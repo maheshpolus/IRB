@@ -1,0 +1,65 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<context:component-scan base-package="org.mit.irb.web.*" />
+	<context:property-placeholder location="classpath:mit-irb.properties" />
+	<bean id="dbProperties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:mit-irb.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/kc-comp" />
+	</bean>
+	<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+		id="sessionFactory">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.c3p0.minPoolSize">${hibernate.c3p0.minPoolSize}</prop>
+				<prop key="hibernate.c3p0.maxPoolSize">${hibernate.c3p0.maxPoolSize}</prop>
+				<prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+				<prop key="hibernate.c3p0.max_statement">${hibernate.c3p0.max_statement}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		id="hibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/resources/dist/</value>
+			<!-- <value>/src/main/webapp/resources/dist/</value> -->
+		</property>
+		<property name="suffix">
+			<value></value>
+		</property>
+	</bean>
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:annotation-driven />
+</beans>

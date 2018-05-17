@@ -1,0 +1,77 @@
+<div class="headerPush"></div>
+    <div class="container-fluid">
+      <section class="row" style="padding:15px;">
+          <div class="col-12 top-aprv-details">
+              <div class="row">
+              <div class="col-12 apprve-date">
+                <div class="row">
+                  <div class="col-4">
+                    <h4>IRB # <span>1804223416</span></h4>
+                    <p>Expation Date : <span>2019-03-26</span> 
+                    </p>
+                  </div>
+                  
+                  <div class="col-3">
+                     <p>Protocol Type : <span>Standard</span><br/>
+                   Submission Status: <span>Approved</span>
+                    </p>
+                  </div>
+                  
+                  <div class="col-4">
+                    <span class="active-en">Active Open Enrollment</span>
+                  </div>
+                  
+                    <div class="col-1 i-icon-top">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                   </div>
+                  
+                </div>
+              </div>
+               
+               
+                <hr class="hr-line">
+                
+              </div> 
+              <div class="row protocol-top">
+                  <div class="col-8">
+                      <h5> Title</h5>
+                      <p>Standard</p>
+                  </div>
+                  <div class="col-4">
+                      <h5>PI</h5>
+                      <p>2015-05-26</p>
+                  </div>
+                  <div class="col-4">
+                      <h5>Last Approvel Date </h5>
+                      <p> 2018-3-26</p>
+                  </div>
+                   <div class="col-4">
+                      <h5>Orginal Approvel Date</h5>
+                      <p>Approved</p>
+                  </div>
+                  <div class="col-4">
+                      <h5>Lead Unit</h5>
+                      <p>School Of Bio science</p>
+                  </div>
+                
+                   <div class="col-12">
+                      <h5>Description</h5>
+                      <p>Isolation, expansion and characterization of MSCs and MSC-derived exosomes from discarded tissues</p>
+                  </div>
+ 
+              </div>
+          </div>
+      </section>
+    </div>
+         <div class="container-fluid">
+      <section class="row btn-row-med" style="padding:15px;">
+      <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
+          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbQuestionaire']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button>
+          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_attachments')"><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
+          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_history')"><i class="fa fa-history" aria-hidden="true"></i>History</button>
+      </section>
+    </div>
+    <div>
+    <router-outlet></router-outlet>
+    </div>
+    

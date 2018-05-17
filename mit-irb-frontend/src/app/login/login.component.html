@@ -1,0 +1,14 @@
+<div class="col-8 m-auto col-sm-8 m-sm-auto col-md-6 m-md-auto col-lg-6 m-lg-auto col-xl-6 m-xl-auto">
+	<div><h3>IRB Login</h3></div>
+	<div><input #input type="text" placeholder="Username" id="login_username"
+		name='username' value='' [(ngModel)]="username"
+		(keyup.enter)="login()" /></div>
+	<div><input type="password"
+		placeholder=" Password" id="login_password" name='password' value=''
+		[(ngModel)]="password" (keyup.enter)="login()" /></div>
+	<div><button value="Login" id="LOGIN-BTN" (click)="login()">Login</button>
+	<button value="Login" id="LOGIN-BTN" (click)="login1()">Login1</button></div>
+	<p id="login-failure" *ngIf="loginFail">
+	<p>Login Error</p>
+</div>
+

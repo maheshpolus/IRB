@@ -1,0 +1,41 @@
+<div class="col-sm-12"
+	[ngClass]="{'main-list': irbList?.length >1}">
+	<div class="row list-rows"
+		*ngFor="let irb of irbList">
+		<div class="col-md-3 col-sm-12 col-xs-12 list-view"
+			[ngClass]="{'in-progress': irb.STATUS=='In Progress',
+						'in-drafts': irb.STATUS=='In Drafts',
+						'pending-action': irb.STATUS=='Pending Action'}">
+			<span><p>{{irb.PROTOCOL_STATUS}}</p></span>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-12 list-des">
+			<h5>
+				<span>{{irb.PROTOCOL_NUMBER}}-</span>{{irb.TITLE}}
+			</h5>
+			<div class="list-data">
+				<div class="row">
+					<div class="col-md-6">
+						<span>Type :</span>{{irb.PROTOCOL_TYPE}}
+					</div>
+					<div class="col-md-6">
+						<span>Submission Status :</span>{{irb.SUBMISSION_STATUS}}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<span>Approval Date :</span>{{irb.LAST_APPROVAL_DATE}}
+				</div>
+				<div class="col-md-6">
+					<span>Expiration Date :</span>{{irb.EXPIRATION_DATE}}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1 col-sm-1 col-xs-12 list-des">
+			<button type="button" class="btn btn-outline-secondary button-view"
+				(click)="openIrb(irb.PROTOCOL_NUMBER)">
+				<i class="fa fa-eye"></i>View
+			</button>
+		</div>
+	</div>
+</div>

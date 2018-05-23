@@ -10,25 +10,30 @@ import org.mit.irb.web.common.view.SnapshotData;
 
 public class DashboardProfile {
 	private List<IRBViews> irbViews;
-	private List<SnapshotData> snapshotData;
+	private SnapshotData snapshotData;
 	private ArrayList<HashMap<String, Object>> dashBoardDetailMap;
-	
+
 	public List<IRBViews> getIrbViews() {
 		return irbViews;
 	}
+
 	public void setIrbViews(List<IRBViews> irbViews) {
 		this.irbViews = irbViews;
 	}
-	public List<SnapshotData> getSnapshotData() {
-		return snapshotData;
-	}
-	public void setSnapshotData(List<SnapshotData> snapshotData) {
-		this.snapshotData = snapshotData;
-	}
+
 	public ArrayList<HashMap<String, Object>> getDashBoardDetailMap() {
 		return dashBoardDetailMap;
 	}
+
 	public void setDashBoardDetailMap(ArrayList<HashMap<String, Object>> dashBoardDetailMap) {
 		this.dashBoardDetailMap = dashBoardDetailMap;
+	}
+
+	public SnapshotData getSnapshotData() {
+		return snapshotData;
+	}
+
+	public void setSnapshotData(SnapshotData snapshotData) {
+		this.snapshotData = snapshotData;
 	}
 }

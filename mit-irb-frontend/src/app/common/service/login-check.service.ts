@@ -20,7 +20,7 @@ export class LoginCheckService {
         }
     }
 
-    login(params) {debugger;
+    login(params) {
         return this._http.post('/loginCheck', params);
     }
 

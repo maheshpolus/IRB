@@ -15,7 +15,7 @@
 					class="fa fa-glass"></i></a>
 			</span>
 		</ul>
-		<ul class="navbarmed" *ngIf="roleType == 'ADMIN'">
+		<ul class="navbarmed" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
 			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}"><a
 				(click)="getIrbListData('ALL')">All My Protocols</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'NEW_SUBMISSION')}"><a
@@ -33,29 +33,31 @@
 		<div class="navigate_ot tab-content" id="nav-tabContent" >
 			<div class="toggle_navgate">
 				<div class="col-sm-12 top-form" *ngIf="isAdvancesearch">
-					<form class="form-inline">
+					<div class="form-inline">
 						<div class="form-group">
-							<input type="text" [(ngModel)]="requestObject.protocol_number" class="form-control" placeholder ="Protocol Number">
+							<input type="text" [(ngModel)]="requestObject.protocol_number"  class="form-control" placeholder ="Protocol Number">
 						</div>
 						<div class="form-group">
-							<input type="text" [(ngModel)]="requestObject.title" class="form-control" placeholder="Title">
+							<input type="text" [(ngModel)]="requestObject.title"  class="form-control" placeholder="Title">
 						</div>
 						<div class="form-group">
 							<input type="text" [(ngModel)]="requestObject.lead_unit_number" class="form-control" placeholder="Lead Unit">
 						</div>
 						<div class="form-group">
-							<input type="text" [(ngModel)]="requestObject.protocol_type_code"  class="form-control"
+							<input type="text" [(ngModel)]="requestObject.protocol_type_code"   class="form-control"
 								placeholder="Protocol Type">
+								<!-- [ngModelOptions]="{standalone: true}" -->
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-default btn-search">
+							<button class="btn btn-default btn-search"
+							(click)="getIrbListData(lastClickedTab)">
 								<i class="fa fa-search"></i>Search
 							</button>
-							<button type="submit" class="btn btn-default btn-close">
+							<button class="btn btn-default btn-close" (click)="clear()">
 								<i class="fa fa-close"></i>Cancel
 							</button>
 						</div>
-					</form>
+					</div>
 				</div>
 				<div class="col-md-12 col-sm-12 checkbox-right">
 					<div class = "row">
@@ -108,33 +110,35 @@
 					</button>
 					<div class="row">
 						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
-							<label> Protocol# </label> <span> <a>{{protocol }}</a>
+							<label> Protocol# </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{protocol }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-							<label> Protocol Type </label> <span> <a>{{protocolType }}</a>
+							<label> Protocol Type </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{protocolType }}</a>
 							</span>
 						</div>
 						<div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
-							<label> Title </label> <span> <a>{{title }}</a>
+							<label> Title </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{title }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
-							<label> Lead Unit </label> <span> <a>{{leadUnit }}</a>
+							<label> Lead Unit </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{leadUnit }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
-							<label> Status </label> <span> <a>{{status }}</a>
+							<label> Status </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{status }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-							<label> PI Name </label> <span> <a>{{piName }}</a>
+							<label> PI Name </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{piName }}</a>
 							</span>
 						</div>
 					</div>
 				</div>
 			</div>
-			<app-card-details
+			
+			<app-card-details *ngIf = "(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+			||(roleType == 'PI')"  
 					[irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
 		</div>
 	</div>

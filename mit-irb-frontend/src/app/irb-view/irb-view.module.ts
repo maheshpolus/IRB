@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { IrbViewRoutingModule } from './irb-view-routing.module';
 import { IrbOverviewComponent } from './irb-overview/irb-overview.component';
@@ -11,7 +12,8 @@ import { IrbHistoryComponent } from './irb-history/irb-history.component';
 @NgModule({
   imports: [
     CommonModule,
-    IrbViewRoutingModule
+    IrbViewRoutingModule,
+    NgxSpinnerModule
   ],
   declarations: [IrbOverviewComponent, IrbHeaderDetailComponent, IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent]
 })

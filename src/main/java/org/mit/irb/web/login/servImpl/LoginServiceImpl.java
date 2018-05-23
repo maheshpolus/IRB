@@ -59,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
 		result = loginDao.checkIRBUserRole(personId);
 		for (HashMap<String, Object> map : result){
 			for (Entry<String, Object> entry : map.entrySet()){
-				System.out.println("key :"+entry.getKey() + " => " + entry.getValue());
+				logger.info("key :"+entry.getKey() + " => " + entry.getValue());
 				if(entry.getKey().equals("IS_IRB_ADMIN") && entry.getValue().equals("Y")){
 					role = "admin";
 					return role;

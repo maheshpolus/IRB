@@ -31,7 +31,7 @@ public class TouchstoneAuthService{
         String userId = null;
         logger.debug( "Starting Touchstone validation...");
         logger.debug( "Getting user from Request (email)===>"+kerbEmail);
-        System.out.println("In Touchstone ,Getting user from Request (email)===>"+kerbEmail);
+        logger.info("In Touchstone ,Getting user from Request (email)===>"+kerbEmail);
         if(kerbEmail!=null) {
             userId = kerbEmail.substring(0,kerbEmail.lastIndexOf("@"));
             LoginValidator validator = new LoginValidator();

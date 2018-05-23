@@ -36,4 +36,70 @@ public class IRBController {
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
 		return new ResponseEntity<String>(responseData, status);
 	}
+	
+	@RequestMapping(value="/getIRBprotocolPersons",method= RequestMethod.POST)
+	public ResponseEntity<String> getIRBprotocolPersons(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		String protocolNumber = vo.getProtocol_number();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolPersons(protocolNumber);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String  responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value="/getIRBprotocolFundingSource",method= RequestMethod.POST)
+	public ResponseEntity<String> getIRBprotocolFundingSource(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		String protocolNumber = vo.getProtocol_number();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolFundingSource(protocolNumber);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String  responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value="/getIRBprotocolLocation",method= RequestMethod.POST)
+	public ResponseEntity<String> getIRBprotocolLocation(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		String protocolNumber = vo.getProtocol_number();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolLocation(protocolNumber);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String  responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value="/getIRBprotocolVulnerableSubject",method= RequestMethod.POST)
+	public ResponseEntity<String> getIRBprotocolVulnerableSubject(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		String protocolNumber = vo.getProtocol_number();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolVulnerableSubject(protocolNumber);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String  responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value="/getIRBprotocolSpecialReview",method= RequestMethod.POST)
+	public ResponseEntity<String> getIRBprotocolSpecialReview(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		String protocolNumber = vo.getProtocol_number();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolSpecialReview(protocolNumber);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String  responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value="/getMITKCPersonInfo",method= RequestMethod.POST)
+	public ResponseEntity<String> getMITKCPersonInfo(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		String avPersonId = vo.getAv_person_id();
+		IRBViewProfile irbViewProfile = irbProtocolService.getMITKCPersonInfo(avPersonId);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String  responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
 }

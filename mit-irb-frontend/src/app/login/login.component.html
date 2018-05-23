@@ -1,4 +1,4 @@
-<div class="col-8 m-auto col-sm-8 m-sm-auto col-md-6 m-md-auto col-lg-6 m-lg-auto col-xl-6 m-xl-auto">
+<!-- <div class="col-8 m-auto col-sm-8 m-sm-auto col-md-6 m-md-auto col-lg-6 m-lg-auto col-xl-6 m-xl-auto">
 	<div><h3>IRB Login</h3></div>
 	<div><input #input type="text" placeholder="Username" id="login_username"
 		name='username' value='' [(ngModel)]="username"
@@ -6,9 +6,44 @@
 	<div><input type="password"
 		placeholder=" Password" id="login_password" name='password' value=''
 		[(ngModel)]="password" (keyup.enter)="login()" /></div>
-	<div><button value="Login" id="LOGIN-BTN" (click)="login()">Login</button>
-	<!-- <button value="Login" id="LOGIN-BTN" (click)="login1()">Login1</button> --></div>
+	<div><button value="Login" id="LOGIN-BTN" (click)="login()">Login</button></div>
 	<p id="login-failure" *ngIf="loginFail">
-	<p> Login Error</p>
+	<p>Login Error</p>
 </div>
 
+ -->
+ <div class="loginPage">
+<div class="bg">
+<div class="container" style="margin-left:250px">
+	<div class="row">
+		<div class="ground borderRadius pageMinHeight col-lg-8 " style="min-height: 300px;">
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-6 hidden-xs">
+					<div class="leftLoginArea"  style="min-height: 275px;"></div>
+					<div>
+						<span>
+							<a  class="logo"><img src="assets/images/loginLogo.png"/></a><!-- /mit-irb/resources/dist/assets/images/loginLogo.png -->
+							<span class="tagLine" style ="color:#fff">IRB Login</span>
+						</span>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"  style="max-height: 300px;">
+					<div class="loginHere">
+						<label >Username</label> <br /> 
+						<input  type="text" placeholder="Username" id="login_username"
+							name='username' value='' [(ngModel)]="username"
+							(keyup.enter)="login()" />
+						<label >Password</label> <br /> 
+						<input type="password" placeholder=" Password" id="login_password" name='password' value=''
+						[(ngModel)]="password" (keyup.enter)="login()"/><br>				
+						<div class="buttonGroup">
+							<button class="loginBtn button first" value="Login" (click)="login()">Login</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>        
+</div>
+</div>
+</div>

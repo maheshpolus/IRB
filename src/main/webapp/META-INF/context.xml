@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/spring3">
-<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
-maxIdle="10" maxWait="5000" name="jdbc/kc-comp" password="kcso" 
-type="javax.sql.DataSource" url="jdbc:oracle:thin:@192.168.1.60:1521:kuali" 
-username="kcso" validationQuery="select 1 from dual"/>
-</Context>

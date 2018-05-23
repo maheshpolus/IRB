@@ -12,33 +12,33 @@ export class SnapshotsComponent implements OnInit {
     result: any;
     snapshots: any = [];
     requestObject = {
-            personId: '900002368',
-            person_role_type : 'pi',
-
+            personId : '',
+            person_role_type : ''
     };
-    roleType = 'PI';
+    roleType: string;
 
   constructor(private _dashboardService: DashboardService, private router: Router,
               private _activatedRoute: ActivatedRoute ) { }
 
   ngOnInit() {
       this.getSnapshotData();
+      this.roleType = this.userDTO.role;
   }
 
   getSnapshotData() {
-   // this.requestObject.personId = this.userDTO.personId;
-      
-      this._dashboardService.getSnapshots( this.requestObject ).subscribe(
-              data => {
-                  this.result = data || [];
-                  if ( this.result != null ) {
-                      this.snapshots = this.result.dashBoardDetailMap;
-                  }
-              },
-              error => {
-                  console.log( 'Error in getSnapshotData', error );
-              },
-      );
+    this.requestObject.personId = this.userDTO.personID;
+    this.requestObject.person_role_type = this.userDTO.role;
+    this._dashboardService.getSnapshots( this.requestObject ).subscribe(
+            data => {
+                this.result = data || [];
+                if ( this.result != null ) {
+                    this.snapshots = this.result.snapshotData;
+                }
+            },
+            error => {
+                console.log( 'Error in getSnapshotData', error );
+            },
+    );
   }
   expandedView() {
       this.router.navigate(['/irb/expanded-view']);

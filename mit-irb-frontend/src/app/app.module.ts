@@ -24,6 +24,7 @@ import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
 import { OrderByPipe } from './common/directives/order-by.pipe';
 import { LoginService } from './login/login.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
+import { IrbViewService } from "./irb-view/irb-view.service";
 
 
 @NgModule( {
@@ -49,7 +50,7 @@ import { DashboardResolverService } from './common/service/dashboard-resolver.se
     ],
     providers: [AuthGuard, LoginCheckService, DashboardService, SharedDataService,
                 { provide: LocationStrategy, useClass: HashLocationStrategy },
-                LoginService, DashboardResolverService, ElasticService],
+                LoginService, DashboardResolverService, ElasticService, IrbViewService],
     bootstrap: [AppComponent]
 } )
 export class AppModule { }

@@ -1,3 +1,4 @@
+<ngx-spinner bdOpacity = 0.5 bdColor = "#333" color = "#fff" type = "ball-spin-clockwise-fade" loadingText = "Loading..." ></ngx-spinner>
 <div class="headerPush"></div>
     <div class="container-fluid">
       <section class="row" style="padding:15px;">
@@ -6,19 +7,29 @@
               <div class="col-12 apprve-date">
                 <div class="row">
                   <div class="col-4">
-                    <h4>IRB # <span>1804223416</span></h4>
-                    <p>Expation Date : <span>2019-03-26</span> 
+                    <h4>IRB # <span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span></h4>
+                    <p>Expation Date : <span>{{irbHeaderDetails?.EXPIRATION_DATE}}</span> 
                     </p>
                   </div>
                   
                   <div class="col-3">
-                     <p>Protocol Type : <span>Standard</span><br/>
-                   Submission Status: <span>Approved</span>
+                     <p>Protocol Type : <span>{{irbHeaderDetails?.PROTOCOL_TYPE}}</span><br/>
+                   Submission Status: <span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span>
                     </p>
                   </div>
                   
                   <div class="col-4">
-                    <span class="active-en">Active Open Enrollment</span>
+                    <span class="active-en" [ngClass]="{'in-progress': irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
+						'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE=='106'),
+						'pending-action': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='102'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE== '104'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE=='107'),
+						'active-status': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='200'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE== '201'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE== '202'||
+									irbHeaderDetails.PROTOCOL_STATUS_CODE=='203')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
                   </div>
                   
                     <div class="col-1 i-icon-top">
@@ -35,28 +46,28 @@
               <div class="row protocol-top">
                   <div class="col-8">
                       <h5> Title</h5>
-                      <p>Standard</p>
+                      <p>{{irbHeaderDetails?.TITLE}}</p>
                   </div>
                   <div class="col-4">
                       <h5>PI</h5>
-                      <p>2015-05-26</p>
+                      <p>{{irbHeaderDetails?.PI_NAME}}</p>
                   </div>
                   <div class="col-4">
                       <h5>Last Approvel Date </h5>
-                      <p> 2018-3-26</p>
+                      <p> {{irbHeaderDetails?.LAST_APPROVAL_DATE}}</p>
                   </div>
-                   <div class="col-4">
+                 <!--   <div class="col-4">
                       <h5>Orginal Approvel Date</h5>
-                      <p>Approved</p>
-                  </div>
+                      <p>{{irbHeaderDetails}}</p>
+                  </div> -->
                   <div class="col-4">
                       <h5>Lead Unit</h5>
-                      <p>School Of Bio science</p>
+                      <p>{{irbHeaderDetails?.UNIT_NAME}}</p>
                   </div>
                 
                    <div class="col-12">
                       <h5>Description</h5>
-                      <p>Isolation, expansion and characterization of MSCs and MSC-derived exosomes from discarded tissues</p>
+                      <p>{{irbHeaderDetails.description}}</p>
                   </div>
  
               </div>
@@ -65,10 +76,15 @@
     </div>
          <div class="container-fluid">
       <section class="row btn-row-med" style="padding:15px;">
-      <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
+      <!-- <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" [queryParams]= "{protocolNumber :requestObject.protocol_number}"  (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
           <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbQuestionaire']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button>
           <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_attachments')"><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
-          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_history')"><i class="fa fa-history" aria-hidden="true"></i>History</button>
+          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_history')"><i class="fa fa-history" aria-hidden="true"></i>History</button> -->
+
+          <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
+          <button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button>
+          <button class="btn btn-primary tab_btn" type="submit"  ><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
+          <button class="btn btn-primary tab_btn" type="submit"  ><i class="fa fa-history" aria-hidden="true"></i>History</button>
       </section>
     </div>
     <div>

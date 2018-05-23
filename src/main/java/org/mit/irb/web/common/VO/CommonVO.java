@@ -24,6 +24,8 @@ public class CommonVO {
 	
 	private String dashboard_type;
 
+	private String av_person_id;
+	
 	public String getUsername() {
 		return username;
 	}
@@ -95,5 +97,12 @@ public class CommonVO {
 	public void setDashboard_type(String dashboard_type) {
 		this.dashboard_type = dashboard_type;
 	}
-	
+
+	public String getAv_person_id() {
+		return av_person_id;
+	}
+
+	public void setAv_person_id(String av_person_id) {
+		this.av_person_id = av_person_id;
+	}
 }

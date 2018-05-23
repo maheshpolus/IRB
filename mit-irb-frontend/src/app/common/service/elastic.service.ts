@@ -9,22 +9,22 @@ export class ElasticService {
     URL_FOR_ELASTIC: string;
     IRB_INDEX: string;
     constructor( private _http: HttpClient ) {
-      this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
-        // this.get_elastic_config().subscribe(
-        //     data => {
-        //         const elastic_config: any = data;
-        //         if (elastic_config) {
-        //             this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
-        //             this.IRB_INDEX = elastic_config.IRB_INDEX;
-        //             if ( !this._client ) {
-        //                 this._connect();
-        //             }
-        //         }
-        //     }
-        // );
-        if ( !this._client ) {
-          this._connect();
-        }
+      // this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+         this.get_elastic_config().subscribe(
+            data => {
+                 const elastic_config: any = data;
+                 if (elastic_config) {
+                     this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
+                     this.IRB_INDEX = elastic_config.IRB_INDEX;
+                     if ( !this._client ) {
+                         this._connect();
+                    }
+                }
+                 if ( !this._client ) {
+                     this._connect();
+                   }
+             }
+         );
     }
 
     private _connect() {
@@ -33,12 +33,12 @@ export class ElasticService {
         } );
     }
     get_elastic_config() {
-        return this._http.get('resources/ospGoConfig.json');
+        return this._http.get('mit-irb/resources/elastic_config_json');
     }
     irbSearch(value): any {
       if ( value ) {
         return this._client.search({
-          index: 'irbprotocol', // this.IRB_INDEX ,
+          index: this.IRB_INDEX ,
           size: 20 ,
           type: 'irbprotocol',
           body: {

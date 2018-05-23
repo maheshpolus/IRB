@@ -7,7 +7,8 @@ import { IrbAttachmentsComponent } from './irb-attachments/irb-attachments.compo
 import { IrbHistoryComponent } from './irb-history/irb-history.component';
 
 const routes: Routes = [
-                        {path: '', component: IrbHeaderDetailComponent, children: [
+                        {path: '', component: IrbHeaderDetailComponent,
+                        children: [
                           {path: '', redirectTo: 'IrbOverviewComponent', pathMatch: 'full'},
                           {path: 'irbOverview', component: IrbOverviewComponent},
                           {path: 'irbQuestionaire', component: IrbQuestionaireComponent},

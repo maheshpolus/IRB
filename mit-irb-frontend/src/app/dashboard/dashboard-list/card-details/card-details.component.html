@@ -2,11 +2,18 @@
 	[ngClass]="{'main-list': irbList?.length >1}">
 	<div class="row list-rows"
 		*ngFor="let irb of irbList">
-		<div class="col-md-3 col-sm-12 col-xs-12 list-view"
-			[ngClass]="{'in-progress': irb.STATUS=='In Progress',
-						'in-drafts': irb.STATUS=='In Drafts',
-						'pending-action': irb.STATUS=='Pending Action'}">
-			<span><p>{{irb.PROTOCOL_STATUS}}</p></span>
+		<div class="col-md-3 col-sm-12 col-xs-12 list-view">
+			<span [ngClass]="{'in-progress': irb.PROTOCOL_STATUS_CODE=='101',
+						'in-drafts': (irb.PROTOCOL_STATUS_CODE=='100'||
+									irb.PROTOCOL_STATUS_CODE=='105'||
+									irb.PROTOCOL_STATUS_CODE=='106'),
+						'pending-action': (irb.PROTOCOL_STATUS_CODE=='102'||
+									irb.PROTOCOL_STATUS_CODE== '104'||
+									irb.PROTOCOL_STATUS_CODE=='107'),
+						'active-status': (irb.PROTOCOL_STATUS_CODE=='200'||
+									irb.PROTOCOL_STATUS_CODE== '201'||
+									irb.PROTOCOL_STATUS_CODE== '202'||
+									irb.PROTOCOL_STATUS_CODE=='203')}"><p>{{irb.PROTOCOL_STATUS}}</p></span>
 		</div>
 		<div class="col-md-8 col-sm-8 col-xs-12 list-des">
 			<h5>

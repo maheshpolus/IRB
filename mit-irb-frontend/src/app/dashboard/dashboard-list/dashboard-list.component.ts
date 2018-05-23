@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, NgZone, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { ElasticService } from '../../common/service/elastic.service';
 import { DashboardService } from '../dashboard.service';
@@ -19,10 +20,10 @@ import 'rxjs/add/operator/catch';
 export class DashboardListComponent implements OnInit, AfterViewInit {
 
     @Input() userDTO: any ;
-    lastClickedTab = 'All My Protocols';
-    requestObject = {     
-            personId : '900002368',
-            person_role_type : 'pi',
+    lastClickedTab = 'ALL';
+    requestObject = {
+            personId : '',
+            person_role_type : '',
             protocol_number : '',
             title : '',
             lead_unit_number : '',
@@ -31,49 +32,6 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     };
     result: any;
     irbListData: any = [];
-
-   /* irbListDummy: any = [
-        {
-        STATUS: 'In Drafts',
-        PROTOCOL_NUMBER: '231312',
-        TITLE: 'new',
-        PROTOCOL_TYPE: 'processed',
-        SUBMISSION_STATUS: 'drafted',
-        APPROVAL_DATE: '7453535',
-        EXPIRATION_DATE: '35424',
-        UPDATE_TIMESTAMP: '3535345'
-        },
-        {
-            STATUS: 'In Progress',
-            PROTOCOL_NUMBER: '131312',
-            TITLE: 'old',
-            PROTOCOL_TYPE: 'negoatiable',
-            SUBMISSION_STATUS: 'progress',
-            APPROVAL_DATE: '53535',
-            EXPIRATION_DATE: '62424',
-            UPDATE_TIMESTAMP: '6535345'
-        },
-        {
-            STATUS: 'Active Open Enrollment',
-            PROTOCOL_NUMBER: '451312',
-            TITLE: 'processing',
-            PROTOCOL_TYPE: 'fixed',
-            SUBMISSION_STATUS: 'active',
-            APPROVAL_DATE: '32343535',
-            EXPIRATION_DATE: '33324',
-            UPDATE_TIMESTAMP: '45635345'
-        },
-        {
-            STATUS: 'Pending Action',
-            PROTOCOL_NUMBER: '731312',
-            TITLE: 'denied',
-            PROTOCOL_TYPE: 'standard',
-            SUBMISSION_STATUS: 'pending',
-            APPROVAL_DATE: '53535',
-            EXPIRATION_DATE: '324',
-            UPDATE_TIMESTAMP: '735345'
-        }
-    ];*/
 
     /**elastic serach variables */
     message = '';
@@ -90,7 +48,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     elasticResultTab = false;
 
     isAdvancesearch = false;
-    roleType = 'PI';
+    roleType: string;
     direction: number;
     column: any;
     sortOrder: string;
@@ -100,10 +58,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     constructor( private sharedData: SharedDataService,
         private _dashboardService: DashboardService,
         private _ngZone: NgZone,
-        private _elasticsearchService: ElasticService ) { }
+        private _elasticsearchService: ElasticService,
+        private router: Router) { }
 
     ngOnInit() {
         this.getIrbListData('ALL');
+        this.roleType = this.userDTO.role;
     }
 
     ngAfterViewInit() {
@@ -205,16 +165,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     getIrbListData( currentTab ) {
         this.seachTextModel = '';
         this.lastClickedTab = currentTab;
-   /*     this.requestObject.personId = this.userDTO.personID;
-        this.requestObject.person_role_type = this.userDTO.role;*/
+        console.log( this.lastClickedTab, this.roleType);
+        this.requestObject.personId = this.userDTO.personID;
+        this.requestObject.person_role_type = this.userDTO.role;
         this.requestObject.dashboard_type = currentTab;
+        console.log(this.requestObject.protocol_number);
         this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
                 this.irbListData = this.result.dashBoardDetailMap || [];
-                if( this.irbListData != null) {
-                    this.arrayOfKeys = Object.keys( this.irbListData[0]) || [];   
-                }
             }
         },
             error => {
@@ -233,7 +192,6 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     }
 
     selectedResult(result) {
-        console.log(result);
         this.protocol = result.obj.protocol_number;
         this.protocolType = result.obj.protocol_type;
         this.piName = result.obj.pi_name;
@@ -246,5 +204,16 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       closeResultTab() {
           this.seachTextModel = '';
         this.elasticResultTab = false;
+      }
+      clear() {
+          this.requestObject.protocol_number = '';
+          this.requestObject.title = '';
+          this.requestObject.lead_unit_number = '';
+          this.requestObject.protocol_type_code = '';
+          this.getIrbListData(this.lastClickedTab);
+      }
+
+      openIrb( protocolNumber ) {
+          this.router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
       }
 }

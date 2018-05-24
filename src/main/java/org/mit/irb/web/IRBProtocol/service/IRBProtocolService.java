@@ -1,6 +1,7 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import org.mit.irb.web.common.pojo.IRBViewProfile;
+import org.mit.irb.web.common.view.ServiceAttachments;
 
 public interface IRBProtocolService {
 
@@ -17,4 +18,8 @@ public interface IRBProtocolService {
 	IRBViewProfile getIRBprotocolSpecialReview(String protocolNumber);
 
 	IRBViewProfile getMITKCPersonInfo(String avPersonId);
+	
+	ServiceAttachments downloadAttachments(String attachmentId);
+
+	IRBViewProfile getAttachmentsList(String protocolnumber);
 }

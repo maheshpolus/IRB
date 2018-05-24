@@ -26,8 +26,6 @@ public class DBEngine {
 	
 	DBConnectionManager dbConnectionManager;
 	private Hashtable errorList;
-	
-	Logger logger = Logger.getLogger(DBEngine.class.getName());
 	/**
 	 * dbConnectionManager instance is created in the DBEngine constructor
 	 */
@@ -542,7 +540,7 @@ public class DBEngine {
                                 colValue = bytesOut;
                                 break;
                             }catch(Exception Ex){
-                               logger.info(Ex);
+                               System.out.println(Ex);
                             }
                         case java.sql.Types.CLOB:
                             try {
@@ -557,7 +555,7 @@ public class DBEngine {
                                 }
                                 break;
                             }catch(Exception Ex){
-                            	 logger.info(Ex);
+                            	 System.out.println(Ex);
                             }
                             break;
                         case java.sql.Types.DATE:
@@ -575,14 +573,14 @@ public class DBEngine {
                 alResSet.add(htRow);
             }
         }catch(SQLException sqlEx){
-        	 logger.info(sqlEx);
+        	 System.out.println(sqlEx);
         }finally{
             try{
                 if(rset!=null){
                     rset.close();
                 }
             }catch(SQLException sqlEx){
-            	 logger.info(sqlEx);
+            	 System.out.println(sqlEx);
             }
         }
         return alResSet;

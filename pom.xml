@@ -95,7 +95,7 @@
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>
-						<contextPath>/mit-irb</contextPath>
+						<contextPath>/spring3</contextPath>
 					</webApp>
 				</configuration>
 			</plugin>

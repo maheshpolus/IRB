@@ -12,7 +12,6 @@ import java.util.Properties;
 public class IRBProperties{
 	
 	private static Properties props = null;
-	/*private static final String COMPANION_PROP_FILE="/mit-irb.properties";*/
 	private static final String COMPANION_PROP_FILE="/mit-irb.properties";
 	
 	/**

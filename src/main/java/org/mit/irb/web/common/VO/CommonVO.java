@@ -26,6 +26,26 @@ public class CommonVO {
 
 	private String av_person_id;
 	
+	private String attachmentId;
+	
+	private String av_summary_type;
+	
+	public String getAv_summary_type() {
+		return av_summary_type;
+	}
+
+	public void setAv_summary_type(String av_summary_type) {
+		this.av_summary_type = av_summary_type;
+	}
+
+	public String getAttachmentId() {
+		return attachmentId;
+	}
+
+	public void setAttachmentId(String attachmentId) {
+		this.attachmentId = attachmentId;
+	}
+
 	public String getUsername() {
 		return username;
 	}

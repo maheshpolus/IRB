@@ -30,10 +30,10 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Autowired
-	DashboardDao dashboardDao; 
+	DashboardDao dashboardDao;
 
 	@Override
-	public DashboardProfile getSnapshotData(String personId, String personRoleType) throws Exception {
+	public DashboardProfile getSnapshotData(String personId, String personRoleType) {
 		DashboardProfile profile = dashboardDao.getSnapshotData(personId, personRoleType);
 		return profile;
 	}
@@ -42,12 +42,6 @@ public class DashboardServiceImpl implements DashboardService {
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
 			String lead_unit_number, String protocol_number,String protocol_type_code, String title) {
 		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboard_type, lead_unit_number, protocol_number, protocol_type_code, title);
-		return profile;
-	}
-
-	@Override
-	public DashboardProfile getExpandedSnapShotView(String personId, String person_role_type, String av_summary_type) {
-		DashboardProfile profile = dashboardDao.getExpandedSnapShotView(personId, person_role_type, av_summary_type);
 		return profile;
 	}
 }

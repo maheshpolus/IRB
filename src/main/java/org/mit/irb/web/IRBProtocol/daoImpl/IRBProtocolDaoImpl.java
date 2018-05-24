@@ -1,6 +1,5 @@
 package org.mit.irb.web.IRBProtocol.daoImpl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
-import org.mit.irb.web.common.view.ServiceAttachments;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +26,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	IRBProtocolDaoImpl(){
 		dbEngine = new DBEngine();
 	}
-	
-	Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName());
+	static Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName()); 
 	@Override
 	public IRBViewProfile getIRBProtocolDetails(String protocolNumber) {
 		IRBViewProfile irbViewProfile = new IRBViewProfile();
@@ -51,7 +48,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			irbViewProfile.setIrbviewHeader(result.get(0));
 			
 		}
-		System.out.println("irbview : "+ result);
+		logger.info("irbview : "+ result);
 		return irbViewProfile;
 	}
 
@@ -75,7 +72,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolPersons(result);
 		}
-		System.out.println("irbview Persons: "+ result);
+		logger.info("irbview Persons: "+ result);
 		return irbViewProfile;
 	}
 
@@ -99,7 +96,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolFundingsource(result);
 		}
-		System.out.println("irbview PROTOCOL_FUNDING_SRC: "+ result);
+		logger.info("irbview PROTOCOL_FUNDING_SRC: "+ result);
 		return irbViewProfile;
 	}
 
@@ -123,7 +120,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolLocation(result);
 		}
-		System.out.println("irbview IRBprotocolLocation: "+ result);
+		logger.info("irbview IRBprotocolLocation: "+ result);
 		return irbViewProfile;
 	}
 
@@ -171,7 +168,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolSpecialReview(result);
 		}
-		System.out.println("irbview IRBprotocolSpecialReview: "+ result);
+		logger.info("irbview IRBprotocolSpecialReview: "+ result);
 		return irbViewProfile;
 	}
 
@@ -219,53 +216,5 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 		}
 		return result;
-	}
-
-	@Override
-	public ServiceAttachments downloadAttachments(String attachmentId) {
-		Integer attachmentsId = Integer.parseInt(attachmentId); 
-		ServiceAttachments serviceAttachments = new ServiceAttachments();
-		ArrayList<InParameter> inParam = new ArrayList<>();
-		ArrayList<OutParameter> outParam = new ArrayList<>();
-		try{
-			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_INTEGER,attachmentsId));
-			outParam.add(new OutParameter("resultset",DBEngineConstants.TYPE_RESULTSET));
-			ArrayList<HashMap<String,Object>> result = 
-				dbEngine.executeProcedure(inParam,"GET_MITKC_ATTACHMENT_FILE",outParam);
-			if(result != null && !result.isEmpty()){
-			HashMap<String,Object> hmResult = result.get(0);
-			serviceAttachments.setFileName(hmResult.get("FILE_NAME").toString());
-			ByteArrayOutputStream byteArrayOutputStream = null;
-	        byteArrayOutputStream =(ByteArrayOutputStream)hmResult.get("FILE_DATA");
-	        serviceAttachments.setAttachment(byteArrayOutputStream.toByteArray());
-	        serviceAttachments.setContentType(hmResult.get("CONTENT_TYPE").toString());
-			}
-		}catch (Exception e) {
-			logger.error("Error while performing attachmentFile", e);
-		}
-		return serviceAttachments;
-	}
-
-	@Override
-	public IRBViewProfile getAttachmentsList(String protocolnumber) {
-		IRBViewProfile irbViewProfile= new IRBViewProfile();
-		ArrayList<InParameter> inputParam = new ArrayList<>();
-		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolnumber));
-		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-		ArrayList<HashMap<String, Object>> result = null;
-		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ATTACHMENT", outputParam);
-		} catch (DBException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolAttachmentList(result);
-		}
-		return irbViewProfile;
 	}
 }

@@ -1,0 +1,112 @@
+<!-- Snapshot of PI -->
+<section class="row" *ngIf="roleType == 'PI'">
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards">
+				<div class="media top-card-outer">
+					<div class="media-left card-icon1">
+						<a><i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body">
+						<h4 class="media-heading">{{snapshots?.ammend_renew_count}}</h4>
+						<p>Ammend/<br>Renewals in Progress</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards">
+				<div class="media top-card-outer">
+					<div class="media-left card-icon1 circle2">
+						<a> <i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body cap2">
+						<h4 class="media-heading">{{snapshots?.revision_req_count}}</h4>
+						<p>Revision <br>Requested</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards">
+				<div class="media top-card-outer">
+					<div class="media-left card-icon1 circle3">
+						<a> <i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body cap3">
+						<h4 class="media-heading">{{snapshots?.awaiting_resp_count}}</h4>
+						<p>Awaiting <br>IRB Response</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards link-card">
+				<ul>
+					<li><a href="#"><i class="fa fa-check-square-o"></i>Exempt
+							Protocol Determination</a></li>
+					<li><a href="#"><i class="fa fa-calendar"></i>IRB
+							Schedules</a></li>
+				</ul>
+			</div>
+		</div>
+</section>
+
+<!-- Snapshot of ADMIN -->
+<section class="row" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards">
+				<div class="media top-card-outer">
+					<div class="media-left card-icon1">
+						<a><i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body-schedule">
+						<h4 class="media-heading">{{snapshots?.scheduled_date_prev}}</h4>
+						<p>{{snapshots?.scheduled_day_prev}}</p>
+						<p class="schedule">{{snapshots?.committe_name_prev}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards">
+				<div class="media top-card-outer">
+					<div class="media-left card-icon1 circle2">
+						<a> <i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body-schedule cap2">
+						<h4 class="media-heading">{{snapshots?.scheduled_date_next}}</h4>
+						<p>{{snapshots?.scheduled_day_next}}</p>
+						<p class="schedule">{{snapshots?.committee_name_next}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards">
+				<div class="media top-card-outer">
+					<div class="media-left card-icon1 circle3">
+						<a> <i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body-schedule cap3">
+						<h4 class="media-heading">{{snapshots?.revision_req_count}}</h4>
+						<p>Pending responses</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-12 top-cards link-card">
+				<ul>
+					<li><a href="#"><i class="fa fa-check-square-o"></i>COUHES</a></li>
+					<li><a href="#"><i class="fa fa-calendar"></i>IRB
+							Schedules</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>

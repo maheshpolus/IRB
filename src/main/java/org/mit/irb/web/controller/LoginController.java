@@ -41,12 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class LoginController extends BaseController {
-	private DBEngine dBEngine;
-
-	public LoginController(){ 
-		dBEngine = new DBEngine();
-	}
-
+	
 	@Autowired
 	LoginValidator loginValidator;
 	
@@ -89,8 +84,7 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
-		System.out.println("returning index page");
-		logger.info("in method entryPage");
+		logger.info("Inside  EntryPage");
 		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO" + session.getId());
 		if (personDTO != null) {
 			logger.info("personDTO != null");
@@ -100,8 +94,6 @@ public class LoginController extends BaseController {
 			if ("TOUCHSTONE".equalsIgnoreCase(login_mode)) {
 				Boolean isLoginSuccess = TouchstoneAuthService.authenticate(request, session);
 				logger.info("in touchstone  isLoginSuccess " +isLoginSuccess);
-				System.out.println("in touchstone "+isLoginSuccess);
-				System.out.println("inside touchstone");
 				if (isLoginSuccess) {
 					return "index.html";
 				}
@@ -130,17 +122,14 @@ public class LoginController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public ResponseEntity<String> logout(ModelMap model, HttpServletRequest request,
+	public String logout(ModelMap model, HttpServletRequest request,
 			HttpServletResponse response) {
 		logger.info("Log Out");
 		// invalidate the session if exists
 		HttpSession session = request.getSession(false);
-		HttpStatus status = HttpStatus.OK;
 		if (session != null) {
 			session.invalidate();
 		}
-		String responseData = null;
-		responseData = "true";
-		return new ResponseEntity<String>(responseData, status);
+		return "redirect:/login";
 	}
 }

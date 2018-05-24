@@ -12,8 +12,7 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbviewProtocolSpecialReview;
 	private HashMap<String, Object> irbviewProtocolMITKCPersonInfo;
 	private ArrayList<HashMap<String, Object>> irbviewProtocolMITKCPersonTrainingInfo;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolAttachmentList;
-	
+
 	public HashMap<String, Object> getIrbviewHeader() {
 		return irbviewHeader;
 	}
@@ -78,13 +77,5 @@ public class IRBViewProfile {
 	public void setIrbviewProtocolMITKCPersonTrainingInfo(
 			ArrayList<HashMap<String, Object>> irbviewProtocolMITKCPersonTrainingInfo) {
 		this.irbviewProtocolMITKCPersonTrainingInfo = irbviewProtocolMITKCPersonTrainingInfo;
-	}
-
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolAttachmentList() {
-		return irbviewProtocolAttachmentList;
-	}
-
-	public void setIrbviewProtocolAttachmentList(ArrayList<HashMap<String, Object>> irbviewProtocolAttachmentList) {
-		this.irbviewProtocolAttachmentList = irbviewProtocolAttachmentList;
 	}
 }

@@ -1,34 +1,20 @@
 package org.mit.irb.web.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
-import org.mit.irb.web.common.utils.DBEngine;
-import org.mit.irb.web.common.utils.DBEngineConstants;
-import org.mit.irb.web.common.utils.DBException;
-import org.mit.irb.web.common.utils.InParameter;
-import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.common.view.IRBViews;
-import org.mit.irb.web.common.view.ServiceAttachments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,12 +25,6 @@ public class IRBController {
 	@Autowired
 	@Qualifier(value="irbProtocolService")
 	IRBProtocolService irbProtocolService;
-	
-	DBEngine dbEngine;
-	
-	IRBController(){
-		dbEngine = new DBEngine();
-	}
 	
 	@RequestMapping(value="/getIRBprotocolDetails",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolDetails(@RequestBody CommonVO vo, HttpServletRequest request,
@@ -121,27 +101,5 @@ public class IRBController {
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
 		return new ResponseEntity<String>(responseData, status);
-	}
-	
-	@RequestMapping(value="/getAttachmentList",method= RequestMethod.POST)
-	public ResponseEntity<String> getAttachments(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) throws JsonProcessingException{
-		String protocolnumber = vo.getProtocol_number();
-		IRBViewProfile irbViewProfile = irbProtocolService.getAttachmentsList(protocolnumber);
-		HttpStatus status = HttpStatus.OK;
-		ObjectMapper mapper = new ObjectMapper();
-		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		return new ResponseEntity<String>(responseData, status);
-	}
-	
-	@RequestMapping(value = "/downloadAttachment", method = RequestMethod.POST)
-	@ResponseBody public void downloadAttachments(@RequestBody CommonVO vo,HttpServletRequest request,HttpServletResponse response) throws Exception{
-		String attachmentId = vo.getAttachmentId();
-		response.setCharacterEncoding("UTF-8");
-		ServiceAttachments serviceAttachments = irbProtocolService.downloadAttachments(attachmentId);
-		response.setContentType(serviceAttachments.getContentType());
-		response.setContentLength(serviceAttachments.getAttachment().length);
-		response.setHeader("Content-Disposition", "attachment; filename=\""+serviceAttachments.getFileName()+"\"");
-		FileCopyUtils.copy(serviceAttachments.getAttachment(), response.getOutputStream());	 
 	}
 }

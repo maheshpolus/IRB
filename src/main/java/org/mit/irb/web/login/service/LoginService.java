@@ -5,12 +5,10 @@ import java.sql.SQLException;
 
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.utils.DBException;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Service;
 
 public interface LoginService {
 	
-	  
+	
 	/**
 	 * @param personId : person ID
 	 * @param unitNumber : Home Unit number

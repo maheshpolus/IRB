@@ -1,17 +1,39 @@
 <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-           <div class="card">
-            <div class="card-header nav-header-link">
-                <nav class="nav navbar-pg3">
-                  <a class="nav-link active" href="#">Attachements</a>
-                  <a class="nav-link" href="#">Notes</a>
-                  <i class="fa fa-info-circle" aria-hidden="true"></i>
-              </nav>
-            </div>
-            
-            <div class="card-body">
-            	<div class="col-12 select-tag-form">
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header nav-header-link">
+					<nav class="nav navbar-pg3">
+						<a class="nav-link active">Attachments</a> <a class="nav-link">Notes</a>
+						<i class="fa fa-info-circle" aria-hidden="true"></i>
+					</nav>
+				</div>
+
+				<div class="card-body">
+
+					<div class="col-md-4 col-sm-4 col-lg-4">
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="sortOrder"
+								[(ngModel)]="sortOrder" (ngModelChange)="sortBy()"
+								id="inlineCheckbox1" value="-1"> <label
+								class="form-check-label radio-label" for="inlineCheckbox1">ASC</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" id="inlineCheckbox2"
+								[(ngModel)]="sortOrder" name="sortOrder"
+								(ngModelChange)="sortBy()" value="1"> <label
+								class="form-check-label radio-label" for="inlineCheckbox2">DSC</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<select class="custom-select mr-sm-2" [(ngModel)]="sortField"
+								(ngModelChange)="sortBy()" id="inlineFormCustomSelect">
+								<option value="UPDATE_TIMESTAMP">UPDATE TIMESTAMP</option>
+								<option value="ATTACHMENT_TYPE">ATTACHMENT TYPE</option>
+							</select>
+						</div>
+					</div>
+
+					<!--       	<div class="col-12 select-tag-form">
 	            	<form>
 					  <div class="form-row">
 					    <div class="col-12 col-sm-6 col-md-3 check-b-right">
@@ -46,44 +68,38 @@
 					    </div>
 					  </div>
 					</form>
-	            </div>
-             		<div class="col-12">
-                  <div class="table-responsive">
-             				<table class="table table-striped table-type-head">
-        					  <thead>
-        					    <tr>
-        					      <th scope="col">Type</th>
-        					      <th scope="col">Description</th>
-        					      <th scope="col">File</th>
-        					      <th scope="col">Updated By</th>
-        					    </tr>
-        					  </thead>
-        					  <tbody class="tdy-color">
-        					    <tr>
-        					      <td scope="row">Informed Consent document</td>
-        					      <td>Consent From Adler Foster</td>
-        					      <td><i class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>iInformed consent document file</span></td>
-        					      <td>Michael keohane 02-24-2018.11.30</td>
-        					    </tr>
-        					    <tr>
-        					     <td scope="row">Informed Consent document</td>
-                        <td>Consent From Adler Foster</td>
-                        <td><i class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>iInformed consent document file</span></td>
-                        <td>Michael keohane 02-24-2018.11.30</td>
-        					    </tr>
-        					    <tr>
-        					      <td scope="row">Informed Consent document</td>
-                        <td>Consent From Adler Foster</td>
-                        <td><i class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>iInformed consent document file</span></td>
-                        <td>Michael keohane 02-24-2018.11.30</td>
-        					    </tr>
-        					  </tbody>
-        					 </table>
-                  </div>
-                </div>
-             
-            </div>
-          </div>
-      </div>
-      </div>
+	            </div> -->
+					<div class="col-12">
+						<div class="table-responsive">
+							<table class="table table-striped table-type-head">
+								<thead>
+									<tr>
+										<th scope="col">Type</th>
+										<th scope="col">Description</th>
+										<th scope="col">File</th>
+										<th scope="col">Updated By</th>
+									</tr>
+								</thead>
+								<tbody class="tdy-color">
+									<tr
+										*ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}">
+										<td scope="row">{{attachments.ATTACHMENT_TYPE}}</td>
+										<td>{{attachments.DESCRIPTION}}</td>
+										<td><i class="fa fa-file-pdf-o" aria-hidden="true"
+											(click)="downloadAttachment(attachments.FILE_ID)"></i> <span>{{attachments.FILE_NAME}}</span></td>
+										<td>{{attachments.UPDATE_USER_NAME}}{{attachments.UPDATE_TIMESTAMP}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div *ngIf="noIrbAttachments">
+								<p>No attachments associated with this
+									protocol.</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

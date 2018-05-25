@@ -10,7 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./irb-overview.component.css']
 })
 export class IrbOverviewComponent implements OnInit {
-    irbPersonDetailedList: any;
+
    showpersonDataList = false;
    noIrbPersons = false;
    noIrbfunds = false;
@@ -25,6 +25,7 @@ export class IrbOverviewComponent implements OnInit {
   irbCollaborators: any[] = [];
   irbSubjects:any[] = [];
   irbSpecialReview:any[] = [];
+  irbPersonDetailedList = [];
   
   result: any;
   requestObject = {    

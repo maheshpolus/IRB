@@ -9,7 +9,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./irb-header-detail.component.css']
 })
 export class IrbHeaderDetailComponent implements OnInit {
-  currentTab = 'irb_overView';
+  isExpanded: boolean;
+  currentTab = '';
   irbHeaderDetails: any;
   result: any;
   requestObject = {     
@@ -21,7 +22,9 @@ export class IrbHeaderDetailComponent implements OnInit {
             this.spinner.show();
          }
 
-  ngOnInit() {
+  ngOnInit() {debugger;
+      this.isExpanded = false;
+      console.log("in onit", this.currentTab);
       this.requestObject.protocol_number = this.route.snapshot.queryParamMap.get('protocolNumber');
       this.loadHeaderDetails();
   }
@@ -41,5 +44,9 @@ export class IrbHeaderDetailComponent implements OnInit {
                    console.log( error );
               },
           );
+  }
+  toggle(){
+      console.log("in toggle", this.isExpanded);
+      this.isExpanded = !this.isExpanded;
   }
 }

@@ -19,6 +19,8 @@ import 'rxjs/add/operator/catch';
 } )
 export class DashboardListComponent implements OnInit, AfterViewInit {
 
+    noIrbList = false;
+
     @Input() userDTO: any ;
     lastClickedTab = 'ALL';
     requestObject = {
@@ -45,6 +47,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     leadUnit: string;
     status: string;
     piName: string;
+    expiry_date: string;
     elasticResultTab = false;
 
     isAdvancesearch = false;
@@ -66,7 +69,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.roleType = this.userDTO.role;
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit() {debugger;
         this.searchText
             .valueChanges
             .map(( text: any ) => text ? text.trim() : '' )
@@ -84,8 +87,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                         let title: string;
                         let protocol_type: string;
                         let personName: string;
-                        let lead_unit: string;
-                        let unit_number: string;
+                        //let lead_unit: string;
+                        let exp_date: string;
                         let test;
                         this._elasticsearchService.irbSearch(searchString)
                             .then(( searchResult ) => {
@@ -98,8 +101,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                                 hits_source.forEach(( elmnt, j ) => {
                                     protocol_number = hits_source[j].protocol_number;
                                     title = hits_source[j].title;
-                                    lead_unit = hits_source[j].lead_unit_name;
-                                    unit_number = hits_source[j].lead_unit_number;
+                                   // lead_unit = hits_source[j].lead_unit_name;
+                                    exp_date = hits_source[j].expiration_date;
                                     protocol_type = hits_source[j].protocol_type;
                                     personName = hits_source[j].pi_name;
                                     status = hits_source[j].status;
@@ -111,12 +114,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                                     if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
                                         title = hits_highlight[j].title;
                                     }
-                                    if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
+                                   /* if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
                                         lead_unit = hits_highlight[j].lead_unit_name;
                                     }
                                     if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
                                         unit_number = hits_highlight[j].lead_unit_number;
-                                    }
+                                    }*/
                                     if ( typeof ( hits_highlight[j].protocol_type ) !== 'undefined' ) {
                                         protocol_type = hits_highlight[j].protocol_type;
                                     }
@@ -128,8 +131,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                                     }
                                     results.push( {
                                         label: protocol_number + '  :  ' + title
-                                        + '  |  ' + unit_number
-                                        + '  |  ' + lead_unit
+                                        /*+ '  |  ' + unit_number
+                                        + '  |  ' + lead_unit*/
                                         + '  |  ' + protocol_type
                                         + '  |  ' + personName
                                         + '  |  ' + status,
@@ -163,17 +166,22 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       }
 
     getIrbListData( currentTab ) {
+        this.irbListData = [];
+        this.noIrbList =  false;
         this.seachTextModel = '';
         this.lastClickedTab = currentTab;
-        console.log( this.lastClickedTab, this.roleType);
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.person_role_type = this.userDTO.role;
         this.requestObject.dashboard_type = currentTab;
-        console.log(this.requestObject.protocol_number);
         this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
-                this.irbListData = this.result.dashBoardDetailMap || [];
+                if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length == 0 ) {
+                    this.noIrbList = true;
+                }
+                else{
+                this.irbListData = this.result.dashBoardDetailMap;
+                }
             }
         },
             error => {
@@ -195,7 +203,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.protocol = result.obj.protocol_number;
         this.protocolType = result.obj.protocol_type;
         this.piName = result.obj.pi_name;
-        this.leadUnit = result.obj.lead_unit_name;
+        this.expiry_date = result.obj.expiration_date;
         this.title = result.obj.title;
         this.status = result.obj.status;
         this.elasticResultTab = true;

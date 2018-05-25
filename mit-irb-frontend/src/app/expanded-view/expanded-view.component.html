@@ -2,7 +2,7 @@
 	<div class="headerPush"></div>
 	<section class="row">
 		<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10 toptext">
-			<h5 class="pageHeader"> SNAP SHOT DETAILS </h5>
+			<h5 class="pageHeader">SNAP SHOT DETAILS</h5>
 		</div>
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div class="borderBox">
@@ -14,8 +14,9 @@
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'PROTOCOL_NUMBER')}"></span>
 							</th>
-							<th (click)="sortBy('TITLE')" width="30%" title="Click to sort by Title">Title
-								<span class="sortorder"
+							<th (click)="sortBy('TITLE')" width="30%"
+								title="Click to sort by Title">Title <span
+								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'TITLE')}"></span>
 							</th>
 							<th (click)="sortBy('PROTOCOL_TYPE')" width="10%"
@@ -23,8 +24,9 @@
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'PROTOCOL_TYPE')}"></span>
 							</th>
-							<th (click)="sortBy('STATUS')" width="15%" title="Click to sort by Lead Unit">Status
-								<span class="sortorder" 
+							<th (click)="sortBy('STATUS')" width="15%"
+								title="Click to sort by Lead Unit">Status <span
+								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'STATUS')}"></span>
 							</th>
 							<th (click)="sortBy('APPROVAL_DATE')"
@@ -41,38 +43,25 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td colspan=6>No Requests Found !</td>
+						<tr *ngFor="let result of expandedList">
+							<td>{{result.PROTOCOL_NUMBER}}</td>
+							<td>{{result.TITLE}}</td>
+							<td>{{result.PROTOCOL_TYPE}}</td>
+							<td>{{result.PROTOCOL_STATUS}}</td>
+							<td>{{result.LAST_APPROVAL_DATE}}</td>
+							<td>{{result.EXPIRATION_DATE}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{result.PROTOCOL_NUMBER}}" (click)="openIrbView(result.PROTOCOL_NUMBER)"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
 						</tr>
-						<!--           <tr *ngFor="let result of resultList; let i=index">
-                <td >{{result.awardNumber}}</td>
-                <td>{{result.accountNumber}}</td>
-                <td>{{result.title}}</td>
-                <td>{{result.unitName}}</td>
-                <td>{{result.sponsor}}</td>
-                <td>{{result.piName}}</td>
-               <td>
-                  <ul class="actionButtonGroup">
-                    <li><a title="Open {{awardDetails.awardNumber}}"
-                      [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-                        class="fa fa-eye"></i> </a></li>
-                    <li *ngIf= "requestobject.moduleSubType === null"><a title="Open {{result.awardNumber}}"
-                      (click)="openAward(result.awardNumber)"><i
-                        class="fa fa-eye"></i> </a>
-                        <a (click)= "updateFavorites(result.awardNumber,i, result.favouriteDocId,'remove')" *ngIf = "result.favouriteDocId != null"><img src="dist/assets/images/star-lit4.png"></a> 
-							          <a (click)= "updateFavorites(result.awardNumber,i, result.favouriteDocId, 'add')" *ngIf = "result.favouriteDocId == null"><img src="dist/assets/images/star4.png"></a> 
-                      </li>
-                       <li><a title="Open {{result.awardNumber}}"
-                      (click)="openAwardView(result.awardNumber,result.piName,result.title,result.sponsor)"><i
-                        class="fa fa-eye eyeLink"></i> </a>
-                         <a (click)= "updateFavorites(result.awardNumber,i, result.favouriteDocId,'remove')" *ngIf = "result.favouriteDocId != null"><img src="dist/assets/images/star-lit4.png"></a> 
-							          <a (click)= "updateFavorites(result.awardNumber,i, result.favouriteDocId, 'add')" *ngIf = "result.favouriteDocId == null"><img src="dist/assets/images/star4.png"></a> 
-                      </li>
-                  </ul>
-                </td>
-              </tr> -->
 					</tbody>
 				</table>
+				<div *ngIf="noData">
+					<p>No request found!
+				</div>
 			</div>
 		</div>
 	</section>

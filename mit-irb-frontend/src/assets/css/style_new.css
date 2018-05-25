@@ -1729,6 +1729,21 @@ div
     font-size: 14px;
     color: #505050;
     padding-top: 10px;
+    font-size: 14px;
+    /* line-height: 30px;
+    margin: 0;
+    color: #a92034; */
+    font-weight: bold;
+}
+.pdf{
+	cursor: pointer;
+}
+.col-6 h6 b{
+	font-size: 14px;
+	color: #a92034 !important;
+}
+.sub-head{
+	color: #a92034!important;
 }
 .card-list-med
 {
@@ -1749,19 +1764,23 @@ div
 }
 .card-list-med p
 {
-    font-size: 12px;
+	font-size: 14px;
+	color: #a92034!important;
+	font-weight: bold;
     margin:0;
     line-height:30px;
     color: #505050;
 }
 .card-desc span
 {
-    color:#a92034;
+    color: #000;
+    font-weight: 400;
 }
 .cmp-b p
 {
     line-height: 40px;
-    color: #f05525;
+    color: #f05525!important;
+    font-weight: normal;
 }
 .card-list-med .row-line::before {
     margin-bottom: 15px;
@@ -1999,7 +2018,12 @@ div
 	margin-top:7px;
 	background-image:url(../images/up_arrow.png);
 	width:18px;
-	height:18px;
+	height:25px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	position: absolute;
+    right: 15px;
+    z-index: 999999;
 }
 
 .text-right{
@@ -2037,7 +2061,12 @@ div
 	margin-top:7px;
 	background-image:url(../images/down_arrow.png);
 	width:18px;
-	height:18px;
+	height:25px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	position: absolute;
+    right: 15px;
+    z-index: 999999;
 }
 .coll-header{
 	padding-left: 0px;
@@ -2108,7 +2137,10 @@ ul.sb-results-dropdown-menu > li:last-child {
     border-radius: 3px;
     box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.18); 
 }
-
+.expand-div{
+	position: relative;
+    padding-bottom: 35px;
+}
 /*end of newly added*/
 /*page2style_start*/
 .collapse_hd

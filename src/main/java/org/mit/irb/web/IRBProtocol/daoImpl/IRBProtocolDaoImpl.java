@@ -1,5 +1,6 @@
 package org.mit.irb.web.IRBProtocol.daoImpl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,6 +15,11 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
+import org.mit.irb.web.common.view.ServiceAttachments;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +32,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	IRBProtocolDaoImpl(){
 		dbEngine = new DBEngine();
 	}
-	static Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName()); 
+	
+	Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName());
 	@Override
 	public IRBViewProfile getIRBProtocolDetails(String protocolNumber) {
 		IRBViewProfile irbViewProfile = new IRBViewProfile();
@@ -48,7 +55,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			irbViewProfile.setIrbviewHeader(result.get(0));
 			
 		}
-		logger.info("irbview : "+ result);
+		System.out.println("irbview : "+ result);
 		return irbViewProfile;
 	}
 
@@ -72,7 +79,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolPersons(result);
 		}
-		logger.info("irbview Persons: "+ result);
+		System.out.println("irbview Persons: "+ result);
 		return irbViewProfile;
 	}
 
@@ -96,7 +103,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolFundingsource(result);
 		}
-		logger.info("irbview PROTOCOL_FUNDING_SRC: "+ result);
+		System.out.println("irbview PROTOCOL_FUNDING_SRC: "+ result);
 		return irbViewProfile;
 	}
 
@@ -120,7 +127,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolLocation(result);
 		}
-		logger.info("irbview IRBprotocolLocation: "+ result);
+		System.out.println("irbview IRBprotocolLocation: "+ result);
 		return irbViewProfile;
 	}
 
@@ -168,7 +175,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolSpecialReview(result);
 		}
-		logger.info("irbview IRBprotocolSpecialReview: "+ result);
+		System.out.println("irbview IRBprotocolSpecialReview: "+ result);
 		return irbViewProfile;
 	}
 
@@ -216,5 +223,60 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 		}
 		return result;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadAttachments(String attachmentId) {
+		Integer attachmentsId = Integer.parseInt(attachmentId);
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_INTEGER, attachmentsId));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_MITKC_ATTACHMENT_FILE",
+					outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("FILE_DATA");
+				byte[] data = byteArrayOutputStream.toByteArray();
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType(hmResult.get("CONTENT_TYPE").toString()));
+				String filename = hmResult.get("FILE_NAME").toString();
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(data.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return attachmentData;
+	}
+
+	@Override
+	public IRBViewProfile getAttachmentsList(String protocolnumber) {
+		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolnumber));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ATTACHMENT", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (result != null && !result.isEmpty()) {
+			irbViewProfile.setIrbviewProtocolAttachmentList(result);
+		}
+		return irbViewProfile;
 	}
 }

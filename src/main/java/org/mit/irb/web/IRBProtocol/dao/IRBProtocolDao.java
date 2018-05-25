@@ -1,6 +1,8 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
 import org.mit.irb.web.common.pojo.IRBViewProfile;
+import org.mit.irb.web.common.view.ServiceAttachments;
+import org.springframework.http.ResponseEntity;
 
 public interface IRBProtocolDao {
 
@@ -17,5 +19,9 @@ public interface IRBProtocolDao {
 	IRBViewProfile getIRBprotocolSpecialReview(String protocolNumber);
 
 	IRBViewProfile getMITKCPersonInfo(String avPersonId);
+
+	ResponseEntity<byte[]> downloadAttachments(String attachmentId);
+
+	IRBViewProfile getAttachmentsList(String protocolnumber);
 
 }

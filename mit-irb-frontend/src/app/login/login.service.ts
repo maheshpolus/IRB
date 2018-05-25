@@ -13,7 +13,7 @@ export class LoginService {
     return this._http.post('/mit-irb/loginCheck', params);
     }
   logout() {
-      this.router.navigate( ['/login'] );
+      return this._http.get('/mit-irb/logout');
   }
   getUserDetail() {
     this._http.get('/mit-irb/getUserDetails');

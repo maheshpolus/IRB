@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable()
 export class IrbViewService {
@@ -22,9 +22,18 @@ export class IrbViewService {
       return this._http.post('/mit-irb/getIRBprotocolVulnerableSubject', params);
   }
   getIrbSpecialReviewDetails(params) {
-      return this._http.post('/mit-irb/getIRBprotocolLocation', params);
+      return this._http.post('/mit-irb/getIRBprotocolSpecialReview', params);
   }
   getIrbPersonDetailedList(params) {
       return this._http.post('/mit-irb/getMITKCPersonInfo', params);
+  }
+  getIrbAttachmentList(params) {
+      return this._http.post('/mit-irb/getAttachmentList', params);
+  }
+  downloadIrbAttachment(attachmentId) {debugger;
+      return this._http.get('/mit-irb/downloadAttachment', { 
+          headers: new HttpHeaders().set('attachmentId',attachmentId.toString()),
+          responseType:'blob'
+      });
   }
 }

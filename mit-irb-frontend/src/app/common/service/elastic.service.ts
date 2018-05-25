@@ -9,7 +9,8 @@ export class ElasticService {
     URL_FOR_ELASTIC: string;
     IRB_INDEX: string;
     constructor( private _http: HttpClient ) {
-      // this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+       /* this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+        this.IRB_INDEX = "irbprotocol";*/
          this.get_elastic_config().subscribe(
             data => {
                  const elastic_config: any = data;
@@ -20,9 +21,7 @@ export class ElasticService {
                          this._connect();
                     }
                 }
-                 if ( !this._client ) {
-                     this._connect();
-                   }
+                
              }
          );
     }
@@ -38,7 +37,7 @@ export class ElasticService {
     irbSearch(value): any {
       if ( value ) {
         return this._client.search({
-          index: this.IRB_INDEX ,
+          index: this.IRB_INDEX,
           size: 20 ,
           type: 'irbprotocol',
           body: {
@@ -63,6 +62,14 @@ export class ElasticService {
                     // },
                     {
                       match: {
+                          pi_name: {
+                          query: value,
+                          operator: 'or'
+                        }
+                      }
+                    },
+                    {
+                      match: {
                           protocol_number: {
                           query: value,
                           operator: 'or'
@@ -77,7 +84,7 @@ export class ElasticService {
                         }
                       }
                     },
-                    {
+                    /*{
                       match: {
                           lead_unit_number: {
                           query: value,
@@ -92,7 +99,7 @@ export class ElasticService {
                             operator: 'or'
                           }
                         }
-                      },
+                      },*/
                       {
                           match: {
                               status: {
@@ -154,13 +161,13 @@ export class ElasticService {
                   document_number: {},
                   protocol_number: {},
                   title: {},
-                  lead_unit_number: {},
-                  lead_unit_name: {},
+                //  lead_unit_number: {},
+                 // lead_unit_name: {},
                   status: {},
                   protocol_type: {},
                   status_code: {},
                   person_id: {},
-                  person_name: {},
+                  pi_name: {},
                 }
               }
             }

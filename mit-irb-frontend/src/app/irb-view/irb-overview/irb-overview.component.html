@@ -11,7 +11,7 @@
 				  </button>
 				</div>
 				<div class="modal-body modal-popup">
-						<div class= "modal-header-label"><h4>Basic</h4></div>
+						<div class= "modal-header-label"><h4 class="popup-sub-head">Basic</h4></div>
 					<!-- section1 -->
 					<div class = "modal-padding">
 						<div class="row">
@@ -49,7 +49,7 @@
 						</div>
 					</div>
 				  <!-- section2 -->
-				  <div><h4>Training</h4></div>
+				  <div><h4 class="popup-sub-head">Training</h4></div>
 					<div class = "modal-padding">
 						<div class="popup-div">
 						<table class="table table-striped">
@@ -127,7 +127,7 @@
 							</div>
 						</div>
 						<div class="col-12 card-list-med ovr-flw" *ngIf="noIrbPersons==false">
-							<div class="row row-line" *ngFor="let irbPersons of irbPersonsDetails" data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
+							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let irbPersons of irbPersonsDetails;let i= index" data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
 								<div class="col-2">
 									<img [ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
 									'coi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID !=='PI'}"
@@ -172,7 +172,7 @@
 							</div>
 						</div>
 						<div class="col-12 card-list-med funding-card" *ngIf="noIrbfunds==false">
-							<div class="row row-line" *ngFor="let fund of irbFundingDetails">
+							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let fund of irbFundingDetails;let i= index">
 								<div class="col-3">
 									<div class="sponser_ico">
 										<i class="fa fa-briefcase" aria-hidden="true"></i>
@@ -219,7 +219,7 @@
 							</div>
 						</div>
 						<div class="col-12 card-list-med funding-card" *ngIf="noIrbSubjects==false">
-							<div class="row row-line" *ngFor="let sub of irbSubjects">
+							<div class="row" [ngClass]="{'row-line':i!=0}"  *ngFor="let sub of irbSubjects;let i= index">
 								<div class="col-3">
 									<div class="hospital_plus_ico">
 										<i class="fa fa-plus-square" aria-hidden="true"></i>
@@ -253,7 +253,7 @@
 							</div>
 						</div>
 						<div class="col-12 card-list-med" *ngIf="noIrbCollaborators==false">
-							<div class="row row-line" *ngFor="let irbCollab of irbCollaborators">
+							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let irbCollab of irbCollaborators;let i= index">
 								<div class="col-2">
 									<div class="profile_avatar_ico">
 										<i class="fa fa-user-o" aria-hidden="true"></i>
@@ -291,10 +291,10 @@
 	</section>
 </div>
 <div class="container-fluid">
-	<section class="row">
+	<section class="row section-margin">
 		<!--collapse-->
 		<div class="col-12">
-			<div class="row" style="padding: 15px;">
+			<div class="row" class="card-spcl-padding">
 				<div class="col-12 card-head-med">
 					<div class="row">
 						<div class="col-11">
@@ -410,14 +410,11 @@
 					</div>
 				</div> -->
 				<!-- delete this on next commit -->
-				<div class="card">
+				<div class="card" *ngIf="noIrbSpecialReviews">
 					<div class="card-header" id="headingTwo">
 						<span class="mb-0">
 							<button class="btn btn-link coll-header">
 								No special reviews</button>
-
-							<span class="up-arrow" data-toggle="collapse" data-target="#collapseTwo"
-								aria-expanded="false" aria-controls="collapseTwo"> </span> <span class="active_green">Active</span>
 						</span>
 					</div>
 				</div>

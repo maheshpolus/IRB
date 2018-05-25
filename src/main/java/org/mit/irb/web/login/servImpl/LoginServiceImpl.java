@@ -59,18 +59,18 @@ public class LoginServiceImpl implements LoginService {
 		result = loginDao.checkIRBUserRole(personId);
 		for (HashMap<String, Object> map : result){
 			for (Entry<String, Object> entry : map.entrySet()){
-				logger.info("key :"+entry.getKey() + " => " + entry.getValue());
+				System.out.println("key :"+entry.getKey() + " => " + entry.getValue());
 				if(entry.getKey().equals("IS_IRB_ADMIN") && entry.getValue().equals("Y")){
-					role = "admin";
+					role = "ADMIN";
 					return role;
 				} else if(entry.getKey().equals("IS_IRB_CHAIR") && entry.getValue().equals("Y")){
-					role = "chair";
+					role = "CHAIR";
 					return role;
 				} else if(entry.getKey().equals("IS_IRB_REVIEWER") && entry.getValue().equals("Y")){
-					role = "reviewer";
+					role = "REVIEWER";
 					return role;
 				} else{
-					role = "pi";
+					role = "PI";
 				}
 			}
 		}
@@ -105,10 +105,10 @@ public class LoginServiceImpl implements LoginService {
 		}
 		return personDTO;
 	}
-
+ 
 	@Override
 	public Integer checkUserType(String personId, String unitNumber) throws DBException, IOException, SQLException {
-
+		System.out.println("in check user type");
 		ArrayList<InParameter> inParam = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
 		Integer userType = null;

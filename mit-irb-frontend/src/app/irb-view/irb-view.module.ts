@@ -8,12 +8,17 @@ import { IrbHeaderDetailComponent } from './irb-header-detail/irb-header-detail.
 import { IrbQuestionaireComponent } from './irb-questionaire/irb-questionaire.component';
 import { IrbAttachmentsComponent } from './irb-attachments/irb-attachments.component';
 import { IrbHistoryComponent } from './irb-history/irb-history.component';
+import { FormsModule } from "@angular/forms";
+import { AppModule } from "../app.module";
+import { AppCommonModule } from "../common/common/common.module";
 
 @NgModule({
   imports: [
     CommonModule,
     IrbViewRoutingModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    FormsModule,
+    AppCommonModule
   ],
   declarations: [IrbOverviewComponent, IrbHeaderDetailComponent, IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent]
 })

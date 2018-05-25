@@ -8,24 +8,15 @@ import { SharedDataService } from '../../../common/service/shared-data.service';
   styleUrls: ['./card-details.component.css']
 })
 export class CardDetailsComponent implements OnInit, AfterViewInit {
-    //isIrbList = false;
 
   @Input() irbList: any = [];
   statusStyle: string;
 
-  constructor(private router: Router, private sharedData: SharedDataService) {
-    //  this.isIrbList = false;
-  }
+  constructor(private router: Router, private sharedData: SharedDataService) { }
 
-  ngOnInit() {
-  }
-  ngAfterViewInit(){/*
-      if( this.irbList == null || this.irbList.length == 0){
-          this.isIrbList = true;
-      }
-      console.log("irblistaterview"+this.isIrbList);
-      */
-  }
+  ngOnInit() {}
+
+  ngAfterViewInit(){}
 
   openIrb( protocolNumber ) {
       this.router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});

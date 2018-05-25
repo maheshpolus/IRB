@@ -40,7 +40,7 @@ export class SnapshotsComponent implements OnInit {
             },
     );
   }
-  expandedView() {
-      this.router.navigate(['/irb/expanded-view']);
+  expandedView(summaryType) {
+      this.router.navigate(['/irb/expanded-view'], {queryParams: {personId: this.userDTO.personID, personRole: this.roleType, summaryType: summaryType}});
   }
 }

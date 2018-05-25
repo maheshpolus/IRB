@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {  }
 
-    login() {debugger;
+    login() {
         const requestObject = {
             username: this.username,
             password: this.password
@@ -36,11 +36,4 @@ export class LoginComponent implements OnInit {
             },
         );
     }
-    login1() {debugger;
-    const requestObject = {
-        username: this.username,
-        password: this.password
-    };
-    /*this.router.navigate( ['/irb/dashboard'] );*/
-}
 }

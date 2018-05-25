@@ -11,9 +11,10 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<ul class="headerMenu">
 					<li><a class="logo">
-						<img src="assets/images/logo.png" class="" /><!-- /mit-irb/resources/dist/assets/images/logo.png -->
+						<img src="/mit-irb/resources/dist/assets/images/logo.png" class="" />
+						<!-- <img src="assets/images/logo.png" class="" /> -->
 					</a></li>
-					<li><a href= "#"><span class="userName">Dashboard of {{result?.fullName}}({{result?.role}})</span><i class="fa fa-user"></i></a></li>
+					<li><a  (click)="logout()"><span class="userName">Dashboard of {{result?.fullName}}({{result?.role}})</span><i class="fa fa-user"></i></a></li>
 					<li class="active"><a id="showNotify"><i
 							class="fa fa-bell"></i></a>
 						<ul class="notificationBox">

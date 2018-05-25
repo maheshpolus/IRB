@@ -25,6 +25,9 @@ import { OrderByPipe } from './common/directives/order-by.pipe';
 import { LoginService } from './login/login.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
 import { IrbViewService } from "./irb-view/irb-view.service";
+import { IrbViewModule } from "./irb-view/irb-view.module";
+import { ExpandedViewService } from "./expanded-view/expanded-view.service";
+import { AppCommonModule } from "./common/common/common.module";
 
 
 @NgModule( {
@@ -38,19 +41,19 @@ import { IrbViewService } from "./irb-view/irb-view.service";
         DashboardListComponent,
         CardDetailsComponent,
         IrbComponent,
-        ExpandedViewComponent,
-        OrderByPipe,
+        ExpandedViewComponent
     ],
     imports: [
         BrowserModule,
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        AppCommonModule
     ],
     providers: [AuthGuard, LoginCheckService, DashboardService, SharedDataService,
                 { provide: LocationStrategy, useClass: HashLocationStrategy },
-                LoginService, DashboardResolverService, ElasticService, IrbViewService],
+                LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService],
     bootstrap: [AppComponent]
 } )
 export class AppModule { }

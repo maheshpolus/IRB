@@ -122,7 +122,7 @@
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
-							<label> Lead Unit </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{leadUnit }}</a>
+							<label> Expiration Date </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{expiry_date }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
@@ -136,7 +136,7 @@
 					</div>
 				</div>
 			</div>
-			
+			<div class="col-sm-12" *ngIf="noIrbList"> No Irb protocol found for this status</div>
 			<app-card-details *ngIf = "(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 			||(roleType == 'PI')"  
 					[irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>

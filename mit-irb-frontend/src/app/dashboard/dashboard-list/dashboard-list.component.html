@@ -63,7 +63,7 @@
 					<div class = "row">
 						<div class = "col-md-8 col-sm-8 col-lg-8">
 							<div class="searchBox"  *ngIf="lastClickedTab == 'ALL'" >
-								<input type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Lead Unit, Status"  
+								<input type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status"  
 									[formControl]="searchText" 	[(ngModel)]="seachTextModel" 
 									(focus)="IsElasticResult = true"/> 
 								<a href = "#" class="searchButton" (click)="clearsearchBox($event)"><i [ngClass]="iconClass"></i></a>

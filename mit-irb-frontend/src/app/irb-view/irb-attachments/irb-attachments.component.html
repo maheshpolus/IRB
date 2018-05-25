@@ -85,8 +85,8 @@
 										*ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}">
 										<td scope="row">{{attachments.ATTACHMENT_TYPE}}</td>
 										<td>{{attachments.DESCRIPTION}}</td>
-										<td><i class="fa fa-file-pdf-o" aria-hidden="true"
-											(click)="downloadAttachment(attachments.FILE_ID)"></i> <span>{{attachments.FILE_NAME}}</span></td>
+										<td><i class="fa fa-file-pdf-o pdf" aria-hidden="true"
+											(click)="downloadAttachment(attachments)"></i> <span>{{attachments.FILE_NAME}}</span></td>
 										<td>{{attachments.UPDATE_USER_NAME}}{{attachments.UPDATE_TIMESTAMP}}</td>
 									</tr>
 								</tbody>

@@ -12,8 +12,8 @@ import { DashboardResolverService } from './common/service/dashboard-resolver.se
  * login service - should set a vatriable 'ActivatedUser' in browser session
  */
 const appRoutes = [
-  //  { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+   { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
+   // { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     {
         path: 'irb', component: IrbComponent, // canActivate: [AuthGuard],

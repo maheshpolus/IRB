@@ -127,7 +127,7 @@
 							</div>
 						</div>
 						<div class="col-12 card-list-med ovr-flw" *ngIf="noIrbPersons==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let irbPersons of irbPersonsDetails;let i= index" data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
+							<div class="row pdf" [ngClass]="{'row-line':i!=0}" *ngFor="let irbPersons of irbPersonsDetails;let i= index" data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
 								<div class="col-2">
 									<img [ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
 									'coi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID !=='PI'}"
@@ -135,14 +135,14 @@
 								</div>
 								<div class="col-4 card-desc">
 									<h6>{{irbPersons.PERSON_NAME}}</h6>
-									<p>{{irbPersons.PROTOCOL_PERSON_ROLE_ID}}</p>
+									<p>Person Role: <span>{{irbPersons.PROTOCOL_PERSON_ROLE_ID}}</span></p>
 									<p>
-										email id: <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office :<span>{{irbPersons.OFFICE_PHONE}}</span>
+										Email Id: <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office :<span>{{irbPersons.OFFICE_PHONE}}</span>
 									</p>
 								</div>
 								<div class="col-4 card-desc">
 									<h6>&nbsp;</h6>
-									<p>{{irbPersons.PRIMARY_TITLE}}</p>
+									<p>Primary Title: <span>{{irbPersons.PRIMARY_TITLE}}</span></p>
 									<p>
 										Affiliation: <span>{{irbPersons.AFFILIATION_TYPE}}</span> | Unit :<span>{{irbPersons.UNIT_NAME}}</span>
 									</p>
@@ -226,10 +226,10 @@
 									</div>
 								</div>
 								<div class="col-7 card-desc">
-									<h6>
+									<h6 class="sub-head">
 										Type: <span>{{sub.VULNERABLE_SUBJECT}}</span>
 									</h6>
-									<h6>
+									<h6 class="sub-head">
 										Count: <span>{{sub.SUBJECT_COUNT}}</span>
 									</h6>
 								</div>
@@ -265,7 +265,7 @@
 										<span>{{irbCollab.ROLODEX_NAME}}</span>
 									</p>
 									<p>
-										<span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span> | {{irbCollab.ROLODEX_PHONE_NUMBER}}<span></span>
+										Email Id: <span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span> |Phone Number:  {{irbCollab.ROLODEX_PHONE_NUMBER}}<span></span>
 									<div class="row row-padng">
 										<div class="col-6">
 											<p>

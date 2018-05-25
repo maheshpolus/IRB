@@ -18,8 +18,11 @@ import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.login.authentication.LoginValidator;
+import org.mit.irb.web.login.authentication.TouchstoneAuthService;
 import org.mit.irb.web.login.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +51,11 @@ public class LoginController extends BaseController {
 	LoginValidator loginValidator;
 	
 	@Autowired
+	@Qualifier(value="loginService")
 	LoginService loginService;
+	
+	@Value("${LOGIN_MODE}")
+	private String login_mode;
 	
 	@RequestMapping(value = "/loginCheck", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<String> loginUser(@RequestBody CommonVO vo, HttpServletRequest request,
@@ -80,9 +87,26 @@ public class LoginController extends BaseController {
 		return new ResponseEntity<String>(responseData, status);
 	}
 
-	@RequestMapping(value = {"/login","/"} ,method = RequestMethod.GET)
-	public String entryPage() {
+	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
+	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
 		System.out.println("returning index page");
+		logger.info("in method entryPage");
+		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO" + session.getId());
+		if (personDTO != null) {
+			logger.info("personDTO != null");
+			return "index.html";
+
+		} else {
+			if ("TOUCHSTONE".equalsIgnoreCase(login_mode)) {
+				Boolean isLoginSuccess = TouchstoneAuthService.authenticate(request, session);
+				logger.info("in touchstone  isLoginSuccess " +isLoginSuccess);
+				System.out.println("in touchstone "+isLoginSuccess);
+				System.out.println("inside touchstone");
+				if (isLoginSuccess) {
+					return "index.html";
+				}
+			}
+		}
 		return "index.html";
 	}
 	
@@ -102,6 +126,21 @@ public class LoginController extends BaseController {
 			e.printStackTrace();
 			status = HttpStatus.BAD_REQUEST;
 		}
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public ResponseEntity<String> logout(ModelMap model, HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.info("Log Out");
+		// invalidate the session if exists
+		HttpSession session = request.getSession(false);
+		HttpStatus status = HttpStatus.OK;
+		if (session != null) {
+			session.invalidate();
+		}
+		String responseData = null;
+		responseData = "true";
 		return new ResponseEntity<String>(responseData, status);
 	}
 }

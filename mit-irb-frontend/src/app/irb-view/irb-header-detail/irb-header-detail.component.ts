@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { IrbViewService } from "../irb-view.service";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-irb-header-detail',
@@ -8,16 +10,36 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class IrbHeaderDetailComponent implements OnInit {
   currentTab = 'irb_overView';
+  irbHeaderDetails: any;
+  result: any;
+  requestObject = {     
+          protocol_number: ''
+  };
   
-  constructor(private router: Router, private route: ActivatedRoute ) { }
+  constructor(private router: Router, private route: ActivatedRoute, private _irbViewService: IrbViewService,
+        private spinner: NgxSpinnerService ) {
+            this.spinner.show();
+         }
 
   ngOnInit() {
-      console.log(this.route.snapshot.queryParamMap.get('protocolNumber'));
+      this.requestObject.protocol_number = this.route.snapshot.queryParamMap.get('protocolNumber');
+      this.loadHeaderDetails();
   }
 
   show_current_tab( e: any, current_tab ) {
       e.preventDefault();
       this.currentTab = current_tab;
-      console.log(this.currentTab);
+  }
+  loadHeaderDetails(){
+          this._irbViewService.getIrbHeaderDetails( this.requestObject ).subscribe( data => {
+              this.result = data || [];
+              if ( this.result != null ) {
+                  this.irbHeaderDetails = this.result.irbviewHeader;
+              }
+          },
+              error => {
+                   console.log( error );
+              },
+          );
   }
 }

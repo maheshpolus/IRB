@@ -7,9 +7,9 @@ export class DashboardService {
   constructor(private _http: HttpClient) { }
 
   getSnapshots(params) {
-      return this._http.post('getDashboardSnapshot', params);
+      return this._http.post('/mit-irb/getDashboardSnapshot', params);
   }
   getIrbList(params) {
-      return this._http.post('getDashboardProtocolList', params);
+      return this._http.post('/mit-irb/getDashboardProtocolList', params);
   }
 }

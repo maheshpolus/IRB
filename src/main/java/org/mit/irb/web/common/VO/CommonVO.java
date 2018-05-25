@@ -24,6 +24,28 @@ public class CommonVO {
 	
 	private String dashboard_type;
 
+	private String av_person_id;
+	
+	private String attachmentId;
+	
+	private String av_summary_type;
+	
+	public String getAv_summary_type() {
+		return av_summary_type;
+	}
+
+	public void setAv_summary_type(String av_summary_type) {
+		this.av_summary_type = av_summary_type;
+	}
+
+	public String getAttachmentId() {
+		return attachmentId;
+	}
+
+	public void setAttachmentId(String attachmentId) {
+		this.attachmentId = attachmentId;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -95,5 +117,12 @@ public class CommonVO {
 	public void setDashboard_type(String dashboard_type) {
 		this.dashboard_type = dashboard_type;
 	}
-	
+
+	public String getAv_person_id() {
+		return av_person_id;
+	}
+
+	public void setAv_person_id(String av_person_id) {
+		this.av_person_id = av_person_id;
+	}
 }

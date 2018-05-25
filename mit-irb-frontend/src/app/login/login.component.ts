@@ -42,18 +42,5 @@ export class LoginComponent implements OnInit {
         password: this.password
     };
     /*this.router.navigate( ['/irb/dashboard'] );*/
-    this._loginService.login1( requestObject ).subscribe(
-        data => {
-            this.result = data || [];
-            //**update ActivatedUser with logged in user once login service complated *//*
-            sessionStorage.setItem('ActivatedUser', 'admin');
-            if ( this.result != null ) {
-                this.router.navigate( ['/irb/dashboard'] );
-            }
-        },
-        error => {
-            console.log( error );
-        },
-    );
 }
 }

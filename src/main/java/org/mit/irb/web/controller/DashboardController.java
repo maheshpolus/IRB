@@ -29,7 +29,7 @@ public class DashboardController {
 
 	@RequestMapping(value = "/getDashboardSnapshot", method = RequestMethod.POST)
 	public ResponseEntity<String> getDashboardSnapShot(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws Exception {
 		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getSnapshotData(vo.getPersonId(), vo.getPerson_role_type());
 		ObjectMapper mapper = new ObjectMapper();
@@ -42,6 +42,21 @@ public class DashboardController {
 		return new ResponseEntity<String>(responseData, status);
 	}
 
+	@RequestMapping(value = "/getExpandedSnapShotView", method = RequestMethod.POST)
+	public ResponseEntity<String> getExpandedSnapShotView(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		HttpStatus status = HttpStatus.OK;
+		DashboardProfile profile = this.dashboardService.getExpandedSnapShotView(vo.getPersonId(), vo.getPerson_role_type(), vo.getAv_summary_type());
+		ObjectMapper mapper = new ObjectMapper();
+		String responseData = null;
+		try {
+			responseData = mapper.writeValueAsString(profile);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
 	@RequestMapping(value = "/getDashboardProtocolList", method = RequestMethod.POST)
 	public ResponseEntity<String> getDashboardProtocolList(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) {

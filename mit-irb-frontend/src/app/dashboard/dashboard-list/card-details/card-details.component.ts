@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedDataService } from '../../../common/service/shared-data.service';
 
@@ -7,14 +7,25 @@ import { SharedDataService } from '../../../common/service/shared-data.service';
   templateUrl: './card-details.component.html',
   styleUrls: ['./card-details.component.css']
 })
-export class CardDetailsComponent implements OnInit {
+export class CardDetailsComponent implements OnInit, AfterViewInit {
+    //isIrbList = false;
 
   @Input() irbList: any = [];
   statusStyle: string;
 
-  constructor(private router: Router, private sharedData: SharedDataService) { }
+  constructor(private router: Router, private sharedData: SharedDataService) {
+    //  this.isIrbList = false;
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+  ngAfterViewInit(){/*
+      if( this.irbList == null || this.irbList.length == 0){
+          this.isIrbList = true;
+      }
+      console.log("irblistaterview"+this.isIrbList);
+      */
+  }
 
   openIrb( protocolNumber ) {
       this.router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});

@@ -1473,7 +1473,7 @@ form-check-label {
 .list-des h5
 {
     font-size: 14px;
-    color: #585858;
+       color: #424141;/* modified from #585858*/
     line-height: 30px;
     margin: 0;
 }
@@ -1486,7 +1486,10 @@ form-check-label {
 }
 .list-des span
 {
-    color: #000;
+ /*  color: #000; */
+    color: #a92034;
+    font-weight: bold;
+
 }
 .list-des p
 {
@@ -1570,8 +1573,8 @@ form-check-label {
     content: "";
     border: solid 1px #ececec;
     right: 0;
-    height: 76px;
-    top: 10px;
+  height: 95px;
+    top: 12px;
 }
 .main-list
 {
@@ -2023,7 +2026,7 @@ div
 	cursor: pointer;
 	position: absolute;
     right: 15px;
-    z-index: 999999;
+   z-index: 1;
 }
 
 .text-right{
@@ -2066,7 +2069,7 @@ div
 	cursor: pointer;
 	position: absolute;
     right: 15px;
-    z-index: 999999;
+     z-index: 1;
 }
 .coll-header{
 	padding-left: 0px;
@@ -2452,9 +2455,9 @@ ul.sb-results-dropdown-menu > li:last-child {
 .history-coll-header p
 {
     color:#a92034;
-    font-size: 12px;
+    font-size: 16px;
     margin: 0;
-    line-height: 26px;
+    line-height: 40px;
     font-weight: bold;
 }
 .history-coll-header p span
@@ -2474,14 +2477,14 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .icon-list-coll li i
 {
-   width:50px;
-   height: 50px;
-   border-radius: 50%;
-   background: #aeaeae;
-   text-align: center;
-   line-height: 49px;
-   color: #fff;
-   font-size: 23px;
+	width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #aeaeae;
+    text-align: center;
+    line-height: 41px;
+    color: #fff;
+    font-size: 19px
 }
 .history-link
 {
@@ -2855,4 +2858,28 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 #exampleModalLongTitle{
 	font-size:1rem;
+}
+.selectBoxShade {
+	color: #8a8585;
+}
+.fund-head {
+	padding-left:20px;
+	font-weight:bold!important;
+	color:#505050!important;
+}
+
+.history-line{
+	position: relative;
+}
+.history-line::before {
+	position: absolute;
+    content: "";
+    border-bottom: solid 1px #ccc;
+    bottom: 6px;
+    width: 98%;
+    left: 6px;
+}
+.history-action {
+	color: #a92034!important;
+	font-weight: bold;
 }

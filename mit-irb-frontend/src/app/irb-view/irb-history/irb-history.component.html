@@ -67,15 +67,15 @@
 							<div id="{{'collapse' + i }}" class="collapse"
 								[attr.aria-labelledby]="'heading' + i " data-parent="#accordion">
 								<div class="card-body history-card-body">
-									<div class="row list-of-his" *ngFor="let historyDet of irbHistoryDetails">
+									<div class="row list-of-his" [ngClass]="{'history-line':i!=irbHistoryDetails.length-1}" *ngFor="let historyDet of irbHistoryDetails;let i = index">
 										<div class="col-12 col-sm-4 col-md-4">
 											<ul>
-												<li>Action : <span>{{historyDet.PROTOCOL_ACTION}}</span></li>
+												<li class="history-action">{{historyDet.PROTOCOL_ACTION}}</li>
 											</ul>
 										</div>
 										<div class="col-12 col-md-4 col-md-4">
 											<ul>
-												<li>Update User : <span>{{historyDet.update_user_name}}</span></li>
+												<li>Update User : <span>{{historyDet.UPDATE_USER_NAME}}</span></li>
 											</ul>
 										</div>
 										<div class="col-12 col-sm-4 col-md-4">

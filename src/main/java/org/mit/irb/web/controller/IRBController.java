@@ -141,7 +141,7 @@ public class IRBController {
 	}
 	
 	@RequestMapping(value = "/getProtocolHistotyGroupList", method = RequestMethod.POST)
-	public ResponseEntity<String> getProtocolHistotyGroupList(HttpServletRequest request, HttpServletResponse response, CommonVO vo) throws JsonProcessingException{
+	public ResponseEntity<String> getProtocolHistotyGroupList(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException{
 		IRBViewProfile irbViewProfile = irbProtocolService.getProtocolHistotyGroupList(vo.getProtocol_number());
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
@@ -150,7 +150,7 @@ public class IRBController {
 	}
 	
 	@RequestMapping(value = "/getProtocolHistotyGroupDetails", method = RequestMethod.POST)
-	public ResponseEntity<String> getProtocolHistotyGroupDetails(HttpServletRequest request, HttpServletResponse response, CommonVO vo) throws JsonProcessingException{
+	public ResponseEntity<String> getProtocolHistotyGroupDetails(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException{
 		IRBViewProfile irbViewProfile = irbProtocolService.getProtocolHistotyGroupDetails(vo.getProtocol_id(), vo.getAction_id(), vo.getNext_group_action_id(), vo.getPrevious_group_action_id());
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();

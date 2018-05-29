@@ -23,4 +23,9 @@ public interface IRBProtocolService {
 	ResponseEntity<byte[]> downloadAttachments(String attachmentId);
 
 	IRBViewProfile getAttachmentsList(String protocolnumber);
+	
+	IRBViewProfile getProtocolHistotyGroupList(String protocol_number);
+
+	IRBViewProfile getProtocolHistotyGroupDetails(Integer protocol_id, Integer action_id, Integer next_group_action_id,
+			Integer previous_group_action_id);
 }

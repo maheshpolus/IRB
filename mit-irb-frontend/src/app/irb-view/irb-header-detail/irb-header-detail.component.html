@@ -90,11 +90,12 @@
       <section class="row btn-row-med" style="padding:15px;">
       <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" [queryParams]= "{protocolNumber :requestObject.protocol_number}"  (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
           <button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button>
+          <!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
           <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_attachments')"><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
-          <!-- <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_history')"><i class="fa fa-history" aria-hidden="true"></i>History</button> -->
-<button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>History</button>
+          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_history')"><i class="fa fa-history" aria-hidden="true"></i>History</button>
+		  <!-- <button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>History</button> -->
           <!-- <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
-          <button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button>
+
           <button class="btn btn-primary tab_btn" type="submit"  ><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
           <button class="btn btn-primary tab_btn" type="submit"  ><i class="fa fa-history" aria-hidden="true"></i>History</button> -->
       </section>

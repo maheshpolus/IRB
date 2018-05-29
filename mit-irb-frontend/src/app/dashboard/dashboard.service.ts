@@ -12,4 +12,7 @@ export class DashboardService {
   getIrbList(params) {
       return this._http.post('/mit-irb/getDashboardProtocolList', params);
   }
+  getProtocolType() {
+      return this._http.post('/mit-irb/getDashboardProtocolType', '');
+  }
 }

@@ -30,6 +30,56 @@ public class CommonVO {
 	
 	private String av_summary_type;
 	
+	private String pi_name;
+	
+	private Integer protocol_id;
+	
+	private Integer action_id;
+	
+	private Integer next_group_action_id;
+	
+	private Integer previous_group_action_id;
+	
+	public Integer getProtocol_id() {
+		return protocol_id;
+	}
+
+	public void setProtocol_id(Integer protocol_id) {
+		this.protocol_id = protocol_id;
+	}
+
+	public Integer getAction_id() {
+		return action_id;
+	}
+
+	public void setAction_id(Integer action_id) {
+		this.action_id = action_id;
+	}
+
+	public Integer getNext_group_action_id() {
+		return next_group_action_id;
+	}
+
+	public void setNext_group_action_id(Integer next_group_action_id) {
+		this.next_group_action_id = next_group_action_id;
+	}
+	
+	public Integer getPrevious_group_action_id() {
+		return previous_group_action_id;
+	}
+
+	public void setPrevious_group_action_id(Integer previous_group_action_id) {
+		this.previous_group_action_id = previous_group_action_id;
+	}
+
+	public String getPi_name() {
+		return pi_name;
+	}
+
+	public void setPi_name(String pi_name) {
+		this.pi_name = pi_name;
+	}
+
 	public String getAv_summary_type() {
 		return av_summary_type;
 	}

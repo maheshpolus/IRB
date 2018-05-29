@@ -43,4 +43,7 @@ export class SnapshotsComponent implements OnInit {
   expandedView(summaryType) {
       this.router.navigate(['/irb/expanded-view'], {queryParams: {personId: this.userDTO.personID, personRole: this.roleType, summaryType: summaryType}});
   }
+  goToQuestionaire(){
+      this.router.navigate(['/irb/exempt-questionaire']);
+  }
 }

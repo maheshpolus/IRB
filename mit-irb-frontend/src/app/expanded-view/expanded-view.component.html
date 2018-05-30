@@ -2,42 +2,24 @@
 	<div class="headerPush"></div>
 	<section class="row">
 		<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10 toptext">
-			<h5 class="pageHeader">SNAP SHOT DETAILS</h5>
+			<h5 class="pageHeader">{{pageHeader}}</h5>
 		</div>
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div class="borderBox">
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
-							<th (click)="sortBy('PROTOCOL_NUMBER')"
-								title="Click to sort by Award">Protocol# <span
-								class="sortorder"
-								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'PROTOCOL_NUMBER')}"></span>
+							<th>Protocol# <span></span>
 							</th>
-							<th (click)="sortBy('TITLE')" width="30%"
-								title="Click to sort by Title">Title <span
-								class="sortorder"
-								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'TITLE')}"></span>
+							<th width="30%">Title
 							</th>
-							<th (click)="sortBy('PROTOCOL_TYPE')" width="10%"
-								title="Click to sort by Account">Type <span
-								class="sortorder"
-								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'PROTOCOL_TYPE')}"></span>
+							<th width="10%">Type
 							</th>
-							<th (click)="sortBy('STATUS')" width="15%"
-								title="Click to sort by Lead Unit">Status <span
-								class="sortorder"
-								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'STATUS')}"></span>
+							<th width="15%">Status 
 							</th>
-							<th (click)="sortBy('APPROVAL_DATE')"
-								title="Click to sort by Sponsor">Approval Date <span
-								class="sortorder"
-								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'APPROVAL_DATE')}"></span>
+							<th >Approval Date
 							</th>
-							<th (click)="sortBy('EXPIRATION_DATE')"
-								title="Click to sort by PI">Expiration Date <span
-								class="sortorder"
-								[ngClass]="{reverse:reverse, sortorder: (lastClickedTab == 'EXPIRATION_DATE')}"></span>
+							<th>Expiration Date
 							</th>
 							<th width="6%">Action</th>
 						</tr>

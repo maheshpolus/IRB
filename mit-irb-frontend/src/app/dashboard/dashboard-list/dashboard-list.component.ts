@@ -18,6 +18,7 @@ import 'rxjs/add/operator/catch';
     styleUrls: ['./dashboard-list.component.css']
 } )
 export class DashboardListComponent implements OnInit, AfterViewInit {
+    noProtocolList: boolean;
 
     noIrbList = false;
 
@@ -28,10 +29,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             person_role_type : '',
             protocol_number : '',
             title : '',
-            lead_unit_number : '',
+            pi_name : '',
             protocol_type_code : '',
             dashboard_type : ''
     };
+    protocolTypeList = [];
     result: any;
     irbListData: any = [];
 
@@ -51,10 +53,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     elasticResultTab = false;
 
     isAdvancesearch = false;
+    isAdvancsearchPerformed = false;
     roleType: string;
     direction: number;
     column: any;
-    sortOrder: string;
+    sortOrder= '1';
     sortField = 'UPDATE_TIMESTAMP';
     arrayOfKeys: any = [];
 
@@ -67,6 +70,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.getIrbListData('ALL');
         this.roleType = this.userDTO.role;
+        this.getIrbProtocolTypes();
     }
 
     ngAfterViewInit() {debugger;
@@ -164,6 +168,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       handleError(): any {
         this.message = 'something went wrong';
       }
+    getAdvanceSearch( currentTab ) {
+        this.isAdvancsearchPerformed = true;
+        this.getIrbListData( currentTab );
+    }
 
     getIrbListData( currentTab ) {
         this.irbListData = [];
@@ -181,6 +189,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 }
                 else{
                 this.irbListData = this.result.dashBoardDetailMap;
+                this.sortBy();
                 }
             }
         },
@@ -197,6 +206,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
     showAdvanceSearch() {
         this.isAdvancesearch = !this.isAdvancesearch;
+        this.isAdvancsearchPerformed = false;
     }
 
     selectedResult(result) {
@@ -216,12 +226,35 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       clear() {
           this.requestObject.protocol_number = '';
           this.requestObject.title = '';
-          this.requestObject.lead_unit_number = '';
+          this.requestObject.pi_name = '';
           this.requestObject.protocol_type_code = '';
           this.getIrbListData(this.lastClickedTab);
+          this.isAdvancsearchPerformed = false;
       }
 
       openIrb( protocolNumber ) {
           this.router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
+      }
+
+      getIrbProtocolTypes() {
+          this._dashboardService.getProtocolType().subscribe( data => {
+              this.result = data || [];
+              if ( this.result != null ) {
+                  if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length == 0 ) {
+                      this.noProtocolList = true;
+                  }
+                  else{
+                  this.protocolTypeList = this.result.dashBoardDetailMap;
+                  }
+              }
+          },
+              error => {
+                   console.log( error );
+              },
+          );
+      }
+
+      selectProtocolType(){
+          console.log("code"+this.requestObject.protocol_type_code);
       }
 }

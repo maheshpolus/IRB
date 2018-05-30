@@ -50,7 +50,7 @@ body{
     overflow-x: hidden;
     overflow-y: auto;
     transition: width .25s;
-    z-index: 2;
+	z-index: 3;
 }
 
 .slideMenu *{
@@ -259,7 +259,8 @@ footer {
 header{
     position: fixed;
     background: #FEFEFE;
-    z-index: 1;
+    z-index: 2;
+
 }
 
 .iconMenu>li>a>span {
@@ -1473,7 +1474,7 @@ form-check-label {
 .list-des h5
 {
     font-size: 14px;
-    color: #585858;
+       color: #424141;/* modified from #585858*/
     line-height: 30px;
     margin: 0;
 }
@@ -1486,7 +1487,10 @@ form-check-label {
 }
 .list-des span
 {
-    color: #000;
+ /*  color: #000; */
+    color: #a92034;
+    font-weight: bold;
+
 }
 .list-des p
 {
@@ -1570,8 +1574,8 @@ form-check-label {
     content: "";
     border: solid 1px #ececec;
     right: 0;
-    height: 76px;
-    top: 10px;
+  height: 95px;
+    top: 12px;
 }
 .main-list
 {
@@ -1654,7 +1658,7 @@ div
 {
     float: right;
     line-height: 50px;
-    font-size: 25px;
+    font-size: 20px;
     /*! font-style: italic; */
     color: #a92034;
     margin: 0;
@@ -1749,7 +1753,7 @@ div
 {
     /*! border: solid #ccc 1px; */
     border-top: none;
-    padding-bottom: 15px;
+   padding-bottom: 0px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius:20px;
    /* height: 386px;  modified*/
@@ -1807,10 +1811,6 @@ div
 .funding-card
 {
     height: auto!important;
-}
-.cards-in .col-6
-{
-    margin-bottom: 20px;
 }
 .popup-div{
     height: 200px;
@@ -1984,6 +1984,7 @@ div
 	color: #fff;
 	font-size: 1.5rem;
 	text-align: center;
+	margin-top: 18px;
 }
 
 .hospital_plus_ico{
@@ -2014,16 +2015,17 @@ div
 	margin:0 50px;
 }
 .up-arrow{
-	float:right;
-	margin-top:7px;
-	background-image:url(../images/up_arrow.png);
-	width:18px;
-	height:25px;
-	background-repeat: no-repeat;
-	cursor: pointer;
-	position: absolute;
-    right: 15px;
-    z-index: 999999;
+	float: right;
+    margin-top: 7px;
+    background-image: url(../images/up_arrow.png);
+    width: 18px;
+    height: 25px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    right: 14px;
+    z-index: 1;
+    top: 90px;
 }
 
 .text-right{
@@ -2057,16 +2059,17 @@ div
 	padding: 0px !important;
 }
 .down-arrow{
-	float:right;
-	margin-top:7px;
-	background-image:url(../images/down_arrow.png);
-	width:18px;
-	height:25px;
-	background-repeat: no-repeat;
-	cursor: pointer;
-	position: absolute;
-    right: 15px;
-    z-index: 999999;
+	float: right;
+    margin-top: 7px;
+    background-image: url(../images/down_arrow.png);
+    width: 18px;
+    height: 25px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    right: 14px;
+    z-index: 1;
+    top: 90px;
 }
 .coll-header{
 	padding-left: 0px;
@@ -2139,7 +2142,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .expand-div{
 	position: relative;
-    padding-bottom: 35px;
+    padding-bottom: 31px;
 }
 /*end of newly added*/
 /*page2style_start*/
@@ -2437,6 +2440,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     padding-left: 0 !important;
     padding-right: 0!important;
     padding-top: 0;
+    padding-bottom: 0;
 }
 .datepicker-outer
 {
@@ -2452,9 +2456,9 @@ ul.sb-results-dropdown-menu > li:last-child {
 .history-coll-header p
 {
     color:#a92034;
-    font-size: 12px;
+    font-size: 16px;
     margin: 0;
-    line-height: 26px;
+    line-height: 40px;
     font-weight: bold;
 }
 .history-coll-header p span
@@ -2474,14 +2478,14 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .icon-list-coll li i
 {
-   width:50px;
-   height: 50px;
-   border-radius: 50%;
-   background: #aeaeae;
-   text-align: center;
-   line-height: 49px;
-   color: #fff;
-   font-size: 23px;
+	width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #aeaeae;
+    text-align: center;
+    line-height: 41px;
+    color: #fff;
+    font-size: 19px
 }
 .history-link
 {
@@ -2506,12 +2510,14 @@ ul.sb-results-dropdown-menu > li:last-child {
     list-style: none;
     font-size: 14px;
     line-height: 30px;
-    color:#616161;
+    color: #000000;
+    font-weight: bold;
 }
 .list-of-his li span
 {
-    color:#000;
-    font-weight: bold;
+    color: #656060;
+    font-weight: 400;
+
 }
 
 /*mediaqueries*/
@@ -2839,9 +2845,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 .card-spcl-padding {
     padding-bottom: 0;
 }
-.section-margin{
-	margin-top: 20px;
-}
+
 .popup-sub-head {
 	font-size: 17px!important;
 	color: #505050;
@@ -2855,4 +2859,28 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 #exampleModalLongTitle{
 	font-size:1rem;
+}
+.selectBoxShade {
+	color: #8a8585;
+}
+.fund-head {
+	padding-left:20px;
+	font-weight:bold!important;
+	color:#505050!important;
+}
+
+.history-line{
+	position: relative;
+}
+.history-line::before {
+	position: absolute;
+    content: "";
+    border-bottom: solid 1px #ccc;
+    bottom: 6px;
+    width: 98%;
+    left: 6px;
+}
+.noHistory {
+	padding: 25px !important;
+
 }

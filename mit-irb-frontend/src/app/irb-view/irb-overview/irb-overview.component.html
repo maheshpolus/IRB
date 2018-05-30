@@ -1,80 +1,95 @@
 <!-- <ngx-spinner bdOpacity = 0.5 bdColor = "#333" color = "#fff" type = "ball-spin-clockwise-fade" loadingText = "Loading..." ></ngx-spinner> -->
 <div class="container-fluid">
 	<!-- modal -->
-	<div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered " role="document">
-			  <div class="modal-content">
+	<div class="modal fade" id="personModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered " role="document">
+			<div class="modal-content">
 				<div class="modal-header popup-header">
-				  <h5 class="modal-title" id="exampleModalLongTitle">Person Details</h5>
-				  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				  </button>
+					<h5 class="modal-title" id="exampleModalLongTitle">Person
+						Details</h5>
+					<button type="button" class="close modal-close"
+						data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
 				<div class="modal-body modal-popup">
-						<div class= "modal-header-label"><h4 class="popup-sub-head">Basic</h4></div>
+					<div class="modal-header-label">
+						<h4 class="popup-sub-head">Basic</h4>
+					</div>
 					<!-- section1 -->
-					<div class = "modal-padding">
+					<div class="modal-padding">
 						<div class="row">
 							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Name: </label> {{irbPersonDetailedList?.FULL_NAME}}
+								<label class="modal-label" for=""> Name : </label>
+								{{irbPersonDetailedList?.FULL_NAME}}
 							</div>
 							<div class="col-md-4 col lg- 4 col-sm-4">
-									<label  class="modal-label" for="">Email: </label> {{irbPersonDetailedList?.EMAIL_ADDRESS}}
+								<label class="modal-label" for="">Email : </label>
+								{{irbPersonDetailedList?.EMAIL_ADDRESS}}
 							</div>
 							<div class="col-md-4 col lg- 4 col-sm-4">
-									<label  class="modal-label" for=""> Primary Title: </label> {{irbPersonDetailedList?.PRIMARY_TITLE}}
+								<label class="modal-label" for=""> Primary Title : </label>
+								{{irbPersonDetailedList?.PRIMARY_TITLE}}
 							</div>
 						</div>
 						<div class="row">
-								<div class="col-md-4 col lg- 4 col-sm-4">
-									<label class="modal-label" for=""> Address: </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
-								</div>
-								<div class="col-md-4 col lg- 4 col-sm-4">
-										<label class="modal-label" for=""> City: </label> {{irbPersonDetailedList?.CITY}}
-								</div>
-								<div class="col-md-4 col lg- 4 col-sm-4">
-										<label class="modal-label" for=""> Country: </label> {{irbPersonDetailedList?.COUNTRY_CODE}}
-								</div>
+							<div class="col-md-4 col lg- 4 col-sm-4">
+								<label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
 							</div>
+							<div class="col-md-4 col lg- 4 col-sm-4">
+								<label class="modal-label" for=""> City : </label>
+								{{irbPersonDetailedList?.CITY}}
+							</div>
+							<div class="col-md-4 col lg- 4 col-sm-4">
+								<label class="modal-label" for=""> Country : </label>
+								{{irbPersonDetailedList?.COUNTRY_CODE}}
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Directory Title:</label> {{irbPersonDetailedList?.DIRECTORY_TITLE}}
+								<label class="modal-label" for=""> Directory Title : </label>
+								{{irbPersonDetailedList?.DIRECTORY_TITLE}}
 							</div>
 							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Mobile number: </label> {{irbPersonDetailedList?.MOBILE_PHONE_NUMBER}}
+								<label class="modal-label" for=""> Mobile number : </label>
+								{{irbPersonDetailedList?.MOBILE_PHONE_NUMBER}}
 							</div>
 							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Postal Code: </label> {{irbPersonDetailedList?.POSTAL_CODE}}
+								<label class="modal-label" for=""> Postal Code : </label>
+								{{irbPersonDetailedList?.POSTAL_CODE}}
 							</div>
 						</div>
 					</div>
-				  <!-- section2 -->
-				  <div><h4 class="popup-sub-head">Training</h4></div>
-					<div class = "modal-padding">
+					<!-- section2 -->
+					<div>
+						<h4 class="popup-sub-head">Training</h4>
+					</div>
+					<div class="modal-padding">
 						<div class="popup-div">
-						<table class="table table-striped">
-							<thead class="popup-header">
-								<tr>
-								<th scope="col">Description</th>
-								<th scope="col">Score</th>
-								<th scope="col">Followup Date </th>
-								<th scope="col">Submitted Date</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor = "let info of irbPersonDetailedTraining">
-								<td scope="row">{{info.TRAINING_DESCRIPTION}}</td>
-								<td>{{info.SCORE}}</td>
-								<td>{{info.FOLLOWUP_DATE}}</td>
-								<td>{{info.DATE_SUBMITTED}}</td>
-								</tr>
-							</tbody>
-						</table>
+							<table class="table table-striped">
+								<thead class="popup-header">
+									<tr>
+										<th scope="col">Description</th>
+										<th scope="col">Score</th>
+										<th scope="col">Followup Date</th>
+										<th scope="col">Submitted Date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let info of irbPersonDetailedTraining">
+										<td scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+										<td>{{info.SCORE}}</td>
+										<td>{{info.FOLLOWUP_DATE}}</td>
+										<td>{{info.DATE_SUBMITTED}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
-					</div>
-				
-				  <!-- section3 -->
-				  	<!-- <div>
+
+					<!-- section3 -->
+					<!-- <div>
 						<div class= "modal-header-label"><h4>Responsibilities</h4></div>
 						<div class="row">
 							<div class="col-md-4 col lg- 4 col-sm-4">
@@ -104,11 +119,10 @@
 
 				  </div> -->
 				</div>
-				<div class="modal-footer">
-				</div>
-			  </div>
+				<div class="modal-footer"></div>
 			</div>
-		</div> 
+		</div>
+	</div>
 	<!-- modal-end -->
 	<section class="row">
 		<!--card list-->
@@ -126,25 +140,35 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med ovr-flw" *ngIf="noIrbPersons==false">
-							<div class="row pdf" [ngClass]="{'row-line':i!=0}" *ngFor="let irbPersons of irbPersonsDetails;let i= index" data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
+						<div class="col-12 card-list-med ovr-flw"
+							*ngIf="noIrbPersons==false">
+							<div class="row pdf" [ngClass]="{'row-line':i!=0}"
+								*ngFor="let irbPersons of irbPersonsDetails;let i= index"
+								data-toggle="modal" data-target="#personModal"
+								(click)="showpersonData(irbPersons.PERSON_ID)">
 								<div class="col-2">
-									<img [ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
+									<img
+										[ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
 									'coi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID !=='PI'}"
 										class="img-fluid pd20" alt="Role image">
 								</div>
 								<div class="col-4 card-desc">
 									<h6>{{irbPersons.PERSON_NAME}}</h6>
-									<p>Person Role: <span>{{irbPersons.PROTOCOL_PERSON_ROLE_ID}}</span></p>
 									<p>
-										Email Id: <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office :<span>{{irbPersons.OFFICE_PHONE}}</span>
+										Person Role : <span>{{irbPersons.PROTOCOL_PERSON_ROLE}}</span>
+									</p>
+									<p>
+										Email Id : <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office : <span>{{irbPersons.OFFICE_PHONE}}</span>
 									</p>
 								</div>
 								<div class="col-4 card-desc">
 									<h6>&nbsp;</h6>
-									<p>Primary Title: <span>{{irbPersons.PRIMARY_TITLE}}</span></p>
 									<p>
-										Affiliation: <span>{{irbPersons.AFFILIATION_TYPE}}</span> | Unit :<span>{{irbPersons.UNIT_NAME}}</span>
+										Primary Title : <span>{{irbPersons.PRIMARY_TITLE}}</span>
+									</p>
+									<p>
+										Affiliation : <span>{{irbPersons.AFFILIATION_TYPE}}</span> |
+										Unit : <span>{{irbPersons.UNIT_NAME}}</span>
 									</p>
 								</div>
 								<div class="col-2 cmp-b">
@@ -153,13 +177,14 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-no-data ovrflow-no-data" *ngIf="noIrbPersons">
+						<div class="col-12 card-list-no-data ovrflow-no-data"
+							*ngIf="noIrbPersons">
 							<div class="col-12">No person details found</div>
 						</div>
 					</div>
-				
-			</div>
-			<div class="col-6">
+
+				</div>
+				<div class="col-6">
 					<div class="shadow-card">
 						<div class="col-12 card-head-med">
 							<div class="row">
@@ -171,8 +196,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med funding-card" *ngIf="noIrbfunds==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let fund of irbFundingDetails;let i= index">
+						<div class="col-12 card-list-med funding-card ovr-flw"
+							*ngIf="noIrbfunds==false">
+							<div class="row" [ngClass]="{'row-line':i!=0}"
+								*ngFor="let fund of irbFundingDetails;let i= index">
 								<div class="col-3">
 									<div class="sponser_ico">
 										<i class="fa fa-briefcase" aria-hidden="true"></i>
@@ -180,20 +207,25 @@
 								</div>
 								<div class="col-9 card-desc">
 									<div class="row padding-row">
-										<div class="col-6">
-											<h6>
-												<b>{{fund.FUNDING_SOURCE_TYPE}} : </b> <span>{{fund.FUNDING_SOURCE}}</span>
-											</h6>
-										</div>
-										<div class="col-6">
-											<h6>
-												<b>Name: </b><span>{{fund.FUNDING_SOURCE_NAME}}</span>
-											</h6>
-										</div>
-
 										<div class="col-12">
+											<h6>
+												<b>{{fund.FUNDING_SOURCE_TYPE}}</b><span class="fund-head">{{fund.FUNDING_SOURCE}}</span>
+											</h6>
+										</div>
+										<div class="col-5" *ngIf="fund.FUNDING_SOURCE_TYPE == 'Award'">
+											<h6>
+												<b>Account# : </b><span>{{fund.ACCOUNT_NUMBER}}</span>
+											</h6>
+										</div>
+										<div
+											[ngClass]="fund.FUNDING_SOURCE_TYPE == 'Award'? 'col-7':'col-6'">
+											<h6>
+												<b>Name : </b><span>{{fund.FUNDING_SOURCE_NAME}}</span>
+											</h6>
+										</div>
+										<div class="col-6">
 											<p>
-												<b>Title: </b><span>{{fund.FUNDING_SOURCE_TYPE}}</span>
+												<b>Title : </b><span>{{fund.FUNDING_SOURCE_TYPE}}</span>
 											</p>
 										</div>
 
@@ -218,8 +250,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med funding-card" *ngIf="noIrbSubjects==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}"  *ngFor="let sub of irbSubjects;let i= index">
+						<div class="col-12 card-list-med funding-card ovr-flw"
+							*ngIf="noIrbSubjects==false">
+							<div class="row" [ngClass]="{'row-line':i!=0}"
+								*ngFor="let sub of irbSubjects;let i= index">
 								<div class="col-3">
 									<div class="hospital_plus_ico">
 										<i class="fa fa-plus-square" aria-hidden="true"></i>
@@ -227,10 +261,10 @@
 								</div>
 								<div class="col-7 card-desc">
 									<h6 class="sub-head">
-										Type: <span>{{sub.VULNERABLE_SUBJECT}}</span>
+										Type : <span>{{sub.VULNERABLE_SUBJECT}}</span>
 									</h6>
 									<h6 class="sub-head">
-										Count: <span>{{sub.SUBJECT_COUNT}}</span>
+										Count : <span>{{sub.SUBJECT_COUNT}}</span>
 									</h6>
 								</div>
 							</div>
@@ -252,29 +286,33 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med" *ngIf="noIrbCollaborators==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let irbCollab of irbCollaborators;let i= index">
+						<div class="col-12 card-list-med ovr-flw"
+							*ngIf="noIrbCollaborators==false">
+							<div class="row" [ngClass]="{'row-line':i!=0}"
+								*ngFor="let irbCollab of irbCollaborators;let i= index">
 								<div class="col-2">
 									<div class="profile_avatar_ico">
 										<i class="fa fa-user-o" aria-hidden="true"></i>
 									</div>
 								</div>
 								<div class="col-10 card-desc">
-									<h6>{{irbCollab.ORGANIZATION_NAME}}</h6>
-									<p>
-										<span>{{irbCollab.ROLODEX_NAME}}</span>
-									</p>
-									<p>
-										Email Id: <span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span> |Phone Number:  {{irbCollab.ROLODEX_PHONE_NUMBER}}<span></span>
-									<div class="row row-padng">
+									<div class="row">
 										<div class="col-6">
+											<h6>{{irbCollab.ORGANIZATION_NAME}}</h6>
 											<p>
-												Expiration date: <span>{{irbCollab.EXPIRATION_DATE}}</span>
+												<span>{{irbCollab.ROLODEX_NAME}}</span>
 											</p>
-										</div>
-										<div class="col-6">
 											<p>
-												Approval Date: <span>{{irbCollab.APPROVAL_DATE}}</span>
+												Email Id : <span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
+												|Phone Number : <span>{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
+										</div>
+										<div class="col-6 row-padng">
+											<p>&nbsp;</p>
+											<p>
+												Expiration date : <span>{{irbCollab.EXPIRATION_DATE}}</span>
+											</p>
+											<p>
+												Approval Date : <span>{{irbCollab.APPROVAL_DATE}}</span>
 											</p>
 										</div>
 									</div>
@@ -413,8 +451,8 @@
 				<div class="card" *ngIf="noIrbSpecialReviews">
 					<div class="card-header" id="headingTwo">
 						<span class="mb-0">
-							<button class="btn btn-link coll-header">
-								No special reviews</button>
+							<button class="btn btn-link coll-header">No special
+								reviews</button>
 						</span>
 					</div>
 				</div>
@@ -422,4 +460,3 @@
 		</div>
 	</section>
 </div>
-	 

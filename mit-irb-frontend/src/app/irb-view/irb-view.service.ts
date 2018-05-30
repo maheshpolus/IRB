@@ -36,4 +36,10 @@ export class IrbViewService {
           responseType:'blob'
       });
   }
+  getProtocolHistotyGroupList(params) {
+      return this._http.post('/mit-irb/getProtocolHistotyGroupList', params);
+  }
+  getProtocolHistotyGroupDetails(params) {
+      return this._http.post('/mit-irb/getProtocolHistotyGroupDetails', params);
+  }
 }

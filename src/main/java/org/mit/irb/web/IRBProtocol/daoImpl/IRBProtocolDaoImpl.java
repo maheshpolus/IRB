@@ -279,4 +279,54 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		}
 		return irbViewProfile;
 	}
+	
+	@Override
+	public IRBViewProfile getProtocolHistotyGroupList(String protocol_number) {
+		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocol_number));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_GROUP", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (result != null && !result.isEmpty()) {
+			irbViewProfile.setIrbviewProtocolHistoryGroupList(result);
+		}
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocol_id, Integer action_id,
+			Integer next_group_action_id, Integer previous_group_action_id) {
+		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocol_id));
+		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, action_id));
+		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, next_group_action_id));
+		inputParam.add(new InParameter("AV_PREVIOUS_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, previous_group_action_id));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_DET", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (result != null && !result.isEmpty()) {
+			irbViewProfile.setIrbviewProtocolHistoryGroupDetails(result);
+		}
+		return irbViewProfile;
+	}
 }

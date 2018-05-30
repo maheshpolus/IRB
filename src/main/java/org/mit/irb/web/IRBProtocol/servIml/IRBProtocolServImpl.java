@@ -67,4 +67,18 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getAttachmentsList(protocolnumber);
 		return irbViewProfile;
 	}
+	
+	@Override
+	public IRBViewProfile getProtocolHistotyGroupList(String protocol_number) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupList(protocol_number);
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocol_id, Integer action_id,
+			Integer next_group_action_id, Integer previous_group_action_id) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupDetails(protocol_id, action_id,
+				next_group_action_id, previous_group_action_id);
+		return irbViewProfile;
+	}
 }

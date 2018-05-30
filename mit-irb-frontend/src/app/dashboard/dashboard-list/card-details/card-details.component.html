@@ -1,9 +1,8 @@
-<div class="col-sm-12"
-	[ngClass]="{'main-list': irbList?.length >1}">
-	<div class="row list-rows"
-		*ngFor="let irb of irbList">
+<div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
+	<div class="row list-rows" *ngFor="let irb of irbList">
 		<div class="col-md-3 col-sm-12 col-xs-12 list-view">
-			<span [ngClass]="{'in-progress': irb.PROTOCOL_STATUS_CODE=='101',
+			<span
+				[ngClass]="{'in-progress': irb.PROTOCOL_STATUS_CODE=='101',
 						'in-drafts': (irb.PROTOCOL_STATUS_CODE=='100'||
 									irb.PROTOCOL_STATUS_CODE=='105'||
 									irb.PROTOCOL_STATUS_CODE=='106'),
@@ -17,24 +16,34 @@
 		</div>
 		<div class="col-md-8 col-sm-8 col-xs-12 list-des">
 			<h5>
-				<span>{{irb.PROTOCOL_NUMBER}}-</span>{{irb.TITLE}}
+				{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}
 			</h5>
-			<div class="list-data">
+			<div>
 				<div class="row">
 					<div class="col-md-6">
-						<span>Type :</span>{{irb.PROTOCOL_TYPE}}
+						<span>Type : </span>{{irb.PROTOCOL_TYPE}}
 					</div>
 					<div class="col-md-6">
-						<span>Submission Status :</span>{{irb.SUBMISSION_STATUS}}
+						<span>Submission Status : </span>{{irb.SUBMISSION_STATUS}}
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<span>Approval Date :</span>{{irb.LAST_APPROVAL_DATE}}
+					<span>Approval Date : </span>{{irb.LAST_APPROVAL_DATE}}
 				</div>
 				<div class="col-md-6">
-					<span>Expiration Date :</span>{{irb.EXPIRATION_DATE}}
+					<span>Expiration Date : </span>{{irb.EXPIRATION_DATE}}
+				</div>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-md-6">
+						<span>PI : </span>{{irb.PI_NAME}}
+					</div>
+					<div class="col-md-6">
+						<span>Last Update : </span>{{irb.UPDATE_TIMESTAMP}}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -45,5 +54,6 @@
 			</button>
 		</div>
 	</div>
-</div><!-- 
+</div>
+<!-- 
 <div class="col-sm-12" *ngIf="irbList.length==0"> No Irb protocol found for this status</div> -->

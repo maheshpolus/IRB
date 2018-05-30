@@ -120,7 +120,7 @@ public class DashboardDaoImpl implements DashboardDao{
 
 	@Override
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
-			String lead_unit_number, String protocol_number,String protocol_type_code, String title) {
+			String pi_name, String protocol_number,String protocol_type_code, String title) {
 		DashboardProfile profile = new DashboardProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -129,7 +129,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("DASHBOARD_TYPE", DBEngineConstants.TYPE_STRING, dashboard_type));
 		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocol_number));
 		inputParam.add(new InParameter("TITLE", DBEngineConstants.TYPE_STRING, title));
-		inputParam.add(new InParameter("LEAD_UNIT_NUMBER", DBEngineConstants.TYPE_STRING, lead_unit_number));
+		inputParam.add(new InParameter("PI_NAME", DBEngineConstants.TYPE_STRING, pi_name));
 		inputParam.add(new InParameter("PROTOCOL_TYPE_CODE", DBEngineConstants.TYPE_STRING, protocol_type_code));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
@@ -160,6 +160,27 @@ public class DashboardDaoImpl implements DashboardDao{
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (result != null && !result.isEmpty()) {
+			profile.setDashBoardDetailMap(result);
+		}
+		return profile;
+	}
+
+	@Override
+	public DashboardProfile getDashboardProtocolType() {
+		DashboardProfile profile = new DashboardProfile();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dBEngine.executeProcedure("GET_IRB_PROTOCOL_TYPE", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

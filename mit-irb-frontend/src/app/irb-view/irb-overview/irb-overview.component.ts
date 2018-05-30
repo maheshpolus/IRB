@@ -36,7 +36,7 @@ export class IrbOverviewComponent implements OnInit {
                 private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-      this.requestObject.protocol_number =this.route.snapshot.queryParamMap.get('protocolNumber');
+      this.requestObject.protocol_number = this.route.snapshot.queryParamMap.get('protocolNumber');
       this.loadPersonalDetails();
       this.loadFundingDetails();
       this.loadCollaboratorsDetails();

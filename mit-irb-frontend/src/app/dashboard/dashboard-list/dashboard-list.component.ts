@@ -53,10 +53,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     elasticResultTab = false;
 
     isAdvancesearch = false;
+    isAdvancsearchPerformed = false;
     roleType: string;
     direction: number;
     column: any;
-    sortOrder: string;
+    sortOrder= '1';
     sortField = 'UPDATE_TIMESTAMP';
     arrayOfKeys: any = [];
 
@@ -167,6 +168,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       handleError(): any {
         this.message = 'something went wrong';
       }
+    getAdvanceSearch( currentTab ) {
+        this.isAdvancsearchPerformed = true;
+        this.getIrbListData( currentTab );
+    }
 
     getIrbListData( currentTab ) {
         this.irbListData = [];
@@ -184,6 +189,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 }
                 else{
                 this.irbListData = this.result.dashBoardDetailMap;
+                this.sortBy();
                 }
             }
         },
@@ -200,6 +206,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
     showAdvanceSearch() {
         this.isAdvancesearch = !this.isAdvancesearch;
+        this.isAdvancsearchPerformed = false;
     }
 
     selectedResult(result) {
@@ -222,6 +229,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
           this.requestObject.pi_name = '';
           this.requestObject.protocol_type_code = '';
           this.getIrbListData(this.lastClickedTab);
+          this.isAdvancsearchPerformed = false;
       }
 
       openIrb( protocolNumber ) {

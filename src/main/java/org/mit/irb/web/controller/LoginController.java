@@ -100,8 +100,6 @@ public class LoginController extends BaseController {
 			if ("TOUCHSTONE".equalsIgnoreCase(login_mode)) {
 				Boolean isLoginSuccess = TouchstoneAuthService.authenticate(request, session);
 				logger.info("in touchstone  isLoginSuccess " +isLoginSuccess);
-				System.out.println("in touchstone "+isLoginSuccess);
-				System.out.println("inside touchstone");
 				if (isLoginSuccess) {
 					return "index.html";
 				}

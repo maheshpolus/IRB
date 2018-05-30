@@ -33,7 +33,6 @@ export class IrbAttachmentsComponent implements OnInit {
     }
 
     loadIrbAttachmentList() {
-        debugger;
         this._irbViewService.getIrbAttachmentList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
@@ -52,7 +51,7 @@ export class IrbAttachmentsComponent implements OnInit {
         );
     }
 
-    downloadAttachment( attachment ) {
+    downloadAttachment( attachment ) { debugger;
         this.requestObject.attachmentId = attachment.FILE_ID;
         this._irbViewService.downloadIrbAttachment( attachment.FILE_ID ).subscribe( data => {
             var a = document.createElement( "a" );

@@ -62,7 +62,22 @@ public class DashboardController {
 			HttpServletResponse response) {
 		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPerson_role_type(),
-				 vo.getDashboard_type(),vo.getLead_unit_number(), vo.getProtocol_number(), vo.getProtocol_type_code(), vo.getTitle());
+				 vo.getDashboard_type(),vo.getPi_name(), vo.getProtocol_number(), vo.getProtocol_type_code(), vo.getTitle());
+		ObjectMapper mapper = new ObjectMapper();
+		String responseData = null;
+		try {
+			responseData = mapper.writeValueAsString(profile);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/getDashboardProtocolType", method = RequestMethod.POST)
+	public ResponseEntity<String> getDashboardProtocolType(HttpServletRequest request,
+			HttpServletResponse response) {
+		HttpStatus status = HttpStatus.OK;
+		DashboardProfile profile = this.dashboardService.getDashboardProtocolType();
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = null;
 		try {

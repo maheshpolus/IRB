@@ -19,7 +19,7 @@
 			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}"><a
 				(click)="getIrbListData('ALL')">All My Protocols</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'NEW_SUBMISSION')}"><a
-				(click)="getIrbListData('NEW_SUBMISSION ')">New Submission </a></li>
+				(click)="getIrbListData('NEW_SUBMISSION')">New Submission </a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'PI_ACTION')}"><a
 				(click)="getIrbListData('PI_ACTION')">PI Actions</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'ADMINISTRATOR')}"><a
@@ -56,11 +56,11 @@
 						</div>
 						<div class="form-group">
 							<button class="btn btn-default btn-search"
-							(click)="getIrbListData(lastClickedTab)">
+							(click)="getAdvanceSearch(lastClickedTab)">
 								<i class="fa fa-search"></i>Search
 							</button>
 							<button class="btn btn-default btn-close" (click)="clear()">
-								<i class="fa fa-close"></i>Cancel
+								<i class="fa fa-close"></i>Clear
 							</button>
 						</div>
 					</div>
@@ -136,7 +136,7 @@
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-							<label> PI Name </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{piName }}</a>
+							<label> PI </label> <span class="nav-advance-search"> <a (click)="openIrb(protocol)">{{piName }}</a>
 							</span>
 						</div>
 					</div>
@@ -144,7 +144,7 @@
 			</div>
 			<div class="col-sm-12" *ngIf="noIrbList"> No Irb protocol found for this status</div>
 			<app-card-details *ngIf = "(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-			||(roleType == 'PI')"  
+			|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"  
 					[irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
 		</div>
 	</div>

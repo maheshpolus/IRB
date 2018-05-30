@@ -6,8 +6,8 @@
               <div class="row">
               <div class="col-12 apprve-date">
                 <div class="row">
-                  <div class="col-4">
-                    <h4>IRB # <span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span></h4>
+                  <div class="col-6">
+                    <h4>IRB # : <span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span></h4>
                     <p>Expiration Date : <span>{{irbHeaderDetails?.EXPIRATION_DATE}}</span><br/>
                     Title : <span>{{irbHeaderDetails?.TITLE}} </span>
                     </p>
@@ -15,12 +15,12 @@
                   
                   <div class="col-3">
                      <p>Protocol Type : <span>{{irbHeaderDetails?.PROTOCOL_TYPE}}</span><br/>
-                   Submission Status: <span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span><br/>
+                   Submission Status : <span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span><br/>
                    PI : <span>{{irbHeaderDetails?.PI_NAME}}</span>
                     </p>
                   </div>
                   
-                  <div class="col-4">
+                  <div class="col-2">
                     <span class="active-en" [ngClass]="{'in-progress': irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
 						'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
 									irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
@@ -36,50 +36,34 @@
                   
                     <div class="col-1 i-icon-top">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> </span>
                    </div>
-                  <!--  <div class="col-8">
-                   <p></span>
-                  </div>
-                  <div class="col-4">
-                      <p></p>
-                  </div> -->
                 </div>
               </div>
-               
-               
-                <hr class="hr-line">
-                
               </div> 
-             
               <div id="headingOne" class="expand-div">
-              <span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> </span>
 					<div  id="collapseOne" class="collapse" aria-labelledby="headingOne">
-					<div class="row protocol-top">
-                  <div class="col-4">
-                      <h5>Last Approval Date </h5>
-                      <p> {{irbHeaderDetails?.LAST_APPROVAL_DATE}}</p>
+					<div class="row protocol-top apprve-date">
+					<hr class="hr-line">
+                  <div class="col-6">
+                      <p>Last Approval Date : <span>{{irbHeaderDetails?.LAST_APPROVAL_DATE}}</span><br/>
+                      Expected Start Date : <span>{{irbHeaderDetails?.EXPECTED_START_DATE}}</span>
+                      </p>
                   </div>
                  <!--   <div class="col-4">
                       <h5>Orginal Approvel Date</h5>
                       <p>{{irbHeaderDetails}}</p>
                   </div> -->
-                  <div class="col-7">
-                      <h5>Lead Unit</h5>
-                      <p>{{irbHeaderDetails?.UNIT_NAME}}</p>
+                  <div class="col-6">
+                      <p>Lead Unit : <span>{{irbHeaderDetails?.UNIT_NAME}}</span><br/>
+                      Anticipated End Date : <span>{{irbHeaderDetails?.ANTICICPATED_END_DATE}}</span>
+                      </p>
                   </div>
-                 <div class="col-4">
-                      <h5> Expected Start Date</h5>
-                      <p>{{irbHeaderDetails?.EXPECTED_START_DATE}}</p>
                   </div>
-                  <div class="col-7">
-                      <h5>Anticipated End Date</h5>
-                      <p>{{irbHeaderDetails?.ANTICICPATED_END_DATE}}</p>
-                  </div>
+                  <div class="row  protocol-top apprve-date">
                    <div class="col-12">
-                      <h5>Description</h5>
-                      <p>{{irbHeaderDetails.description}}</p>
+                      <p>Description : <span></span>{{irbHeaderDetails.description}}</p>
                   </div>
- 
               </div>
               </div>
               </div>

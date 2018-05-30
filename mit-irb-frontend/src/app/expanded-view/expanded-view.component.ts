@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class ExpandedViewComponent implements OnInit {
 
     noData = false;
-    reverse = false;
+    pageHeader: string;
 
     expandedList: any;
     result: any;
@@ -27,12 +27,23 @@ export class ExpandedViewComponent implements OnInit {
         this.requestObject.personId = this.route.snapshot.queryParamMap.get( 'personId' );
         this.requestObject.person_role_type = this.route.snapshot.queryParamMap.get( 'personRole' );
         this.requestObject.av_summary_type = this.route.snapshot.queryParamMap.get( 'summaryType' );
+        if( this.requestObject.av_summary_type == 'AMMEND_RENEW') {
+            this.pageHeader = 'Ammend/Renewals in Progress';
+        }
+        else if( this.requestObject.av_summary_type == 'REVISION_REQ') {
+            if( this.requestObject.person_role_type == 'PI') {
+                this.pageHeader = 'Revision Requested';
+            }
+            else {
+                this.pageHeader = 'Pending Responses';
+            }
+        }
+        else if( this.requestObject.av_summary_type == 'AWAITING_RESP') {
+            this.pageHeader = 'Awaiting IRB Response';
+        }
         this.loadExpandedData();
     }
-    sortBy( criteria ) {
-        this.reverse = !this.reverse;
-        this.lastClickedTab = criteria;
-    }
+
     loadExpandedData() {
         this._expandedViewService.getExpandedList( this.requestObject ).subscribe( data => {
             this.result = data || [];

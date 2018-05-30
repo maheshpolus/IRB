@@ -50,7 +50,7 @@ body{
     overflow-x: hidden;
     overflow-y: auto;
     transition: width .25s;
-    z-index: 2;
+	z-index: 3;
 }
 
 .slideMenu *{
@@ -259,7 +259,8 @@ footer {
 header{
     position: fixed;
     background: #FEFEFE;
-    z-index: 1;
+    z-index: 2;
+
 }
 
 .iconMenu>li>a>span {
@@ -1657,7 +1658,7 @@ div
 {
     float: right;
     line-height: 50px;
-    font-size: 25px;
+    font-size: 20px;
     /*! font-style: italic; */
     color: #a92034;
     margin: 0;
@@ -1752,7 +1753,7 @@ div
 {
     /*! border: solid #ccc 1px; */
     border-top: none;
-    padding-bottom: 15px;
+   padding-bottom: 0px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius:20px;
    /* height: 386px;  modified*/
@@ -1810,10 +1811,6 @@ div
 .funding-card
 {
     height: auto!important;
-}
-.cards-in .col-6
-{
-    margin-bottom: 20px;
 }
 .popup-div{
     height: 200px;
@@ -1987,6 +1984,7 @@ div
 	color: #fff;
 	font-size: 1.5rem;
 	text-align: center;
+	margin-top: 18px;
 }
 
 .hospital_plus_ico{
@@ -2017,16 +2015,17 @@ div
 	margin:0 50px;
 }
 .up-arrow{
-	float:right;
-	margin-top:7px;
-	background-image:url(../images/up_arrow.png);
-	width:18px;
-	height:25px;
-	background-repeat: no-repeat;
-	cursor: pointer;
-	position: absolute;
-    right: 15px;
-   z-index: 1;
+	float: right;
+    margin-top: 7px;
+    background-image: url(../images/up_arrow.png);
+    width: 18px;
+    height: 25px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    right: 14px;
+    z-index: 1;
+    top: 90px;
 }
 
 .text-right{
@@ -2060,16 +2059,17 @@ div
 	padding: 0px !important;
 }
 .down-arrow{
-	float:right;
-	margin-top:7px;
-	background-image:url(../images/down_arrow.png);
-	width:18px;
-	height:25px;
-	background-repeat: no-repeat;
-	cursor: pointer;
-	position: absolute;
-    right: 15px;
-     z-index: 1;
+	float: right;
+    margin-top: 7px;
+    background-image: url(../images/down_arrow.png);
+    width: 18px;
+    height: 25px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    right: 14px;
+    z-index: 1;
+    top: 90px;
 }
 .coll-header{
 	padding-left: 0px;
@@ -2142,7 +2142,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .expand-div{
 	position: relative;
-    padding-bottom: 35px;
+    padding-bottom: 31px;
 }
 /*end of newly added*/
 /*page2style_start*/
@@ -2440,6 +2440,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     padding-left: 0 !important;
     padding-right: 0!important;
     padding-top: 0;
+    padding-bottom: 0;
 }
 .datepicker-outer
 {
@@ -2509,12 +2510,14 @@ ul.sb-results-dropdown-menu > li:last-child {
     list-style: none;
     font-size: 14px;
     line-height: 30px;
-    color:#616161;
+    color: #000000;
+    font-weight: bold;
 }
 .list-of-his li span
 {
-    color:#000;
-    font-weight: bold;
+    color: #656060;
+    font-weight: 400;
+
 }
 
 /*mediaqueries*/
@@ -2842,9 +2845,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 .card-spcl-padding {
     padding-bottom: 0;
 }
-.section-margin{
-	margin-top: 20px;
-}
+
 .popup-sub-head {
 	font-size: 17px!important;
 	color: #505050;
@@ -2879,7 +2880,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     width: 98%;
     left: 6px;
 }
-.history-action {
-	color: #a92034!important;
-	font-weight: bold;
+.noHistory {
+	padding: 25px !important;
+
 }

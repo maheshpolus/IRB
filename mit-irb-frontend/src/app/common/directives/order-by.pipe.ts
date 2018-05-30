@@ -7,9 +7,9 @@ export class OrderByPipe implements PipeTransform {
 
   transform(records: Array<any>, args?: any): any {debugger;
       return records.sort(function(a, b) {
-          if (a[args.property] < b[args.property]) {
+          if (a[args.property].toLowerCase() < b[args.property].toLowerCase()) {
               return 1 * args.direction;
-          } else if ( a[args.property] > b[args.property]) {
+          } else if ( a[args.property].toLowerCase() > b[args.property].toLowerCase()) {
               return -1 * args.direction;
           } else {
               return 0;

@@ -15,10 +15,10 @@ export class IrbAttachmentsComponent implements OnInit {
 
     irbAttachmentsList: any[] = [];
     result: any;
-    sortOrder: string;
+    sortOrder= '1';
+    sortField = 'UPDATE_TIMESTAMP';
     direction: number;
     column: any;
-    sortField = 'UPDATE_TIMESTAMP';
     requestObject = {
         protocol_number: '',
         attachmentId: ''
@@ -27,7 +27,6 @@ export class IrbAttachmentsComponent implements OnInit {
     constructor( private _irbViewService: IrbViewService, private route: ActivatedRoute, ) { }
 
     ngOnInit() {
-        debugger;
         this.requestObject.protocol_number = this.route.snapshot.queryParamMap.get( 'protocolNumber' );
         this.loadIrbAttachmentList();
     }
@@ -41,6 +40,7 @@ export class IrbAttachmentsComponent implements OnInit {
                 }
                 else {
                     this.irbAttachmentsList = this.result.irbviewProtocolAttachmentList;
+                    this.sortBy();
                 }
             }
 
@@ -51,7 +51,7 @@ export class IrbAttachmentsComponent implements OnInit {
         );
     }
 
-    downloadAttachment( attachment ) { debugger;
+    downloadAttachment( attachment ) { 
         this.requestObject.attachmentId = attachment.FILE_ID;
         this._irbViewService.downloadIrbAttachment( attachment.FILE_ID ).subscribe( data => {
             var a = document.createElement( "a" );

@@ -73,7 +73,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.getIrbProtocolTypes();
     }
 
-    ngAfterViewInit() {debugger;
+    ngAfterViewInit() {
         this.searchText
             .valueChanges
             .map(( text: any ) => text ? text.trim() : '' )
@@ -255,6 +255,5 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       }
 
       selectProtocolType(){
-          console.log("code"+this.requestObject.protocol_type_code);
       }
 }

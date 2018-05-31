@@ -131,14 +131,18 @@ public class LoginController extends BaseController {
 	public ResponseEntity<String> logout(ModelMap model, HttpServletRequest request,
 			HttpServletResponse response) {
 		logger.info("Log Out");
-		// invalidate the session if exists
-		HttpSession session = request.getSession(false);
 		HttpStatus status = HttpStatus.OK;
-		if (session != null) {
-			session.invalidate();
-		}
 		String responseData = null;
-		responseData = "true";
+		// invalidate the session if exists
+		if ("USERID".equalsIgnoreCase(login_mode)) {
+			HttpSession session = request.getSession(false);
+			if (session != null) {
+				session.invalidate();
+			}
+			responseData = "true";
+		}  else{
+			responseData = "false";
+		}
 		return new ResponseEntity<String>(responseData, status);
 	}
 }

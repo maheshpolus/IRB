@@ -54,6 +54,7 @@ export class IrbHistoryComponent implements OnInit {
     }
 
     loadHistoryDetails() {
+        this.irbHistoryDetails = [];
         this._irbViewService.getProtocolHistotyGroupDetails( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {

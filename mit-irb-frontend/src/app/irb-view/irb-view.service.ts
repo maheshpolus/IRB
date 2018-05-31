@@ -30,7 +30,7 @@ export class IrbViewService {
   getIrbAttachmentList(params) {
       return this._http.post('/mit-irb/getAttachmentList', params);
   }
-  downloadIrbAttachment(attachmentId) {debugger;
+  downloadIrbAttachment(attachmentId) {
       return this._http.get('/mit-irb/downloadAttachment', { 
           headers: new HttpHeaders().set('attachmentId',attachmentId.toString()),
           responseType:'blob'

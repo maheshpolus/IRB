@@ -35,7 +35,6 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public Boolean checkUserHasRight(String personId, String unitNumber) throws DBException, IOException, SQLException {
-
 		ArrayList<InParameter> inParam = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
 		boolean right = false;
@@ -49,6 +48,7 @@ public class LoginServiceImpl implements LoginService {
 				right = true;
 			}
 		}
+		logger.info("---UserHas Right---"+right);
 		return right;
 	}
 
@@ -59,7 +59,6 @@ public class LoginServiceImpl implements LoginService {
 		result = loginDao.checkIRBUserRole(personId);
 		for (HashMap<String, Object> map : result){
 			for (Entry<String, Object> entry : map.entrySet()){
-				System.out.println("key :"+entry.getKey() + " => " + entry.getValue());
 				if(entry.getKey().equals("IS_IRB_ADMIN") && entry.getValue().equals("Y")){
 					role = "ADMIN";
 					return role;
@@ -74,6 +73,7 @@ public class LoginServiceImpl implements LoginService {
 				}
 			}
 		}
+		logger.info("----Role----"+role);
 		return role;
 	}
 
@@ -103,12 +103,12 @@ public class LoginServiceImpl implements LoginService {
 				personDTO.setPersonID(personDetailsList.get(0).get("PRNCPL_ID").toString());
 			}
 		}
+		logger.info("----------------PersonDetails----"+personDTO);
 		return personDTO;
 	}
  
 	@Override
 	public Integer checkUserType(String personId, String unitNumber) throws DBException, IOException, SQLException {
-		System.out.println("in check user type");
 		ArrayList<InParameter> inParam = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
 		Integer userType = null;
@@ -120,6 +120,7 @@ public class LoginServiceImpl implements LoginService {
 			HashMap<String, Object> hmResult = result.get(0);
 			userType = Integer.parseInt((String) hmResult.get("has_right"));
 		}
+		logger.info("-----------UserType------"+ userType);
 		return userType;
 	}
 }

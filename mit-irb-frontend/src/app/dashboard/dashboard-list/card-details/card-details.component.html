@@ -1,6 +1,6 @@
 <div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
 	<div class="row list-rows" *ngFor="let irb of irbList">
-		<div class="col-md-3 col-sm-12 col-xs-12 list-view">
+		<div class="col-md-3 col-sm-12 col-12 list-view">
 			<span
 				[ngClass]="{'in-progress': irb.PROTOCOL_STATUS_CODE=='101',
 						'in-drafts': (irb.PROTOCOL_STATUS_CODE=='100'||
@@ -14,10 +14,8 @@
 									irb.PROTOCOL_STATUS_CODE== '202'||
 									irb.PROTOCOL_STATUS_CODE=='203')}"><p>{{irb.PROTOCOL_STATUS}}</p></span>
 		</div>
-		<div class="col-md-8 col-sm-8 col-xs-12 list-des">
-			<h5>
-				{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}
-			</h5>
+		<div class="col-md-7 col-sm-12 col-12 list-des">
+			<h5>{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}</h5>
 			<div>
 				<div class="row">
 					<div class="col-md-6">
@@ -47,7 +45,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-1 col-sm-1 col-xs-12 list-des">
+		<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
 			<button type="button" class="btn btn-outline-secondary button-view"
 				(click)="openIrb(irb.PROTOCOL_NUMBER)">
 				<i class="fa fa-eye"></i>View

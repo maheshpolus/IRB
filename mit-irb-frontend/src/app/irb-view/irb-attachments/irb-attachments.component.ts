@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { IrbViewService } from "../irb-view.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import 'rxjs/Rx';
+
+import { IrbViewService } from '../irb-view.service';
 
 @Component( {
     selector: 'app-irb-attachments',
@@ -15,19 +16,20 @@ export class IrbAttachmentsComponent implements OnInit {
 
     irbAttachmentsList: any[] = [];
     result: any;
-    sortOrder= '1';
+    sortOrder = '1';
     sortField = 'UPDATE_TIMESTAMP';
     direction: number;
     column: any;
+
     requestObject = {
-        protocol_number: '',
-        attachmentId: ''
+            protocolNumber: '',
+            attachmentId: ''
     };
 
-    constructor( private _irbViewService: IrbViewService, private route: ActivatedRoute, ) { }
+    constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, ) { }
 
     ngOnInit() {
-        this.requestObject.protocol_number = this.route.snapshot.queryParamMap.get( 'protocolNumber' );
+        this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get( 'protocolNumber' );
         this.loadIrbAttachmentList();
     }
 
@@ -35,10 +37,9 @@ export class IrbAttachmentsComponent implements OnInit {
         this._irbViewService.getIrbAttachmentList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
-                if ( this.result.irbviewProtocolAttachmentList == null || this.result.irbviewProtocolAttachmentList.length == 0 ) {
+                if ( this.result.irbviewProtocolAttachmentList == null || this.result.irbviewProtocolAttachmentList.length === 0 ) {
                     this.noIrbAttachments = true;
-                }
-                else {
+                } else {
                     this.irbAttachmentsList = this.result.irbviewProtocolAttachmentList;
                     this.sortBy();
                 }
@@ -46,25 +47,24 @@ export class IrbAttachmentsComponent implements OnInit {
 
         },
             error => {
-                console.log( error );
+                console.log( "Error in method loadIrbAttachmentList()", error );
             },
         );
     }
 
-    downloadAttachment( attachment ) { 
+    downloadAttachment( attachment ) {
         this.requestObject.attachmentId = attachment.FILE_ID;
         this._irbViewService.downloadIrbAttachment( attachment.FILE_ID ).subscribe( data => {
-            var a = document.createElement( "a" );
-            var blob = new Blob( [data], { type: data.type } );
+            const a = document.createElement( 'a' );
+            const blob = new Blob( [data], { type: data.type } );
             a.href = URL.createObjectURL( blob );
             a.download = attachment.FILE_NAME;
             a.click();
 
         },
-            error => console.log( "Error downloading the file." ),
-            () => console.info( "OK" ) );
+            error => console.log( 'Error downloading the file.'),
+            () => console.log( 'OK' ) );
     }
-
 
     sortBy() {
         this.column = this.sortField;

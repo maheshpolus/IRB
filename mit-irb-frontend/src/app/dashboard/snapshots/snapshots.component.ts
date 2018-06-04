@@ -1,5 +1,6 @@
 import { Component, OnInit , Input} from '@angular/core';
-import { Router, ActivatedRoute} from '@angular/router';
+import { Router } from '@angular/router';
+
 import { DashboardService } from '../dashboard.service';
 
 @Component({
@@ -7,18 +8,19 @@ import { DashboardService } from '../dashboard.service';
   templateUrl: './snapshots.component.html',
   styleUrls: ['./snapshots.component.css']
 })
+
 export class SnapshotsComponent implements OnInit {
+
     @Input() userDTO: any;
     result: any;
     snapshots: any = [];
     requestObject = {
             personId : '',
-            person_role_type : ''
+            personRoleType : ''
     };
     roleType: string;
 
-  constructor(private _dashboardService: DashboardService, private router: Router,
-              private _activatedRoute: ActivatedRoute ) { }
+  constructor(private _dashboardService: DashboardService, private _router: Router ) { }
 
   ngOnInit() {
       this.getSnapshotData();
@@ -27,7 +29,7 @@ export class SnapshotsComponent implements OnInit {
 
   getSnapshotData() {
     this.requestObject.personId = this.userDTO.personID;
-    this.requestObject.person_role_type = this.userDTO.role;
+    this.requestObject.personRoleType = this.userDTO.role;
     this._dashboardService.getSnapshots( this.requestObject ).subscribe(
             data => {
                 this.result = data || [];
@@ -40,10 +42,13 @@ export class SnapshotsComponent implements OnInit {
             },
     );
   }
+
   expandedView(summaryType) {
-      this.router.navigate(['/irb/expanded-view'], {queryParams: {personId: this.userDTO.personID, personRole: this.roleType, summaryType: summaryType}});
+      this._router.navigate(['/irb/expanded-view'],
+      {queryParams: {personId: this.userDTO.personID, personRole: this.roleType, summaryType: summaryType}});
   }
-  goToQuestionaire(){
-      this.router.navigate(['/irb/exempt-questionaire']);
+
+  goToQuestionaire() {
+      this._router.navigate(['/irb/exempt-questionaire']);
   }
 }

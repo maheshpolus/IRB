@@ -2,6 +2,9 @@ package org.mit.irb.web.common.view;
 
 import java.sql.Date;
 
+/*
+ * Class for IRB view details
+*/
 public class IRBViews {
 	private String status;
 	private Integer protocolNumber;

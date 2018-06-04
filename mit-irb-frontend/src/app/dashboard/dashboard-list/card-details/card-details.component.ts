@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedDataService } from '../../../common/service/shared-data.service';
 
 @Component({
   selector: 'app-card-details',
@@ -12,13 +11,13 @@ export class CardDetailsComponent implements OnInit, AfterViewInit {
   @Input() irbList: any = [];
   statusStyle: string;
 
-  constructor(private router: Router, private sharedData: SharedDataService) { }
+  constructor(private _router: Router) { }
 
   ngOnInit() {}
 
-  ngAfterViewInit(){}
+  ngAfterViewInit() {}
 
   openIrb( protocolNumber ) {
-      this.router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
+      this._router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
   }
 }

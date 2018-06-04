@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router) {}
+  constructor(private _router: Router) {}
 
   /** watches for a 'ActivatedUser' in sessionstorage
    * reurn true if found
@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
       if (sessionStorage.getItem('ActivatedUser')) {
       return true;
       } else {
-        this.router.navigate(['/login']);
+        this._router.navigate(['/login']);
         return false;
       }
     }

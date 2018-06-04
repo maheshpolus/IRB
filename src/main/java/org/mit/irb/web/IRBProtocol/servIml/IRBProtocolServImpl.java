@@ -21,31 +21,31 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public IRBViewProfile getIRBprotocolPersons(String protocolNumber) {
+	public IRBViewProfile getIRBProtocolPersons(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolPersons(protocolNumber);
 		return irbViewProfile;
 	}
 
 	@Override
-	public IRBViewProfile getIRBprotocolFundingSource(String protocolNumber) {
+	public IRBViewProfile getIRBProtocolFundingSource(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolFundingSource(protocolNumber);
 		return irbViewProfile;
 	}
 
 	@Override
-	public IRBViewProfile getIRBprotocolLocation(String protocolNumber) {
+	public IRBViewProfile getIRBProtocolLocation(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolLocation(protocolNumber);
 		return irbViewProfile;
 	}
 
 	@Override
-	public IRBViewProfile getIRBprotocolVulnerableSubject(String protocolNumber) {
+	public IRBViewProfile getIRBProtocolVulnerableSubject(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolVulnerableSubject(protocolNumber);
 		return irbViewProfile;
 	}
 
 	@Override
-	public IRBViewProfile getIRBprotocolSpecialReview(String protocolNumber) {
+	public IRBViewProfile getIRBProtocolSpecialReview(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolSpecialReview(protocolNumber);
 		return irbViewProfile;
 	}

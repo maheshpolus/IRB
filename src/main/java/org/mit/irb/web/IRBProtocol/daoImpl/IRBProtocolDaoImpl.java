@@ -46,16 +46,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_DETAILS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewHeader(result.get(0));
-			
 		}
-		System.out.println("irbview : "+ result);
 		return irbViewProfile;
 	}
 
@@ -71,15 +72,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_PERSONS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolPersons(result);
 		}
-		System.out.println("irbview Persons: "+ result);
 		return irbViewProfile;
 	}
 
@@ -95,15 +98,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_FUNDING_SRC", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolFundingsource(result);
 		}
-		System.out.println("irbview PROTOCOL_FUNDING_SRC: "+ result);
 		return irbViewProfile;
 	}
 
@@ -119,15 +124,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_LOCATION", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolLocation(result);
 		}
-		System.out.println("irbview IRBprotocolLocation: "+ result);
 		return irbViewProfile;
 	}
 
@@ -143,10 +150,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_VULNBLE_SUBJT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolVulnerableSubject(result);
@@ -167,15 +177,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_SPECIAL_REVW", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolSpecialReview(result);
 		}
-		System.out.println("irbview IRBprotocolSpecialReview: "+ result);
 		return irbViewProfile;
 	}
 
@@ -192,10 +204,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolMITKCPersonInfo(result.get(0));
@@ -215,10 +230,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_TRAINING_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 		}
@@ -253,6 +271,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		return attachmentData;
 	}
@@ -269,10 +288,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ATTACHMENT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolAttachmentList(result);
@@ -292,10 +314,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_GROUP", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolHistoryGroupList(result);
@@ -319,10 +344,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_DET", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbviewProtocolHistoryGroupDetails(result);

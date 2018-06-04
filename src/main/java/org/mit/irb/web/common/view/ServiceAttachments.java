@@ -1,5 +1,10 @@
 package org.mit.irb.web.common.view;
 
+/**
+ * 
+ * Class with attachment details
+ *
+ */
 public class ServiceAttachments {
 	String fileName;
 	byte[] attachment;

@@ -11,7 +11,12 @@
 		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+        
+     <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans.
+	 For example @Controller and @Service. Make sure to set the correct base-package-->
 	<context:component-scan base-package="org.mit.irb.web.*" />
+	
+	<!-- scan this file for reading configuration details of mit-irb -->
 	<context:property-placeholder location="classpath:mit-irb.properties" />
 	<bean id="dbProperties"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -21,9 +26,13 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- Datasource for DBConnection -->
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/jdbc/mit-irb" />
 	</bean>
+	
+	<!-- view resolver -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -34,6 +43,10 @@
 			<value></value>
 		</property>
 	</bean>
+	
+	<!-- location of resource files -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+	<!-- Configures the annotation-driven Spring MVC Controller programming model-->
 	<mvc:annotation-driven />
 </beans>

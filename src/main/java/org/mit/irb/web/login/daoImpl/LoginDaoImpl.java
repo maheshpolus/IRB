@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginDaoImpl implements LoginDao{
 
 	DBEngine dbEngine;
+	Logger logger = Logger.getLogger(LoginDaoImpl.class);
 	
 	LoginDaoImpl(){
 		dbEngine = new DBEngine();
@@ -45,5 +47,4 @@ public class LoginDaoImpl implements LoginDao{
 		}
 		return result;
 	}
-
 }

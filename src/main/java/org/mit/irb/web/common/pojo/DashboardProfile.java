@@ -8,6 +8,11 @@ import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.view.IRBViews;
 import org.mit.irb.web.common.view.SnapshotData;
 
+/**
+ * 
+ * Class for setting dashboard related data
+ *
+ */
 public class DashboardProfile {
 	private List<IRBViews> irbViews;
 	private SnapshotData snapshotData;

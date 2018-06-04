@@ -1,27 +1,33 @@
-<ngx-spinner bdOpacity = 0.5 bdColor = "#333" color = "#fff" type = "ball-spin-clockwise-fade" loadingText = "Loading..." ></ngx-spinner>
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff"
+	type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="headerPush"></div>
-    <div class="container-fluid" *ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
-      <section class="row" style="padding:15px;">
-          <div class="col-12 top-aprv-details">
-              <div class="row">
-              <div class="col-12 apprve-date">
-                <div class="row">
-                  <div class="col-6">
-                    <h4>IRB # : <span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span></h4>
-                    <p>Expiration Date : <span>{{irbHeaderDetails?.EXPIRATION_DATE}}</span><br/>
-                    Title : <span>{{irbHeaderDetails?.TITLE}} </span>
-                    </p>
-                  </div>
-                  
-                  <div class="col-3">
-                     <p>Protocol Type : <span>{{irbHeaderDetails?.PROTOCOL_TYPE}}</span><br/>
-                   Submission Status : <span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span><br/>
-                   PI : <span>{{irbHeaderDetails?.PI_NAME}}</span>
-                    </p>
-                  </div>
-                  
-                  <div class="col-2">
-                    <span class="active-en" [ngClass]="{'in-progress': irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
+<div class="container-fluid"
+	*ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
+	<section class="row" style="padding: 15px;">
+		<div class="col-12 top-aprv-details">
+			<div class="row">
+				<div class="col-12 apprve-date">
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-12">
+							<h4>
+								IRB # : <span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span>
+							</h4>
+							<p>
+								Expiration Date : <span>{{irbHeaderDetails?.EXPIRATION_DATE}}</span><br />
+								Title : <span>{{irbHeaderDetails?.TITLE}} </span>
+							</p>
+						</div>
+						<div class="col-md-3 col-sm-6 col-12">
+							<p>
+								Protocol Type : <span>{{irbHeaderDetails?.PROTOCOL_TYPE}}</span><br />
+								Submission Status : <span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span><br />
+								PI : <span>{{irbHeaderDetails?.PI_NAME}}</span>
+							</p>
+						</div>
+
+						<div class="col-md-2 col-sm-6 col-12">
+							<span class="active-en"
+								[ngClass]="{'in-progress': irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
 						'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
 									irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
 									irbHeaderDetails.PROTOCOL_STATUS_CODE=='106'),
@@ -32,59 +38,83 @@
 									irbHeaderDetails.PROTOCOL_STATUS_CODE== '201'||
 									irbHeaderDetails.PROTOCOL_STATUS_CODE== '202'||
 									irbHeaderDetails.PROTOCOL_STATUS_CODE=='203')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
-                  </div>
-                  
-                    <div class="col-1 i-icon-top">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    <span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> </span>
-                   </div>
-                </div>
-              </div>
-              </div> 
-              <div id="headingOne" class="expand-div">
-					<div  id="collapseOne" class="collapse" aria-labelledby="headingOne">
+						</div>
+
+						<div class="i-icon-top">
+
+							<span class="collapsed" (click)="toggle()"
+								[ngClass]="isExpanded==true?'up-arrow':'down-arrow'"
+								data-toggle="collapse" data-target="#collapseOne"
+								aria-expanded="false" aria-controls="collapseOne"> </span>
+						</div>
+						<div class="info-icon-header">
+							<i class="fa fa-info-circle" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="headingOne" class="expand-div">
+				<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
 					<div class="row protocol-top apprve-date">
-					<hr class="hr-line">
-                  <div class="col-6">
-                      <p>Last Approval Date : <span>{{irbHeaderDetails?.LAST_APPROVAL_DATE}}</span><br/>
-                      Expected Start Date : <span>{{irbHeaderDetails?.EXPECTED_START_DATE}}</span>
-                      </p>
-                  </div>
-                 <!--   <div class="col-4">
+						<hr class="hr-line">
+						<div class="col-6">
+							<p>
+								Last Approval Date : <span>{{irbHeaderDetails?.LAST_APPROVAL_DATE}}</span><br />
+								Expected Start Date : <span>{{irbHeaderDetails?.EXPECTED_START_DATE}}</span>
+							</p>
+						</div>
+						<!--   <div class="col-4">
                       <h5>Orginal Approvel Date</h5>
                       <p>{{irbHeaderDetails}}</p>
                   </div> -->
-                  <div class="col-6">
-                      <p>Lead Unit : <span>{{irbHeaderDetails?.UNIT_NAME}}</span><br/>
-                      Anticipated End Date : <span>{{irbHeaderDetails?.ANTICICPATED_END_DATE}}</span>
-                      </p>
-                  </div>
-                  </div>
-                  <div class="row  protocol-top apprve-date">
-                   <div class="col-12">
-                      <p>Description : <span></span>{{irbHeaderDetails.description}}</p>
-                  </div>
-              </div>
-              </div>
-              </div>
-          </div>
-      </section>
-    </div>
-         <div class="container-fluid">
-      <section class="row btn-row-med" style="padding:15px;">
-      <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" [queryParams]= "{protocolNumber :requestObject.protocol_number}"  (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
-          <button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button>
-          <!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
-          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_attachments')"><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
-          <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" [queryParams]= "{protocolNumber :requestObject.protocol_number}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_history')"><i class="fa fa-history" aria-hidden="true"></i>History</button>
-		  <!-- <button class="btn btn-primary tab_btn" type="submit" ><i class="fa fa-question-circle-o" aria-hidden="true"></i>History</button> -->
-          <!-- <button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" (click)="show_current_tab($event,'irb_overView')"  routerLinkActive="btnactive"><i class="fa fa-home" aria-hidden="true"></i>General</button>
+						<div class="col-6">
+							<p>
+								Lead Unit : <span>{{irbHeaderDetails?.UNIT_NAME}}</span><br />
+								Anticipated End Date : <span>{{irbHeaderDetails?.ANTICICPATED_END_DATE}}</span>
+							</p>
+						</div>
+					</div>
+					<div class="row  protocol-top apprve-date">
+						<div class="col-12">
+							<p>
+								Description : <span></span>{{irbHeaderDetails.description}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<div class="container-fluid">
+	<section class="row btn-row-med" style="padding: 15px;">
+		<button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
+			(click)="show_current_tab($event,'irb_overView')"
+			routerLinkActive="btnactive">
+			<i class="fa fa-home" aria-hidden="true"></i>General
+		</button>
+		<button class="btn btn-primary tab_btn" type="submit">
+			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
+		</button>
+		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
+		<button class="btn btn-primary tab_btn" type="submit"
+			[routerLink]="['irbAttatchments']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
+			routerLinkActive="btnactive"
+			(click)="show_current_tab($event,'irb_attachments')">
+			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
+		</button>
+		<button class="btn btn-primary tab_btn" type="submit"
+			[routerLink]="['irbHistory']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
+			routerLinkActive="btnactive"
+			(click)="show_current_tab($event,'irb_history')">
+			<i class="fa fa-history" aria-hidden="true"></i>History
+		</button>
+	</section>
+</div>
+<div>
+	<router-outlet></router-outlet>
+</div>
 
-          <button class="btn btn-primary tab_btn" type="submit"  ><i class="fa fa-paperclip" aria-hidden="true"></i>Attachments</button>
-          <button class="btn btn-primary tab_btn" type="submit"  ><i class="fa fa-history" aria-hidden="true"></i>History</button> -->
-      </section>
-    </div> 
-    <div>
-    <router-outlet></router-outlet>
-    </div>
-    

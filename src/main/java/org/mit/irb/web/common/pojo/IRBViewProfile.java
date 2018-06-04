@@ -1,5 +1,9 @@
 package org.mit.irb.web.common.pojo;
 
+/**
+ * Class with all details about IRB protocol
+ * 
+ */
 import java.util.ArrayList;
 import java.util.HashMap;
 

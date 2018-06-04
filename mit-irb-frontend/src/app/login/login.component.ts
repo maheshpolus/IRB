@@ -1,38 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-// import { LoginCheckService } from '../common/service/login-check.service';
 import { LoginService } from './login.service';
+
 @Component( {
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
 } )
+
 export class LoginComponent implements OnInit {
+
     result: any;
     loginFail = false;
     username: String;
     password: String;
-    constructor( private _loginService: LoginService, private router: Router ) { }
 
-    ngOnInit() {  }
+    constructor( private _loginService: LoginService, private _router: Router ) {
+        if (sessionStorage.getItem('ActivatedUser') != null) {
+            this._router.navigate( ['/irb/dashboard'] );
+        }
+    }
+
+    ngOnInit() {}
 
     login() {
         const requestObject = {
-            username: this.username,
+            userName: this.username,
             password: this.password
         };
-        /*this.router.navigate( ['/irb/dashboard'] );*/
         this._loginService.login( requestObject ).subscribe(
             data => {
                 this.result = data || [];
-                //**update ActivatedUser with logged in user once login service complated *//*
+                /**update ActivatedUser with logged in user once login service completed */
                 sessionStorage.setItem('ActivatedUser', 'admin');
                 if ( this.result != null ) {
-                    this.router.navigate( ['/irb/dashboard'] );
+                    this._router.navigate( ['/irb/dashboard'] );
                 }
             },
             error => {
-                console.log( error );
+                console.log( "Error in method login()", error );
             },
         );
     }

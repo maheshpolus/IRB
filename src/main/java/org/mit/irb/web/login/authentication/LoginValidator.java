@@ -133,7 +133,6 @@ public class LoginValidator extends BaseController {
 	}
 	
 	public Integer checkUserType(String personId, String unitNumber) throws DBException, IOException, SQLException {
-		System.out.println("in check user type");
 		ArrayList<InParameter> inParam = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
 		Integer userType = null;
@@ -154,7 +153,6 @@ public class LoginValidator extends BaseController {
 		result = checkIRBUserRoles(personId);
 		for (HashMap<String, Object> map : result){
 			for (Entry<String, Object> entry : map.entrySet()){
-				System.out.println("key :"+entry.getKey() + " => " + entry.getValue());
 				if(entry.getKey().equals("IS_IRB_ADMIN") && entry.getValue().equals("Y")){
 					role = "ADMIN";
 					return role;

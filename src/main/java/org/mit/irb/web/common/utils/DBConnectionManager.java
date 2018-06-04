@@ -10,8 +10,6 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-//import org.apache.log4j.Logger;
-
 /**
  * Singleton class to manage db connections.Singleton design pattern is followed.
  * @author anumole

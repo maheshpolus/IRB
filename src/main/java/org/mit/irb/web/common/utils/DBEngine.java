@@ -22,8 +22,6 @@ import org.mit.irb.web.common.utils.*;
 
 public class DBEngine {
 	
-	//protected static Logger logger = Logger.getLogger(DBEngine.class.getName());
-	
 	DBConnectionManager dbConnectionManager;
 	private Hashtable errorList;
 	

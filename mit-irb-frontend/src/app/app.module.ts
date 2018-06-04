@@ -13,22 +13,22 @@ import { SnapshotsComponent } from './dashboard/snapshots/snapshots.component';
 import { DashboardListComponent } from './dashboard/dashboard-list/dashboard-list.component';
 import { CardDetailsComponent } from './dashboard/dashboard-list/card-details/card-details.component';
 import { IrbComponent } from './irb/irb.component';
+import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
+import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './common/service/auth-guard.service';
 import { ElasticService } from './common/service/elastic.service';
 import { DashboardService } from './dashboard/dashboard.service';
-import { LoginCheckService } from './common/service/login-check.service';
-import { SharedDataService } from './common/service/shared-data.service';
-import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
-import { OrderByPipe } from './common/directives/order-by.pipe';
+import { ExpandedViewService } from './expanded-view/expanded-view.service';
 import { LoginService } from './login/login.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
-import { IrbViewService } from "./irb-view/irb-view.service";
-import { IrbViewModule } from "./irb-view/irb-view.module";
-import { ExpandedViewService } from "./expanded-view/expanded-view.service";
-import { AppCommonModule } from "./common/common/common.module";
+import { IrbViewService } from './irb-view/irb-view.service';
 
+import { AppRoutingModule } from './app-routing.module';
+import { IrbViewModule } from './irb-view/irb-view.module';
+import { AppCommonModule } from './common/common/common.module';
+
+import { OrderByPipe } from './common/directives/order-by.pipe';
 
 @NgModule( {
     declarations: [
@@ -41,7 +41,8 @@ import { AppCommonModule } from "./common/common/common.module";
         DashboardListComponent,
         CardDetailsComponent,
         IrbComponent,
-        ExpandedViewComponent
+        ExpandedViewComponent,
+        ExemptQuestionaireComponent
     ],
     imports: [
         BrowserModule,
@@ -51,7 +52,7 @@ import { AppCommonModule } from "./common/common/common.module";
         ReactiveFormsModule,
         AppCommonModule
     ],
-    providers: [AuthGuard, LoginCheckService, DashboardService, SharedDataService,
+    providers: [AuthGuard, DashboardService,
                 { provide: LocationStrategy, useClass: HashLocationStrategy },
                 LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService],
     bootstrap: [AppComponent]

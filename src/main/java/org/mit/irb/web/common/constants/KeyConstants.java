@@ -1,7 +1,7 @@
 package org.mit.irb.web.common.constants;
 
 /**
- * Constants in KC Companion Tool
+ * Constants in MIT IRB
  *
  */
 public final class KeyConstants {

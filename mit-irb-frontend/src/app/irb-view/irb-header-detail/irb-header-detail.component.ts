@@ -1,31 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { IrbViewService } from "../irb-view.service";
 import { NgxSpinnerService } from 'ngx-spinner';
+
+import { IrbViewService } from '../irb-view.service';
 
 @Component({
   selector: 'app-irb-header-detail',
   templateUrl: './irb-header-detail.component.html',
   styleUrls: ['./irb-header-detail.component.css']
 })
+
 export class IrbHeaderDetailComponent implements OnInit {
   isExpanded: boolean;
   currentTab = '';
   irbHeaderDetails: any;
   result: any;
-  requestObject = {     
-          protocol_number: ''
+
+  requestObject = {
+          protocolNumber: ''
   };
-  
-  constructor(private router: Router, private route: ActivatedRoute, private _irbViewService: IrbViewService,
+
+  constructor(private router: Router, private _activatedRoute: ActivatedRoute, private _irbViewService: IrbViewService,
         private spinner: NgxSpinnerService ) {
             this.spinner.show();
          }
 
-  ngOnInit() {debugger;
+  ngOnInit() {
       this.isExpanded = false;
-      console.log("in onit", this.currentTab);
-      this.requestObject.protocol_number = this.route.snapshot.queryParamMap.get('protocolNumber');
+      this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
       this.loadHeaderDetails();
   }
 
@@ -33,7 +35,7 @@ export class IrbHeaderDetailComponent implements OnInit {
       e.preventDefault();
       this.currentTab = current_tab;
   }
-  loadHeaderDetails(){
+  loadHeaderDetails() {
           this._irbViewService.getIrbHeaderDetails( this.requestObject ).subscribe( data => {
               this.result = data || [];
               if ( this.result != null ) {
@@ -41,12 +43,11 @@ export class IrbHeaderDetailComponent implements OnInit {
               }
           },
               error => {
-                   console.log( error );
+                   console.log( "Error in method loadHeaderDetails()", error );
               },
           );
   }
-  toggle(){
-      console.log("in toggle", this.isExpanded);
+  toggle() {
       this.isExpanded = !this.isExpanded;
   }
 }

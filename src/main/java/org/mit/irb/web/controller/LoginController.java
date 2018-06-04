@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
@@ -39,14 +40,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/*
+ * Controller to check user's login and logout functionality
+*/
+
 @Controller
 public class LoginController extends BaseController {
-	private DBEngine dBEngine;
 
-	public LoginController(){ 
-		dBEngine = new DBEngine();
-	}
-
+	protected static Logger logger = Logger.getLogger(LoginController.class.getName());
+	
 	@Autowired
 	LoginValidator loginValidator;
 	
@@ -62,13 +64,15 @@ public class LoginController extends BaseController {
 			HttpServletResponse response) throws Exception {
 		logger.debug("Received request for login: ");
 		HttpStatus status = HttpStatus.OK;
-		String userName = vo.getUsername();
+		String userName = vo.getUserName();
 		String password = vo.getPassword();
-		String loginMode = "USERID";
+		logger.info("----/loginCheck----");
+		logger.info("----User Name-----"+userName);
+		logger.info("----password-----"+password);
 		Boolean loginCheck = false;
 		String role = null;
 		try {
-			loginCheck = loginValidator.loginCheck(loginMode, userName, password, request, response);
+			loginCheck = loginValidator.loginCheck(login_mode, userName, password, request, response);
 			if (loginCheck) {
 				role = loginService.checkIRBUserRole(userName);
 			} else {
@@ -89,8 +93,7 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
-		System.out.println("returning index page");
-		logger.info("in method entryPage");
+		logger.info("---------- entryPage-----------");
 		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO" + session.getId());
 		if (personDTO != null) {
 			logger.info("personDTO != null");
@@ -110,6 +113,7 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
 	public ResponseEntity<String> getPersonDetails(HttpServletRequest request){
+		logger.info("----/getUserDetails----");
 		String responseData = null;
 		HttpStatus status = HttpStatus.OK;
 		PersonDTO personDTO = null;
@@ -120,6 +124,7 @@ public class LoginController extends BaseController {
 				personDTO = (PersonDTO) session.getAttribute("personDTO"+session.getId());
 			}
 			responseData = mapper.writeValueAsString(personDTO);
+			logger.info("----Response Data-----"+responseData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			status = HttpStatus.BAD_REQUEST;

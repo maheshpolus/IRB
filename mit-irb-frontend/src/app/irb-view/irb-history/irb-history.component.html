@@ -10,7 +10,7 @@
 				</div>
 
 				<div class="card-body card-paddng">
-					<!--             	<div class="col-12 datepicker-outer">
+					<!--<div class="col-12 datepicker-outer">
 	            	<form>
       					  <div class="form-row">
       					    <div class="col-12 col-sm-6 col-md-3 action-h">
@@ -51,7 +51,8 @@
 									</div>
 									<div class="col-12 col-sm-12 col-md-4">
 										<ul class="icon-list-coll">
-											<li><i class="fa fa-question-circle-o" aria-hidden="true"></i></li>
+											<li><i class="fa fa-question-circle-o"
+												aria-hidden="true"></i></li>
 											<li><i class="fa fa-envelope-open-o" aria-hidden="true"></i></li>
 											<li><i class="fa fa-file-pdf-o" aria-hidden="true"></i></li>
 										</ul>
@@ -67,7 +68,9 @@
 							<div id="{{'collapse' + i }}" class="collapse"
 								[attr.aria-labelledby]="'heading' + i " data-parent="#accordion">
 								<div class="card-body history-card-body">
-									<div class="row list-of-his" [ngClass]="{'history-line':i!=irbHistoryDetails.length-1}" *ngFor="let historyDet of irbHistoryDetails;let i = index">
+									<div class="row list-of-his"
+										[ngClass]="{'history-line':i!=irbHistoryDetails.length-1}"
+										*ngFor="let historyDet of irbHistoryDetails;let i = index">
 										<div class="col-12 col-sm-4 col-md-4">
 											<ul>
 												<li class="history-action">{{historyDet.PROTOCOL_ACTION}}</li>
@@ -87,7 +90,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="card-header history-coll-header card card-list-no-data noHistory" 
+						<div
+							class="card-header history-coll-header card card-list-no-data noHistory"
 							*ngIf="noHistoryList">
 							<div class="col-12">No history details found</div>
 						</div>

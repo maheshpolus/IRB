@@ -1,129 +1,4 @@
-<!-- <ngx-spinner bdOpacity = 0.5 bdColor = "#333" color = "#fff" type = "ball-spin-clockwise-fade" loadingText = "Loading..." ></ngx-spinner> -->
 <div class="container-fluid">
-	<!-- modal -->
-	<div class="modal fade" id="personModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered " role="document">
-			<div class="modal-content">
-				<div class="modal-header popup-header">
-					<h5 class="modal-title" id="exampleModalLongTitle">Person
-						Details</h5>
-					<button type="button" class="close modal-close"
-						data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body modal-popup">
-					<div class="modal-header-label">
-						<h4 class="popup-sub-head">Basic</h4>
-					</div>
-					<!-- section1 -->
-					<div class="modal-padding">
-						<div class="row">
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Name : </label>
-								{{irbPersonDetailedList?.FULL_NAME}}
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for="">Email : </label>
-								{{irbPersonDetailedList?.EMAIL_ADDRESS}}
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Primary Title : </label>
-								{{irbPersonDetailedList?.PRIMARY_TITLE}}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> City : </label>
-								{{irbPersonDetailedList?.CITY}}
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Country : </label>
-								{{irbPersonDetailedList?.COUNTRY_CODE}}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Directory Title : </label>
-								{{irbPersonDetailedList?.DIRECTORY_TITLE}}
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Mobile number : </label>
-								{{irbPersonDetailedList?.MOBILE_PHONE_NUMBER}}
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label class="modal-label" for=""> Postal Code : </label>
-								{{irbPersonDetailedList?.POSTAL_CODE}}
-							</div>
-						</div>
-					</div>
-					<!-- section2 -->
-					<div>
-						<h4 class="popup-sub-head">Training</h4>
-					</div>
-					<div class="modal-padding">
-						<div class="popup-div">
-							<table class="table table-striped">
-								<thead class="popup-header">
-									<tr>
-										<th scope="col">Description</th>
-										<th scope="col">Score</th>
-										<th scope="col">Followup Date</th>
-										<th scope="col">Submitted Date</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let info of irbPersonDetailedTraining">
-										<td scope="row">{{info.TRAINING_DESCRIPTION}}</td>
-										<td>{{info.SCORE}}</td>
-										<td>{{info.FOLLOWUP_DATE}}</td>
-										<td>{{info.DATE_SUBMITTED}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-
-					<!-- section3 -->
-					<!-- <div>
-						<div class= "modal-header-label"><h4>Responsibilities</h4></div>
-						<div class="row">
-							<div class="col-md-4 col lg- 4 col-sm-4">
-								<label for=""> Name</label> value
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-									<label for="">Address  </label> value
-							</div>
-							<div class="col-md-4 col lg- 4 col-sm-4">
-									<label for=""> Primary Title</label> value
-							</div>
-						</div>
-						<div class="row">
-								<div class="col-md-4 col lg- 4 col-sm-4">
-									<label for=""> Office Address</label> value
-								</div>
-								<div class="col-md-4 col lg- 4 col-sm-4">
-										<label for=""> City</label> value
-								</div>
-								<div class="col-md-4 col lg- 4 col-sm-4">
-										<label for=""> Country</label> value
-								</div>
-								<div class="col-md-4 col lg- 4 col-sm-4">
-										<label for=""> State</label> value
-								</div>
-							</div>
-
-				  </div> -->
-				</div>
-				<div class="modal-footer"></div>
-			</div>
-		</div>
-	</div>
-	<!-- modal-end -->
 	<section class="row">
 		<!--card list-->
 		<div class="col-12">
@@ -132,10 +7,10 @@
 					<div class="shadow-card">
 						<div class="col-12 card-head-med">
 							<div class="row">
-								<div class="col-11">
+								<div class="col-md-11 col-8">
 									<h6>Personnel Information</h6>
 								</div>
-								<div class="col-1">
+								<div class="col-md-1 col-4 ">
 									<i class="fa fa-info-circle" aria-hidden="true"></i>
 								</div>
 							</div>
@@ -144,24 +19,26 @@
 							*ngIf="noIrbPersons==false">
 							<div class="row pdf" [ngClass]="{'row-line':i!=0}"
 								*ngFor="let irbPersons of irbPersonsDetails;let i= index"
-								data-toggle="modal" data-target="#personModal"
+								data-toggle="modal" data-toggle="modal"
+								data-target="#personModal"
 								(click)="showpersonData(irbPersons.PERSON_ID)">
-								<div class="col-2">
+								<div class="col-md-2 col-sm-6 co-12">
 									<img
 										[ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
 									'coi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID !=='PI'}"
 										class="img-fluid pd20" alt="Role image">
 								</div>
-								<div class="col-4 card-desc">
+								<div class="col-md-4 col-sm-6 co-12 card-desc">
 									<h6>{{irbPersons.PERSON_NAME}}</h6>
 									<p>
 										Person Role : <span>{{irbPersons.PROTOCOL_PERSON_ROLE}}</span>
 									</p>
 									<p>
-										Email Id : <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office : <span>{{irbPersons.OFFICE_PHONE}}</span>
+										Email Id : <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office
+										: <span>{{irbPersons.OFFICE_PHONE}}</span>
 									</p>
 								</div>
-								<div class="col-4 card-desc">
+								<div class="col-md-4 col-sm-6 co-12 card-desc">
 									<h6>&nbsp;</h6>
 									<p>
 										Primary Title : <span>{{irbPersons.PRIMARY_TITLE}}</span>
@@ -171,7 +48,7 @@
 										Unit : <span>{{irbPersons.UNIT_NAME}}</span>
 									</p>
 								</div>
-								<div class="col-2 cmp-b">
+								<div class="col-md-2 col-sm-6 co-12 cmp-b">
 									<p *ngIf="irbPersons.IS_COMPLETED=='Y'">Completed</p>
 									<p *ngIf="irbPersons.IS_COMPLETED=='N'">Pending</p>
 								</div>
@@ -328,6 +205,131 @@
 		</div>
 	</section>
 </div>
+
+<!-- modal -->
+<div class="modal fade bd-example-modal-lg" id="personModal"
+	tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Person
+					Details</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-popup">
+				<div class="modal-header-label">
+					<h4 class="popup-sub-head">Basic</h4>
+				</div>
+				<!-- section1 -->
+				<div class="modal-padding">
+					<div class="row">
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Name : </label>
+							{{irbPersonDetailedList?.FULL_NAME}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for="">Email : </label>
+							{{irbPersonDetailedList?.EMAIL_ADDRESS}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Primary Title : </label>
+							{{irbPersonDetailedList?.PRIMARY_TITLE}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> City : </label>
+							{{irbPersonDetailedList?.CITY}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Country : </label>
+							{{irbPersonDetailedList?.COUNTRY_CODE}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Directory Title : </label>
+							{{irbPersonDetailedList?.DIRECTORY_TITLE}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Mobile number : </label>
+							{{irbPersonDetailedList?.MOBILE_PHONE_NUMBER}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Postal Code : </label>
+							{{irbPersonDetailedList?.POSTAL_CODE}}
+						</div>
+					</div>
+				</div>
+				<!-- section2 -->
+				<div>
+					<h4 class="popup-sub-head">Training</h4>
+				</div>
+				<div class="modal-padding">
+					<div class="popup-div">
+						<table class="table table-striped">
+							<thead class="popup-header">
+								<tr>
+									<th scope="col">Description</th>
+									<th scope="col">Score</th>
+									<th scope="col">Followup Date</th>
+									<th scope="col">Submitted Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let info of irbPersonDetailedTraining">
+									<td scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+									<td>{{info.SCORE}}</td>
+									<td>{{info.FOLLOWUP_DATE}}</td>
+									<td>{{info.DATE_SUBMITTED}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- section3 -->
+				<!-- <div>
+						<div class= "modal-header-label"><h4>Responsibilities</h4></div>
+						<div class="row">
+							<div class="col-md-4 col lg- 4 col-sm-4">
+								<label for=""> Name</label> value
+							</div>
+							<div class="col-md-4 col lg- 4 col-sm-4">
+									<label for="">Address  </label> value
+							</div>
+							<div class="col-md-4 col lg- 4 col-sm-4">
+									<label for=""> Primary Title</label> value
+							</div>
+						</div>
+						<div class="row">
+								<div class="col-md-4 col lg- 4 col-sm-4">
+									<label for=""> Office Address</label> value
+								</div>
+								<div class="col-md-4 col lg- 4 col-sm-4">
+										<label for=""> City</label> value
+								</div>
+								<div class="col-md-4 col lg- 4 col-sm-4">
+										<label for=""> Country</label> value
+								</div>
+								<div class="col-md-4 col lg- 4 col-sm-4">
+										<label for=""> State</label> value
+								</div>
+							</div>
+				  </div> -->
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+<!-- modal-end -->
+
 <div class="container-fluid">
 	<section class="row section-margin">
 		<!--collapse-->
@@ -345,109 +347,6 @@
 				</div>
 			</div>
 			<div id="accordion">
-				<!-- <div class="card" *ngFor="let specialRv of irbSpecialReview">
-					<div class="card-header" id="headingOne">
-						<span class="mb-0">
-							<button class="btn btn-link coll-header">Human Subjects</button>
-						</span> <span (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse"
-								data-target="#collapseOne" aria-expanded="false"
-								aria-controls="collapseOne"> </span> <span class="active_green">Active</span>
-
-					</div>
-
-					<div id="collapseOne" class="collapse show"
-						aria-labelledby="headingOne" data-parent="#accordion">
-						<div class="card-body card-bg-coll">
-							<div class="row protocol-top">
-								<div class="col-12 coll-details">
-									<div class="row">
-										<div class="col-3">
-											<p>
-												Protocol Number : <span>1231</span>
-											</p>
-										</div>
-										<div class="col-3">
-											<p>
-												Application Date : <span>2015-05-26</span>
-											</p>
-										</div>
-										<div class="col-3">
-											<p>
-												Approval Date : <span>2018-3-26</span>
-											</p>
-										</div>
-										<div class="col-3">
-											<p>
-												Expiration Date : <span>2019-3-26</span>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row protocol-top">
-								<div class="col-12 coll-details">
-									<p>
-										Comments : <span>Isolation, expansion and
-											characterization of MSCs and MSC-derived exosomes from
-											discarded tissues</span>
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div> -->
-				<!-- <div class="card">
-					<div class="card-header" id="headingTwo">
-						<span class="mb-0">
-							<button class="btn btn-link coll-header">
-								Animal Usage</button>
-
-							<span class="up-arrow" data-toggle="collapse" data-target="#collapseTwo"
-								aria-expanded="false" aria-controls="collapseTwo"> </span> <span class="active_green">Active</span>
-						</span>
-					</div>
-					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-						data-parent="#accordion">
-						<div class="card-body card-bg-coll">
-							<div class="row protocol-top">
-								<div class="col-12 coll-details">
-									<div class="row">
-										<div class="col-3">
-											<p>
-												Protocol Number : <span>1231</span>
-											</p>
-										</div>
-										<div class="col-3">
-											<p>
-												Application Date : <span>2015-05-26</span>
-											</p>
-										</div>
-										<div class="col-3">
-											<p>
-												Approval Date : <span>2018-3-26</span>
-											</p>
-										</div>
-										<div class="col-3">
-											<p>
-												Expiration Date : <span>2019-3-26</span>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row protocol-top">
-								<div class="col-12 coll-details">
-									<p>
-										Comments : <span>Isolation, expansion and
-											characterization of MSCs and MSC-derived exosomes from
-											discarded tissues</span>
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div> -->
-				<!-- delete this on next commit -->
 				<div class="card" *ngIf="noIrbSpecialReviews">
 					<div class="card-header" id="headingTwo">
 						<span class="mb-0">

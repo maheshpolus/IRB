@@ -1,85 +1,72 @@
 package org.mit.irb.web.common.view;
 
+/*
+ * Class for setting snapshot details in Dashboard
+*/
 public class SnapshotData {
 
-	String ammend_renew_count;
-	String revision_req_count;
-	String awaiting_resp_count;
-	String committe_name_prev;
-	String committee_name_next;
-	String scheduled_date_prev;
-	String scheduled_day_prev;
-	String scheduled_date_next;
-	String scheduled_day_next;
-
-	public String getAmmend_renew_count() {
-		return ammend_renew_count;
+	String ammendRenewCount;
+	String revisionReqCount;
+	String awaitingRespCount;
+	String committeNamePrev;
+	String committeeNameNext;
+	String scheduledDatePrev;
+	String scheduledDayPrev;
+	String scheduledDateNext;
+	String scheduledDayNext;
+	
+	public String getAmmendRenewCount() {
+		return ammendRenewCount;
 	}
-
-	public void setAmmend_renew_count(String ammend_renew_count) {
-		this.ammend_renew_count = ammend_renew_count;
+	public void setAmmendRenewCount(String ammendRenewCount) {
+		this.ammendRenewCount = ammendRenewCount;
 	}
-
-	public String getRevision_req_count() {
-		return revision_req_count;
+	public String getRevisionReqCount() {
+		return revisionReqCount;
 	}
-
-	public void setRevision_req_count(String revision_req_count) {
-		this.revision_req_count = revision_req_count;
+	public void setRevisionReqCount(String revisionReqCount) {
+		this.revisionReqCount = revisionReqCount;
 	}
-
-	public String getAwaiting_resp_count() {
-		return awaiting_resp_count;
+	public String getAwaitingRespCount() {
+		return awaitingRespCount;
 	}
-
-	public void setAwaiting_resp_count(String awaiting_resp_count) {
-		this.awaiting_resp_count = awaiting_resp_count;
+	public void setAwaitingRespCount(String awaitingRespCount) {
+		this.awaitingRespCount = awaitingRespCount;
 	}
-	public String getCommitte_name_prev() {
-		return committe_name_prev;
+	public String getCommitteNamePrev() {
+		return committeNamePrev;
 	}
-
-	public void setCommitte_name_prev(String committe_name_prev) {
-		this.committe_name_prev = committe_name_prev;
+	public void setCommitteNamePrev(String committeNamePrev) {
+		this.committeNamePrev = committeNamePrev;
 	}
-
-	public String getCommittee_name_next() {
-		return committee_name_next;
+	public String getCommitteeNameNext() {
+		return committeeNameNext;
 	}
-
-	public void setCommittee_name_next(String committee_name_next) {
-		this.committee_name_next = committee_name_next;
+	public void setCommitteeNameNext(String committeeNameNext) {
+		this.committeeNameNext = committeeNameNext;
 	}
-
-	public String getScheduled_date_prev() {
-		return scheduled_date_prev;
+	public String getScheduledDatePrev() {
+		return scheduledDatePrev;
 	}
-
-	public void setScheduled_date_prev(String scheduled_date_prev) {
-		this.scheduled_date_prev = scheduled_date_prev;
+	public void setScheduledDatePrev(String scheduledDatePrev) {
+		this.scheduledDatePrev = scheduledDatePrev;
 	}
-
-	public String getScheduled_day_prev() {
-		return scheduled_day_prev;
+	public String getScheduledDayPrev() {
+		return scheduledDayPrev;
 	}
-
-	public void setScheduled_day_prev(String scheduled_day_prev) {
-		this.scheduled_day_prev = scheduled_day_prev;
+	public void setScheduledDayPrev(String scheduledDayPrev) {
+		this.scheduledDayPrev = scheduledDayPrev;
 	}
-
-	public String getScheduled_date_next() {
-		return scheduled_date_next;
+	public String getScheduledDateNext() {
+		return scheduledDateNext;
 	}
-
-	public void setScheduled_date_next(String scheduled_date_next) {
-		this.scheduled_date_next = scheduled_date_next;
+	public void setScheduledDateNext(String scheduledDateNext) {
+		this.scheduledDateNext = scheduledDateNext;
 	}
-
-	public String getScheduled_day_next() {
-		return scheduled_day_next;
+	public String getScheduledDayNext() {
+		return scheduledDayNext;
 	}
-
-	public void setScheduled_day_next(String scheduled_day_next) {
-		this.scheduled_day_next = scheduled_day_next;
+	public void setScheduledDayNext(String scheduledDayNext) {
+		this.scheduledDayNext = scheduledDayNext;
 	}
 }

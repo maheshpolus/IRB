@@ -6,102 +6,46 @@ package org.mit.irb.web.common.VO;
  */
 public class CommonVO {
 
-	private String username;
+	private String userName;
 
 	private String password;
 	
 	private String personId;
 	
-	private String person_role_type;
+	private String personRoleType;
 	
-	private String protocol_number;
+	private String protocolNumber;
 	
 	private String title;
 	
-	private String lead_unit_number;
+	private String leadunitNumber;
 	
-	private String protocol_type_code;
+	private String protocolTypeCode;
 	
-	private String dashboard_type;
+	private String dashboardType;
 
-	private String av_person_id;
+	private String avPersonId;
 	
 	private String attachmentId;
 	
-	private String av_summary_type;
+	private String avSummaryType;
 	
-	private String pi_name;
+	private String piName;
 	
-	private Integer protocol_id;
+	private Integer protocolId;
 	
-	private Integer action_id;
+	private Integer actionId;
 	
-	private Integer next_group_action_id;
+	private Integer nextGroupActionId;
 	
-	private Integer previous_group_action_id;
-	
-	public Integer getProtocol_id() {
-		return protocol_id;
+	private Integer previousGroupActionId;
+
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setProtocol_id(Integer protocol_id) {
-		this.protocol_id = protocol_id;
-	}
-
-	public Integer getAction_id() {
-		return action_id;
-	}
-
-	public void setAction_id(Integer action_id) {
-		this.action_id = action_id;
-	}
-
-	public Integer getNext_group_action_id() {
-		return next_group_action_id;
-	}
-
-	public void setNext_group_action_id(Integer next_group_action_id) {
-		this.next_group_action_id = next_group_action_id;
-	}
-	
-	public Integer getPrevious_group_action_id() {
-		return previous_group_action_id;
-	}
-
-	public void setPrevious_group_action_id(Integer previous_group_action_id) {
-		this.previous_group_action_id = previous_group_action_id;
-	}
-
-	public String getPi_name() {
-		return pi_name;
-	}
-
-	public void setPi_name(String pi_name) {
-		this.pi_name = pi_name;
-	}
-
-	public String getAv_summary_type() {
-		return av_summary_type;
-	}
-
-	public void setAv_summary_type(String av_summary_type) {
-		this.av_summary_type = av_summary_type;
-	}
-
-	public String getAttachmentId() {
-		return attachmentId;
-	}
-
-	public void setAttachmentId(String attachmentId) {
-		this.attachmentId = attachmentId;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -120,20 +64,20 @@ public class CommonVO {
 		this.personId = personId;
 	}
 
-	public String getPerson_role_type() {
-		return person_role_type;
+	public String getPersonRoleType() {
+		return personRoleType;
 	}
 
-	public void setPerson_role_type(String person_role_type) {
-		this.person_role_type = person_role_type;
+	public void setPersonRoleType(String personRoleType) {
+		this.personRoleType = personRoleType;
 	}
 
-	public String getProtocol_number() {
-		return protocol_number;
+	public String getProtocolNumber() {
+		return protocolNumber;
 	}
 
-	public void setProtocol_number(String protocol_number) {
-		this.protocol_number = protocol_number;
+	public void setProtocolNumber(String protocolNumber) {
+		this.protocolNumber = protocolNumber;
 	}
 
 	public String getTitle() {
@@ -144,35 +88,91 @@ public class CommonVO {
 		this.title = title;
 	}
 
-	public String getLead_unit_number() {
-		return lead_unit_number;
+	public String getLeadunitNumber() {
+		return leadunitNumber;
 	}
 
-	public void setLead_unit_number(String lead_unit_number) {
-		this.lead_unit_number = lead_unit_number;
+	public void setLeadunitNumber(String leadunitNumber) {
+		this.leadunitNumber = leadunitNumber;
 	}
 
-	public String getProtocol_type_code() {
-		return protocol_type_code;
+	public String getProtocolTypeCode() {
+		return protocolTypeCode;
 	}
 
-	public void setProtocol_type_code(String protocol_type_code) {
-		this.protocol_type_code = protocol_type_code;
+	public void setProtocolTypeCode(String protocolTypeCode) {
+		this.protocolTypeCode = protocolTypeCode;
 	}
 
-	public String getDashboard_type() {
-		return dashboard_type;
+	public String getDashboardType() {
+		return dashboardType;
 	}
 
-	public void setDashboard_type(String dashboard_type) {
-		this.dashboard_type = dashboard_type;
+	public void setDashboardType(String dashboardType) {
+		this.dashboardType = dashboardType;
 	}
 
-	public String getAv_person_id() {
-		return av_person_id;
+	public String getAvPersonId() {
+		return avPersonId;
 	}
 
-	public void setAv_person_id(String av_person_id) {
-		this.av_person_id = av_person_id;
+	public void setAvPersonId(String avPersonId) {
+		this.avPersonId = avPersonId;
+	}
+
+	public String getAttachmentId() {
+		return attachmentId;
+	}
+
+	public void setAttachmentId(String attachmentId) {
+		this.attachmentId = attachmentId;
+	}
+
+	public String getAvSummaryType() {
+		return avSummaryType;
+	}
+
+	public void setAvSummaryType(String avSummaryType) {
+		this.avSummaryType = avSummaryType;
+	}
+
+	public String getPiName() {
+		return piName;
+	}
+
+	public void setPiName(String piName) {
+		this.piName = piName;
+	}
+
+	public Integer getProtocolId() {
+		return protocolId;
+	}
+
+	public void setProtocolId(Integer protocolId) {
+		this.protocolId = protocolId;
+	}
+
+	public Integer getActionId() {
+		return actionId;
+	}
+
+	public void setActionId(Integer actionId) {
+		this.actionId = actionId;
+	}
+
+	public Integer getNextGroupActionId() {
+		return nextGroupActionId;
+	}
+
+	public void setNextGroupActionId(Integer nextGroupActionId) {
+		this.nextGroupActionId = nextGroupActionId;
+	}
+
+	public Integer getPreviousGroupActionId() {
+		return previousGroupActionId;
+	}
+
+	public void setPreviousGroupActionId(Integer previousGroupActionId) {
+		this.previousGroupActionId = previousGroupActionId;
 	}
 }

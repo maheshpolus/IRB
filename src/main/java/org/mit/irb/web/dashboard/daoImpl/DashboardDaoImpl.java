@@ -58,39 +58,39 @@ public class DashboardDaoImpl implements DashboardDao{
 		SnapshotData snapshotData = new SnapshotData();
 		for(HashMap<String, Object> hmap: result){
 			if(hmap.get("COMMITTEE_NAME_PREV") != null){
-				snapshotData.setCommitte_name_prev(hmap.get("COMMITTEE_NAME_PREV").toString());
+				snapshotData.setCommitteNamePrev(hmap.get("COMMITTEE_NAME_PREV").toString());
 			} else{
 				//snapshotData.setCommitte_name_prev("0");
 			}
 			if(hmap.get("SCHEDULED_DATE_PREV") != null){
-				snapshotData.setScheduled_date_prev(hmap.get("SCHEDULED_DATE_PREV").toString());
+				snapshotData.setScheduledDatePrev(hmap.get("SCHEDULED_DATE_PREV").toString());
 			} else{
 				//snapshotData.setScheduled_date_prev("0");
 			}
 			if(hmap.get("SCHEDULED_DAY_PREV") != null){
-				snapshotData.setScheduled_day_prev(hmap.get("SCHEDULED_DAY_PREV").toString());
+				snapshotData.setScheduledDayPrev(hmap.get("SCHEDULED_DAY_PREV").toString());
 			} else{
 				//snapshotData.setScheduled_day_prev("0");
 			}
 			if(hmap.get("COMMITTEE_NAME_NEXT") != null){
-				snapshotData.setCommittee_name_next(hmap.get("COMMITTEE_NAME_NEXT").toString());
+				snapshotData.setCommitteeNameNext(hmap.get("COMMITTEE_NAME_NEXT").toString());
 			} else{
 				//snapshotData.setCommittee_name_next("0");
 			}
 			if(hmap.get("SCHEDULED_DATE_NEXT") != null){
-				snapshotData.setScheduled_date_next(hmap.get("SCHEDULED_DATE_NEXT").toString());
+				snapshotData.setScheduledDateNext(hmap.get("SCHEDULED_DATE_NEXT").toString());
 			} else{
 				//snapshotData.setScheduled_date_next("0");
 			}
 			if(hmap.get("SCHEDULED_DAY_NEXT") != null){
-				snapshotData.setScheduled_day_next(hmap.get("SCHEDULED_DAY_NEXT").toString());
+				snapshotData.setScheduledDayNext(hmap.get("SCHEDULED_DAY_NEXT").toString());
 			} else{
 				//snapshotData.setScheduled_day_next("0");
 			}
 			if(hmap.get("REVISION_REQ_COUNT") != null){
-				snapshotData.setRevision_req_count(hmap.get("REVISION_REQ_COUNT").toString());
+				snapshotData.setRevisionReqCount(hmap.get("REVISION_REQ_COUNT").toString());
 			} else{
-				snapshotData.setRevision_req_count("0");
+				snapshotData.setRevisionReqCount("0");
 			}
 		}
 		profile.setSnapshotData(snapshotData);
@@ -100,19 +100,19 @@ public class DashboardDaoImpl implements DashboardDao{
 		SnapshotData snapshotData = new SnapshotData();
 		for(HashMap<String, Object> hmap: result){
 			if(hmap.get("AMMEND_RENEW_COUNT") != null){
-				snapshotData.setAmmend_renew_count(hmap.get("AMMEND_RENEW_COUNT").toString());
+				snapshotData.setAmmendRenewCount(hmap.get("AMMEND_RENEW_COUNT").toString());
 			} else{
-				snapshotData.setAmmend_renew_count("0");
+				snapshotData.setAmmendRenewCount("0");
 			}
 			if(hmap.get("REVISION_REQ_COUNT") != null){
-				snapshotData.setRevision_req_count(hmap.get("REVISION_REQ_COUNT").toString());
+				snapshotData.setRevisionReqCount(hmap.get("REVISION_REQ_COUNT").toString());
 			} else{
-				snapshotData.setRevision_req_count("0");
+				snapshotData.setRevisionReqCount("0");
 			}
 			if(hmap.get("AWAITING_RESP_COUNT") != null){
-				snapshotData.setAwaiting_resp_count(hmap.get("AWAITING_RESP_COUNT").toString());
+				snapshotData.setAwaitingRespCount(hmap.get("AWAITING_RESP_COUNT").toString());
 			} else{
-				snapshotData.setAwaiting_resp_count("0");
+				snapshotData.setAwaitingRespCount("0");
 			}
 		}
 		profile.setSnapshotData(snapshotData);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class IrbViewService {
@@ -31,9 +31,9 @@ export class IrbViewService {
       return this._http.post('/mit-irb/getAttachmentList', params);
   }
   downloadIrbAttachment(attachmentId) {
-      return this._http.get('/mit-irb/downloadAttachment', { 
-          headers: new HttpHeaders().set('attachmentId',attachmentId.toString()),
-          responseType:'blob'
+      return this._http.get('/mit-irb/downloadAttachment', {
+          headers: new HttpHeaders().set('attachmentId', attachmentId.toString()),
+          responseType: 'blob'
       });
   }
   getProtocolHistotyGroupList(params) {

@@ -1,44 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpandedViewService } from "./expanded-view.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { ExpandedViewService } from './expanded-view.service';
 
 @Component( {
     selector: 'app-expanded-view',
     templateUrl: './expanded-view.component.html',
     styleUrls: ['./expanded-view.component.css']
 } )
+
 export class ExpandedViewComponent implements OnInit {
 
     noData = false;
-    pageHeader: string;
 
+    pageHeader: string;
     expandedList: any;
     result: any;
     lastClickedTab = '';
+
     requestObject = {
         personId: '',
-        person_role_type: '',
-        av_summary_type: ''
-    }
+        personRoleType: '',
+        avSummaryType: ''
+    };
 
-    constructor( private _expandedViewService: ExpandedViewService, private route: ActivatedRoute, private router: Router ) { }
+    constructor( private _expandedViewService: ExpandedViewService, private _activatedRoute: ActivatedRoute, private _router: Router ) { }
 
     ngOnInit() {
-        this.requestObject.personId = this.route.snapshot.queryParamMap.get( 'personId' );
-        this.requestObject.person_role_type = this.route.snapshot.queryParamMap.get( 'personRole' );
-        this.requestObject.av_summary_type = this.route.snapshot.queryParamMap.get( 'summaryType' );
-        if( this.requestObject.av_summary_type == 'AMMEND_RENEW') {
+        this.requestObject.personId = this._activatedRoute.snapshot.queryParamMap.get( 'personId' );
+        this.requestObject.personRoleType = this._activatedRoute.snapshot.queryParamMap.get( 'personRole' );
+        this.requestObject.avSummaryType = this._activatedRoute.snapshot.queryParamMap.get( 'summaryType' );
+        if ( this.requestObject.avSummaryType === 'AMMEND_RENEW') {
             this.pageHeader = 'Ammend/Renewals in Progress';
-        }
-        else if( this.requestObject.av_summary_type == 'REVISION_REQ') {
-            if( this.requestObject.person_role_type == 'PI') {
+        } else if ( this.requestObject.avSummaryType === 'REVISION_REQ') {
+            if ( this.requestObject.personRoleType === 'PI') {
                 this.pageHeader = 'Revision Requested';
-            }
-            else {
+            } else {
                 this.pageHeader = 'Pending Responses';
             }
-        }
-        else if( this.requestObject.av_summary_type == 'AWAITING_RESP') {
+        } else if ( this.requestObject.avSummaryType === 'AWAITING_RESP') {
             this.pageHeader = 'Awaiting IRB Response';
         }
         this.loadExpandedData();
@@ -48,21 +48,21 @@ export class ExpandedViewComponent implements OnInit {
         this._expandedViewService.getExpandedList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
-                if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length == 0 ) {
+                if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0 ) {
                     this.noData = true;
-                }
-                else {
+                } else {
                     this.expandedList = this.result.dashBoardDetailMap;
                 }
             }
 
         },
             error => {
-                console.log( error );
+                console.log( "Error in method loadExpandedData()", error );
             },
         );
     }
+
     openIrbView( protocolNumber ) {
-        this.router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } } );
+        this._router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } } );
     }
 }

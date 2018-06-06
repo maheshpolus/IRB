@@ -6,9 +6,9 @@
 			<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}"><a
 				(click)="getIrbListData('PENDING')">Pending Action</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'DRAFT')}"><a
-				(click)="getIrbListData('DRAFT')">In Drafts</a></li>
+				(click)="getIrbListData('DRAFT')">In Progress</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}"><a
-				(click)="getIrbListData('INPROGRESS')">In Progress</a></li>
+				(click)="getIrbListData('INPROGRESS')">Submitted</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}"><a
 				(click)="getIrbListData('ACTIVE')">Active</a></li>
 			<span> <a (click)="showAdvanceSearch()"><i

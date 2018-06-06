@@ -1,4 +1,4 @@
-package org.mit.irb.web.dashboard.servImpl;
+package org.mit.irb.web.dashboard.service.Impl;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -39,15 +39,15 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
-	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
-			String pi_name, String protocol_number,String protocol_type_code, String title) {
-		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboard_type, pi_name, protocol_number, protocol_type_code, title);
+	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
+			String piName, String protocolNumber,String protocolTypeCode, String title) {
+		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboardType, piName, protocolNumber, protocolTypeCode, title);
 		return profile;
 	}
 
 	@Override
-	public DashboardProfile getExpandedSnapShotView(String personId, String person_role_type, String av_summary_type) {
-		DashboardProfile profile = dashboardDao.getExpandedSnapShotView(personId, person_role_type, av_summary_type);
+	public DashboardProfile getExpandedSnapShotView(String personId, String personRoleType, String avSummaryType) {
+		DashboardProfile profile = dashboardDao.getExpandedSnapShotView(personId, personRoleType, avSummaryType);
 		return profile;
 	}
 

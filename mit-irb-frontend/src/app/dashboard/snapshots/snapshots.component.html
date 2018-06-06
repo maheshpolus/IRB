@@ -10,14 +10,14 @@
 				<div class="media-body top-card-body">
 					<h4 class="media-heading">{{snapshots?.ammendRenewCount}}</h4>
 					<p>
-						Ammend/<br>Renewals in Progress
+						Ammend/Renewals in <br>Progress
 					</p>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards">
+		<div class="col-12 top-cards revision-req-card">
 			<div class="media top-card-outer"
 				(click)="expandedView('REVISION_REQ')">
 				<div class="media-left card-icon1 circle2">
@@ -44,7 +44,7 @@
 				<div class="media-body top-card-body cap3">
 					<h4 class="media-heading">{{snapshots?.awaitingRespCount}}</h4>
 					<p>
-						Awaiting <br>IRB Response
+						Awaiting IRB <br>Response
 					</p>
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards link-card">
 			<ul>
-				<li><a><i class="fa fa-check-square-o"></i>Exempt <!-- class="pdf" (click)="goToQuestionaire()" -->
+				<li><a class="pdf" (click)="goToQuestionaire()"><i class="fa fa-check-square-o"></i>Exempt 
 						Protocol Determination</a></li>
 				<li><a><i class="fa fa-calendar"></i>IRB Schedules</a></li>
 			</ul>
@@ -70,7 +70,7 @@
 					<a><i class="fa fa-file-text-o"></i> </a>
 				</div>
 				<div class="media-body top-card-body-schedule cap1">
-					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDatePrev}}</h4>
+					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDatePrev | date: 'MM/dd/yyyy'}}</h4>
 					<p class="schedule-p">{{snapshots?.scheduledDayPrev}}</p>
 					<p class="schedule schedule-p">{{snapshots?.committeNamePrev}}</p>
 				</div>
@@ -85,7 +85,7 @@
 					</a>
 				</div>
 				<div class="media-body top-card-body-schedule cap2">
-					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDateNext}}</h4>
+					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDateNext | date: 'MM/dd/yyyy'}}</h4>
 					<p class="schedule-p">{{snapshots?.scheduledDayNext}}</p>
 					<p class="schedule schedule-p">{{snapshots?.committeeNameNext}}</p>
 				</div>

@@ -10,7 +10,7 @@ public class IRBViews {
 	private Integer protocolNumber;
 	private String title;
 	private String pi;
-	private String lead_unit;
+	private String leadUnit;
 	private String description;
 	private String protocolType;
 	private String submissionStatus;
@@ -81,12 +81,12 @@ public class IRBViews {
 		this.pi = pi;
 	}
 
-	public String getLead_unit() {
-		return lead_unit;
+	public String getLeadUnit() {
+		return leadUnit;
 	}
 
-	public void setLead_unit(String lead_unit) {
-		this.lead_unit = lead_unit;
+	public void setLeadUnit(String leadUnit) {
+		this.leadUnit = leadUnit;
 	}
 
 	public String getDescription() {

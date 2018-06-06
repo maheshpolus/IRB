@@ -1,4 +1,4 @@
-package org.mit.irb.web.IRBProtocol.daoImpl;
+package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,16 +46,16 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_DETAILS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewHeader(result.get(0));
+			irbViewProfile.setIrbViewHeader(result.get(0));
 		}
 		return irbViewProfile;
 	}
@@ -72,16 +72,16 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_PERSONS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolPersons(result);
+			irbViewProfile.setIrbViewProtocolPersons(result);
 		}
 		return irbViewProfile;
 	}
@@ -98,7 +98,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_FUNDING_SRC", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.info("-----------Exception:---"+ e);
@@ -107,7 +107,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			logger.info("-----------Exception:---"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolFundingsource(result);
+			irbViewProfile.setIrbViewProtocolFundingsource(result);
 		}
 		return irbViewProfile;
 	}
@@ -124,16 +124,16 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_LOCATION", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolLocation(result);
+			irbViewProfile.setIrbViewProtocolLocation(result);
 		}
 		return irbViewProfile;
 	}
@@ -150,16 +150,16 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_VULNBLE_SUBJT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolVulnerableSubject(result);
+			irbViewProfile.setIrbViewProtocolVulnerableSubject(result);
 		}
 		logger.info("irbview IRB_PROTOCOL_VULNBLE_SUBJT: "+ result);
 		return irbViewProfile;
@@ -177,16 +177,16 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_SPECIAL_REVW", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolSpecialReview(result);
+			irbViewProfile.setIrbViewProtocolSpecialReview(result);
 		}
 		return irbViewProfile;
 	}
@@ -204,18 +204,18 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolMITKCPersonInfo(result.get(0));
+			irbViewProfile.setIrbViewProtocolMITKCPersonInfo(result.get(0));
 			resultTraing = getMITKCPersonTraingInfo(avPersonId);
-			irbViewProfile.setIrbviewProtocolMITKCPersonTrainingInfo(resultTraing);
+			irbViewProfile.setIrbViewProtocolMITKCPersonTrainingInfo(resultTraing);
 		}
 		return irbViewProfile;
 	}
@@ -230,13 +230,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_TRAINING_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 		}
@@ -271,89 +271,89 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		return attachmentData;
 	}
 
 	@Override
-	public IRBViewProfile getAttachmentsList(String protocolnumber) {
+	public IRBViewProfile getAttachmentsList(String protocolNumber) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolnumber));
+		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ATTACHMENT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolAttachmentList(result);
+			irbViewProfile.setIrbViewProtocolAttachmentList(result);
 		}
 		return irbViewProfile;
 	}
 	
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupList(String protocol_number) {
+	public IRBViewProfile getProtocolHistotyGroupList(String protocolNumber) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocol_number));
+		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_GROUP", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolHistoryGroupList(result);
+			irbViewProfile.setIrbViewProtocolHistoryGroupList(result);
 		}
 		return irbViewProfile;
 	}
 
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocol_id, Integer action_id,
-			Integer next_group_action_id, Integer previous_group_action_id) {
+	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,
+			Integer previousGroupActionId) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocol_id));
-		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, action_id));
-		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, next_group_action_id));
-		inputParam.add(new InParameter("AV_PREVIOUS_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, previous_group_action_id));
+		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
+		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
+		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
+		inputParam.add(new InParameter("AV_PREVIOUS_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, previousGroupActionId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_DET", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbviewProtocolHistoryGroupDetails(result);
+			irbViewProfile.setIrbViewProtocolHistoryGroupDetails(result);
 		}
 		return irbViewProfile;
 	}

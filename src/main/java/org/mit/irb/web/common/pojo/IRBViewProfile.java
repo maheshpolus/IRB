@@ -8,106 +8,106 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class IRBViewProfile {
-	private HashMap<String, Object> irbviewHeader;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolPersons;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolFundingsource;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolLocation;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolVulnerableSubject;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolSpecialReview;
-	private HashMap<String, Object> irbviewProtocolMITKCPersonInfo;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolMITKCPersonTrainingInfo;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolAttachmentList;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolHistoryGroupList;
-	private ArrayList<HashMap<String, Object>> irbviewProtocolHistoryGroupDetails;
+	private HashMap<String, Object> irbViewHeader;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolPersons;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolFundingsource;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolLocation;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolVulnerableSubject;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolSpecialReview;
+	private HashMap<String, Object> irbViewProtocolMITKCPersonInfo;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolMITKCPersonTrainingInfo;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolAttachmentList;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupList;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails;
 	
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolHistoryGroupList() {
-		return irbviewProtocolHistoryGroupList;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
+		return irbViewProtocolHistoryGroupList;
 	}
 
-	public void setIrbviewProtocolHistoryGroupList(ArrayList<HashMap<String, Object>> irbviewProtocolHistoryGroupList) {
-		this.irbviewProtocolHistoryGroupList = irbviewProtocolHistoryGroupList;
+	public void setIrbViewProtocolHistoryGroupList(ArrayList<HashMap<String, Object>> irbviewProtocolHistoryGroupList) {
+		this.irbViewProtocolHistoryGroupList = irbviewProtocolHistoryGroupList;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolHistoryGroupDetails() {
-		return irbviewProtocolHistoryGroupDetails;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupDetails() {
+		return irbViewProtocolHistoryGroupDetails;
 	}
 
-	public void setIrbviewProtocolHistoryGroupDetails(
-			ArrayList<HashMap<String, Object>> irbviewProtocolHistoryGroupDetails) {
-		this.irbviewProtocolHistoryGroupDetails = irbviewProtocolHistoryGroupDetails;
+	public void setIrbViewProtocolHistoryGroupDetails(
+			ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails) {
+		this.irbViewProtocolHistoryGroupDetails = irbViewProtocolHistoryGroupDetails;
 	}
 
-	public HashMap<String, Object> getIrbviewHeader() {
-		return irbviewHeader;
+	public HashMap<String, Object> getIrbViewHeader() {
+		return irbViewHeader;
 	}
 
-	public void setIrbviewHeader(HashMap<String, Object> irbviewHeader) {
-		this.irbviewHeader = irbviewHeader;
+	public void setIrbViewHeader(HashMap<String, Object> irbViewHeader) {
+		this.irbViewHeader = irbViewHeader;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolPersons() {
-		return irbviewProtocolPersons;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolPersons() {
+		return irbViewProtocolPersons;
 	}
 
-	public void setIrbviewProtocolPersons(ArrayList<HashMap<String, Object>> irbviewProtocolPersons) {
-		this.irbviewProtocolPersons = irbviewProtocolPersons;
+	public void setIrbViewProtocolPersons(ArrayList<HashMap<String, Object>> irbViewProtocolPersons) {
+		this.irbViewProtocolPersons = irbViewProtocolPersons;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolFundingsource() {
-		return irbviewProtocolFundingsource;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolFundingsource() {
+		return irbViewProtocolFundingsource;
 	}
 
-	public void setIrbviewProtocolFundingsource(ArrayList<HashMap<String, Object>> irbviewProtocolFundingsource) {
-		this.irbviewProtocolFundingsource = irbviewProtocolFundingsource;
+	public void setIrbViewProtocolFundingsource(ArrayList<HashMap<String, Object>> irbViewProtocolFundingsource) {
+		this.irbViewProtocolFundingsource = irbViewProtocolFundingsource;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolLocation() {
-		return irbviewProtocolLocation;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolLocation() {
+		return irbViewProtocolLocation;
 	}
 
-	public void setIrbviewProtocolLocation(ArrayList<HashMap<String, Object>> irbviewProtocolLocation) {
-		this.irbviewProtocolLocation = irbviewProtocolLocation;
+	public void setIrbViewProtocolLocation(ArrayList<HashMap<String, Object>> irbViewProtocolLocation) {
+		this.irbViewProtocolLocation = irbViewProtocolLocation;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolVulnerableSubject() {
-		return irbviewProtocolVulnerableSubject;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolVulnerableSubject() {
+		return irbViewProtocolVulnerableSubject;
 	}
 
-	public void setIrbviewProtocolVulnerableSubject(
-			ArrayList<HashMap<String, Object>> irbviewProtocolVulnerableSubject) {
-		this.irbviewProtocolVulnerableSubject = irbviewProtocolVulnerableSubject;
+	public void setIrbViewProtocolVulnerableSubject(
+			ArrayList<HashMap<String, Object>> irbViewProtocolVulnerableSubject) {
+		this.irbViewProtocolVulnerableSubject = irbViewProtocolVulnerableSubject;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolSpecialReview() {
-		return irbviewProtocolSpecialReview;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolSpecialReview() {
+		return irbViewProtocolSpecialReview;
 	}
 
-	public void setIrbviewProtocolSpecialReview(ArrayList<HashMap<String, Object>> irbviewProtocolSpecialReview) {
-		this.irbviewProtocolSpecialReview = irbviewProtocolSpecialReview;
+	public void setIrbViewProtocolSpecialReview(ArrayList<HashMap<String, Object>> irbViewProtocolSpecialReview) {
+		this.irbViewProtocolSpecialReview = irbViewProtocolSpecialReview;
 	}
 
-	public HashMap<String, Object> getIrbviewProtocolMITKCPersonInfo() {
-		return irbviewProtocolMITKCPersonInfo;
+	public HashMap<String, Object> getIrbViewProtocolMITKCPersonInfo() {
+		return irbViewProtocolMITKCPersonInfo;
 	}
 
-	public void setIrbviewProtocolMITKCPersonInfo(HashMap<String,Object> hashMap) {
-		this.irbviewProtocolMITKCPersonInfo = hashMap;
+	public void setIrbViewProtocolMITKCPersonInfo(HashMap<String,Object> irbViewProtocolMITKCPersonInfo) {
+		this.irbViewProtocolMITKCPersonInfo = irbViewProtocolMITKCPersonInfo;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolMITKCPersonTrainingInfo() {
-		return irbviewProtocolMITKCPersonTrainingInfo;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolMITKCPersonTrainingInfo() {
+		return irbViewProtocolMITKCPersonTrainingInfo;
 	}
 
-	public void setIrbviewProtocolMITKCPersonTrainingInfo(
-			ArrayList<HashMap<String, Object>> irbviewProtocolMITKCPersonTrainingInfo) {
-		this.irbviewProtocolMITKCPersonTrainingInfo = irbviewProtocolMITKCPersonTrainingInfo;
+	public void setIrbViewProtocolMITKCPersonTrainingInfo(
+			ArrayList<HashMap<String, Object>> irbViewProtocolMITKCPersonTrainingInfo) {
+		this.irbViewProtocolMITKCPersonTrainingInfo = irbViewProtocolMITKCPersonTrainingInfo;
 	}
 
-	public ArrayList<HashMap<String, Object>> getIrbviewProtocolAttachmentList() {
-		return irbviewProtocolAttachmentList;
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolAttachmentList() {
+		return irbViewProtocolAttachmentList;
 	}
 
-	public void setIrbviewProtocolAttachmentList(ArrayList<HashMap<String, Object>> irbviewProtocolAttachmentList) {
-		this.irbviewProtocolAttachmentList = irbviewProtocolAttachmentList;
+	public void setIrbViewProtocolAttachmentList(ArrayList<HashMap<String, Object>> irbViewProtocolAttachmentList) {
+		this.irbViewProtocolAttachmentList = irbViewProtocolAttachmentList;
 	}
 }

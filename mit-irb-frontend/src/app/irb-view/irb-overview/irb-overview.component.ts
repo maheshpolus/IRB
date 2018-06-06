@@ -55,10 +55,10 @@ export class IrbOverviewComponent implements OnInit {
       this._irbViewService.getIrbPersonalDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
-              if (this.result.irbviewProtocolPersons == null || this.result.irbviewProtocolPersons.length === 0) {
+              if (this.result.irbViewProtocolPersons == null || this.result.irbViewProtocolPersons.length === 0) {
                   this.noIrbPersons = true;
               } else {
-                  this.irbPersonsDetails = this.result.irbviewProtocolPersons;
+                  this.irbPersonsDetails = this.result.irbViewProtocolPersons;
               }
           }
       },
@@ -72,10 +72,10 @@ export class IrbOverviewComponent implements OnInit {
       this._irbViewService.getIrbFundingDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
-              if (this.result.irbviewProtocolFundingsource == null || this.result.irbviewProtocolFundingsource.length === 0) {
+              if (this.result.irbViewProtocolFundingsource == null || this.result.irbViewProtocolFundingsource.length === 0) {
                   this.noIrbfunds = true;
               } else {
-              this.irbFundingDetails = this.result.irbviewProtocolFundingsource;
+              this.irbFundingDetails = this.result.irbViewProtocolFundingsource;
               }
           }
       },
@@ -89,10 +89,10 @@ export class IrbOverviewComponent implements OnInit {
       this._irbViewService.getIrbCollaboratorsDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
-              if (this.result.irbviewProtocolLocation == null || this.result.irbviewProtocolLocation.length === 0) {
+              if (this.result.irbViewProtocolLocation == null || this.result.irbViewProtocolLocation.length === 0) {
                   this.noIrbCollaborators = true;
               } else {
-                  this.irbCollaborators = this.result.irbviewProtocolLocation;
+                  this.irbCollaborators = this.result.irbViewProtocolLocation;
               }
           }
           this._spinner.hide();
@@ -107,10 +107,10 @@ export class IrbOverviewComponent implements OnInit {
       this._irbViewService.getIrbSubjectsDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
-              if (this.result.irbviewProtocolVulnerableSubject == null || this.result.irbviewProtocolVulnerableSubject.length === 0) {
+              if (this.result.irbViewProtocolVulnerableSubject == null || this.result.irbViewProtocolVulnerableSubject.length === 0) {
                   this.noIrbSubjects = true;
               } else {
-              this.irbSubjects = this.result.irbviewProtocolVulnerableSubject;
+              this.irbSubjects = this.result.irbViewProtocolVulnerableSubject;
               }
           }
           this._spinner.hide();
@@ -125,10 +125,10 @@ export class IrbOverviewComponent implements OnInit {
       this._irbViewService.getIrbSpecialReviewDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
-              if (this.result.irbviewProtocolSpecialReview == null || this.result.irbviewProtocolSpecialReview.length === 0) {
+              if (this.result.irbViewProtocolSpecialReview == null || this.result.irbViewProtocolSpecialReview.length === 0) {
                   this.noIrbSpecialReviews = true;
               } else {
-              this.irbSpecialReview = this.result.irbviewProtocolSpecialReview;
+              this.irbSpecialReview = this.result.irbViewProtocolSpecialReview;
               }
           }
       },
@@ -154,8 +154,8 @@ export class IrbOverviewComponent implements OnInit {
       this._irbViewService.getIrbPersonDetailedList( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
-              this.irbPersonDetailedList = this.result.irbviewProtocolMITKCPersonInfo;
-              this.irbPersonDetailedTraining = this.result.irbviewProtocolMITKCPersonTrainingInfo;
+              this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
+              this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
           }
       },
           error => {

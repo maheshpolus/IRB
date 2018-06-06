@@ -37,10 +37,10 @@ export class IrbAttachmentsComponent implements OnInit {
         this._irbViewService.getIrbAttachmentList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
-                if ( this.result.irbviewProtocolAttachmentList == null || this.result.irbviewProtocolAttachmentList.length === 0 ) {
+                if ( this.result.irbViewProtocolAttachmentList == null || this.result.irbViewProtocolAttachmentList.length === 0 ) {
                     this.noIrbAttachments = true;
                 } else {
-                    this.irbAttachmentsList = this.result.irbviewProtocolAttachmentList;
+                    this.irbAttachmentsList = this.result.irbViewProtocolAttachmentList;
                     this.sortBy();
                 }
             }

@@ -39,7 +39,7 @@ export class IrbHeaderDetailComponent implements OnInit {
           this._irbViewService.getIrbHeaderDetails( this.requestObject ).subscribe( data => {
               this.result = data || [];
               if ( this.result != null ) {
-                  this.irbHeaderDetails = this.result.irbviewHeader;
+                  this.irbHeaderDetails = this.result.irbViewHeader;
               }
           },
               error => {

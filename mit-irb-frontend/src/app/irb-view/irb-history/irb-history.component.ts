@@ -38,10 +38,10 @@ export class IrbHistoryComponent implements OnInit {
         this._irbViewService.getProtocolHistotyGroupList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
-                if ( this.result.irbviewProtocolHistoryGroupList == null || this.result.irbviewProtocolHistoryGroupList.length === 0 ) {
+                if ( this.result.irbViewProtocolHistoryGroupList == null || this.result.irbViewProtocolHistoryGroupList.length === 0 ) {
                     this.noHistoryList = true;
                 } else {
-                    this.irbHistoryList = this.result.irbviewProtocolHistoryGroupList;
+                    this.irbHistoryList = this.result.irbViewProtocolHistoryGroupList;
                     this.isExpanded.length = this.irbHistoryList.length;
                 }
             }
@@ -58,11 +58,11 @@ export class IrbHistoryComponent implements OnInit {
         this._irbViewService.getProtocolHistotyGroupDetails( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
-                if ( this.result.irbviewProtocolHistoryGroupDetails == null ||
-                     this.result.irbviewProtocolHistoryGroupDetails.length === 0 ) {
+                if ( this.result.irbViewProtocolHistoryGroupDetails == null ||
+                     this.result.irbViewProtocolHistoryGroupDetails.length === 0 ) {
                     this.noHistoryDetails = true;
                 } else {
-                    this.irbHistoryDetails = this.result.irbviewProtocolHistoryGroupDetails;
+                    this.irbHistoryDetails = this.result.irbViewProtocolHistoryGroupDetails;
                 }
             }
 

@@ -30,7 +30,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     logout() {
     this._loginService.logout().subscribe(data => {
                 sessionStorage.removeItem('ActivatedUser');
-                this._router.navigate( ['/login'] );
+                if(data == true){
+                    this._router.navigate( ['/login'] );
+                } else{
+                    this._router.navigate( ['/irb/dashboard'] );
+                }
         });
     }
 }

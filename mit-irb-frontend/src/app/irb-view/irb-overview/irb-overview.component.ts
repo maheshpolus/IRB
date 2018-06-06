@@ -20,13 +20,13 @@ export class IrbOverviewComponent implements OnInit {
     noIrbSubjects = false;
     isExpanded = true;
 
-    irbPersonDetailedTraining = [];
+    irbPersonDetailedTraining: any[] = [];
     irbPersonsDetails: any[] = [];
     irbFundingDetails: any[] = [];
     irbCollaborators: any[] = [];
     irbSubjects: any[] = [];
     irbSpecialReview: any[] = [];
-    irbPersonDetailedList = [];
+    irbPersonDetailedList: any;
     result: any;
 
     requestObject = {
@@ -149,6 +149,8 @@ export class IrbOverviewComponent implements OnInit {
   }
 
   loadPersonDetailedList() {
+      this.irbPersonDetailedList = [];
+      this.irbPersonDetailedTraining = [];
       this._irbViewService.getIrbPersonDetailedList( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {

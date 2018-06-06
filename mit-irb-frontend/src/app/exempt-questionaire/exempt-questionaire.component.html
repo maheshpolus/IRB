@@ -31,7 +31,7 @@
 		<div class="col-12">
 			<div class="card coll-card-q">
 				<h5 class="card-header collapse_hd">
-					Questionnire <i class="fa fa-info-circle" aria-hidden="true"></i>
+					Questionaire <i class="fa fa-info-circle" aria-hidden="true"></i>
 				</h5>
 				<div class="card-body collapse-card-body">
 					<div>
@@ -39,44 +39,26 @@
 							<div>
 								<div class="card-body qs-bdy">
 									<ol class="quest-no">
-										<li>Does your study involve research?</li>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="-1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">No</label>
-										</div>
-										<li>Does your research involve the use of human
-											subject(s)?</li>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="-1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">No</label>
-										</div>
-										<li>Does your research include prisoners as subjects?</li>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="-1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">No</label>
-										</div>
-										<li>Is the inclusion of prisoners in your population
-											group incidental?</li>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input type="radio" name="qs1" value="-1"> <label
-												class="form-check-label radio-label" for="inlineCheckbox1">No</label>
-										</div>
+									<li>{{questions[0].question}}<br>
+											<div class="form-check form-check-inline">
+												<input type="radio" name="qs+{{questions[0].questionId}}" value="1" [ngModel]="answer"> <label
+													class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input type="radio" name="qs+{{questions[0].questionId}}" value="-1" [ngModel]="answer"> <label
+													class="form-check-label radio-label" for="inlineCheckbox1">No</label>
+											</div>
+										</li>
+										<li *ngFor="let quest of questions">{{quest.question}}<br>
+											<div class="form-check form-check-inline">
+												<input type="radio" name="qs+{{quest.questionId}}" value="1" [ngModel]="answer"> <label
+													class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input type="radio" name="qs+{{quest.questionId}}" value="-1" [ngModel]="answer"> <label
+													class="form-check-label radio-label" for="inlineCheckbox1">No</label>
+											</div>
+										</li>
 									</ol>
 								</div>
 							</div>
@@ -87,4 +69,3 @@
 		</div>
 	</div>
 </div>
-

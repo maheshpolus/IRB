@@ -19,7 +19,7 @@
 							*ngIf="noIrbPersons==false">
 							<div class="row pdf" [ngClass]="{'row-line':i!=0}"
 								*ngFor="let irbPersons of irbPersonsDetails;let i= index"
-								data-toggle="modal" data-toggle="modal"
+								data-toggle="modal"
 								data-target="#personModal"
 								(click)="showpersonData(irbPersons.PERSON_ID)">
 								<div class="col-md-2 col-sm-6 co-12">
@@ -186,10 +186,10 @@
 										<div class="col-6 row-padng">
 											<p>&nbsp;</p>
 											<p>
-												Expiration date : <span>{{irbCollab.EXPIRATION_DATE}}</span>
+												Expiration date : <span>{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</span>
 											</p>
 											<p>
-												Approval Date : <span>{{irbCollab.APPROVAL_DATE}}</span>
+												Approval Date : <span>{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span>
 											</p>
 										</div>
 									</div>
@@ -277,18 +277,18 @@
 						<table class="table table-striped">
 							<thead class="popup-header">
 								<tr>
-									<th scope="col">Description</th>
+									<th class="table-align-head" scope="col">Description</th>
 									<th scope="col">Score</th>
 									<th scope="col">Followup Date</th>
-									<th scope="col">Submitted Date</th>
+									<th scope="col" class="submitted-header">Submitted Date</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr *ngFor="let info of irbPersonDetailedTraining">
-									<td scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+									<td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}</td>
 									<td>{{info.SCORE}}</td>
-									<td>{{info.FOLLOWUP_DATE}}</td>
-									<td>{{info.DATE_SUBMITTED}}</td>
+									<td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
+									<td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td>
 								</tr>
 							</tbody>
 						</table>

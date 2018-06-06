@@ -13,7 +13,7 @@
 								IRB # : <span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span>
 							</h4>
 							<p>
-								Expiration Date : <span>{{irbHeaderDetails?.EXPIRATION_DATE}}</span><br />
+								Expiration Date : <span>{{irbHeaderDetails?.EXPIRATION_DATE | date: 'MM/dd/yyyy'}}</span><br />
 								Title : <span>{{irbHeaderDetails?.TITLE}} </span>
 							</p>
 						</div>
@@ -54,13 +54,13 @@
 				</div>
 			</div>
 			<div id="headingOne" class="expand-div">
-				<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+				<div id="collapseOne" class="collapse" aria-labelledby="headingOne" *ngIf="isExpanded == true">
 					<div class="row protocol-top apprve-date">
 						<hr class="hr-line">
 						<div class="col-6">
 							<p>
-								Last Approval Date : <span>{{irbHeaderDetails?.LAST_APPROVAL_DATE}}</span><br />
-								Expected Start Date : <span>{{irbHeaderDetails?.EXPECTED_START_DATE}}</span>
+								Last Approval Date : <span>{{(irbHeaderDetails?.LAST_APPROVAL_DATE === ' ' || irbHeaderDetails?.LAST_APPROVAL_DATE === null ) ? ' ':(irbHeaderDetails?.LAST_APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span><br />
+								Expected Start Date : <span>{{(irbHeaderDetails?.EXPECTED_START_DATE === ' ' || irbHeaderDetails?.EXPECTED_START_DATE === null ) ? ' ':(irbHeaderDetails?.EXPECTED_START_DATE | date: 'MM/dd/yyyy')}}</span>
 							</p>
 						</div>
 						<!--   <div class="col-4">
@@ -70,7 +70,7 @@
 						<div class="col-6">
 							<p>
 								Lead Unit : <span>{{irbHeaderDetails?.UNIT_NAME}}</span><br />
-								Anticipated End Date : <span>{{irbHeaderDetails?.ANTICICPATED_END_DATE}}</span>
+								Anticipated End Date : <span>{{(irbHeaderDetails?.ANTICICPATED_END_DATE === ' ' || irbHeaderDetails?.ANTICICPATED_END_DATE === null ) ? ' ':(irbHeaderDetails?.ANTICICPATED_END_DATE | date: 'MM/dd/yyyy')}}</span>
 							</p>
 						</div>
 					</div>

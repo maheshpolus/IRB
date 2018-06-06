@@ -1,4 +1,4 @@
-package org.mit.irb.web.IRBProtocol.servIml;
+package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
@@ -63,22 +63,22 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public IRBViewProfile getAttachmentsList(String protocolnumber) {
-		IRBViewProfile irbViewProfile = irbProtocolDao.getAttachmentsList(protocolnumber);
+	public IRBViewProfile getAttachmentsList(String protocolNumber) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getAttachmentsList(protocolNumber);
 		return irbViewProfile;
 	}
 	
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupList(String protocol_number) {
-		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupList(protocol_number);
+	public IRBViewProfile getProtocolHistotyGroupList(String protocolNumber) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupList(protocolNumber);
 		return irbViewProfile;
 	}
 
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocol_id, Integer action_id,
-			Integer next_group_action_id, Integer previous_group_action_id) {
-		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupDetails(protocol_id, action_id,
-				next_group_action_id, previous_group_action_id);
+	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId,
+			Integer nextGroupActionId, Integer previousGroupActionId) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupDetails(protocolId, actionId,
+				nextGroupActionId, previousGroupActionId);
 		return irbViewProfile;
 	}
 }

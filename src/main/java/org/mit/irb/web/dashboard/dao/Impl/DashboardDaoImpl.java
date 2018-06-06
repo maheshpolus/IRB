@@ -1,4 +1,4 @@
-package org.mit.irb.web.dashboard.daoImpl;
+package org.mit.irb.web.dashboard.dao.Impl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -59,33 +59,21 @@ public class DashboardDaoImpl implements DashboardDao{
 		for(HashMap<String, Object> hmap: result){
 			if(hmap.get("COMMITTEE_NAME_PREV") != null){
 				snapshotData.setCommitteNamePrev(hmap.get("COMMITTEE_NAME_PREV").toString());
-			} else{
-				//snapshotData.setCommitte_name_prev("0");
-			}
+			} 
 			if(hmap.get("SCHEDULED_DATE_PREV") != null){
 				snapshotData.setScheduledDatePrev(hmap.get("SCHEDULED_DATE_PREV").toString());
-			} else{
-				//snapshotData.setScheduled_date_prev("0");
-			}
+			} 
 			if(hmap.get("SCHEDULED_DAY_PREV") != null){
 				snapshotData.setScheduledDayPrev(hmap.get("SCHEDULED_DAY_PREV").toString());
-			} else{
-				//snapshotData.setScheduled_day_prev("0");
-			}
+			} 
 			if(hmap.get("COMMITTEE_NAME_NEXT") != null){
 				snapshotData.setCommitteeNameNext(hmap.get("COMMITTEE_NAME_NEXT").toString());
-			} else{
-				//snapshotData.setCommittee_name_next("0");
-			}
+			} 
 			if(hmap.get("SCHEDULED_DATE_NEXT") != null){
 				snapshotData.setScheduledDateNext(hmap.get("SCHEDULED_DATE_NEXT").toString());
-			} else{
-				//snapshotData.setScheduled_date_next("0");
-			}
+			} 
 			if(hmap.get("SCHEDULED_DAY_NEXT") != null){
 				snapshotData.setScheduledDayNext(hmap.get("SCHEDULED_DAY_NEXT").toString());
-			} else{
-				//snapshotData.setScheduled_day_next("0");
 			}
 			if(hmap.get("REVISION_REQ_COUNT") != null){
 				snapshotData.setRevisionReqCount(hmap.get("REVISION_REQ_COUNT").toString());

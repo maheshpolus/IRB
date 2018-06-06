@@ -51,145 +51,135 @@ public class IRBController {
 	@RequestMapping(value="/getIRBprotocolDetails",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolDetails(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolDetails---------------");
+		logger.info("getIRBprotocolDetails");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("-----------protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolDetails(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getIRBprotocolPersons",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolPersons(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolPersons---------------");
+		logger.info("getIRBprotocolPersons---------------");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("-----------protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:---"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolPersons(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getIRBprotocolFundingSource",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolFundingSource(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolFundingSource---------------");
+		logger.info("getIRBprotocolFundingSource");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("-----------protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolFundingSource(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getIRBprotocolLocation",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolLocation(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolFundingSource---------------");
+		logger.info("getIRBprotocolFundingSource");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("-----------protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolLocation(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getIRBprotocolVulnerableSubject",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolVulnerableSubject(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolFundingSource---------------");
+		logger.info("getIRBprotocolFundingSource");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("-----------protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolVulnerableSubject(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getIRBprotocolSpecialReview",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolSpecialReview(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolFundingSource---------------");
+		logger.info("getIRBprotocolFundingSource");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("-----------protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolSpecialReview(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getMITKCPersonInfo",method= RequestMethod.POST)
 	public ResponseEntity<String> getMITKCPersonInfo(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolFundingSource---------------");
+		logger.info("getIRBprotocolFundingSource");
 		String avPersonId = vo.getAvPersonId();
-		logger.info("-----------avPersonId:---"+avPersonId);
+		logger.info("avPersonId:"+avPersonId);
 		IRBViewProfile irbViewProfile = irbProtocolService.getMITKCPersonInfo(avPersonId);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value="/getAttachmentList",method= RequestMethod.POST)
 	public ResponseEntity<String> getAttachments(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("-----------getIRBprotocolFundingSource---------------");
+		logger.info("getIRBprotocolFundingSource");
 		String protocolnumber = vo.getProtocolNumber();
-		logger.info("-----------protocolnumber:---"+protocolnumber);
+		logger.info("protocolnumber:"+protocolnumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getAttachmentsList(protocolnumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String  responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value = "/downloadAttachment", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> downloadAttachments(HttpServletResponse response, @RequestHeader("attachmentId") String attachmentId) {
-		logger.info("-----------downloadAttachment---------------");
+		logger.info("downloadAttachment");
 		return irbProtocolService.downloadAttachments(attachmentId);
 	}
 	
 	@RequestMapping(value = "/getProtocolHistotyGroupList", method = RequestMethod.POST)
 	public ResponseEntity<String> getProtocolHistotyGroupList(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException{
-		logger.info("-----------getProtocolHistotyGroupList---------------");
-		logger.info("-----------protocolnumber:---"+vo.getProtocolNumber());
+		logger.info("getProtocolHistotyGroupList");
+		logger.info("protocolnumber:"+vo.getProtocolNumber());
 		IRBViewProfile irbViewProfile = irbProtocolService.getProtocolHistotyGroupList(vo.getProtocolNumber());
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value = "/getProtocolHistotyGroupDetails", method = RequestMethod.POST)
 	public ResponseEntity<String> getProtocolHistotyGroupDetails(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException{
-		logger.info("-----------getProtocolHistotyGroupList---------------");
-		logger.info("-----------protocolId:---"+vo.getProtocolId());
-	 	logger.info("-----------ActionId:---"+vo.getActionId());
-	 	logger.info("-----------NextGroupActionId:---"+vo.getNextGroupActionId());
-	 	logger.info("----------- PreviousGroupActionId()---"+ vo.getPreviousGroupActionId());
+		logger.info("getProtocolHistotyGroupList");
+		logger.info("protocolId:"+vo.getProtocolId());
+	 	logger.info("ActionId:"+vo.getActionId());
+	 	logger.info("NextGroupActionId:"+vo.getNextGroupActionId());
+	 	logger.info("PreviousGroupActionId"+ vo.getPreviousGroupActionId());
 		IRBViewProfile irbViewProfile = irbProtocolService.getProtocolHistotyGroupDetails(vo.getProtocolId(), vo.getActionId(), vo.getNextGroupActionId(), vo.getPreviousGroupActionId());
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(irbViewProfile);
-		logger.info("-----------ResponseData:---"+ responseData);
 		return new ResponseEntity<String>(responseData, status);
 	}
 }

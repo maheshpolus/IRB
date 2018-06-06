@@ -1735,10 +1735,10 @@ div
     margin-bottom: 20px;
 } */
 
-.popup-div{
+/* .popup-div{
     height: 200px;
     overflow-y: auto;
-}
+} */
 /*page1style_end*/
 
 /*media queries*/
@@ -2760,5 +2760,32 @@ ul.sb-results-dropdown-menu > li:last-child {
     top: 10px;
     color: #a92034;
     font-size: 18px;
-
+}
+.revision-req-card {
+	border: 1px solid #fda46b;
+    background: #fbf1eb;
+}
+.popup-div tbody {
+    display:block;
+    height:200px;
+    overflow-y:auto;
+}
+.popup-div thead, .popup-div tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+.popup-div table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+}
+.table-align {
+	width: 43%;	
+}
+.table-align-head {
+	width: 41%;	
+}
+.submitted-header {
+	padding-left: 5px!important;
 }

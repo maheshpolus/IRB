@@ -1,4 +1,4 @@
-package org.mit.irb.web.login.daoImpl;
+package org.mit.irb.web.login.dao.Impl;
 
 import java.io.IOException;
 import java.sql.SQLException;

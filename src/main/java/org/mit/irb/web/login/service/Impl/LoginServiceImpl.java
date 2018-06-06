@@ -1,4 +1,4 @@
-package org.mit.irb.web.login.servImpl;
+package org.mit.irb.web.login.service.Impl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -48,7 +48,6 @@ public class LoginServiceImpl implements LoginService {
 				right = true;
 			}
 		}
-		logger.info("---UserHas Right---"+right);
 		return right;
 	}
 
@@ -73,7 +72,6 @@ public class LoginServiceImpl implements LoginService {
 				}
 			}
 		}
-		logger.info("----Role----"+role);
 		return role;
 	}
 
@@ -103,7 +101,6 @@ public class LoginServiceImpl implements LoginService {
 				personDTO.setPersonID(personDetailsList.get(0).get("PRNCPL_ID").toString());
 			}
 		}
-		logger.info("----------------PersonDetails----"+personDTO);
 		return personDTO;
 	}
  
@@ -120,7 +117,6 @@ public class LoginServiceImpl implements LoginService {
 			HashMap<String, Object> hmResult = result.get(0);
 			userType = Integer.parseInt((String) hmResult.get("has_right"));
 		}
-		logger.info("-----------UserType------"+ userType);
 		return userType;
 	}
 }

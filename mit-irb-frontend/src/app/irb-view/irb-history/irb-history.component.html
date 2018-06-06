@@ -65,7 +65,7 @@
 									[attr.aria-controls]="'collapse' + i "></i>
 							</div>
 
-							<div id="{{'collapse' + i }}" class="collapse"
+							<div id="{{'collapse' + i }}" class="collapse" *ngIf="isExpanded[i]==true"
 								[attr.aria-labelledby]="'heading' + i " data-parent="#accordion">
 								<div class="card-body history-card-body">
 									<div class="row list-of-his"
@@ -83,7 +83,7 @@
 										</div>
 										<div class="col-12 col-sm-4 col-md-4">
 											<ul>
-												<li>Action Date : <span>{{historyDet.ACTION_DATE}}</span></li>
+												<li>Action Date : <span>{{(historyDet.ACTION_DATE === ' ' || historyDet.ACTION_DATE === null ) ? ' ':(historyDet.ACTION_DATE | date: 'MM/dd/yyyy')}}</span></li>
 											</ul>
 										</div>
 									</div>

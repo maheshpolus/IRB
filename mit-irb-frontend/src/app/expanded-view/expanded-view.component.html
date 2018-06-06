@@ -25,11 +25,11 @@
 							<td>{{result.TITLE}}</td>
 							<td>{{result.PROTOCOL_TYPE}}</td>
 							<td>{{result.PROTOCOL_STATUS}}</td>
-							<td>{{result.LAST_APPROVAL_DATE}}</td>
-							<td>{{result.EXPIRATION_DATE}}</td>
+							<td>{{(result.LAST_APPROVAL_DATE === ' ' || result.LAST_APPROVAL_DATE === null ) ? ' ':(result.LAST_APPROVAL_DATE | date: 'MM/dd/yyyy')}}</td>
+							<td>{{(result.EXPIRATION_DATE === ' ' || result.EXPIRATION_DATE === null ) ? ' ':(result.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</td>
 							<td>
 								<ul class="actionButtonGroup">
-									<li><a title="Open {{result.PROTOCOL_NUMBER}}"
+									<li><a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
 										(click)="openIrbView(result.PROTOCOL_NUMBER)"><i
 											class="fa fa-eye"></i> </a></li>
 								</ul>

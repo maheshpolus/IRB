@@ -49,8 +49,6 @@ public class LoginValidator extends BaseController {
 	public LoginValidator() {
 	}
 	
-	
-
 	// login credentials checking and return boolean value for DB user
 	public Boolean loginCheck(String loginMode, String userName, String password, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -192,24 +190,17 @@ public class LoginValidator extends BaseController {
 	}
 
 
-
 	public LoginService getLoginService() {
 		return loginService;
 	}
-
-
 
 	public void setLoginService(LoginService loginService) {
 		this.loginService = loginService;
 	}
 
-
-
 	public LoginDao getLoginDao() {
 		return loginDao;
 	}
-
-
 
 	public void setLoginDao(LoginDao loginDao) {
 		this.loginDao = loginDao;

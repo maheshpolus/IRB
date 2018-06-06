@@ -66,9 +66,8 @@ public class LoginController extends BaseController {
 		HttpStatus status = HttpStatus.OK;
 		String userName = vo.getUserName();
 		String password = vo.getPassword();
-		logger.info("----/loginCheck----");
-		logger.info("----User Name-----"+userName);
-		logger.info("----password-----"+password);
+		logger.info("loginCheck");
+		logger.info("User Name"+userName);
 		Boolean loginCheck = false;
 		String role = null;
 		try {
@@ -93,7 +92,7 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
-		logger.info("---------- entryPage-----------");
+		logger.info("entry Page");
 		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO" + session.getId());
 		if (personDTO != null) {
 			logger.info("personDTO != null");
@@ -113,7 +112,7 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
 	public ResponseEntity<String> getPersonDetails(HttpServletRequest request){
-		logger.info("----/getUserDetails----");
+		logger.info("getUserDetails");
 		String responseData = null;
 		HttpStatus status = HttpStatus.OK;
 		PersonDTO personDTO = null;
@@ -124,7 +123,6 @@ public class LoginController extends BaseController {
 				personDTO = (PersonDTO) session.getAttribute("personDTO"+session.getId());
 			}
 			responseData = mapper.writeValueAsString(personDTO);
-			logger.info("----Response Data-----"+responseData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			status = HttpStatus.BAD_REQUEST;

@@ -1,7 +1,10 @@
 package org.mit.irb.web.IRBProtocol.service;
 
+import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.common.view.ServiceAttachments;
+import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IRBProtocolService {
@@ -73,9 +76,38 @@ public interface IRBProtocolService {
 	 * @param actionId
 	 * @param nextGroupActionId
 	 * @param previousGroupActionId
-	 * @return load history deatils associated with a protocol
+	 * @return load history details associated with a protocol
 	 */
 	
 	IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,
 			Integer previousGroupActionId);
+	
+	
+	/**
+	 * @param PersonDTO
+	 * @return return list of all exempt form
+	 */
+	
+	IRBViewProfile getPersonExemptFormList(PersonDTO personDTO);	
+	
+	/**
+	 * @param PersonDTO
+	 * @param IRBExemptForm
+	 * @return the list of questionnaire questions,its condition,options and its answers
+	 * @throws Exception
+	 */
+	QuestionnaireDto savePersonExemptForm(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception;
+	
+	
+
+	/**
+	 * @param questionnaireInfobean
+	 *  @param QuestionnaireDto
+	 * @param personDTO	
+	 * @return save the answers of questionnaire
+	 * @throws Exception
+	 */
+	String saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean,PersonDTO personDTO) throws Exception;
+
+	
 }

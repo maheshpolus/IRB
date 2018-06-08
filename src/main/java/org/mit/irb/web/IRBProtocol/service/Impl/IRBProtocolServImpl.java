@@ -1,9 +1,17 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
+import org.mit.irb.web.common.constants.KeyConstants;
+import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.common.view.ServiceAttachments;
+import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
+import org.mit.irb.web.questionnaire.service.QuestionnaireService;
+import org.mit.irb.web.questionnaire.service.Impl.QuestionnaireServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -81,4 +89,62 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 				nextGroupActionId, previousGroupActionId);
 		return irbViewProfile;
 	}
+
+	@Override
+	public IRBViewProfile getPersonExemptFormList(PersonDTO personDTO) {
+		// call procedure GET_IRB_PERSON_EXEMPT_FORM
+		return new IRBViewProfile();
+	}
+
+	@Override
+	public QuestionnaireDto savePersonExemptForm(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception {
+		savePersonExemptForm(irbExemptForm,"I");
+		QuestionnaireService questionnaireService = new QuestionnaireServiceImpl();		
+		QuestionnaireDto QuestionnaireDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, personDTO.getPersonID());
+		return QuestionnaireDto;
+	}
+
+	@Override
+	public String saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean,
+			PersonDTO personDTO) throws Exception {			
+		saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,personDTO);
+		savePersonExemptForm(irbExemptForm,"U");
+		boolean isSubmit = isSubmit(questionnaireInfobean); 
+		if(isQuestionnaireComplete(questionnaireInfobean) && !isSubmit){
+			return getExemptMsg(questionnaireInfobean);
+		}
+		return "success";
+	}
+
+	private void saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,
+			PersonDTO personDTO) throws Exception {
+		QuestionnaireService questionnaireService = new QuestionnaireServiceImpl();			
+		questionnaireService.saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,KeyConstants.COEUS_MODULE_PERSON,personDTO.getPersonID(), personDTO);
+	}
+	
+	private boolean isSubmit(String questionnaireInfobean) throws Exception {
+		//TODO: Write the logic of submit
+		return false;
+	}		
+	
+	private String getExemptMsg(String questionnaireInfobean) {
+		// TODO Auto-generated method stub
+		return "success";
+	}
+	
+	private void savePersonExemptForm(IRBExemptForm irbExemptForm, String actype){
+		//Save exempt details using procedure --> UPD_IRB_PERSON_EXEMPT_FORM 
+	}
+
+	private boolean isQuestionnaireComplete(String questionnaireInfobean){
+		JSONObject questionnaireJsnobject = new JSONObject(questionnaireInfobean);
+		JSONArray questionnaireJsnArray = questionnaireJsnobject.getJSONArray("answerlist");
+		String questionnaireCompletionFlag = questionnaireJsnobject.get("QuestionnaireCompletionFlag").toString();
+		if("Y".equalsIgnoreCase(questionnaireCompletionFlag)){
+			return true;
+		}
+		return false;
+		
+	}
+	
 }

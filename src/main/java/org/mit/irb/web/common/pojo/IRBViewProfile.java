@@ -6,6 +6,7 @@ package org.mit.irb.web.common.pojo;
  */
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class IRBViewProfile {
 	private HashMap<String, Object> irbViewHeader;
@@ -18,8 +19,9 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbViewProtocolMITKCPersonTrainingInfo;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolAttachmentList;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupList;
-	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails;
-	
+	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails;	
+	private List<IRBExemptForm> irbExemptFormList;
+		
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
 	}
@@ -110,4 +112,13 @@ public class IRBViewProfile {
 	public void setIrbViewProtocolAttachmentList(ArrayList<HashMap<String, Object>> irbViewProtocolAttachmentList) {
 		this.irbViewProtocolAttachmentList = irbViewProtocolAttachmentList;
 	}
+
+	public List<IRBExemptForm> getIrbExemptFormList() {
+		return irbExemptFormList;
+	}
+
+	public void setIrbExemptFormList(List<IRBExemptForm> irbExemptFormList) {
+		this.irbExemptFormList = irbExemptFormList;
+	}
+	
 }

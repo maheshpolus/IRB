@@ -39,7 +39,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService{
 			List<QuestionnaireAnswerDto> answerList =  new ArrayList<QuestionnaireAnswerDto>();
 			if(moduleItemId != null){
 				ArrayList<InParameter> inputParam = new ArrayList<>();
-				inputParam.add(new InParameter("av_module_item_id", DBEngineConstants.TYPE_INTEGER,moduleItemId));
+				inputParam.add(new InParameter("av_module_item_id", DBEngineConstants.TYPE_INTEGER,Integer.parseInt(moduleItemId)));
 				inputParam.add(new InParameter("av_module_code", DBEngineConstants.TYPE_INTEGER,moduleCode));
 				ArrayList<HashMap<String,Object>> QuestionnaireAnswerDtoMap = 
 						dbEngine.executeProcedure(inputParam,"get_mitkc_qnr_qstn_answer",outParam);
@@ -361,7 +361,4 @@ public class QuestionnaireServiceImpl implements QuestionnaireService{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	
 }
-

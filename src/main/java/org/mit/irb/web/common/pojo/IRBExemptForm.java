@@ -9,6 +9,14 @@ public class IRBExemptForm {
 	private Integer exemptFormNumber; 
 	private Integer exemptQuestionnaireAnswerHeaderId; 
 	private String updateUser;
+	private String updateTimeStamp;
+	
+	public String getUpdateTimeStamp() {
+		return updateTimeStamp;
+	}
+	public void setUpdateTimeStamp(String updateTimeStamp) {
+		this.updateTimeStamp = updateTimeStamp;
+	}
 	public Integer getExemptFormID() {
 		return exemptFormID;
 	}

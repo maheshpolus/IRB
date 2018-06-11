@@ -1,5 +1,7 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
+import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.common.view.ServiceAttachments;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +30,8 @@ public interface IRBProtocolDao {
 
 	IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,
 			Integer previousGroupActionId);
+
+	IRBViewProfile getPersonExemptFormList(PersonDTO personDTO);
+
+	void savePersonExemptForm(IRBExemptForm irbExemptForm, String actype);
 }

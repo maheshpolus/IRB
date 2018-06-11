@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
@@ -101,10 +104,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			logger.info("Exception:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("-----------Exception:---"+ e);
+			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolFundingsource(result);
@@ -161,7 +164,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolVulnerableSubject(result);
 		}
-		logger.info("irbview IRB_PROTOCOL_VULNBLE_SUBJT: "+ result);
 		return irbViewProfile;
 	}
 
@@ -356,5 +358,84 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			irbViewProfile.setIrbViewProtocolHistoryGroupDetails(result);
 		}
 		return irbViewProfile;
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	public IRBViewProfile getPersonExemptFormList(PersonDTO personDTO) {
+		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_INTEGER, personDTO.getPersonID())); //AV_PERSON_ID
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_FORM", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		}
+		if (result != null && !result.isEmpty()) {
+			List<IRBExemptForm> irbExemptFormList = null;
+			for(HashMap<String, Object> hmap: result){
+				IRBExemptForm exemptForm = new IRBExemptForm();
+				if(hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null){
+					exemptForm.setExemptFormID((Integer) hmap.get("IRB_PERSON_EXEMPT_FORM_ID"));
+				}
+				if(hmap.get("PERSON_ID") != null){
+					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
+				}
+				if(hmap.get("PERSON_NAME") != null){
+					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
+				}
+				if(hmap.get("EXEMPT_FORM_NUMBER") != null){
+					exemptForm.setExemptFormNumber((Integer) hmap.get("EXEMPT_FORM_NUMBER"));
+				}
+				if(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null){
+					exemptForm.setExemptQuestionnaireAnswerHeaderId((Integer) hmap.get("QUESTIONNAIRE_ANS_HEADER_ID"));
+				}
+				if(hmap.get("UPDATE_TIMESTAMP") != null){
+					exemptForm.setUpdateTimeStamp((String) hmap.get("UPDATE_TIMESTAMP"));
+				}
+				if(hmap.get("UPDATE_USER") != null){
+					exemptForm.setUpdateUser((String) hmap.get("UPDATE_USER"));
+				}
+				irbExemptFormList.add(exemptForm);
+			}
+			irbViewProfile.setIrbExemptFormList(irbExemptFormList);
+		}
+		return irbViewProfile;
+	}
+
+	@Override
+	public void savePersonExemptForm(IRBExemptForm irbExemptForm, String actype) {
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormID())); //AV_PERSON_ID
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, irbExemptForm.getPersonId()));
+		inputParam.add(new InParameter("AV_PERSON_NAME", DBEngineConstants.TYPE_STRING, irbExemptForm.getPersonName()));
+		inputParam.add(new InParameter("AV_EXEMPT_FORM_NUMBER", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormNumber()));
+		inputParam.add(new InParameter("AV_EXEMPT_TITLE", DBEngineConstants.TYPE_STRING, irbExemptForm.getExemptTitle()));
+		inputParam.add(new InParameter("AV_QUESTIONNAIRE_ANS_HEADER_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptQuestionnaireAnswerHeaderId()));
+		inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
+		inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, actype));
+		try {
+			dbEngine.executeProcedure(inputParam, "UPD_IRB_PERSON_EXEMPT_FORM");
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		}
+		
 	}
 }

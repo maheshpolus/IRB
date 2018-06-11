@@ -96,7 +96,7 @@ public interface IRBProtocolService {
 	 * @return the list of questionnaire questions,its condition,options and its answers
 	 * @throws Exception
 	 */
-	QuestionnaireDto savePersonExemptForm(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception;
+	QuestionnaireDto savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception;
 	
 	
 
@@ -108,6 +108,4 @@ public interface IRBProtocolService {
 	 * @throws Exception
 	 */
 	String saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean,PersonDTO personDTO) throws Exception;
-
-	
 }

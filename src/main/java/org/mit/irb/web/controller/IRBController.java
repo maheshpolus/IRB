@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
+import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
@@ -20,6 +22,7 @@ import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.common.view.IRBViews;
 import org.mit.irb.web.common.view.ServiceAttachments;
+import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -180,6 +184,34 @@ public class IRBController {
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/savePersonExemptForm", method = RequestMethod.POST)
+	public ResponseEntity<String> savePersonExemptForms(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBExemptForm irbExemptForm) throws Exception{
+		logger.info("savePersonExemptForm");
+		logger.info("Exempt title: " + irbExemptForm.getExemptTitle());
+		logger.info("Person Id: " + irbExemptForm.getPersonId());
+		logger.info("Update User: " + irbExemptForm.getUpdateUser());
+		HttpStatus status = HttpStatus.OK;
+		QuestionnaireDto questionnaireDto = irbProtocolService.savePersonExemptForms(irbExemptForm);
+		ObjectMapper mapper = new ObjectMapper();
+		String responseData = mapper.writeValueAsString(questionnaireDto);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/saveQuestionnaire", method = RequestMethod.POST)
+	public ResponseEntity<String> saveQuestionnaire(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBExemptForm irbExemptForm,@RequestBody QuestionnaireDto questionnaireDto, @RequestParam("questionnaireInfobean") String questionnaireInfobean,
+			@RequestBody PersonDTO personDTO) throws Exception{
+		logger.info("saveQuestionnaire");
+		logger.info("IRBExemptForm: " + irbExemptForm);
+		logger.info("QuestionnaireDto: " + questionnaireDto);
+		logger.info("QuestionnaireInfobean: " + questionnaireInfobean);
+		logger.info("PersonDTO: " + personDTO);
+		HttpStatus status = HttpStatus.OK;
+		String saveStatus = irbProtocolService.saveQuestionnaire(irbExemptForm, questionnaireDto,questionnaireInfobean,personDTO);
+		ObjectMapper mapper = new ObjectMapper();
+		String responseData = mapper.writeValueAsString(saveStatus);
 		return new ResponseEntity<String>(responseData, status);
 	}
 }

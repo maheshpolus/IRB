@@ -21,6 +21,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@Autowired
 	IRBProtocolDao irbProtocolDao;
+	
+	@Autowired
+	QuestionnaireService questionnaireService;
 
 	@Override
 	public IRBViewProfile getIRBProtocolDetails(String protocolNumber) {
@@ -92,15 +95,15 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@Override
 	public IRBViewProfile getPersonExemptFormList(PersonDTO personDTO) {
-		// call procedure GET_IRB_PERSON_EXEMPT_FORM
-		return new IRBViewProfile();
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptFormList(personDTO);
+		return irbViewProfile;
 	}
-
+//next
 	@Override
-	public QuestionnaireDto savePersonExemptForm(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception {
+	public QuestionnaireDto savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception {
 		savePersonExemptForm(irbExemptForm,"I");
-		QuestionnaireService questionnaireService = new QuestionnaireServiceImpl();		
-		QuestionnaireDto QuestionnaireDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, personDTO.getPersonID());
+		//QuestionnaireService questionnaireService = new QuestionnaireServiceImpl();		
+		QuestionnaireDto QuestionnaireDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, irbExemptForm.getPersonId());
 		return QuestionnaireDto;
 	}
 
@@ -118,7 +121,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	private void saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,
 			PersonDTO personDTO) throws Exception {
-		QuestionnaireService questionnaireService = new QuestionnaireServiceImpl();			
+		//QuestionnaireService questionnaireService = new QuestionnaireServiceImpl();			
 		questionnaireService.saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,KeyConstants.COEUS_MODULE_PERSON,personDTO.getPersonID(), personDTO);
 	}
 	
@@ -133,7 +136,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 	
 	private void savePersonExemptForm(IRBExemptForm irbExemptForm, String actype){
-		//Save exempt details using procedure --> UPD_IRB_PERSON_EXEMPT_FORM 
+		irbProtocolDao.savePersonExemptForm(irbExemptForm,actype);
 	}
 
 	private boolean isQuestionnaireComplete(String questionnaireInfobean){
@@ -144,7 +147,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			return true;
 		}
 		return false;
-		
 	}
 	
 }

@@ -14,7 +14,7 @@ BEGIN
   into li_count
   from krim_role_t t1
   inner join krim_role_mbr_t t2 on t1.role_id = t2.role_id
-  where t2.mbr_id = AV_USER_ID
+  where t2.mbr_id in (select prncpl_id from krim_prncpl_t where prncpl_nm = AV_USER_ID)
   and t1.role_nm =  'IRB Administrator';
   
   if li_count > 0 then
@@ -32,4 +32,3 @@ BEGIN
         ls_irb_chair AS IS_IRB_CHAIR
     FROM DUAL;
 END;
-/

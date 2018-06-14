@@ -8,10 +8,11 @@ BEGIN
 		SELECT 
 		t1.protocol_number,
 		t1.protocol_id,
+		t1.description,
 		t1.title,
 		t4.person_name as pi_name,
-		t1.last_approval_date,
-		t1.expiration_date,
+		to_char(t1.last_approval_date,'mm/dd/yyyy') as last_approval_date,
+		to_char(t1.expiration_date,'mm/dd/yyyy') as expiration_date,
 		t1.protocol_status_code,
 		t2.description as protocol_status,
 		t1.protocol_type_code,

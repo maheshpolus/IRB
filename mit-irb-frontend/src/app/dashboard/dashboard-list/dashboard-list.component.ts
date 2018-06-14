@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, NgZone, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
@@ -192,7 +192,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             }
         },
             error => {
-                 console.log( "Error in method getIrbListData()" ,error );
+                 console.log( 'Error in method getIrbListData()' , error );
             },
         );
     }
@@ -219,17 +219,17 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       }
 
       closeResultTab() {
-          this.seachTextModel = '';
+        this.seachTextModel = '';
         this.elasticResultTab = false;
       }
 
       clear() {
-          this.requestObject.protocolNumber = '';
-          this.requestObject.title = '';
-          this.requestObject.piName = '';
-          this.requestObject.protocolTypeCode = '';
-          this.getIrbListData(this.lastClickedTab);
-          this.isAdvancsearchPerformed = false;
+        this.requestObject.protocolNumber = '';
+        this.requestObject.title = '';
+        this.requestObject.piName = '';
+        this.requestObject.protocolTypeCode = '';
+        this.getIrbListData(this.lastClickedTab);
+        this.isAdvancsearchPerformed = false;
       }
 
       openIrb( protocolNumber ) {
@@ -248,8 +248,29 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
               }
           },
               error => {
-                   console.log( "Error in method getIrbProtocolTypes()", error );
+                   console.log( 'Error in method getIrbProtocolTypes()', error );
               },
           );
+      }
+/*fetch exempt protocols*/
+      getExemptListData(currentTab) {
+        this.irbListData = [];
+        this.noIrbList =  false;
+        this.lastClickedTab = currentTab;
+        this._dashboardService.getExemptProtocols(this.userDTO).subscribe( data => {
+            this.result = data || [];
+            if ( this.result != null ) {
+                if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
+                    this.noIrbList = true;
+                } else {
+                    this.irbListData = this.result.irbExemptFormList;
+                    this.sortBy();
+                }
+            }
+        },
+            error => {
+                 console.log( 'Error in method getExemptListData()', error );
+            },
+        );
       }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.common.dto.PersonDTO;
-import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.common.utils.DBEngine;
@@ -18,7 +17,6 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
-import org.mit.irb.web.common.view.ServiceAttachments;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -254,8 +252,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_INTEGER, attachmentsId));
 			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_MITKC_ATTACHMENT_FILE",
-					outParam);
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_MITKC_ATTACHMENT_FILE", outParam);
 			if (result != null && !result.isEmpty()) {
 				HashMap<String, Object> hmResult = result.get(0);
 				ByteArrayOutputStream byteArrayOutputStream = null;
@@ -331,8 +328,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	}
 
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,
-			Integer previousGroupActionId) {
+	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,Integer previousGroupActionId) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -366,7 +362,67 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_INTEGER, personDTO.getPersonID())); //AV_PERSON_ID
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_INTEGER, Integer.parseInt(personDTO.getPersonID())));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_PER_FORM", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		}
+		if (result != null && !result.isEmpty()) {
+			List<IRBExemptForm> irbExemptFormList = new ArrayList<IRBExemptForm>();
+			for(HashMap<String, Object> hmap: result){
+				IRBExemptForm exemptForm = new IRBExemptForm();
+				if(hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null){
+					exemptForm.setExemptFormID(Integer.parseInt(hmap.get("IRB_PERSON_EXEMPT_FORM_ID").toString()));
+				}
+				if(hmap.get("PERSON_ID") != null){
+					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
+				}
+				if(hmap.get("PERSON_NAME") != null){
+					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
+				}
+				if(hmap.get("EXEMPT_TITLE") != null){
+					exemptForm.setExemptTitle((String) hmap.get("EXEMPT_TITLE"));
+				}
+				if(hmap.get("EXEMPT_FORM_NUMBER") != null){
+					exemptForm.setExemptFormNumber(Integer.parseInt(hmap.get("EXEMPT_FORM_NUMBER").toString()));
+				}
+				if(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null){
+					exemptForm.setExemptQuestionnaireAnswerHeaderId(Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
+				}
+				if(hmap.get("UPDATE_USER") != null){
+					exemptForm.setUpdateUser((String) hmap.get("UPDATE_USER"));
+				}
+				if(hmap.get("EXEMPT_STATUS") != null){
+					exemptForm.setStatus((String) hmap.get("EXEMPT_STATUS"));
+				}
+				if(hmap.get("EXEMPT_STATUS_CODE") != null){
+					exemptForm.setStatusCode((String) hmap.get("EXEMPT_STATUS_CODE"));
+				}
+				if(hmap.get("IS_EXEMPT_GRANTED") != null){
+					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
+				}
+				irbExemptFormList.add(exemptForm);
+			}
+			irbViewProfile.setIrbExemptFormList(irbExemptFormList);
+		}
+		return irbViewProfile;
+	}
+	@Override
+	public IRBViewProfile getPersonExemptForm(Integer exemptFormId) {
+		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, exemptFormId)); //AV_PERSON_ID
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
@@ -382,11 +438,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			logger.info("Exception:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
-			List<IRBExemptForm> irbExemptFormList = null;
+			List<IRBExemptForm> irbExemptFormList = new ArrayList<IRBExemptForm>();
 			for(HashMap<String, Object> hmap: result){
 				IRBExemptForm exemptForm = new IRBExemptForm();
 				if(hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null){
-					exemptForm.setExemptFormID((Integer) hmap.get("IRB_PERSON_EXEMPT_FORM_ID"));
+					exemptForm.setExemptFormID(Integer.parseInt(hmap.get("IRB_PERSON_EXEMPT_FORM_ID").toString()));
 				}
 				if(hmap.get("PERSON_ID") != null){
 					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
@@ -394,17 +450,26 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("PERSON_NAME") != null){
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
 				}
+				if(hmap.get("EXEMPT_TITLE") != null){
+					exemptForm.setExemptTitle((String) hmap.get("EXEMPT_TITLE"));
+				}
 				if(hmap.get("EXEMPT_FORM_NUMBER") != null){
-					exemptForm.setExemptFormNumber((Integer) hmap.get("EXEMPT_FORM_NUMBER"));
+					exemptForm.setExemptFormNumber(Integer.parseInt(hmap.get("EXEMPT_FORM_NUMBER").toString()));
 				}
 				if(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null){
-					exemptForm.setExemptQuestionnaireAnswerHeaderId((Integer) hmap.get("QUESTIONNAIRE_ANS_HEADER_ID"));
-				}
-				if(hmap.get("UPDATE_TIMESTAMP") != null){
-					exemptForm.setUpdateTimeStamp((String) hmap.get("UPDATE_TIMESTAMP"));
+					exemptForm.setExemptQuestionnaireAnswerHeaderId(Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
 				}
 				if(hmap.get("UPDATE_USER") != null){
 					exemptForm.setUpdateUser((String) hmap.get("UPDATE_USER"));
+				}
+				if(hmap.get("EXEMPT_STATUS") != null){
+					exemptForm.setStatus((String) hmap.get("EXEMPT_STATUS"));
+				}
+				if(hmap.get("EXEMPT_STATUS_CODE") != null){
+					exemptForm.setStatusCode((String) hmap.get("EXEMPT_STATUS_CODE"));
+				}
+				if(hmap.get("IS_EXEMPT_GRANTED") != null){
+					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
 				}
 				irbExemptFormList.add(exemptForm);
 			}
@@ -420,6 +485,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, irbExemptForm.getPersonId()));
 		inputParam.add(new InParameter("AV_PERSON_NAME", DBEngineConstants.TYPE_STRING, irbExemptForm.getPersonName()));
 		inputParam.add(new InParameter("AV_EXEMPT_FORM_NUMBER", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormNumber()));
+		inputParam.add(new InParameter("AV_EXEMPT_STATUS_CODE", DBEngineConstants.TYPE_STRING, irbExemptForm.getStatusCode()));
+		inputParam.add(new InParameter("AV_IS_EXEMPT_GRANTED", DBEngineConstants.TYPE_STRING, irbExemptForm.getIsExempt()));
 		inputParam.add(new InParameter("AV_EXEMPT_TITLE", DBEngineConstants.TYPE_STRING, irbExemptForm.getExemptTitle()));
 		inputParam.add(new InParameter("AV_QUESTIONNAIRE_ANS_HEADER_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptQuestionnaireAnswerHeaderId()));
 		inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
@@ -436,6 +503,40 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			e.printStackTrace();
 			logger.info("Exception:"+ e);
 		}
-		
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	public ArrayList<HashMap<String, Object>> getExemptMsg(IRBExemptForm irbExemptForm) {
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormID())); //AV_PERSON_ID
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_MESSAGE", outputParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception:"+ e);
+		}
+		return result;
+	}
+
+	
+	@Override
+	public Integer getNextExemptId() {
+		Integer exemptId = null;
+		try{
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			outParam.add(new OutParameter("returnId",DBEngineConstants.TYPE_INTEGER));
+			ArrayList<HashMap<String,Object>> result = dbEngine.executeFunction("FN_MITKC_IRB_NEXT_EXEMPT_ID",outParam);
+			if(result != null && !result.isEmpty()){
+				HashMap<String,Object> hmResult = result.get(0);
+				exemptId = Integer.parseInt((String)hmResult.get("returnId"));
+			}		
+		}catch(Exception e){
+			logger.error("Error in methord getNextExemptId",e);
+		}
+		return exemptId;
 	}
 }

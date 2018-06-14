@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
@@ -15,26 +16,15 @@ import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
-import org.mit.irb.web.common.utils.DBEngine;
-import org.mit.irb.web.common.utils.DBEngineConstants;
-import org.mit.irb.web.common.utils.DBException;
-import org.mit.irb.web.common.utils.InParameter;
-import org.mit.irb.web.common.utils.OutParameter;
-import org.mit.irb.web.common.view.IRBViews;
-import org.mit.irb.web.common.view.ServiceAttachments;
-import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,8 +43,7 @@ public class IRBController {
 	protected static Logger logger = Logger.getLogger(IRBController.class.getName());
 	
 	@RequestMapping(value="/getIRBprotocolDetails",method= RequestMethod.POST)
-	public ResponseEntity<String> getIRBprotocolDetails(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) throws JsonProcessingException{
+	public ResponseEntity<String> getIRBprotocolDetails(@RequestBody CommonVO vo, HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{
 		logger.info("getIRBprotocolDetails");
 		String protocolNumber = vo.getProtocolNumber();
 		logger.info("protocolNumber:"+protocolNumber);
@@ -68,9 +57,9 @@ public class IRBController {
 	@RequestMapping(value="/getIRBprotocolPersons",method= RequestMethod.POST)
 	public ResponseEntity<String> getIRBprotocolPersons(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws JsonProcessingException{
-		logger.info("getIRBprotocolPersons---------------");
+		logger.info("getIRBprotocolPersons");
 		String protocolNumber = vo.getProtocolNumber();
-		logger.info("protocolNumber:---"+protocolNumber);
+		logger.info("protocolNumber:"+protocolNumber);
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolPersons(protocolNumber);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
@@ -187,6 +176,16 @@ public class IRBController {
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
+	@RequestMapping(value = "/getPersonExemptFormList", method = RequestMethod.POST)
+	public ResponseEntity<String> getPersonExemptFormList(HttpServletRequest request, HttpServletResponse response, @RequestBody PersonDTO personDTO) throws JsonProcessingException{
+		logger.info("getPersonExemptFormList");
+		logger.info("Person DTO:"+personDTO);
+		IRBViewProfile irbViewProfile = irbProtocolService.getPersonExemptFormList(personDTO);
+		HttpStatus status = HttpStatus.OK;
+		ObjectMapper mapper = new ObjectMapper();
+		String responseData = mapper.writeValueAsString(irbViewProfile);
+		return new ResponseEntity<String>(responseData, status);
+	}
 	@RequestMapping(value = "/savePersonExemptForm", method = RequestMethod.POST)
 	public ResponseEntity<String> savePersonExemptForms(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBExemptForm irbExemptForm) throws Exception{
 		logger.info("savePersonExemptForm");
@@ -194,24 +193,35 @@ public class IRBController {
 		logger.info("Person Id: " + irbExemptForm.getPersonId());
 		logger.info("Update User: " + irbExemptForm.getUpdateUser());
 		HttpStatus status = HttpStatus.OK;
-		QuestionnaireDto questionnaireDto = irbProtocolService.savePersonExemptForms(irbExemptForm);
+		CommonVO commonVO = irbProtocolService.savePersonExemptForms(irbExemptForm);
 		ObjectMapper mapper = new ObjectMapper();
-		String responseData = mapper.writeValueAsString(questionnaireDto);
+		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value = "/saveQuestionnaire", method = RequestMethod.POST)
-	public ResponseEntity<String> saveQuestionnaire(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBExemptForm irbExemptForm,@RequestBody QuestionnaireDto questionnaireDto, @RequestParam("questionnaireInfobean") String questionnaireInfobean,
-			@RequestBody PersonDTO personDTO) throws Exception{
+	public ResponseEntity<String> saveQuestionnaire(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		logger.info("saveQuestionnaire");
-		logger.info("IRBExemptForm: " + irbExemptForm);
-		logger.info("QuestionnaireDto: " + questionnaireDto);
-		logger.info("QuestionnaireInfobean: " + questionnaireInfobean);
-		logger.info("PersonDTO: " + personDTO);
+		ObjectMapper mapper=new ObjectMapper();
+		logger.info("IRBExemptForm: " + vo.getIrbExemptForm());
+		logger.info("QuestionnaireDto: " + vo.getQuestionnaireDto());
+		logger.info("QuestionnaireInfobean: " + vo.getQuestionnaireInfobean());
+		logger.info("PersonDTO: " + vo.getPersonDTO());
 		HttpStatus status = HttpStatus.OK;
-		String saveStatus = irbProtocolService.saveQuestionnaire(irbExemptForm, questionnaireDto,questionnaireInfobean,personDTO);
-		ObjectMapper mapper = new ObjectMapper();
+		PersonDTO personDTO = vo.getPersonDTO();
+		String saveStatus = irbProtocolService.saveQuestionnaire(vo.getIrbExemptForm(), vo.getQuestionnaireDto(),vo.getQuestionnaireInfobean(), personDTO);
 		String responseData = mapper.writeValueAsString(saveStatus);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/getPersonExemptForm", method = RequestMethod.POST)
+	public ResponseEntity<String> getPersonExemptForm(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBExemptForm irbExemptForm) throws Exception{
+		logger.info("getPersonExemptForm");
+		ObjectMapper mapper=new ObjectMapper();
+		logger.info("IRBExemptForm: " + irbExemptForm);
+		HttpStatus status = HttpStatus.OK;		
+		CommonVO commonVO = irbProtocolService.getPersonExemptForm(irbExemptForm);
+		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
 }

@@ -9,14 +9,10 @@ public class IRBExemptForm {
 	private Integer exemptFormNumber; 
 	private Integer exemptQuestionnaireAnswerHeaderId; 
 	private String updateUser;
-	private String updateTimeStamp;
+	private String isExempt;
+	private String status;
+	private String statusCode;
 	
-	public String getUpdateTimeStamp() {
-		return updateTimeStamp;
-	}
-	public void setUpdateTimeStamp(String updateTimeStamp) {
-		this.updateTimeStamp = updateTimeStamp;
-	}
 	public Integer getExemptFormID() {
 		return exemptFormID;
 	}
@@ -58,6 +54,23 @@ public class IRBExemptForm {
 	}
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+	public String getIsExempt() {
+		return isExempt;
+	}
+	public void setIsExempt(String isExempt) {
+		this.isExempt = isExempt;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getStatusCode() {
+		return statusCode;
+	}
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
 	} 	
-	
 }

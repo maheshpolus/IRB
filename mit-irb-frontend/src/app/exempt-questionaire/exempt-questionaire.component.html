@@ -4,28 +4,29 @@
 		<div class="col-12 top-aprv-details">
 			<div class="row">
 				<div class="col-12 apprve-date">
-					<div class="row">
-						<div class="col-4">
-							<h4>
-								Name : <span></span>
-							</h4>
-							<p>
-								Date Created : <span></span> <br /> Update By : <span> </span>
+					<div class="row create-quest">
+						<div class="col-1 top-form">
+							<h4 class="form-inline">Title :</h4>
 						</div>
-
-						<div class="col-3">
-							<p>
-								<br /> Date Completed: <span></span><br />
-							</p>
+						<div class="col-9">
+							<span class="form-group"> <input type="text" [disabled]="isViewMode"
+								[(ngModel)]="requestObject.exemptTitle" class="form-control"
+								placeholder="Enter Exempt Title">
+							</span>
+						</div>
+						<div class="col-md-2 col-sm-12 col-12 button-responsive" *ngIf="!isViewMode">
+							<button type="button" [hidden]="showQuestionaire"
+								class="btn btn-outline-secondary button-view"
+								(click)="loadQuestionaire()" data-toggle="modal"
+								data-target="#alertModal">Continue</button>
 						</div>
 					</div>
 				</div>
-				<hr class="hr-line">
 			</div>
 		</div>
 	</section>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="showQuestionaire">
 	<div class="row">
 		<!--collapse-->
 		<div class="col-12">
@@ -33,35 +34,63 @@
 				<h5 class="card-header collapse_hd">
 					Questionaire <i class="fa fa-info-circle" aria-hidden="true"></i>
 				</h5>
-				<div class="card-body collapse-card-body">
-					<div>
-						<div class="card">
-							<div>
-								<div class="card-body qs-bdy">
-									<ol class="quest-no">
-									<li>{{questions[0].question}}<br>
-											<div class="form-check form-check-inline">
-												<input type="radio" name="qs+{{questions[0].questionId}}" value="1" [ngModel]="answer"> <label
-													class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
-											</div>
-											<div class="form-check form-check-inline">
-												<input type="radio" name="qs+{{questions[0].questionId}}" value="-1" [ngModel]="answer"> <label
-													class="form-check-label radio-label" for="inlineCheckbox1">No</label>
-											</div>
-										</li>
-										<li *ngFor="let quest of questions">{{quest.question}}<br>
-											<div class="form-check form-check-inline">
-												<input type="radio" name="qs+{{quest.questionId}}" value="1" [ngModel]="answer"> <label
-													class="form-check-label radio-label" for="inlineCheckbox1">Yes</label>
-											</div>
-											<div class="form-check form-check-inline">
-												<input type="radio" name="qs+{{quest.questionId}}" value="-1" [ngModel]="answer"> <label
-													class="form-check-label radio-label" for="inlineCheckbox1">No</label>
-											</div>
-										</li>
-									</ol>
+				<div class="card-body collapse-card-body questionaire-height">
+					<div class="quest-no"
+						*ngFor=' let quest of questionaire.questionnaireQuestions; let indexQuestion = index'>
+						<ul [ngSwitch]="quest.answerType" class="list">
+							<li *ngSwitchCase="'Radio'">
+								<div *ngIf="quest.showQuestion == true" class="list">
+									<p>{{quest.question}}</p>
+									<div
+										*ngFor=" let option of questionaire.questionnaireOptions; let in=index"
+										class="radio-inline ">
+										<span *ngIf="quest.questionId == option.QUESTION_ID"> 
+											<input [disabled]= "isViewMode"
+											type="radio" name="{{option.QUESTION_ID}}"
+											[value]="option.OPTION_LABEL"
+											(change)="showChildQuestions(quest)"
+											[(ngModel)]="quest.selectedAnswer" />
+											{{option.OPTION_LABEL}}
+										</span>
+									</div>
 								</div>
-							</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<section class="row btn-row-med" style="padding: 15px;">
+					<button class="btn btn-primary tab_btn"  *ngIf = "isViewMode == false" (click)="saveQuestionaire()" data-toggle="modal"
+								data-target="#alertModal">Save
+					</button>
+					<button class="btn btn-primary tab_btn" data-toggle="modal"
+					data-target="#alertModal" type="submit"  *ngIf = "isViewMode == false" (click)="submitQuestionaire()">Submit
+					</button>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- modal -->
+<div class="modal fade" id="alertModal"
+	tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true" *ngIf="showAlert">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-popup">
+				<!-- section1 -->
+				<div class="modal-padding">
+					<div class="row">
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+							<h4 class="popup-sub-head">{{alertMsg}}</h4>
 						</div>
 					</div>
 				</div>
@@ -69,3 +98,4 @@
 		</div>
 	</div>
 </div>
+<!-- modal-end -->

@@ -2186,8 +2186,8 @@ ul.sb-results-dropdown-menu > li:last-child {
 .quest-no p
 {
     color: #a91f34;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: bold;
 }
 .qs-bdy
 {
@@ -2718,7 +2718,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 	margin-top: 20px;
 } */
 .popup-sub-head {
-	font-size: 17px!important;
+	font-size: 15px!important;
 	color: #505050;
     font-weight: bold;
 }
@@ -2788,4 +2788,30 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .submitted-header {
 	padding-left: 5px!important;
+}
+.list div span {
+	font-size: 14px;
+	font-weight: 400;
+}
+.create-quest {
+    padding: 0px 15px 10px !important;
+    line-height: 22px;
+    font-size: 14px;
+    position: relative;
+}
+.hide-create{
+	display: none;
+}
+.questionaire-height {
+    height: 400px;
+    overflow-y: scroll;
+    padding-top: 20px; 
+}
+.questionaire-height-old {
+	height: 150px;
+	overflow-y: none; 
+}
+.title-head {
+    font-size: 1rem!important;
+    padding-right: 0;
 }

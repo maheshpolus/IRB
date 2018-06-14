@@ -18,12 +18,20 @@ public interface  QuestionnaireService {
 	
 	
 	/**
+	 * @param requestId
+	 * @return the list of questionnaire questions,its condition,options and its answers
+	 * @throws Exception
+	 */
+	QuestionnaireDto getQuestionnaireDetails(Integer moduleCode, String moduleItemId,Integer questionnaireAnswerHeader) throws Exception;
+	
+	
+	/**
 	 * @param questionnaireInfobean
 	 * @param personDTO	
 	 * @return save the answers of questionnaire
 	 * @throws Exception
 	 */
-	void saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,Integer moduleCode, String moduleItemKey,PersonDTO personDTO) throws Exception;
+	Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,Integer moduleCode, String moduleItemKey,PersonDTO personDTO) throws Exception;
 	
 	/**
 	 * @param jsonData

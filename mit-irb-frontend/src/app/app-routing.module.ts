@@ -7,14 +7,14 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
 import { AuthGuard } from './common/service/auth-guard.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
-import { ExemptQuestionaireComponent } from "./exempt-questionaire/exempt-questionaire.component";
+import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
 
 /**remove the comment on can Activate once login service is completed
  * login service - should set a vatriable 'ActivatedUser' in browser session
  */
 const appRoutes = [
-    { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
-  //  { path: '', redirectTo: 'login', pathMatch: 'full' },
+     { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
+   // { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     {
         path: 'irb', component: IrbComponent, // canActivate: [AuthGuard],
@@ -24,7 +24,9 @@ const appRoutes = [
             },
             { path: 'irb-view', loadChildren: 'app/irb-view/irb-view.module#IrbViewModule' },
             { path: 'expanded-view', component: ExpandedViewComponent },
-            { path: 'exempt-questionaire', component: ExemptQuestionaireComponent }
+            { path: 'exempt-questionaire', component: ExemptQuestionaireComponent,
+                resolve: { irb: DashboardResolverService }
+            }
         ]
     }
 ];

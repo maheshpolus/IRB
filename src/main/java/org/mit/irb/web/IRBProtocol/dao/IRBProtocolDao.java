@@ -1,5 +1,8 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -34,4 +37,10 @@ public interface IRBProtocolDao {
 	IRBViewProfile getPersonExemptFormList(PersonDTO personDTO);
 
 	void savePersonExemptForm(IRBExemptForm irbExemptForm, String actype);
+
+	 ArrayList<HashMap<String, Object>> getExemptMsg(IRBExemptForm irbExemptForm);
+	 
+	 Integer getNextExemptId();
+	 
+	 IRBViewProfile getPersonExemptForm(Integer exemptFormId);
 }

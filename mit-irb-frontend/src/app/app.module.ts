@@ -29,6 +29,7 @@ import { IrbViewModule } from './irb-view/irb-view.module';
 import { AppCommonModule } from './common/common/common.module';
 
 import { OrderByPipe } from './common/directives/order-by.pipe';
+import { ExemptCardComponent } from './dashboard/dashboard-list/exempt-card/exempt-card.component';
 
 @NgModule( {
     declarations: [
@@ -42,7 +43,8 @@ import { OrderByPipe } from './common/directives/order-by.pipe';
         CardDetailsComponent,
         IrbComponent,
         ExpandedViewComponent,
-        ExemptQuestionaireComponent
+        ExemptQuestionaireComponent,
+        ExemptCardComponent
     ],
     imports: [
         BrowserModule,

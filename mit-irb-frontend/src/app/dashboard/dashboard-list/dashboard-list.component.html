@@ -11,7 +11,9 @@
 				(click)="getIrbListData('INPROGRESS')">Submitted</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}"><a
 				(click)="getIrbListData('ACTIVE')">Active</a></li>
-			<span> <a (click)="showAdvanceSearch()"><i
+			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}"><a
+				(click)="getExemptListData('EXEMPT')">Exempt Studies</a></li>
+			<span *ngIf="(lastClickedTab !== 'EXEMPT')"> <a (click)="showAdvanceSearch()"><i
 					class="fa fa-glass"></i></a>
 			</span>
 		</ul>
@@ -87,7 +89,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-4 col-lg-4">
+						<div class="col-md-4 col-sm-4 col-lg-4" *ngIf="(lastClickedTab !== 'EXEMPT')">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="sortOrder"
 									[(ngModel)]="sortOrder" (ngModelChange)="sortBy()"
@@ -156,12 +158,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-12" *ngIf="noIrbList">No Irb protocol found
-				for this status</div>
-			<app-card-details
+			<ng-container *ngIf = "lastClickedTab != 'EXEMPT'">
+				<div class="col-sm-12" *ngIf="noIrbList">No Irb protocol found for this status</div>
+				<app-card-details
 				*ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 			|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
 				[irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
+			</ng-container>	
+			<ng-container *ngIf = "lastClickedTab == 'EXEMPT'">
+				<div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>
+				<app-exempt-card
+				[irbList]="irbListData"></app-exempt-card>
+			</ng-container>
 		</div>
 	</div>
 </section>

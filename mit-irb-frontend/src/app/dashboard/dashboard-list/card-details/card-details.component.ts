@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,18 +6,14 @@ import { Router } from '@angular/router';
   templateUrl: './card-details.component.html',
   styleUrls: ['./card-details.component.css']
 })
-export class CardDetailsComponent implements OnInit, AfterViewInit {
+export class CardDetailsComponent  {
 
   @Input() irbList: any = [];
   statusStyle: string;
 
   constructor(private _router: Router) { }
 
-  ngOnInit() {}
-
-  ngAfterViewInit() {}
-
   openIrb( protocolNumber ) {
-      this._router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
+      this._router.navigate( ['/irb/irb-view/irbOverview'], {queryParams: {protocolNumber: protocolNumber}});
   }
 }

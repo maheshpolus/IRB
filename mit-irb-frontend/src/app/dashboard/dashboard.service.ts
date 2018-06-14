@@ -15,4 +15,7 @@ export class DashboardService {
   getProtocolType() {
       return this._http.post('/mit-irb/getDashboardProtocolType', '');
   }
+  getExemptProtocols(params) {
+    return this._http.post('/mit-irb/getPersonExemptFormList', params);
+  }
 }

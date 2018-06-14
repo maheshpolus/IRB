@@ -1,0 +1,33 @@
+<div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}" *ngIf="tabIndex == EXEMPT">
+	<div class="row list-rows" *ngFor="let irb of irbList">
+		<div class="col-md-3 col-sm-12 col-12 list-view">
+			<span *ngIf="irb.isExempt=='Y'" class="in-progress"><p>Exempt</p></span>
+			<span *ngIf="irb.isExempt=='N'" class="active-status"><p>Not Exempt</p></span>
+			<span *ngIf="irb.isExempt==null" class="active-status"><p>Not Submitted</p></span>
+			<span *ngIf="irb.isExempt=='O'" class="in-drafts"><p>Review Not Required</p></span>
+		</div>
+		<div class="col-md-7 col-sm-12 col-12 list-des">
+			<h5>{{irb.exemptTitle}}</h5>
+			<div>
+				<div class="row">
+					<div class="col-md-6">
+						<span>Update User : </span>{{irb.updateUser}}
+					</div>
+					<div class="col-md-6">
+						<span>Status : </span>{{irb.status}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+		<a> 
+			<!--  href="#/irb/exempt-questionaire?exempId={{irb.exemptQuestionnaireAnswerHeaderId}}&mode= 1" -->
+			<!-- {{irb.statusCode}} -->
+			<button type="button" class="btn btn-outline-secondary button-view"
+				(click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+				<i class="fa fa-eye"></i>View
+			</button>
+		</a>
+		</div>
+	</div>
+</div>

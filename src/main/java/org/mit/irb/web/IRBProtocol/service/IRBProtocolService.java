@@ -1,9 +1,9 @@
 package org.mit.irb.web.IRBProtocol.service;
 
+import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
-import org.mit.irb.web.common.view.ServiceAttachments;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.springframework.http.ResponseEntity;
 
@@ -96,9 +96,16 @@ public interface IRBProtocolService {
 	 * @return the list of questionnaire questions,its condition,options and its answers
 	 * @throws Exception
 	 */
-	QuestionnaireDto savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception;
+	CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception;
 	
-	
+	/**
+	 * @param PersonDTO
+	 * @param IRBExemptForm
+	 * @return the list of questionnaire questions,its condition,options and its answers
+	 * @throws Exception
+	 */
+	CommonVO getPersonExemptForm(IRBExemptForm irbExemptForm) throws Exception;
+
 
 	/**
 	 * @param questionnaireInfobean

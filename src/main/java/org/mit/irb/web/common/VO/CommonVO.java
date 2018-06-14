@@ -1,5 +1,9 @@
 package org.mit.irb.web.common.VO;
 
+import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
+import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
+
 /**
  * Value object for service arguement.
  *
@@ -39,6 +43,14 @@ public class CommonVO {
 	private Integer nextGroupActionId;
 	
 	private Integer previousGroupActionId;
+	
+	private IRBExemptForm irbExemptForm;
+	
+	private QuestionnaireDto questionnaireDto;
+	
+	private PersonDTO personDTO;
+	
+	private String questionnaireInfobean;
 
 	public String getUserName() {
 		return userName;
@@ -174,5 +186,37 @@ public class CommonVO {
 
 	public void setPreviousGroupActionId(Integer previousGroupActionId) {
 		this.previousGroupActionId = previousGroupActionId;
+	}
+
+	public IRBExemptForm getIrbExemptForm() {
+		return irbExemptForm;
+	}
+
+	public void setIrbExemptForm(IRBExemptForm irbExemptForm) {
+		this.irbExemptForm = irbExemptForm;
+	}
+
+	public QuestionnaireDto getQuestionnaireDto() {
+		return questionnaireDto;
+	}
+
+	public void setQuestionnaireDto(QuestionnaireDto questionnaireDto) {
+		this.questionnaireDto = questionnaireDto;
+	}
+
+	public PersonDTO getPersonDTO() {
+		return personDTO;
+	}
+
+	public void setPersonDTO(PersonDTO personDTO) {
+		this.personDTO = personDTO;
+	}
+
+	public String getQuestionnaireInfobean() {
+		return questionnaireInfobean;
+	}
+
+	public void setQuestionnaireInfobean(String questionnaireInfobean) {
+		this.questionnaireInfobean = questionnaireInfobean;
 	}
 }

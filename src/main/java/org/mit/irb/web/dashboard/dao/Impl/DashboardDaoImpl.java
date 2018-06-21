@@ -125,10 +125,13 @@ public class DashboardDaoImpl implements DashboardDao{
 			result = dBEngine.executeProcedure(inputParam, "GET_IRB_DASHBOARD", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("DBException in getDashboardProtocolList"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("IOException in getDashboardProtocolList"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("SQLException in getDashboardProtocolList"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			profile.setDashBoardDetailMap(result);
@@ -150,10 +153,13 @@ public class DashboardDaoImpl implements DashboardDao{
 			result = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("DBException in getExpandedSnapShotView"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("IOException in getExpandedSnapShotView"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("SQLException in getExpandedSnapShotView"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			profile.setDashBoardDetailMap(result);
@@ -171,10 +177,13 @@ public class DashboardDaoImpl implements DashboardDao{
 			result = dBEngine.executeProcedure("GET_IRB_PROTOCOL_TYPE", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.info("DBException in getDashboardProtocolType"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.info("IOException in getDashboardProtocolType"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("SQLException in getDashboardProtocolType"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			profile.setDashBoardDetailMap(result);

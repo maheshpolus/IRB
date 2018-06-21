@@ -37,10 +37,7 @@ public class DashboardController {
 	@RequestMapping(value = "/getDashboardSnapshot", method = RequestMethod.POST)
 	public ResponseEntity<String> getDashboardSnapShot(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		logger.info("getDashboardSnapshot");
 		HttpStatus status = HttpStatus.OK;
-		logger.info("PersonId: "+vo.getPersonId());
-		logger.info("PersonRoleType: "+vo.getPersonRoleType());
 		DashboardProfile profile = this.dashboardService.getSnapshotData(vo.getPersonId(), vo.getPersonRoleType());
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = null;
@@ -48,7 +45,7 @@ public class DashboardController {
 			responseData = mapper.writeValueAsString(profile);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("Exception in getDashboardSnapshot method "+ e);
 		}
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -56,11 +53,7 @@ public class DashboardController {
 	@RequestMapping(value = "/getExpandedSnapShotView", method = RequestMethod.POST)
 	public ResponseEntity<String> getExpandedSnapShotView(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		logger.info("-----------getDashboardSnapshot---------------");
 		HttpStatus status = HttpStatus.OK;
-		logger.info("PersonId:"+vo.getPersonId());
-		logger.info("PersonRoleType: "+vo.getPersonRoleType());
-		logger.info("AvSummaryType:"+vo.getAvSummaryType());
 		DashboardProfile profile = this.dashboardService.getExpandedSnapShotView(vo.getPersonId(), vo.getPersonRoleType(), vo.getAvSummaryType());
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = null;
@@ -68,7 +61,7 @@ public class DashboardController {
 			responseData = mapper.writeValueAsString(profile);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("Exception in getExpandedSnapShotView method"+ e);
 		}
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -76,15 +69,7 @@ public class DashboardController {
 	@RequestMapping(value = "/getDashboardProtocolList", method = RequestMethod.POST)
 	public ResponseEntity<String> getDashboardProtocolList(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("getDashboardProtocolList");
 		HttpStatus status = HttpStatus.OK;
-		logger.info("PersonId: "+vo.getPersonId());
-		logger.info("PersonRoleType: "+vo.getPersonRoleType());
-		logger.info("DashboardType: "+vo.getDashboardType());
-		logger.info("PiName:"+vo.getPiName());
-		logger.info("ProtocolNumber: "+vo.getProtocolNumber());
-		logger.info("ProtocolTypeCode:"+vo.getProtocolTypeCode());
-		logger.info("Title: "+vo.getTitle());
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(),
 				 vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(), vo.getProtocolTypeCode(), vo.getTitle());
 		ObjectMapper mapper = new ObjectMapper();
@@ -93,7 +78,7 @@ public class DashboardController {
 			responseData = mapper.writeValueAsString(profile);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("Exception in getDashboardProtocolList:"+ e);
 		}
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -101,7 +86,6 @@ public class DashboardController {
 	@RequestMapping(value = "/getDashboardProtocolType", method = RequestMethod.POST)
 	public ResponseEntity<String> getDashboardProtocolType(HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("getDashboardProtocolType");
 		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolType();
 		ObjectMapper mapper = new ObjectMapper();
@@ -110,7 +94,7 @@ public class DashboardController {
 			responseData = mapper.writeValueAsString(profile);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("Exception in getDashboardProtocolType"+ e);
 		}
 		return new ResponseEntity<String>(responseData, status);
 	}

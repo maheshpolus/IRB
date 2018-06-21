@@ -1,5 +1,8 @@
 package org.mit.irb.web.IRBProtocol.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
@@ -96,7 +99,7 @@ public interface IRBProtocolService {
 	 * @return the list of questionnaire questions,its condition,options and its answers
 	 * @throws Exception
 	 */
-	CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception;
+	CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm, PersonDTO dto) throws Exception;
 	
 	/**
 	 * @param PersonDTO
@@ -114,5 +117,9 @@ public interface IRBProtocolService {
 	 * @return save the answers of questionnaire
 	 * @throws Exception
 	 */
-	String saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean,PersonDTO personDTO) throws Exception;
+	CommonVO saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean,PersonDTO personDTO) throws Exception;
+
+	CommonVO getEvaluateMessage(IRBExemptForm exemptForm);
+
+	ArrayList<HashMap<String, Object>> getLeadunitAutoCompleteList();
 }

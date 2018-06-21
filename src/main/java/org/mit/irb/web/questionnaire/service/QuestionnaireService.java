@@ -3,6 +3,7 @@ package org.mit.irb.web.questionnaire.service;
 import java.util.List;
 
 import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 
 public interface  QuestionnaireService {
@@ -31,7 +32,7 @@ public interface  QuestionnaireService {
 	 * @return save the answers of questionnaire
 	 * @throws Exception
 	 */
-	Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,Integer moduleCode, String moduleItemKey,PersonDTO personDTO) throws Exception;
+	Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,Integer moduleCode, String moduleItemKey,PersonDTO personDTO, IRBExemptForm exemptForm) throws Exception;
 	
 	/**
 	 * @param jsonData

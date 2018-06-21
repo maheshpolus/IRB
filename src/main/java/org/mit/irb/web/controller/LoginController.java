@@ -60,20 +60,17 @@ public class LoginController extends BaseController {
 	private String login_mode;
 	
 	@RequestMapping(value = "/loginCheck", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> loginUser(@RequestBody CommonVO vo, HttpServletRequest request,
+	public ResponseEntity<String> loginUser(@RequestBody CommonVO vo, HttpServletRequest request,HttpSession session,
 			HttpServletResponse response) throws Exception {
-		logger.debug("Received request for login: ");
 		HttpStatus status = HttpStatus.OK;
 		String userName = vo.getUserName();
 		String password = vo.getPassword();
-		logger.info("loginCheck");
-		logger.info("User Name"+userName);
 		Boolean loginCheck = false;
 		String role = null;
 		try {
 			loginCheck = loginValidator.loginCheck(login_mode, userName, password, request, response);
 			if (loginCheck) {
-				role = loginService.checkIRBUserRole(userName);
+				role = loginService.checkIRBUserRole(userName);    
 			} else {
 				status = HttpStatus.BAD_REQUEST;
 			}
@@ -85,6 +82,9 @@ public class LoginController extends BaseController {
 		if (role != null && !role.isEmpty()) {
 			PersonDTO personDTO = loginValidator.readPersonData(userName);
 			personDTO.setRole(role);
+        	 if(personDTO.getPersonID() !=null){
+        		 session.setAttribute("personDTO", personDTO);
+	            }
 			responseData = mapper.writeValueAsString(personDTO);
 		}
 		return new ResponseEntity<String>(responseData, status);
@@ -92,16 +92,14 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
-		logger.info("entry Page");
-		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO" + session.getId());
+		logger.info("IRB Entry Page");
+		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO");
 		if (personDTO != null) {
-			logger.info("personDTO != null");
 			return "index.html";
 
 		} else {
 			if ("TOUCHSTONE".equalsIgnoreCase(login_mode)) {
 				Boolean isLoginSuccess = TouchstoneAuthService.authenticate(request, session);
-				logger.info("in touchstone  isLoginSuccess " +isLoginSuccess);
 				if (isLoginSuccess) {
 					return "index.html";
 				}
@@ -111,16 +109,14 @@ public class LoginController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
-	public ResponseEntity<String> getPersonDetails(HttpServletRequest request){
-		logger.info("getUserDetails");
+	public ResponseEntity<String> getPersonDetails(HttpServletRequest request, HttpSession session){
 		String responseData = null;
 		HttpStatus status = HttpStatus.OK;
 		PersonDTO personDTO = null;
-		HttpSession session = request.getSession();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			if(session != null){
-				personDTO = (PersonDTO) session.getAttribute("personDTO"+session.getId());
+				personDTO = (PersonDTO) session.getAttribute("personDTO");
 			}
 			responseData = mapper.writeValueAsString(personDTO);
 		} catch (JsonProcessingException e) {
@@ -133,7 +129,6 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ResponseEntity<String> logout(ModelMap model, HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("Log Out");
 		HttpStatus status = HttpStatus.OK;
 		String responseData = null;
 		// invalidate the session if exists

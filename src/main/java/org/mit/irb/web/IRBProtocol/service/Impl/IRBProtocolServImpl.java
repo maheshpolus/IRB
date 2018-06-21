@@ -103,7 +103,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception {
+	public CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm, PersonDTO dto) throws Exception {
 		irbExemptForm.setStatusCode("1");
 		Integer exemptId = irbProtocolDao.getNextExemptId();
 		irbExemptForm.setExemptFormID(exemptId); 
@@ -120,14 +120,14 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public String saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean, PersonDTO personDTO) throws Exception {		
+	public CommonVO saveQuestionnaire(IRBExemptForm irbExemptForm,QuestionnaireDto questionnaireDto, String questionnaireInfobean, PersonDTO personDTO) throws Exception {		
 		String moduleItemId = getModuleItemId(personDTO, irbExemptForm);
-		Integer questionnaireHeaderId =  saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,moduleItemId,personDTO);	
+		Integer questionnaireHeaderId =  saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,moduleItemId, personDTO,irbExemptForm);	
 		irbExemptForm.setExemptQuestionnaireAnswerHeaderId(questionnaireHeaderId);
 		ArrayList<HashMap<String, Object>> alExemptMessage = new ArrayList<>();
-		String exemptMessage = "Saved successfully";
+		String exemptMessage = "";
 		boolean isSubmit = isSubmit(questionnaireInfobean); 
-		if(isQuestionnaireComplete(questionnaireInfobean) && isSubmit){
+		if(isQuestionnaireComplete(questionnaireInfobean)){
 			savePersonExemptForm(irbExemptForm,"U");
 			alExemptMessage = getExemptMsg(irbExemptForm);	
 			HashMap<String, Object> hmExemptMessage = alExemptMessage.get(0);		
@@ -138,16 +138,29 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 				irbExemptForm.setIsExempt(hmExemptMessage.get("IS_EXEMPT_GRANTED").toString());
 				exemptMessage = hmExemptMessage.get("EXEMPT_MESSAGE").toString();
 			}
+		} else{
+			exemptMessage = "Please complete the questionnaire to proceed!!";
 		}
+		
 		if(!isSubmit){
 			irbExemptForm.setStatusCode("1");
 		}
-		savePersonExemptForm(irbExemptForm,"U");	
-		return exemptMessage;
+		savePersonExemptForm(irbExemptForm,"U");
+		CommonVO commonVO = new CommonVO();
+		String moduleItemsId = getModuleItemId(irbExemptForm.getPersonId(), irbExemptForm);
+		QuestionnaireDto questionnairesDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, moduleItemsId,irbExemptForm.getExemptQuestionnaireAnswerHeaderId());
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(irbExemptForm.getExemptFormID());
+		if(irbViewProfile != null && irbViewProfile.getIrbExemptFormList() != null){
+			irbExemptForm = irbViewProfile.getIrbExemptFormList().get(0);
+		}	
+		commonVO.setQuestionnaireDto(questionnairesDto);
+		commonVO.setIrbExemptForm(irbExemptForm);
+		commonVO.setExemptMessage(exemptMessage);
+		return commonVO;
 	}
 
-	private Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,String moduleItemId,PersonDTO personDTO) throws Exception {		
-		return questionnaireService.saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,KeyConstants.COEUS_MODULE_PERSON,moduleItemId, personDTO);
+	private Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,String moduleItemId,PersonDTO personDTO, IRBExemptForm exemptForm) throws Exception {		
+		return questionnaireService.saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,KeyConstants.COEUS_MODULE_PERSON,moduleItemId, personDTO, exemptForm);
 	}
 	
 	private boolean isSubmit(String questionnaireInfobean) throws Exception {
@@ -203,6 +216,49 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 	
 	private String getModuleItemId(PersonDTO personDTO,IRBExemptForm irbExemptForm){
-		return getModuleItemId(personDTO.getPersonID(),irbExemptForm);
+		return getModuleItemId(irbExemptForm.getPersonId(),irbExemptForm);
+	}
+
+	@Override
+	public CommonVO getEvaluateMessage(IRBExemptForm exemptForm) {
+		CommonVO vo= new CommonVO();
+		ArrayList<HashMap<String, Object>> alertMessage = new ArrayList<>();
+		alertMessage = irbProtocolDao.getExemptMsg(exemptForm);
+		HashMap<String, Object> message = alertMessage.get(0);
+		String exemptMessage ="";
+		String question = "";
+		String isExempt = "";
+		Integer questionId;
+		if(message.get("EXEMPT_MESSAGE") != null){
+			exemptMessage = message.get("EXEMPT_MESSAGE").toString();
+		} else{
+			exemptMessage = "No exempt message for this form!!";
+		}
+		if(message.get("QUESTION") != null){
+			question = message.get("QUESTION").toString();
+		} else{
+			question = "No question for this exempt form";
+		}
+		if(message.get("IS_EXEMPT_GRANTED") != null){
+			isExempt = message.get("IS_EXEMPT_GRANTED").toString();
+		} else{
+			isExempt = "No status available";
+		}
+		if(message.get("QUESTION_ID") != null){
+			questionId = Integer.parseInt(message.get("QUESTION_ID").toString());
+		} else{
+			questionId = 0;
+		}
+		vo.setExemptMessage(exemptMessage);
+		vo.setQuestion(question);
+		vo.setIsExemptGranted(isExempt);
+		vo.setQuestionId(questionId);
+		return vo;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getLeadunitAutoCompleteList() {
+		ArrayList<HashMap<String, Object>> leadUnitList = irbProtocolDao.getLeadunitAutoCompleteList();
+		return leadUnitList;
 	}
 }

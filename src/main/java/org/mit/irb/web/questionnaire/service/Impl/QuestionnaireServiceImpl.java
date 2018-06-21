@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mit.irb.web.common.dto.PersonDTO;
+import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
@@ -51,6 +52,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 					QuestionnaireAnswerDto.setQuestionnaireAnswerHeaderId(Integer.parseInt((answersDetails.get("QUESTIONNAIRE_ANSWER_ID").toString())));
 					if (answersDetails.get("ANSWER_NUMBER") != null) {
 						QuestionnaireAnswerDto.setAnswerNumber(Integer.parseInt((answersDetails.get("ANSWER_NUMBER").toString())));
+					}
+					if (answersDetails.get("QUESTIONNAIRE_ANSWER_ID") != null) {						
+						QuestionnaireAnswerDto.setQuestionnaireAnswerId(Integer.parseInt((answersDetails.get("QUESTIONNAIRE_ANSWER_ID").toString())));
 					}
 					if (answersDetails.get("ANSWER_LOOKUP_CODE") != null) {
 						QuestionnaireAnswerDto.setAnswerLookupCode(answersDetails.get("ANSWER_LOOKUP_CODE").toString());
@@ -109,7 +113,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 					}
 					questionnaireQuestion.setQuestionId(Integer.parseInt((questionDetails.get("QUESTION_ID").toString())));
 					for (QuestionnaireAnswerDto QuestionnaireAnswerDto : answerList) {
-						if (questionnaireQuestion.getQuestionId() == QuestionnaireAnswerDto.getQuestionId()) {
+						if (questionnaireQuestion.getQuestionId() .equals( QuestionnaireAnswerDto.getQuestionId())) {
 							questionnaireQuestion.setSelectedAnswer(QuestionnaireAnswerDto.getSelectedAnswer());
 							questionnaireQuestion.setAttachmentId(QuestionnaireAnswerDto.getAttachmentId());
 							questionnaireQuestion.setQuestionnaireAnswerHeaderId(QuestionnaireAnswerDto.getQuestionnaireAnswerHeaderId());
@@ -166,7 +170,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	@Override
-	public Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,Integer moduleCode, String moduleItemId, PersonDTO personDTO) throws Exception {
+	public Integer saveQuestionnaireAnswers(QuestionnaireDto questionnaireDto, String questionnaireInfobean,Integer moduleCode, String moduleItemId, PersonDTO personDTO,IRBExemptForm exemptForm) throws Exception {
 		Integer questionnaireAnsHeaderId = null;
 		try {		
 			Integer questionnaireId = generateQuestionnaireId(moduleCode,moduleItemId);
@@ -177,9 +181,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			if (!questAnsHeaderId.equals("null")) {
 				questionnaireAnsHeaderId = Integer.parseInt(questAnsHeaderId);
 			} else {
-				questionnaireAnsHeaderId = generateQuesAnsHeaderId(moduleCode, moduleItemId,personDTO, questionnaireId);
+				questionnaireAnsHeaderId = generateQuesAnsHeaderId(moduleCode, moduleItemId,exemptForm, questionnaireId);
 			}
-			updateQuestionnaireAnswerHeader(questionnaireAnsHeaderId, questionnaireCompletionFlag, personDTO);
+			updateQuestionnaireAnswerHeader(questionnaireAnsHeaderId, questionnaireCompletionFlag, exemptForm);
 			for (int i = 0; i < questionnaireJsnArray.length(); i++) {
 				JSONObject explrObject = questionnaireJsnArray.getJSONObject(i);
 				ArrayList<InParameter> inParam = new ArrayList<>();
@@ -274,7 +278,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return questionnaireAnsHeaderId;
 	}
 
-	private Integer generateQuesAnsHeaderId(Integer moduleCode, String moduleItemId, PersonDTO personDTO,Integer questionnaireId) {
+	private Integer generateQuesAnsHeaderId(Integer moduleCode, String moduleItemId, IRBExemptForm exemptForm,Integer questionnaireId) {
 		Integer questionnaireAnsHeaderId = null;
 		try {
 			ArrayList<InParameter> inParam = new ArrayList<>();
@@ -282,7 +286,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			inParam.add(new InParameter("av_module_item_id", DBEngineConstants.TYPE_LONG, moduleItemId));
 			inParam.add(new InParameter("av_module_item_code", DBEngineConstants.TYPE_INTEGER, moduleCode));
 			inParam.add(new InParameter("av_questionnaire_id", DBEngineConstants.TYPE_INTEGER, questionnaireId));
-			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, personDTO.getPersonID()));
+			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, exemptForm.getPersonId()));
 			outParam.add(new OutParameter("questionnaireAnsHeaderId", DBEngineConstants.TYPE_INTEGER));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction(inParam, "fn_upd_mitkc_qnr_ans_header",outParam);
 			if (result != null && !result.isEmpty()) {
@@ -296,13 +300,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	private Integer updateQuestionnaireAnswerHeader(Integer questionnaireAnsHeaderId, String completionFlag,
-			PersonDTO personDTO) {
+			IRBExemptForm exemptForm) {
 		try {
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			inParam.add(new InParameter("av_qnr_ans_header_id", DBEngineConstants.TYPE_INTEGER, questionnaireAnsHeaderId));
 			inParam.add(new InParameter("av_qnr_completed_flag", DBEngineConstants.TYPE_STRING, completionFlag));
-			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, personDTO.getPersonID()));
+			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, exemptForm.getPersonId()));
 			outParam.add(new OutParameter("questionnaireAnsHeaderId", DBEngineConstants.TYPE_INTEGER));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction(inParam, "fn_upd_mitkc_qnr_header",outParam);
 			if (result != null && !result.isEmpty()) {

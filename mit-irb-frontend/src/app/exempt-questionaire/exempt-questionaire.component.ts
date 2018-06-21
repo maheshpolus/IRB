@@ -378,8 +378,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
               this.requestObject.irbExemptForm = this.result.irbExemptForm;
               if ( this.QuestionnaireCompletionFlag === 'Y') {
                 this.alertMsg = 'Exempt questionnaire is complete.' +
-                'Please click on “Evaluate” to evaluate your answers and to know the determination.' +
-                'If you dont want to know determination please go ahead with submission by clicking “Submit”';
+                'Please click on Evaluate to evaluate your answers and to know the determination.' +
+                'If you dont want to know determination please go ahead with submission by clicking Submit';
             } else {
               this.alertMsg = 'Questionaire saved successfully!';
             }

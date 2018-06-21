@@ -1,27 +1,115 @@
 <div class="headerPush"></div>
 <div class="container-fluid">
-	<section class="row" style="padding: 15px;">
+	<section class="row sect-padding">
 		<div class="col-12 top-aprv-details">
 			<div class="row">
-				<div class="col-12 apprve-date">
-					<div class="row create-quest">
-						<div class="col-1 top-form">
-							<h4 class="form-inline">Title :</h4>
-						</div>
-						<div class="col-9">
-							<span class="form-group"> <input type="text" [disabled]="isViewMode"
-								[(ngModel)]="requestObject.exemptTitle" class="form-control"
-								placeholder="Enter Exempt Title">
-							</span>
-						</div>
-						<div class="col-md-2 col-sm-12 col-12 button-responsive" *ngIf="!isViewMode">
-							<button type="button" [hidden]="showQuestionaire"
-								class="btn btn-outline-secondary button-view"
-								(click)="loadQuestionaire()" data-toggle="modal"
-								data-target="#alertModal">Continue</button>
-						</div>
+				<div class="col-12">
+					<div class="Welcome-msg">
+						<p>Welcome to the Exempt Protocol Determination tool. By
+							default, your name will be listed as the Investigator of this
+							study. Please search and add the correct Investigator and
+							Department/Lab/Center, as appropriate.You will be presented with
+							a series of questions to answer, and that information will
+							determine if your study meets the federally defined criteria for
+							exemption.</p>
 					</div>
 				</div>
+				<div class="col-12 col-md-12 col-sm-6 apprve-date mb-15"
+					*ngIf="isViewMode || isEditMode">
+					<div class="col-2 display">
+						<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' "
+							class="in-progress active-en margin-fix">Exempt</span> <span
+							*ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'"
+							class="active-status active-en margin-fix">Not Exempt</span> <span
+							*ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' "
+							class="active-status active-en margin-fix">Not Submitted</span> <span
+							*ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'"
+							class="in-drafts active-en margin-fix">Review Not Required</span>
+					</div>
+				</div>
+				<div class="col-12 apprve-date display">
+					<div class="title-head" *ngIf="showQuestionaire">
+						<h4 class="exempt-id">
+							Exempt Id : <span>E-
+								{{requestObject.irbExemptForm.exemptFormID}}</span>
+						</h4>
+					</div>
+				</div>
+				<div class="col-12 apprve-date">
+					<div class="col-1 title-head">
+						<h4>*Title:</h4>
+					</div>
+					<div class="col-10 width-exempt searchBox display">
+						<input class="form-control" type="text" [disabled]="isViewMode"
+							[(ngModel)]="requestObject.irbExemptForm.exemptTitle"
+							placeholder="Enter Exempt Title">
+					</div>
+				</div>
+				<div class="col-12 apprve-date">
+					<div class="col-1 title-head">
+						<h4>*PI:</h4>
+					</div>
+					<div class="col-5 width-exempt searchBox display">
+						<input class="form-control" type="text" *ngIf="!isViewMode"
+							[(ngModel)]="requestObject.irbExemptForm.personName"
+							placeholder="Search: PI Name" [formControl]="piSearchText"
+							(focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"/> <input class="form-control"
+							type="text" [disabled]="isViewMode"
+							[(ngModel)]="requestObject.irbExemptForm.personName"
+							*ngIf="isViewMode" />
+						<div class="sb-seachresults results-margin">
+							<ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPI">
+								<li *ngFor="let result of _results | async"
+									(mousedown)="selectedResult(result)"><span
+									[innerHTML]="result.label"></span></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-1 title-head">
+						<h4>Unit:</h4>
+					</div>
+					<div class="col-4 width-exempt searchBox display">
+						<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName"
+							placeholder="Search: Unit" *ngIf="!isViewMode"
+							[datasource]="dataService" [minSearchLength]="0"
+							(ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
+							(selected)="onUnitSelect()"></ng2-completer>
+						<input class="form-control unit-margin" type="text" [disabled]="isViewMode"
+							[(ngModel)]="requestObject.irbExemptForm.unitName"
+							*ngIf="isViewMode" />
+					</div>
+				</div>
+				<!--new-->
+				<div class="col-12 apprve-date">
+					<div class="col-1  padding-pi-elastic title-head">
+						<h4>Faculty Sponsor:</h4>
+					</div>
+					<div class="col-5  width-exempt searchBox display">
+						<input class="form-control" type="text" *ngIf="!isViewMode"
+							[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+							placeholder="Search: Faculty Sponsor Name"
+							[formControl]="facultySearchText"
+							(focus)="IsElasticResultFaculty = true"  (focusout)="IsElasticResultFaculty = false"/> <input
+							class="form-control" type="text" [disabled]="isViewMode"
+							[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+							*ngIf="isViewMode" />
+						<div class="sb-seachresults results-margin">
+							<ul class="sb-results-dropdown-menu"
+								*ngIf="IsElasticResultFaculty">
+								<li *ngFor="let result of _results | async"
+									(mousedown)="selectedFacultyResult(result)"><span
+									[innerHTML]="result.label"></span></li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+				<div *ngIf="!isViewMode" class="col-12 exempt-id">
+					<button [hidden]="showQuestionaire"
+						class="btn mb-3 btn-primary tab_btn" (click)="loadQuestionaire()"
+						data-toggle="modal" data-target="#alertModal">Continue</button>
+				</div>
+				<!--new end-->
 			</div>
 		</div>
 	</section>
@@ -32,22 +120,29 @@
 		<div class="col-12">
 			<div class="card coll-card-q">
 				<h5 class="card-header collapse_hd">
-					Questionaire <i class="fa fa-info-circle" aria-hidden="true"></i>
+					Exempt Form <i class="fa fa-info-circle" aria-hidden="true"></i>
 				</h5>
-				<div class="card-body collapse-card-body questionaire-height">
+				<div class="card-body collapse-card-body">
 					<div class="quest-no"
 						*ngFor=' let quest of questionaire.questionnaireQuestions; let indexQuestion = index'>
 						<ul [ngSwitch]="quest.answerType" class="list">
 							<li *ngSwitchCase="'Radio'">
-								<div *ngIf="quest.showQuestion == true" class="list">
-									<p>{{quest.question}}</p>
+								<div *ngIf="quest.showQuestion == true" class="list"
+									[ngClass]="{'errorquestion': errorQuestionId == quest.questionId}">
+									<hr
+										*ngIf="indexQuestion>0 && errorQuestionId !== quest.questionId">
+									<p>
+										{{quest.question}} <span class="help-link"> <i
+											class="fa fa-question-circle-o" aria-hidden="true"
+											data-toggle="modal" data-target="#helpModal"
+											(click)="getHelpLink(quest.description)"></i></span>
+									</p>
 									<div
 										*ngFor=" let option of questionaire.questionnaireOptions; let in=index"
 										class="radio-inline ">
-										<span *ngIf="quest.questionId == option.QUESTION_ID"> 
-											<input [disabled]= "isViewMode"
-											type="radio" name="{{option.QUESTION_ID}}"
-											[value]="option.OPTION_LABEL"
+										<span *ngIf="quest.questionId == option.QUESTION_ID"> <input
+											[disabled]="isViewMode" type="radio"
+											name="{{option.QUESTION_ID}}" [value]="option.OPTION_LABEL"
 											(change)="showChildQuestions(quest)"
 											[(ngModel)]="quest.selectedAnswer" />
 											{{option.OPTION_LABEL}}
@@ -57,29 +152,37 @@
 							</li>
 						</ul>
 					</div>
+					<div *ngIf="isEvaluate" class="eval-msg">
+							<p>{{alertMsg}}</p>
+						</div>
 				</div>
 			</div>
 			<div class="container-fluid">
-				<section class="row btn-row-med" style="padding: 15px;">
-					<button class="btn btn-primary tab_btn"  *ngIf = "isViewMode == false" (click)="saveQuestionaire()" data-toggle="modal"
-								data-target="#alertModal">Save
-					</button>
+				<section class="row btn-row-med sect-padding">
+					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == false"
+						(click)="saveQuestionaire()" id="save">Save</button>
+					<button class="btn btn-primary tab_btn" type="submit"
+					*ngIf="isViewMode == false"
+					(click)="evaluateExemptQuestionnaire()"
+					[disabled]="QuestionnaireCompletionFlag=='N'">Evaluate</button>
 					<button class="btn btn-primary tab_btn" data-toggle="modal"
-					data-target="#alertModal" type="submit"  *ngIf = "isViewMode == false" (click)="submitQuestionaire()">Submit
-					</button>
+						data-target="#confirmModal" type="submit"
+						*ngIf="isViewMode == false" (click)="submitConfirmation()"
+						[disabled]="QuestionnaireCompletionFlag=='N'">Submit</button>
 				</section>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- modal -->
-<div class="modal fade" id="alertModal"
-	tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-	aria-hidden="true" *ngIf="showAlert">
+<!-- message-modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog"
+	aria-labelledby="alertModalCenterTitle" aria-hidden="true"
+	*ngIf="showAlert">
+	<!-- alert modals-->
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Alert</h5>
 				<button type="button" class="close modal-close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -97,5 +200,69 @@
 			</div>
 		</div>
 	</div>
+	<!-- alert modals end-->
 </div>
-<!-- modal-end -->
+<!-- message-modal-end -->
+<!-- help-link-modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog"
+	aria-labelledby="helpModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Help</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-popup">
+				<!-- section1 -->
+				<div class="modal-padding">
+					<div class="row">
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+							<h4 class="popup-sub-head" [innerHTML]="helpMsg"></h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- help-link-modal-end -->
+<!--confirmation modal-->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog"
+	aria-labelledby="helpModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Confirmation</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close" (click)="closeConfirmation()">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-popup">
+				<!-- section1 -->
+				<div class="modal-padding">
+					<div class="row">
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+							<p class="confirm-text">
+								<input type="checkbox" #agreeCheckbox="ngModel"
+									[(ngModel)]="isChecked" (change)="0"> {{alertMsg}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<section class="row btn-row-med sect-confirm-padding">
+				<button class="btn btn-primary tab_btn" data-dismiss="modal"
+					aria-label="Close" (click)="submitQuestionaire()" *ngIf="isChecked">Agree</button>
+			</section>
+		</div>
+	</div>
+</div>
+<!-- confirmation modal end-->
+<!-- modal butoon hidden dont change -->
+<button id="openModalButton" [hidden]="true" data-toggle="modal"
+	data-target="#alertModal">Open Modal</button>
+<!-- end -->

@@ -5,9 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './irb.component.html',
   styleUrls: ['./irb.component.css']
 })
-export class IrbComponent implements OnInit {
+export class IrbComponent{
 
   constructor() { }
 
-  ngOnInit() { }
 }

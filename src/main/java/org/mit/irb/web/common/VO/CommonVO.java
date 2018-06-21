@@ -5,7 +5,7 @@ import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 
 /**
- * Value object for service arguement.
+ * Value object for service argument.
  *
  */
 public class CommonVO {
@@ -51,6 +51,14 @@ public class CommonVO {
 	private PersonDTO personDTO;
 	
 	private String questionnaireInfobean;
+	
+	private String exemptMessage;
+	
+	private Integer questionId;
+	
+	private String question;
+	
+	private String isExemptGranted;
 
 	public String getUserName() {
 		return userName;
@@ -218,5 +226,37 @@ public class CommonVO {
 
 	public void setQuestionnaireInfobean(String questionnaireInfobean) {
 		this.questionnaireInfobean = questionnaireInfobean;
+	}
+
+	public String getExemptMessage() {
+		return exemptMessage;
+	}
+
+	public void setExemptMessage(String exemptMessage) {
+		this.exemptMessage = exemptMessage;
+	}
+
+	public Integer getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(Integer questionId) {
+		this.questionId = questionId;
+	}
+
+	public String getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+
+	public String getIsExemptGranted() {
+		return isExemptGranted;
+	}
+
+	public void setIsExemptGranted(String isExemptGranted) {
+		this.isExemptGranted = isExemptGranted;
 	}
 }

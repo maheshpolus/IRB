@@ -11,7 +11,7 @@ import { DashboardService } from './dashboard.service';
 
 export class DashboardComponent implements OnInit {
     userDTO: any = {};
-    constructor(private _activatedRoute: ActivatedRoute) { }
+    constructor(private _activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
          this.userDTO = this._activatedRoute.snapshot.data['irb'];

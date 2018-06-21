@@ -39,6 +39,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     protocolTypeList = [];
     result: any;
     irbListData: any = [];
+    exemptListData: any = [];
     roleType: string;
     direction: number;
     column: any;
@@ -254,7 +255,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       }
 /*fetch exempt protocols*/
       getExemptListData(currentTab) {
-        this.irbListData = [];
+        this.exemptListData = [];
         this.noIrbList =  false;
         this.lastClickedTab = currentTab;
         this._dashboardService.getExemptProtocols(this.userDTO).subscribe( data => {
@@ -263,8 +264,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
                     this.noIrbList = true;
                 } else {
-                    this.irbListData = this.result.irbExemptFormList;
-                    this.sortBy();
+                    this.exemptListData = this.result.irbExemptFormList;
                 }
             }
         },

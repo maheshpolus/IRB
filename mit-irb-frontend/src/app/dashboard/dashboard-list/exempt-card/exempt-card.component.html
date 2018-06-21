@@ -1,21 +1,27 @@
-<div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}" *ngIf="tabIndex == EXEMPT">
-	<div class="row list-rows" *ngFor="let irb of irbList">
+<div class="col-sm-12" *ngIf="exemptList!=null && exemptList!=undefined" [ngClass]="{'main-list': exemptList?.length >1}">
+	<div class="row list-rows" *ngFor="let irb of exemptList">
 		<div class="col-md-3 col-sm-12 col-12 list-view">
-			<span *ngIf="irb.isExempt=='Y'" class="in-progress"><p>Exempt</p></span>
-			<span *ngIf="irb.isExempt=='N'" class="active-status"><p>Not Exempt</p></span>
-			<span *ngIf="irb.isExempt==null" class="active-status"><p>Not Submitted</p></span>
-			<span *ngIf="irb.isExempt=='O'" class="in-drafts"><p>Review Not Required</p></span>
+			<span *ngIf="irb.isExempt=='Y' && irb.status=='Submitted'" class="in-progress"><p>Exempt</p></span>
+			<span *ngIf="irb.isExempt=='N' && irb.status=='Submitted'" class="active-status"><p>Not Exempt</p></span>
+			<span *ngIf="irb.isExempt==null || irb.status=='In Progress'" class="active-status"><p>Not Submitted</p></span>
+			<span *ngIf="irb.isExempt=='O' && irb.status=='Submitted'" class="in-drafts"><p>Review Not Required</p></span>
 		</div>
 		<div class="col-md-7 col-sm-12 col-12 list-des">
-			<h5>{{irb.exemptTitle}}</h5>
+			<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
 			<div>
 				<div class="row">
 					<div class="col-md-6">
-						<span>Update User : </span>{{irb.updateUser}}
+						<span>Last Updated By : </span>{{irb.updateUser}} on {{irb.updatetimstamp}}
 					</div>
 					<div class="col-md-6">
 						<span>Status : </span>{{irb.status}}
 					</div>
+				</div>
+				<div class="row"></div>
+				<div class="row">
+						<div class="col-md-12">
+							<span>PI : </span>{{irb.personName}}
+						</div>
 				</div>
 			</div>
 		</div>

@@ -9,9 +9,21 @@ public class IRBExemptForm {
 	private Integer exemptFormNumber; 
 	private Integer exemptQuestionnaireAnswerHeaderId; 
 	private String updateUser;
+	private String updateTimestamp;
 	private String isExempt;
 	private String status;
 	private String statusCode;
+	private String facultySponsorPersonId;
+	private String facultySponsorPerson;
+	private String unitNumber;
+	private String unitName;
+	
+	public String getFacultySponsorPersonId() {
+		return facultySponsorPersonId;
+	}
+	public void setFacultySponsorPersonId(String facultySponsorPersonId) {
+		this.facultySponsorPersonId = facultySponsorPersonId;
+	}
 	
 	public Integer getExemptFormID() {
 		return exemptFormID;
@@ -72,5 +84,29 @@ public class IRBExemptForm {
 	}
 	public void setStatusCode(String statusCode) {
 		this.statusCode = statusCode;
+	}
+	public String getFacultySponsorPerson() {
+		return facultySponsorPerson;
+	}
+	public void setFacultySponsorPerson(String facultySponsorPerson) {
+		this.facultySponsorPerson = facultySponsorPerson;
+	}
+	public String getUpdatetimstamp() {
+		return updateTimestamp;
+	}
+	public void setUpdateTimestamp(String updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
+	public String getUnitNumber() {
+		return unitNumber;
+	}
+	public void setUnitNumber(String unitNumber) {
+		this.unitNumber = unitNumber;
+	}
+	public String getUnitName() {
+		return unitName;
+	}
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
 	} 	
 }

@@ -47,13 +47,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_DETAILS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getIRBProtocolDetails:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getIRBProtocolDetails:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getIRBProtocolDetails:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewHeader(result.get(0));
@@ -73,13 +73,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_PERSONS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getIRBprotocolPersons:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getIRBprotocolPersons:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getIRBprotocolPersons:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolPersons(result);
@@ -99,13 +99,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_FUNDING_SRC", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getIRBprotocolFundingSource:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getIRBprotocolFundingSource:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getIRBprotocolFundingSource:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolFundingsource(result);
@@ -125,13 +125,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_LOCATION", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getIRBprotocolLocation:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getIRBprotocolLocation:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getIRBprotocolLocation:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolLocation(result);
@@ -151,13 +151,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_VULNBLE_SUBJT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getIRBprotocolVulnerableSubject:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getIRBprotocolVulnerableSubject:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getIRBprotocolVulnerableSubject:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolVulnerableSubject(result);
@@ -177,13 +177,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_SPECIAL_REVW", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getIRBprotocolSpecialReview:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getIRBprotocolSpecialReview:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getIRBprotocolSpecialReview:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolSpecialReview(result);
@@ -204,13 +204,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getMITKCPersonInfo:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getMITKCPersonInfo:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getMITKCPersonInfo:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolMITKCPersonInfo(result.get(0));
@@ -230,13 +230,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_TRAINING_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getMITKCPersonTraingInfo:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getMITKCPersonTraingInfo:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getMITKCPersonTraingInfo:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 		}
@@ -270,7 +270,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("Exception in downloadAttachments method:"+ e);
 		}
 		return attachmentData;
 	}
@@ -287,13 +287,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ATTACHMENT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getAttachmentsList:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getAttachmentsList:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getAttachmentsList:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolAttachmentList(result);
@@ -313,13 +313,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_GROUP", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getProtocolHistotyGroupList:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getProtocolHistotyGroupList:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getProtocolHistotyGroupList:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolHistoryGroupList(result);
@@ -342,13 +342,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_DET", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getProtocolHistotyGroupDetails:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getProtocolHistotyGroupDetails:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getProtocolHistotyGroupDetails:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolHistoryGroupDetails(result);
@@ -369,13 +369,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_PER_FORM", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getPersonExemptFormList:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getPersonExemptFormList:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getPersonExemptFormList:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			List<IRBExemptForm> irbExemptFormList = new ArrayList<IRBExemptForm>();
@@ -410,6 +410,21 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				}
 				if(hmap.get("IS_EXEMPT_GRANTED") != null){
 					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
+				}
+				if(hmap.get("FACULTY_SPONSOR_PERSON_ID") != null){
+					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
+				}
+				if(hmap.get("FACULTY_SPONSOR_PERSON") != null){
+					exemptForm.setFacultySponsorPerson((String) hmap.get("FACULTY_SPONSOR_PERSON"));
+				}
+				if(hmap.get("UNIT_NUMBER") != null){
+					exemptForm.setUnitNumber((String) hmap.get("UNIT_NUMBER"));
+				}
+				if(hmap.get("UNIT_NAME") != null){
+					exemptForm.setUnitName((String) hmap.get("UNIT_NAME"));
+				}
+				if(hmap.get("UPDATE_TIMESTAMP") != null){
+					exemptForm.setUpdateTimestamp((String) hmap.get("UPDATE_TIMESTAMP"));
 				}
 				irbExemptFormList.add(exemptForm);
 			}
@@ -429,13 +444,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_FORM", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in getPersonExemptForm:"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in getPersonExemptForm:"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in getPersonExemptForm:"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			List<IRBExemptForm> irbExemptFormList = new ArrayList<IRBExemptForm>();
@@ -459,6 +474,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null){
 					exemptForm.setExemptQuestionnaireAnswerHeaderId(Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
 				}
+				if(hmap.get("FACULTY_SPONSOR_PERSON_ID") != null){
+					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
+				}
+				if(hmap.get("UPDATE_TIMESTAMP") != null){
+					exemptForm.setUpdateTimestamp((String) hmap.get("UPDATE_TIMESTAMP"));
+				}
 				if(hmap.get("UPDATE_USER") != null){
 					exemptForm.setUpdateUser((String) hmap.get("UPDATE_USER"));
 				}
@@ -470,6 +491,15 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				}
 				if(hmap.get("IS_EXEMPT_GRANTED") != null){
 					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
+				}
+				if(hmap.get("FACULTY_SPONSOR_PERSON") != null){
+					exemptForm.setFacultySponsorPerson((String) hmap.get("FACULTY_SPONSOR_PERSON"));
+				}
+				if(hmap.get("UNIT_NUMBER") != null){
+					exemptForm.setUnitNumber((String) hmap.get("UNIT_NUMBER"));
+				}
+				if(hmap.get("UNIT_NAME") != null){
+					exemptForm.setUnitName((String) hmap.get("UNIT_NAME"));
 				}
 				irbExemptFormList.add(exemptForm);
 			}
@@ -489,19 +519,21 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		inputParam.add(new InParameter("AV_IS_EXEMPT_GRANTED", DBEngineConstants.TYPE_STRING, irbExemptForm.getIsExempt()));
 		inputParam.add(new InParameter("AV_EXEMPT_TITLE", DBEngineConstants.TYPE_STRING, irbExemptForm.getExemptTitle()));
 		inputParam.add(new InParameter("AV_QUESTIONNAIRE_ANS_HEADER_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptQuestionnaireAnswerHeaderId()));
+		inputParam.add(new InParameter("AV_FACULTY_SPONSOR_PERSON_ID", DBEngineConstants.TYPE_STRING, irbExemptForm.getFacultySponsorPersonId()));
+		inputParam.add(new InParameter("AV_UNIT_NUMBER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUnitNumber()));
 		inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
 		inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, actype));
 		try {
 			dbEngine.executeProcedure(inputParam, "UPD_IRB_PERSON_EXEMPT_FORM");
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("DBException in savePersonExemptForm method"+ e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("IOException in savePersonExemptForm method"+ e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("SQLException in savePersonExemptForm method"+ e);
 		}
 	}
 
@@ -517,7 +549,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_MESSAGE", outputParam);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Exception:"+ e);
+			logger.info("Exception in getExemptMsg method:"+ e);
 		}
 		return result;
 	}
@@ -538,5 +570,25 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			logger.error("Error in methord getNextExemptId",e);
 		}
 		return exemptId;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getLeadunitAutoCompleteList() {
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure("get_mitkc_all_units", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in getLeadunitAutoCompleteList:"+ e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in getLeadunitAutoCompleteList:"+ e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in getLeadunitAutoCompleteList:"+ e);
+		}
+		return result;
 	}
 }

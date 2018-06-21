@@ -3,7 +3,7 @@
 <div class="headerPush"></div>
 <div class="container-fluid"
 	*ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
-	<section class="row" style="padding: 15px;">
+	<section class="row sect-padding">
 		<div class="col-12 top-aprv-details">
 			<div class="row">
 				<div class="col-12 apprve-date">
@@ -87,7 +87,7 @@
 	</section>
 </div>
 <div class="container-fluid">
-	<section class="row btn-row-med" style="padding: 15px;">
+	<section class="row btn-row-med sect-padding">
 		<button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']"
 			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
 			(click)="show_current_tab($event,'irb_overView')"

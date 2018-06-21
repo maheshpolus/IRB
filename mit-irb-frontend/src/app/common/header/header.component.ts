@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 
 import { LoginService } from '../../login/login.service';
@@ -9,7 +9,7 @@ import { LoginService } from '../../login/login.service';
     styleUrls: ['./header.component.css']
 } )
 
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent implements OnInit {
 
     result: any;
 
@@ -24,8 +24,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             },
         );
     }
-
-    ngAfterViewInit() {}
 
     logout() {
     this._loginService.logout().subscribe(data => {

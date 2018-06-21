@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 
@@ -8,7 +8,7 @@ import { LoginService } from './login.service';
     styleUrls: ['./login.component.css'],
 } )
 
-export class LoginComponent implements OnInit {
+export class LoginComponent{
 
     result: any;
     loginFail = false;
@@ -20,8 +20,6 @@ export class LoginComponent implements OnInit {
             this._router.navigate( ['/irb/dashboard'] );
         }
     }
-
-    ngOnInit() {}
 
     login() {
         const requestObject = {

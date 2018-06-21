@@ -25,11 +25,11 @@ import { DashboardResolverService } from './common/service/dashboard-resolver.se
 import { IrbViewService } from './irb-view/irb-view.service';
 
 import { AppRoutingModule } from './app-routing.module';
-import { IrbViewModule } from './irb-view/irb-view.module';
 import { AppCommonModule } from './common/common/common.module';
 
-import { OrderByPipe } from './common/directives/order-by.pipe';
 import { ExemptCardComponent } from './dashboard/dashboard-list/exempt-card/exempt-card.component';
+import { PiElasticService } from './common/service/pi-elastic.service';
+import { Ng2CompleterModule } from "ng2-completer";
 
 @NgModule( {
     declarations: [
@@ -52,11 +52,12 @@ import { ExemptCardComponent } from './dashboard/dashboard-list/exempt-card/exem
         HttpClientModule,
         AppRoutingModule,
         ReactiveFormsModule,
-        AppCommonModule
+        AppCommonModule,
+        Ng2CompleterModule 
     ],
     providers: [AuthGuard, DashboardService,
                 { provide: LocationStrategy, useClass: HashLocationStrategy },
-                LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService],
+                LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService],
     bootstrap: [AppComponent]
 } )
 export class AppModule { }

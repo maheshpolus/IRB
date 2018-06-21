@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class ExemptCardComponent {
 
   /**input from parent componet Exempt list */
-  @Input() irbList: any = [];
+  @Input() exemptList: any = [];
 
   constructor(private _router: Router) { }
   /**Opens Expemt Exempt Component

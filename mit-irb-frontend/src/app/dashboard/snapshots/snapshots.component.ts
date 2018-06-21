@@ -48,7 +48,7 @@ export class SnapshotsComponent implements OnInit {
       {queryParams: {personId: this.userDTO.personID, personRole: this.roleType, summaryType: summaryType}});
   }
 
-  goToQuestionaire() {debugger;
+  goToQuestionaire() {
       this._router.navigate(['/irb/exempt-questionaire']);
   }
 }

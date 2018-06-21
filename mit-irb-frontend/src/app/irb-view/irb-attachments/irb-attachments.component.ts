@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import 'rxjs/Rx';
 
 import { IrbViewService } from '../irb-view.service';
 

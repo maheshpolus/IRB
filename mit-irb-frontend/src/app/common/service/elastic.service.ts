@@ -9,9 +9,9 @@ export class ElasticService {
     URL_FOR_ELASTIC: string;
     IRB_INDEX: string;
     constructor( private _http: HttpClient ) {
-       /* this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
-        this.IRB_INDEX = "irbprotocol";*/
-         this.get_elastic_config().subscribe(
+        this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+        this.IRB_INDEX = "irbprotocol";
+      /*   this.get_elastic_config().subscribe(
             data => {
                  const elastic_config: any = data;
                  if (elastic_config) {
@@ -21,9 +21,11 @@ export class ElasticService {
                          this._connect();
                     }
                 }
-                
              }
-         );
+         );*/
+         if ( !this._client ) {
+             this._connect();
+        }
     }
 
     private _connect() {

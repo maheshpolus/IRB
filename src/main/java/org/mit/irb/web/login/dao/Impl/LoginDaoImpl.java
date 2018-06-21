@@ -38,11 +38,15 @@ public class LoginDaoImpl implements LoginDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_ROLE", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
+			logger.error("DBException in checkIRBUserRole"+ e);
 		} catch (IOException e) {
+			logger.error("IOException in checkIRBUserRole"+ e);
 			e.printStackTrace();
 		} catch (SQLException e) {
+			logger.error("SQLException in checkIRBUserRole"+ e);
 			e.printStackTrace();
 		} catch (Exception e) {
+			logger.error("Exception in checkIRBUserRole"+ e);
 			e.printStackTrace();
 		}
 		return result;

@@ -30,7 +30,7 @@ export class LoginComponent{
             data => {
                 this.result = data || [];
                 /**update ActivatedUser with logged in user once login service completed */
-                sessionStorage.setItem('ActivatedUser', 'admin');
+                sessionStorage.setItem('ActivatedUser', this.result.userName);
                 if ( this.result != null ) {
                     this._router.navigate( ['/irb/dashboard'] );
                 }

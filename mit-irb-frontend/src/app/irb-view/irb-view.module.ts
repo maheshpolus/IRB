@@ -23,4 +23,4 @@ import { IrbViewRoutingModule } from './irb-view-routing.module';
   ],
   declarations: [IrbOverviewComponent, IrbHeaderDetailComponent, IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent]
 })
-export class IrbViewModule { }
+export class IrbViewModule {}

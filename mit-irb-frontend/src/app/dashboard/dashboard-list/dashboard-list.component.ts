@@ -20,6 +20,7 @@ import { DashboardService } from '../dashboard.service';
 } )
 
 export class DashboardListComponent implements OnInit, AfterViewInit {
+
     noProtocolList: boolean;
     noIrbList = false;
     isAdvancesearch = false;
@@ -46,7 +47,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     sortOrder = '1';
     sortField = 'UPDATE_TIMESTAMP';
 
-    /**elastic serach variables */
+    /**elastic search variables */
     message = '';
     _results: Subject<Array<any>> = new Subject<Array<any>>();
     searchText: FormControl = new FormControl( '' );
@@ -66,12 +67,14 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         private _elasticsearchService: ElasticService,
         private _router: Router ) { }
 
+    /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
         this.getIrbListData('ALL');
         this.roleType = this.userDTO.role;
         this.getIrbProtocolTypes();
     }
-/*logic for elastic search*/
+
+    /*logic for elastic search*/
     ngAfterViewInit() {
         this.searchText
             .valueChanges
@@ -164,15 +167,23 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             .catch( this.handleError )
             .subscribe( this._results );
       }
-      handleError(): any {
-        this.message = 'something went wrong';
-      }
 
+    /** handles error in elastic search */
+    handleError(): any {
+    this.message = 'something went wrong';
+    }
+
+    /**get advance search results
+     * @param currentTab - value of current tab
+     */
     getAdvanceSearch( currentTab ) {
         this.isAdvancsearchPerformed = true;
         this.getIrbListData( currentTab );
     }
 
+    /** calls service to load irb protocols in dashboard
+     * @param currentTab - value of current tab
+     */
     getIrbListData( currentTab ) {
         this.irbListData = [];
         this.noIrbList =  false;
@@ -198,16 +209,21 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         );
     }
 
-    sortBy( ) {
+    /** sets value of column and direction to implement sorting */
+    sortBy() {
         this.column = this.sortField;
         this.direction =  parseInt(this.sortOrder, 10);
     }
-/*show or hide advance search*/
+
+    /*show or hide advance search fields*/
     showAdvanceSearch() {
         this.isAdvancesearch = !this.isAdvancesearch;
         this.isAdvancsearchPerformed = false;
     }
 
+    /** assigns values of selected result from elastic search results
+     * @param result - elastic search selected result object
+     */
     selectedResult(result) {
         this.protocol = result.obj.protocol_number;
         this.protocolType = result.obj.protocol_type;
@@ -219,26 +235,35 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.seachTextModel = '';
       }
 
+      /** method to close elastic search result*/
       closeResultTab() {
         this.seachTextModel = '';
         this.elasticResultTab = false;
       }
 
+      /** clear all fields in advance search and load orginal irb protocol list if none of the fields where empty*/
       clear() {
-        this.requestObject.protocolNumber = '';
-        this.requestObject.title = '';
-        this.requestObject.piName = '';
-        this.requestObject.protocolTypeCode = '';
-        this.getIrbListData(this.lastClickedTab);
-        this.isAdvancsearchPerformed = false;
+        if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
+        this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '') {
+            this.requestObject.protocolNumber = '';
+            this.requestObject.title = '';
+            this.requestObject.piName = '';
+            this.requestObject.protocolTypeCode = '';
+            this.getIrbListData(this.lastClickedTab);
+            this.isAdvancsearchPerformed = false;
+        }
       }
 
+      /**opens irb view module of a selected protocol
+       * @param protocolNumber -unique identifier of a protocol
+       */
       openIrb( protocolNumber ) {
           this._router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
       }
-/*fetch protocolTypes to show in dropdown*/
+
+      /**fetch protocolTypes to show in dropdown*/
       getIrbProtocolTypes() {
-          this._dashboardService.getProtocolType().subscribe( data => {
+        this._dashboardService.getProtocolType().subscribe( data => {
               this.result = data || [];
               if ( this.result != null ) {
                   if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0 ) {
@@ -253,7 +278,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
               },
           );
       }
-/*fetch exempt protocols*/
+
+      /**fetch exempt protocols
+       * @param currentTab - value of current tab
+      */
       getExemptListData(currentTab) {
         this.exemptListData = [];
         this.noIrbList =  false;

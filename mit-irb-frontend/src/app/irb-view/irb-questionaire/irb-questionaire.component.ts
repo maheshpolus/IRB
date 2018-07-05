@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './irb-questionaire.component.html',
   styleUrls: ['./irb-questionaire.component.css']
 })
-export class IrbQuestionaireComponent{
+export class IrbQuestionaireComponent {
 
   constructor() { }
 

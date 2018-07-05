@@ -1,5 +1,8 @@
 package org.mit.irb.web.common.VO;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
@@ -59,6 +62,18 @@ public class CommonVO {
 	private String question;
 	
 	private String isExemptGranted;
+
+	private ArrayList<QuestionnaireDto> questionnaireDtos;
+	
+	private ArrayList<HashMap<String, Object>> exemptQuestionList;
+	
+	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
+		return exemptQuestionList;
+	}
+
+	public void setExemptQuestionList(ArrayList<HashMap<String, Object>> exemptQuestionList) {
+		this.exemptQuestionList = exemptQuestionList;
+	}
 
 	public String getUserName() {
 		return userName;
@@ -258,5 +273,13 @@ public class CommonVO {
 
 	public void setIsExemptGranted(String isExemptGranted) {
 		this.isExemptGranted = isExemptGranted;
+	}
+
+	public ArrayList<QuestionnaireDto> getQuestionnaireDtos() {
+		return questionnaireDtos;
+	}
+
+	public void setQuestionnaireDtos(ArrayList<QuestionnaireDto> questionnaireDtos) {
+		this.questionnaireDtos = questionnaireDtos;
 	}
 }

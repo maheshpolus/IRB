@@ -10,13 +10,16 @@ import { LoginService } from '../../login/login.service';
 } )
 
 export class HeaderComponent implements OnInit {
-
+    requestObject = {
+            userName :  sessionStorage.getItem('ActivatedUser')
+    };
+    
     result: any;
 
     constructor( private _loginService: LoginService, private _router: Router ) { }
 
-    ngOnInit() {
-        this._loginService.getUserDetail().subscribe( data => {
+    ngOnInit() { 
+        this._loginService.getUserDetail(this.requestObject).subscribe( data => { 
             this.result = data || [];
         },
             error => {

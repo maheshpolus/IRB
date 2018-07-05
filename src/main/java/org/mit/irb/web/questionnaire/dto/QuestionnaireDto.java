@@ -49,6 +49,5 @@ public class QuestionnaireDto {
 
 	public void setQuesAttachmentList(List<QuestionnaireAttachmentDto> quesAttachmentList) {
 		this.quesAttachmentList = quesAttachmentList;
-	}	
-	
+	}
 }

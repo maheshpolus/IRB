@@ -43,9 +43,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			if (questionnaireAnswerHeader != null) {
 				QuestionnaireAnswerDtoMap = getQuestionnaireAnswer(questionnaireAnswerHeader);
 
-			} else if (moduleItemId != null) {
+			} /*else if (moduleItemId != null) {
 				QuestionnaireAnswerDtoMap = getQuestionnaireAnswer(moduleCode, moduleItemId);
-			}
+			}*/
 			if (QuestionnaireAnswerDtoMap != null && !QuestionnaireAnswerDtoMap.isEmpty()) {
 				for (HashMap<String, Object> answersDetails : QuestionnaireAnswerDtoMap) {
 					QuestionnaireAnswerDto QuestionnaireAnswerDto = new QuestionnaireAnswerDto();
@@ -101,6 +101,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 						} else {
 							questionnaireQuestion.setShowQuestion(false);
 						}
+					}
+					if (questionDetails.get("GROUP_LABEL") != null) {	
+						questionnaireQuestion.setGroupLabel(questionDetails.get("GROUP_LABEL").toString());					
 					}
 					if (questionDetails.get("HELP_LINK") != null) {
 						questionnaireQuestion.setHelpLink(questionDetails.get("HELP_LINK").toString());

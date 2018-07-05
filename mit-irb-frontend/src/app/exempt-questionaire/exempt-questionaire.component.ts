@@ -7,11 +7,13 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
-import { Router, ActivatedRoute} from '@angular/router';
-import { CompleterService, CompleterData } from 'ng2-completer';
+import { ActivatedRoute} from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
 
 import { ExemptQuestionaireService } from './exempt-questionaire.service';
 import { PiElasticService } from '../common/service/pi-elastic.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-exempt-questionaire',
@@ -24,17 +26,14 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
   showQuestionaire = false;
   showAlert = true;
+  showWelcomeMessage = true;
   QuestionnaireCompletionFlag = 'N';
-
+  showHelpMsg: any = [];
   questionaire: any = [];
   units: any = [];
-  unitInput: any = {
-    UNIT_NUMBER: '',
-    UNIT_NAME: ''
-  };
-  mode: string;
+  unitName: any = [];
   result: any = {};
-  helpMsg = '';
+  helpMsg: any = [];
   lastGROUP_NAME = null;
   requestObject: any = {
     irbExemptForm: {
@@ -46,7 +45,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
           exemptFormID: '',
           facultySponsorPersonId: '',
           unitNumber: '',
-          unitName: ''
+          unitName: '',
+          summary: ''
     },
     personDTO: {},
     questionnaireDto: {},
@@ -63,7 +63,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   isEditMode = false;
   isEvaluate = false;
   isChecked = false;
-  errorQuestionId: any;
+  errorQuestions: any = [];
   /* elastic search variables */
   message = '';
   _results: Subject<Array<any>> = new Subject<Array<any>>();
@@ -74,12 +74,33 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   piName: string;
   personId: string;
   elasticResultTab = false;
-  protected dataService: CompleterData;
+
+  WELCOME_MESSAGE: string;
+  ABOUT_MESSAGE: string;
+  EXEMPT_MSG: string;
+  NOT_EXEMPT_MSG: string;
+  PI_DECLARATION: string;
+  OTHER_MSG: string;
+  isExempt: string;
 
   constructor( private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
-    private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _completerService: CompleterService) { }
+    private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,private _spinner: NgxSpinnerService,) {}
 
+  /** sets requestObject and checks for mode */
   ngOnInit() {
+    this._http.get("/mit-irb/resources/string_config_json").subscribe(
+      data => {
+           const property_config: any = data;
+           if (property_config) {
+               this.WELCOME_MESSAGE = property_config.WELCOME_MSG;
+               this.ABOUT_MESSAGE = property_config.ABOUT_QUESTIONNAIRE_MSG;
+               this.EXEMPT_MSG = property_config.EXEMPT_MSG;
+               this.NOT_EXEMPT_MSG = property_config.NOT_EXEMPT_MSG;
+               this.PI_DECLARATION = property_config.PI_DECLARATION;
+               this.OTHER_MSG =property_config.OTHER_MSG;
+          }
+       }
+   );
       this.userDTO = this._activatedRoute.snapshot.data['irb'];
       this.requestObject.irbExemptForm.updateUser = this.userDTO.userName;
       this.requestObject.irbExemptForm.personId = this.userDTO.personID;
@@ -92,7 +113,6 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
        * @ isViemode = true -> viewmode
        * @ isViemode = false -> editmode
        */
-      // this.mode = this._activatedRoute.snapshot.queryParamMap.get('mode');
       this.requestObject.irbExemptForm.exemptTitle = this._activatedRoute.snapshot.queryParamMap.get('title');
       this.requestObject.irbExemptForm.exemptFormID = this._activatedRoute.snapshot.queryParamMap.get('exemptFormID');
       this.requestObject.irbExemptForm.exemptQuestionnaireAnswerHeaderId = this._activatedRoute.snapshot.queryParamMap.get('exempHeaderId');
@@ -112,8 +132,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       this.getPiUnits();
   }
 
-  /*logic for elastic search*/
+  /** logic for elastic search*/
   ngAfterViewInit() {
+    /** elastic search of PI */
       this.piSearchText
           .valueChanges
           .map(( text: any ) => text ? text.trim() : '' )
@@ -125,6 +146,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
           } )
           .catch( this.handleError )
           .subscribe( this._results );
+
+    /** elastic search of Faculty sponsor */
       this.facultySearchText
       .valueChanges
       .map(( text: any ) => text ? text.trim() : '' )
@@ -136,7 +159,16 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       } )
       .catch( this.handleError )
       .subscribe( this._results );
+      console.log()
+    /** show welcome message on create mode */
+      if (this.isViewMode == false && this.isEditMode == false) {
+        this.openWelcomeModal();
+      }
   }
+
+/**fetches elastic search results
+ * @param searchString - string enterd in the input field
+ */
   getElasticSearchResults(searchString) {
   return new Promise<Array<String>>(( resolve, reject ) => {
     this._ngZone.runOutsideAngular(() => {
@@ -185,18 +217,22 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     } );
   } );
  }
-
+  /**show message if elastic search failed */
   handleError(): any {
     this.message = 'something went wrong';
   }
 
+  /** calls service to fetch Units of PI */
   getPiUnits() {
     this._exemptQuestionaireService.getPIUnit().subscribe(
       data => {
           this.result = data || [];
           if ( this.result != null ) {
               this.units = this.result;
-              this.dataService = this._completerService.local(this.units, 'UNIT_NAME', 'UNIT_NAME');
+              this.units.forEach(( value, index ) => {
+                    this.unitName[index] = value.UNIT_NAME;
+              } );
+              //this.dataService = this._completerService.local(this.units, 'UNIT_NAME', 'UNIT_NAME');
           }
       },
       error => {
@@ -207,6 +243,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
   unitChangeFunction( unitName ) { }
 
+  /** assign values to requestObject on selecting a particular unit from suggestion box */
   onUnitSelect() {
     this.units.forEach(( value, index ) => {
       if ( value.UNIT_NAME === this.requestObject.irbExemptForm.unitName ) {
@@ -216,13 +253,15 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     } );
   }
 
-  selectedResult(result) {
+ /** assign values to requestObject on selecting a particular PI from elastic search */
+  selectedPiResult(result) {
     this.requestObject.irbExemptForm.personName = '';
     this.requestObject.irbExemptForm.personName = result.obj.full_name;
     this.requestObject.irbExemptForm.personId = result.obj.person_id;
     this.IsElasticResultPI = false;
   }
 
+ /** assign values to requestObject on selecting a particular Faculty from elastic search */
   selectedFacultyResult(result) {
     this.requestObject.irbExemptForm.facultySponsorPerson = '';
     this.requestObject.irbExemptForm.facultySponsorPerson = result.obj.full_name;
@@ -230,11 +269,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.IsElasticResultFaculty = false;
   }
 
+  /** function to load exempt questionaire once the title and pi and exempt is created */
   loadQuestionaire() {
     this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
       this.showAlert = false;
       if ( (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
-      (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null)) {
+      (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
+      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '')) {
           this._exemptQuestionaireService.getQuestionaire( this.requestObject ).subscribe(
                   data => {
                       this.result = data || [];
@@ -257,7 +298,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       }
   }
 
+  /** function to load exempt questionaire which was saved once
+   * loaded in edit or view mode only
+  */
   loadSavedQuestionaire() {
+    this._spinner.show();
     this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
     this._exemptQuestionaireService.getSavedQuestionaire( this.requestObject ).subscribe(
       data => {
@@ -265,6 +310,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
           if ( this.result != null ) {
               this.questionaire = this.result.questionnaireDto;
               this.requestObject.irbExemptForm = this.result.irbExemptForm;
+              if(this.requestObject.irbExemptForm.statusCode == '2') {
+                  this.isViewMode = true;
+              }
               this.updateExemptQuestionnaire();
               this.QuestionnaireCompletionFlag = 'Y';
               this.checkQuestionaireCompletion();
@@ -273,11 +321,15 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       error => {
           console.log( 'Error in getSavedQuestionaire', error );
       },
+      ()=> {
+          this._spinner.hide();
+      }
     );
   }
 
+  /** logic to show child questions once a question is answered */
   showChildQuestions(currentQuestion) {
-    this.errorQuestionId = null;
+    this.errorQuestions = [];
     this.isEvaluate = false;
     if (currentQuestion.acType == null) {
        currentQuestion.acType = 'I';
@@ -288,6 +340,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
        currentQuestion.selectedAnswer = null;
     }
     if (currentQuestion.hasCondition === 'Y') {
+      let lastGROUP_NAME ='';
         this.questionaire.questionnaireConditions.forEach(condition => {
           switch (condition.CONDITION_TYPE) {
             case 'EQUALS':
@@ -300,9 +353,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                   } else if (currentQuestion.acType === 'D') {
                     currentQuestion.acType = 'U';
                   }
-                  this.lastGROUP_NAME = condition.GROUP_NAME;
+                  lastGROUP_NAME = condition.GROUP_NAME;
                 } else if (condition.GROUP_NAME === question.groupName &&
-                    condition.CONDITION_VALUE !== currentQuestion.selectedAnswer) {
+                    condition.CONDITION_VALUE !== currentQuestion.selectedAnswer && lastGROUP_NAME != condition.GROUP_NAME) {
                     question.showQuestion = false;
                     question.selectedAnswer = null;
                     if (question.acType === 'U') {
@@ -326,6 +379,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
      }
   }
 
+  /** logic to hide child questions once a question is skipped */
   hideChildQuestion(currentQuestion) {
       this.questionaire.questionnaireConditions.forEach(condition => {
         if (condition.QUESTION_ID === currentQuestion.questionId) {
@@ -350,6 +404,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       });
   }
 
+  /**checks whether the questionaire is complete and sets the flag */
   checkQuestionaireCompletion() {
     this.questionaire.questionnaireQuestions.forEach(question => {
       if (question.selectedAnswer === null && question.showQuestion === true) {
@@ -358,9 +413,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /** service call to save the exempt questionaire */
   saveQuestionaire() {
     this.isEvaluate = false;
-    this.errorQuestionId = null;
+    this.errorQuestions = [];
     this.QuestionnaireCompletionFlag = 'Y';
     this.requestObject.questionnaireInfobean = {};
     this.alertMsg = '';
@@ -371,8 +427,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
     this.requestObject.personDTO.personID = this.userDTO.personID;
     this.requestObject.personDTO.fullName = this.userDTO.fullName;
-    this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
-      data => {
+    if ( (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
+        (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
+        (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '')) {
+        this._spinner.show();
+        this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
+        data => {
             this.result = data;
             if ( this.result != null ) {
               this.requestObject.irbExemptForm = this.result.irbExemptForm;
@@ -393,59 +453,117 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
           this.alertMsg = 'Failed to save questionaire';
       },
       () => {
+        this._spinner.hide();
         this.openSaveModal();
         this.updateExemptQuestionnaire();
       }
     );
+    } else {
+        this.openSaveModal();
+        this.alertMsg = 'Please provide the mandatory fields';
+    }
   }
 
+  /** calls service to evaluate exempt questioanire */
+  evaluateExemptQuestionnaire() {
+    this.errorQuestions = [];
+    this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
+    if ( (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
+        (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
+        (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '')) {
+        this._spinner.show();
+        this._exemptQuestionaireService.evaluatedQuestionaire(this.requestObject).subscribe(
+         data => {
+            this.result = data;
+            this.isExempt = this.result.isExemptGranted;
+            if (this.result.isExemptGranted === 'N') {
+              this.alertMsg = this.NOT_EXEMPT_MSG + ' Please see the highlighted question(s)' +
+              'to know the reason for not being exempt.';
+              this.errorQuestions =  this.result.exemptQuestionList;
+            } else if(this.result.isExemptGranted === 'Y') {
+              this.alertMsg = this.EXEMPT_MSG + ' You can proceed with submission.';
+            } else if(this.result.isExemptGranted === 'O') {
+              this.alertMsg = this.OTHER_MSG;
+            }
+      },
+      error => {
+          console.log( 'Error in saveQuestionaire', error );
+          this.alertMsg = 'Failed to save questionaire';
+       },
+      () => {
+        this._spinner.hide();
+        this.isEvaluate = true;
+      }
+  );
+ } else {
+     this.openSaveModal();
+     this.alertMsg = 'Please provide the mandatory fields';
+ }
+}
+
+  /** shows a popup to show the certify message before submitting */
   submitConfirmation() {
       this.isEvaluate = false;
       this.alertMsg = '';
       this.QuestionnaireCompletionFlag = 'Y';
       this.checkQuestionaireCompletion();
       if ( this.QuestionnaireCompletionFlag === 'Y') {
-        this.alertMsg = 'As PI, I certify that the above information is complete and accurate to the best of my knowledge.' +
-        'I understand that the determination of non-exempt status for the proposed research is based solely upon' +
-        'the information provided in this questionnaire and I agree to complete a new questionnaire should any of these' +
-        'fact change or be determined to be inaccurate or incomplete.';
+        this.alertMsg = this.PI_DECLARATION;
       } else {
         this.alertMsg = 'Cannot submit questionaire since it is not complete';
     }
   }
 
+  /** sets the value of checkbox to false if the certify message is closed without agreeing*/
   closeConfirmation() {
     this.isChecked = false;
   }
 
+  /** submit questionaire after completing and agreeing*/
   submitQuestionaire() {
     this.isEvaluate = false;
-    this.errorQuestionId = null;
+    this.errorQuestions = [];
     this.alertMsg = '';
       this.setCommonReqObject();
       this.requestObject.questionnaireInfobean.isSubmit = 'Y';
       this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
       this.requestObject.personDTO.personID = this.userDTO.personID;
       this.requestObject.personDTO.fullName = this.userDTO.fullName;
-      this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
-        data => {
+      if ( (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
+      (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
+      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '')) {
+          this._spinner.show();
+          this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
+           data => {
               this.result = data;
               if ( this.result != null ) {
-                  this.alertMsg = this.result.exemptMessage;
-                  this.requestObject.irbExemptForm = this.result.irbExemptForm;
-                  this.isViewMode = true;
-          }
+                  if (this.result.irbExemptForm.isExempt === 'N') {
+                      this.alertMsg = this.NOT_EXEMPT_MSG;
+                  } else if(this.result.irbExemptForm.isExempt === 'Y') {
+                      this.alertMsg = this.EXEMPT_MSG;
+                  } else if(this.result.irbExemptForm.isExempt === 'O') {
+                      this.alertMsg = this.OTHER_MSG;
+                  }
+              this.requestObject.irbExemptForm = this.result.irbExemptForm;
+              this.isViewMode = true;
+             }
         },
         error => {
             console.log( 'Error in submitQuestionaire', error );
             this.alertMsg = 'Failed to submit questionaire';
         },
         () => {
+          this._spinner.hide();
           this.openSaveModal();
         }
       );
+      } else {
+          this.openSaveModal();
+          this.alertMsg = 'Please provide the mandatory fields';
+      }
   }
 
+  /** function which sets the requestObject values for both save and submit calls*/
   setCommonReqObject() {
       this.requestObject.questionnaireInfobean = {};
       this.requestObject.questionnaireInfobean.QuestionnaireCompletionFlag = this.QuestionnaireCompletionFlag;
@@ -457,7 +575,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   }
 
   /**updates questionnaire
-   * itratesover questions to make child questions true
+   * iterates over questions to make child questions true
    * no input params required
    */
   updateExemptQuestionnaire() {
@@ -479,13 +597,19 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getHelpLink(helpMsg) {
+  /** assigns help link message of a question
+   * sets no help message if help mesag is not available
+   * @param helpMsg
+   */
+  getHelpLink(helpMsg, index) {
+      this.showHelpMsg[index] = !this.showHelpMsg[index];
       if (helpMsg == null) {
-          this.helpMsg = 'No help message availabe!';
+          this.helpMsg[index] = 'No help message availabe!';
       } else {
-          this.helpMsg = helpMsg;
+          this.helpMsg[index] = helpMsg;
       }
   }
+
   /**opening modal using hidden button
    * call this fn to trigeer modal open of save
   */
@@ -494,27 +618,30 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     document.getElementById('openModalButton').click();
   }
 
-  evaluateExemptQuestionnaire() {
-    this.errorQuestionId = null;
-    this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
-    this._exemptQuestionaireService.evaluatedQuestionaire(this.requestObject).subscribe(
-      data => {
-            this.result = data;
-            if (this.result.isExemptGranted !== 'Y') {
-              this.alertMsg = this.result.exemptMessage + ' Please see the highlighted question to know the reason for not being exempt.';
-              this.errorQuestionId =  this.result.questionId;
-            } else {
-              this.alertMsg = this.result.exemptMessage + ' You can proceed with submission.';
-            }
-      },
-      error => {
-          console.log( 'Error in saveQuestionaire', error );
-          this.alertMsg = 'Failed to save questionaire';
-       },
-      () => {
-        this.isEvaluate = true;
+  /**opening modal using hidden button
+   * call this fn to trigeer modal open to show welcome message
+  */
+ openWelcomeModal() {
+  this.showWelcomeMessage = true;
+  document.getElementById('openWelocomeModalButton').click();
+  }
+
+  /**evaluates error questions
+   * @param - questionid
+   * return true if questionid is in errorlist
+   */
+  showEvaluateMessageById(questionId) {
+    let isError = false;
+    this.errorQuestions.forEach(element => {
+      if(element.QUESTION_ID == questionId) {
+        isError = true;
       }
-  );
+    });
+    return isError;
+  }
+
+  /** close welcome message modal */
+  closeWelcome() {
+    this.showWelcomeMessage = false;
   }
 }
-

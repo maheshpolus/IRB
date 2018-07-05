@@ -26,11 +26,13 @@ export class IrbAttachmentsComponent implements OnInit {
 
     constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, ) { }
 
+    /** sets requestObject and call function to load attachment details */
     ngOnInit() {
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get( 'protocolNumber' );
         this.loadIrbAttachmentList();
     }
 
+    /**calls service to load Attachment list in protocol*/
     loadIrbAttachmentList() {
         this._irbViewService.getIrbAttachmentList( this.requestObject ).subscribe( data => {
             this.result = data || [];
@@ -45,11 +47,14 @@ export class IrbAttachmentsComponent implements OnInit {
 
         },
             error => {
-                console.log( "Error in method loadIrbAttachmentList()", error );
+                console.log( 'Error in method loadIrbAttachmentList()', error );
             },
         );
     }
 
+    /**calls service to get attachment details and to download it
+     * @param attachment - object of an attachment
+     */
     downloadAttachment( attachment ) {
         this.requestObject.attachmentId = attachment.FILE_ID;
         this._irbViewService.downloadIrbAttachment( attachment.FILE_ID ).subscribe( data => {
@@ -64,6 +69,7 @@ export class IrbAttachmentsComponent implements OnInit {
             () => console.log( 'OK' ) );
     }
 
+    /**set column and direction to sort attachments */
     sortBy() {
         this.column = this.sortField;
         this.direction = parseInt( this.sortOrder, 10 );

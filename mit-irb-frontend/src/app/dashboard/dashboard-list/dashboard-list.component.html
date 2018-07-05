@@ -35,7 +35,7 @@
 		</ul>
 		<div class="navigate_ot tab-content" id="nav-tabContent">
 			<div class="toggle_navgate">
-				<div class="col-sm-12 top-form" *ngIf="isAdvancesearch">
+				<div class="col-sm-12 top-form" *ngIf="isAdvancesearch && lastClickedTab != 'EXEMPT'">
 					<div class="form-inline">
 						<div class="form-group">
 							<input type="text" [(ngModel)]="requestObject.protocolNumber"

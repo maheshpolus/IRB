@@ -26,6 +26,7 @@ export class ExpandedViewComponent implements OnInit {
 
     constructor( private _expandedViewService: ExpandedViewService, private _activatedRoute: ActivatedRoute, private _router: Router ) { }
 
+    /** sets page heading and calls function to load snapshot detailed data*/
     ngOnInit() {
         this.requestObject.personId = this._activatedRoute.snapshot.queryParamMap.get( 'personId' );
         this.requestObject.personRoleType = this._activatedRoute.snapshot.queryParamMap.get( 'personRole' );
@@ -44,6 +45,7 @@ export class ExpandedViewComponent implements OnInit {
         this.loadExpandedData();
     }
 
+    /** calls service to load details of selected snapshot*/
     loadExpandedData() {
         this._expandedViewService.getExpandedList( this.requestObject ).subscribe( data => {
             this.result = data || [];
@@ -57,11 +59,14 @@ export class ExpandedViewComponent implements OnInit {
 
         },
             error => {
-                console.log( "Error in method loadExpandedData()", error );
+                console.log( 'Error in method loadExpandedData()', error );
             },
         );
     }
 
+    /** opens irb view module
+     * @param protocolNumber - unique identifier of a protocol
+    */
     openIrbView( protocolNumber ) {
         this._router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } } );
     }

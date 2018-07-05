@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IrbViewService } from '../irb-view.service';
@@ -37,6 +37,7 @@ export class IrbOverviewComponent implements OnInit {
   constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute,
                 private _spinner: NgxSpinnerService) { }
 
+  /** sets requestObject and calls all the functions */
   ngOnInit() {
       this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
       this.loadPersonalDetails();
@@ -46,13 +47,9 @@ export class IrbOverviewComponent implements OnInit {
       this.loadSpecialReviewDetails();
   }
 
-  toggle() {
-      this.isExpanded = !this.isExpanded;
-  }
-
+  /**calls service to load person details of protocol */
   loadPersonalDetails() {
-    this._spinner.show();
-      this._irbViewService.getIrbPersonalDetails( this.requestObject ).subscribe( data => {
+    this._irbViewService.getIrbPersonalDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
               if (this.result.irbViewProtocolPersons == null || this.result.irbViewProtocolPersons.length === 0) {
@@ -63,13 +60,15 @@ export class IrbOverviewComponent implements OnInit {
           }
       },
           error => {
-               console.log( "Error in method loadPersonalDetails()", error );
+               console.log( 'Error in method loadPersonalDetails()', error );
           },
       );
   }
 
+  /**calls service to load funding details of protocol */
   loadFundingDetails() {
-      this._irbViewService.getIrbFundingDetails( this.requestObject ).subscribe( data => {
+    this._spinner.show();
+    this._irbViewService.getIrbFundingDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
               if (this.result.irbViewProtocolFundingsource == null || this.result.irbViewProtocolFundingsource.length === 0) {
@@ -80,13 +79,17 @@ export class IrbOverviewComponent implements OnInit {
           }
       },
           error => {
-               console.log( "Error in method loadFundingDetails()", error );
+               console.log( 'Error in method loadFundingDetails()', error );
           },
+          () => {
+              this._spinner.hide();
+          }
       );
   }
 
+  /**calls service to load collaborators details of protocol */
   loadCollaboratorsDetails() {
-      this._irbViewService.getIrbCollaboratorsDetails( this.requestObject ).subscribe( data => {
+    this._irbViewService.getIrbCollaboratorsDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
               if (this.result.irbViewProtocolLocation == null || this.result.irbViewProtocolLocation.length === 0) {
@@ -95,16 +98,16 @@ export class IrbOverviewComponent implements OnInit {
                   this.irbCollaborators = this.result.irbViewProtocolLocation;
               }
           }
-          this._spinner.hide();
       },
           error => {
-               console.log( "Error in method loadCollaboratorsDetails()", error );
+               console.log( 'Error in method loadCollaboratorsDetails()', error );
           },
       );
   }
 
+  /**calls service to load subjects details of protocol */
   loadSubjectsDetails() {
-      this._irbViewService.getIrbSubjectsDetails( this.requestObject ).subscribe( data => {
+    this._irbViewService.getIrbSubjectsDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
               if (this.result.irbViewProtocolVulnerableSubject == null || this.result.irbViewProtocolVulnerableSubject.length === 0) {
@@ -113,16 +116,16 @@ export class IrbOverviewComponent implements OnInit {
               this.irbSubjects = this.result.irbViewProtocolVulnerableSubject;
               }
           }
-          this._spinner.hide();
       },
           error => {
-               console.log( "Error in method loadSubjectsDetails()", error );
+               console.log( 'Error in method loadSubjectsDetails()', error );
           },
       );
   }
 
+  /**calls service to load special details of protocol */
   loadSpecialReviewDetails() {
-      this._irbViewService.getIrbSpecialReviewDetails( this.requestObject ).subscribe( data => {
+    this._irbViewService.getIrbSpecialReviewDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
               if (this.result.irbViewProtocolSpecialReview == null || this.result.irbViewProtocolSpecialReview.length === 0) {
@@ -133,34 +136,38 @@ export class IrbOverviewComponent implements OnInit {
           }
       },
           error => {
-               console.log( "Error in method loadSpecialReviewDetails()", error );
+               console.log( 'Error in method loadSpecialReviewDetails()', error );
           },
       );
   }
 
+  /**calls service to load person details of protocol */
+  loadPersonDetailedList() {
+    this.irbPersonDetailedList = [];
+    this.irbPersonDetailedTraining = [];
+    this._irbViewService.getIrbPersonDetailedList( this.requestObject ).subscribe( data => {
+        this.result = data || [];
+        if ( this.result != null ) {
+            this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
+            this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
+        }
+    },
+        error => {
+             console.log( 'Error in method loadPersonDetailedList()', error );
+        },
+    );
+}
+  /**show details of selected person in a popup
+   * @@param personId -unique id of each person
+  */
   showpersonData( personId ) {
       this.showpersonDataList = true;
       this.requestObject.avPersonId = personId;
       this.loadPersonDetailedList();
   }
 
+  /**clear boolean after person details modal is closed */
   closeModal() {
       this.showpersonDataList = false;
-  }
-
-  loadPersonDetailedList() {
-      this.irbPersonDetailedList = [];
-      this.irbPersonDetailedTraining = [];
-      this._irbViewService.getIrbPersonDetailedList( this.requestObject ).subscribe( data => {
-          this.result = data || [];
-          if ( this.result != null ) {
-              this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
-              this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
-          }
-      },
-          error => {
-               console.log( "Error in method loadPersonDetailedList()", error );
-          },
-      );
   }
 }

@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
 export class CardDetailsComponent  {
 
   @Input() irbList: any = [];
-  statusStyle: string;
 
   constructor(private _router: Router) { }
 
+  /**Opens Irb Component
+   * @protocolNumber - unique id for protocol
+  */
   openIrb( protocolNumber ) {
       this._router.navigate( ['/irb/irb-view/irbOverview'], {queryParams: {protocolNumber: protocolNumber}});
   }

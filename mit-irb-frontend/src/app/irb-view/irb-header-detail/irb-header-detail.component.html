@@ -1,5 +1,4 @@
-<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff"
-	type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+
 <div class="headerPush"></div>
 <div class="container-fluid"
 	*ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
@@ -63,10 +62,6 @@
 								Expected Start Date : <span>{{(irbHeaderDetails?.EXPECTED_START_DATE === ' ' || irbHeaderDetails?.EXPECTED_START_DATE === null ) ? ' ':(irbHeaderDetails?.EXPECTED_START_DATE | date: 'MM/dd/yyyy')}}</span>
 							</p>
 						</div>
-						<!--   <div class="col-4">
-                      <h5>Orginal Approvel Date</h5>
-                      <p>{{irbHeaderDetails}}</p>
-                  </div> -->
 						<div class="col-6">
 							<p>
 								Lead Unit : <span>{{irbHeaderDetails?.UNIT_NAME}}</span><br />
@@ -90,26 +85,26 @@
 	<section class="row btn-row-med sect-padding">
 		<button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']"
 			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
-			(click)="show_current_tab($event,'irb_overView')"
+			(click)="show_current_tab('irb_overView')"
 			routerLinkActive="btnactive">
 			<i class="fa fa-home" aria-hidden="true"></i>General
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit">
 			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
 		</button>
-		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab($event,'irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
+		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
 		<button class="btn btn-primary tab_btn" type="submit"
 			[routerLink]="['irbAttatchments']"
 			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
 			routerLinkActive="btnactive"
-			(click)="show_current_tab($event,'irb_attachments')">
+			(click)="show_current_tab('irb_attachments')">
 			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit"
 			[routerLink]="['irbHistory']"
 			[queryParams]="{protocolNumber :requestObject.protocolNumber}"
 			routerLinkActive="btnactive"
-			(click)="show_current_tab($event,'irb_history')">
+			(click)="show_current_tab('irb_history')">
 			<i class="fa fa-history" aria-hidden="true"></i>History
 		</button>
 	</section>

@@ -17,7 +17,14 @@ public class IRBExemptForm {
 	private String facultySponsorPerson;
 	private String unitNumber;
 	private String unitName;
+	private String summary;
 	
+	public String getSummary() {
+		return summary;
+	}
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
 	public String getFacultySponsorPersonId() {
 		return facultySponsorPersonId;
 	}

@@ -12,6 +12,7 @@ public class QuestionnaireQuestionDto {
 	private String lookUpName;
 	private String lookUpFiled;
 	private String groupName;
+	private String groupLabel;
 	private String hasCondition;
 	private Boolean showQuestion;
 	private Boolean completionFlag;
@@ -226,5 +227,12 @@ public class QuestionnaireQuestionDto {
 
 	public void setAttachmentId(Integer attachmentId) {
 		this.attachmentId = attachmentId;
+	}
+	public String getGroupLabel() {
+		return groupLabel;
+	}
+
+	public void setGroupLabel(String groupLabel) {
+		this.groupLabel = groupLabel;
 	}
 }

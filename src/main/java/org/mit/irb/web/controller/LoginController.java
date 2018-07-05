@@ -1,9 +1,7 @@
 package org.mit.irb.web.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,12 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
-import org.mit.irb.web.common.pojo.DashboardProfile;
-import org.mit.irb.web.common.utils.DBEngine;
-import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
-import org.mit.irb.web.common.utils.InParameter;
-import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.login.authentication.LoginValidator;
 import org.mit.irb.web.login.authentication.TouchstoneAuthService;
 import org.mit.irb.web.login.service.LoginService;
@@ -29,13 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,7 +50,7 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping(value = "/loginCheck", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<String> loginUser(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+			HttpServletResponse response, HttpSession httpSession) throws Exception {
 		logger.debug("Received request for login: ");
 		HttpStatus status = HttpStatus.OK;
 		String userName = vo.getUserName();
@@ -93,12 +82,6 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
 		logger.info("entry Page");
-		PersonDTO personDTO = (PersonDTO) session.getAttribute("personDTO" + session.getId());
-		if (personDTO != null) {
-			logger.info("personDTO != null");
-			return "index.html";
-
-		} else {
 			if ("TOUCHSTONE".equalsIgnoreCase(login_mode)) {
 				Boolean isLoginSuccess = TouchstoneAuthService.authenticate(request, session);
 				logger.info("in touchstone  isLoginSuccess " +isLoginSuccess);
@@ -106,22 +89,27 @@ public class LoginController extends BaseController {
 					return "index.html";
 				}
 			}
-		}
 		return "index.html";
 	}
 	
-	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
-	public ResponseEntity<String> getPersonDetails(HttpServletRequest request){
+	@RequestMapping(value = "/getUserDetails", method = RequestMethod.POST)
+	public ResponseEntity<String> getPersonDetails(HttpServletRequest request, HttpSession httpSession, @RequestBody CommonVO vo) throws Exception{
 		logger.info("getUserDetails");
+		String role = null;
+	      PersonDTO personDTO = null;
+	      Object userName = httpSession.getAttribute("personDTO" + httpSession.getId());
+	      if(userName == null){
+	    	  personDTO = loginValidator.readPersonData(vo.getUserName());
+	    	  role = loginService.checkIRBUserRole(vo.getUserName());
+	    	  personDTO.setRole(role);
+	    	  
+	      } else{
+	    	  personDTO = (PersonDTO) httpSession.getAttribute("personDTO"+httpSession.getId());
+	      }
 		String responseData = null;
 		HttpStatus status = HttpStatus.OK;
-		PersonDTO personDTO = null;
-		HttpSession session = request.getSession();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			if(session != null){
-				personDTO = (PersonDTO) session.getAttribute("personDTO"+session.getId());
-			}
 			responseData = mapper.writeValueAsString(personDTO);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

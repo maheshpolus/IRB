@@ -426,6 +426,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("UPDATE_TIMESTAMP") != null){
 					exemptForm.setUpdateTimestamp((String) hmap.get("UPDATE_TIMESTAMP"));
 				}
+				if(hmap.get("SUMMARY") != null){
+					exemptForm.setSummary((String) hmap.get("SUMMARY"));
+				}
 				irbExemptFormList.add(exemptForm);
 			}
 			irbViewProfile.setIrbExemptFormList(irbExemptFormList);
@@ -477,6 +480,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("FACULTY_SPONSOR_PERSON_ID") != null){
 					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
 				}
+				if(hmap.get("SUMMARY") != null){
+					exemptForm.setSummary((String) hmap.get("SUMMARY"));
+				}
 				if(hmap.get("UPDATE_TIMESTAMP") != null){
 					exemptForm.setUpdateTimestamp((String) hmap.get("UPDATE_TIMESTAMP"));
 				}
@@ -522,6 +528,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		inputParam.add(new InParameter("AV_FACULTY_SPONSOR_PERSON_ID", DBEngineConstants.TYPE_STRING, irbExemptForm.getFacultySponsorPersonId()));
 		inputParam.add(new InParameter("AV_UNIT_NUMBER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUnitNumber()));
 		inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
+		inputParam.add(new InParameter("AV_SUMMARY", DBEngineConstants.TYPE_STRING, irbExemptForm.getSummary()));
 		inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, actype));
 		try {
 			dbEngine.executeProcedure(inputParam, "UPD_IRB_PERSON_EXEMPT_FORM");
@@ -546,7 +553,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
 		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_MESSAGE", outputParam);
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_NOT_EXEMPT_QSTN_LIST", outputParam);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("Exception in getExemptMsg method:"+ e);

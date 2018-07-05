@@ -124,24 +124,24 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		String moduleItemId = getModuleItemId(personDTO, irbExemptForm);
 		Integer questionnaireHeaderId =  saveQuestionnaireAnswers(questionnaireDto,questionnaireInfobean,moduleItemId, personDTO,irbExemptForm);	
 		irbExemptForm.setExemptQuestionnaireAnswerHeaderId(questionnaireHeaderId);
-		ArrayList<HashMap<String, Object>> alExemptMessage = new ArrayList<>();
-		String exemptMessage = "";
+		ArrayList<HashMap<String, Object>> questionArrayList = new ArrayList<>();
 		boolean isSubmit = isSubmit(questionnaireInfobean); 
 		if(isQuestionnaireComplete(questionnaireInfobean)){
 			savePersonExemptForm(irbExemptForm,"U");
-			alExemptMessage = getExemptMsg(irbExemptForm);	
-			HashMap<String, Object> hmExemptMessage = alExemptMessage.get(0);		
-			if(hmExemptMessage.get("EXEMPT_MESSAGE") == null){
-				exemptMessage = "No message for this questionnaire";
-			} else{
-				irbExemptForm.setStatusCode("2");
-				irbExemptForm.setIsExempt(hmExemptMessage.get("IS_EXEMPT_GRANTED").toString());
-				exemptMessage = hmExemptMessage.get("EXEMPT_MESSAGE").toString();
-			}
-		} else{
-			exemptMessage = "Please complete the questionnaire to proceed!!";
-		}
-		
+			questionArrayList = getExemptMsg(irbExemptForm);	
+			irbExemptForm.setStatusCode("2");
+			if(!questionArrayList.isEmpty()){
+				int questId =Integer.parseInt(questionArrayList.get(0).get("QUESTION_ID").toString());
+				int questIdFromDB= 0;
+					if(questId== questIdFromDB){
+						irbExemptForm.setIsExempt("O");
+					} else {
+						irbExemptForm.setIsExempt("N");
+					}
+			}else{
+				irbExemptForm.setIsExempt("Y");
+			} 
+		} 
 		if(!isSubmit){
 			irbExemptForm.setStatusCode("1");
 		}
@@ -155,7 +155,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		}	
 		commonVO.setQuestionnaireDto(questionnairesDto);
 		commonVO.setIrbExemptForm(irbExemptForm);
-		commonVO.setExemptMessage(exemptMessage);
 		return commonVO;
 	}
 
@@ -165,7 +164,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	
 	private boolean isSubmit(String questionnaireInfobean) throws Exception {
 		JSONObject questionnaireJsnobject = new JSONObject(questionnaireInfobean);
-		JSONArray questionnaireJsnArray = questionnaireJsnobject.getJSONArray("answerlist");
 		String questionnaireCompletionFlag = questionnaireJsnobject.get("isSubmit").toString();
 		if("Y".equalsIgnoreCase(questionnaireCompletionFlag)){
 			return true;
@@ -183,7 +181,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	private boolean isQuestionnaireComplete(String questionnaireInfobean){
 		JSONObject questionnaireJsnobject = new JSONObject(questionnaireInfobean);
-		JSONArray questionnaireJsnArray = questionnaireJsnobject.getJSONArray("answerlist");
 		String questionnaireCompletionFlag = questionnaireJsnobject.get("QuestionnaireCompletionFlag").toString();
 		if("Y".equalsIgnoreCase(questionnaireCompletionFlag)){
 			return true;
@@ -222,37 +219,20 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	@Override
 	public CommonVO getEvaluateMessage(IRBExemptForm exemptForm) {
 		CommonVO vo= new CommonVO();
-		ArrayList<HashMap<String, Object>> alertMessage = new ArrayList<>();
-		alertMessage = irbProtocolDao.getExemptMsg(exemptForm);
-		HashMap<String, Object> message = alertMessage.get(0);
-		String exemptMessage ="";
-		String question = "";
-		String isExempt = "";
-		Integer questionId;
-		if(message.get("EXEMPT_MESSAGE") != null){
-			exemptMessage = message.get("EXEMPT_MESSAGE").toString();
-		} else{
-			exemptMessage = "No exempt message for this form!!";
-		}
-		if(message.get("QUESTION") != null){
-			question = message.get("QUESTION").toString();
-		} else{
-			question = "No question for this exempt form";
-		}
-		if(message.get("IS_EXEMPT_GRANTED") != null){
-			isExempt = message.get("IS_EXEMPT_GRANTED").toString();
-		} else{
-			isExempt = "No status available";
-		}
-		if(message.get("QUESTION_ID") != null){
-			questionId = Integer.parseInt(message.get("QUESTION_ID").toString());
-		} else{
-			questionId = 0;
-		}
-		vo.setExemptMessage(exemptMessage);
-		vo.setQuestion(question);
-		vo.setIsExemptGranted(isExempt);
-		vo.setQuestionId(questionId);
+		ArrayList<HashMap<String, Object>> questionList = new ArrayList<>();
+		questionList = irbProtocolDao.getExemptMsg(exemptForm);
+		vo.setExemptQuestionList(questionList);
+		if(!questionList.isEmpty()){
+			int questId =Integer.parseInt(questionList.get(0).get("QUESTION_ID").toString());
+			int questIdFromDB= 0;
+			if(questId== questIdFromDB){
+				vo.setIsExemptGranted("O");
+			} else {
+				vo.setIsExemptGranted("N");
+			}
+		} else {
+			vo.setIsExemptGranted("Y");
+		} 
 		return vo;
 	}
 

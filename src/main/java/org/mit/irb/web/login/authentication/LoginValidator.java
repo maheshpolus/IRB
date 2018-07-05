@@ -96,21 +96,21 @@ public class LoginValidator extends BaseController {
 					resultSet = (ResultSet) callableStatement.getObject(2);
 
 					while (resultSet.next()) {
-						personDTO.setPersonID(resultSet.getString(1));
-						personDTO.setFirstName(resultSet.getString(2));
-						personDTO.setHasDual(resultSet.getString(3));
-						personDTO.setLastName(resultSet.getString(4));
-						personDTO.setFullName(resultSet.getString(5));
-						personDTO.setEmail(resultSet.getString(6));
-						personDTO.setUnitNumber(resultSet.getString(7));
-						personDTO.setUnitName(resultSet.getString(8));
-						//personDTO.setPhoneNumber(resultSet.getString(9));
+						personDTO.setPersonID(resultSet.getString("prncpl_id"));
+						personDTO.setFirstName(resultSet.getString("first_nm"));
+						personDTO.setHasDual(resultSet.getString("middle_nm"));
+						personDTO.setLastName(resultSet.getString("last_nm"));
+						personDTO.setFullName(resultSet.getString("full_name"));
+						personDTO.setEmail(resultSet.getString("email_addr"));
+						personDTO.setUnitNumber(resultSet.getString("prmry_dept_cd"));
+						personDTO.setUnitName(resultSet.getString("unit_name"));
 						personDTO.setUserName(userName);
 						Integer userType = checkUserType(personDTO.getPersonID(), "");
 						personDTO.setUserRoleType(userType);
 						try {
 							String role = checkIRBUserRole(userName);
 							personDTO.setRole(role);
+							logger.info("in checkIRBUserRole" +role);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -127,6 +127,7 @@ public class LoginValidator extends BaseController {
 				dbUtils.endTxn(connection);
 			}
 		}
+		logger.info("personDto" +personDTO.getUnitName()+personDTO);
 		return personDTO;
 	}
 	

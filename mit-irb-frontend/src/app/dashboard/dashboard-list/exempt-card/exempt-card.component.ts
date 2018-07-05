@@ -13,6 +13,7 @@ export class ExemptCardComponent {
   @Input() exemptList: any = [];
 
   constructor(private _router: Router) { }
+
   /**Opens Expemt Exempt Component
    * @exemptId - unique id for exempt form
    * @mode - view or edit mode

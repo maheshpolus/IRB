@@ -87,11 +87,11 @@ public interface IRBProtocolService {
 	
 	
 	/**
-	 * @param PersonDTO
+	 * @param CommonVO
 	 * @return return list of all exempt form
 	 */
 	
-	IRBViewProfile getPersonExemptFormList(PersonDTO personDTO);	
+	IRBViewProfile getPersonExemptFormList(CommonVO vo);	
 	
 	/**
 	 * @param PersonDTO

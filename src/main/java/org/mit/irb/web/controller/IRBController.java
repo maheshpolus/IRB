@@ -154,8 +154,8 @@ public class IRBController {
 	}
 	
 	@RequestMapping(value = "/getPersonExemptFormList", method = RequestMethod.POST)
-	public ResponseEntity<String> getPersonExemptFormList(HttpServletRequest request, HttpServletResponse response, @RequestBody PersonDTO personDTO) throws JsonProcessingException{
-		IRBViewProfile irbViewProfile = irbProtocolService.getPersonExemptFormList(personDTO);
+	public ResponseEntity<String> getPersonExemptFormList(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException{
+		IRBViewProfile irbViewProfile = irbProtocolService.getPersonExemptFormList(vo);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(irbViewProfile);

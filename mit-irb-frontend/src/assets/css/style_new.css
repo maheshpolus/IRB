@@ -3032,5 +3032,10 @@ ul.sb-results-dropdown-menu > li:last-child {
     color: #196d1c;
     text-align: center;
 }
-.helpCard:hover  .closeResultCard{display: block;
-transition: display .25s}	  
+.helpCard:hover  .closeResultCard {
+	display: block;
+	transition: display .25s
+}
+.search-input {
+    width: 300px !important;
+}	  

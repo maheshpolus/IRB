@@ -35,7 +35,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             title : '',
             piName : '',
             protocolTypeCode : '',
-            dashboardType : ''
+            dashboardType : '',
+            determination : ''
     };
     protocolTypeList = [];
     result: any;
@@ -61,6 +62,14 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     piName: string;
     expiry_date: string;
     elasticResultTab = false;
+
+    exemptParams = {
+        personId : '',
+        personRoleType : '',
+        title : '',
+        piName : '',
+        determination : ''
+    }
 
     constructor( private _dashboardService: DashboardService,
         private _ngZone: NgZone,
@@ -244,7 +253,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
       /** clear all fields in advance search and load orginal irb protocol list if none of the fields where empty*/
       clear() {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
-        this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '') {
+        this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ) {
             this.requestObject.protocolNumber = '';
             this.requestObject.title = '';
             this.requestObject.piName = '';
@@ -286,7 +295,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptListData = [];
         this.noIrbList =  false;
         this.lastClickedTab = currentTab;
-        this._dashboardService.getExemptProtocols(this.userDTO).subscribe( data => {
+        this.exemptParams.personId = this.userDTO.personID;
+        this.exemptParams.personRoleType = this.userDTO.role;
+        this.exemptParams.piName = this.requestObject.piName;
+        this.exemptParams.title = this.requestObject.title;
+        this.exemptParams.determination = this.requestObject.determination;
+        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
@@ -300,5 +314,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                  console.log( 'Error in method getExemptListData()', error );
             },
         );
+      }
+
+      /** clear all fields in advance search of exempt studies*/
+      clearExemptSearch() {
+        this.requestObject.determination = '';
+        this.requestObject.title = '';
+        this.requestObject.piName = '';
+        this.getExemptListData('EXEMPT');
       }
 }

@@ -67,6 +67,8 @@ public class CommonVO {
 	
 	private ArrayList<HashMap<String, Object>> exemptQuestionList;
 	
+	private String determination;
+
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -281,5 +283,13 @@ public class CommonVO {
 
 	public void setQuestionnaireDtos(ArrayList<QuestionnaireDto> questionnaireDtos) {
 		this.questionnaireDtos = questionnaireDtos;
+	}
+
+	public String getDetermination() {
+		return determination;
+	}
+
+	public void setDetermination(String determination) {
+		this.determination = determination;
 	}
 }

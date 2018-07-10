@@ -97,8 +97,8 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public IRBViewProfile getPersonExemptFormList(PersonDTO personDTO) {
-		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptFormList(personDTO);
+	public IRBViewProfile getPersonExemptFormList(CommonVO vo) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptFormList(vo.getPersonId(), vo.getPersonRoleType(), vo.getTitle(), vo.getPiName(), vo.getDetermination());
 		return irbViewProfile;
 	}
 

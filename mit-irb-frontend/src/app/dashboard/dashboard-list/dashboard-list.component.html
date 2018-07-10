@@ -29,6 +29,8 @@
 				(click)="getIrbListData('ADMINISTRATOR')">Administrator</a></li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'REVIEWER')}"><a
 				(click)="getIrbListData('REVIEWER')">Reviewer</a></li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}"><a
+				(click)="getExemptListData('EXEMPT')">Exempt Studies</a></li>
 			<span> <a (click)="showAdvanceSearch()"><i
 					class="fa fa-glass"></i></a>
 			</span>
@@ -154,6 +156,37 @@
 							<label> PI </label> <span class="nav-advance-search"> <a
 								(click)="openIrb(protocol)">{{piName }}</a>
 							</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 top-form" *ngIf="isAdvancesearch && lastClickedTab == 'EXEMPT'">
+					<div class="form-inline">
+						<div class="form-group">
+							<input type="text" [(ngModel)]="requestObject.title"
+								class="form-control search-input" placeholder="Title">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="requestObject.piName"
+								class="form-control search-input" placeholder="PI Name">
+						</div>
+						<div class="form-group">
+							<select class="form-control selectBoxShade search-input"
+								placeholder="Determination"
+								[(ngModel)]="requestObject.determination"
+								id="inlineFormCustomSelect">
+								<option value="" hidden>Determination</option>
+								<option value="Y" >Exempt</option>
+								<option value="N" >Not Exempt</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-default btn-search"
+								(click)="getExemptListData('EXEMPT')">
+								<i class="fa fa-search"></i>Search
+							</button>
+							<button class="btn btn-default btn-close" (click)="clearExemptSearch()">
+								<i class="fa fa-close"></i>Clear
+							</button>
 						</div>
 					</div>
 				</div>

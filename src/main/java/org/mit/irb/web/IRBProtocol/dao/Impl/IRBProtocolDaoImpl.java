@@ -358,15 +358,19 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 	@SuppressWarnings("null")
 	@Override
-	public IRBViewProfile getPersonExemptFormList(PersonDTO personDTO) {
+	public IRBViewProfile getPersonExemptFormList(String personID, String personRoleType, String title, String piName, String determination) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_INTEGER, Integer.parseInt(personDTO.getPersonID())));
+		inputParam.add(new InParameter("AV_PERSON_ID",  DBEngineConstants.TYPE_STRING,personID));
+		inputParam.add(new InParameter("AV_PERSON_ROLE_TYPE", DBEngineConstants.TYPE_STRING, personRoleType));
+		inputParam.add(new InParameter("AV_TITLE", DBEngineConstants.TYPE_STRING, title));
+		inputParam.add(new InParameter("AV_PI_NAME", DBEngineConstants.TYPE_STRING, piName));
+		inputParam.add(new InParameter("AV_DETERMINATION", DBEngineConstants.TYPE_STRING, determination));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_PER_FORM", outputParam);
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FORM_LIST", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getPersonExemptFormList:"+ e);

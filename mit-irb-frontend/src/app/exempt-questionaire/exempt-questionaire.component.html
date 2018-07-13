@@ -7,7 +7,7 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="Welcome-msg">
-						<p>{{ABOUT_MESSAGE}}
+						<p [innerHTML]="ABOUT_MESSAGE">
 						</p>
 					</div>
 				</div>
@@ -40,6 +40,9 @@
 						<input class="form-control" type="text" [disabled]="isViewMode"
 							[(ngModel)]="requestObject.irbExemptForm.exemptTitle"
 							placeholder="Enter Exempt Title">
+					</div>
+					<div class="row">
+					<span class="col-1 title-head pl0"></span>
 					</div>
 				</div>
 				<div class="col-12 apprve-date">
@@ -77,20 +80,11 @@
 					</div>
 				</div>
 				<div class="col-12 apprve-date">
-						<div class="col-1 title-head pl0">
-								<h4>*Summary:</h4>
-						</div>
-						<div class="col-10 width-exempt searchBox dsp-flex">
-						<textarea  [disabled]="isViewMode" rows="2" maxlength="350" [(ngModel)]="requestObject.irbExemptForm.summary" 
-						placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 350 characters."></textarea>
-						</div>
-				</div>
-				<div class="col-12 apprve-date">
 					<div class="title-head">
 						<h4 class="sponsorFont">Faculty Sponsor:</h4>
 					</div>
 					<div class="col-5  width-exempt searchBox display">
-						<input class="form-control" type="text" *ngIf="!isViewMode"
+						<input class="form-control mlFaculty-3" type="text" *ngIf="!isViewMode"
 							[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
 							placeholder="Search: Faculty Sponsor Name"
 							[formControl]="facultySearchText"
@@ -107,6 +101,15 @@
 							</ul>
 						</div>
 					</div>
+				</div>
+				<div class="col-12 apprve-date">
+						<div class="col-1 title-head pl0">
+								<h4>*Summary:</h4>
+						</div>
+						<div class="col-10 width-exempt searchBox dsp-flex">
+						<textarea  [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" 
+						placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
+						</div>
 				</div>
 				<div *ngIf="!isViewMode" class="col-12 exempt-id">
 					<button [hidden]="showQuestionaire"
@@ -160,8 +163,9 @@
 											<button class="closeResultCard close-help" (click)="getHelpLink(quest.description, indexQuestion)">
 												<i class="fa fa-times"></i>
 											</button>
-											<p class="category help-Msg" [innerHTML]="helpMsg[indexQuestion]">
-											</p>
+											<div class="helpMsg">
+											<label [innerHTML]="helpMsg[indexQuestion]"></label>
+											</div>
 										</div>
 								   </div>
 								</div>
@@ -204,7 +208,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Alert</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">{{modalHeading}}</h5>
 				<button type="button" class="close modal-close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -215,7 +219,7 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-							<h4 class="popup-sub-head">{{alertMsg}}</h4>
+							<h4 class="popup-sub-head questionnaire-popups">{{alertMsg}}</h4>
 						</div>
 					</div>
 				</div>
@@ -244,7 +248,8 @@
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
 							<p class="confirm-text">
 								<input type="checkbox" #agreeCheckbox="ngModel"
-									[(ngModel)]="isChecked" (change)="0"> {{alertMsg}}
+									[(ngModel)]="isChecked" (change)="0">
+								<span class="col-12 confirm-text-padding" [innerHTML] ="alertMsg"></span>
 							</p>
 						</div>
 					</div>
@@ -265,16 +270,16 @@
 		<div class="modal-content">
 			<div class="modal-header popup-header">
 				<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-					<h5 class="align" id="exampleModalLongTitle">WELCOME TO THE COUHES EXEMPT QUESTIONNAIRE</h5>
+					<h5 class="align" id="exampleModalLongTitle">Welcome to the COUHES Exempt Determination Questionnaire</h5>
 				</div>
 			</div>
-			<div class="modal-body modal-popup">
+			<div class="modal-body modal-popup pb-0">
 					<!-- section1 -->
-					<div class="modal-padding">
+					<div class="modal-padding pb-0">
 							<div class="row">
 								<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-									<h4 class="popup-sub-head">
-										<p class="welcome-text">{{WELCOME_MESSAGE}}</p>
+									<h4 class="popup-sub-head questionnaire-popups">
+										<p class="welcome-text" [innerHTML]="WELCOME_MESSAGE"></p>
 									</h4>
 								</div>
 							</div>

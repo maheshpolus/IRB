@@ -58,6 +58,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
   };
   alertMsg: string;
+  modalHeading: string;
   userDTO: any = {};
   isViewMode: any;
   isEditMode = false;
@@ -294,6 +295,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
           );
       } else {
           this.showAlert = true;
+          this.modalHeading = 'Alert';
           this.alertMsg = 'Please provide the mandatory fields';
       }
   }
@@ -414,11 +416,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   }
 
   /** service call to save the exempt questionaire */
-  saveQuestionaire() {
+  saveQuestionaire() {debugger;
     this.isEvaluate = false;
     this.errorQuestions = [];
     this.QuestionnaireCompletionFlag = 'Y';
     this.requestObject.questionnaireInfobean = {};
+    this.modalHeading = '';
     this.alertMsg = '';
     this.result = {};
     this.checkQuestionaireCompletion();
@@ -437,10 +440,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             if ( this.result != null ) {
               this.requestObject.irbExemptForm = this.result.irbExemptForm;
               if ( this.QuestionnaireCompletionFlag === 'Y') {
-                this.alertMsg = 'Exempt questionnaire is complete.' +
-                'Please click on Evaluate to evaluate your answers and to know the determination.' +
-                'If you dont want to know determination please go ahead with submission by clicking Submit';
+                this.modalHeading = 'Congratulations';
+                this.alertMsg = 'You have completed the exempt determination questionnaire. Please click on'+ 
+                'Evaluate to assess your exempt determination status. Once you are ready to'+ 
+                ' proceed, click Submit to continue.';
             } else {
+              this.modalHeading = 'Congratulations';
               this.alertMsg = 'Questionaire saved successfully!';
             }
             if (this.result.hasOwnProperty('questionnaireDto')) {
@@ -450,6 +455,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       },
       error => {
           console.log( 'Error in saveQuestionaire', error );
+          this.modalHeading = 'Alert';
           this.alertMsg = 'Failed to save questionaire';
       },
       () => {
@@ -460,6 +466,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     );
     } else {
         this.openSaveModal();
+        this.modalHeading = 'Alert';
         this.alertMsg = 'Please provide the mandatory fields';
     }
   }
@@ -477,18 +484,17 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             this.result = data;
             this.isExempt = this.result.isExemptGranted;
             if (this.result.isExemptGranted === 'N') {
-              this.alertMsg = this.NOT_EXEMPT_MSG + ' Please see the highlighted question(s)' +
-              'to know the reason for not being exempt.';
+              this.alertMsg = this.NOT_EXEMPT_MSG;
               this.errorQuestions =  this.result.exemptQuestionList;
             } else if(this.result.isExemptGranted === 'Y') {
-              this.alertMsg = this.EXEMPT_MSG + ' You can proceed with submission.';
+              this.alertMsg = this.EXEMPT_MSG;
             } else if(this.result.isExemptGranted === 'O') {
               this.alertMsg = this.OTHER_MSG;
             }
       },
       error => {
-          console.log( 'Error in saveQuestionaire', error );
-          this.alertMsg = 'Failed to save questionaire';
+          console.log( 'Error in evaluateExemptQuestionnaire', error );
+          this.alertMsg = 'Failed to evaluate questionaire';
        },
       () => {
         this._spinner.hide();
@@ -497,6 +503,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   );
  } else {
      this.openSaveModal();
+     this.modalHeading = 'Alert';
      this.alertMsg = 'Please provide the mandatory fields';
  }
 }
@@ -504,6 +511,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   /** shows a popup to show the certify message before submitting */
   submitConfirmation() {
       this.isEvaluate = false;
+      this.modalHeading = '';
       this.alertMsg = '';
       this.QuestionnaireCompletionFlag = 'Y';
       this.checkQuestionaireCompletion();
@@ -523,6 +531,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   submitQuestionaire() {
     this.isEvaluate = false;
     this.errorQuestions = [];
+    this.modalHeading = 'Alert';
     this.alertMsg = '';
       this.setCommonReqObject();
       this.requestObject.questionnaireInfobean.isSubmit = 'Y';
@@ -559,6 +568,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       );
       } else {
           this.openSaveModal();
+          this.modalHeading = 'Alert';
           this.alertMsg = 'Please provide the mandatory fields';
       }
   }

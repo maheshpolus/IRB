@@ -2188,7 +2188,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     color: #a91f34;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 2px;
 }
 .qs-bdy
 {
@@ -2308,7 +2308,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 .close-btn1
 {
     background: #b2b2b2;
-     border: solid 1px #b2b2b2;
+    border: solid 1px #b2b2b2;
 }
 .close-btn1:hover
 {
@@ -2491,7 +2491,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .history-card-body
 {
-    background: #efeef3;
+    background: #fde8eb;
 }
 .list-of-his li
 {
@@ -2638,9 +2638,11 @@ ul.sb-results-dropdown-menu > li:last-child {
 .modal-close{
     color: #fff;
     opacity:12 !important;
+    text-shadow: none;
 }
 .modal-close :hover{
-    color: #a92034;
+    color: #000;
+    cursor: pointer;
 }
 .black-overlay {
     opacity: 0.7;
@@ -2901,10 +2903,12 @@ ul.sb-results-dropdown-menu > li:last-child {
     font-size: 15px;
     font-weight: 600;
     margin-top: 10px;
+    font-style: italic;
 }
 .confirm-text {
     color: black;
     text-align: justify;
+    font-style: italic;
 }
 .sect-confirm-padding {
     padding-right: 28px;
@@ -2916,6 +2920,9 @@ ul.sb-results-dropdown-menu > li:last-child {
     margin: 15px !important;
     margin-left: 0px !important;			
     color: #a92034;
+    text-align: center;
+    font-style: italic;
+    font-size: 15px;
 }
 .errorquestion{
     color: #721c24;
@@ -2961,7 +2968,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     border-radius: 5px;
 }
 .category-margin {
-    margin-top: 20px!important;
+    margin-top: 10px!important;
 }
 .searchBox textarea{
     border-radius: 20px;
@@ -2976,7 +2983,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     display: inline-flex;
 }
 .modal-full {
-    min-width: 70%;
+    min-width: 75%;
 }
 .align {
     text-align: center;
@@ -2998,18 +3005,21 @@ ul.sb-results-dropdown-menu > li:last-child {
 .pl-0 {
     padding-left: 0;
 }
-.help-Msg {
+.helpMsg {
+	padding: 10px 10px;
     background-color: #fff3d4;
     border-radius: 0;
     border-left: 3px solid #f6b73c;
-    color: #a91f34!important;
+    color: #000!important;
+    font-size: 14px;
+    font-weight: bold;
 }
 .close-help {
     right: 20px!important;
 }
 .welcome-text {
-    text-align: justify;
-    line-height: 20px;
+    text-align: center;
+    line-height: 25px;
     font-weight: 500;
 }
 .proceed-btn-align {
@@ -3032,10 +3042,29 @@ ul.sb-results-dropdown-menu > li:last-child {
     color: #196d1c;
     text-align: center;
 }
-.helpCard:hover  .closeResultCard {
-	display: block;
-	transition: display .25s
+.helpCard:hover  .closeResultCard{display: block;
+transition: display .25s}
+
+.mlFaculty-3 {
+	margin-left: 3px;
+}	  
+.confirm-text {
+   position: relative;
+}
+.confirm-text-padding {
+	padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+.highlight-mandatory {
+	border: 1px #F44336 solid!important;
+}
+.pb-0 {
+	padding-bottom: 0px!important;
+}
+.questionnaire-popups {
+	font-style: italic;
+    text-align: center;
 }
 .search-input {
     width: 300px !important;
-}	  
+}

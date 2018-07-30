@@ -33,58 +33,77 @@
 					</div>
 				</div>
 				<div class="col-12 apprve-date">
-					<div class="col-1 title-head pl0">
-						<h4>*Title:</h4>
-					</div>
-					<div class="col-10 width-exempt searchBox display">
-						<input class="form-control" type="text" [disabled]="isViewMode"
-							[(ngModel)]="requestObject.irbExemptForm.exemptTitle"
-							placeholder="Enter Exempt Title">
-					</div>
-					<div class="row">
-					<span class="col-1 title-head pl0"></span>
-					</div>
-				</div>
-				<div class="col-12 apprve-date">
-					<div class="col-1 title-head pl0">
-						<h4>*PI:</h4>
-					</div>
-					<div class="col-5 width-exempt searchBox display">
-						<input class="form-control" type="text" *ngIf="!isViewMode"
-							[(ngModel)]="requestObject.irbExemptForm.personName"
-							placeholder="Search: PI Name" [formControl]="piSearchText"
-							(focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"/> <input class="form-control"
-							type="text" [disabled]="isViewMode"
-							[(ngModel)]="requestObject.irbExemptForm.personName"
-							*ngIf="isViewMode" />
-						<div class="sb-seachresults results-margin">
-							<ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPI">
-								<li *ngFor="let result of _results | async"
-									(mousedown)="selectedPiResult(result)"><span
-									[innerHTML]="result.label"></span></li>
-							</ul>
+						<div class="col-1 title-head pl0">
+							<h4>*Title:</h4>
+						</div>
+						<div class="col-10 width-exempt searchBox display">
+							<input class="form-control" type="text" [disabled]="isViewMode"  maxlength="250"
+								[(ngModel)]="requestObject.irbExemptForm.exemptTitle"
+								placeholder="Enter Exempt Title">
 						</div>
 					</div>
-					<div class="col-1 title-head">
-						<h4>Unit:</h4>
+					<div class="col-12 apprve-date">
+						<div class="col-1 title-head pl0">
+							<h4>*Principal Investigator:</h4>
+						</div>
+						<div class="col-5 width-exempt searchBox display">
+							<input class="form-control" type="text" *ngIf="!isViewMode"
+							(input)="clearSelectedPIdata()"
+								[(ngModel)]="requestObject.irbExemptForm.personName"
+								placeholder="Search: PI Name" [formControl]="piSearchText"
+								(focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"/> <input class="form-control"
+								type="text" [disabled]="isViewMode"
+								[(ngModel)]="requestObject.irbExemptForm.personName"
+								*ngIf="isViewMode" />
+							<div class="sb-seachresults results-margin">
+								<ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPI">
+									<li *ngFor="let result of _results | async"
+										(mousedown)="selectedPiResult(result)"><span
+										[innerHTML]="result.label"></span></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-1 title-head">
+							<h4>Unit:</h4>
+						</div>
+						<div class="col-4 width-exempt searchBox display">
+							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName"
+								placeholder="Search:Department Unit" *ngIf="!isViewMode"
+								[datasource]="unitName" [minSearchLength]="0"
+								(ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
+								(selected)="onUnitSelect()"></ng2-completer>
+							<input class="form-control unit-margin" type="text" [disabled]="isViewMode"
+								[(ngModel)]="requestObject.irbExemptForm.unitName"
+								*ngIf="isViewMode" />
+						</div>
 					</div>
-					<div class="col-4 width-exempt searchBox display">
-						<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName"
-							placeholder="Search: Unit" *ngIf="!isViewMode"
-							[datasource]="unitName" [minSearchLength]="0"
-							(ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
-							(selected)="onUnitSelect()"></ng2-completer>
-						<input class="form-control unit-margin" type="text" [disabled]="isViewMode"
-							[(ngModel)]="requestObject.irbExemptForm.unitName"
-							*ngIf="isViewMode" />
-					</div>
-				</div>
 				<div class="col-12 apprve-date">
-					<div class="title-head">
+						<div class="col-1 title-head pl0">
+							<h4>*Start Date:</h4>
+						</div>
+						<div class="col-5 width-exempt searchBox display">	
+								<input class="form-control datePickerRadius" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" 
+								placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolStartDate">
+								<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>				
+						</div>
+						<div class="col-1 title-head ">
+							<h4>*End Date:</h4>
+						</div>
+						<div class="col-4 width-exempt searchBox display">
+								<input class="form-control datePickerRadius" [owlDateTimeTrigger]="dt3" 
+								[owlDateTime]="dt3" placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolEndDate">
+								<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+
+							</div>
+					</div>
+
+				<div class="col-12 apprve-date">
+					<div class="col-1 title-head pl0">
 						<h4 class="sponsorFont">Faculty Sponsor:</h4>
 					</div>
 					<div class="col-5  width-exempt searchBox display">
 						<input class="form-control mlFaculty-3" type="text" *ngIf="!isViewMode"
+						(input)="clearSelectedFacultydata()"
 							[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
 							placeholder="Search: Faculty Sponsor Name"
 							[formControl]="facultySearchText"
@@ -185,12 +204,21 @@
 			</div>
 			<div class="container-fluid">
 				<section class="row btn-row-med sect-padding">
-					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == false"
+						<button *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'" class="btn btn-primary tab_btn" data-toggle="modal"
+						data-target="#checklistModal" type="submit"  (click)="showAddAttachmentPopUp($event)">Add/View Checklist</button>		<button class="btn btn-primary tab_btn" (click)="openActionLogModal()" type="submit"
+						data-toggle="modal"	data-target="#routeActionLogModal" id="actionLog">Action Log</button>
+					
+						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true"
+						(click)="approveQuestionnireClick()" data-toggle="modal"	data-target="#approveRejectActionConfirmModal" id="approve">Approve</button>
+						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true"
+						(click)="rejectQuestionnireClick()" data-toggle="modal"	data-target="#approveRejectActionConfirmModal" id="reject">Reject</button>
+					
+						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == false"
 						(click)="saveQuestionaire()" id="save">Save</button>
-					<button class="btn btn-primary tab_btn" type="submit"
-					*ngIf="isViewMode == false"
-					(click)="evaluateExemptQuestionnaire()"
-					[disabled]="QuestionnaireCompletionFlag=='N'">Evaluate</button>
+						<button class="btn btn-primary tab_btn" type="submit"
+						*ngIf="isViewMode == false"
+						(click)="evaluateExemptQuestionnaire()"
+						[disabled]="QuestionnaireCompletionFlag=='N'">Preview</button>
 					<button class="btn btn-primary tab_btn" data-toggle="modal"
 						data-target="#confirmModal" type="submit"
 						*ngIf="isViewMode == false" (click)="submitConfirmation()"
@@ -293,11 +321,290 @@
 	</div>
 </div>
 <!-- welcome message modal end-->
+<!-- welcome message modal end-->
+ <!--checklist modal-->
+ <div class="modal fade" id="checklistModal" tabindex="-1" role="dialog"
+ aria-labelledby="helpModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+ <div class="modal-dialog modal-full" role="document">
+	 <div class="modal-content">
+	 <div class="modal-header popup-header">
+		 <h5 class="modal-title" id="exampleModalLongTitle">Add CheckList</h5>
+		 <button type="button" class="close modal-close" data-dismiss="modal" (click)="closeAttachments()"
+		   aria-label="Close">
+		   <span aria-hidden="true">&times;</span>
+		 </button>
+	   </div>
+		 <div class="modal-body modal-popup">
+				 <!-- section1 -->
+				 <div class="modal-padding">
+						 <div class="row">
+							 <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+								 <h4 class="popup-sub-head">
+				  
+										<table>
+												<tr class="form-group">
+											  <td >
+														  <label class="label-color">*Description</label></td>
+														<td> <textarea class="form-control txt-area-fnt modal-table-padding modal-desc-width" placeholder="Description" [(ngModel)]="attachmentDescription" ></textarea>
+											 </td>  
+											  </tr>
+											</table>
+											<span *ngIf="isEmptyCheckListDescr" class="desc-warning">* Please provide checklist description to proceed</span>
+					 
+			   <file-drop customstyle ="file-drop-color" headertext="Drop files here"
+			   (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+			   (onFileLeave)="fileLeave($event)"> <input type="file"
+			   #file (change)="onChange(file.files)" multiple /> OR &nbsp;&nbsp;
+			 </file-drop>
+			 <ul class="ul-style">
+			   <li *ngFor="let item of uploadedFile; let i=index">
+			   <span class="pdf">{{ item.name }}----------------</span><i class="fa fa-trash-o" (click)="deleteFromUploadedFileList(item)"></i>
+			   </li>
+			 </ul>
+								 </h4>
+							 </div>
+						 </div>
+					 </div>
+			 </div>
+		 <section class="row btn-row-med sect-confirm-padding proceed-btn-align">
+			 <button class="btn btn-primary tab_btn proceed-btn inner-tab-btn"
+				 aria-label="Close" (click)="addAttachments()">Add</button>
+		 </section>
+		 <table *ngIf="exemptAttachmentObject.length !== 0" class="table table-responsive tableSkin">
+		 <tr>
+			 <th title="">Sl Number</th>
+			 <th title="">Description</th>
+			 <th title="">File Name</th>
+			 <th title="">Action</th>
+		 </tr>
+		 <tr  *ngFor="let attachments of exemptAttachmentObject; let i=index">
+				<td>{{i+1}}</td>
+				<td> <input class="form-control" type="text" [ngClass]="(!editScheduleattachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'" 
+					[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.DESCRIPTION"></td>
+				<td>{{attachments.FILENAME}}</td>
+				<td><ul class="actionButtonGroup">
+						<li><a (click)="tempSave($event,attachments)" title="Delete {{attachments.EXEMPT_FORM_CHECKLST_ID}}"
+							data-toggle="modal" data-target="#deleteAttachment"><i
+								class="fa fa-trash-o"></i></a></li>
+						<li><a
+							(click)="downloadAttachements($event, attachments)"
+							title="Open{{attachments.EXEMPT_FORM_CHECKLST_ID}}"> <i
+								class="fa fa-download" aria-hidden="true"></i></a></li>
+						<li>
+							<a *ngIf="!editScheduleattachment[i] == true" (click)="editAttachments($event,i, attachments)"><i class="fa fa-edit"></i></a>
+						</li>
+						<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="saveEditedattachments($event,i, attachments)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+						<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+					</ul>
+				</td>
+			</tr>
+	 </table>
+
+	 </div>
+ </div>
+</div>
+<!--checklist modal ends-->
+
+
+<!--  DELETE WARNING MODAL -->
+ <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
+	 id="deleteAttachment" tabindex="-1" role="dialog"
+	 aria-labelledby="deleteModalTitle" aria-hidden="true">
+	 <div class="modal-dialog modal-dialog-centered" role="document">
+		 <div class="modal-content modal-text-color">
+			 <div class="modal-header">
+				 <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+				 <button type="button" class="close" data-dismiss="modal"
+					 aria-label="Close">
+					 <span aria-hidden="true">&times;</span>
+				 </button>
+			 </div>
+			 <div class="modal-body">
+				 <p>Are you sure you want to delete this item?</p>
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn pop-up-color tab_btn proceed-btn"
+					 data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
+				 <button type="button" class="btn pop-up-color tab_btn proceed-btn"
+					 (click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
+			 </div>
+		 </div>
+	 </div>
+ </div>
+ <!--  DELETE WARNING MODAL ENDS-->
+ 
+
 <!-- modal butoon hidden dont change -->
 <button id="openModalButton" [hidden]="true" data-toggle="modal"
-	data-target="#alertModal">Open Modal</button>
+	data-target="#alertModal"></button>
 <!-- end -->
 <!-- modal butoon hidden for welcome message -->
 <button id="openWelocomeModalButton" [hidden]="true" data-toggle="modal"
-	data-target="#welcomeModal">Open Modal</button>
+	data-target="#welcomeModal"></button>
 <!-- end -->
+
+<!-- stk -->
+<!-- modal butoon hidden dont change -->
+<button id="openWarningModalButton" [hidden]="true" data-toggle="modal"
+	data-target="#alertWarningModal"></button>
+<!-- end -->
+<!-- message-modal -->
+<div class="modal fade" id="alertWarningModal" tabindex="-1" role="dialog"
+	aria-labelledby="alertModalCenterTitle" aria-hidden="true"
+	*ngIf="showWarningAlert">
+	<!-- alert modals-->
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">{{modalHeading}}</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-popup">
+				<!-- section1 -->
+				<div class="modal-padding">
+					<div class="row">
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+							<h4 class="popup-sub-head questionnaire-popups">{{alertMsg}}</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<section class="row btn-row-med sect-confirm-padding proceed-btn-align">
+				<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					aria-label="Close" (click)="proceedWithWarning()">Proceed</button>
+					<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					aria-label="Close">Close</button>
+			</section>
+		</div>
+	</div>
+	<!-- alert modals end-->
+</div>
+<!-- message-modal-end -->
+
+<!--action log modal-->
+
+<div class="modal fade" id="routeActionLogModal" tabindex="-1" role="dialog"
+	aria-labelledby="actionLogModal" aria-hidden="true">
+	<!-- alert modals-->
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Action Log</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		<!--body-->
+		<div
+		class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard resultCardBefore">
+		<div class="row cardColor-1">
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6" >
+				<label>Exempt Form #</label> <span>{{actionLogResult?.irbExemptForm?.exemptFormID}}</span>
+			</div>
+			
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+				<label>Status</label> <span>{{actionLogResult?.irbExemptForm?.status}}</span>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+				<label>PI</label> <span>{{actionLogResult?.irbExemptForm?.personName}}</span>
+			</div>
+			<!-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+				<label>Home Unit</label> <span></span>
+			</div>
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<label>Title</label> <span></span>
+			</div> -->
+		</div>
+	</div>
+	<div class="row" *ngIf="finalStatus != null">
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+			<label class="routeLogStatus">finalStatus</label>
+		</div>
+	</div>
+	<div class="borderBox col-12 cardTable">
+		<div class="pullSide">
+			<table class="table" id="routeLogTable">
+						   <thead class="tbl-head-clr thead-font-size cardThead">
+							<th >Name</th>
+							<th >Review Status</th>
+							<th >Action Date</th>
+							<th >Comments</th>							
+							<th >Actions</th>
+						</thead>						
+						<tr class="cardTr" *ngFor = "let logItem of actionLogResult.actionLogs;let i = index">
+							<td >{{logItem?.UPDATE_USER}}</td>
+							<td >{{logItem?.EXEMPT_STATUS}}									
+							</td>
+							<td >{{logItem?.UPDATE_TIMESTAMP | date:'MM/dd/yyyy'}}</td>
+							<!-- <td style="width:30%"><span *ngIf="!commentsGrantManagerExpand[i] && logItem?.COMMENTS?.length>30;else showFullGrantManagerComments" (click) = "commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]">{{logItem?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
+											
+								<ng-template #showFullGrantManagerComments>{{logItem?.COMMENTS }}<i *ngIf="logItem?.COMMENTS?.length>30" (click)="commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
+							</td>	 -->
+							<td >{{logItem?.COMMENTS}}							
+								</td>			
+							<td >{{logItem?.ACTION_TYPE}}							
+							</td>			
+							
+						</tr>						
+				   </table> 
+		</div>
+	</div>
+		<!--end body-->
+		<div class="modal-footer" >
+				<button type="button" class="btnSkin btn-secondary"
+					data-dismiss="modal" data-toggle="modal">Close</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!--end action log modal-->
+
+<!-- start approveRejectActionConfirmModal-->
+<div class="modal fade" id="approveRejectActionConfirmModal" tabindex="-1" role="dialog"
+	aria-labelledby="alertModalCenterTitle" aria-hidden="true">
+	<!-- alert modals-->
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Confirm</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-popup">
+				<!-- section1 -->
+				<div class="modal-padding">
+					<div class="row">
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+							<h4 class="popup-sub-head questionnaire-popups">Do you want to continue?</h4>
+						</div>
+						<!-- <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">	<label>Comment</label></div> -->
+					
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+						<textarea class="w100" rows="3" maxlength="1250" 
+						placeholder="Add Comment"></textarea>
+					</div>
+					</div>
+				</div>
+			</div>
+			<section class="row btn-row-med sect-confirm-padding proceed-btn-align">
+				<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+				*ngIf="isApprovedAlert" aria-label="Close" (click)="approveConfirmClick()">Proceed</button>
+					<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					*ngIf="isRejectedAlert" aria-label="Close" (click)="rejectConfirmClick()">Reject</button>
+					<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					aria-label="Close">Close</button>
+			</section>
+		</div>
+	</div>
+	<!-- alert modals end-->
+</div>
+<!-- end approveRejectActionConfirmModal-->

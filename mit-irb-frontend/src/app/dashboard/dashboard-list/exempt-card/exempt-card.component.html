@@ -1,39 +1,76 @@
-<div class="col-sm-12" *ngIf="exemptList!=null && exemptList!=undefined" [ngClass]="{'main-list': exemptList?.length >1}">
-	<div class="row list-rows" *ngFor="let irb of exemptList">
-		<div class="col-md-3 col-sm-12 col-12 list-view">
-			<span *ngIf="irb.isExempt=='Y' && irb.status=='Submitted'" class="in-progress"><p>Exempt</p></span>
-			<span *ngIf="irb.isExempt=='N' && irb.status=='Submitted'" class="active-status"><p>Not Exempt</p></span>
-			<span *ngIf="irb.isExempt==null || irb.status=='In Progress'" class="active-status"><p>Not Submitted</p></span>
-			<span *ngIf="irb.isExempt=='O' && irb.status=='Submitted'" class="in-drafts"><p>Review Not Required</p></span>
+
+<div *ngIf="!showBtn">
+
+		<div  class="col-sm-12 p15">
+			<button type="button" name="myStudies" (click)="showData(userDTO.role,'STUDIES')" class="btn btn-secondary inner-tab-btn" [ngClass]="{btnactive:(tabSelected=='STUDIES')}">
+					<i class="fa fa-book pr5" aria-hidden="true"></i>My Studies
+				</button>
+				<span *ngIf="userDTO.jobTitle != null || userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
+			<button type="button" name="pending" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'PENDING')" [ngClass]="{btnactive:(tabSelected=='PENDING')}">
+				
+					<i class="fa fa-spinner pr5" aria-hidden="true"></i>
+				Pending</button>
+				</span>
+				<span *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
+						<button type="button" name="submitted" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'SUBMITTED')" [ngClass]="{btnactive:(tabSelected=='SUBMITTED')}">
+					
+								<i class="fa fa-check pr5" aria-hidden="true"></i>	
+							Submitted</button>
+						</span>
 		</div>
-		<div class="col-md-7 col-sm-12 col-12 list-des">
-			<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
-			<div>
-				<div class="row">
-					<div class="col-md-6">
-							<span>PI : </span>{{irb.personName}}
+		<div class="col-sm-12 inner-tab-container">
+		
+		<div class="col-sm-12" *ngIf="exemptList!=null && exemptList!=undefined" [ngClass]="{'main-list': exemptList?.length >1}">
+		<div class="row list-rows" *ngFor="let irb of exemptList  | filterStatus : statusCode">
+				<div class="col-md-3 col-sm-12 col-12 list-view">
+						<span *ngIf="irb.isExempt=='Y' && irb.status=='Submitted'" class="in-progress"><p>Exempt</p></span>
+						<span *ngIf="irb.isExempt=='N' && irb.status=='Submitted'" class="active-status"><p>Not Exempt</p></span>
+						<span *ngIf="irb.isExempt=='O' && irb.status=='Submitted'" class="in-drafts"><p>Review Not Required</p></span>
+						<span *ngIf="irb.isExempt==null || irb.status=='In Progress'" class="active-status"><p>Not Submitted</p></span>
+						<span *ngIf="irb.isExempt=='O' && (irb.status=='Enroute to IRB office' || irb.status=='Enroute to Faculty sponsor')" class="in-drafts"><p>Not Exempt-Pending Review</p></span>
+						<span *ngIf="irb.isExempt=='Y' && (irb.status=='Enroute to IRB office' || irb.status=='Enroute to Faculty sponsor')" class="in-progress"><p>Exempt-Pending Review</p></span>
 					</div>
-					<div class="col-md-6">
-						<span>Status : </span>{{irb.status}}
-					</div>
-				</div>
-				<div class="row"></div>
-				<div class="row">
-						<div class="col-md-12">
-							<span>Last Updated By : </span>{{irb.updateUser}} on {{irb.updatetimstamp}}
+					<div class="col-md-7 col-sm-12 col-12 list-des">
+							<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
+							<div>
+								<div class="row">
+									<div class="col-md-6">
+											<span>PI : </span>{{irb.personName}}
+									</div>
+									<div class="col-md-6">
+										<span>Faculty Sponser :</span>{{irb.facultySponsorPerson}} 
+									</div>
+								</div>
+								<div class="row"></div>
+								<div class="row">
+										<div class="col-md-6">
+											<span>Last Updated By : </span>{{irb.updateUser}} on {{irb.updatetimstamp}}
+										</div>
+										<div class="col-md-6">
+											<span>Status : </span>{{irb.status}}
+										</div>
+										<div class="col-md-6">
+											<span>Start Date : </span>{{irb.exemptProtocolStartDate}}  
+										</div>
+										<div class="col-md-6">
+											<span>End Date : </span>{{irb.exemptProtocolEndDate}}  
+										</div>
+								</div>
+							</div>
 						</div>
-				</div>
+			<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+			<a> 
+				<!--  href="#/irb/exempt-questionaire?exempId={{irb.exemptQuestionnaireAnswerHeaderId}}&mode= 1" -->
+				<!-- {{irb.statusCode}} -->
+				<button type="button" class="btn btn-outline-secondary button-view"
+					(click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+					<i class="fa fa-eye"></i>View
+				</button>
+			</a>
 			</div>
 		</div>
-		<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
-		<a> 
-			<!--  href="#/irb/exempt-questionaire?exempId={{irb.exemptQuestionnaireAnswerHeaderId}}&mode= 1" -->
-			<!-- {{irb.statusCode}} -->
-			<button type="button" class="btn btn-outline-secondary button-view"
-				(click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-				<i class="fa fa-eye"></i>View
-			</button>
-		</a>
 		</div>
-	</div>
-</div>
+		
+		</div>
+		</div>
+		

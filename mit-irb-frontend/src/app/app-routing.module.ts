@@ -1,17 +1,25 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { IrbComponent } from './irb/irb.component';
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { RouterModule, PreloadAllModules } from '@angular/router';
 import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
 import { AuthGuard } from './common/service/auth-guard.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
+
 import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
+import { ElasticService } from "./common/service/elastic.service";
+import { AppModule } from "./app.module";
 
 /**remove the comment on can Activate once login service is completed
  * login service - should set a vatriable 'ActivatedUser' in browser session
  */
+
+const role = 'admin' // Just for the example  
+    debugger;
+    const comp = role === 'admin' ? 'irb/dashboard' : 'login';
+
 const appRoutes = [
      { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
    // { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,19 +30,21 @@ const appRoutes = [
             { path: 'dashboard', component: DashboardComponent,
                     resolve: { irb: DashboardResolverService }
             },
+            { path: 'irb-create', loadChildren: 'app/irb-create/irb-create.module#IrbCreateModule' },
             { path: 'irb-view', loadChildren: 'app/irb-view/irb-view.module#IrbViewModule' },
             { path: 'expanded-view', component: ExpandedViewComponent },
             { path: 'exempt-questionaire', component: ExemptQuestionaireComponent,
-                resolve: { irb: DashboardResolverService }
-            }
+                    resolve: { irb: DashboardResolverService }
+            },
+            { path: 'committee', loadChildren:'./committee/committee.module#CommitteeModule'}
         ]
     }
 ];
 @NgModule( {
     imports: [
         CommonModule,
-        RouterModule.forRoot( appRoutes )
+        RouterModule.forRoot( appRoutes , {preloadingStrategy: PreloadAllModules})
     ],
-    exports: [RouterModule]
+    exports: [RouterModule],
 } )
 export class AppRoutingModule { }

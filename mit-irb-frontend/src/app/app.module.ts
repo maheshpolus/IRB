@@ -31,6 +31,10 @@ import { PiElasticService } from './common/service/pi-elastic.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppCommonModule } from './common/common/common.module';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { FilterPipe } from './common/directives/filter.pipe';
+import { FileDropModule } from 'ngx-file-drop';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 enableProdMode();
 
@@ -47,7 +51,8 @@ enableProdMode();
         IrbComponent,
         ExpandedViewComponent,
         ExemptQuestionaireComponent,
-        ExemptCardComponent
+        ExemptCardComponent,
+        FilterPipe
     ],
     imports: [
         BrowserModule,
@@ -57,7 +62,11 @@ enableProdMode();
         ReactiveFormsModule,
         AppCommonModule,
         Ng2CompleterModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        FileDropModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        BrowserAnimationsModule
     ],
     providers: [AuthGuard, DashboardService,
                 { provide: LocationStrategy, useClass: HashLocationStrategy },

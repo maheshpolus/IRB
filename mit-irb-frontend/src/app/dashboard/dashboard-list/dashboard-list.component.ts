@@ -36,7 +36,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             piName : '',
             protocolTypeCode : '',
             dashboardType : '',
-            determination : ''
+            determination : '',
+            exemptProtocolStartDate: '',
+            exemptProtocolEndDate: '',
+            facultySponsorPerson: ''
     };
     protocolTypeList = [];
     result: any;
@@ -68,7 +71,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         personRoleType : '',
         title : '',
         piName : '',
-        determination : ''
+        determination : '',
+        exemptProtocolStartDate: '',
+        exemptProtocolEndDate: '',
+        facultySponsorPerson: ''
+
+
     }
 
     constructor( private _dashboardService: DashboardService,
@@ -201,6 +209,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
         this.requestObject.dashboardType = currentTab;
+        debugger
         this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
@@ -296,10 +305,16 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.noIrbList =  false;
         this.lastClickedTab = currentTab;
         this.exemptParams.personId = this.userDTO.personID;
-        this.exemptParams.personRoleType = this.userDTO.role;
+        this.exemptParams.personRoleType = (this.userDTO.role=="CHAIR" || this.userDTO.role=="ADMIN")?"IRB_ADMIN":this.userDTO.role;
+        if(this.userDTO.jobTitle==null && this.exemptParams.personRoleType =="PI")
+        {
+            this.exemptParams.personRoleType ="STUDENT";
+        }
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
         this.exemptParams.determination = this.requestObject.determination;
+    
+    debugger
         this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
@@ -307,8 +322,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                     this.noIrbList = true;
                 } else {
                     this.exemptListData = this.result.irbExemptFormList;
+                    debugger
                 }
             }
+            console.log(this.result);
         },
             error => {
                  console.log( 'Error in method getExemptListData()', error );

@@ -1,0 +1,103 @@
+<div class=" pushFixedHeaderFooter">
+<div class="headerPush"></div>
+<div class="container-fluid">
+
+	<section class="row sect-padding">
+		<div class="col-12 top-aprv-details">
+			<div class="row">
+				<div class="col-12 apprve-date">
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-12">
+							<h4>
+								IRB # : <span></span>
+							</h4>
+							<p>
+								Expiration Date : <span></span><br />
+								Title : <span> </span>
+							</p>
+						</div>
+						<div class="col-md-3 col-sm-6 col-12">
+							<p>
+								Protocol Type : <span></span><br />
+								Submission Status : <span></span><br />
+								PI : <span></span>
+							</p>
+						</div>
+
+						<div class="col-md-2 col-sm-6 col-12">
+							<span class="active-en"
+								></span>
+						</div>
+
+						<div class="i-icon-top">
+
+							<span class="collapsed" (click)="toggle()"
+								[ngClass]="isExpanded==true?'up-arrow':'down-arrow'"
+								data-toggle="collapse" data-target="#collapseOne"
+								aria-expanded="false" aria-controls="collapseOne"> </span>
+						</div>
+						<div class="info-icon-header">
+							<i class="fa fa-info-circle" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="headingOne" class="expand-div">
+				<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+					<div class="row protocol-top apprve-date">
+						<hr class="hr-line">
+						<div class="col-6">
+							<p>
+								Last Approval Date : <span></span><br />
+								Expected Start Date : <span></span>
+							</p>
+						</div>
+						<div class="col-6">
+							<p>
+								Lead Unit : <span></span><br />
+								Anticipated End Date : <span></span>
+							</p>
+						</div>
+					</div>
+					<div class="row  protocol-top apprve-date">
+						<div class="col-12">
+							<p>
+								Description : <span></span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<div class="container-fluid">
+	<section class="row btn-row-med sect-padding">
+		<button class="btn btn-primary tab_btn" [routerLink]="['irbHome']"		
+			(click)="show_current_tab('irbHome')"
+			routerLinkActive="btnactive">
+			<i class="fa fa-home" aria-hidden="true"></i>General
+		</button>
+		<button class="btn btn-primary tab_btn" type="submit">
+			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
+		</button>
+		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
+		<button class="btn btn-primary tab_btn" type="submit"
+			[routerLink]="['irbAttatchments']"		
+			routerLinkActive="btnactive"
+			(click)="show_current_tab('irb_attachments')">
+			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
+		</button>
+		<button class="btn btn-primary tab_btn" type="submit"
+			[routerLink]="['irbHistory']"
+			routerLinkActive="btnactive"
+			(click)="show_current_tab('irb_history')">
+			<i class="fa fa-history" aria-hidden="true"></i>History
+		</button>
+	</section>
+</div>
+</div>
+<div>
+	<router-outlet></router-outlet>
+</div>
+

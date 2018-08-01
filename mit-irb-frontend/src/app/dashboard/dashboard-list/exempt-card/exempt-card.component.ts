@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -7,12 +7,32 @@ import { Router } from '@angular/router';
   templateUrl: './exempt-card.component.html',
   styleUrls: ['./exempt-card.component.css']
 })
-export class ExemptCardComponent {
+export class ExemptCardComponent implements OnInit {
+ 
+
 
   /**input from parent componet Exempt list */
   @Input() exemptList: any = [];
+  @Input() userDTO: any ;
+  @Input() showBtn :boolean;
+ 
 
-  constructor(private _router: Router) { }
+  statusCode: string[];
+ 
+
+  tabSelected: string="STUDIES";
+  ngOnInit()
+  {
+
+    
+    this.statusCode= (this.userDTO.role=='PI')?["1","4"] : ["1"];
+    
+  }
+ 
+  constructor(private _router: Router) {
+   
+    
+   }
 
   /**Opens Expemt Exempt Component
    * @exemptId - unique id for exempt form
@@ -26,4 +46,29 @@ export class ExemptCardComponent {
     this._router.navigate( ['/irb/exempt-questionaire'],
     {queryParams: {exempHeaderId: exemptId, mode: mode, title: exemptTitle, exemptFormID: exemptFormID}});
   }
+
+ public showData(userRole,tabClicked)
+ {
+  this.tabSelected=tabClicked;
+  this.statusCode=this.getStatusCode(userRole,tabClicked);
+
+  
+ }
+ getStatusCode(role,tabClicked)
+ {
+   
+   if(role=='PI' && this.userDTO.jobTitle !== null && tabClicked == "PENDING")
+      return ["2"];
+    else if(role=='PI' && this.userDTO.jobTitle !== null && tabClicked == "STUDIES")
+    return ["1","2","3","4"];
+    else if((role=='ADMIN' || role=='CHAIR' ) && tabClicked == "STUDIES")
+      return ["1"];
+    else if((role=='ADMIN' || role=='CHAIR' ) && tabClicked == "PENDING")
+      return ["3"];
+    else if((role=='ADMIN' || role=='CHAIR' ) && tabClicked == "SUBMITTED")
+      return ["4"];
+    else if(role=='PI' && this.userDTO.jobTitle == null && tabClicked == "STUDIES")
+      return ["1","2","3","4"];
+ }
+ 
 }

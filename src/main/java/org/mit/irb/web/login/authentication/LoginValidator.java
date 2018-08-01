@@ -105,6 +105,7 @@ public class LoginValidator extends BaseController {
 						personDTO.setUnitNumber(resultSet.getString("prmry_dept_cd"));
 						personDTO.setUnitName(resultSet.getString("unit_name"));
 						personDTO.setUserName(userName);
+						personDTO.setJobTitle(resultSet.getString("job_title"));
 						Integer userType = checkUserType(personDTO.getPersonID(), "");
 						personDTO.setUserRoleType(userType);
 						try {

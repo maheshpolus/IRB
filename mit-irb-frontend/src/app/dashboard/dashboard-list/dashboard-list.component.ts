@@ -36,7 +36,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             piName : '',
             protocolTypeCode : '',
             dashboardType : '',
-            determination : ''
+            determination : '',
+            exemptProtocolStartDate: '',
+            exemptProtocolEndDate: '',
+            facultySponsorPerson: ''
     };
     protocolTypeList = [];
     result: any;
@@ -68,7 +71,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         personRoleType : '',
         title : '',
         piName : '',
-        determination : ''
+        determination : '',
+        exemptProtocolStartDate: null,
+        exemptProtocolEndDate: null,
+        facultySponsorPerson: null
+
+
     }
 
     constructor( private _dashboardService: DashboardService,
@@ -200,7 +208,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.lastClickedTab = currentTab;
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
-        this.requestObject.dashboardType = currentTab;
+        this.requestObject.dashboardType = currentTab;        
         this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
@@ -296,19 +304,30 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.noIrbList =  false;
         this.lastClickedTab = currentTab;
         this.exemptParams.personId = this.userDTO.personID;
-        this.exemptParams.personRoleType = this.userDTO.role;
+        this.exemptParams.personRoleType = (this.userDTO.role=="CHAIR" || this.userDTO.role=="ADMIN")?"IRB_ADMIN":this.userDTO.role;
+        if(this.userDTO.jobTitle==null && this.exemptParams.personRoleType =="PI")
+        {
+            this.exemptParams.personRoleType ="STUDENT";
+        }
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
-        this.exemptParams.determination = this.requestObject.determination;
+        this.exemptParams.determination = this.requestObject.determination; 
+        if(this.requestObject.exemptProtocolStartDate!=null &&this.requestObject.exemptProtocolStartDate!='')
+        this.exemptParams.exemptProtocolStartDate=this.GetFormattedDate(this.requestObject.exemptProtocolStartDate);  
+        if(this.requestObject.exemptProtocolEndDate!=null &&this.requestObject.exemptProtocolEndDate!='')
+        this.exemptParams.exemptProtocolEndDate=this.GetFormattedDate(this.requestObject.exemptProtocolEndDate);    
+        this.exemptParams.facultySponsorPerson=this.requestObject.facultySponsorPerson;
+        
         this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
                     this.noIrbList = true;
                 } else {
-                    this.exemptListData = this.result.irbExemptFormList;
+                    this.exemptListData = this.result.irbExemptFormList;                    
                 }
             }
+            console.log(this.result);
         },
             error => {
                  console.log( 'Error in method getExemptListData()', error );
@@ -321,6 +340,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.determination = '';
         this.requestObject.title = '';
         this.requestObject.piName = '';
+        this.requestObject.facultySponsorPerson=null;
+        this.requestObject.exemptProtocolStartDate=null;
+        this.requestObject.exemptProtocolEndDate=null;
         this.getExemptListData('EXEMPT');
+      }
+      GetFormattedDate(currentDate) { 
+        var month = currentDate.getMonth() + 1;
+        var day = currentDate .getDate();
+        var year = currentDate.getFullYear();
+        return month + "-" + day + "-" + year;
       }
 }

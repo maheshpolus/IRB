@@ -40,10 +40,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   readonly strReturnedFacultyActionType = '4';
   readonly strReturnedIrbOfficeActionType = '5';
   readonly strApprovedIrbOfficeActionType = '6';
- defaultStartDate= new Date();
+
   showQuestionaire = false;
   showAlert = true;
-  //stk
+  
   isApprovedAlert = false;
   isRejectedAlert = false;
   actionLogResult: any = [];
@@ -73,7 +73,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       summary: '',
       checkListDescription: '',
       checkListAcType: '',
-      //stk
+      
       exemptProtocolStartDate: '',
       exemptProtocolEndDate: '',
       isFacultySponsor: '',
@@ -81,7 +81,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       actionTypesCode: '',
       statusCode: ''
     },
-    exemptProtocolStartDate: '',
+    exemptProtocolStartDate:'',// '7/29/2018',y,m,d
     exemptProtocolEndDate: '',
     facultySponsorJobTitle: null,
     personJobTitle: null,
@@ -95,9 +95,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
   };
   alertMsg: string;
+  showEvaluateWarning:string;
   modalHeading: string;
   userDTO: any = {};
   isViewMode: any;
+  isPendingActionRequired=false;
   isEditMode = false;
   isEvaluate = false;
   isChecked = false;
@@ -168,11 +170,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.requestObject.irbExemptForm.personName = this.userDTO.fullName;
     this.requestObject.personDTO.personID = this.userDTO.personID;
     this.requestObject.personDTO.fullName = this.userDTO.fullName;
-    this.requestObject.personDTO.role = this.userDTO.role;
-    debugger
-    //stk
+    this.requestObject.personDTO.role = this.userDTO.role;    
+    
     //this.requestObject.personDTO.userJobTitle = this.userDTO.jobTitle;
     //to set current user job title
+    
     this.requestObject.personJobTitle = this.userDTO.jobTitle;
     this.requestObject.irbExemptForm.unitName = this.userDTO.unitName;
     this.requestObject.irbExemptForm.unitNumber = this.userDTO.unitNumber;
@@ -184,13 +186,17 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.requestObject.irbExemptForm.exemptFormID =this._activatedRoute.snapshot.queryParamMap.get('exemptFormID');
     this.requestObject.irbExemptForm.exemptQuestionnaireAnswerHeaderId = this._activatedRoute.snapshot.queryParamMap.get('exempHeaderId');
     this.isViewMode = this._activatedRoute.snapshot.queryParamMap.get('mode');
-    if (this.isViewMode) {
+    
+    if (this.isViewMode) {  
       this.showQuestionaire = true;
       this.loadSavedQuestionaire();
     }
+    if (this.isViewMode === '3' ||this.isViewMode === '2') {
+      this.isPendingActionRequired=true; 
+    }  
     if (this.isViewMode === '1') {
       this.isEditMode = true;
-    }
+    }  
     if (this.isViewMode == null || this.isViewMode === undefined || this.isViewMode === '1') {
       this.isViewMode = false;
     } else {
@@ -325,11 +331,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   }
   /** assign values to requestObject on selecting a particular PI from elastic search */
   selectedPiResult(result) {
-    debugger
+    
     this.requestObject.irbExemptForm.personName = '';
     this.requestObject.irbExemptForm.personName = result.obj.full_name;
-    this.requestObject.irbExemptForm.personId = result.obj.person_id;
-    //stk doubt
+    this.requestObject.irbExemptForm.personId = result.obj.person_id; 
+        
     this.requestObject.personJobTitle = result.obj.job_title;
     this.IsElasticResultPI = false;
   }
@@ -340,26 +346,34 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   }
   /** assign values to requestObject on selecting a particular Faculty from elastic search */
   selectedFacultyResult(result) {
-    debugger
+    
     this.requestObject.irbExemptForm.facultySponsorPerson = '';
     this.requestObject.irbExemptForm.facultySponsorPerson = result.obj.full_name;
     this.requestObject.irbExemptForm.facultySponsorPersonId = result.obj.person_id;
-    //stk
+    
     this.requestObject.facultySponsorJobTitle = result.obj.job_title;
     this.IsElasticResultFaculty = false;
   }
 
   /** function to load exempt questionaire once the title and pi and exempt is created */
   loadQuestionaire() {
+    
     this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
     this.showAlert = false;
     if (this.requestObject.irbExemptForm.personId !== '' &&
       (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
       (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
-      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null)) {
-      //stk
-      debugger
-      if (!this.ignoreWarning && (this.requestObject.irbExemptForm.facultySponsorPersonId == '' || this.requestObject.irbExemptForm.facultySponsorPersonId == null) && this.requestObject.personJobTitle == null) {
+      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null) &&
+      (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
+      (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
+      
+      if(Date.parse(this.requestObject.exemptProtocolStartDate) >= Date.parse(this.requestObject.exemptProtocolEndDate))
+      {
+        this.showAlert = true;
+        this.modalHeading = 'Alert';
+        this.alertMsg = 'End date should be greater than start date';
+      }
+     else if (!this.ignoreWarning && (this.requestObject.irbExemptForm.facultySponsorPersonId == '' || this.requestObject.irbExemptForm.facultySponsorPersonId == null) && this.requestObject.personJobTitle == null) {
         this.modalHeading = 'Alert';
         this.alertMsg = 'Your study need to be reviewed by a faculty sponsor, please add a faculty sponsor';
         this.openWarningModal();
@@ -370,8 +384,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.openWarningModal();
       }
       else {
-        debugger
-        //stk
+              
+        
         this.requestObject.irbExemptForm.actionTypesCode = this.strCreatedActionType;
         this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
         this.ignoreWarning = false;
@@ -393,7 +407,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             this.showQuestionaire = true;
           }
         );
-      }
+      
+     
+    }
     }
     else if (this.requestObject.irbExemptForm.personId == '' && this.requestObject.irbExemptForm.personName !== '' && this.requestObject.irbExemptForm.personName !== null) {
       this.showAlert = true;
@@ -411,16 +427,21 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
    * loaded in edit or view mode only
   */
   loadSavedQuestionaire() {
-    debugger
+    
     this._spinner.show();
     this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
     this._exemptQuestionaireService.getSavedQuestionaire(this.requestObject).subscribe(
       data => {
-        this.result = data || [];
-        debugger
+        this.result = data || [];        
         if (this.result != null) {
+          
+        
           this.questionaire = this.result.questionnaireDto;
           this.requestObject.irbExemptForm = this.result.irbExemptForm;
+          if(this.requestObject.irbExemptForm.exemptProtocolStartDate!=null &&this.requestObject.irbExemptForm.exemptProtocolStartDate!='')
+          this.requestObject.exemptProtocolStartDate=this.GetFormattedDateFromString(this.requestObject.irbExemptForm.exemptProtocolStartDate);
+          if(this.requestObject.irbExemptForm.exemptProtocolEndDate!=null &&this.requestObject.irbExemptForm.exemptProtocolEndDate!='')
+          this.requestObject.exemptProtocolEndDate=this.GetFormattedDateFromString(this.requestObject.irbExemptForm.exemptProtocolEndDate);
           if (this.requestObject.irbExemptForm.statusCode == '2' || this.requestObject.irbExemptForm.statusCode == '3') {
             this.isViewMode = true;
           }
@@ -525,8 +546,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   }
 
   /** service call to save the exempt questionaire */
-  saveQuestionaire() {
-    debugger;
+  saveQuestionaire() {    
     this.isEvaluate = false;
     this.errorQuestions = [];
     this.QuestionnaireCompletionFlag = 'Y';
@@ -543,7 +563,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     //  this.requestObject.personJobTitle =this.userDTO.jobTitle;
     if ((this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
       (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
-      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '')) {
+      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '') &&      
+      (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
+      (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
       this._spinner.show();
       this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
         data => {
@@ -584,46 +606,56 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
   /** calls service to evaluate exempt questioanire */
   evaluateExemptQuestionnaire() {
-    this.errorQuestions = [];
-    debugger
+    this.errorQuestions = [];    
     this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
     if (this.requestObject.irbExemptForm.personId !== '' &&
       (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
       (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
-      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null)) {
-      //stk
-      debugger
+      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null) &&      
+      (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
+      (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)){
+            
       this._spinner.show();
       this._exemptQuestionaireService.evaluatedQuestionaire(this.requestObject).subscribe(
         data => {
           this.result = data;
           this.isExempt = this.result.isExemptGranted;
+          
           if ((this.requestObject.irbExemptForm.facultySponsorPersonId == '' || this.requestObject.irbExemptForm.facultySponsorPersonId == null) && this.requestObject.personJobTitle == null) {
             if (this.result.isExemptGranted === 'N') {
-              this.alertMsg = this.NOT_EXEMPT_MSG + this.NOFACULTY_MESSAGE;
+              this.alertMsg = this.NOT_EXEMPT_MSG ;
+              this.showEvaluateWarning= this.NOFACULTY_MESSAGE;
               this.errorQuestions = this.result.exemptQuestionList;
             } else if (this.result.isExemptGranted === 'Y') {
-              this.alertMsg = this.EXEMPT_MSG + this.NOFACULTY_MESSAGE;
+              this.alertMsg = this.EXEMPT_MSG ;
+              this.showEvaluateWarning= this.NOFACULTY_MESSAGE;
             } else if (this.result.isExemptGranted === 'O') {
-              this.alertMsg = this.OTHER_MSG + this.NOFACULTY_MESSAGE;
+              this.alertMsg = this.OTHER_MSG ;
+              this.showEvaluateWarning= this.NOFACULTY_MESSAGE;
             }
           }
           else if (this.requestObject.facultySponsorJobTitle == null && this.requestObject.personJobTitle == null) {
             if (this.result.isExemptGranted === 'N') {
-              this.alertMsg = this.NOT_EXEMPT_MSG + this.NOFACULTY_TITILE_MESSAGE;
+              this.alertMsg = this.NOT_EXEMPT_MSG ;
+              this.showEvaluateWarning= this.NOFACULTY_TITILE_MESSAGE;
               this.errorQuestions = this.result.exemptQuestionList;
             } else if (this.result.isExemptGranted === 'Y') {
-              this.alertMsg = this.EXEMPT_MSG + this.NOFACULTY_TITILE_MESSAGE;
+              this.alertMsg = this.EXEMPT_MSG ;
+              this.showEvaluateWarning= this.NOFACULTY_TITILE_MESSAGE;
             } else if (this.result.isExemptGranted === 'O') {
-              this.alertMsg = this.OTHER_MSG + this.NOFACULTY_TITILE_MESSAGE;
+              this.alertMsg = this.OTHER_MSG;
+              this.showEvaluateWarning= this.NOFACULTY_TITILE_MESSAGE;
             }
           }
           else if (this.result.isExemptGranted === 'N') {
+            this.showEvaluateWarning='';
             this.alertMsg = this.NOT_EXEMPT_MSG;
             this.errorQuestions = this.result.exemptQuestionList;
           } else if (this.result.isExemptGranted === 'Y') {
+            this.showEvaluateWarning='';
             this.alertMsg = this.EXEMPT_MSG;
           } else if (this.result.isExemptGranted === 'O') {
+            this.showEvaluateWarning='';
             this.alertMsg = this.OTHER_MSG;
           }
         },
@@ -675,9 +707,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.modalHeading = 'Alert';
     this.alertMsg = '';
     this.setCommonReqObject();
-    //stk
-    debugger
-    if (this.requestObject.personJobTitle != null && this.requestObject.irbExemptForm.facultySponsorPersonId == '') {
+        
+    if (this.requestObject.personJobTitle != null && (this.requestObject.irbExemptForm.facultySponsorPersonId == ''||this.requestObject.irbExemptForm.facultySponsorPersonId == null)) {
       this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
       this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
     }
@@ -700,9 +731,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     if (this.requestObject.irbExemptForm.personId !== '' &&
       (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
       (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
-      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null)) {
-      //stk
-      debugger
+      (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null) &&      
+      (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
+      (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
+            
       if (!this.ignoreWarning && (this.requestObject.irbExemptForm.facultySponsorPersonId == '' || this.requestObject.irbExemptForm.facultySponsorPersonId == null) && this.requestObject.personJobTitle == null) {
         this.modalHeading = 'Alert';
         this.alertMsg = 'Your study need to be reviewed by a faculty sponsor, please add a faculty sponsor';
@@ -967,12 +999,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
       this.showAddAttachment = false;
       this.uploadedFile = [];
   }
-  //stk
+  
   // close warning modal
   //proceed to load questionnire when user clicks proceed
   proceedWithWarning() {
     // this.showWarningAlert = false;
-    debugger
+    
     this.ignoreWarning = true;
     if (this.QuestionnaireCompletionFlag == 'N') {
       this.loadQuestionaire();
@@ -993,10 +1025,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
  *
 */
   openActionLogModal() {
-    debugger
+    
     this.actionLogResult = [];
     this._exemptQuestionaireService.getActivityLogByExemptFormID(this.requestObject).subscribe(
       data => {
+        
         this.actionLogResult = data || [];
         // if (this.result != null) {
 
@@ -1017,8 +1050,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.isRejectedAlert = false;
   }
   approveConfirmClick() {
-    this.isApprovedAlert = false;
-    this.isRejectedAlert = false;
+    //this.isApprovedAlert = false;
+   // this.isRejectedAlert = false;
     this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
     if (this.requestObject.personDTO.role == "PI") {
       this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
@@ -1033,8 +1066,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.isRejectedAlert = true;
   }
   rejectConfirmClick() {
-    this.isApprovedAlert = false;
-    this.isRejectedAlert = false;
+   // this.isApprovedAlert = false;
+   // this.isRejectedAlert = false;
     this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
     if (this.requestObject.personDTO.role == "PI") {
       this.requestObject.irbExemptForm.actionTypesCode = this.strReturnedFacultyActionType;
@@ -1045,10 +1078,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     this.approveRejectAction(this.requestObject);
   }
   approveRejectAction(reqObjectVal) {
-    debugger
+    
+   this.isPendingActionRequired=false;
     this._exemptQuestionaireService.approveOrDisapproveAction(reqObjectVal).subscribe(
       data => {
-        this.actionLogResult = data || [];
+        //this.actionLogResult = data || [];
+        this.isApprovedAlert = false;
+       this.isRejectedAlert = false;
       },
       error => {
         console.log('Error in getActivityLogById', error);
@@ -1063,5 +1099,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
   var day = currentDate .getDate();
   var year = currentDate.getFullYear();
   return month + "-" + day + "-" + year;
+}
+GetFormattedDateFromString(currentDate) { 
+  
+  var res = currentDate.split("-");
+  var month = parseInt(res[0]);
+  var day = parseInt(res[1]);
+  var year = parseInt(res[2]); 
+  return new Date(year,month-1,day);
 }
 }

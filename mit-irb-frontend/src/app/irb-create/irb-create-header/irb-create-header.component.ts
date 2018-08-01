@@ -15,7 +15,6 @@ export class IrbCreateHeaderComponent implements OnInit {
    * @param current_tab - value of currently selected tab
    */
   show_current_tab( current_tab ) {
-    debugger
     this.currentTab = current_tab;
   }
 }

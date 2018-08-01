@@ -21,6 +21,7 @@ public class PersonDTO {
 	private String phoneNumber;
 	private Integer userRoleType;
 	private String role;
+	private String jobTitle;
 	
 	public String getHasDual() {
 		return hasDual;
@@ -105,5 +106,11 @@ public class PersonDTO {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public String getJobTitle() {
+		return jobTitle;
+	}
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
 	}
 }

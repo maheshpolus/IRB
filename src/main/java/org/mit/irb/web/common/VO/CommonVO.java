@@ -69,6 +69,14 @@ public class CommonVO {
 	
 	private String determination;
 
+	private ArrayList<HashMap<String, Object>> actionLogs;
+	
+	private String exemptFormfacultySponsorName;
+	
+	private String exemptFormStartDate;
+	
+	private String exemptFormEndDate;
+	
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -291,5 +299,37 @@ public class CommonVO {
 
 	public void setDetermination(String determination) {
 		this.determination = determination;
+	}
+
+	public ArrayList<HashMap<String, Object>> getActionLogs() {
+		return actionLogs;
+	}
+
+	public void setActionLogs(ArrayList<HashMap<String, Object>> actionLogs) {
+		this.actionLogs = actionLogs;
+	}
+
+	public String getExemptFormfacultySponsorName() {
+		return exemptFormfacultySponsorName;
+	}
+
+	public void setExemptFormfacultySponsorName(String exemptFormfacultySponsorName) {
+		this.exemptFormfacultySponsorName = exemptFormfacultySponsorName;
+	}
+
+	public String getExemptFormStartDate() {
+		return exemptFormStartDate;
+	}
+
+	public void setExemptFormStartDate(String exemptFormStartDate) {
+		this.exemptFormStartDate = exemptFormStartDate;
+	}
+
+	public String getExemptFormEndDate() {
+		return exemptFormEndDate;
+	}
+
+	public void setExemptFormEndDate(String exemptFormEndDate) {
+		this.exemptFormEndDate = exemptFormEndDate;
 	}
 }

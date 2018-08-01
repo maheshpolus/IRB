@@ -6,8 +6,7 @@ export class ExemptQuestionaireService {
   formData = new FormData();
 constructor(private _http: HttpClient) { }
 
-  getQuestionaire( params ) {
-    debugger
+  getQuestionaire( params ) {    
       return this._http.post('/mit-irb/savePersonExemptForm', params);
   }
   saveQuestionaire( params ) {
@@ -42,7 +41,7 @@ downloadExemptProtocolChecklist(checklistId){
         responseType:'blob'
     });
 }
-  //stk
+  
   getActivityLogByExemptFormID( params ) {
     return this._http.post('/mit-irb/getExemptProtocolActivityLogs', params);
   }

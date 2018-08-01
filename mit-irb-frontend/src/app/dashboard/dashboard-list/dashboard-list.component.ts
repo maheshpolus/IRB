@@ -72,9 +72,9 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         title : '',
         piName : '',
         determination : '',
-        exemptProtocolStartDate: '',
-        exemptProtocolEndDate: '',
-        facultySponsorPerson: ''
+        exemptProtocolStartDate: null,
+        exemptProtocolEndDate: null,
+        facultySponsorPerson: null
 
 
     }
@@ -208,8 +208,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.lastClickedTab = currentTab;
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
-        this.requestObject.dashboardType = currentTab;
-        debugger
+        this.requestObject.dashboardType = currentTab;        
         this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
@@ -312,17 +311,20 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         }
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
-        this.exemptParams.determination = this.requestObject.determination;
-    
-    debugger
+        this.exemptParams.determination = this.requestObject.determination; 
+        if(this.requestObject.exemptProtocolStartDate!=null &&this.requestObject.exemptProtocolStartDate!='')
+        this.exemptParams.exemptProtocolStartDate=this.GetFormattedDate(this.requestObject.exemptProtocolStartDate);  
+        if(this.requestObject.exemptProtocolEndDate!=null &&this.requestObject.exemptProtocolEndDate!='')
+        this.exemptParams.exemptProtocolEndDate=this.GetFormattedDate(this.requestObject.exemptProtocolEndDate);    
+        this.exemptParams.facultySponsorPerson=this.requestObject.facultySponsorPerson;
+        
         this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
                     this.noIrbList = true;
                 } else {
-                    this.exemptListData = this.result.irbExemptFormList;
-                    debugger
+                    this.exemptListData = this.result.irbExemptFormList;                    
                 }
             }
             console.log(this.result);
@@ -338,6 +340,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.determination = '';
         this.requestObject.title = '';
         this.requestObject.piName = '';
+        this.requestObject.facultySponsorPerson=null;
+        this.requestObject.exemptProtocolStartDate=null;
+        this.requestObject.exemptProtocolEndDate=null;
         this.getExemptListData('EXEMPT');
+      }
+      GetFormattedDate(currentDate) { 
+        var month = currentDate.getMonth() + 1;
+        var day = currentDate .getDate();
+        var year = currentDate.getFullYear();
+        return month + "-" + day + "-" + year;
       }
 }

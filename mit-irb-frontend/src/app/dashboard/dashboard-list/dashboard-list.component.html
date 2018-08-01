@@ -160,49 +160,51 @@
 						</div>
 					</div>
 					<div class="col-sm-12 top-form" *ngIf="isAdvancesearch && lastClickedTab == 'EXEMPT'">
-						<div class="form-inline">
-							<div class="form-group">
-								<input type="text" [(ngModel)]="requestObject.title"
-									class="form-control search-input input-width" placeholder="Title">
-							</div>
-							<div class="form-group">
-								<input type="text" [(ngModel)]="requestObject.piName"
-									class="form-control search-input input-width" placeholder="PI Name">
-							</div>
-							<div class="form-group" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
-									<input type="text" [(ngModel)]="requestObject.facultySponsorPersonId"
-										class="form-control search-input input-width" placeholder="Faculty Sponser">
+							<div class="form-inline">
+								<div class="form-group">
+									<input type="text" [(ngModel)]="requestObject.title"
+										class="form-control search-input input-width" placeholder="Title">
 								</div>
-							<div class="form-group">
-								<select class="form-control selectBoxShade search-input input-width"
-									placeholder="Determination"
-									[(ngModel)]="requestObject.determination"
-									id="inlineFormCustomSelect">
-									<option value="" hidden>Determination</option>
-									<option value="Y" >Exempt</option>
-									<option value="N" >Not Exempt</option>
-								</select>
-							</div>
-						
-								<div class="form-group" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
-									<input type="text" [(ngModel)]="requestObject.exemptProtocolStartDate"
-										class="form-control search-input input-width" placeholder="Start Date">
+								<div class="form-group">
+									<input type="text" [(ngModel)]="requestObject.piName"
+										class="form-control search-input input-width" placeholder="PI Name">
 								</div>
-								<div class="form-group" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
-										<input type="text" [(ngModel)]="requestObject.exemptProtocolEndDate"
-											class="form-control search-input input-width" placeholder="End Date">
+								<div class="form-group">
+										<input type="text" [(ngModel)]="requestObject.facultySponsorPersonId"
+											class="form-control search-input input-width" placeholder="Faculty Sponser">
 									</div>
-							<div class="form-group">
-								<button class="btn btn-default btn-search"
-									(click)="getExemptListData('EXEMPT')">
-									<i class="fa fa-search"></i>Search
-								</button>
-								<button class="btn btn-default btn-close" (click)="clearExemptSearch()">
-									<i class="fa fa-close"></i>Clear
-								</button>
+								<div class="form-group">
+									<select class="form-control selectBoxShade search-input input-width"
+										placeholder="Determination"
+										[(ngModel)]="requestObject.determination"
+										id="inlineFormCustomSelect">
+										<option value="" hidden>Determination</option>
+										<option value="Y" >Exempt</option>
+										<option value="N" >Not Exempt</option>
+									</select>
+								</div>
+							
+									<div class="form-group">
+											<input class="form-control search-input input-width" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" 
+											placeholder="Start Date" [(ngModel)]="requestObject.exemptProtocolStartDate">
+											<owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+									</div>
+									<div class="form-group">
+												<input class="form-control search-input input-width" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" 
+											placeholder="End Date" [(ngModel)]="requestObject.exemptProtocolEndDate">
+											<owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+										</div>
+								<div class="form-group">
+									<button class="btn btn-default btn-search"
+										(click)="getExemptListData('EXEMPT')">
+										<i class="fa fa-search"></i>Search
+									</button>
+									<button class="btn btn-default btn-close" (click)="clearExemptSearch()">
+										<i class="fa fa-close"></i>Clear
+									</button>
+								</div>
 							</div>
 						</div>
-					</div>
 				</div>
 				<ng-container *ngIf = "lastClickedTab != 'EXEMPT'">
 					<div class="col-sm-12" *ngIf="noIrbList">No Irb protocol found for this status</div>

@@ -33,20 +33,20 @@
 					</div>
 				</div>
 				<div class="col-12 apprve-date">
-						<div class="col-1 title-head pl0">
+						<div class="col-2 title-head pl0">
 							<h4>*Title:</h4>
 						</div>
-						<div class="col-10 width-exempt searchBox display">
+						<div class="col-9 width-exempt searchBox display">
 							<input class="form-control" type="text" [disabled]="isViewMode"  maxlength="250"
 								[(ngModel)]="requestObject.irbExemptForm.exemptTitle"
 								placeholder="Enter Exempt Title">
 						</div>
 					</div>
 					<div class="col-12 apprve-date">
-						<div class="col-1 title-head pl0">
+						<div class="col-2 title-head pl0">
 							<h4>*Principal Investigator:</h4>
 						</div>
-						<div class="col-5 width-exempt searchBox display">
+						<div class="col-4 width-exempt searchBox display">
 							<input class="form-control" type="text" *ngIf="!isViewMode"
 							(input)="clearSelectedPIdata()"
 								[(ngModel)]="requestObject.irbExemptForm.personName"
@@ -63,10 +63,10 @@
 								</ul>
 							</div>
 						</div>
-						<div class="col-1 title-head">
+						<div class="col-2 title-head">
 							<h4>Unit:</h4>
 						</div>
-						<div class="col-4 width-exempt searchBox display">
+						<div class="col-3 width-exempt searchBox display">
 							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName"
 								placeholder="Search:Department Unit" *ngIf="!isViewMode"
 								[datasource]="unitName" [minSearchLength]="0"
@@ -77,59 +77,60 @@
 								*ngIf="isViewMode" />
 						</div>
 					</div>
-				<div class="col-12 apprve-date">
-						<div class="col-1 title-head pl0">
-							<h4>*Start Date:</h4>
+					<!--Text change Ends-->
+	
+					<div class="col-12 apprve-date">
+							<div class="col-2 title-head pl0">
+								<h4>*Start Date:</h4>
+							</div>
+							<div class="col-4 width-exempt searchBox display">								
+											<input [disabled]="isViewMode" class="form-control datePickerRadius" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" 
+									placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolStartDate">
+									<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+							</div>
+							<div class="col-2 title-head ">
+								<h4>*End Date:</h4>
+							</div>
+							<div class="col-3 width-exempt searchBox display">
+												<input [disabled]="isViewMode" class="form-control datePickerRadius" [owlDateTimeTrigger]="dt3" 
+									[owlDateTime]="dt3" placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolEndDate">
+									<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+								</div>
 						</div>
-						<div class="col-5 width-exempt searchBox display">	
-								<input class="form-control datePickerRadius" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" 
-								placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolStartDate">
-								<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>				
+	
+					<div class="col-12 apprve-date">
+						<div class="col-2 title-head pl0">
+							<h4 class="sponsorFont">Faculty Sponsor:</h4>
 						</div>
-						<div class="col-1 title-head ">
-							<h4>*End Date:</h4>
+						<div class="col-4  width-exempt searchBox display">
+							<input class="form-control mlFaculty-3" type="text" *ngIf="!isViewMode"
+							(input)="clearSelectedFacultydata()"
+								[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+								placeholder="Search: Faculty Sponsor Name"
+								[formControl]="facultySearchText"
+								(focus)="IsElasticResultFaculty = true"  (focusout)="IsElasticResultFaculty = false"/> <input
+								class="form-control" type="text" [disabled]="isViewMode"
+								[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+								*ngIf="isViewMode" />
+							<div class="sb-seachresults results-margin">
+								<ul class="sb-results-dropdown-menu"
+									*ngIf="IsElasticResultFaculty">
+									<li *ngFor="let result of _results | async"
+										(mousedown)="selectedFacultyResult(result)"><span
+										[innerHTML]="result.label"></span></li>
+								</ul>
+							</div>
 						</div>
-						<div class="col-4 width-exempt searchBox display">
-								<input class="form-control datePickerRadius" [owlDateTimeTrigger]="dt3" 
-								[owlDateTime]="dt3" placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolEndDate">
-								<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
-
+					</div>
+					<div class="col-12 apprve-date">
+							<div class="col-2 title-head pl0">
+									<h4>*Summary:</h4>
+							</div>
+							<div class="col-9 width-exempt searchBox dsp-flex">
+							<textarea  [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" 
+							placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
 							</div>
 					</div>
-
-				<div class="col-12 apprve-date">
-					<div class="col-1 title-head pl0">
-						<h4 class="sponsorFont">Faculty Sponsor:</h4>
-					</div>
-					<div class="col-5  width-exempt searchBox display">
-						<input class="form-control mlFaculty-3" type="text" *ngIf="!isViewMode"
-						(input)="clearSelectedFacultydata()"
-							[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
-							placeholder="Search: Faculty Sponsor Name"
-							[formControl]="facultySearchText"
-							(focus)="IsElasticResultFaculty = true"  (focusout)="IsElasticResultFaculty = false"/> <input
-							class="form-control" type="text" [disabled]="isViewMode"
-							[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
-							*ngIf="isViewMode" />
-						<div class="sb-seachresults results-margin">
-							<ul class="sb-results-dropdown-menu"
-								*ngIf="IsElasticResultFaculty">
-								<li *ngFor="let result of _results | async"
-									(mousedown)="selectedFacultyResult(result)"><span
-									[innerHTML]="result.label"></span></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="col-12 apprve-date">
-						<div class="col-1 title-head pl0">
-								<h4>*Summary:</h4>
-						</div>
-						<div class="col-10 width-exempt searchBox dsp-flex">
-						<textarea  [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" 
-						placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
-						</div>
-				</div>
 				<div *ngIf="!isViewMode" class="col-12 exempt-id">
 					<button [hidden]="showQuestionaire"
 						class="btn mb-3 btn-primary tab_btn" (click)="loadQuestionaire()"
@@ -195,10 +196,13 @@
 							<p [ngClass]="{'is-exempt-message':isExempt=='Y' || isExempt=='O',
 							'not-exempt-message':isExempt=='N'}">
 								<span class="danger">
-								<i class="fa"[ngClass]="{'fa-check':isExempt=='Y' || isExempt=='O',
-							'fa-warning':isExempt=='N'}" class="fa fa-check"></i>
+								<i class="fa"[ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
+							'fa-warning':isExempt=='N'}" class="fa fa-star"></i>
 								</span>
-							{{alertMsg}}</p>
+							{{alertMsg}}
+							<span *ngIf="showEvaluateWarning!=''"><br/>	<i class="fa"[ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
+								'fa-warning':isExempt=='N'}" class="fa fa-star"></i>{{showEvaluateWarning}}</span>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -208,10 +212,10 @@
 						data-target="#checklistModal" type="submit"  (click)="showAddAttachmentPopUp($event)">Add/View Checklist</button>		<button class="btn btn-primary tab_btn" (click)="openActionLogModal()" type="submit"
 						data-toggle="modal"	data-target="#routeActionLogModal" id="actionLog">Action Log</button>
 					
-						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true"
-						(click)="approveQuestionnireClick()" data-toggle="modal"	data-target="#approveRejectActionConfirmModal" id="approve">Approve</button>
-						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true"
-						(click)="rejectQuestionnireClick()" data-toggle="modal"	data-target="#approveRejectActionConfirmModal" id="reject">Reject</button>
+						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired"
+						(click)="approveQuestionnireClick()" data-toggle="modal" data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="approve">Approve</button>
+						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired"
+						(click)="rejectQuestionnireClick()" data-toggle="modal"	data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="reject">Reject</button>
 					
 						<button class="btn btn-primary tab_btn" *ngIf="isViewMode == false"
 						(click)="saveQuestionaire()" id="save">Save</button>
@@ -219,7 +223,7 @@
 						*ngIf="isViewMode == false"
 						(click)="evaluateExemptQuestionnaire()"
 						[disabled]="QuestionnaireCompletionFlag=='N'">Preview</button>
-					<button class="btn btn-primary tab_btn" data-toggle="modal"
+						<button class="btn btn-primary tab_btn submit-btn" data-toggle="modal"
 						data-target="#confirmModal" type="submit"
 						*ngIf="isViewMode == false" (click)="submitConfirmation()"
 						[disabled]="QuestionnaireCompletionFlag=='N'">Submit</button>
@@ -507,12 +511,15 @@
 				<label>Exempt Form #</label> <span>{{actionLogResult?.irbExemptForm?.exemptFormID}}</span>
 			</div>
 			
-			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
 				<label>Status</label> <span>{{actionLogResult?.irbExemptForm?.status}}</span>
 			</div>
-			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
 				<label>PI</label> <span>{{actionLogResult?.irbExemptForm?.personName}}</span>
 			</div>
+			<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
+					<label>Title</label> <span>{{actionLogResult?.irbExemptForm?.exemptTitle}}</span>
+				</div>
 			<!-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 				<label>Home Unit</label> <span></span>
 			</div>
@@ -590,17 +597,17 @@
 					
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
 						<textarea class="w100" rows="3" maxlength="1250" 
-						placeholder="Add Comment"></textarea>
+						placeholder="Add Comment" [(ngModel)]="requestObject.irbExemptForm.comment"></textarea>
 					</div>
 					</div>
 				</div>
 			</div>
 			<section class="row btn-row-med sect-confirm-padding proceed-btn-align">
-				<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+				<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
 				*ngIf="isApprovedAlert" aria-label="Close" (click)="approveConfirmClick()">Proceed</button>
-					<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
 					*ngIf="isRejectedAlert" aria-label="Close" (click)="rejectConfirmClick()">Reject</button>
-					<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
 					aria-label="Close">Close</button>
 			</section>
 		</div>

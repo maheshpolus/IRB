@@ -12,17 +12,9 @@ import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questi
 import { ElasticService } from "./common/service/elastic.service";
 import { AppModule } from "./app.module";
 
-/**remove the comment on can Activate once login service is completed
- * login service - should set a vatriable 'ActivatedUser' in browser session
- */
-
-const role = 'admin' // Just for the example  
-    debugger;
-    const comp = role === 'admin' ? 'irb/dashboard' : 'login';
-
 const appRoutes = [
-     { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
-   // { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
+    //{ path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     {
         path: 'irb', component: IrbComponent, // canActivate: [AuthGuard],

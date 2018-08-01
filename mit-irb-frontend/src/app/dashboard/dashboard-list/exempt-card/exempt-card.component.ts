@@ -17,7 +17,7 @@ export class ExemptCardComponent implements OnInit {
   @Input() showBtn :boolean;
  
 
-  statusCode: string[] =  ["1","4"];
+  statusCode: string[];
  
 
   tabSelected: string="STUDIES";
@@ -51,14 +51,16 @@ export class ExemptCardComponent implements OnInit {
  {
   this.tabSelected=tabClicked;
   this.statusCode=this.getStatusCode(userRole,tabClicked);
+
   
  }
  getStatusCode(role,tabClicked)
  {
+   
    if(role=='PI' && this.userDTO.jobTitle !== null && tabClicked == "PENDING")
       return ["2"];
     else if(role=='PI' && this.userDTO.jobTitle !== null && tabClicked == "STUDIES")
-      return ["1","4"];
+    return ["1","2","3","4"];
     else if((role=='ADMIN' || role=='CHAIR' ) && tabClicked == "STUDIES")
       return ["1"];
     else if((role=='ADMIN' || role=='CHAIR' ) && tabClicked == "PENDING")
@@ -66,7 +68,7 @@ export class ExemptCardComponent implements OnInit {
     else if((role=='ADMIN' || role=='CHAIR' ) && tabClicked == "SUBMITTED")
       return ["4"];
     else if(role=='PI' && this.userDTO.jobTitle == null && tabClicked == "STUDIES")
-      return ["1","4"];
+      return ["1","2","3","4"];
  }
  
 }

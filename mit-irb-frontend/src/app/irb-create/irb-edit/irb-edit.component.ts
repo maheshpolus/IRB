@@ -27,7 +27,6 @@ export class IrbEditComponent implements OnInit {
   //   this.createForm = new FormGroup({
   //     customRoleSelect: new FormControl(null)
   // });
-  // debugger
   // this.createForm.controls['customRoleSelect'].setValue(this.default, {onlySelf: true});
     this.personalDataList = [
       { id: "3", name: "test", role: "two", title: "noTitle", leadUnit: "unit", affiliate: "no" },

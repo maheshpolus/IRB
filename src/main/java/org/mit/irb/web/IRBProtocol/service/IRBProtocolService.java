@@ -105,12 +105,13 @@ public interface IRBProtocolService {
 	CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception;
 	
 	/**
+	 * @param personDTO 
 	 * @param PersonDTO
 	 * @param IRBExemptForm
 	 * @return the list of questionnaire questions,its condition,options and its answers
 	 * @throws Exception
 	 */
-	CommonVO getPersonExemptForm(IRBExemptForm irbExemptForm) throws Exception;
+	CommonVO getPersonExemptForm(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception;
 
 
 	/**

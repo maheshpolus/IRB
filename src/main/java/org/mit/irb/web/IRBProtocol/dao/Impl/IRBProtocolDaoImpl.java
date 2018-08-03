@@ -367,17 +367,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	public IRBViewProfile getPersonExemptFormList(String personID, String personRoleType, String title, String piName, String determination,
 			String facultySponsor, String exemptStratDate, String ExemptEndDate) throws ParseException {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
-		java.util.Date exemptStartDate = null;
+		java.util.Date exemptStartDates = null;
 		java.sql.Date sqlExemptStartDate = null;
-		java.util.Date exemptEndDate = null;
+		java.util.Date exemptEndDates = null;
 		java.sql.Date sqlExemptEndDate = null;
 		if(exemptStratDate != null){
-			 exemptStartDate = sdf1.parse(exemptStratDate);
-			 sqlExemptStartDate = new java.sql.Date(exemptStartDate.getTime()); 
+			exemptStartDates = sdf1.parse(exemptStratDate);
+			 sqlExemptStartDate = new java.sql.Date(exemptStartDates.getTime()); 
 		}
 		if(ExemptEndDate != null){
-			exemptEndDate = sdf1.parse(exemptStratDate);
-			sqlExemptEndDate = new java.sql.Date(exemptEndDate.getTime()); 
+			exemptEndDates = sdf1.parse(ExemptEndDate);
+			sqlExemptEndDate = new java.sql.Date(exemptEndDates.getTime()); 
 		}
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
@@ -490,7 +490,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		return jobTitle;
 	}
 	@Override
-	public IRBViewProfile getPersonExemptForm(Integer exemptFormId) {
+	public IRBViewProfile getPersonExemptForm(Integer exemptFormId, String loginUserPersonId) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -570,10 +570,15 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("UNIT_NAME") != null){
 					exemptForm.setUnitName((String) hmap.get("UNIT_NAME"));
 				}
-				if((hmap.get("FACULTY_SPONSOR_PERSON_ID")!=null && hmap.get("PERSON_ID") != null)&&(hmap.get("PERSON_ID").toString().equals(hmap.get("FACULTY_SPONSOR_PERSON_ID").toString()))){
-					exemptForm.setIsFacultySponsor(true);
+				if((hmap.get("FACULTY_SPONSOR_PERSON_ID")!=null && loginUserPersonId != null)&&(loginUserPersonId.equals(hmap.get("FACULTY_SPONSOR_PERSON_ID").toString()))){
+					exemptForm.setLoggedInUserFacultySponsor(true);
 				} else{
-					exemptForm.setIsFacultySponsor(false);
+					exemptForm.setLoggedInUserFacultySponsor(false);
+				}
+				if((hmap.get("PERSON_ID")!=null && loginUserPersonId != null)&&(loginUserPersonId.equals(hmap.get("PERSON_ID").toString()))){
+					exemptForm.setLoggedInUserPI(true);
+				} else{
+					exemptForm.setLoggedInUserPI(false);
 				}
 				irbExemptFormList.add(exemptForm);
 			}

@@ -25,8 +25,8 @@ export class ExemptCardComponent implements OnInit {
   {
 
     
-    this.statusCode= (this.userDTO.role=='PI')?["1","4"] : ["1"];
-    
+   // this.statusCode= (this.userDTO.role=='PI')?["1","4"] : ["1"];
+    this.showData(this.userDTO.role,'STUDIES')
   }
  
   constructor(private _router: Router) {
@@ -43,6 +43,7 @@ export class ExemptCardComponent implements OnInit {
     if (mode == null) {
       mode = 1;
     }
+    debugger
     this._router.navigate( ['/irb/exempt-questionaire'],
     {queryParams: {exempHeaderId: exemptId, mode: mode, title: exemptTitle, exemptFormID: exemptFormID}});
   }

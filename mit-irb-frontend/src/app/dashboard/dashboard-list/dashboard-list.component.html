@@ -170,7 +170,7 @@
 										class="form-control search-input input-width" placeholder="PI Name">
 								</div>
 								<div class="form-group">
-										<input type="text" [(ngModel)]="requestObject.facultySponsorPersonId"
+										<input type="text" [(ngModel)]="requestObject.exemptFormfacultySponsorName"
 											class="form-control search-input input-width" placeholder="Faculty Sponser">
 									</div>
 								<div class="form-group">
@@ -186,12 +186,12 @@
 							
 									<div class="form-group">
 											<input class="form-control search-input input-width" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" 
-											placeholder="Start Date" [(ngModel)]="requestObject.exemptProtocolStartDate">
+											placeholder="Start Date" [(ngModel)]="requestObject.exemptFormStartDate">
 											<owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
 									</div>
 									<div class="form-group">
 												<input class="form-control search-input input-width" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" 
-											placeholder="End Date" [(ngModel)]="requestObject.exemptProtocolEndDate">
+											placeholder="End Date" [(ngModel)]="requestObject.exemptFormEndDate">
 											<owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
 										</div>
 								<div class="form-group">

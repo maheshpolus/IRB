@@ -37,9 +37,9 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             protocolTypeCode : '',
             dashboardType : '',
             determination : '',
-            exemptProtocolStartDate: '',
-            exemptProtocolEndDate: '',
-            facultySponsorPerson: ''
+            exemptFormStartDate: '',
+            exemptFormEndDate: '',
+            exemptFormfacultySponsorName: ''
     };
     protocolTypeList = [];
     result: any;
@@ -72,11 +72,9 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         title : '',
         piName : '',
         determination : '',
-        exemptProtocolStartDate: null,
-        exemptProtocolEndDate: null,
-        facultySponsorPerson: null
-
-
+        exemptFormStartDate: null,
+        exemptFormEndDate: null,
+        exemptFormfacultySponsorName: null
     }
 
     constructor( private _dashboardService: DashboardService,
@@ -312,13 +310,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
         this.exemptParams.determination = this.requestObject.determination; 
-        if(this.requestObject.exemptProtocolStartDate!=null &&this.requestObject.exemptProtocolStartDate!='')
-        this.exemptParams.exemptProtocolStartDate=this.GetFormattedDate(this.requestObject.exemptProtocolStartDate);  
-        if(this.requestObject.exemptProtocolEndDate!=null &&this.requestObject.exemptProtocolEndDate!='')
-        this.exemptParams.exemptProtocolEndDate=this.GetFormattedDate(this.requestObject.exemptProtocolEndDate);    
-        this.exemptParams.facultySponsorPerson=this.requestObject.facultySponsorPerson;
-        
-        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
+        if(this.requestObject.exemptFormStartDate!=null &&this.requestObject.exemptFormStartDate!='')
+        this.exemptParams.exemptFormStartDate=this.GetFormattedDate(this.requestObject.exemptFormStartDate);  
+        if(this.requestObject.exemptFormEndDate!=null &&this.requestObject.exemptFormEndDate!='')
+        this.exemptParams.exemptFormEndDate=this.GetFormattedDate(this.requestObject.exemptFormEndDate);    
+        this.exemptParams.exemptFormfacultySponsorName=this.requestObject.exemptFormfacultySponsorName;
+        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {  debugger;
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
@@ -327,7 +324,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                     this.exemptListData = this.result.irbExemptFormList;                    
                 }
             }
-            console.log(this.result);
+            console.log("Exempt result",this.result);
         },
             error => {
                  console.log( 'Error in method getExemptListData()', error );
@@ -340,9 +337,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.determination = '';
         this.requestObject.title = '';
         this.requestObject.piName = '';
-        this.requestObject.facultySponsorPerson=null;
-        this.requestObject.exemptProtocolStartDate=null;
-        this.requestObject.exemptProtocolEndDate=null;
+        this.requestObject.exemptFormfacultySponsorName=null;
+        this.requestObject.exemptFormStartDate=null;
+        this.requestObject.exemptFormEndDate=null;
+        this.exemptParams.determination = '';
+        this.exemptParams.title = '';
+        this.exemptParams.piName = '';
+        this.exemptParams.exemptFormfacultySponsorName=null;
+        this.exemptParams.exemptFormStartDate=null;
+        this.exemptParams.exemptFormEndDate=null;
         this.getExemptListData('EXEMPT');
       }
       GetFormattedDate(currentDate) { 

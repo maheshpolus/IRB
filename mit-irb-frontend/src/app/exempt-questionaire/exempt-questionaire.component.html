@@ -63,10 +63,10 @@
 								</ul>
 							</div>
 						</div>
-						<div class="col-2 title-head">
+						<div class="col-1 title-head">
 							<h4>Unit:</h4>
 						</div>
-						<div class="col-3 width-exempt searchBox display">
+						<div class="col-4 width-exempt searchBox display">
 							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName"
 								placeholder="Search:Department Unit" *ngIf="!isViewMode"
 								[datasource]="unitName" [minSearchLength]="0"
@@ -88,11 +88,11 @@
 									placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolStartDate">
 									<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
 							</div>
-							<div class="col-2 title-head ">
+							<div class="col-1 title-head ">
 								<h4>*End Date:</h4>
 							</div>
-							<div class="col-3 width-exempt searchBox display">
-												<input [disabled]="isViewMode" class="form-control datePickerRadius" [owlDateTimeTrigger]="dt3" 
+							<div class="col-4 width-exempt searchBox display">
+												<input [disabled]="isViewMode" class="form-control datePickerRadius margin-6" [owlDateTimeTrigger]="dt3" 
 									[owlDateTime]="dt3" placeholder="mm/dd/yyyy" [(ngModel)]="requestObject.exemptProtocolEndDate">
 									<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
 								</div>
@@ -152,35 +152,35 @@
 				</h5>
 				<div class="card-body collapse-card-body">
 					<div class="quest-no"
-						*ngFor=' let quest of questionaire.questionnaireQuestions; let indexQuestion = index'>
-						<ul [ngSwitch]="quest.answerType" class="list">
+						*ngFor=' let questionIndex of questionaire.questionnaireQuestions; let indexQuestion = index'>
+						<ul [ngSwitch]="questionIndex.answerType" class="list">
 							<li *ngSwitchCase="'Radio'">
-									<div class="row category-margin" *ngIf="quest.groupLabel!==null && quest.showQuestion == true">
+									<div class="row category-margin" *ngIf="questionIndex.groupLabel!==null && questionIndex.showQuestion == true">
 											<div class="col-12 col-sm-12 col-md-12 pl-0">
-												<p class="category">{{quest.groupLabel}}</p>
+												<p class="category">{{questionIndex.groupLabel}}</p>
 											</div>
 									</div>
-								<div *ngIf="quest.showQuestion == true" class="list"
-									[ngClass]="{'errorquestion': showEvaluateMessageById(quest.questionId)}">
+								<div *ngIf="questionIndex.showQuestion == true" class="list"
+									[ngClass]="{'errorquestion': showEvaluateMessageById(questionIndex.questionId)}">
 									<p>
-										{{quest.question}} <span class="help-link"> <i
+										{{questionIndex.question}} <span class="help-link"> <i
 											class="fa fa-lightbulb-o"
-											(click)="getHelpLink(quest.description, indexQuestion)"></i></span>
+											(click)="getHelpLink(questionIndex.description, indexQuestion)"></i></span>
 									</p>
 									<div
 										*ngFor=" let option of questionaire.questionnaireOptions; let in=index"
 										class="radio-inline ">
-										<span *ngIf="quest.questionId == option.QUESTION_ID"> <input
+										<span *ngIf="questionIndex.questionId == option.QUESTION_ID"> <input
 											[disabled]="isViewMode" type="radio"
 											name="{{option.QUESTION_ID}}" [value]="option.OPTION_LABEL"
-											(change)="showChildQuestions(quest)"
-											[(ngModel)]="quest.selectedAnswer" />
+											(change)="showChildQuestions(questionIndex)"
+											[(ngModel)]="questionIndex.selectedAnswer" />
 											{{option.OPTION_LABEL}}
 										</span>
 									</div>
 									<div class="row category-margin" *ngIf="showHelpMsg[indexQuestion] == true">
 										<div class="col-12 col-sm-12 col-md-12 pl-0 helpCard">
-											<button class="closeResultCard close-help" (click)="getHelpLink(quest.description, indexQuestion)">
+											<button class="closeResultCard close-help" (click)="getHelpLink(questionIndex.description, indexQuestion)">
 												<i class="fa fa-times"></i>
 											</button>
 											<div class="helpMsg">
@@ -193,7 +193,7 @@
 						</ul>
 					</div>
 					<div *ngIf="isEvaluate" class="col-12 eval-msg">
-							<p [ngClass]="{'is-exempt-message':isExempt=='Y' || isExempt=='O',
+							<p class="alignLeft" [ngClass]="{'is-exempt-message':isExempt=='Y' || isExempt=='O',
 							'not-exempt-message':isExempt=='N'}">
 								<span class="danger">
 								<i class="fa"[ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
@@ -302,7 +302,7 @@
 		<div class="modal-content">
 			<div class="modal-header popup-header">
 				<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-					<h5 class="align" id="exampleModalLongTitle">Welcome to the COUHES Exempt Determination Questionnaire</h5>
+					<h5 class="align" id="exampleModalLongTitle">Welcome to the COUHES Exempt Questionnaire</h5>
 				</div>
 			</div>
 			<div class="modal-body modal-popup pb-0">
@@ -477,10 +477,10 @@
 					</div>
 				</div>
 			</div>
-			<section class="row btn-row-med sect-confirm-padding proceed-btn-align">
-				<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+			<section class="row btn-row-med sect-warning-padding proceed-btn-align">
+				<button class="btn mb-3 btn-primary tab_btn" data-dismiss="modal"
 					aria-label="Close" (click)="proceedWithWarning()">Proceed</button>
-					<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					<button class="btn mb-3 btn-primary tab_btn" data-dismiss="modal"
 					aria-label="Close">Close</button>
 			</section>
 		</div>
@@ -494,7 +494,7 @@
 <div class="modal fade" id="routeActionLogModal" tabindex="-1" role="dialog"
 	aria-labelledby="actionLogModal" aria-hidden="true">
 	<!-- alert modals-->
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-Action" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
 				<h5 class="modal-title" id="exampleModalLongTitle">Action Log</h5>
@@ -533,12 +533,12 @@
 			<label class="routeLogStatus">finalStatus</label>
 		</div>
 	</div>
-	<div class="borderBox col-12 cardTable">
+	<div class="borderBox col-12 cardTable pad-Bottom0">
 		<div class="pullSide">
 			<table class="table" id="routeLogTable">
 						   <thead class="tbl-head-clr thead-font-size cardThead">
 							<th >Name</th>
-							<th >Review Status</th>
+							<th >Status</th>
 							<th >Action Date</th>
 							<th >Comments</th>							
 							<th >Actions</th>
@@ -552,8 +552,8 @@
 											
 								<ng-template #showFullGrantManagerComments>{{logItem?.COMMENTS }}<i *ngIf="logItem?.COMMENTS?.length>30" (click)="commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
 							</td>	 -->
-							<td >{{logItem?.COMMENTS}}							
-								</td>			
+							<td title="{{logItem?.COMMENTS}}">{{ (logItem?.COMMENTS?.length>100)? (logItem?.COMMENTS | slice:0:100)+'...':(logItem?.COMMENTS) }}							
+								</td>	
 							<td >{{logItem?.ACTION_TYPE}}							
 							</td>			
 							
@@ -562,7 +562,7 @@
 		</div>
 	</div>
 		<!--end body-->
-		<div class="modal-footer" >
+		<div class="modal-footer pad-Top0" >
 				<button type="button" class="btnSkin btn-secondary"
 					data-dismiss="modal" data-toggle="modal">Close</button>
 			</div>
@@ -580,7 +580,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Confirm</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Approve/Reject</h5>
 				<button type="button" class="close modal-close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -591,7 +591,7 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-							<h4 class="popup-sub-head questionnaire-popups">Do you want to continue?</h4>
+							<h4 class="popup-sub-head questionnaire-popups">Please provide your comments</h4>
 						</div>
 						<!-- <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">	<label>Comment</label></div> -->
 					
@@ -604,7 +604,7 @@
 			</div>
 			<section class="row btn-row-med sect-confirm-padding proceed-btn-align">
 				<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
-				*ngIf="isApprovedAlert" aria-label="Close" (click)="approveConfirmClick()">Proceed</button>
+				*ngIf="isApprovedAlert" aria-label="Close" (click)="approveConfirmClick()">Approve</button>
 					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
 					*ngIf="isRejectedAlert" aria-label="Close" (click)="rejectConfirmClick()">Reject</button>
 					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"

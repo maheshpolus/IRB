@@ -114,7 +114,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		irbExemptForm.setExemptFormID(exemptId);
 		savePersonExemptForm(irbExemptForm,"I");
 		irbProtocolDao.irbExemptFormActionLog(irbExemptForm.getExemptFormID(), irbExemptForm.getActionTypesCode(), irbExemptForm.getComment(), irbExemptForm.getStatusCode(), irbExemptForm.getUpdateUser());
-		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(exemptId);
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(exemptId,null);
 		if(irbViewProfile != null && irbViewProfile.getIrbExemptFormList() != null){
 			irbExemptForm = irbViewProfile.getIrbExemptFormList().get(0);
 		}	
@@ -157,7 +157,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		CommonVO commonVO = new CommonVO();
 		String moduleItemsId = getModuleItemId(irbExemptForm.getPersonId(), irbExemptForm);
 		QuestionnaireDto questionnairesDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, moduleItemsId,irbExemptForm.getExemptQuestionnaireAnswerHeaderId());
-		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(irbExemptForm.getExemptFormID());
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(irbExemptForm.getExemptFormID(),personDTO.getPersonID());
 		if(irbViewProfile != null && irbViewProfile.getIrbExemptFormList() != null){
 			irbExemptForm = irbViewProfile.getIrbExemptFormList().get(0);
 		}	
@@ -197,11 +197,11 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public CommonVO getPersonExemptForm(IRBExemptForm irbExemptForm) throws Exception {
+	public CommonVO getPersonExemptForm(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception {
 		CommonVO commonVO = new CommonVO();
 		String moduleItemId = getModuleItemId(irbExemptForm.getPersonId(), irbExemptForm);
 		QuestionnaireDto questionnaireDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, moduleItemId,irbExemptForm.getExemptQuestionnaireAnswerHeaderId());
-		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(irbExemptForm.getExemptFormID());
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(irbExemptForm.getExemptFormID(), personDTO.getPersonID());
 		if(irbViewProfile != null && irbViewProfile.getIrbExemptFormList() != null){
 			irbExemptForm = irbViewProfile.getIrbExemptFormList().get(0);
 		}	
@@ -277,7 +277,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public CommonVO getExemptProtocolActivityLogs(Integer exemptFormID) {
 		CommonVO vo = new CommonVO();
 		IRBExemptForm exemptForm = new IRBExemptForm();
-		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(exemptFormID);
+		IRBViewProfile irbViewProfile = irbProtocolDao.getPersonExemptForm(exemptFormID, null);
 		if(irbViewProfile != null && irbViewProfile.getIrbExemptFormList() != null){
 			exemptForm = irbViewProfile.getIrbExemptFormList().get(0);
 		}	
@@ -304,7 +304,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		CommonVO commonVO = new CommonVO();
 		savePersonExemptForm(vo.getIrbExemptForm(),"U");
 		irbProtocolDao.irbExemptFormActionLog(vo.getIrbExemptForm().getExemptFormID(), vo.getIrbExemptForm().getActionTypesCode(), vo.getIrbExemptForm().getComment(), vo.getIrbExemptForm().getStatusCode(), vo.getIrbExemptForm().getUpdateUser());
-		commonVO = getPersonExemptForm(commonVO.getIrbExemptForm());
+		commonVO = getPersonExemptForm(commonVO.getIrbExemptForm(), vo.getPersonDTO());
 		return commonVO;
 	}
 }

@@ -182,7 +182,7 @@ public class IRBController {
 	public ResponseEntity<String> getPersonExemptForm(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;		 
-		CommonVO commonVO = irbProtocolService.getPersonExemptForm(vo.getIrbExemptForm());
+		CommonVO commonVO = irbProtocolService.getPersonExemptForm(vo.getIrbExemptForm(), vo.getPersonDTO());
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}

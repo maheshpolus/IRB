@@ -22,15 +22,16 @@
 		
 		<div class="col-sm-12" *ngIf="exemptList!=null && exemptList!=undefined" [ngClass]="{'main-list': exemptList?.length >1}">
 		<div class="row list-rows" *ngFor="let irb of exemptList  | filterStatus : statusCode">
-				<div class="col-md-3 col-sm-12 col-12 list-view">
+				<div class="col-md-2 col-sm-12 col-12 list-view">
 						<span *ngIf="irb.isExempt=='Y' && irb.status=='Submitted'" class="in-progress"><p>Exempt</p></span>
 						<span *ngIf="irb.isExempt=='N' && irb.status=='Submitted'" class="active-status"><p>Not Exempt</p></span>
 						<span *ngIf="irb.isExempt=='O' && irb.status=='Submitted'" class="in-drafts"><p>Review Not Required</p></span>
 						<span *ngIf="irb.isExempt==null || irb.status=='In Progress'" class="active-status"><p>Not Submitted</p></span>
 						<span *ngIf="irb.isExempt=='O' && (irb.status=='Enroute to IRB office' || irb.status=='Enroute to Faculty sponsor')" class="in-drafts"><p>Not Exempt-Pending Review</p></span>
 						<span *ngIf="irb.isExempt=='Y' && (irb.status=='Enroute to IRB office' || irb.status=='Enroute to Faculty sponsor')" class="in-progress"><p>Exempt-Pending Review</p></span>
+						<span *ngIf="irb.isExempt=='N' && (irb.status=='Enroute to IRB office' || irb.status=='Enroute to Faculty sponsor')" class="in-progress"><p>Not Exempt-Pending Review</p></span>
 					</div>
-					<div class="col-md-7 col-sm-12 col-12 list-des">
+					<div class="col-md-8 col-sm-12 col-12 list-des">
 							<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
 							<div>
 								<div class="row">
@@ -38,22 +39,25 @@
 											<span>PI : </span>{{irb.personName}}
 									</div>
 									<div class="col-md-6">
-										<span>Faculty Sponser :</span>{{irb.facultySponsorPerson}} 
+										
+										<span>Status : </span>{{irb.status}}
+										
 									</div>
 								</div>
 								<div class="row"></div>
 								<div class="row">
 										<div class="col-md-6">
-											<span>Last Updated By : </span>{{irb.updateUser}} on {{irb.updatetimstamp}}
+										<span>Faculty Sponser :</span>{{irb.facultySponsorPerson}} 
+											
 										</div>
 										<div class="col-md-6">
-											<span>Status : </span>{{irb.status}}
+											<span>Last Updated By : </span>{{irb.updateUser}} on {{irb.updateTimestamp | date :"MM/dd/yyyy"}}
 										</div>
 										<div class="col-md-6">
-											<span>Start Date : </span>{{irb.exemptProtocolStartDate}}  
+											<span>Start Date : </span>{{irb.exemptProtocolStartDate  | date :"MM/dd/yyyy"}}  
 										</div>
 										<div class="col-md-6">
-											<span>End Date : </span>{{irb.exemptProtocolEndDate}}  
+											<span>End Date : </span>{{irb.exemptProtocolEndDate  | date :"MM/dd/yyyy"}}  
 										</div>
 								</div>
 							</div>

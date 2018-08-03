@@ -18,7 +18,6 @@ public class IRBExemptForm {
 	private String unitNumber;
 	private String unitName;
 	private String summary;
-	private boolean isFacultySponsor;
 	private String comment;
 	private String actionTypesCode;
 	private String checkListDescription;
@@ -28,6 +27,8 @@ public class IRBExemptForm {
 	private String exemptProtocolEndDate;
 	private String facultySponsorJobTitle;
 	private String PIJobTitle;
+	private boolean loggedInUserFacultySponsor;
+	private boolean loggedInUserPI;
 	
 	public String getCheckListAcType() {
 		return checkListAcType;
@@ -140,13 +141,6 @@ public class IRBExemptForm {
 		this.unitName = unitName;
 	} 
 	
-	public boolean getIsFacultySponsor() {
-		return isFacultySponsor;
-	}
-	public void setIsFacultySponsor(boolean b) {
-		this.isFacultySponsor = b;
-	}
-	
 	public String getComment() {
 		return comment;
 	}
@@ -207,5 +201,21 @@ public class IRBExemptForm {
 
 	public void setPIJobTitle(String pIJobTitle) {
 		PIJobTitle = pIJobTitle;
+	}
+
+	public boolean isLoggedInUserFacultySponsor() {
+		return loggedInUserFacultySponsor;
+	}
+
+	public void setLoggedInUserFacultySponsor(boolean loggedInUserFacultySponsor) {
+		this.loggedInUserFacultySponsor = loggedInUserFacultySponsor;
+	}
+
+	public boolean isLoggedInUserPI() {
+		return loggedInUserPI;
+	}
+
+	public void setLoggedInUserPI(boolean loggedInUserPI) {
+		this.loggedInUserPI = loggedInUserPI;
 	}
 }

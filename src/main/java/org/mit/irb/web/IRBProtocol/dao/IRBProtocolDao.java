@@ -42,7 +42,7 @@ public interface IRBProtocolDao {
 	 
 	 Integer getNextExemptId();
 	 
-	 IRBViewProfile getPersonExemptForm(Integer exemptFormId);
+	 IRBViewProfile getPersonExemptForm(Integer exemptFormId, String string);
 
 	ArrayList<HashMap<String, Object>> getLeadunitAutoCompleteList();
 

@@ -88,3 +88,201 @@ ALTER TABLE "MITKC_IRB_PERSON_EXEMPT_FORM" ADD START_DATE  DATE
 /
 ALTER TABLE "MITKC_IRB_PERSON_EXEMPT_FORM" ADD END_DATE  DATE
 /
+SET DEFINE OFF
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (701,'Exempt - When PI Submits (If FS is not required), Send to PI. Inform PI that study is exempt.','Determination - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+A determination has been made regarding your request, {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} - {EXEMPT_CATEGORY}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+Investigators must comply with the requirement outline in the Investigator Responsibility Guidelines outlined on the <a href="https://www.google.co.in/">COUHES website</a>.
+<br/><br/>
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="https://www.google.co.in/">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (702,'NonExempt – When PI Submits (If No FS required), send to PI, saying your study is non-exempt','Determination - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+A determination has been made regarding your request, {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} - {EXEMPT_CATEGORY} {COMMENTS}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+A non-exempt determination requires Comprehensive Review. Please visit the <a href="https://www.google.co.in/">COUHES website</a> for further information.
+<br/><br/> 
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="https://www.google.co.in/">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (703,'When PI Submits (If No FS required), send to IRB, saying one study is submitted as non-exempt','Determination - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+A determination has been made regarding request, {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} - {EXEMPT_CATEGORY} {COMMENTS}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+Thank you,
+<br/><br/>
+MIT COUHES Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (704,'Exempt – When FS clicks reject button, send to PI, saying your study is returned by FS','[ACTION REQUIRED] Status ({EXEMPT_FORM_STATUS}) - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+An action is required for {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Action Required:</b> Response - Returned by Faculty Sponsor
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Note:</b> {COMMENTS}
+<br/><br/>
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="https://www.google.co.in/">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (705,'Exempt – When PI submits (FS required) send to FS, saying one study is waiting for your review','[ACTION REQUIRED] Status ({EXEMPT_FORM_STATUS}) - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+An action is required for {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Action Required:</b> Response – Review Request
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} - {EXEMPT_CATEGORY}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+<P>As Faculty Sponsor, you are required to oversee the human subject research conducted under this study and ensure investigators adhere to the Investigator Responsibility Guidelines outlined on the <a href="{IRB_URL}">COUHES website</a></P>
+<br/><br/>
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="{IRB_URL}">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (706,'Exempt – When FS approves send to PI & FS, saying study is approved','Determination - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+A determination has been made regarding your request, {EXEMPT_NUMBER} - {STUDY_TITLE}. 
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} – {EXEMPT_CATEGORY}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+Investigators must comply with the requirement outline in the Investigator Responsibility Guidelines outlined on the <a href="{IRB_URL}">COUHES website.</a>
+<br/><br/>
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="{IRB_URL}">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (707,'Non Exempt – When FS approves send to PI, FS saying study is approved','Determination - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+A determination has been made regarding your request, {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} – {EXEMPT_CATEGORY} {COMMENTS}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator: {PI_NAME}
+</b>
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor: {FACULTY_SPONSOR}
+</b>
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="{IRB_URL}">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects |
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (708,'Non Exempt – When FS rejects a study send to PI, saying your study is rejected by FS','[ACTION REQUIRED] Status ({EXEMPT_FORM_STATUS}) - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+An action is required for {EXEMPT_NUMBER} - {STUDY_TITLE}. 
+<br/><br/> 
+<b>Action Required:</b> Response – Returned by Faculty Sponsor
+<br/><br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Note:</b> {COMMENTS}
+<br/><br/> 
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/> 
+Thank you,
+<br/><br/>
+<a href="{IRB_URL}">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/> 
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/> 
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+Insert into MITKC_NOTIFICATION_TYPE (NOTIFICATION_NUMBER,DESCRIPTION,SUBJECT,IS_ACTIVE,UPDATE_USER,UPDATE_TIMESTAMP,MODULE_CODE,MESSAGE) values (709,'Non Exempt – When PI submits a study (FS required) send to FS, saying one study is waiting for your review','[ACTION REQUIRED] Status ({EXEMPT_FORM_STATUS}) - {EXEMPT_NUMBER} - {STUDY_TITLE}','Y',user,sysdate,null,'Hi,
+<br/><br/>
+An action is required for {EXEMPT_NUMBER} - {STUDY_TITLE}.
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Action Required:</b> Response – Review Request
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Exempt Determination:</b> {DETERMINATION} – {EXEMPT_CATEGORY} {COMMENTS}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Principal Investigator:</b> {PI_NAME}
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Faculty Sponsor:</b> {FACULTY_SPONSOR}
+<br/><br/>
+As Faculty Sponsor, you are required to oversee the human subject research conducted under this study and ensure investigators adhere to theInvestigator Responsibility Guidelines outlined on the <a href="{IRB_URL}">COUHES website</a>
+<br/><br/>
+If you have questions, contact the COUHES to determine further required action.
+<br/><br/>
+Thank you,
+<br/><br/>
+<a href="{IRB_URL}">MIT COUHES</a> Committee on the Use of Humans as Experimental Subjects | 
+<br/><br/>
+E25-143b, 77 Mass Ave, Cambridge, MA 02139
+<br/><br/>
+Ph: 617-253-6787 Email: COUHES@mit.edu')
+/
+commit
+/

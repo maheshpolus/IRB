@@ -27,8 +27,7 @@ const appRoutes = [
             { path: 'expanded-view', component: ExpandedViewComponent },
             { path: 'exempt-questionaire', component: ExemptQuestionaireComponent,
                     resolve: { irb: DashboardResolverService }
-            },
-            { path: 'committee', loadChildren:'./committee/committee.module#CommitteeModule'}
+            }
         ]
     }
 ];

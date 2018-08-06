@@ -20,6 +20,7 @@ select '*-*-*-*-*-*-*- Started compiling MITKC IRB Procedures V2.0 '|| localtime
 @procedure/FN_IRB_EXEMP_FORM_ACTION_LOG.sql;
 @procedure/GET_IRB_PROTOCOL_DETAILS.sql;
 @procedure/GET_IRB_NOT_EXEMPT_QSTN_LIST.sql;
+@procedure/pkg_mitkc_mail_generic.sql
 commit
 /
 select '*-*-*-*-*-*-*- Completed building MITKC IRB  V2.0'|| localtimestamp from dual;

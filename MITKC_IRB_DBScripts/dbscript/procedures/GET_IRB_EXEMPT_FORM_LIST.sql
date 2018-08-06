@@ -96,9 +96,7 @@ BEGIN
 						||' order by T1.UPDATE_TIMESTAMP desc
             ) WHERE ROWNUM < 100';
 		
-    INSERT INTO TMP_LOG(SQL_QUERY) VALUES(ls_dyn_sql);
-    commit;
- 			open cur_generic for ls_dyn_sql;
+   			open cur_generic for ls_dyn_sql;
 	
 END;
 /

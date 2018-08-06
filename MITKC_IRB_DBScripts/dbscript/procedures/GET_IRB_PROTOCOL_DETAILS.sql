@@ -7,7 +7,7 @@ BEGIN
     OPEN CUR_GENERIC FOR
 		SELECT 
 		t1.protocol_number,
-		t1.protocol_id,
+		t1.protocol_id,		
 		t1.description,
 		t1.title,
 		t4.person_name as pi_name,

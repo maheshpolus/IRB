@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
 
     /** get userDTO from resolver service */
     ngOnInit() {
+        
          this.userDTO = this._activatedRoute.snapshot.data['irb'];
     }
 }

@@ -57,4 +57,8 @@ export class SnapshotsComponent implements OnInit {
   goToQuestionaire() {
       this._router.navigate(['/irb/exempt-questionaire']);
   }
+   /** route to Create Protocol module when the link is clicked */
+   goToCreateProtocol() {
+    this._router.navigate(['/irb/irb-create']);
+}
 }

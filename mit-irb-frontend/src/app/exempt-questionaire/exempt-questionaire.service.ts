@@ -3,10 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class ExemptQuestionaireService {
-
+  formData = new FormData();
 constructor(private _http: HttpClient) { }
 
-  getQuestionaire( params ) {
+  getQuestionaire( params ) {    
       return this._http.post('/mit-irb/savePersonExemptForm', params);
   }
   saveQuestionaire( params ) {
@@ -20,5 +20,33 @@ constructor(private _http: HttpClient) { }
   }
   evaluatedQuestionaire( params ) {
     return this._http.post('/mit-irb/getEvaluateMessage', params);
+  }
+  addExemptProtocolChecklist(exemptForm: Object,uploadedFile){
+    this.formData.delete( 'files' ); 
+        this.formData.delete( 'formDataJson' );
+        for ( var i = 0; i < uploadedFile.length; i++ ) {
+            this.formData.append( 'files', uploadedFile[i] );
+        }
+        this.formData.append( 'formDataJson', JSON.stringify( exemptForm ) );
+    return this._http.post('/mit-irb/addExemptProtocolAttachments', this.formData);
+  }
+
+showExemptProtocolChecklist(params){
+    return this._http.post('/mit-irb/getExemptProtocolAttachmentList', params);
+}
+
+downloadExemptProtocolChecklist(checklistId){ 
+    return this._http.get('/mit-irb/downloadExemptProtocolAttachments', { 
+        headers: new HttpHeaders().set('checkListId', checklistId.toString()),
+        responseType:'blob'
+    });
+}
+  
+  getActivityLogByExemptFormID( params ) {
+    return this._http.post('/mit-irb/getExemptProtocolActivityLogs', params);
+  }
+  approveOrDisapproveAction(params)
+  {
+    return this._http.post('/mit-irb/approveOrDisapproveExemptProtocols', params);
   }
 }

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public interface IRBProtocolDao {
 	ArrayList<HashMap<String, Object>> getLeadunitAutoCompleteList();
 
 	void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment, String exemptstatusCode,
-			String updateUser);
+			String updateUser, Integer notificationNumber, PersonDTO personDTO);
 
 	void addExemptProtocolAttachments(MultipartFile[] files, IRBExemptForm jsonObj);
 	

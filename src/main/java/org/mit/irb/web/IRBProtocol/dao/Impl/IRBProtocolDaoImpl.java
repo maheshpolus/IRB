@@ -2,7 +2,7 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Date;
+import java.sql.Clob;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialException;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
@@ -22,6 +24,8 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
+import org.mit.irb.web.notification.ExemptProtocolEmailNotification;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,6 +39,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 	DBEngine dbEngine;
+	
+	@Autowired
+	ExemptProtocolEmailNotification exemptProtocolEmailNotification;
 	
 	IRBProtocolDaoImpl(){
 		dbEngine = new DBEngine();
@@ -489,6 +496,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		}
 		return jobTitle;
 	}
+	
 	@Override
 	public IRBViewProfile getPersonExemptForm(Integer exemptFormId, String loginUserPersonId) {
 		IRBViewProfile irbViewProfile= new IRBViewProfile();
@@ -689,8 +697,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 	@Override
 	public void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment,
-			String exemptstatusCode, String updateUser) {
+			String exemptstatusCode, String updateUser, Integer notificationNumber, PersonDTO personDTO) {
 		try {
+			System.out.println("Notification Number: "+notificationNumber);
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			outParam.add(new OutParameter("returnId",DBEngineConstants.TYPE_INTEGER));
@@ -700,12 +709,28 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			inParam.add(new InParameter("av_exempt_status_code", DBEngineConstants.TYPE_STRING, exemptstatusCode));
 			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, updateUser));
 			dbEngine.executeFunction(inParam, "fn_irb_exemp_form_action_log",outParam);
-			
+			if(notificationNumber != null){
+				logger.info("Sending Email Notification with status code "+notificationNumber);
+				sendingExemptNotifications(formId,comment,personDTO.getPersonID(),notificationNumber);
+			}
 		} catch (Exception e) {
 			logger.error("Error in methord action log exempt questionnaire", e);
 		}
 	}
 
+	public void sendingExemptNotifications(Integer formId,String comment, String loginPersonId, Integer notificationNumber){
+		Clob exemptComment = null;
+		try {
+			if(comment != null){
+				exemptComment = new javax.sql.rowset.serial.SerialClob(comment.toCharArray());
+			}
+			exemptProtocolEmailNotification.sendingExemptEmailNotifications(formId, exemptComment, loginPersonId, notificationNumber);
+		} catch (SerialException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void addExemptProtocolAttachments(MultipartFile[] files, IRBExemptForm irbExemptForm){
 			try {
@@ -841,5 +866,5 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		e.printStackTrace();
 		logger.info("SQLException in updateExemptprotocolAttachments method"+ e);
 	}
-	}
+  }
 }

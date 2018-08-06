@@ -3417,3 +3417,36 @@ transition: display .25s}
 {
     color:red !important;
 }
+
+.pad-Top0
+{
+	    padding-top: 0px !important;
+}
+.pad-Bottom0
+{
+	    padding-bottom: 0px !important;
+}
+.alignLeft{
+	text-align: left;
+}
+.margin-6
+{
+	margin-left: -6px;
+}
+.sect-warning-padding{
+	    padding-right: 28px;
+     padding-bottom: 0px;
+}
+@media (min-width: 576px){
+.modal-dialog-Action {
+    max-width: 750px !important;
+}
+}
+.viewModeActionLog>div>div>span {  
+    font-size: .9em !important;  
+    font-weight: 600 !important;
+}
+.wComment
+{
+	width:26%;
+}

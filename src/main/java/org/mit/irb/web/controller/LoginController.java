@@ -79,7 +79,7 @@ public class LoginController extends BaseController {
 		return new ResponseEntity<String>(responseData, status);
 	}
 
-	@RequestMapping(value = {"/", "/dashboard"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public String entryPage(HttpServletRequest request, HttpSession session) throws DBException, IOException {
 		logger.info("entry Page");
 			if ("TOUCHSTONE".equalsIgnoreCase(login_mode)) {

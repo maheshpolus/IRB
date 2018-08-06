@@ -97,12 +97,13 @@ public interface IRBProtocolService {
 	IRBViewProfile getPersonExemptFormList(CommonVO vo) throws ParseException;	
 	
 	/**
+	 * @param personDTO 
 	 * @param PersonDTO
 	 * @param IRBExemptForm
 	 * @return the list of questionnaire questions,its condition,options and its answers
 	 * @throws Exception
 	 */
-	CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm) throws Exception;
+	CommonVO savePersonExemptForms(IRBExemptForm irbExemptForm, PersonDTO personDTO) throws Exception;
 	
 	/**
 	 * @param personDTO 
@@ -142,7 +143,7 @@ public interface IRBProtocolService {
 	 * @param updateUser
 	 * @return void used to write the logs of each exempt form 
 	 */
-	void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment, String exemptstatusCode, String updateUser);
+	void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment, String exemptstatusCode, String updateUser, Integer notificationNumber, PersonDTO personDTO);
 
 	/**
 	 * @param files

@@ -29,6 +29,7 @@ public class IRBExemptForm {
 	private String PIJobTitle;
 	private boolean loggedInUserFacultySponsor;
 	private boolean loggedInUserPI;
+	private Integer notificationNumber;
 	
 	public String getCheckListAcType() {
 		return checkListAcType;
@@ -217,5 +218,13 @@ public class IRBExemptForm {
 
 	public void setLoggedInUserPI(boolean loggedInUserPI) {
 		this.loggedInUserPI = loggedInUserPI;
+	}
+
+	public Integer getNotificationNumber() {
+		return notificationNumber;
+	}
+
+	public void setNotificationNumber(Integer notificationNumber) {
+		this.notificationNumber = notificationNumber;
 	}
 }

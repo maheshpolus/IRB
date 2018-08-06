@@ -223,8 +223,12 @@
 						*ngIf="isViewMode == false"
 						(click)="evaluateExemptQuestionnaire()"
 						[disabled]="QuestionnaireCompletionFlag=='N'">Preview</button>
+						<button class="btn btn-primary tab_btn" data-toggle="modal"
+						data-target="#approveRejectActionConfirmModal" type="submit"						
+						*ngIf="isViewMode == false && isActionByPi == true" (click)="returnQuestionnaireClick()()"
+						[disabled]="QuestionnaireCompletionFlag=='N'">Return</button>
 						<button class="btn btn-primary tab_btn submit-btn" data-toggle="modal"
-						data-target="#confirmModal" type="submit"
+						data-target="#confirmModal" type="submit"						
 						*ngIf="isViewMode == false" (click)="submitConfirmation()"
 						[disabled]="QuestionnaireCompletionFlag=='N'">Submit</button>
 				</section>
@@ -505,20 +509,20 @@
 			</div>
 		<!--body-->
 		<div
-		class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard resultCardBefore">
+		class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode viewModeActionLog resultCard resultCardBefore">
 		<div class="row cardColor-1">
 			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6" >
-				<label>Exempt Form #</label> <span>{{actionLogResult?.irbExemptForm?.exemptFormID}}</span>
+				<label><b>Exempt Form #</b></label> <span>{{actionLogResult?.irbExemptForm?.exemptFormID}}</span>
 			</div>
 			
 			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
-				<label>Status</label> <span>{{actionLogResult?.irbExemptForm?.status}}</span>
+				<label><b>Status</b></label> <span>{{actionLogResult?.irbExemptForm?.status}}</span>
 			</div>
 			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
-				<label>PI</label> <span>{{actionLogResult?.irbExemptForm?.personName}}</span>
+				<label><b>PI</b></label> <span>{{actionLogResult?.irbExemptForm?.personName}}</span>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
-					<label>Title</label> <span>{{actionLogResult?.irbExemptForm?.exemptTitle}}</span>
+					<label><b>Title</b></label> <span>{{actionLogResult?.irbExemptForm?.exemptTitle}}</span>
 				</div>
 			<!-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 				<label>Home Unit</label> <span></span>
@@ -537,25 +541,23 @@
 		<div class="pullSide">
 			<table class="table" id="routeLogTable">
 						   <thead class="tbl-head-clr thead-font-size cardThead">
-							<th >Name</th>
-							<th >Status</th>
-							<th >Action Date</th>
-							<th >Comments</th>							
-							<th >Actions</th>
+						   <th >Actions</th>							
+							<th>Status</th>							
+							<th >Comments</th>						
+							<th >Action Taken</th>
 						</thead>						
 						<tr class="cardTr" *ngFor = "let logItem of actionLogResult.actionLogs;let i = index">
-							<td >{{logItem?.UPDATE_USER}}</td>
-							<td >{{logItem?.EXEMPT_STATUS}}									
+						<td >{{logItem?.ACTION_TYPE}}							
 							</td>
-							<td >{{logItem?.UPDATE_TIMESTAMP | date:'MM/dd/yyyy'}}</td>
+							<td >{{logItem?.EXEMPT_STATUS}}									
+							</td>						
 							<!-- <td style="width:30%"><span *ngIf="!commentsGrantManagerExpand[i] && logItem?.COMMENTS?.length>30;else showFullGrantManagerComments" (click) = "commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]">{{logItem?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
 											
 								<ng-template #showFullGrantManagerComments>{{logItem?.COMMENTS }}<i *ngIf="logItem?.COMMENTS?.length>30" (click)="commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
 							</td>	 -->
-							<td title="{{logItem?.COMMENTS}}">{{ (logItem?.COMMENTS?.length>100)? (logItem?.COMMENTS | slice:0:100)+'...':(logItem?.COMMENTS) }}							
-								</td>	
-							<td >{{logItem?.ACTION_TYPE}}							
-							</td>			
+							<td class="wComment" title="{{logItem?.COMMENTS}}">{{ (logItem?.COMMENTS?.length>100)? (logItem?.COMMENTS | slice:0:100)+'...':(logItem?.COMMENTS) }}							
+								</td>								
+									<td ><b>{{logItem?.UPDATE_USER}} </b><br/> On {{logItem?.UPDATE_TIMESTAMP | date:'MM/dd/yyyy h:mm:ss a'}}</td>		
 							
 						</tr>						
 				   </table> 
@@ -580,7 +582,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Approve/Reject</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">{{ApproveRejectHeader}}</h5>
 				<button type="button" class="close modal-close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -591,7 +593,7 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-							<h4 class="popup-sub-head questionnaire-popups">Please provide your comments</h4>
+							<h4 style="text-align: left;" class="popup-sub-head questionnaire-popups">Please provide your comments</h4>
 						</div>
 						<!-- <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">	<label>Comment</label></div> -->
 					
@@ -607,6 +609,8 @@
 				*ngIf="isApprovedAlert" aria-label="Close" (click)="approveConfirmClick()">Approve</button>
 					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
 					*ngIf="isRejectedAlert" aria-label="Close" (click)="rejectConfirmClick()">Reject</button>
+					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
+					*ngIf="isReturnAlert" aria-label="Close" (click)="returnConfirmClick()">Return</button>
 					<button data-toggle="modal" class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal"
 					aria-label="Close">Close</button>
 			</section>

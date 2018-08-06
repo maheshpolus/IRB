@@ -162,7 +162,7 @@ public class IRBController {
 	@RequestMapping(value = "/savePersonExemptForm", method = RequestMethod.POST)
 	public ResponseEntity<String> savePersonExemptForms(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		HttpStatus status = HttpStatus.OK;
-		CommonVO commonVO = irbProtocolService.savePersonExemptForms(vo.getIrbExemptForm());
+		CommonVO commonVO = irbProtocolService.savePersonExemptForms(vo.getIrbExemptForm(),vo.getPersonDTO());
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);

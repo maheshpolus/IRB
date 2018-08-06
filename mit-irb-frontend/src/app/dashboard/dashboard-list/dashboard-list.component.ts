@@ -315,7 +315,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         if(this.requestObject.exemptFormEndDate!=null &&this.requestObject.exemptFormEndDate!='')
         this.exemptParams.exemptFormEndDate=this.GetFormattedDate(this.requestObject.exemptFormEndDate);    
         this.exemptParams.exemptFormfacultySponsorName=this.requestObject.exemptFormfacultySponsorName;
-        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {  debugger;
+        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {  
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {

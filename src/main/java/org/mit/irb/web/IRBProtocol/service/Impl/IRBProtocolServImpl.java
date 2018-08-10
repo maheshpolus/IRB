@@ -300,7 +300,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		CommonVO commonVO = new CommonVO();
 		savePersonExemptForm(vo.getIrbExemptForm(),"U");
 		irbProtocolDao.irbExemptFormActionLog(vo.getIrbExemptForm().getExemptFormID(), vo.getIrbExemptForm().getActionTypesCode(), vo.getIrbExemptForm().getComment(), vo.getIrbExemptForm().getStatusCode(), vo.getIrbExemptForm().getUpdateUser(),vo.getIrbExemptForm().getNotificationNumber(),vo.getPersonDTO());
-		commonVO = getPersonExemptForm(commonVO.getIrbExemptForm(), vo.getPersonDTO());
+		commonVO = getPersonExemptForm(vo.getIrbExemptForm(), vo.getPersonDTO());
 		return commonVO;
 	}
 }

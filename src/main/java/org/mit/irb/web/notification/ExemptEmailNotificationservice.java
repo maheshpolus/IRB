@@ -11,5 +11,5 @@ public interface ExemptEmailNotificationservice {
 	 * @param notificationNumber
 	 * function to send exempt protocol notifications
 	*/
-	public void sendingExemptEmailNotifications(Integer exemptFormId, Clob comments, String loginPersonId,Integer notificationNumber);
+	public void sendingExemptEmailNotifications(Integer exemptFormId, String comments, String loginPersonId,Integer notificationNumber);
 }

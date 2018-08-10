@@ -719,15 +719,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	}
 
 	public void sendingExemptNotifications(Integer formId,String comment, String loginPersonId, Integer notificationNumber){
-		Clob exemptComment = null;
-		try {
-			if(comment != null){
-				exemptComment = new javax.sql.rowset.serial.SerialClob(comment.toCharArray());
-			}
-			exemptProtocolEmailNotification.sendingExemptEmailNotifications(formId, exemptComment, loginPersonId, notificationNumber);
-		} catch (SerialException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		try {			
+			exemptProtocolEmailNotification.sendingExemptEmailNotifications(formId, comment, loginPersonId, notificationNumber);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

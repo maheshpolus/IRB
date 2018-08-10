@@ -23,7 +23,7 @@ public class ExemptProtocolEmailNotification implements ExemptEmailNotifications
 	}
 	
 	@Override
-	public void sendingExemptEmailNotifications(Integer exemptFormId, Clob comments, String loginPersonId, Integer notificationNumber) {
+	public void sendingExemptEmailNotifications(Integer exemptFormId, String comments, String loginPersonId, Integer notificationNumber) {
 		String functionExecuteStatus = null;
 		try{
 			ArrayList<OutParameter> outParam = new ArrayList<>();
@@ -37,7 +37,7 @@ public class ExemptProtocolEmailNotification implements ExemptEmailNotifications
 			ArrayList<HashMap<String,Object>> result = dbEngine.executeFunction(inputParam,"pkg_mitkc_mail_generic.fn_send_irb_notification",outParam);
 			if(result != null && !result.isEmpty()){
 				HashMap<String,Object> hmResult = result.get(0);
-				functionExecuteStatus = (String)hmResult.get("status");
+				functionExecuteStatus = (String) hmResult.get("status");
 			}		
 		}catch(Exception e){
 			logger.error("Error in methord sendingExemptEmailNotifications function",e);

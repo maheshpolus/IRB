@@ -699,7 +699,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	public void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment,
 			String exemptstatusCode, String updateUser, Integer notificationNumber, PersonDTO personDTO) {
 		try {
-			System.out.println("Notification Number: "+notificationNumber);
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			outParam.add(new OutParameter("returnId",DBEngineConstants.TYPE_INTEGER));
@@ -710,7 +709,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, updateUser));
 			dbEngine.executeFunction(inParam, "fn_irb_exemp_form_action_log",outParam);
 			if(notificationNumber != null){
-				logger.info("Sending Email Notification with status code "+notificationNumber);
+				logger.info("Sending Email Notification with status code: "+notificationNumber);
 				sendingExemptNotifications(formId,comment,personDTO.getPersonID(),notificationNumber);
 			}
 		} catch (Exception e) {

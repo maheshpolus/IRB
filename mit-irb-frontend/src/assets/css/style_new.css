@@ -1439,6 +1439,10 @@ form-check-label {
 .active-status {
     background: #009688!important; 
 }
+.exempt-status
+{
+    background: lightskyblue!important; 
+}
 
 /*for modal*/
 .modal-content{

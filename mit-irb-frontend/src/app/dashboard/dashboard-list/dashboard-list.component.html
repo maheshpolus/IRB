@@ -2,7 +2,7 @@
 		<div class="navigate">
 			<ul class="navbarmed" *ngIf="roleType == 'PI'">
 				<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}"><a
-					(click)="getIrbListData('ALL')">All My Protocols</a></li>
+					(click)="getIrbListData('ALL')">My Protocols</a></li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}"><a
 					(click)="getIrbListData('PENDING')">Pending Action</a></li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'DRAFT')}"><a
@@ -12,7 +12,7 @@
 				<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}"><a
 					(click)="getIrbListData('ACTIVE')">Active</a></li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}"><a
-					(click)="getExemptListData('EXEMPT')">Exempt Studies</a></li>
+					(click)="getExemptListData('EXEMPT')">Exempt Determinations</a></li>
 				<span> <a (click)="showAdvanceSearch()"><i
 						class="fa fa-glass"></i></a>
 				</span>
@@ -194,6 +194,7 @@
 											placeholder="End Date" [(ngModel)]="requestObject.exemptFormEndDate">
 											<owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
 										</div>
+										
 								<div class="form-group">
 									<button class="btn btn-default btn-search"
 										(click)="getExemptListData('EXEMPT')">

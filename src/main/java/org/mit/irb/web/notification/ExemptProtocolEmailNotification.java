@@ -1,6 +1,6 @@
 package org.mit.irb.web.notification;
 
-import java.sql.Clob;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,6 +26,11 @@ public class ExemptProtocolEmailNotification implements ExemptEmailNotifications
 	public void sendingExemptEmailNotifications(Integer exemptFormId, String comments, String loginPersonId, Integer notificationNumber) {
 		String functionExecuteStatus = null;
 		try{
+			logger.info("exemptFormId: "+exemptFormId);
+			logger.info("comments: "+comments);
+			logger.info("loginPersonId: "+loginPersonId);
+			logger.info("notificationNumber: "+notificationNumber);
+			logger.info("notificationType: "+notificationType);
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			ArrayList<InParameter> inputParam = new ArrayList<>();
 			inputParam.add(new InParameter("AV_MODULE_ITEM_ID", DBEngineConstants.TYPE_INTEGER, exemptFormId));

@@ -28,7 +28,7 @@
 			*ngIf="exemptList!=null && exemptList!=undefined"
 			[ngClass]="{'main-list': exemptList?.length >1}">
 			<div class="row list-rows"
-				*ngFor="let irb of exemptList  | filterStatus : statusCode">
+				*ngFor="let irb of exemptList  | filterStatus : statusCode : userDTO.personID :tabSelected">
 				<div class="col-md-2 col-sm-12 col-12 list-view">
 					<span *ngIf="irb.isExempt=='Y' && irb.statusCode=='4'"
 						class="in-progress"><p>Exempt</p></span> <span

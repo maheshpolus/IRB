@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +16,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 import oracle.jdbc.OracleTypes;
-import oracle.sql.CLOB;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.common.utils.*;
@@ -295,16 +295,15 @@ public class DBEngine {
 					callableStatement.setTime(++paramterId, getTimeValue(inParameter.getParameterValue()));
 					
 				}else if(inParameter.getParameterType().equals(DBEngineConstants.TYPE_CLOB)){
-					
+					Clob nullClob = null;
 					 String clobData = getClobValue(inParameter.getParameterValue());
 	                 if (clobData != null) {
 	                     ByteArrayInputStream bais = new ByteArrayInputStream(clobData.getBytes());
 	                     callableStatement.setAsciiStream(++paramterId, bais, bais.available());
 	                     bais.close();
 	                 } else {
-	                	 callableStatement.setClob(++paramterId, CLOB.empty_lob());
-	                 }
-	                 
+	                	 callableStatement.setClob(++paramterId, nullClob);
+	                 }   
 				}else if(inParameter.getParameterType().equals(DBEngineConstants.TYPE_BLOB)){
 					  byte[] buffer = null;
 	                  buffer = (byte[])getBlobValue(inParameter.getParameterValue());
@@ -322,12 +321,8 @@ public class DBEngine {
 	                 callableStatement.setAsciiStream(++paramterId,inputStream, inputStream.available());
 	                 inputStream.close();
 				}
-				
-				
 			}
-			
 			callableStatement.execute();
-				
 				int outParaIndex = 0;
 				
 				if(outParam != null && outParam.isEmpty()){
@@ -351,14 +346,9 @@ public class DBEngine {
 						}else if(outResult.getParameterType().equals(DBEngineConstants.TYPE_FLOAT)){
 							htResultSet.put(outResult.getParameterName(),""+callableStatement.getDouble(++outParaIndex));
 	                        result = packageResult(htResultSet);
-							
 						}
-						
 					}
-					
 				}
-							
-			
 			return result;
 			
 		}
@@ -405,14 +395,14 @@ public class DBEngine {
 				callableStatement.setTime(++paramterId, getTimeValue(inParameter.getParameterValue()));
 				
 			}else if(inParameter.getParameterType().equals(DBEngineConstants.TYPE_CLOB)){
-				
+				Clob nullClob = null;
 				 String clobData = getClobValue(inParameter.getParameterValue());
                  if (clobData != null) {
                      ByteArrayInputStream bais = new ByteArrayInputStream(clobData.getBytes());
                      callableStatement.setAsciiStream(++paramterId, bais, bais.available());
                      bais.close();
                  } else {
-                	 //callableStatement.setClob(++paramterId, CLOB.empty_lob());
+                	 callableStatement.setClob(++paramterId, nullClob);
                  }
                  
 			}else if(inParameter.getParameterType().equals(DBEngineConstants.TYPE_BLOB)){
@@ -432,8 +422,6 @@ public class DBEngine {
                  callableStatement.setAsciiStream(++paramterId,inputStream, inputStream.available());
                  inputStream.close();
 			}
-			
-			
 		}
 		for(OutParameter outParameter : outParam){
 			
@@ -460,13 +448,9 @@ public class DBEngine {
                 
             }else if (outParameter.getParameterType().equalsIgnoreCase(DBEngineConstants.TYPE_RESULTSET) ) {
             	callableStatement.registerOutParameter(++paramterId,OracleTypes.CURSOR);
-                
             }
-			
 		}
-		
 		callableStatement.execute();
-			
 			int inputParmSize = inParam.size();
 			int outParaIndex = inputParmSize;
 			
@@ -490,15 +474,10 @@ public class DBEngine {
 						
 					}else if(outResult.getParameterType().equals(DBEngineConstants.TYPE_FLOAT)){
 						htResultSet.put(outResult.getParameterName(),""+callableStatement.getDouble(++outParaIndex));
-                        result = packageResult(htResultSet);
-						
+                        result = packageResult(htResultSet); 
 					}
-					
 				}
-				
 			}
-						
-		
 		return result;
 		
 	}

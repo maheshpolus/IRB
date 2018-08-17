@@ -373,8 +373,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             } else if (!this.ignoreWarning && (this.requestObject.irbExemptForm.facultySponsorPersonId == '' || this.requestObject.irbExemptForm.facultySponsorPersonId == null) && this.requestObject.personJobTitle == null) {
                 this.modalHeading = 'Alert';
                 this.alertMsg = this.NOFACULTY_MESSAGE;
-                this.openWarningModal();
-            } else if (!this.ignoreWarning && this.requestObject.facultySponsorJobTitle == null && this.requestObject.personJobTitle == null) {
+                this.openWarningModal();  
+          } else if (!this.ignoreWarning && this.requestObject.facultySponsorJobTitle == null && this.requestObject.personJobTitle == null) {
                 this.modalHeading = 'Alert';
                 this.alertMsg = this.NOFACULTY_TITILE_MESSAGE;
                 this.openWarningModal();
@@ -421,9 +421,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             data => {
                 this.result = data || [];
                 if (this.result != null) {
-
                     if ((this.result.irbExemptForm.loggedInUserFacultySponsor == true && this.result.irbExemptForm.facultySponsorJobTitle != null && this.result.irbExemptForm.statusCode !== '4') ||
-                        (this.result.irbExemptForm.loggedInUserPI == true && this.result.irbExemptForm.pijobTitle != null) ||
+                        (this.result.irbExemptForm.loggedInUserPI == true && this.result.irbExemptForm.pijobTitle != null  && this.result.irbExemptForm.statusCode == '5') ||
                         (this.result.irbExemptForm.statusCode == '3' && (this.userDTO.role == "CHAIR" || this.userDTO.role == "ADMIN"))) {
                         this.isPendingActionRequired = true;
                     }
@@ -728,15 +727,27 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             }
         }
         else if ((this.requestObject.personJobTitle !== null || this.requestObject.personJobTitle !== '')) {
-            if (this.requestObject.irbExemptForm.isExempt === 'Y') {
-                this.requestObject.irbExemptForm.notificationNumber = 701;
-            }
-            else if (this.requestObject.irbExemptForm.isExempt === 'N') {
-                this.requestObject.irbExemptForm.notificationNumber = 702;
-               // this.requestObject.irbExemptForm.notificationNumber = 703;
-            }
-            this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
-            this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+            if((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle == '')){
+                if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                    this.requestObject.irbExemptForm.notificationNumber = 701;
+                }
+                else if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                    this.requestObject.irbExemptForm.notificationNumber = 702;
+                   // this.requestObject.irbExemptForm.notificationNumber = 703;
+                }
+                this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
+                this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+            } else if((this.requestObject.facultySponsorJobTitle !== null || this.requestObject.facultySponsorJobTitle !== '')){
+                if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                    this.requestObject.irbExemptForm.notificationNumber = 705;
+                }
+                else if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                    this.requestObject.irbExemptForm.notificationNumber = 709;
+                   // this.requestObject.irbExemptForm.notificationNumber = 703;
+                }
+                this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
+                this.requestObject.irbExemptForm.statusCode = this.strEnroutedToFacultyStatusCode;
+            }  
         }
         this.requestObject.questionnaireInfobean.isSubmit = 'Y';
         this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);

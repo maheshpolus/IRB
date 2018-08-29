@@ -43,7 +43,7 @@ export class ExemptCardComponent implements OnInit {
     
     getStatusCode( role, tabClicked ) {
         if ( role == 'PI' && this.userDTO.jobTitle !== null && tabClicked == "PENDING" )
-            return ["2", "5"];
+            return ["1","2", "5"];
         else if ( role == 'PI' && this.userDTO.jobTitle !== null && tabClicked == "STUDIES" )
             return ["1", "2", "3", "4"];
         else if ( ( role == 'ADMIN' || role == 'CHAIR' ) && tabClicked == "STUDIES" )

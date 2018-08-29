@@ -23,7 +23,7 @@
 			</button>
 		</span>
 	</div>
-	<div class="col-sm-12 inner-tab-container">
+	<div class="inner-tab-container">
 		<div class="col-sm-12"
 			*ngIf="exemptList!=null && exemptList!=undefined"
 			[ngClass]="{'main-list': exemptList?.length >1}">
@@ -45,7 +45,7 @@
 						*ngIf="irb.isExempt=='N' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')"
 						class="in-progress"><p>Not Exempt-Pending Review</p></span>
 				</div>
-				<div class="col-md-8 col-sm-12 col-12 list-des">
+				<div class="col-md-7 col-sm-12 col-12 list-des">
 					<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
 					<div>
 						<div class="row">

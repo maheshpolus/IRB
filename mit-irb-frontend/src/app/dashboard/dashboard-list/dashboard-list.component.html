@@ -20,7 +20,7 @@
 			<ul class="navbarmed"
 				*ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
 				<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}"><a
-					(click)="getIrbListData('ALL')">All My Protocols</a></li>
+					(click)="getIrbListData('ALL')">My Protocols</a></li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'NEW_SUBMISSION')}"><a
 					(click)="getIrbListData('NEW_SUBMISSION')">New Submission </a></li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'PI_ACTION')}"><a
@@ -30,7 +30,7 @@
 				<li [ngClass]="{activenav:(lastClickedTab == 'REVIEWER')}"><a
 					(click)="getIrbListData('REVIEWER')">Reviewer</a></li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}"><a
-					(click)="getExemptListData('EXEMPT')">Exempt Studies</a></li>
+					(click)="getExemptListData('EXEMPT')">Exempt Determinations</a></li>
 				<span> <a (click)="showAdvanceSearch()"><i
 						class="fa fa-glass"></i></a>
 				</span>

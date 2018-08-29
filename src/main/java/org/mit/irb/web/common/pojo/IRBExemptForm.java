@@ -30,6 +30,7 @@ public class IRBExemptForm {
 	private boolean loggedInUserFacultySponsor;
 	private boolean loggedInUserPI;
 	private Integer notificationNumber;
+	private Integer submittedOnce;
 	
 	public String getCheckListAcType() {
 		return checkListAcType;
@@ -226,5 +227,13 @@ public class IRBExemptForm {
 
 	public void setNotificationNumber(Integer notificationNumber) {
 		this.notificationNumber = notificationNumber;
+	}
+
+	public Integer getSubmittedOnce() {
+		return submittedOnce;
+	}
+
+	public void setSubmittedOnce(Integer submittedOnce) {
+		this.submittedOnce = submittedOnce;
 	}
 }

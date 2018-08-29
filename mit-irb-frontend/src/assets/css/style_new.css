@@ -13,6 +13,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 
 html {
@@ -3024,6 +3025,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     line-height: 25px;
     font-weight: 500;
     font-style: normal!important;
+    font-size: 18px;
 
 }
 .proceed-btn-align {
@@ -3362,7 +3364,7 @@ transition: display .25s}
     padding-right: 5px !important;
 }
 .inner-tab-container{
-    padding: 10px 25px;
+   /* padding: 10px 25px;*/
     background-color: #fff;
     box-shadow: 1px 2px 8px #cac3c3;
 }

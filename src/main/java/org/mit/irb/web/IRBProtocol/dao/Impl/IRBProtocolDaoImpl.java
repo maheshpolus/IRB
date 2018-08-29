@@ -425,6 +425,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("PERSON_NAME") != null){
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
 				}
+				if(hmap.get("IS_SUBMITTED_ONCE") != null){
+					exemptForm.setSubmittedOnce(Integer.parseInt(hmap.get("IS_SUBMITTED_ONCE").toString()));
+				}
 				if(hmap.get("EXEMPT_TITLE") != null){
 					exemptForm.setExemptTitle((String) hmap.get("EXEMPT_TITLE"));
 				}

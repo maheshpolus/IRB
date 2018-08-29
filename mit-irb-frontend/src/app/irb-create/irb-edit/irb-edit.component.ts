@@ -42,7 +42,6 @@ export class IrbEditComponent implements OnInit {
     this.personalInfo = selectedItem;
   }
   addPersonalDetails() {
-    debugger
     this.personalDataList.push({
       id: "0",
       name: this.personalInfo.name,

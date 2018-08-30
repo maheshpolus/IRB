@@ -215,6 +215,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		ArrayList<HashMap<String, Object>> resultTraing = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_INFO", outputParam);
+			if (result != null && !result.isEmpty()) {
+				irbViewProfile.setIrbViewProtocolMITKCPersonInfo(result.get(0));
+			}
+			resultTraing = getMITKCPersonTraingInfo(avPersonId);
+			if (resultTraing != null && !resultTraing.isEmpty()) {
+				irbViewProfile.setIrbViewProtocolMITKCPersonTrainingInfo(resultTraing);
+			}
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getMITKCPersonInfo:"+ e);
@@ -224,11 +231,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.info("SQLException in getMITKCPersonInfo:"+ e);
-		}
-		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbViewProtocolMITKCPersonInfo(result.get(0));
-			resultTraing = getMITKCPersonTraingInfo(avPersonId);
-			irbViewProfile.setIrbViewProtocolMITKCPersonTrainingInfo(resultTraing);
 		}
 		return irbViewProfile;
 	}
@@ -250,8 +252,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.info("SQLException in getMITKCPersonTraingInfo:"+ e);
-		}
-		if (result != null && !result.isEmpty()) {
 		}
 		return result;
 	}
@@ -468,7 +468,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("SUMMARY") != null){
 					exemptForm.setSummary((String) hmap.get("SUMMARY"));
 				}
-				DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				if(hmap.get("START_DATE") != null){
 					exemptForm.setExemptProtocolStartDate(df.format((Timestamp) hmap.get("START_DATE")));
 				}

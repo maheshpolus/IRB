@@ -468,7 +468,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 				if(hmap.get("SUMMARY") != null){
 					exemptForm.setSummary((String) hmap.get("SUMMARY"));
 				}
-				DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				if(hmap.get("START_DATE") != null){
 					exemptForm.setExemptProtocolStartDate(df.format((Timestamp) hmap.get("START_DATE")));
 				}

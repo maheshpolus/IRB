@@ -2026,10 +2026,10 @@ div
 .nav-advance-search {
 	cursor: pointer;
 }
-.pi-profile {
+.pi-profile:after {
 	content: url("../images/principl_avatar.png");
 }
-.coi-profile {
+.coi-profile:after {
 	content: url("../images/avatar.png");
 }
 .card-list-no-data{

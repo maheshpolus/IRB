@@ -9,7 +9,7 @@ export class FilterPipe implements PipeTransform {
     return items.filter((value) => {
       for (let i = 0; i < filterText.length; i++) {
         if(value.statusCode == filterText[i]){
-            if((value.statusCode == 2 || value.statusCode == 5) && tabSelected == "PENDING" ){
+            if((value.statusCode == 2 || value.statusCode == 5 || value.statusCode == 1) && tabSelected == "PENDING" ){
               if(value.facultySponsorPersonId == loginPersonId)
                 return value;
             }else if(value.statusCode == 1 && tabSelected == "PENDING"){

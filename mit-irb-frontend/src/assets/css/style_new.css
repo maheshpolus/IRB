@@ -2029,7 +2029,13 @@ div
 .pi-profile {
 	content: url("../images/principl_avatar.png");
 }
+.pi-profile:after {
+	content: url("../images/principl_avatar.png");
+}
 .coi-profile {
+	content: url("../images/avatar.png");
+}
+.coi-profile:after {
 	content: url("../images/avatar.png");
 }
 .card-list-no-data{

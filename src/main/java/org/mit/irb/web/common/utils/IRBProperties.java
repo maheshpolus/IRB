@@ -6,13 +6,12 @@ import java.util.Properties;
 
 /**
  * Class get details from property files and load data to class 
- * @author anumole
+ * @author anu
  *
  */
 public class IRBProperties{
 	
 	private static Properties props = null;
-	/*private static final String COMPANION_PROP_FILE="/mit-irb.properties";*/
 	private static final String COMPANION_PROP_FILE="/mit-irb.properties";
 	
 	/**

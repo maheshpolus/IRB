@@ -702,6 +702,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	public void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment,
 			String exemptstatusCode, String updateUser, Integer notificationNumber, PersonDTO personDTO) {
 		try {
+			Integer adminNotificationNumber = 703;
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			outParam.add(new OutParameter("returnId",DBEngineConstants.TYPE_INTEGER));
@@ -714,6 +715,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			if(notificationNumber != null){
 				logger.info("Sending Email Notification with status code: "+notificationNumber);
 				sendingExemptNotifications(formId,comment,personDTO.getPersonID(),notificationNumber);
+				sendingExemptNotifications(formId,null,personDTO.getPersonID(),adminNotificationNumber);
 			}
 		} catch (Exception e) {
 			logger.error("Error in methord action log exempt questionnaire", e);

@@ -118,5 +118,17 @@
 	"/mit-irb/downloadExemptProtocolAttachments":{
 		"target" : "http://192.168.1.93:8080",
 		"secure" : false
+	},
+	"/mit-irb/createIRBProtocol":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/updateProtocolGeneralInfo":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/updateProtocolPersonInfo":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
 	}
 }

@@ -9,17 +9,17 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-6 col-12">
 							<h4>
-								IRB # : <span></span>
+								IRB # : <span>{{generalInfo.protocolNumber}}</span>
 							</h4>
 							<p>
-								Expiration Date : <span></span><br />
-								Title : <span> </span>
+								Expiration Date : <span>{{generalInfo.prtocolExpirationDate}}</span><br />
+								Title : <span>{{generalInfo.protocolTitle}}</span>
 							</p>
 						</div>
 						<div class="col-md-3 col-sm-6 col-12">
 							<p>
-								Protocol Type : <span></span><br />
-								Submission Status : <span></span><br />
+								Protocol Type : <span>{{generalInfo.protocolType}}</span><br />
+								Submission Status : <span>{{generalInfo.protocolStatus}}</span><br />
 								PI : <span></span>
 							</p>
 						</div>
@@ -48,21 +48,21 @@
 						<hr class="hr-line">
 						<div class="col-6">
 							<p>
-								Last Approval Date : <span></span><br />
-								Expected Start Date : <span></span>
+								Last Approval Date : <span>{{generalInfo.approvalDate}}</span><br />
+								Expected Start Date : <span>{{generalInfo.protocolStartDate}}</span>
 							</p>
 						</div>
 						<div class="col-6">
 							<p>
 								Lead Unit : <span></span><br />
-								Anticipated End Date : <span></span>
+								Anticipated End Date : <span>{{generalInfo.protocolEndDate}}</span>
 							</p>
 						</div>
 					</div>
 					<div class="row  protocol-top apprve-date">
 						<div class="col-12">
 							<p>
-								Description : <span></span>
+								Description : <span>{{generalInfo.prtocolDescription}}</span>
 							</p>
 						</div>
 					</div>

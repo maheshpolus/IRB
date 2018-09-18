@@ -320,11 +320,11 @@ header{
 
 
 .searchBox>input[type="text"],.advancedTools input[type="text"], select {
-    border-radius: 20px;
-    border: 1px #DEDEDE solid;
+    border-radius: 20px ;
+    border: 1px #DEDEDE solid ;
     width: 100%;
     padding-right: 35px;
-    line-height: 27px;
+    line-height: 20px ;
     font-size: .8em;
     padding-left: 10px;
     /*cursor: pointer;/*newly added*/
@@ -2883,6 +2883,11 @@ ul.sb-results-dropdown-menu > li:last-child {
     padding-left: 10px;
     margin-left: -7px;
 }
+.person-unit input {
+    border-radius: .25rem !important;
+    margin-left: 0 !important;
+    font-size: 13px;
+}
 .completer-dropdown {
     margin: 0;
     max-height: 400px;
@@ -3291,8 +3296,13 @@ transition: display .25s}
 }
 .poping-border{
 
-    border: 1px solid #007bff;
+    border: 1px solid #007bff !important;
 }
+.error-border{
+
+    border: 1px solid red;
+}
+
 .resultCardBefore::before{
     height:auto !important ;
     top:10px;
@@ -3461,4 +3471,21 @@ transition: display .25s}
 .wComment
 {
 	width:26%;
+}
+.save-button {
+    line-height: 90px;
+    padding-left: 40px;
+}
+.error {
+    margin-left: 5px;
+    color: red;
+}
+.mandatory{
+    color: red;
+}
+.leadUnit-holder input{
+    border: 1px solid #007bff !important;
+}
+.normal-border input {
+    border: 1px solid rgba(0,0,0,.15) !important;;
 }

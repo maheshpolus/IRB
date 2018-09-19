@@ -16,7 +16,7 @@ export class ExemptCardComponent implements OnInit {
 
     statusCode: string[];
     tabSelected: string = "STUDIES";
-    
+
     ngOnInit() {
         this.showData( this.userDTO.role, 'STUDIES' )
     }

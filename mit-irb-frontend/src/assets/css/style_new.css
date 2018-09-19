@@ -320,11 +320,11 @@ header{
 
 
 .searchBox>input[type="text"],.advancedTools input[type="text"], select {
-    border-radius: 20px ;
-    border: 1px #DEDEDE solid ;
+    border-radius: .25rem !important;
+    border: 1px #DEDEDE solid;
     width: 100%;
     padding-right: 35px;
-    line-height: 20px ;
+     line-height: 27px;
     font-size: .8em;
     padding-left: 10px;
     /*cursor: pointer;/*newly added*/
@@ -1623,7 +1623,7 @@ div
 
     background: #a91f34;
     border: #a91f34;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 .btn-row-med .btn i {
 
@@ -2874,11 +2874,11 @@ ul.sb-results-dropdown-menu > li:last-child {
 /*end of styles for login page*/
 
 .completer-input {
-	border-radius: 20px;
+    border-radius: .25rem !important;
     border: 1px #DEDEDE solid;
     width: 100%;
     padding-right: 35px;
-    line-height: 40px;
+    line-height: 27px;
     font-size: .8em;
     padding-left: 10px;
     margin-left: -7px;
@@ -2985,12 +2985,12 @@ ul.sb-results-dropdown-menu > li:last-child {
     margin-top: 10px!important;
 }
 .searchBox textarea{
-    border-radius: 20px;
+    border-radius: .25rem !important;
     border: 1px #DEDEDE solid;
     width: 100%;
     padding-right: 35px;
-    line-height: 27px;
-    font-size: .8em;
+    /* line-height: 18px; */
+    font-size: 14px;
     padding-left: 10px;
 }
 .dsp-flex {
@@ -3302,7 +3302,6 @@ transition: display .25s}
 
     border: 1px solid red;
 }
-
 .resultCardBefore::before{
     height:auto !important ;
     top:10px;
@@ -3336,6 +3335,7 @@ transition: display .25s}
       border: 2px dotted  #a91f34;
        border-radius: 30px;
      margin-top:10px;
+   color:#a91f34 !important;
     
      
 }
@@ -3417,7 +3417,7 @@ transition: display .25s}
 	padding-left: 10px;
 }
 .datePickerRadius{
-    border-radius: 20px;
+    border-radius: .25rem !important;
     padding-right: 35px;
     line-height: 27px;
     font-size: .8em;
@@ -3488,4 +3488,45 @@ transition: display .25s}
 }
 .normal-border input {
     border: 1px solid rgba(0,0,0,.15) !important;;
+}
+
+/* attachment styles */
+.addTextBtn {
+	border: 0;
+	background: transparent;
+	font-size: 0.85em;
+	padding: 0;
+	cursor: pointer;
+	color: #a92135;
+    font-weight: bold;
+    outline: none;
+}
+.addTextBtn:hover {
+    color: #a92135;
+    text-decoration: none;
+    
+}
+.mt-10
+{
+    margin-top: 10px;
+}
+.ml-600
+{
+    margin-left: 600px;
+}
+.ml-10
+{
+    margin-left: 10px
+}
+.test li {
+    display: block;
+}
+.filechip {
+    display: inline-block;
+    padding: 0 25px;
+    
+    font-size: 18px;
+ 
+    border-radius: 25px;
+    background-color: #f1f1f1;
 }

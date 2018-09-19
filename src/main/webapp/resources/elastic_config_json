@@ -1,5 +1,6 @@
 {
 "URL_FOR_ELASTIC":"https://coeus-qa.mit.edu/es/",
 "IRB_INDEX":"irbprotocol",
-"PERSON_INDEX":"mitperson"
+"PERSON_INDEX":"mitperson",
+"NON_EMPLOYEE_INDEX":"mitrolodex"
 }

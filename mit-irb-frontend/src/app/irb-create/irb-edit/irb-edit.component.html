@@ -82,7 +82,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 top-distance" ><!--  *ngIf="isGeneralInfoSaved">-->
+    <div class="col-12 top-distance" *ngIf="isGeneralInfoSaved">
       <div class="card history-card border-radius-1">
         <div class="card-header history-header">
           <nav class="nav navbar-pg3">
@@ -137,7 +137,7 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label>Title</label>
-                  <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.personTitle" class="form-control input-field-size" placeholder="Title">
+                  <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.primaryTitle" class="form-control input-field-size" placeholder="Title">
                 </div>
               </div>
             </div>
@@ -156,7 +156,6 @@
                   <label>Affiliate</label>
                   <!-- <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.affiliate" class="form-control input-field-size" placeholder="Affiliate"> -->
                   <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.affiliationTypeCode">
-                    <!--  <option *ngIf="isPersonalInfoEdit" value=""selected>{{personnelInfo.affiliate}}</option>-->
                       <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
                   </select>
                 </div>
@@ -192,10 +191,10 @@
                   <tbody class="tbody-font-size">
                     <tr  *ngFor="let item of personalDataList let i=index" [class.poping-border]="i == personalInfoSelectedRow">
                       <td>{{item.personName}}</td>
-                      <td>{{item.roleType}}</td>
-                      <td>{{item.personTitle}}</td>
+                      <td>{{item.protocolPersonRoleId}}</td>
+                      <td>{{item.primaryTitle}}</td>
                       <td>{{item.leadUnit}}</td>
-                      <td>{{item.affiliate}}</td>
+                      <td>{{item.affiliationTypeCode}}</td>
                       <td class="action-btn-list">
                         <button (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
                           <i class="fa fa-pencil" aria-hidden="true"></i>

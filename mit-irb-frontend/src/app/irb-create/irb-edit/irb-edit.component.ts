@@ -57,7 +57,6 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
   invalidData = {invalidStartDate : false, invalidEndDate : false};
   irbPersonDetailedList: any;
   irbPersonDetailedTraining: any[] = [];
-  selectedAffilation: string;
   constructor(private _irbCreateService: IrbCreateService,
      private _ngZone: NgZone,
      private _completerService: CompleterService,
@@ -263,39 +262,31 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
     // });
   }
 
-  editPersonalDetails(selectedItem: any, index: number) {debugger;
+  editPersonalDetails(selectedItem: any, index: number) {
     this.editIndex = index;
     this.personalInfoSelectedRow = index;
     this.isPersonalInfoEdit = true;
     this.personnelInfo = Object.assign({}, selectedItem) ;
-    console.log(this.personnelInfo);
-    //this.personnelInfo.affiliationTypeCode = this.personnelInfo.affiliate;
-    
   }
   addPersonalDetails(mode) {
     if (!(this.personnelInfo.personName == null || this.personnelInfo.personName === undefined)  &&
         !(this.personnelInfo.protocolPersonRoleId == null || this.personnelInfo.protocolPersonRoleId === undefined) &&
-        !(this.personnelInfo.personTitle == null || this.personnelInfo.personTitle === undefined) &&
+        !(this.personnelInfo.primaryTitle == null || this.personnelInfo.primaryTitle === undefined) &&
         !(this.personnelInfo.leadUnit == null || this.personnelInfo.leadUnit === undefined) &&
         !(this.personnelInfo.affiliationTypeCode == null || this.personnelInfo.affiliationTypeCode === undefined)) {
-        for(let affiliation of this.affiliationTypes)
-            if(affiliation.affiliationTypeCode == this.personnelInfo.affiliationTypeCode)
-                    this.selectedAffilation = affiliation.description;
         if (mode === 'ADD') {
           this.personalDataList.push({
             id: '0',
             personName: this.personnelInfo.personName,
-            roleType: this.personnelInfo.roleType,
-            personTitle: this.personnelInfo.personTitle,
+            protocolPersonRoleId: this.personnelInfo.protocolPersonRoleId,
+            primaryTitle: this.personnelInfo.primaryTitle,
             leadUnit: this.personnelInfo.leadUnit,
-            affiliate: this.selectedAffilation,
-            acType: 'I'
+            affiliationTypeCode: this.personnelInfo.affiliationTypeCode,
+            acType: 'U'
           });
-          console.log(this.personnelInfo);
-          this.personnelInfo.acType = 'I';
+          this.personnelInfo.acType = 'U';
         } else if (mode === 'EDIT') {
           this.personnelInfo.acType = 'U';
-         
           this.personalDataList[this.editIndex] = Object.assign({}, this.personnelInfo) ;
         }
         this.savePersonalInfo();

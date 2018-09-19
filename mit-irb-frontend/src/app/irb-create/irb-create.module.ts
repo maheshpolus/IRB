@@ -6,18 +6,24 @@ import { IrbEditComponent } from './irb-edit/irb-edit.component';
 import { IrbCreateRoutingModule } from '../irb-create/irb-create-routing.module';
 //import { IrbHistoryComponent } from '../irb-view/irb-history/irb-history.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FileDropModule } from 'ngx-file-drop';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { IrbCreateAttachmentComponent } from './irb-create-attachment/irb-create-attachment.component';
+import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histroy.component';
+import { AppCommonModule } from '../common/common/common.module';
 
 @NgModule({
   imports: [
     CommonModule,
     IrbCreateRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
+    FormsModule,  
+	 ReactiveFormsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    Ng2CompleterModule
+  Ng2CompleterModule,
+    FileDropModule,
+    AppCommonModule
   ],
-  declarations: [IrbCreateHeaderComponent, IrbEditComponent]//IrbHistoryComponent
+  declarations: [IrbCreateHeaderComponent,IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent]//IrbHistoryComponent
 })
 export class IrbCreateModule { }

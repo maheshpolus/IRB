@@ -56,7 +56,7 @@
 								[(ngModel)]="requestObject.irbExemptForm.personName"
 								*ngIf="isViewMode" />
 							<div class="sb-seachresults results-margin">
-								<ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPI">
+								<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultPI">
 									<li *ngFor="let result of _results | async"
 										(mousedown)="selectedPiResult(result)"><span
 										[innerHTML]="result.label"></span></li>
@@ -67,7 +67,7 @@
 							<h4>Unit:</h4>
 						</div>
 						<div class="col-4 width-exempt searchBox display">
-							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName"
+							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'"
 								placeholder="Search:Department Unit" *ngIf="!isViewMode"
 								[datasource]="unitName" [minSearchLength]="0"
 								(ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
@@ -103,7 +103,7 @@
 							<h4 class="sponsorFont">Faculty Sponsor:</h4>
 						</div>
 						<div class="col-4  width-exempt searchBox display">
-							<input class="form-control mlFaculty-3" type="text" *ngIf="!isViewMode"
+							<input class="form-control" type="text" *ngIf="!isViewMode"
 							(input)="clearSelectedFacultydata()"
 								[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
 								placeholder="Search: Faculty Sponsor Name"
@@ -113,7 +113,7 @@
 								[(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
 								*ngIf="isViewMode" />
 							<div class="sb-seachresults results-margin">
-								<ul class="sb-results-dropdown-menu"
+								<ul class="sb-results-dropdown-menu test"
 									*ngIf="IsElasticResultFaculty">
 									<li *ngFor="let result of _results | async"
 										(mousedown)="selectedFacultyResult(result)"><span
@@ -366,7 +366,7 @@
 			 </file-drop>
 			 <ul class="ul-style">
 			   <li *ngFor="let item of uploadedFile; let i=index">
-			   <span class="pdf">{{ item.name }}----------------</span><i class="fa fa-trash-o" (click)="deleteFromUploadedFileList(item)"></i>
+			   <span>{{ item.name }}----------------</span><i class="fa fa-trash-o pdf" (click)="deleteFromUploadedFileList(item)"></i>
 			   </li>
 			 </ul>
 								 </h4>

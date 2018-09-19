@@ -83,7 +83,7 @@
 										class="searchButton" (click)="clearsearchBox($event)"><i
 										[ngClass]="iconClass"></i></a>
 									<div class="sb-seachresults">
-										<ul class="sb-results-dropdown-menu" *ngIf="IsElasticResult">
+										<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResult">
 											<li *ngFor="let result of _results | async"
 												(mousedown)="selectedResult(result)"><span
 												[innerHTML]="result.label"></span></li>

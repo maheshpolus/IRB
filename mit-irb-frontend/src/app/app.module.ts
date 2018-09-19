@@ -27,10 +27,11 @@ import { LoginService } from './login/login.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
 import { IrbViewService } from './irb-view/irb-view.service';
 import { PiElasticService } from './common/service/pi-elastic.service';
+import {SharedDataService} from './common/service/shared-data.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppCommonModule } from './common/common/common.module';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { FilterPipe } from './common/directives/filter.pipe';
 import { FileDropModule } from 'ngx-file-drop';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
@@ -70,7 +71,8 @@ enableProdMode();
     ],
     providers: [AuthGuard, DashboardService,
                 { provide: LocationStrategy, useClass: HashLocationStrategy },
-                LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService],
+                LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
+                SharedDataService],
     bootstrap: [AppComponent]
 } )
 export class AppModule { }

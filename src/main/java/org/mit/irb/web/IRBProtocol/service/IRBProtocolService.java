@@ -4,6 +4,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
@@ -17,10 +24,55 @@ public interface IRBProtocolService {
 	/**
 	 * @param personId
 	 * @param personRoleType
-	 * @return load deatails of IRB protocol
+	 * @return load details of IRB protocol
 	 */
 	IRBViewProfile getIRBProtocolDetails(String protocolNumber);
 
+	/**
+	 * return all the possible protocol types. 
+	 */
+	IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO);
+	
+	/**
+	 * return all the possible protocol types. 
+	 */
+	IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO);
+	
+	/**
+	 * return all lead units. 
+	 */
+	IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO);
+	
+	/**
+	 * return list of affiliation. 
+	 */
+	IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO);
+	
+
+	/**
+	 * return list of subject types. 
+	 */
+	IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO);
+	
+	/**
+	 * return list of subject types. 
+	 */
+	IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO);
+	
+	/**
+	 * @param generalInfo
+	 * @return IRBProtocolVO with updated general information
+	 */
+	
+	IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO);
+	
+	/**
+	 * @param generalInfo
+	 * @return IRBProtocolVO with updated general information
+	 */
+	
+	IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo);
+	
 	/**
 	 * @param protocolNumber
 	 * @return list of persons associated with those protocol
@@ -176,4 +228,21 @@ public interface IRBProtocolService {
 	 * @throws Exception
 	 */
 	CommonVO approveOrDisapproveExemptProtocols(CommonVO vo) throws Exception;
+
+	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo);
+
+	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource);
+
+	IRBProtocolVO updateSubject(ProtocolSubject protocolSubject);
+
+	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator);
+
+	IRBProtocolVO loadAttachmentType();
+
+	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
+	
+	ProtocolGeneralInfo loadProtocolById(Integer protocolId);
+
+	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson);
+
 }

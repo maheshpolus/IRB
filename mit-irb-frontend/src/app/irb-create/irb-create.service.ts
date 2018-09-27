@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class IrbCreateService {
+  formData = new FormData();
 
   constructor( private router: Router, private _http: HttpClient) { }
   getEditDetails(params) {
@@ -18,4 +19,28 @@ export class IrbCreateService {
   return this._http.post('/mit-irb/updateProtocolPersonInfo', params);
 }
 
+addattachment(protocolAttachments: Object, irbAttachmentProtocol: Object, uploadedFile) {
+  this.formData.delete( 'files' );
+      this.formData.delete( 'formDataJson' );
+      // this.formData.delete('formDataIRBJson');
+      for ( let i = 0; i < uploadedFile.length; i++ ) {
+          this.formData.append( 'files', uploadedFile[i] );
+      }
+      this.formData.append( 'formDataJson', JSON.stringify( protocolAttachments ) );
+      // this.formData.append( 'formDataIRBJson', JSON.stringify( irbAttachmentProtocol ) );
+  return this._http.post('/mit-irb/addProtocolAttachments', this.formData);
+}
+getAttachmentTypes(params) {
+  return this._http.post('/mit-irb/loadAttachmentType', params);
+}
+
+updateFundingSource(params) {
+  return this._http.post('/mit-irb/updateFundingSource', params);
+}
+updateSubject(params) {
+  return this._http.post('/mit-irb/updateSubject', params);
+}
+updateCollaborator(params) {
+  return this._http.post('/mit-irb/updateCollaborator', params);
+}
 }

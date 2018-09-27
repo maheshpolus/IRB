@@ -9,6 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
@@ -129,7 +136,7 @@ public class IRBController {
 	}
 	
 	@RequestMapping(value = "/downloadAttachment", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> downloadAttachments(HttpServletResponse response, @RequestHeader("attachmentId") String attachmentId) {
+	public ResponseEntity<byte[]> downloadments(HttpServletResponse response, @RequestHeader("attachmentId") String attachmentId) {
 		return irbProtocolService.downloadAttachments(attachmentId);
 	}
 	
@@ -246,6 +253,118 @@ public class IRBController {
 		HttpStatus status = HttpStatus.OK;
 		ArrayList<HashMap<String, Object>> leadunitList = irbProtocolService.getExemptProtocolAttachmentList(vo.getIrbExemptForm().getExemptFormID());
 		String responseData = mapper.writeValueAsString(leadunitList);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/createIRBProtocol", method = RequestMethod.POST)
+	public ResponseEntity<String> createIRBProtocol(HttpServletRequest request, HttpServletResponse response,@RequestBody CommonVO vo) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		irbProtocolVO.setProtocolId(vo.getProtocolId());
+		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
+		ProtocolPersonnelInfo personnelInfo = new ProtocolPersonnelInfo();
+		ProtocolLeadUnits protocolLeadUnits = new ProtocolLeadUnits();
+		ProtocolFundingSource fundingSource= new ProtocolFundingSource();
+	    ProtocolSubject protocolSubject= new ProtocolSubject();
+	    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
+		irbProtocolVO = irbProtocolService.loadProtocolTypes(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadRoleTypes(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadProtocolPersonLeadunits(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadProtocolAffiliationTypes(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadProtocolSubjectTypes(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadProtocolFundingSourceTypes(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadProtocolCollaboratorNames(irbProtocolVO);
+		irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
+		//irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
+		irbProtocolVO.setPersonnelInfo(personnelInfo);
+		irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
+		irbProtocolVO.setFundingSource(fundingSource);
+		irbProtocolVO.setProtocolSubject(protocolSubject);
+		irbProtocolVO.setProtocolCollaborator(protocolCollaborator);
+		String responseData = mapper.writeValueAsString(irbProtocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/updateProtocolGeneralInfo", method = RequestMethod.POST)
+	public ResponseEntity<String> updateProtocolGeneralInfo(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/updateProtocolPersonInfo", method = RequestMethod.POST)
+	public ResponseEntity<String> updateProtocolPersonInfo(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/updateFundingSource", method = RequestMethod.POST)
+	public ResponseEntity<String> updateFundingSource(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateFundingSource(irbProtocolVO.getFundingSource());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/updateSubject", method = RequestMethod.POST)
+	public ResponseEntity<String> updateSubject(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateSubject(irbProtocolVO.getProtocolSubject());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/updateCollaborator", method = RequestMethod.POST)
+	public ResponseEntity<String> updateCollaborator(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateCollaborator(irbProtocolVO.getProtocolCollaborator());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/loadAttachmentType", method = RequestMethod.POST)
+	public ResponseEntity<String> loadAttachmentType(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.loadAttachmentType();
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+
+	@RequestMapping(value = "/loadProtocolById", method = RequestMethod.POST)
+	public ResponseEntity<String> loadProtocolById(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ProtocolGeneralInfo generalInfo = irbProtocolService.loadProtocolById(irbProtocolVO.getProtocolId());
+		protocolVO.setGeneralInfo(generalInfo);
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+
+	@RequestMapping(value = "/addProtocolAttachments", method = RequestMethod.POST)
+	public ResponseEntity<String> addProtocolAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) throws JsonProcessingException {
+		logger.info("Request for ProtocolAttachments Modification");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.addProtocolAttachments(files, formDataJson);
+		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
 }

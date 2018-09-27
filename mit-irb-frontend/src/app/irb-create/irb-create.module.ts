@@ -11,6 +11,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { IrbCreateAttachmentComponent } from './irb-create-attachment/irb-create-attachment.component';
 import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histroy.component';
 import { AppCommonModule } from '../common/common/common.module';
+import { IrbActionsComponent } from './irb-actions/irb-actions.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,6 @@ import { AppCommonModule } from '../common/common/common.module';
     FileDropModule,
     AppCommonModule
   ],
-  declarations: [IrbCreateHeaderComponent,IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent]//IrbHistoryComponent
+  declarations: [IrbCreateHeaderComponent,IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent, IrbActionsComponent]//IrbHistoryComponent
 })
 export class IrbCreateModule { }

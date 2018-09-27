@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
     ngOnInit() { 
         this._loginService.getUserDetail(this.requestObject).subscribe( data => { 
             this.result = data || [];
+            localStorage.setItem('userName', this.result.userName);
         },
             error => {
                  console.log( "Error in method getUserDetail()", error );

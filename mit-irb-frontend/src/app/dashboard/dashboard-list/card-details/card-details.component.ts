@@ -18,4 +18,8 @@ export class CardDetailsComponent  {
   openIrb( protocolNumber ) {
       this._router.navigate( ['/irb/irb-view/irbOverview'], {queryParams: {protocolNumber: protocolNumber}});
   }
+
+  EditIrb (protocolNumber, protocolId) {
+    this._router.navigate( ['/irb/irb-create'], {queryParams: {protocolNumber: protocolNumber, protocolId: protocolId}});
+  }
 }

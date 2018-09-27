@@ -1,11 +1,22 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.json.JSONObject;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.constants.KeyConstants;
@@ -16,11 +27,16 @@ import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Transactional
 @Service(value = "irbProtocolService")
 public class IRBProtocolServImpl implements IRBProtocolService {
 
@@ -29,6 +45,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	
 	@Autowired
 	QuestionnaireService questionnaireService;
+	
+	@Autowired
+	private HibernateTemplate hibernateTemplate;
 	
 	org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(IRBProtocolServImpl.class.getName());
 
@@ -280,6 +299,39 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		ArrayList<HashMap<String, Object>> actionLogs= irbProtocolDao.getExemptProtocolActivityLogs(exemptFormID);
 		vo.setIrbExemptForm(exemptForm);
 		vo.setActionLogs(actionLogs);
+		//ProtocolGeneralInfo generalInfo1 = new ProtocolGeneralInfo();
+		//generalInfo1 = hibernateTemplate.get(ProtocolGeneralInfo.class, 113);
+		
+		/*Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolGeneralInfo.class);
+		ProtocolGeneralInfo generalInfo = null;
+		generalInfo = (ProtocolGeneralInfo) criteria.list().get(0);*/
+		//logger.info("General Obj: "+generalInfo1);
+		//ProtocolGeneralInfo generalInfo = new ProtocolGeneralInfo();
+		//logger.info("protocol Types: "+ irbProtocolDao.loadProtocolTypes());
+	/*	generalInfo.setProtocolTypeCode("2");
+		generalInfo.setProtocolStatusCode("202");
+		String str="2015-03-29";  
+	    Date satrtDate=Date.valueOf(str);
+		generalInfo.setProtocolStartDate(satrtDate);
+		generalInfo.setProtocolEndDate(satrtDate);
+		generalInfo.setProtocolTitle("Protocol title save test using hibernate zzzz");
+		//generalInfo.setprotocold("Protocol save test using hibernate with description");
+		generalInfo.setUpdateTimestamp(satrtDate);
+		generalInfo.setUpdateUser("test user1 yy");
+		generalInfo.setActive("Y");
+		generalInfo.setProtocolId(9);
+		generalInfo.setProtocolNumber("25");
+		generalInfo.setSequenceNumber(255);
+		irbProtocolDao.updateGeneralInfo(generalInfo);*/
+		//logger.info("Roles: "+irbProtocolDao.loadRoleTypes(new IRBProtocolVO()));
+		/*logger.info("Lead Units: "+irbProtocolDao.loadProtocolPersonLeadunits());
+		logger.info("Affiliations: "+irbProtocolDao.loadProtocolAffiliationTypes());
+		logger.info("Subjects: "+irbProtocolDao.loadProtocolSubjectTypes());
+		logger.info("Funding source: "+irbProtocolDao.loadProtocolFundingSourceTypes());*/
+		//IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		//logger.info("loadProtocolCollaboratorNames: "+irbProtocolDao.loadProtocolCollaboratorNames(irbProtocolVO));
+		
 		return vo;
 	}
 
@@ -302,5 +354,117 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		irbProtocolDao.irbExemptFormActionLog(vo.getIrbExemptForm().getExemptFormID(), vo.getIrbExemptForm().getActionTypesCode(), vo.getIrbExemptForm().getComment(), vo.getIrbExemptForm().getStatusCode(), vo.getIrbExemptForm().getUpdateUser(),vo.getIrbExemptForm().getNotificationNumber(),vo.getPersonDTO());
 		commonVO = getPersonExemptForm(vo.getIrbExemptForm(), vo.getPersonDTO());
 		return commonVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo) {
+		IRBProtocolVO irbProtocolVO = irbProtocolDao.updateGeneralInfo(generalInfo);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolTypes(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadRoleTypes(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolPersonLeadunits(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolAffiliationTypes(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolSubjectTypes(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolFundingSourceTypes(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolCollaboratorNames(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo) {
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolDao.updateProtocolPersonInfo(personnelInfo);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource) {
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolDao.updateFundingSource(fundingSource);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject) {
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolDao.updateSubject(protocolSubject);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator) {
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolDao.updateCollaborator(protocolCollaborator);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadAttachmentType() {
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolDao.loadAttachmentType();
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolDetails(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public ProtocolGeneralInfo loadProtocolById(Integer protocolId) {
+		return irbProtocolDao.loadProtocolById(protocolId);
+	}
+
+	@Override
+	public IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson) {
+		IRBProtocolVO irbProtocolVO = null;
+		try {
+			irbProtocolVO = irbProtocolDao.addProtocolAttachments(files,formDataJson);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return irbProtocolVO;
 	}
 }

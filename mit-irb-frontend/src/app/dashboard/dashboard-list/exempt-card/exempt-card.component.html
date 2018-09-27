@@ -4,21 +4,21 @@
 		<button type="button" name="myStudies"
 			(click)="showData(userDTO.role,'STUDIES')"
 			class="btn btn-secondary inner-tab-btn"
-			[ngClass]="{btnactive:(tabSelected=='STUDIES')}">
+			[ngClass]="{tabActive:(tabSelected=='STUDIES')}">
 			<i class="fa fa-book pr5" aria-hidden="true"></i>My Studies
 		</button>
 		<span>
 			<button type="button" name="pending"
 				class="btn btn-secondary inner-tab-btn"
 				(click)="showData(userDTO.role,'PENDING')"
-				[ngClass]="{btnactive:(tabSelected=='PENDING')}">
+				[ngClass]="{tabActive:(tabSelected=='PENDING')}">
 				<i class="fa fa-spinner pr5" aria-hidden="true"></i> Pending
 			</button>
 		</span> <span *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
 			<button type="button" name="submitted"
 				class="btn btn-secondary inner-tab-btn"
 				(click)="showData(userDTO.role,'SUBMITTED')"
-				[ngClass]="{btnactive:(tabSelected=='SUBMITTED')}">
+				[ngClass]="{tabActive:(tabSelected=='SUBMITTED')}">
 				<i class="fa fa-check pr5" aria-hidden="true"></i> Submitted
 			</button>
 		</span>

@@ -6,7 +6,7 @@ export class ExemptQuestionaireService {
   formData = new FormData();
 constructor(private _http: HttpClient) { }
 
-  getQuestionaire( params ) {    
+  getQuestionaire( params ) {
       return this._http.post('/mit-irb/savePersonExemptForm', params);
   }
   saveQuestionaire( params ) {
@@ -21,10 +21,10 @@ constructor(private _http: HttpClient) { }
   evaluatedQuestionaire( params ) {
     return this._http.post('/mit-irb/getEvaluateMessage', params);
   }
-  addExemptProtocolChecklist(exemptForm: Object,uploadedFile){
-    this.formData.delete( 'files' ); 
+  addExemptProtocolChecklist(exemptForm: Object, uploadedFile) {
+    this.formData.delete( 'files' );
         this.formData.delete( 'formDataJson' );
-        for ( var i = 0; i < uploadedFile.length; i++ ) {
+        for ( let i = 0; i < uploadedFile.length; i++ ) {
             this.formData.append( 'files', uploadedFile[i] );
         }
         this.formData.append( 'formDataJson', JSON.stringify( exemptForm ) );

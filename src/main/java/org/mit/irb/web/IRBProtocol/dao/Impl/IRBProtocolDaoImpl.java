@@ -2,20 +2,49 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.sql.rowset.serial.SerialException;
-
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.jdbc.Work;
+import org.hibernate.transform.Transformers;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -30,24 +59,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service(value="iRBProtocolDao")
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service(value = "iRBProtocolDao")
 @Transactional
-public class IRBProtocolDaoImpl implements IRBProtocolDao{
+public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	DBEngine dbEngine;
-	
+
 	@Autowired
 	ExemptProtocolEmailNotification exemptProtocolEmailNotification;
-	
-	IRBProtocolDaoImpl(){
+
+	@Autowired
+	HibernateTemplate hibernateTemplate;
+
+	IRBProtocolDaoImpl() {
 		dbEngine = new DBEngine();
 	}
-	
+
 	Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName());
+
 	@Override
 	public IRBViewProfile getIRBProtocolDetails(String protocolNumber) {
 		IRBViewProfile irbViewProfile = new IRBViewProfile();
@@ -60,13 +98,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_DETAILS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBProtocolDetails:"+ e);
+			logger.info("DBException in getIRBProtocolDetails:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getIRBProtocolDetails:"+ e);
+			logger.info("IOException in getIRBProtocolDetails:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getIRBProtocolDetails:"+ e);
+			logger.info("SQLException in getIRBProtocolDetails:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewHeader(result.get(0));
@@ -86,13 +124,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_PERSONS", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBprotocolPersons:"+ e);
+			logger.info("DBException in getIRBprotocolPersons:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getIRBprotocolPersons:"+ e);
+			logger.info("IOException in getIRBprotocolPersons:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getIRBprotocolPersons:"+ e);
+			logger.info("SQLException in getIRBprotocolPersons:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolPersons(result);
@@ -112,13 +150,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_FUNDING_SRC", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBprotocolFundingSource:"+ e);
+			logger.info("DBException in getIRBprotocolFundingSource:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getIRBprotocolFundingSource:"+ e);
+			logger.info("IOException in getIRBprotocolFundingSource:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getIRBprotocolFundingSource:"+ e);
+			logger.info("SQLException in getIRBprotocolFundingSource:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolFundingsource(result);
@@ -138,13 +176,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_LOCATION", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBprotocolLocation:"+ e);
+			logger.info("DBException in getIRBprotocolLocation:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getIRBprotocolLocation:"+ e);
+			logger.info("IOException in getIRBprotocolLocation:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getIRBprotocolLocation:"+ e);
+			logger.info("SQLException in getIRBprotocolLocation:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolLocation(result);
@@ -164,13 +202,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_VULNBLE_SUBJT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBprotocolVulnerableSubject:"+ e);
+			logger.info("DBException in getIRBprotocolVulnerableSubject:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getIRBprotocolVulnerableSubject:"+ e);
+			logger.info("IOException in getIRBprotocolVulnerableSubject:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getIRBprotocolVulnerableSubject:"+ e);
+			logger.info("SQLException in getIRBprotocolVulnerableSubject:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolVulnerableSubject(result);
@@ -190,13 +228,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_SPECIAL_REVW", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBprotocolSpecialReview:"+ e);
+			logger.info("DBException in getIRBprotocolSpecialReview:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getIRBprotocolSpecialReview:"+ e);
+			logger.info("IOException in getIRBprotocolSpecialReview:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getIRBprotocolSpecialReview:"+ e);
+			logger.info("SQLException in getIRBprotocolSpecialReview:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolSpecialReview(result);
@@ -224,13 +262,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			}
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getMITKCPersonInfo:"+ e);
+			logger.info("DBException in getMITKCPersonInfo:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getMITKCPersonInfo:"+ e);
+			logger.info("IOException in getMITKCPersonInfo:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getMITKCPersonInfo:"+ e);
+			logger.info("SQLException in getMITKCPersonInfo:" + e);
 		}
 		return irbViewProfile;
 	}
@@ -245,13 +283,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_TRAINING_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getMITKCPersonTraingInfo:"+ e);
+			logger.info("DBException in getMITKCPersonTraingInfo:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getMITKCPersonTraingInfo:"+ e);
+			logger.info("IOException in getMITKCPersonTraingInfo:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getMITKCPersonTraingInfo:"+ e);
+			logger.info("SQLException in getMITKCPersonTraingInfo:" + e);
 		}
 		return result;
 	}
@@ -265,7 +303,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_INTEGER, attachmentsId));
 			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_MITKC_ATTACHMENT_FILE", outParam);
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_MITKC_ATTACHMENT_FILE",
+					outParam);
 			if (result != null && !result.isEmpty()) {
 				HashMap<String, Object> hmResult = result.get(0);
 				ByteArrayOutputStream byteArrayOutputStream = null;
@@ -283,14 +322,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Exception in downloadAttachments method:"+ e);
+			logger.info("Exception in downloadAttachments method:" + e);
 		}
 		return attachmentData;
 	}
 
 	@Override
 	public IRBViewProfile getAttachmentsList(String protocolNumber) {
-		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
@@ -300,23 +339,23 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ATTACHMENT", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getAttachmentsList:"+ e);
+			logger.info("DBException in getAttachmentsList:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getAttachmentsList:"+ e);
+			logger.info("IOException in getAttachmentsList:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getAttachmentsList:"+ e);
+			logger.info("SQLException in getAttachmentsList:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolAttachmentList(result);
 		}
 		return irbViewProfile;
 	}
-	
+
 	@Override
 	public IRBViewProfile getProtocolHistotyGroupList(String protocolNumber) {
-		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
@@ -326,13 +365,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_GROUP", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getProtocolHistotyGroupList:"+ e);
+			logger.info("DBException in getProtocolHistotyGroupList:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getProtocolHistotyGroupList:"+ e);
+			logger.info("IOException in getProtocolHistotyGroupList:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getProtocolHistotyGroupList:"+ e);
+			logger.info("SQLException in getProtocolHistotyGroupList:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolHistoryGroupList(result);
@@ -341,27 +380,29 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	}
 
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,Integer previousGroupActionId) {
-		IRBViewProfile irbViewProfile= new IRBViewProfile();
+	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId,
+			Integer nextGroupActionId, Integer previousGroupActionId) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
 		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
 		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
-		inputParam.add(new InParameter("AV_PREVIOUS_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, previousGroupActionId));
+		inputParam.add(
+				new InParameter("AV_PREVIOUS_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, previousGroupActionId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_DET", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getProtocolHistotyGroupDetails:"+ e);
+			logger.info("DBException in getProtocolHistotyGroupDetails:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getProtocolHistotyGroupDetails:"+ e);
+			logger.info("IOException in getProtocolHistotyGroupDetails:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getProtocolHistotyGroupDetails:"+ e);
+			logger.info("SQLException in getProtocolHistotyGroupDetails:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolHistoryGroupDetails(result);
@@ -371,25 +412,26 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 	@SuppressWarnings("null")
 	@Override
-	public IRBViewProfile getPersonExemptFormList(String personID, String personRoleType, String title, String piName, String determination,
-			String facultySponsor, String exemptStratDate, String ExemptEndDate) throws ParseException {
+	public IRBViewProfile getPersonExemptFormList(String personID, String personRoleType, String title, String piName,
+			String determination, String facultySponsor, String exemptStratDate, String ExemptEndDate)
+			throws ParseException {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
 		java.util.Date exemptStartDates = null;
 		java.sql.Date sqlExemptStartDate = null;
 		java.util.Date exemptEndDates = null;
 		java.sql.Date sqlExemptEndDate = null;
-		if(exemptStratDate != null){
+		if (exemptStratDate != null) {
 			exemptStartDates = sdf1.parse(exemptStratDate);
-			 sqlExemptStartDate = new java.sql.Date(exemptStartDates.getTime()); 
+			sqlExemptStartDate = new java.sql.Date(exemptStartDates.getTime());
 		}
-		if(ExemptEndDate != null){
+		if (ExemptEndDate != null) {
 			exemptEndDates = sdf1.parse(ExemptEndDate);
-			sqlExemptEndDate = new java.sql.Date(exemptEndDates.getTime()); 
+			sqlExemptEndDate = new java.sql.Date(exemptEndDates.getTime());
 		}
-		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_PERSON_ID",  DBEngineConstants.TYPE_STRING,personID));
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, personID));
 		inputParam.add(new InParameter("AV_PERSON_ROLE_TYPE", DBEngineConstants.TYPE_STRING, personRoleType));
 		inputParam.add(new InParameter("AV_TITLE", DBEngineConstants.TYPE_STRING, title));
 		inputParam.add(new InParameter("AV_PI_NAME", DBEngineConstants.TYPE_STRING, piName));
@@ -403,76 +445,77 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FORM_LIST", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getPersonExemptFormList:"+ e);
+			logger.info("DBException in getPersonExemptFormList:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getPersonExemptFormList:"+ e);
+			logger.info("IOException in getPersonExemptFormList:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getPersonExemptFormList:"+ e);
+			logger.info("SQLException in getPersonExemptFormList:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			List<IRBExemptForm> irbExemptFormList = new ArrayList<IRBExemptForm>();
-			for(HashMap<String, Object> hmap: result){
+			for (HashMap<String, Object> hmap : result) {
 				IRBExemptForm exemptForm = new IRBExemptForm();
-				if(hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null){
+				if (hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null) {
 					exemptForm.setExemptFormID(Integer.parseInt(hmap.get("IRB_PERSON_EXEMPT_FORM_ID").toString()));
 				}
-				if(hmap.get("PERSON_ID") != null){
+				if (hmap.get("PERSON_ID") != null) {
 					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
 					exemptForm.setPIJobTitle(getJobTitle((String) hmap.get("PERSON_ID")));
 				}
-				if(hmap.get("PERSON_NAME") != null){
+				if (hmap.get("PERSON_NAME") != null) {
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
 				}
-				if(hmap.get("IS_SUBMITTED_ONCE") != null){
+				if (hmap.get("IS_SUBMITTED_ONCE") != null) {
 					exemptForm.setSubmittedOnce(Integer.parseInt(hmap.get("IS_SUBMITTED_ONCE").toString()));
 				}
-				if(hmap.get("EXEMPT_TITLE") != null){
+				if (hmap.get("EXEMPT_TITLE") != null) {
 					exemptForm.setExemptTitle((String) hmap.get("EXEMPT_TITLE"));
 				}
-				if(hmap.get("EXEMPT_FORM_NUMBER") != null){
+				if (hmap.get("EXEMPT_FORM_NUMBER") != null) {
 					exemptForm.setExemptFormNumber(Integer.parseInt(hmap.get("EXEMPT_FORM_NUMBER").toString()));
 				}
-				if(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null){
-					exemptForm.setExemptQuestionnaireAnswerHeaderId(Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
+				if (hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null) {
+					exemptForm.setExemptQuestionnaireAnswerHeaderId(
+							Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
 				}
-				if(hmap.get("UPDATE_USER") != null){
+				if (hmap.get("UPDATE_USER") != null) {
 					exemptForm.setUpdateUser((String) hmap.get("UPDATE_USER"));
 				}
-				if(hmap.get("EXEMPT_STATUS") != null){
+				if (hmap.get("EXEMPT_STATUS") != null) {
 					exemptForm.setStatus((String) hmap.get("EXEMPT_STATUS"));
 				}
-				if(hmap.get("EXEMPT_STATUS_CODE") != null){
+				if (hmap.get("EXEMPT_STATUS_CODE") != null) {
 					exemptForm.setStatusCode((String) hmap.get("EXEMPT_STATUS_CODE"));
 				}
-				if(hmap.get("IS_EXEMPT_GRANTED") != null){
+				if (hmap.get("IS_EXEMPT_GRANTED") != null) {
 					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
 				}
-				if(hmap.get("FACULTY_SPONSOR_PERSON_ID") != null){
+				if (hmap.get("FACULTY_SPONSOR_PERSON_ID") != null) {
 					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
 					exemptForm.setFacultySponsorJobTitle(getJobTitle((String) hmap.get("FACULTY_SPONSOR_PERSON_ID")));
 				}
-				if(hmap.get("FACULTY_SPONSOR_PERSON") != null){
+				if (hmap.get("FACULTY_SPONSOR_PERSON") != null) {
 					exemptForm.setFacultySponsorPerson((String) hmap.get("FACULTY_SPONSOR_PERSON"));
 				}
-				if(hmap.get("UNIT_NUMBER") != null){
+				if (hmap.get("UNIT_NUMBER") != null) {
 					exemptForm.setUnitNumber((String) hmap.get("UNIT_NUMBER"));
 				}
-				if(hmap.get("UNIT_NAME") != null){
+				if (hmap.get("UNIT_NAME") != null) {
 					exemptForm.setUnitName((String) hmap.get("UNIT_NAME"));
 				}
-				if(hmap.get("UPDATE_TIMESTAMP") != null){
+				if (hmap.get("UPDATE_TIMESTAMP") != null) {
 					exemptForm.setUpdateTimestamp((String) hmap.get("UPDATE_TIMESTAMP"));
 				}
-				if(hmap.get("SUMMARY") != null){
+				if (hmap.get("SUMMARY") != null) {
 					exemptForm.setSummary((String) hmap.get("SUMMARY"));
 				}
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				if(hmap.get("START_DATE") != null){
+				if (hmap.get("START_DATE") != null) {
 					exemptForm.setExemptProtocolStartDate(df.format((Timestamp) hmap.get("START_DATE")));
 				}
-				if(hmap.get("END_DATE") != null){
+				if (hmap.get("END_DATE") != null) {
 					exemptForm.setExemptProtocolEndDate(df.format((Timestamp) hmap.get("END_DATE")));
 				}
 				irbExemptFormList.add(exemptForm);
@@ -481,114 +524,118 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		}
 		return irbViewProfile;
 	}
-	
+
 	public String getJobTitle(String personId) {
 		String jobTitle = null;
-		try{
+		try {
 			ArrayList<OutParameter> outParam = new ArrayList<>();
 			ArrayList<InParameter> inputParam = new ArrayList<>();
 			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, personId));
-			outParam.add(new OutParameter("jobsTitle",DBEngineConstants.TYPE_STRING));
-			ArrayList<HashMap<String,Object>> result = dbEngine.executeFunction(inputParam,"FN_MITKC_GET_PER_JOB_TITLE",outParam);
-			if(result != null && !result.isEmpty()){
-				HashMap<String,Object> hmResult = result.get(0);
-				jobTitle = (String)hmResult.get("jobsTitle");
-			}		
-		}catch(Exception e){
-			logger.error("Error in methord getJob title function",e);
+			outParam.add(new OutParameter("jobsTitle", DBEngineConstants.TYPE_STRING));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction(inputParam,
+					"FN_MITKC_GET_PER_JOB_TITLE", outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				jobTitle = (String) hmResult.get("jobsTitle");
+			}
+		} catch (Exception e) {
+			logger.error("Error in methord getJob title function", e);
 		}
 		return jobTitle;
 	}
-	
+
 	@Override
 	public IRBViewProfile getPersonExemptForm(Integer exemptFormId, String loginUserPersonId) {
-		IRBViewProfile irbViewProfile= new IRBViewProfile();
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, exemptFormId)); //AV_PERSON_ID
+		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, exemptFormId)); // AV_PERSON_ID
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_EXEMPT_FORM", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getPersonExemptForm:"+ e);
+			logger.info("DBException in getPersonExemptForm:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getPersonExemptForm:"+ e);
+			logger.info("IOException in getPersonExemptForm:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getPersonExemptForm:"+ e);
+			logger.info("SQLException in getPersonExemptForm:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
 			List<IRBExemptForm> irbExemptFormList = new ArrayList<IRBExemptForm>();
-			for(HashMap<String, Object> hmap: result){
+			for (HashMap<String, Object> hmap : result) {
 				IRBExemptForm exemptForm = new IRBExemptForm();
-				if(hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null){
+				if (hmap.get("IRB_PERSON_EXEMPT_FORM_ID") != null) {
 					exemptForm.setExemptFormID(Integer.parseInt(hmap.get("IRB_PERSON_EXEMPT_FORM_ID").toString()));
 				}
-				if(hmap.get("PERSON_ID") != null){
+				if (hmap.get("PERSON_ID") != null) {
 					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
 					exemptForm.setPIJobTitle(getJobTitle((String) hmap.get("PERSON_ID")));
 				}
-				if(hmap.get("PERSON_NAME") != null){
+				if (hmap.get("PERSON_NAME") != null) {
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
 				}
-				if(hmap.get("EXEMPT_TITLE") != null){
+				if (hmap.get("EXEMPT_TITLE") != null) {
 					exemptForm.setExemptTitle((String) hmap.get("EXEMPT_TITLE"));
 				}
-				if(hmap.get("EXEMPT_FORM_NUMBER") != null){
+				if (hmap.get("EXEMPT_FORM_NUMBER") != null) {
 					exemptForm.setExemptFormNumber(Integer.parseInt(hmap.get("EXEMPT_FORM_NUMBER").toString()));
 				}
-				if(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null){
-					exemptForm.setExemptQuestionnaireAnswerHeaderId(Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
+				if (hmap.get("QUESTIONNAIRE_ANS_HEADER_ID") != null) {
+					exemptForm.setExemptQuestionnaireAnswerHeaderId(
+							Integer.parseInt(hmap.get("QUESTIONNAIRE_ANS_HEADER_ID").toString()));
 				}
-				if(hmap.get("FACULTY_SPONSOR_PERSON_ID") != null){
+				if (hmap.get("FACULTY_SPONSOR_PERSON_ID") != null) {
 					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
 					exemptForm.setFacultySponsorJobTitle(getJobTitle((String) hmap.get("FACULTY_SPONSOR_PERSON_ID")));
 				}
-				if(hmap.get("SUMMARY") != null){
+				if (hmap.get("SUMMARY") != null) {
 					exemptForm.setSummary((String) hmap.get("SUMMARY"));
 				}
 				DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-				if(hmap.get("START_DATE") != null){
+				if (hmap.get("START_DATE") != null) {
 					exemptForm.setExemptProtocolStartDate(df.format((Timestamp) hmap.get("START_DATE")));
 				}
-				if(hmap.get("END_DATE") != null){
+				if (hmap.get("END_DATE") != null) {
 					exemptForm.setExemptProtocolEndDate(df.format((Timestamp) hmap.get("END_DATE")));
 				}
-				if(hmap.get("UPDATE_TIMESTAMP") != null){
+				if (hmap.get("UPDATE_TIMESTAMP") != null) {
 					exemptForm.setUpdateTimestamp((String) hmap.get("UPDATE_TIMESTAMP"));
 				}
-				if(hmap.get("UPDATE_USER") != null){
+				if (hmap.get("UPDATE_USER") != null) {
 					exemptForm.setUpdateUser((String) hmap.get("UPDATE_USER"));
 				}
-				if(hmap.get("EXEMPT_STATUS") != null){
+				if (hmap.get("EXEMPT_STATUS") != null) {
 					exemptForm.setStatus((String) hmap.get("EXEMPT_STATUS"));
 				}
-				if(hmap.get("EXEMPT_STATUS_CODE") != null){
+				if (hmap.get("EXEMPT_STATUS_CODE") != null) {
 					exemptForm.setStatusCode((String) hmap.get("EXEMPT_STATUS_CODE"));
 				}
-				if(hmap.get("IS_EXEMPT_GRANTED") != null){
+				if (hmap.get("IS_EXEMPT_GRANTED") != null) {
 					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
 				}
-				if(hmap.get("FACULTY_SPONSOR_PERSON") != null){
+				if (hmap.get("FACULTY_SPONSOR_PERSON") != null) {
 					exemptForm.setFacultySponsorPerson((String) hmap.get("FACULTY_SPONSOR_PERSON"));
 				}
-				if(hmap.get("UNIT_NUMBER") != null){
+				if (hmap.get("UNIT_NUMBER") != null) {
 					exemptForm.setUnitNumber((String) hmap.get("UNIT_NUMBER"));
 				}
-				if(hmap.get("UNIT_NAME") != null){
+				if (hmap.get("UNIT_NAME") != null) {
 					exemptForm.setUnitName((String) hmap.get("UNIT_NAME"));
 				}
-				if((hmap.get("FACULTY_SPONSOR_PERSON_ID")!=null && loginUserPersonId != null)&&(loginUserPersonId.equals(hmap.get("FACULTY_SPONSOR_PERSON_ID").toString()))){
+				if ((hmap.get("FACULTY_SPONSOR_PERSON_ID") != null && loginUserPersonId != null)
+						&& (loginUserPersonId.equals(hmap.get("FACULTY_SPONSOR_PERSON_ID").toString()))) {
 					exemptForm.setLoggedInUserFacultySponsor(true);
-				} else{
+				} else {
 					exemptForm.setLoggedInUserFacultySponsor(false);
 				}
-				if((hmap.get("PERSON_ID")!=null && loginUserPersonId != null)&&(loginUserPersonId.equals(hmap.get("PERSON_ID").toString()))){
+				if ((hmap.get("PERSON_ID") != null && loginUserPersonId != null)
+						&& (loginUserPersonId.equals(hmap.get("PERSON_ID").toString()))) {
 					exemptForm.setLoggedInUserPI(true);
-				} else{
+				} else {
 					exemptForm.setLoggedInUserPI(false);
 				}
 				irbExemptFormList.add(exemptForm);
@@ -600,29 +647,36 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 	@Override
 	public void savePersonExemptForm(IRBExemptForm irbExemptForm, String actype) throws ParseException {
-		ArrayList<InParameter> inputParam = new ArrayList<>(); 
+		ArrayList<InParameter> inputParam = new ArrayList<>();
 		java.util.Date exemptStartDate = null;
 		java.util.Date exemptEndDate = null;
-		java.sql.Date sqlExemptStartDate = null; 
-		java.sql.Date sqlExemptEndDate = null; 
+		java.sql.Date sqlExemptStartDate = null;
+		java.sql.Date sqlExemptEndDate = null;
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
-		if(irbExemptForm.getExemptProtocolStartDate() != null){
-			 exemptStartDate = sdf1.parse(irbExemptForm.getExemptProtocolStartDate());
-			 sqlExemptStartDate = new java.sql.Date(exemptStartDate.getTime());
+		if (irbExemptForm.getExemptProtocolStartDate() != null) {
+			exemptStartDate = sdf1.parse(irbExemptForm.getExemptProtocolStartDate());
+			sqlExemptStartDate = new java.sql.Date(exemptStartDate.getTime());
 		}
-		if(irbExemptForm.getExemptProtocolEndDate() != null){
+		if (irbExemptForm.getExemptProtocolEndDate() != null) {
 			exemptEndDate = sdf1.parse(irbExemptForm.getExemptProtocolEndDate());
 			sqlExemptEndDate = new java.sql.Date(exemptEndDate.getTime());
 		}
-		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormID())); //AV_PERSON_ID
+		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,
+				irbExemptForm.getExemptFormID())); // AV_PERSON_ID
 		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, irbExemptForm.getPersonId()));
 		inputParam.add(new InParameter("AV_PERSON_NAME", DBEngineConstants.TYPE_STRING, irbExemptForm.getPersonName()));
-		inputParam.add(new InParameter("AV_EXEMPT_FORM_NUMBER", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormNumber()));
-		inputParam.add(new InParameter("AV_EXEMPT_STATUS_CODE", DBEngineConstants.TYPE_STRING, irbExemptForm.getStatusCode()));
-		inputParam.add(new InParameter("AV_IS_EXEMPT_GRANTED", DBEngineConstants.TYPE_STRING, irbExemptForm.getIsExempt()));
-		inputParam.add(new InParameter("AV_EXEMPT_TITLE", DBEngineConstants.TYPE_STRING, irbExemptForm.getExemptTitle()));
-		inputParam.add(new InParameter("AV_QUESTIONNAIRE_ANS_HEADER_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptQuestionnaireAnswerHeaderId()));
-		inputParam.add(new InParameter("AV_FACULTY_SPONSOR_PERSON_ID", DBEngineConstants.TYPE_STRING, irbExemptForm.getFacultySponsorPersonId()));
+		inputParam.add(new InParameter("AV_EXEMPT_FORM_NUMBER", DBEngineConstants.TYPE_INTEGER,
+				irbExemptForm.getExemptFormNumber()));
+		inputParam.add(
+				new InParameter("AV_EXEMPT_STATUS_CODE", DBEngineConstants.TYPE_STRING, irbExemptForm.getStatusCode()));
+		inputParam.add(
+				new InParameter("AV_IS_EXEMPT_GRANTED", DBEngineConstants.TYPE_STRING, irbExemptForm.getIsExempt()));
+		inputParam
+				.add(new InParameter("AV_EXEMPT_TITLE", DBEngineConstants.TYPE_STRING, irbExemptForm.getExemptTitle()));
+		inputParam.add(new InParameter("AV_QUESTIONNAIRE_ANS_HEADER_ID", DBEngineConstants.TYPE_INTEGER,
+				irbExemptForm.getExemptQuestionnaireAnswerHeaderId()));
+		inputParam.add(new InParameter("AV_FACULTY_SPONSOR_PERSON_ID", DBEngineConstants.TYPE_STRING,
+				irbExemptForm.getFacultySponsorPersonId()));
 		inputParam.add(new InParameter("AV_UNIT_NUMBER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUnitNumber()));
 		inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
 		inputParam.add(new InParameter("AV_SUMMARY", DBEngineConstants.TYPE_STRING, irbExemptForm.getSummary()));
@@ -633,13 +687,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			dbEngine.executeProcedure(inputParam, "UPD_IRB_PERSON_EXEMPT_FORM");
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in savePersonExemptForm method"+ e);
+			logger.info("DBException in savePersonExemptForm method" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in savePersonExemptForm method"+ e);
+			logger.info("IOException in savePersonExemptForm method" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in savePersonExemptForm method"+ e);
+			logger.info("SQLException in savePersonExemptForm method" + e);
 		}
 	}
 
@@ -648,32 +702,33 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	public ArrayList<HashMap<String, Object>> getExemptMsg(IRBExemptForm irbExemptForm) {
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormID())); //AV_PERSON_ID
+		inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,
+				irbExemptForm.getExemptFormID())); // AV_PERSON_ID
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_NOT_EXEMPT_QSTN_LIST", outputParam);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Exception in getExemptMsg method:"+ e);
+			logger.info("Exception in getExemptMsg method:" + e);
 		}
 		return result;
 	}
 
-	
 	@Override
 	public Integer getNextExemptId() {
 		Integer exemptId = null;
-		try{
+		try {
 			ArrayList<OutParameter> outParam = new ArrayList<>();
-			outParam.add(new OutParameter("returnId",DBEngineConstants.TYPE_INTEGER));
-			ArrayList<HashMap<String,Object>> result = dbEngine.executeFunction("FN_MITKC_IRB_NEXT_EXEMPT_ID",outParam);
-			if(result != null && !result.isEmpty()){
-				HashMap<String,Object> hmResult = result.get(0);
-				exemptId = Integer.parseInt((String)hmResult.get("returnId"));
-			}		
-		}catch(Exception e){
-			logger.error("Error in methord getNextExemptId",e);
+			outParam.add(new OutParameter("returnId", DBEngineConstants.TYPE_INTEGER));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction("FN_MITKC_IRB_NEXT_EXEMPT_ID",
+					outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				exemptId = Integer.parseInt((String) hmResult.get("returnId"));
+			}
+		} catch (Exception e) {
+			logger.error("Error in methord getNextExemptId", e);
 		}
 		return exemptId;
 	}
@@ -687,77 +742,87 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure("get_mitkc_all_units", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getLeadunitAutoCompleteList:"+ e);
+			logger.info("DBException in getLeadunitAutoCompleteList:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getLeadunitAutoCompleteList:"+ e);
+			logger.info("IOException in getLeadunitAutoCompleteList:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getLeadunitAutoCompleteList:"+ e);
+			logger.info("SQLException in getLeadunitAutoCompleteList:" + e);
 		}
 		return result;
 	}
 
 	@Override
-	public void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment,
-			String exemptstatusCode, String updateUser, Integer notificationNumber, PersonDTO personDTO) {
+	public void irbExemptFormActionLog(Integer formId, String actionTypeCode, String comment, String exemptstatusCode,
+			String updateUser, Integer notificationNumber, PersonDTO personDTO) {
 		try {
 			Integer adminNotificationNumber = 703;
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
-			outParam.add(new OutParameter("returnId",DBEngineConstants.TYPE_INTEGER));
+			outParam.add(new OutParameter("returnId", DBEngineConstants.TYPE_INTEGER));
 			inParam.add(new InParameter("av_irb_person_exempt_form_id", DBEngineConstants.TYPE_INTEGER, formId));
 			inParam.add(new InParameter("av_action_type_code", DBEngineConstants.TYPE_STRING, actionTypeCode));
 			inParam.add(new InParameter("av_comment", DBEngineConstants.TYPE_STRING, comment));
 			inParam.add(new InParameter("av_exempt_status_code", DBEngineConstants.TYPE_STRING, exemptstatusCode));
 			inParam.add(new InParameter("av_update_user", DBEngineConstants.TYPE_STRING, updateUser));
-			dbEngine.executeFunction(inParam, "fn_irb_exemp_form_action_log",outParam);
-			if(notificationNumber != null){
-				logger.info("Sending Email Notification with status code: "+notificationNumber);
-				sendingExemptNotifications(formId,comment,personDTO.getPersonID(),notificationNumber);
-				sendingExemptNotifications(formId,null,personDTO.getPersonID(),adminNotificationNumber);
+			dbEngine.executeFunction(inParam, "fn_irb_exemp_form_action_log", outParam);
+			if (notificationNumber != null) {
+				logger.info("Sending Email Notification with status code: " + notificationNumber);
+				sendingExemptNotifications(formId, comment, personDTO.getPersonID(), notificationNumber);
+				sendingExemptNotifications(formId, null, personDTO.getPersonID(), adminNotificationNumber);
 			}
 		} catch (Exception e) {
 			logger.error("Error in methord action log exempt questionnaire", e);
 		}
 	}
 
-	public void sendingExemptNotifications(Integer formId,String comment, String loginPersonId, Integer notificationNumber){
-		try {			
-			exemptProtocolEmailNotification.sendingExemptEmailNotifications(formId, comment, loginPersonId, notificationNumber);
+	public void sendingExemptNotifications(Integer formId, String comment, String loginPersonId,
+			Integer notificationNumber) {
+		try {
+			exemptProtocolEmailNotification.sendingExemptEmailNotifications(formId, comment, loginPersonId,
+					notificationNumber);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 	@Override
-	public void addExemptProtocolAttachments(MultipartFile[] files, IRBExemptForm irbExemptForm){
-			try {
-				Integer checkListId = null;
-				if(!irbExemptForm.getCheckListAcType().equals("I")){				
-					checkListId = irbExemptForm.getCheckListId();
-				}
-				ArrayList<InParameter> inputParam = null;
-				for (int i = 0; i < files.length; i++) {
-					inputParam = new ArrayList<>();
-					inputParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListId));
-					inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormID()));
-					inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListDescription()));
-					inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, files[i].getOriginalFilename()));
-					inputParam.add(new InParameter("AV_FILE_DATA", DBEngineConstants.TYPE_BLOB, files[i].getBytes()));
-					inputParam.add(new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
-					inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
-					inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListAcType()));
-					dbEngine.executeProcedure(inputParam, "UPD_IRB_EXEMPT_FORM_CHECKLST");
-				}
+	public void addExemptProtocolAttachments(MultipartFile[] files, IRBExemptForm irbExemptForm) {
+		try {
+			Integer checkListId = null;
+			if (!irbExemptForm.getCheckListAcType().equals("I")) {
+				checkListId = irbExemptForm.getCheckListId();
+			}
+			ArrayList<InParameter> inputParam = null;
+			for (int i = 0; i < files.length; i++) {
+				inputParam = new ArrayList<>();
+				inputParam.add(
+						new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListId));
+				inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,
+						irbExemptForm.getExemptFormID()));
+				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,
+						irbExemptForm.getCheckListDescription()));
+				inputParam.add(
+						new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, files[i].getOriginalFilename()));
+				inputParam.add(new InParameter("AV_FILE_DATA", DBEngineConstants.TYPE_BLOB, files[i].getBytes()));
+				inputParam.add(
+						new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
+				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,
+						irbExemptForm.getUpdateUser()));
+				inputParam.add(
+						new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListAcType()));
+				dbEngine.executeProcedure(inputParam, "UPD_IRB_EXEMPT_FORM_CHECKLST");
+			}
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in addExemptProtocolAttachments method"+ e);
+			logger.info("DBException in addExemptProtocolAttachments method" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in addExemptProtocolAttachments method"+ e);
+			logger.info("IOException in addExemptProtocolAttachments method" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in addExemptProtocolAttachments method"+ e);
+			logger.info("SQLException in addExemptProtocolAttachments method" + e);
 		}
 	}
 
@@ -772,13 +837,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FORM_ACTION_LOG", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getExemptProtocolActivityLogs:"+ e);
+			logger.info("DBException in getExemptProtocolActivityLogs:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getExemptProtocolActivityLogs:"+ e);
+			logger.info("IOException in getExemptProtocolActivityLogs:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getExemptProtocolActivityLogs:"+ e);
+			logger.info("SQLException in getExemptProtocolActivityLogs:" + e);
 		}
 		return result;
 	}
@@ -790,9 +855,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 		try {
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
-			inParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListAttachmentId));
+			inParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER,
+					checkListAttachmentId));
 			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_EXEMPT_FORM_CKLST_FILE", outParam);
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam,
+					"GET_IRB_EXEMPT_FORM_CKLST_FILE", outParam);
 			if (result != null && !result.isEmpty()) {
 				HashMap<String, Object> hmResult = result.get(0);
 				ByteArrayOutputStream byteArrayOutputStream = null;
@@ -810,7 +877,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Exception in downloadExemptProtocolAttachments method:"+ e);
+			logger.info("Exception in downloadExemptProtocolAttachments method:" + e);
 		}
 		return attachmentData;
 	}
@@ -826,13 +893,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FORM_CHECKLST", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
-			logger.info("DBException in getExemptProtocolAttachmentList:"+ e);
+			logger.info("DBException in getExemptProtocolAttachmentList:" + e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("IOException in getExemptProtocolAttachmentList:"+ e);
+			logger.info("IOException in getExemptProtocolAttachmentList:" + e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("SQLException in getExemptProtocolAttachmentList:"+ e);
+			logger.info("SQLException in getExemptProtocolAttachmentList:" + e);
 		}
 		return result;
 	}
@@ -840,29 +907,351 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao{
 	@Override
 	public void updateExemptprotocolAttachments(IRBExemptForm irbExemptForm) {
 		try {
-			Integer checkListId = null;			
+			Integer checkListId = null;
 			checkListId = irbExemptForm.getCheckListId();
 			byte[] fileData = "".getBytes();
 			ArrayList<InParameter> inputParam = null;
-				inputParam = new ArrayList<>();
-				inputParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListId));
-				inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, irbExemptForm.getExemptFormID()));
-				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListDescription()));
-				inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, ""));
-				inputParam.add(new InParameter("AV_FILE_DATA", DBEngineConstants.TYPE_BLOB, fileData));
-				inputParam.add(new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, null));
-				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
-				inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListAcType()));
-				dbEngine.executeProcedure(inputParam, "UPD_IRB_EXEMPT_FORM_CHECKLST");
-	} catch (DBException e) {
-		e.printStackTrace();
-		logger.info("DBException in updateExemptprotocolAttachments method"+ e);
-	} catch (IOException e) {
-		e.printStackTrace();
-		logger.info("IOException in updateExemptprotocolAttachments method"+ e);
-	} catch (SQLException e) {
-		e.printStackTrace();
-		logger.info("SQLException in updateExemptprotocolAttachments method"+ e);
+			inputParam = new ArrayList<>();
+			inputParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListId));
+			inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,
+					irbExemptForm.getExemptFormID()));
+			inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,
+					irbExemptForm.getCheckListDescription()));
+			inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, ""));
+			inputParam.add(new InParameter("AV_FILE_DATA", DBEngineConstants.TYPE_BLOB, fileData));
+			inputParam.add(new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, null));
+			inputParam.add(
+					new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING, irbExemptForm.getUpdateUser()));
+			inputParam
+					.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListAcType()));
+			dbEngine.executeProcedure(inputParam, "UPD_IRB_EXEMPT_FORM_CHECKLST");
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in updateExemptprotocolAttachments method" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in updateExemptprotocolAttachments method" + e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in updateExemptprotocolAttachments method" + e);
+		}
 	}
-  }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolType.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("protocolTypeCode"), "protocolTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolType.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolType> protocolType = criteria.list();
+		logger.info("Protocol Type in DAO: " + protocolType);
+		irbProtocolVO.setProtocolType(protocolType);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		if(generalInfo.getProtocolNumber() == null){
+			generalInfo.setActive("Y");
+			generalInfo.setIslatest("Y");
+			generalInfo.setProtocolStatusCode("100");
+			String protocolNUmber = generateProtocolNumber();
+			generalInfo.setProtocolNumber(protocolNUmber);
+			generalInfo.setSequenceNumber(1);
+		}
+		hibernateTemplate.saveOrUpdate(generalInfo);
+		irbProtocolVO.setGeneralInfo(generalInfo);
+		return irbProtocolVO;
+	}
+
+	private String generateProtocolNumber() {
+		String generatedId = null;
+		try {
+			String prefix = "";
+			Calendar c = Calendar.getInstance();
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			prefix = String.valueOf(year) + String.valueOf(month);
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection connection = sessionImpl.connection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("select count(1) from MITKC_IRB_PROTOCOL");
+			if (rs.next()) {
+				int id = rs.getInt(1);
+				generatedId = prefix + new Integer(id).toString();
+				logger.info("Generated Id: " + generatedId);
+				return generatedId;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return generatedId;
+	}
+
+	@Override
+	public IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolPersonRoleTypes.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("protocolPersonRoleId"), "protocolPersonRoleId");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolPersonRoleTypes.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolPersonRoleTypes> rolelType = criteria.list();
+		logger.info("Role Type in DAO: " + rolelType);
+		irbProtocolVO.setPersonRoleTypes(rolelType);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolPersonLeadUnits.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("unitNumber"), "unitNumber");
+		projList.add(Projections.property("unitName"), "unitName");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolPersonLeadUnits.class));
+		criteria.addOrder(Order.asc("unitName"));
+		List<ProtocolPersonLeadUnits> protocolPersonLeadUnits = criteria.list();
+		logger.info("Leadunits in DAO: " + protocolPersonLeadUnits);
+		irbProtocolVO.setProtocolPersonLeadUnits(protocolPersonLeadUnits);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolAffiliationTypes.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("affiliationTypeCode"), "affiliationTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolAffiliationTypes.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolAffiliationTypes> protocolAffiliationTypes = criteria.list();
+		logger.info("protocolAffiliationTypes in DAO: " + protocolAffiliationTypes);
+		irbProtocolVO.setAffiliationTypes(protocolAffiliationTypes);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolSubjectTypes.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("vulnerableSubjectTypeCode"), "vulnerableSubjectTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolSubjectTypes.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolSubjectTypes> protocolSubjectTypes = criteria.list();
+		logger.info("protocolSubjectTypes in DAO: " + protocolSubjectTypes);
+		irbProtocolVO.setProtocolSubjectTypes(protocolSubjectTypes);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolFundingSourceTypes.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("fundingSourceTypeCode"), "fundingSourceTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList)
+				.setResultTransformer(Transformers.aliasToBean(ProtocolFundingSourceTypes.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolFundingSourceTypes> protocolFundingSourceTypes = criteria.list();
+		logger.info("protocolFundingSourceTypes in DAO: " + protocolFundingSourceTypes);
+		irbProtocolVO.setProtocolFundingSourceTypes(protocolFundingSourceTypes);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CollaboratorNames.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("organizationId"), "organizationId");
+		projList.add(Projections.property("organizationName"), "organizationName");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CollaboratorNames.class));
+		criteria.addOrder(Order.asc("organizationName"));
+		List<CollaboratorNames> collaboratorNames = criteria.list();
+		logger.info("collaboratorNames in DAO: " + collaboratorNames);
+		irbProtocolVO.setCollaboratorNames(collaboratorNames);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		personnelInfo.setSequenceNumber(1);
+		if (personnelInfo.getAcType().equals("U")) {
+			hibernateTemplate.saveOrUpdate(personnelInfo);
+		} else if (personnelInfo.getAcType().equals("D")) {
+			Query queryDeleteLeadUnits = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from ProtocolLeadUnits p where  p.protocolUnitsId =:protocolUnitsId");
+			queryDeleteLeadUnits.setInteger("protocolUnitsId",
+					personnelInfo.getProtocolLeadUnits().get(0).getProtocolUnitsId());
+			queryDeleteLeadUnits.executeUpdate();
+
+			Query queryDeletePerson = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from ProtocolPersonnelInfo p where  p.protocolPersonId =:protocolPersonId");
+			queryDeletePerson.setInteger("protocolPersonId", personnelInfo.getProtocolPersonId());
+			queryDeletePerson.executeUpdate();
+		}
+
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
+		queryGeneral.setInteger("protocolId", personnelInfo.getProtocolGeneralInfo().getProtocolId());
+		ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
+		irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		fundingSource.setSequenceNumber(1);
+		if (fundingSource.getAcType().equals("U")) {
+			hibernateTemplate.saveOrUpdate(fundingSource);
+		} else {
+			Query queryDelete = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
+					"delete from ProtocolFundingSource p where p.protocolFundingSourceId =:protocolFundingSourceId");
+			queryDelete.setInteger("protocolFundingSourceId", fundingSource.getProtocolFundingSourceId());
+			queryDelete.executeUpdate();
+		}
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
+		query.setInteger("protocolId", fundingSource.getProtocolId());
+		irbProtocolVO.setProtocolFundingSourceList(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		protocolSubject.setSequenceNumber(1);
+		if (protocolSubject.getAcType().equals("U")) {
+			hibernateTemplate.saveOrUpdate(protocolSubject);
+		} else {
+			Query queryDelete = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
+					"delete from ProtocolSubject p where p.protocolVulnerableSubId =:protocolVulnerableSubId");
+			queryDelete.setInteger("protocolVulnerableSubId", protocolSubject.getProtocolVulnerableSubId());
+			queryDelete.executeUpdate();
+		}
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
+		query.setInteger("protocolId", protocolSubject.getProtocolId());
+		irbProtocolVO.setProtocolSubjectList(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/YYYY");
+		protocolCollaborator.setSequenceNumber(1);
+		if (protocolCollaborator.getAcType().equals("U")) {
+			hibernateTemplate.saveOrUpdate(protocolCollaborator);
+		} else {
+			Query queryDelete = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from ProtocolCollaborator p where p.protocolLocationId =:protocolLocationId");
+			queryDelete.setInteger("protocolLocationId", protocolCollaborator.getProtocolLocationId());
+			queryDelete.executeUpdate();
+		}
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
+		query.setInteger("protocolId", protocolCollaborator.getProtocolId());
+		irbProtocolVO.setProtocolCollaboratorList(query.list());
+
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadAttachmentType() {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachementTypes");
+		irbProtocolVO.setIrbAttachementTypes(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
+		Integer protocolId = null;
+		protocolId = irbProtocolVO.getProtocolId();
+		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
+		if (protocolId != null) {
+			Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
+			queryGeneral.setInteger("protocolId", protocolId);
+			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
+			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);
+			irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
+
+			Query queryfundingSource = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
+			queryfundingSource.setInteger("protocolId", protocolId);
+			irbProtocolVO.setProtocolFundingSourceList(queryfundingSource.list());
+
+			Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
+			queryprotocolSubject.setInteger("protocolId", protocolId);
+			irbProtocolVO.setProtocolSubjectList(queryprotocolSubject.list());
+
+			Query queryCollaborator = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
+			queryCollaborator.setInteger("protocolId", protocolId);
+
+			List<ProtocolCollaborator> collaborators = queryCollaborator.list();
+			irbProtocolVO.setProtocolCollaboratorList(collaborators);
+		} else {
+			irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
+		}
+
+		return irbProtocolVO;
+	}
+
+	@Override
+	public ProtocolGeneralInfo loadProtocolById(Integer protocolId) {
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
+		queryGeneral.setInteger("protocolId", protocolId);
+		ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
+		return protocolGeneralInfoObj;
+	}
+
+	@Override
+	public IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson)
+			throws JsonParseException, JsonMappingException, IOException {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		IRBAttachmentProtocol attachmentProtocol = mapper.readValue(formDataJson, IRBAttachmentProtocol.class);
+		if (attachmentProtocol.getAcType().equals("U")) {
+			for (int i = 0; i < files.length; i++) {
+				attachmentProtocol.getProtocolAttachment().setFileName(files[i].getOriginalFilename());
+				attachmentProtocol.getProtocolAttachment().setContentType(files[i].getContentType());
+				attachmentProtocol.getProtocolAttachment().setFileData(files[i].getBytes());
+				hibernateTemplate.saveOrUpdate(attachmentProtocol);
+				logger.info("saved success fully: " + attachmentProtocol);
+			}
+		} else if (attachmentProtocol.getAcType().equals("D")) {
+			Query queryDeletProtocolAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from ProtocolAttachments p where p.fileId =:fileId");
+			queryDeletProtocolAttachment.setInteger("fileId", attachmentProtocol.getProtocolAttachment().getFileId());
+			queryDeletProtocolAttachment.executeUpdate();
+
+			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from IRBAttachmentProtocol p where p.paProtocolId =:paProtocolId");
+			queryDeletAttachment.setInteger("paProtocolId", attachmentProtocol.getPaProtocolId());
+			queryDeletAttachment.executeUpdate();
+		}
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from IRBAttachmentProtocol");
+		irbProtocolVO.setProtocolAttachmentList(query.list());
+		return irbProtocolVO;
+	}
 }

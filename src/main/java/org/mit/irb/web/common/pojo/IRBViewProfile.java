@@ -21,7 +21,13 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupList;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails;	
 	private List<IRBExemptForm> irbExemptFormList;
-		
+	private ArrayList<HashMap<String, Object>> irbProtocolRoleMap;
+	private ArrayList<HashMap<String, Object>> irbProtocolFundingSourceMap;
+	private ArrayList<HashMap<String, Object>> irbProtocolSubjectMap;		
+	private ArrayList<HashMap<String, Object>> irbProtocolLeadUnitMap;
+	private ArrayList<HashMap<String, Object>> irbProtocolAffiliateMap;	
+	private ArrayList<HashMap<String, Object>> irbProtocolTitleMap;		
+	
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
 	}
@@ -119,6 +125,54 @@ public class IRBViewProfile {
 
 	public void setIrbExemptFormList(List<IRBExemptForm> irbExemptFormList) {
 		this.irbExemptFormList = irbExemptFormList;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolRoleMap() {
+		return irbProtocolRoleMap;
+	}
+
+	public void setIrbProtocolRoleMap(ArrayList<HashMap<String, Object>> irbProtocolRoleMap) {
+		this.irbProtocolRoleMap = irbProtocolRoleMap;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolFundingSourceMap() {
+		return irbProtocolFundingSourceMap;
+	}
+
+	public void setIrbProtocolFundingSourceMap(ArrayList<HashMap<String, Object>> irbProtocolFundingSourceMap) {
+		this.irbProtocolFundingSourceMap = irbProtocolFundingSourceMap;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolSubjectMap() {
+		return irbProtocolSubjectMap;
+	}
+
+	public void setIrbProtocolSubjectMap(ArrayList<HashMap<String, Object>> irbProtocolSubjectMap) {
+		this.irbProtocolSubjectMap = irbProtocolSubjectMap;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolLeadUnitMap() {
+		return irbProtocolLeadUnitMap;
+	}
+
+	public void setIrbProtocolLeadUnitMap(ArrayList<HashMap<String, Object>> irbProtocolLeadUnitMap) {
+		this.irbProtocolLeadUnitMap = irbProtocolLeadUnitMap;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolAffiliateMap() {
+		return irbProtocolAffiliateMap;
+	}
+
+	public void setIrbProtocolAffiliateMap(ArrayList<HashMap<String, Object>> irbProtocolAffiliateMap) {
+		this.irbProtocolAffiliateMap = irbProtocolAffiliateMap;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolTitleMap() {
+		return irbProtocolTitleMap;
+	}
+
+	public void setIrbProtocolTitleMap(ArrayList<HashMap<String, Object>> irbProtocolTitleMap) {
+		this.irbProtocolTitleMap = irbProtocolTitleMap;
 	}
 	
 }

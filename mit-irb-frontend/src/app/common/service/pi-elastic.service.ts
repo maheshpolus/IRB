@@ -11,8 +11,8 @@ export class PiElasticService {
   PERSON_INDEX: string;
   NON_EMPLOYEE_INDEX: string;
   constructor( private _http: HttpClient ) {
-  /*    this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
-      this.IRB_INDEX = 'kcperson';
+     /* this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+      this.IRB_INDEX = 'mitperson';
       this.PERSON_INDEX = 'fibirolodex';
       this.NON_EMPLOYEE_INDEX = 'mitrolodex';*/
        this.get_elastic_config().subscribe(

@@ -2,7 +2,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:tx="http://www.springframework.org/schema/tx"
- 	xsi:schemaLocation="
+	xsi:schemaLocation="
          http://www.springframework.org/schema/beans     
          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
          http://www.springframework.org/schema/mvc 
@@ -12,66 +12,133 @@
          http://www.springframework.org/schema/context 
          http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-	<!-- Scans the classpath for annotated components that will be auto-registered as Spring beans.
-	 For example @Controller and @Service. Make sure to set the correct base-package-->
-	<context:component-scan base-package="org.mit.irb.web.*" />
-	
+	<!-- Scans the classpath for annotated components that will be auto-registered 
+		as Spring beans. For example @Controller and @Service. Make sure to set the 
+		correct base-package -->
+	<context:component-scan base-package="org.mit.irb.*" />
+
 	<!-- scan this file for reading configuration details of mit-irb -->
- 	<context:property-placeholder location="classpath:mit-irb.properties" />
- 	<bean id="dbProperties"
- 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
- 		<property name="locations">
- 			<list>
- 				<value>classpath:mit-irb.properties</value>
- 			</list>
- 		</property>
- 	</bean>
+	<context:property-placeholder location="classpath:mit-irb.properties" />
+	<bean id="dbProperties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:mit-irb.properties</value>
+			</list>
+		</property>
+	</bean>
 
 	<!-- Datasource for DBConnection -->
- 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
- 		<property name="jndiName" value="java:comp/env/jdbc/mit-irb" />
- 	</bean>
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/mit-irb" />
+	</bean>
 
- 	<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
- 		id="sessionFactory">
- 		<property name="dataSource" ref="dataSource"></property>
- 		<property name="hibernateProperties">
- 			<props>
- 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
- 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
- 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
- 				<prop key="hibernate.c3p0.minPoolSize">${hibernate.c3p0.minPoolSize}</prop>
- 				<prop key="hibernate.c3p0.maxPoolSize">${hibernate.c3p0.maxPoolSize}</prop>
- 				<prop key="hibernate.c3p0.max_statement">${hibernate.c3p0.max_statement}</prop>
- 			</props>
- 		</property>
- 	</bean>
- 	<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager"
- 		id="hibernateTransactionManager">
- 		<property name="sessionFactory" ref="sessionFactory"></property>
- 	</bean>
- 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
- 		<property name="sessionFactory" ref="sessionFactory" />
- 	</bean>
- 	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
+	<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+		id="sessionFactory">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- <property name="annotatedClasses"> -->
+		<property name="annotatedClasses">
+			<list>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolType</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolStatus</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementStatus</value>
+
+				<!-- <value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
+					<value>org.mit.irb.web.committee.pojo.Committee</value>
+					<value>org.mit.irb.web.committee.pojo.CommitteeCorrespBatch</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeCorrespBatchDetail</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeMemberExpertise</value>
+					<value>org.mit.irb.web.committee.pojo.CommitteeMemberRoles</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeMemberships</value>
+					<value>org.mit.irb.web.committee.pojo.CommitteeMembershipStatus</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeMembershipType.java</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeResearchAreas.java</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeSchedule</value>
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleActItems</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleAttachment</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleFrequency</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleMinuteDoc</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes</value>
+					<value>org.mit.irb.web.committee.pojo.CommitteeType</value> 
+					<value>org.mit.irb.web.committee.pojo.MembershipRole</value>
+					<value>org.mit.irb.web.committee.pojo.MinuteEntryType</value> 
+					<value>org.mit.irb.web.committee.pojo.ProtocolActionType</value>
+					<value>org.mit.irb.web.committee.pojo.CommitteeResearchAreas.java</value> 
+					<value>org.mit.irb.web.committee.pojo.ProtocolContingency</value>
+					<value>org.mit.irb.web.committee.pojo.ProtocolReviewType</value> 
+					<value>org.mit.irb.web.committee.pojo.ProtocolSubmission</value>
+					<value>org.mit.irb.web.committee.pojo.ProtocolSubmissionQualifierType</value> 
+					<value>org.mit.irb.web.committee.pojo.ProtocolSubmissionStatus</value>
+					<value>org.mit.irb.web.committee.pojo.ProtocolSubmissionType</value> 
+					<value>org.mit.irb.web.committee.pojo.ProtoCorrespType</value>
+					<value>org.mit.irb.web.committee.pojo.ResearchArea</value> 
+					<value>org.mit.irb.web.committee.pojo.Rolodex</value>
+					<value>org.mit.irb.web.committee.pojo.ScheduleActItemType</value> 
+					<value>org.mit.irb.web.committee.pojo.ScheduleAgenda</value>
+					<value>org.mit.irb.web.committee.pojo.ScheduleStatus</value> 
+					<value>org.mit.irb.web.committee.pojo.Unit</value>
+					<value>org.mit.irb.web.committee.pojo.UnitAdministrator</value> 
+					<value>org.mit.irb.web.committee.pojo.UnitAdministratorType</value> -->
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.c3p0.minPoolSize">${hibernate.c3p0.minPoolSize}</prop>
+				<prop key="hibernate.c3p0.maxPoolSize">${hibernate.c3p0.maxPoolSize}</prop>
+				<prop key="hibernate.c3p0.max_statement">${hibernate.c3p0.max_statement}</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		id="hibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
 
 	<!-- view resolver -->
- 	<bean
- 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
- 		<property name="prefix">
- 			<value>/resources/dist/</value>
- 		</property>
- 		<property name="suffix">
- 			<value></value>
- 		</property>
- 	</bean>
- 	
- 	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- one of the properties available; the maximum file size in bytes -->
-        <property name="maxUploadSize" value="100000000000"/>
-    </bean>
-    
- 	<mvc:resources mapping="/resources/**" location="/resources/" />
- 	<!-- Configures the annotation-driven Spring MVC Controller programming model-->
- 	<mvc:annotation-driven />
- </beans>
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/resources/dist/</value>
+		</property>
+		<property name="suffix">
+			<value></value>
+		</property>
+	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="100000000000" />
+	</bean>
+
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<!-- Configures the annotation-driven Spring MVC Controller programming 
+		model -->
+	<mvc:annotation-driven />
+</beans>

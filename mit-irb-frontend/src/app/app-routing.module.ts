@@ -9,12 +9,12 @@ import { AuthGuard } from './common/service/auth-guard.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
 
 import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
-import { ElasticService } from "./common/service/elastic.service";
-import { AppModule } from "./app.module";
+import { ElasticService } from './common/service/elastic.service';
+import { AppModule } from './app.module';
 
 const appRoutes = [
     { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
-    //{ path: '', redirectTo: 'login', pathMatch: 'full' },
+    // { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     {
         path: 'irb', component: IrbComponent, // canActivate: [AuthGuard],
@@ -24,6 +24,7 @@ const appRoutes = [
             },
             { path: 'irb-create', loadChildren: 'app/irb-create/irb-create.module#IrbCreateModule' },
             { path: 'irb-view', loadChildren: 'app/irb-view/irb-view.module#IrbViewModule' },
+            //  { path: 'Committee', loadChildren: 'app/committee/committee.module#CommitteeModule' },
             { path: 'expanded-view', component: ExpandedViewComponent },
             { path: 'exempt-questionaire', component: ExemptQuestionaireComponent,
                     resolve: { irb: DashboardResolverService }

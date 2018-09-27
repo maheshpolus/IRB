@@ -134,5 +134,21 @@
 	"/mit-irb/updateFundingSource":{
 		"target" : "http://192.168.1.93:8080",
 		"secure" : false
+	},
+	"/mit-irb/updateSubject":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/updateCollaborator":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/addProtocolAttachments":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/loadAttachmentType":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
 	}
 }

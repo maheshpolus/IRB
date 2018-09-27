@@ -9,24 +9,23 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-6 col-12">
 							<h4>
-								IRB # : <span>{{generalInfo.protocolNumber}}</span>
+								IRB # : <span>{{generalInfo?.protocolNumber}}</span>
 							</h4>
 							<p>
-								Expiration Date : <span>{{generalInfo.prtocolExpirationDate}}</span><br />
-								Title : <span>{{generalInfo.protocolTitle}}</span>
+								Expiration Date : <span>{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}</span><br />
+								Title : <span>{{generalInfo?.protocolTitle}}</span>
 							</p>
 						</div>
 						<div class="col-md-3 col-sm-6 col-12">
 							<p>
-								Protocol Type : <span>{{generalInfo.protocolType}}</span><br />
-								Submission Status : <span>{{generalInfo.protocolStatus}}</span><br />
+								Protocol Type : <span>{{generalInfo?.protocolType?.description}}</span><br />
+								Submission Status : <span></span><br />
 								PI : <span></span>
 							</p>
 						</div>
 
-						<div class="col-md-2 col-sm-6 col-12">
-							<span class="active-en"
-								></span>
+						<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
+							<span class="active-en">{{generalInfo?.protocolStatus?.description}}</span>
 						</div>
 
 						<div class="i-icon-top">
@@ -48,14 +47,14 @@
 						<hr class="hr-line">
 						<div class="col-6">
 							<p>
-								Last Approval Date : <span>{{generalInfo.approvalDate}}</span><br />
-								Expected Start Date : <span>{{generalInfo.protocolStartDate}}</span>
+								Last Approval Date : <span>{{generalInfo.lastApprovalDate| date:"MM/dd/yyyy"}}</span><br />
+								Expected Start Date : <span>{{generalInfo.protocolStartDate| date:"MM/dd/yyyy"}}</span>
 							</p>
 						</div>
 						<div class="col-6">
 							<p>
 								Lead Unit : <span></span><br />
-								Anticipated End Date : <span>{{generalInfo.protocolEndDate}}</span>
+								Anticipated End Date : <span>{{generalInfo.protocolEndDate| date:"MM/dd/yyyy"}}</span>
 							</p>
 						</div>
 					</div>
@@ -85,14 +84,20 @@
 		<button class="btn btn-primary tab_btn" type="submit"
 			[routerLink]="['irbCreateAttachment']"		
 			routerLinkActive="btnactive"
-			(click)="show_current_tab('irb_attachments')">
+			(click)="show_current_tab('irbCreateAttachment')">
 			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
 		</button>
 		<button class="btn btn-primary tab_btn" [routerLink]="['irbHistory']" type="submit"
 			[routerLink]="['irbHistory']"
 			routerLinkActive="btnactive"
-			(click)="show_current_tab('irb_history')">
+			(click)="show_current_tab('irbHistory')">
 			<i class="fa fa-history" aria-hidden="true"></i>History
+		</button>
+		<button class="btn btn-primary tab_btn" [routerLink]="['irbActions']" type="submit"
+			[routerLink]="['irbActions']"
+			routerLinkActive="btnactive"
+			(click)="show_current_tab('irbActions')">
+			<i class="fa fa-history" aria-hidden="true"></i>Actions
 		</button>
 	</section>
 </div>

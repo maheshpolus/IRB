@@ -11,12 +11,18 @@
 
         <div class="card-body card-paddng">
           <div class="col-12  search-eidted-p padding-15">
+            <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo">
+              Please fill all mandatory fields marked
+              <strong>*</strong>
+            </div>
+          </div>
+          <div class="col-12  search-eidted-p padding-15">
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group ">
                   <label>Type<span class="mandatory">*</span></label>
                   <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
-                    <!-- <option selected="">Type</option> -->
+                    <option selected value=null>Please Select</option>
                     <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
                   </select>
                 </div>
@@ -24,12 +30,12 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label>Start Date</label>
-                  <label *ngIf="invalidData.invalidStartDate" class = "error">Start Date should be less than End Date</label>
+                  <label *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</label>
                   <div class="input-group  mb-4">
-                    	<input type="text"class="form-control" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1"
-									        placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate" (ngModelChange)="validateStartDate()">
-									    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-							    <!-- <div class="input-group-append input-span-1">
+                    <input type="text" class="form-control" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
+                      (ngModelChange)="validateStartDate()">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                    <!-- <div class="input-group-append input-span-1">
                       <span class="input-group-text">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                       </span>
@@ -40,11 +46,11 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label>End Date</label>
-                  <label *ngIf="invalidData.invalidEndDate" class = "error">End Date should be greater than Start Date</label>
+                  <label *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</label>
                   <div class="input-group mb-3">
-                    <input type="text"class="form-control" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" 
-									        placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate" (ngModelChange)="validateEndDate()">
-									    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                    <input type="text" class="form-control" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
+                      (ngModelChange)="validateEndDate()">
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
                     <!-- <div class="input-group-append input-span-1">
                       <span class="input-group-text">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -56,13 +62,13 @@
 
             </div>
             <div class="row">
-              <div class="col-md-5">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label>Title<span class="mandatory">*</span></label>
                   <textarea class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
                 </div>
               </div>
-              <div class="col-md-5">
+              <!-- <div class="col-md-5">
                 <div class="form-group">
                   <label>Description</label>
                   <textarea class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="generalInfo.prtocolDescription"></textarea>
@@ -70,6 +76,22 @@
               </div>
               <div class="col-md-2 save-button">
                 <button type="button" class="btn btn-success" (click)="saveGeneralInfo()">
+                  <span *ngIf="!isGeneralInfoSaved">Proceed</span>
+                  <span *ngIf="isGeneralInfoSaved">Save</span>
+                </button>
+              </div> -->
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-10">
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="generalInfo.prtocolDescription"></textarea>
+                </div>
+              </div>
+              <div class="col-md-2 save-button">
+                <button type="button" class="btn btn-success margin-class" (click)="saveGeneralInfo()">
                   <span *ngIf="!isGeneralInfoSaved">Proceed</span>
                   <span *ngIf="isGeneralInfoSaved">Save</span>
                 </button>
@@ -93,31 +115,37 @@
 
         <div class="card-body card-paddng">
           <div class="col-12  search-eidted-p padding-15">
+            <div class="alert alert-danger " *ngIf="invalidData.invalidPersonnelInfo">
+              Please fill all mandatory fields marked
+              <strong>*</strong>
+            </div>
+          </div>
+          <div class="col-12  search-eidted-p padding-15">
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
-                  <!-- <label>Person Name</label> -->
                   <div class="form-check-inline">
-                      <label class="form-check-label">
-                        <input type="radio" class="form-check-input" name="optradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
-                      </label>
-                    </div>
-                    <div class="form-check-inline">
-                      <label class="form-check-label">
-                        <input type="radio" class="form-check-input" name="optradio"value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
-                      </label>
-                    </div>
-                  <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()"
-                   [class.poping-border]="isPersonalInfoEdit" type="text" class="form-control input-field-size" 
-                   placeholder="{{personPlaceHolder}}"
-                  [formControl]="personSearchText" (focus)="IsElasticResultPerson = true" (focusout)="IsElasticResultPerson = false"/>
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="optradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
+                    </label>
+                  </div>
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="optradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
+                    </label>
+                    <span class="mandatory">*</span>
+
+                  </div>
+                  <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit"
+                    type="text" class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
+                    (focus)="IsElasticResultPerson = true" (focusout)="IsElasticResultPerson = false" />
                   <div class="sb-seachresults top-margin">
-                      <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
-                        <li *ngFor="let result of _results | async"
-                          (mousedown)="selectedPiResult(result)"><span
-                          [innerHTML]="result.label"></span></li>
-                      </ul>
-                    </div>
+                    <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
+                      <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
+                        <span [innerHTML]="result.label"></span>
+                      </li>
+                    </ul>
+                  </div>
 
                   <!-- <input class="form-control input-field-size" type="text"
                   [(ngModel)]="personnelInfo.personName"
@@ -126,50 +154,68 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Role</label>
-                  <select [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.protocolPersonRoleId"
-                  (ngModelChange)="setPersonRole()" class="custom-select mr-sm-2" id="customRoleSelect">
-                    <!-- <option selected="">Type</option> -->
+                  <label>Role
+                    <span class="mandatory">*</span>
+                  </label>
+                  <select [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId)"
+                    class="custom-select mr-sm-2" id="customRoleSelect">
+                    <option selected value="null">Please Select</option>
                     <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
                   </select>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Title</label>
-                  <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.primaryTitle" class="form-control input-field-size" placeholder="Title">
+                  <label>Title
+                    <span class="mandatory">*</span>
+                  </label>
+                  <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.primaryTitle" class="form-control input-field-size"
+                    placeholder="Title">
                 </div>
               </div>
             </div>
             <div class="row top-dis-15">
-
+                <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
+                    placeholder="email-id">
+                    </div>
+                  </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Lead unit</label>
+                  <label>Lead unit
+                    <span class="mandatory">*</span>
+                  </label>
                   <!-- <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.leadUnit" class="form-control input-field-size" placeholder="Lead unit"> -->
-                  <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personnelInfo.leadUnit" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
-                  class="input-field-size person-unit leadUnit-holder" placeholder="Lead unit"></ng2-completer>
+                  <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit" (ngModelChange)="setPersonLeadUnit(personLeadUnit)"
+                    [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
+                    placeholder="Lead unit"></ng2-completer>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
-                  <label>Affiliate</label>
+                  <label>Affiliate
+                    <span class="mandatory">*</span>
+                  </label>
                   <!-- <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.affiliate" class="form-control input-field-size" placeholder="Affiliate"> -->
-                  <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.affiliationTypeCode">
-                      <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
+                  <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.affiliationTypeCode"
+                    (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode)">
+                    <option selected value="null">Please Select</option>
+                    <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
                   </select>
                 </div>
               </div>
               <div class="col-md-1 add-btn-1">
-                 <button *ngIf="!isPersonalInfoEdit" (click)="addPersonalDetails('ADD')" type="button" class="btn btn-success top-butn">   
-                 <i class="fa fa-plus" aria-hidden="true"></i> 
-                  
-                </button> 
-                <button *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails('EDIT')" type="button" class="btn btn-success top-butn">   
+                <button title="Add" *ngIf="!isPersonalInfoEdit" (click)="addPersonalDetails('ADD')" type="button" class="btn btn-success top-butn">
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+
+                </button>
+                <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails('EDIT')" type="button" class="btn btn-success top-butn">
                   <!-- <i class="fa fa-pencil" aria-hidden="true"></i>  -->
                   <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                   
-                 </button> 
+
+                </button>
               </div>
             </div>
 
@@ -183,27 +229,28 @@
                       <th scope="col">Name</th>
                       <th scope="col">Role</th>
                       <th scope="col">Email</th>
-                      <th scope="col">Lead Unit</th>
+                      <th scope="col">Unit</th>
+                      <th scope="col">Affiliate</th>
                       <th scope="col">Primary Title</th>
                       <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody class="tbody-font-size">
-                    <tr  *ngFor="let item of personalDataList let i=index" [class.poping-border]="i == personalInfoSelectedRow">
+                    <tr *ngFor="let item of personalDataList let i=index" [class.poping-border]="i == personalInfoSelectedRow">
                       <td>{{item.personName}}</td>
-                      <td>{{item.protocolPersonRoleId}}</td>
+                      <td>{{item.protocolPersonRoleTypes?.description}}</td>
+                      <td>{{item.emailAddress}}</td>
+                      <td>{{item.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
+                      <td>{{item.protocolAffiliationTypes?.description}}</td>
                       <td>{{item.primaryTitle}}</td>
-                      <td>{{item.leadUnit}}</td>
-                      <td>{{item.affiliationTypeCode}}</td>
                       <td class="action-btn-list">
-                        <button (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                        <button title="Edit" (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
                           <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="btn btn-primary view-btn-1" data-toggle="modal"
-                        data-target="#personModal" (click)="loadPersonDetailedList()">
+                        <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
                           <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
-                        <button (click)="deletePersonalDetails(i)" type="button" class="btn btn-primary delete-btn-1">
+                        <button title="Delete" (click)="deletePersonalDetails(i)" type="button" class="btn btn-primary delete-btn-1">
                           <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
                       </td>
@@ -244,28 +291,46 @@
         </div>
 
         <div class="card-body card-paddng">
+          <div class="col-12  search-eidted-p padding-15">
+            <div class="alert alert-danger " *ngIf="invalidData.invalidFundingInfo">
+              Please fill all mandatory fields marked
+              <strong>*</strong>
+            </div>
+          </div>
           <div class="col-12 search-eidted-p padding-15">
             <div class="row">
 
               <div class="col-md-5">
-                <label>Funding Type:</label>
-                <select class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect" [(ngModel)]="fundingSource.fundingSourceTypeCode">
-                  <!-- <option selected="">Type</option> -->
-                  <option *ngFor="let fundingSource of protocolFundingSourceTypes" value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}</option>
-                </select>
+                <div class="form-group">
+                  <label>Funding Type</label>
+                  <select [class.poping-border]="isFundingInfoEdit" class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect"
+                    [(ngModel)]="fundingSource.fundingSourceTypeCode" (ngModelChange)="setFundingSourceType(fundingSource.fundingSourceTypeCode)">
+                    <option selected value="null">Please Select</option>
+                    <option *ngFor="let fundingSource of protocolFundingSourceTypes" value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}</option>
+                  </select>
+                </div>
               </div>
               <div class="col-md-3">
-                <label>Source:</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.protocolFundingSourceId">
+                <div class="form-group">
+                  <label>Source</label>
+                  <input type="text" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
+                </div>
               </div>
               <div class="col-md-3">
-                <label>Description</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Description" [(ngModel)]="fundingSource.protocolFundingSourceId">
+                <div class="form-group">
+                  <label>Description</label>
+                  <input type="text" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Description"
+                    [(ngModel)]="fundingSource.description">
+                </div>
               </div>
               <div class="col-md-1 add-btn-1-fund">
-                <button type="button" class="btn btn-success f-btn-top" (click)="addFundingDetails('ADD')">
-                    <i class="fa fa-plus" aria-hidden="true"></i> 
+                <button title="Add" *ngIf="!isFundingInfoEdit" type="button" class="btn btn-success f-btn-top" (click)="addFundingDetails('ADD')">
+                  <i class="fa fa-plus add-button" aria-hidden="true"></i>
                 </button>
+                <button title="Save" *ngIf="isFundingInfoEdit" type="button" class="btn btn-success f-btn-top" (click)="addFundingDetails('EDIT')">
+                  <i class="fa fa-floppy-o add-button" aria-hidden="true"></i>
+                </button>
+
               </div>
             </div>
 
@@ -283,19 +348,19 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let item of protocolFundingSourceList let i=index">
-                        <td>{{item.fundingSourceTypeCode}}</td>
-                        <td>{{item.protocolFundingSourceId}}</td>
-                        <td>{{item.protocolFundingDescription}}</td>
+                    <tr *ngFor="let item of protocolFundingSourceList let j=index" [class.poping-border]="j == fundingEditIndex">
+                      <td>{{item.protocolFundingSourceTypes?.description}}</td>
+                      <td>{{item.fundingSource}}</td>
+                      <td>{{item.description}}</td>
 
                       <td class="action-btn-list">
-                        <button type="button" class="btn btn-primary edit-btn-1">
+                        <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
                           <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
                         <!-- <button type="button" class="btn btn-primary view-btn-1">
                           <i class="fa fa-eye" aria-hidden="true"></i>
                         </button> -->
-                        <button type="button" class="btn btn-primary delete-btn-1">
+                        <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)">
                           <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
                       </td>
@@ -320,24 +385,38 @@
         </div>
 
         <div class="card-body card-paddng">
+          <div class="col-12  search-eidted-p padding-15">
+            <div class="alert alert-danger " *ngIf="invalidData.invalidSubjectInfo">
+              Please fill all mandatory fields marked
+              <strong>*</strong>
+            </div>
+          </div>
           <div class="col-12 search-eidted-p padding-15">
             <div class="row">
 
               <div class="col-md-5">
-                <label>Type:</label>
-                <select class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect" [(ngModel)]="protocolSubject.vulnerableSubjectTypeCode">
-                  <!-- <option selected="">Type</option> -->
-                  <option *ngFor="let subjectType of protocolSubjectTypes" value="{{subjectType.vulnerableSubjectTypeCode}}">{{subjectType.description}}</option>
-                </select>
+                <div class="form-group">
+                  <label>Type</label>
+                  <select [class.poping-border]="isSubjectInfoEdit" class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect"
+                    [(ngModel)]="protocolSubject.vulnerableSubjectTypeCode" (ngModelChange)="setSubjectType(protocolSubject.vulnerableSubjectTypeCode)">
+                    <option selected value="null">Please Select</option>
+                    <option *ngFor="let subjectType of protocolSubjectTypes" value="{{subjectType.vulnerableSubjectTypeCode}}">{{subjectType.description}}</option>
+                  </select>
+                </div>
               </div>
               <div class="col-md-6">
-                <label>Count:</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Count" [(ngModel)]="protocolSubject.subjectCount">
+                <div class="form-group">
+                  <label>Count</label>
+                  <input type="text" [class.poping-border]="isSubjectInfoEdit" class="form-control form-control-sm" placeholder="Count" [(ngModel)]="protocolSubject.subjectCount">
+                </div>
               </div>
 
               <div class="col-md-1 add-btn-1-fund">
-                <button type="button" class="btn btn-success" (click)="addSubjectDetails('ADD')">
-                    <i class="fa fa-plus" aria-hidden="true"></i> 
+                <button title="Add" *ngIf="!isSubjectInfoEdit" type="button" class="btn btn-success" (click)="addSubjectDetails('ADD')">
+                  <i class="fa fa-plus add-button" aria-hidden="true"></i>
+                </button>
+                <button title="Save" *ngIf="isSubjectInfoEdit" type="button" class="btn btn-success" (click)="addSubjectDetails('EDIT')">
+                  <i class="fa fa-floppy-o add-button" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
@@ -355,21 +434,21 @@
                     </tr>
                   </thead>
                   <tbody>
-                      <tr *ngFor="let item of protocolSubjectList let i=index">
-                          <td>{{item.vulnerableSubjectTypeCode}}</td>
-                          <td>{{item.subjectCount}}</td>
-                          <td class="action-btn-list">
-                            <button type="button" class="btn btn-primary edit-btn-1">
-                              <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </button>
-                            <!-- <button type="button" class="btn btn-primary view-btn-1">
+                    <tr *ngFor="let item of protocolSubjectList let k=index" [class.poping-border]="k == subjectEditIndex">
+                      <td>{{item.protocolSubjectTypes?.description}}</td>
+                      <td>{{item.subjectCount}}</td>
+                      <td class="action-btn-list">
+                        <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editSubjectDetails(item,k)">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button>
+                        <!-- <button type="button" class="btn btn-primary view-btn-1">
                               <i class="fa fa-eye" aria-hidden="true"></i>
                             </button> -->
-                            <button type="button" class="btn btn-primary delete-btn-1">
-                              <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
-                          </td>
-                      </tr>
+                        <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteSubjectDetails(k)">
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -379,7 +458,7 @@
       </div>
     </div>
     <!--subjects end-->
-    <div class="col-12 top-distance" *ngIf="isGeneralInfoSaved">
+    <div class="col-12 top-distance bottom-distance" *ngIf="isGeneralInfoSaved">
       <div class="card history-card border-radius-1">
         <div class="card-header history-header">
           <nav class="nav navbar-pg3">
@@ -390,28 +469,37 @@
 
         <div class="card-body card-paddng">
           <div class="col-12  search-eidted-p padding-15">
+            <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo">
+              Please fill all mandatory fields marked
+              <strong>*</strong>
+            </div>
+          </div>
+          <div class="col-12  search-eidted-p padding-15">
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <label>Name</label>
                   <!-- <input type="text" class="form-control input-field-size" placeholder="Name"> -->
-                  <ng2-completer  [datasource]="collaboratorNames" [minSearchLength]="0"
-                  class="input-field-size person-unit" placeholder="Name"></ng2-completer>
+                  <ng2-completer [class.normal-border]="!isCollaboratorInfoEdit" [datasource]="collaboratorNames" [minSearchLength]="0" [(ngModel)]="collaboratorName"
+                    (ngModelChange)="setCollaborator(collaboratorName)" class="input-field-size person-unit collaborator-holder"
+                    placeholder="Name"></ng2-completer>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Point of contact</label>
-                  <input type="text" class="form-control input-field-size" placeholder="Point of contact">
+                  <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control input-field-size" [(ngModel)]="protocolCollaborator.pointOfContact"
+                    placeholder="Point of contact">
                 </div>
               </div>
               <div class="col-md-2">
                 <div class="form-group">
                   <label>Approval Date</label>
+                  <label *ngIf="invalidData.invalidApprovalDate" class="error">Approval Date should be less than Expiration Date</label>
                   <div class="input-group date-pickr-1 mb-3">
-                      <input type="text"class="form-control" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
-                      placeholder="mm/dd/yyyy">
-                  <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                    <input type="text" class="form-control" [class.poping-border]="isCollaboratorInfoEdit" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
+                      [(ngModel)]="protocolCollaborator.approvalDate" (ngModelChange)="validateApprovalDate()" placeholder="mm/dd/yyyy">
+                    <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
                     <!-- <div class="input-group-append input-span-1">
                       <span class="input-group-text">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -422,22 +510,26 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <label>Expiration Date</label>
+                  <label>Expiration Date </label>
+                  <label *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</label>
                   <div class="input-group date-pickr-1 mb-3">
-                      <input type="text"class="form-control" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
-                      placeholder="mm/dd/yyyy">
+                    <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4"
+                      [(ngModel)]="protocolCollaborator.expirationDate" (ngModelChange)="validateExpirationDate()" placeholder="mm/dd/yyyy">
                     <!-- <div class="input-group-append input-span-1">
                       <span class="input-group-text" [owlDateTimeTrigger]="dt3">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                       </span>
                     </div> -->
-                    <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                    <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
                   </div>
                 </div>
               </div>
               <div class="col-md-1 add-btn-1">
-                <button type="button" class="btn btn-success top-butn">
-                    <i class="fa fa-plus" aria-hidden="true"></i> 
+                <button title="Add" *ngIf="!isCollaboratorInfoEdit" type="button" class="btn btn-success top-butn" (click)="addCollaboratorDetails('ADD')">
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+                <button title="Save" *ngIf="isCollaboratorInfoEdit" (click)="addCollaboratorDetails('EDIT')" type="button" class="btn btn-success top-butn">
+                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
@@ -446,7 +538,7 @@
           <div class="col-md-12 users-list-tbl">
             <div class="row">
               <div class="table-responsive">
-                <table class="table table-striped tbl-p-clr">
+                <table class="table table-striped tbl-p-clr" *ngIf="protocolCollaboratorList.length > 0">
                   <thead class="tbl-head-clr thead-font-size">
                     <tr>
                       <th scope="col">Name</th>
@@ -457,37 +549,16 @@
                     </tr>
                   </thead>
                   <tbody class="tbody-font-size">
-                    <tr>
-                      <td>Gosh Satrajit s</td>
-                      <td>Research Scientist</td>
-                      <td>5-9-2018</td>
-                      <td>5-9-2018</td>
+                    <tr *ngFor="let item of protocolCollaboratorList let l=index" [class.poping-border]="l == collaboratorEditIndex">
+                      <td>{{item.collaboratorNames?.organizationName}}</td>
+                      <td>{{item.pointOfContact}}</td>
+                      <td>{{item.approvalDate| date:"MM/dd/yyyy"}}</td>
+                      <td>{{item.expirationDate| date:"MM/dd/yyyy"}}</td>
                       <td class="action-btn-list">
-                        <button type="button" class="btn btn-primary edit-btn-1">
+                        <button title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
                           <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
-                        <!-- <button type="button" class="btn btn-primary view-btn-1">
-                          <i class="fa fa-eye" aria-hidden="true"></i>
-                        </button> -->
-                        <button type="button" class="btn btn-primary delete-btn-1">
-                          <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Gosh Satrajit s</td>
-                      <td>Research Scientist</td>
-                      <td>a@b.com</td>
-                      <td>617-258-0721</td>
-
-                      <td class="action-btn-list">
-                        <button type="button" class="btn btn-primary edit-btn-1">
-                          <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </button>
-                        <!-- <button type="button" class="btn btn-primary view-btn-1">
-                          <i class="fa fa-eye" aria-hidden="true"></i>
-                        </button> -->
-                        <button type="button" class="btn btn-primary delete-btn-1">
+                        <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1">
                           <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
                       </td>
@@ -503,95 +574,93 @@
   </div>
 </div>
 <!-- modal -->
-<div class="modal fade bd-example-modal-lg" id="personModal"
-	tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-	aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Person
-					Details</h5>
-				<button type="button" class="close modal-close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body modal-popup">
-				<div class="modal-header-label">
-					<h4 class="popup-sub-head">Basic</h4>
-				</div>
-				<!-- section1 -->
-				<div class="modal-padding">
-					<div class="row">
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Name : </label>
-							{{irbPersonDetailedList?.FULL_NAME}}
-						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for="">Email : </label>
-							{{irbPersonDetailedList?.EMAIL_ADDRESS}}
-						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Primary Title : </label>
-							{{irbPersonDetailedList?.PRIMARY_TITLE}}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
-						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> City : </label>
-							{{irbPersonDetailedList?.CITY}}
-						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Country : </label>
-							{{irbPersonDetailedList?.COUNTRY_CODE}}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Office Location : </label>
-							{{irbPersonDetailedList?.OFFICE_LOCATION}}
-						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Office Phone Number : </label>
-							{{irbPersonDetailedList?.OFFICE_PHONE }}
-						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Postal Code : </label>
-							{{irbPersonDetailedList?.POSTAL_CODE}}
-						</div>
-					</div>
-				</div>
-				<!-- section2 -->
-				<div>
-					<h4 class="popup-sub-head">Training</h4>
-				</div>
-				<div class="modal-padding">
-					<div class="popup-div">
-						<table class="table table-striped">
-							<thead class="popup-header">
-								<tr>
-									<th class="table-align-head" scope="col">Description</th>
-									<th scope="col">Score</th>
-									<th scope="col">Followup Date</th>
-									<th scope="col" class="submitted-header">Submitted Date</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor="let info of irbPersonDetailedTraining">
-									<td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}</td>
-									<td>{{info.SCORE}}</td>
-									<td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
-									<td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<!-- section3 -->
-				<!-- <div>
+<div class="modal fade bd-example-modal-lg" id="personModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Person Details
+        </h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-popup">
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head">Basic</h4>
+        </div>
+        <!-- section1 -->
+        <div class="modal-padding">
+          <div class="row">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Name : </label>
+              {{irbPersonDetailedList?.FULL_NAME}}
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for="">Email : </label>
+              {{irbPersonDetailedList?.EMAIL_ADDRESS}}
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Primary Title : </label>
+              {{irbPersonDetailedList?.PRIMARY_TITLE}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> City : </label>
+              {{irbPersonDetailedList?.CITY}}
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Country : </label>
+              {{irbPersonDetailedList?.COUNTRY_CODE}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Office Location : </label>
+              {{irbPersonDetailedList?.OFFICE_LOCATION}}
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Office Phone Number : </label>
+              {{irbPersonDetailedList?.OFFICE_PHONE }}
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Postal Code : </label>
+              {{irbPersonDetailedList?.POSTAL_CODE}}
+            </div>
+          </div>
+        </div>
+        <!-- section2 -->
+        <div>
+          <h4 class="popup-sub-head">Training</h4>
+        </div>
+        <div class="modal-padding">
+          <div class="popup-div">
+            <table class="table table-striped">
+              <thead class="popup-header">
+                <tr>
+                  <th class="table-align-head" scope="col">Description</th>
+                  <th scope="col">Score</th>
+                  <th scope="col">Followup Date</th>
+                  <th scope="col" class="submitted-header">Submitted Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let info of irbPersonDetailedTraining">
+                  <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+                  <td>{{info.SCORE}}</td>
+                  <td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
+                  <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- section3 -->
+        <!-- <div>
 						<div class= "modal-header-label"><h4>Responsibilities</h4></div>
 						<div class="row">
 							<div class="col-md-4 col lg- 4 col-sm-4">
@@ -619,9 +688,9 @@
 								</div>
 							</div>
 				  </div> -->
-			</div>
-			<div class="modal-footer"></div>
-		</div>
-	</div>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
 </div>
 <!-- modal-end -->

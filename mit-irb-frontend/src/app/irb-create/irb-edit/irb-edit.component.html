@@ -32,14 +32,14 @@
                   <label>Start Date</label>
                   <label *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</label>
                   <div class="input-group  mb-4">
-                    <input type="text" class="form-control" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
+                    <input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
                       (ngModelChange)="validateStartDate()">
                     <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-                    <!-- <div class="input-group-append input-span-1">
+                    <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1">
                       <span class="input-group-text">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                       </span>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -48,14 +48,14 @@
                   <label>End Date</label>
                   <label *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</label>
                   <div class="input-group mb-3">
-                    <input type="text" class="form-control" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
+                    <input type="text" class="form-control"  [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
                       (ngModelChange)="validateEndDate()">
                     <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                    <!-- <div class="input-group-append input-span-1">
+                    <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
                       <span class="input-group-text">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                       </span>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>

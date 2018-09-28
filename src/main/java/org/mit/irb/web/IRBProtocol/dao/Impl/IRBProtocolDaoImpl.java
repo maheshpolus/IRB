@@ -972,16 +972,23 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	private String generateProtocolNumber() {
 		String generatedId = null;
 		try {
-			String prefix = "";
+			String prefix ="";
 			Calendar c = Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			prefix = String.valueOf(year) + String.valueOf(month);
+	        int year = c.get(Calendar.YEAR);
+	        int month = c.get(Calendar.MONTH);
+	       
+	        String currentMonth = String.valueOf(month);
+	        if(currentMonth.length()>1){
+	        	currentMonth = currentMonth;
+	        } else{
+	        	currentMonth = "0"+currentMonth;
+	        }
+	        prefix = String.valueOf(year).substring(2)+currentMonth;
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection connection = sessionImpl.connection();
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select count(1) from MITKC_IRB_PROTOCOL");
+			ResultSet rs = statement.executeQuery("select SEQ_PROTOCOL_ID.nextval from dual");
 			if (rs.next()) {
 				int id = rs.getInt(1);
 				generatedId = prefix + new Integer(id).toString();

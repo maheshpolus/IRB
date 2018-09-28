@@ -19,14 +19,14 @@ export class IrbCreateService {
   return this._http.post('/mit-irb/updateProtocolPersonInfo', params);
 }
 
-addattachment(protocolAttachments: Object, irbAttachmentProtocol: Object, uploadedFile) {
+addattachment(irbAttachmentProtocol: Object, uploadedFile) {
   this.formData.delete( 'files' );
       this.formData.delete( 'formDataJson' );
       // this.formData.delete('formDataIRBJson');
       for ( let i = 0; i < uploadedFile.length; i++ ) {
           this.formData.append( 'files', uploadedFile[i] );
       }
-      this.formData.append( 'formDataJson', JSON.stringify( protocolAttachments ) );
+      this.formData.append( 'formDataJson', JSON.stringify( irbAttachmentProtocol ) );
       // this.formData.append( 'formDataIRBJson', JSON.stringify( irbAttachmentProtocol ) );
   return this._http.post('/mit-irb/addProtocolAttachments', this.formData);
 }

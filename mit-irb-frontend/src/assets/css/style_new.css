@@ -3840,5 +3840,17 @@ color: #FA7440 !important;
     background: #e9ecfd;
     border: solid 1px #3f51b5;
 }
+.action-popup-header{
+    padding: 15px 30px 15px 30px;
+}
+.options-font select, .options-font option
+{
+    font-size: 12px;
+}
 
 /* Actions page End */
+.width-date
+{
+    width: 88%;
+    display: inline-block;
+}

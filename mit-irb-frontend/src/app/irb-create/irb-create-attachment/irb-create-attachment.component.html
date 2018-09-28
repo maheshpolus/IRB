@@ -106,8 +106,8 @@
                 </thead>
                 <tbody class="tdy-color">
                   <tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}; let i = index">
-                    <td> <select  class="custom-select mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="editAttachment[i] == true" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"  [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.ATTACHMENT_TYPE_CODE">
-                        <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCD}}">{{attachmentType.description}}</option>
+                    <td> <select  class="custom-select mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="editAttachment[i] == true" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"  [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.ATTACHMENT_TYPE_CODE" (ngModelChange)="setAttachmentType(attachments.ATTACHMENT_TYPE_CODE)">
+                        <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
                     </select></td>
                 	<td>
                       <input [class.poping-border]="editAttachment[i] == true" class="form-control" type="text" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"

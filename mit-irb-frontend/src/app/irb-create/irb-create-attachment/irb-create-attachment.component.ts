@@ -48,6 +48,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
     isMandatoryFilled = true;
     showPopup = false;
     tempSaveAttachment: any = {};
+    tempEditAttachment: any = {};
     isDuplicate = false;
     generalInfo: any;
     attachmentTypeDescription: string;
@@ -73,10 +74,9 @@ export class IrbCreateAttachmentComponent implements OnInit {
            this.result = data;
            this.attachmentTypes = this.result.irbAttachementTypes;
        });
-       console.log(this.attachmentTypes);
        this.loadIrbAttachmentList();
     }
-    setAttachmentType(attachmentTypeCode) {debugger;
+    setAttachmentType(attachmentTypeCode) {
         this.attachmentTypes.forEach(attachmentType => {
             if ( attachmentType.typeCode == attachmentTypeCode) {
                 this.attachmentTypeDescription = attachmentType.description;
@@ -123,15 +123,16 @@ export class IrbCreateAttachmentComponent implements OnInit {
             () => console.log('OK'));
     }
     editAttachments(event: any, index, attachments) {
-        event.preventDefault();
-        this.tempSaveAttachment = attachments;
+        // event.preventDefault();
+        this.tempEditAttachment.DESCRIPTION = attachments.DESCRIPTION;
+        this.tempEditAttachment.ATTACHMENT_TYPE_CODE = attachments.ATTACHMENT_TYPE_CODE;
         this.editAttachment[index] = !this.editAttachment[index];
     }
     cancelEditedattachments(event: any, index, attachments) {
         event.preventDefault();
         this.editAttachment[index] = !this.editAttachment[index];
-        attachments.Description = this.tempSaveAttachment.DESCRIPTION;
-        attachments.ATTACHMENT_TYPE_CODE = this.tempSaveAttachment.ATTACHMENT_TYPE_CODE;
+        attachments.DESCRIPTION =  this.tempEditAttachment.DESCRIPTION;
+        attachments.ATTACHMENT_TYPE_CODE = this.tempEditAttachment.ATTACHMENT_TYPE_CODE;
     }
     saveEditedattachments(event: any, index, attachments) {
         event.preventDefault();
@@ -140,9 +141,9 @@ export class IrbCreateAttachmentComponent implements OnInit {
         this.irbAttachmentProtocol.protocolNumber =  this.requestObject.protocolNumber;
         // this.irbAttachmentProtocol.protocolId = this.requestObject.protocolId;
          this.irbAttachmentProtocol.sequenceNumber = 1;
-         this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
+         this.irbAttachmentProtocol.typeCode = attachments.ATTACHMENT_TYPE_CODE;
          this.irbAttachmentProtocol.documentId = 1;
-         this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;
+         this.irbAttachmentProtocol.description = attachments.DESCRIPTION;
          this.irbAttachmentProtocol.updateTimestamp = new Date();
          this.irbAttachmentProtocol.updateUser = localStorage.getItem('userName');
          this.irbAttachmentProtocol.attachmentVersion = 1;
@@ -153,8 +154,8 @@ export class IrbCreateAttachmentComponent implements OnInit {
              description: 'Complete'
          };
          this.irbAttachmentProtocol.attachmentType = {
-             typeCode: this.requestObject.attachmentTypeCode,
-             description: this.attachmentTypeDescription,
+            typeCode: attachments.ATTACHMENT_TYPE_CODE,
+             description: attachments.DESCRIPTION
          };
          this.irbAttachmentProtocol.protocolAttachment = {
             // protocolNumber: this.requestObject.protocolNumber,
@@ -171,13 +172,13 @@ export class IrbCreateAttachmentComponent implements OnInit {
         // this.irbAttachmentProtocol.updateTimestamp = new Date();
         // this.irbAttachmentProtocol.updateUser = localStorage.getItem('userName');
         // this.irbAttachmentProtocol.attachmentVersion = 1;
-        this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
-            data => {
-                this.irbAttachment = data;
-                this.uploadedFile = [];
+        // this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
+        //     data => {
+        //         this.irbAttachment = data;
+        //         this.uploadedFile = [];
 
-            }
-        );
+        //     }
+        // );
     }
 
     onChange(files: FileList) {
@@ -313,40 +314,40 @@ export class IrbCreateAttachmentComponent implements OnInit {
         this.uploadedFile = [];
     }
     tempSave(event, attachment) {
-        event.preventDefault();
+       // event.preventDefault();
         this.showPopup = true;
         this.tempSaveAttachment = attachment;
     }
     deleteAttachments(event) {
         event.preventDefault();
         this.showPopup = false;
-        this.protocolAttachments.acType = 'D';
+        this.irbAttachmentProtocol.acType = 'D';
         this.irbAttachmentProtocol.protocolNumber =  this.requestObject.protocolNumber;
-           // this.irbAttachmentProtocol.protocolId = this.requestObject.protocolId;
-            this.irbAttachmentProtocol.sequenceNumber = 1;
-            this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
-            this.irbAttachmentProtocol.documentId = 1;
-            this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;
-            this.irbAttachmentProtocol.updateTimestamp = new Date();
-            this.irbAttachmentProtocol.updateUser = localStorage.getItem('userName');
-            this.irbAttachmentProtocol.attachmentVersion = 1;
-            this.irbAttachmentProtocol.protocolGeneralInfo = this.generalInfo;
-            this.irbAttachmentProtocol.statusCode = 2;
-            this.irbAttachmentProtocol.attachementStatus = {
-                statusCode: 2,
-                description: 'Complete'
-            };
-            this.irbAttachmentProtocol.attachmentType = {
-                typeCode: this.requestObject.attachmentTypeCode,
-                description: this.attachmentTypeDescription,
-            };
-            this.irbAttachmentProtocol.protocolAttachment = {
-               // protocolNumber: this.requestObject.protocolNumber,
-               sequenceNumber: 1,
-               updateTimestamp: new Date(),
-                updateUser: localStorage.getItem('userName')
+        // this.irbAttachmentProtocol.protocolId = this.requestObject.protocolId;
+        this.irbAttachmentProtocol.sequenceNumber = 1;
+         this.irbAttachmentProtocol.typeCode = this.tempSaveAttachment.ATTACHMENT_TYPE_CODE;
+         this.irbAttachmentProtocol.documentId = 1;
+         this.irbAttachmentProtocol.description = this.tempSaveAttachment.DESCRIPTION;
+         this.irbAttachmentProtocol.updateTimestamp = new Date();
+         this.irbAttachmentProtocol.updateUser = localStorage.getItem('userName');
+         this.irbAttachmentProtocol.attachmentVersion = 1;
+         this.irbAttachmentProtocol.protocolGeneralInfo = this.generalInfo;
+         this.irbAttachmentProtocol.statusCode = 2;
+         this.irbAttachmentProtocol.attachementStatus = {
+             statusCode: 2,
+             description: 'Complete'
+         };
+         this.irbAttachmentProtocol.attachmentType = {
+             typeCode: this.tempSaveAttachment.ATTACHMENT_TYPE_CODE,
+             description: this.tempSaveAttachment.DESCRIPTION
+         };
+         this.irbAttachmentProtocol.protocolAttachment = {
+            // protocolNumber: this.requestObject.protocolNumber,
+            sequenceNumber: 1,
+            updateTimestamp: new Date(),
+             updateUser: localStorage.getItem('userName')
 
-            };
+         };
         // this.irbAttachmentProtocol.protocolNumber = this.requestObject.protocolNumber;
         // this.irbAttachmentProtocol.protocolId = this.requestObject.protocolId;
         // this.irbAttachmentProtocol.typeCD = this.requestObject.attachmentTypeCode;
@@ -355,13 +356,13 @@ export class IrbCreateAttachmentComponent implements OnInit {
         // this.irbAttachmentProtocol.updateTimestamp = new Date();
         // this.irbAttachmentProtocol.updateUser = localStorage.getItem('userName');
         // this.irbAttachmentProtocol.attachmentVersion = 1;
-        this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
-            data => {
-                this.irbAttachment = data;
-                this.uploadedFile = [];
+        // this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
+        //     data => {
+        //         this.irbAttachment = data;
+        //         this.uploadedFile = [];
 
-            }
-        );
+        //     }
+        // );
     }
     sortBy() {
         this.column = this.sortField;

@@ -76,7 +76,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
        console.log(this.attachmentTypes);
        this.loadIrbAttachmentList();
     }
-    setAttachmentType(attachmentTypeCode) {
+    setAttachmentType(attachmentTypeCode) {debugger;
         this.attachmentTypes.forEach(attachmentType => {
             if ( attachmentType.typeCode == attachmentTypeCode) {
                 this.attachmentTypeDescription = attachmentType.description;

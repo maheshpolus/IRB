@@ -988,11 +988,19 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection connection = sessionImpl.connection();
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select SEQ_PROTOCOL_ID.nextval from dual");
+			ResultSet rs = statement.executeQuery("select SEQ_IRB_PROTOCOL_NUMBER.nextval from dual");
 			if (rs.next()) {
 				int id = rs.getInt(1);
-				generatedId = prefix + new Integer(id).toString();
-				logger.info("Generated Id: " + generatedId);
+				String Identifier = new Integer(id).toString();
+				String newId = Identifier;
+				
+				if(Identifier.length()<6){
+					int dif = 6- Identifier.length();
+					for(int i=0;i<dif;i++){
+						newId="0"+newId;
+					}
+				}
+				generatedId = prefix + newId;
 				return generatedId;
 			}
 		} catch (SQLException e) {

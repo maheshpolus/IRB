@@ -467,4 +467,10 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		}
 		return irbProtocolVO;
 	}
+
+	@Override
+	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
+		IRBProtocolVO irbProtocolVO = null;
+		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachmentsByProtocolNumber(protocolNumber);
+	}
 }

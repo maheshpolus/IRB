@@ -105,4 +105,6 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson)
 			throws JsonParseException, JsonMappingException, IOException;
+
+	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 }

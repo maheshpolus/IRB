@@ -105,29 +105,30 @@
                   </tr>
                 </thead>
                 <tbody class="tdy-color">
-                  <tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}; let i = index">
-                    <td> <select  class="custom-select mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="editAttachment[i] == true" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"  [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.ATTACHMENT_TYPE_CODE" (ngModelChange)="setAttachmentType(attachments.ATTACHMENT_TYPE_CODE)">
+                  <tr *ngFor="let attachments of irbAttachmentsList let i = index">
+                    <td> <select  class="custom-select mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="editAttachment[i] == true" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"  [disabled]="!editAttachment[i] == true" 
+                      [(ngModel)]="attachments.attachmentType.typeCode" (ngModelChange)="setAttachmentType(attachments.attachmentType.typeCode)">
                         <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
                     </select></td>
                 	<td>
                       <input [class.poping-border]="editAttachment[i] == true" class="form-control" type="text" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"
-                       [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.DESCRIPTION">
+                       [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.description">
                     </td>
-                    <td class="padding-table-content">{{attachments.FILE_NAME}} </td>
+                    <td style="width: 30%" class="padding-table-content">{{attachments.protocolAttachment.fileName}} </td>
                     <td>
                       <ul class="actionButtonGroup padding-icons">
                         <li>
-                          <a (click)="tempSave($event,attachments)" title="Delete {{attachments.FILE_ID}}" data-toggle="modal" data-target="#deleteAttachment">
+                          <a title="Delete {{attachments.protocolAttachment.fileId}}">
                             <i class="fa fa-trash-o delete-color"></i>
                           </a>
                         </li>
                         <li>
-                          <a (click)="downloadAttachment(attachments)" title="Open{{attachments.FILE_ID}}">
+                          <a (click)="downloadAttachment(attachments)" title="Open{{attachments.protocolAttachment.fileId}}">
                             <i class="fa fa-download download-color" aria-hidden="true"></i>
                           </a>
                         </li>
                         <li>
-                          <a *ngIf="!editAttachment[i] == true" (click)="editAttachments($event,i, attachments)">
+                          <a *ngIf="!editAttachment[i] == true">
                             <i class="fa fa-edit edit-color"></i>
                           </a>
                         </li>
@@ -135,8 +136,8 @@
                               <li><a *ngIf="!editAttachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times cancel-color" aria-hidden="true"></i></a></li>
                       </ul>
                     </td>
-                    <td class="padding-table-content">{{attachments.UPDATE_USER_NAME}} {{(attachments.UPDATE_TIMESTAMP ===' ' || attachments.UPDATE_TIMESTAMP
-                      ===null) ? ' ':(attachments.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</td>
+                    <td class="padding-table-content">{{attachments.updateUser}} {{(attachments.updateTimestamp ===' ' || attachments.updateTimestamp
+                      ===null) ? ' ':(attachments.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
                   </tr>
                 </tbody>
               </table>

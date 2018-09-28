@@ -993,7 +993,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				int id = rs.getInt(1);
 				String Identifier = new Integer(id).toString();
 				String newId = Identifier;
-				
 				if(Identifier.length()<6){
 					int dif = 6- Identifier.length();
 					for(int i=0;i<dif;i++){
@@ -1254,18 +1253,24 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				logger.info("saved success fully: " + attachmentProtocol);
 			}
 		} else if (attachmentProtocol.getAcType().equals("D")) {
-			Query queryDeletProtocolAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("delete from ProtocolAttachments p where p.fileId =:fileId");
+			Query queryDeletProtocolAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from ProtocolAttachments p where p.fileId =:fileId");
 			queryDeletProtocolAttachment.setInteger("fileId", attachmentProtocol.getProtocolAttachment().getFileId());
 			queryDeletProtocolAttachment.executeUpdate();
-
-			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("delete from IRBAttachmentProtocol p where p.paProtocolId =:paProtocolId");
+			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from IRBAttachmentProtocol p where p.paProtocolId =:paProtocolId");
 			queryDeletAttachment.setInteger("paProtocolId", attachmentProtocol.getPaProtocolId());
 			queryDeletAttachment.executeUpdate();
 		}
-		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from IRBAttachmentProtocol");
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber");
+		query.setString("protocolNumber", attachmentProtocol.getProtocolNumber());
+		irbProtocolVO.setProtocolAttachmentList(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber");
+		query.setString("protocolNumber", protocolNumber);
 		irbProtocolVO.setProtocolAttachmentList(query.list());
 		return irbProtocolVO;
 	}

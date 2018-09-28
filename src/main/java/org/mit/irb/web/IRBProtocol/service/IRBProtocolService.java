@@ -245,4 +245,6 @@ public interface IRBProtocolService {
 
 	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson);
 
+	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
+
 }

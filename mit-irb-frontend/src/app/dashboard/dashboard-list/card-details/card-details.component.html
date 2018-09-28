@@ -52,7 +52,7 @@
 				<i class="fa fa-eye"></i>View
 			</button>
 		</a>
-		<a>
+		<a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105">
 			<button type="button" class="btn btn-outline-secondary button-view"
 				(click)="EditIrb(irb.PROTOCOL_NUMBER,irb.PROTOCOL_ID)">
 				<i class="fa fa-pencil"></i>Edit

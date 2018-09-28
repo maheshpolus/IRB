@@ -367,4 +367,15 @@ public class IRBController {
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
+	
+	@RequestMapping(value = "/loadIRBProtocolAttachmentsByProtocolNumber", method = RequestMethod.POST)
+	public ResponseEntity<String> loadIRBProtocolAttachmentsByProtocolNumber(HttpServletRequest request, HttpServletResponse response,  @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
+		logger.info("Request for loadIRBProtocolAttachmentsByProtocolNumber");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.loadIRBProtocolAttachmentsByProtocolNumber(irbProtocolVO.getProtocolNumber());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}	
 }

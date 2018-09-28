@@ -45,7 +45,7 @@ public class ProtocolAttachments implements Serializable {
 	private String contentType;
 
 	@Column(name = "VER_NBR")
-	private Date verNumbr;
+	private Integer verNumbr;
 
 	@Column(name = "OBJ_ID")
 	private String objId;
@@ -109,11 +109,11 @@ public class ProtocolAttachments implements Serializable {
 		this.contentType = contentType;
 	}
 
-	public Date getVerNumbr() {
+	public Integer getVerNumbr() {
 		return verNumbr;
 	}
 
-	public void setVerNumbr(Date verNumbr) {
+	public void setVerNumbr(Integer verNumbr) {
 		this.verNumbr = verNumbr;
 	}
 

@@ -18,6 +18,9 @@ export class IrbCreateService {
  updateProtocolPersonInfo(params) {
   return this._http.post('/mit-irb/updateProtocolPersonInfo', params);
 }
+getIrbAttachmentList(params) {
+  return this._http.post('/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber', params);
+}
 
 addattachment(irbAttachmentProtocol: Object, uploadedFile) {
   this.formData.delete( 'files' );

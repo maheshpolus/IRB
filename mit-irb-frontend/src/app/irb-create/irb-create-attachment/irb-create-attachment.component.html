@@ -13,12 +13,6 @@
         <div class="col-12  search-eidted-p padding-15">
           <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-              <!-- <a href="#" title="add new attachment" class="addTextBtn" (click)="showAddAttachmentPopUp($event)"
-                data-toggle="modal" data-target="#addAttachment">
-                <i class="fa fa-plus"></i>&nbsp;
-                <span>Add Attachment</span>
-              </a> -->
-             
                 <div class="row">
                   <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
                     <div class="alert alert-danger " *ngIf="!isMandatoryFilled">
@@ -28,25 +22,18 @@
                     <div class="alert alert-danger " *ngIf="isDuplicate">
                       File already choosen. Please choose a different one
                     </div>
-
-  
-                      
                         <div class="row col-12 form-group">
                           <div class="col-4 apprve-date"><h4>*Type</h4>
                               <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode" (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
                                 <option value=null selected>Please Select</option>
                                 <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
                             </select></div>
-                            
                          <div class= "col-8 apprve-date">
                             <h4 class="ml-10">*Description</h4>
                          
                             <textarea rows="1" cols="2"class="form-control txt-area-fnt modal-table-padding " placeholder="Description" [(ngModel)]="requestObject.attachmentDescription"></textarea>
                           </div>
                         </div>
-                    
-                      <!-- <span *ngIf="!isMandatoryFilled" class="desc-warning">* Please provide Mandatory Fields to proceed</span> -->
-
                       <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
                         (onFileLeave)="fileLeave($event)">
                         <button class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose
@@ -57,20 +44,16 @@
                           here</div>
 
                       </file-drop>
-                      <!-- <span *ngIf="isDuplicate" class="desc-warning">*File already choosen. Please choose a different one</span> -->
                       <div class="filechip">
                           <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
                           <i class="fa fa-close pdf" (click)="deleteFromUploadedFileList(item)"></i></span>
                       </div>
-                   
                   </div>
                 </div>
             </div>
             <section class="row btn-row-med sect-confirm-padding proceed-btn-align ml-600">
               <button class="btn btn-primary tab_btn proceed-btn btn-mt-10" aria-label="Close" (click)="addAttachments()">Add</button>
-              <!-- <button class="btn btn-primary tab_btn proceed-btn inner-tab-btn" aria-label="Close" (click)="closeAttachments()" data-dismiss="modal" >Close</button> -->
             </section>
-        
           <div class="col-12 mt-10">
             <div class="table-responsive" *ngIf="!noIrbAttachments">
               	<div class="form-check form-check-inline">
@@ -99,9 +82,8 @@
                     <th scope="col">Type</th>
                     <th scope="col">Description</th>
                     <th scope="col">File</th>
+                     <th scope="col">Updated By</th>
                     <th scope="col">Action</th>
-                    <th scope="col">Updated By</th>
-
                   </tr>
                 </thead>
                 <tbody class="tdy-color">
@@ -115,10 +97,13 @@
                        [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.description">
                     </td>
                     <td style="width: 30%" class="padding-table-content">{{attachments.protocolAttachment.fileName}} </td>
+                    <td class="padding-table-content">{{attachments.updateUser}} {{(attachments.updateTimestamp ===' ' || attachments.updateTimestamp
+                        ===null) ? ' ':(attachments.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
                     <td>
                       <ul class="actionButtonGroup padding-icons">
                         <li>
-                          <a title="Delete {{attachments.protocolAttachment.fileId}}">
+                          <a title="Delete {{attachments.protocolAttachment.fileId}}" (click)="tempSave($event,attachments)" data-toggle="modal"
+                          data-target="#deleteAttachment">
                             <i class="fa fa-trash-o delete-color"></i>
                           </a>
                         </li>
@@ -128,7 +113,7 @@
                           </a>
                         </li>
                         <li>
-                          <a *ngIf="!editAttachment[i] == true">
+                          <a *ngIf="!editAttachment[i] == true" (click)="editAttachments($event,i, attachments)">
                             <i class="fa fa-edit edit-color"></i>
                           </a>
                         </li>
@@ -136,8 +121,6 @@
                               <li><a *ngIf="!editAttachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times cancel-color" aria-hidden="true"></i></a></li>
                       </ul>
                     </td>
-                    <td class="padding-table-content">{{attachments.updateUser}} {{(attachments.updateTimestamp ===' ' || attachments.updateTimestamp
-                      ===null) ? ' ':(attachments.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -175,3 +158,4 @@
   </div>
 </div>
   <!-- delete warning modal ends -->
+  

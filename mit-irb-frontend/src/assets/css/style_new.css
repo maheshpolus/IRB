@@ -1360,7 +1360,7 @@ cursor: pointer;
 }
 .form-check-input {
     position: absolute;
-    margin-top: .50rem!important;
+    margin-top: .45rem!important;
     margin-left: -0.25rem;
 }
 form-check-label {
@@ -1516,6 +1516,7 @@ form-check-label {
     cursor: pointer;
     margin-top: 30px;
     margin-bottom: 30px;
+    font-size: 0.9rem !important;
 }
 .button-view i
 {
@@ -1630,11 +1631,11 @@ div
     text-align: right;
     display: block;
 }
-.btn-row-med .btn-primary  {
+.btn-row-med .btn-primary {
 
     background: #a91f34;
     border: #a91f34;
-    cursor: pointer !important;
+    
 }
 .btn-row-med .btn i {
 
@@ -1999,11 +2000,13 @@ div
 	text-align: center;
 }
 .tab_btn:hover{
-	background-color:#999;
+    background-color:#999;
+    cursor: pointer !important;
 }
 .submit_btn:hover
 {
     background: #265a26;
+    cursor: pointer !important;
 
 }
 .tabActive{
@@ -2012,6 +2015,7 @@ div
 .btnactive{
 	background-color:#999 !important;
 }
+
 .active_green{
 	background-color:#1fa933;
 	padding:5px 20px;
@@ -2969,7 +2973,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .errorquestion{
     color: #721c24;
-    background-color: #f7e7e8;
+    background-color: #f9f2f3;
     border-color: #f5c6cb;
     padding: 0.75rem 1.25rem;
     margin-bottom: 1rem;
@@ -3469,7 +3473,7 @@ transition: display .25s}
 {
     background-color: #367936;
     color: #fff;
-    cursor: pointer;
+   
 }
 /* .submit-btn:hover{
 	background-color:#999!important ;
@@ -3847,10 +3851,13 @@ color: #FA7440 !important;
 {
     font-size: 12px;
 }
-
 /* Actions page End */
 .width-date
 {
     width: 88%;
     display: inline-block;
+}
+select#inlineFormCustomSelect
+{
+    padding-top: 0.39rem !important;
 }

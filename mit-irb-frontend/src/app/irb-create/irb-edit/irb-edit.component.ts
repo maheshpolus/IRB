@@ -3,12 +3,15 @@ import { FormControl } from '@angular/forms';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { Router, ActivatedRoute} from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
+
 import { IrbCreateService } from '../irb-create.service';
 import { PiElasticService } from '../../common/service/pi-elastic.service';
 import {SharedDataService} from '../../common/service/shared-data.service';
@@ -77,7 +80,9 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
      private _sharedDataService: SharedDataService,
      private _activatedRoute: ActivatedRoute,
      private _router: Router,
-     private _irbViewService: IrbViewService) {}
+     private _irbViewService: IrbViewService,
+     private _spinner: NgxSpinnerService) {}
+  
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this._activatedRoute.queryParams.subscribe(params => {
@@ -87,6 +92,7 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
         this.isGeneralInfoSaved = true;
       }
   });
+    
   this._sharedDataService.setGeneralInfo({});
    this.loadEditDetails();
   }
@@ -104,12 +110,15 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
       .catch(this.handleError)
       .subscribe(this._results);
   }
+  
   loadEditDetails() {
     this.requestObject = { protocolId: this.protocolId};
+    this._spinner.show();
     this._irbCreateService.getEditDetails(this.requestObject).subscribe(
       data => {
         this.commonVo = data;
         // Look up Data - start
+        this._spinner.hide();
         this.protocolType = this.commonVo.protocolType;
         this.personRoleTypes = this.commonVo.personRoleTypes;
         this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
@@ -129,7 +138,6 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
           this.generalInfo.protocolStatusCode = 100;
           this.generalInfo.protocolStatus = {description : 'In Progress', protocolStatusCode: 100};
         }
-       // this.generalInfo.attachmentProtocols = [];
         this._sharedDataService.setGeneralInfo( Object.assign({}, this.generalInfo));
         this.personnelInfo = this.commonVo.personnelInfo;
         this.fundingSource = this.commonVo.fundingSource;
@@ -389,7 +397,6 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
     // End setting Person Lead Unit Details
     this.personnelInfo.protocolGeneralInfo = this.generalInfo;
     this.commonVo.personnelInfo = this.personnelInfo;
-    // this.commonVo.protocolLeadUnits = this.personnelInfo.protocolLeadUnits;
    }
     this._irbCreateService.updateProtocolPersonInfo(this.commonVo).subscribe(
         data => {
@@ -400,10 +407,6 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
         });
   }
   deletePersonalDetails(index) {
-    // this.personalInfoSelectedRow = null;
-    // this.isPersonalInfoEdit = false;
-    // this.personalDataList.splice(index, 1);
-
     this.commonVo.personnelInfo = this.personalDataList[index];
     this.commonVo.personnelInfo.acType = 'D';
     this.commonVo.personnelInfo.protocolGeneralInfo = this.generalInfo;
@@ -527,8 +530,6 @@ saveSubjectDetails(mode) {
        this.result = data;
        this.protocolSubject = {};
        this.protocolSubjectList = this.result.protocolSubjectList;
-       // this.commonVo.personnelInfo = this.result.personnelInfo;
-       // this.personnelInfo = this.result.personnelInfo;
     });
 }
 
@@ -612,6 +613,4 @@ saveCollaboratorDetails(mode) {
        this.protocolCollaboratorList = this.result.protocolCollaboratorList;
     });
 }
-
 }
-

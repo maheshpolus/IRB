@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
@@ -152,10 +152,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     isEmptyCheckListDescr = false;
     isDuplicate = false;
     disableButton = false;
+    showContinueButton = false;
 
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
          private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
-          private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef) { }
+          private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
+            private _router: Router) { }
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
@@ -588,6 +590,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                                 ' Preview to assess your exempt determination status. Once you are ready to' +
                                 ' proceed, click Submit to continue.';
                         } else {
+                            this.showContinueButton = true;
                             this.modalHeading = 'Questionnaire Complete';
                             this.alertMsg = 'Questionaire saved successfully!';
                         }
@@ -1180,5 +1183,16 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     triggerAdd() {
         $('#addAttach').trigger('click');
+    }
+
+    continueWithDashboard() {
+        this.showContinueButton = false;
+        this._router.navigate( ['/irb/dashboard']);
+        $('#alertModal').modal('hide');
+    }
+
+    continueWithQstnr() {
+        this.showContinueButton = false;
+        $('#alertModal').modal('hide');
     }
 }

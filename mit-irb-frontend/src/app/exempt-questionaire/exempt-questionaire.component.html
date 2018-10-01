@@ -242,6 +242,10 @@
 						</div>
 					</div>
 				</div>
+				<section class="row btn-row-med sect-confirm-padding" *ngIf="showContinueButton">
+					<button class="btn btn-primary tab_btn" (click)="continueWithQstnr()" aria-label="Close">Continue</button>
+					<button class="btn btn-primary tab_btn" (click)="continueWithDashboard()" aria-label="Close">Exit to Dashboard</button>
+				</section>
 			</div>
 		</div>
 	</div>

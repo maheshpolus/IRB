@@ -54,6 +54,7 @@ import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.notification.ExemptProtocolEmailNotification;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -975,7 +976,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			String prefix ="";
 			Calendar c = Calendar.getInstance();
 	        int year = c.get(Calendar.YEAR);
-	        int month = c.get(Calendar.MONTH);
+	        int month = c.get(Calendar.MONTH)+1;
 	       
 	        String currentMonth = String.valueOf(month);
 	        if(currentMonth.length()>1){
@@ -1244,21 +1245,41 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		ObjectMapper mapper = new ObjectMapper();
 		IRBAttachmentProtocol attachmentProtocol = mapper.readValue(formDataJson, IRBAttachmentProtocol.class);
-		if (attachmentProtocol.getAcType().equals("U")) {
+		if (attachmentProtocol.getAcType().equals("I")) {
 			for (int i = 0; i < files.length; i++) {
-				attachmentProtocol.getProtocolAttachment().setFileName(files[i].getOriginalFilename());
-				attachmentProtocol.getProtocolAttachment().setContentType(files[i].getContentType());
-				attachmentProtocol.getProtocolAttachment().setFileData(files[i].getBytes());
+				IRBAttachmentProtocol irbAttachmentProtocol = new IRBAttachmentProtocol();
+				irbAttachmentProtocol.setAttachementStatus(attachmentProtocol.getAttachementStatus());
+				irbAttachmentProtocol.setAttachmentType(attachmentProtocol.getAttachmentType());
+				irbAttachmentProtocol.setAttachmentVersion(attachmentProtocol.getAttachmentVersion());
+				irbAttachmentProtocol.setCreateTimestamp(attachmentProtocol.getCreateTimestamp());
+				irbAttachmentProtocol.setDescription(attachmentProtocol.getDescription());
+				irbAttachmentProtocol.setDocumentId(attachmentProtocol.getDocumentId());
+				irbAttachmentProtocol.setProtocolGeneralInfo(attachmentProtocol.getProtocolGeneralInfo());
+				irbAttachmentProtocol.setSequenceNumber(attachmentProtocol.getSequenceNumber());
+				irbAttachmentProtocol.setProtocolNumber(attachmentProtocol.getProtocolNumber());
+				irbAttachmentProtocol.setStatusCode(attachmentProtocol.getStatusCode());
+				irbAttachmentProtocol.setTypeCode(attachmentProtocol.getTypeCode());
+				irbAttachmentProtocol.setUpdateTimestamp(attachmentProtocol.getUpdateTimestamp());
+				irbAttachmentProtocol.setUpdateUser(attachmentProtocol.getUpdateUser());
+				ProtocolAttachments attachments = new ProtocolAttachments();
+				attachments.setContentType(files[i].getContentType());
+				attachments.setFileName(files[i].getOriginalFilename());
+				attachments.setFileData(files[i].getBytes());
+				attachments.setSequenceNumber(attachmentProtocol.getProtocolAttachment().getSequenceNumber());
+				attachments.setUpdateTimestamp(attachmentProtocol.getProtocolAttachment().getUpdateTimestamp());
+				attachments.setUpdateUser(attachmentProtocol.getUpdateUser());
+				irbAttachmentProtocol.setProtocolAttachment(attachments);
+				hibernateTemplate.saveOrUpdate(irbAttachmentProtocol);
+			} 
+		}else if(attachmentProtocol.getAcType().equals("U")){
 				hibernateTemplate.saveOrUpdate(attachmentProtocol);
-				logger.info("saved success fully: " + attachmentProtocol);
-			}
-		} else if (attachmentProtocol.getAcType().equals("D")) {
-			Query queryDeletProtocolAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from ProtocolAttachments p where p.fileId =:fileId");
-			queryDeletProtocolAttachment.setInteger("fileId", attachmentProtocol.getProtocolAttachment().getFileId());
-			queryDeletProtocolAttachment.executeUpdate();
+		}else if (attachmentProtocol.getAcType().equals("D")) {
 			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from IRBAttachmentProtocol p where p.paProtocolId =:paProtocolId");
 			queryDeletAttachment.setInteger("paProtocolId", attachmentProtocol.getPaProtocolId());
 			queryDeletAttachment.executeUpdate();
+			Query queryDeletProtocolAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from ProtocolAttachments p where p.fileId =:fileId");
+			queryDeletProtocolAttachment.setInteger("fileId", attachmentProtocol.getProtocolAttachment().getFileId());
+			queryDeletProtocolAttachment.executeUpdate();
 		}
 		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber");
 		query.setString("protocolNumber", attachmentProtocol.getProtocolNumber());

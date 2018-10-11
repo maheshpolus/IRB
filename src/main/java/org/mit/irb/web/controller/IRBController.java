@@ -346,17 +346,6 @@ public class IRBController {
 		return new ResponseEntity<String>(responseData, status);
 	}
 
-	@RequestMapping(value = "/loadProtocolById", method = RequestMethod.POST)
-	public ResponseEntity<String> loadProtocolById(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
-		ObjectMapper mapper=new ObjectMapper();
-		HttpStatus status = HttpStatus.OK;
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		ProtocolGeneralInfo generalInfo = irbProtocolService.loadProtocolById(irbProtocolVO.getProtocolId());
-		protocolVO.setGeneralInfo(generalInfo);
-		String responseData = mapper.writeValueAsString(protocolVO);
-		return new ResponseEntity<String>(responseData, status);
-	}
-
 	@RequestMapping(value = "/addProtocolAttachments", method = RequestMethod.POST)
 	public ResponseEntity<String> addProtocolAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) throws JsonProcessingException {
 		logger.info("Request for ProtocolAttachments Modification");

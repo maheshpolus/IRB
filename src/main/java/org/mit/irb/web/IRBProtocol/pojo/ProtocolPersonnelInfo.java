@@ -88,10 +88,6 @@ public class ProtocolPersonnelInfo {
 	@Column(name = "IS_VETERAN")
 	private char isVeteran;
 
-	/*
-	 * @Column(name="HAS_VISA") private char hasVisa;
-	 */
-
 	@Transient
 	@Column(name = "IS_FACULTY")
 	private char isFaculty;
@@ -874,5 +870,4 @@ public class ProtocolPersonnelInfo {
 	public void setProtocolPersonRoleTypes(ProtocolPersonRoleTypes protocolPersonRoleTypes) {
 		this.protocolPersonRoleTypes = protocolPersonRoleTypes;
 	}
-
 }

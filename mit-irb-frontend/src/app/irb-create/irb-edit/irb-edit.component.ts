@@ -4,6 +4,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 import { Router, ActivatedRoute} from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ISubscription } from 'rxjs/Subscription';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
@@ -16,6 +17,7 @@ import { IrbCreateService } from '../irb-create.service';
 import { PiElasticService } from '../../common/service/pi-elastic.service';
 import {SharedDataService} from '../../common/service/shared-data.service';
 import { IrbViewService } from '../../irb-view/irb-view.service';
+import { $ } from '../../../../node_modules/protractor';
 
 @Component({
   selector: 'app-irb-edit',
@@ -54,6 +56,7 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
   protocolCollaboratorList = [];
   generalInfo: any = {};
   personnelInfo: any = {};
+  ProtocolPI: any = {};
   fundingSource: any = {};
   protocolSubject: any = {};
   protocolCollaborator: any = {};
@@ -68,11 +71,14 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
   fundingEditIndex = null;
   collaboratorEditIndex = null;
   subjectEditIndex = null;
+  remainingLength = 7500;
+  private subscription1: ISubscription;
   invalidData = {invalidGeneralInfo: false, invalidStartDate : false, invalidEndDate : false,
                  invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
                  invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false};
   irbPersonDetailedList: any;
   irbPersonDetailedTraining: any[] = [];
+
   constructor(private _irbCreateService: IrbCreateService,
      private _ngZone: NgZone,
      private _completerService: CompleterService,
@@ -82,7 +88,7 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
      private _router: Router,
      private _irbViewService: IrbViewService,
      private _spinner: NgxSpinnerService) {}
-  
+
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this._activatedRoute.queryParams.subscribe(params => {
@@ -91,10 +97,17 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
       if (this.protocolId != null && this.protocolNumber != null) {
         this.isGeneralInfoSaved = true;
       }
-  });
-    
-  this._sharedDataService.setGeneralInfo({});
-   this.loadEditDetails();
+    });
+
+    this.subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+      if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
+        this.commonVo = commonVo;
+        this.loadEditDetails();
+      }
+    });
+
+  // this._sharedDataService.setGeneralInfo({});
+   // this.loadEditDetails();
   }
 
   ngAfterViewInit() {
@@ -110,13 +123,13 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
       .catch(this.handleError)
       .subscribe(this._results);
   }
-  
+
   loadEditDetails() {
     this.requestObject = { protocolId: this.protocolId};
     this._spinner.show();
-    this._irbCreateService.getEditDetails(this.requestObject).subscribe(
-      data => {
-        this.commonVo = data;
+    // this._irbCreateService.getEditDetails(this.requestObject).subscribe(
+    //   data => {
+    //     this.commonVo = data;
         // Look up Data - start
         this._spinner.hide();
         this.protocolType = this.commonVo.protocolType;
@@ -130,6 +143,9 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
         this.protocolSubjectTypes = this.commonVo.protocolSubjectTypes;
         // Look up Data - End
         this.generalInfo = this.commonVo.generalInfo;
+        if (this.generalInfo.prtocolDescription != null) {
+          this.remainingChar( this.generalInfo.prtocolDescription.length); // Calculating description length
+        }
         this.generalInfo.protocolStartDate =
         this.commonVo.generalInfo.protocolStartDate != null ? new Date(this.commonVo.generalInfo.protocolStartDate) : null;
         this.commonVo.generalInfo.protocolEndDate =
@@ -140,6 +156,7 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
         }
         this._sharedDataService.setGeneralInfo( Object.assign({}, this.generalInfo));
         this.personnelInfo = this.commonVo.personnelInfo;
+        // this.ProtocolPI = Object.assign({}, this.commonVo.personnelInfo);
         this.fundingSource = this.commonVo.fundingSource;
         this.protocolSubject = this.commonVo.protocolSubject;
         this.protocolCollaborator = this.commonVo.protocolCollaborator != null ? this.commonVo.protocolCollaborator : {};
@@ -147,7 +164,7 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
         this.protocolFundingSourceList = this.commonVo.protocolFundingSourceList != null ? this.commonVo.protocolFundingSourceList : [];
         this.protocolSubjectList = this.commonVo.protocolSubjectList != null ? this.commonVo.protocolSubjectList : [];
         this.protocolCollaboratorList = this.commonVo.protocolCollaboratorList != null ? this.commonVo.protocolCollaboratorList : [];
-      });
+      // });
   }
 
   validateStartDate() {
@@ -180,22 +197,72 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  remainingChar(currentLength) {
+    const maxLength = document.getElementById('purposeOfStudy').getAttribute('maxLength');
+    this.remainingLength = parseInt(maxLength, 10) - currentLength;
+  }
+
+  /** assign values to requestObject on selecting a particular PI from elastic search */
+  selectedPiResult(result) {
+    this.ProtocolPI.personName = '';
+    this.ProtocolPI.personName = result.obj.full_name;
+    if (result.obj.person_id !== undefined) {
+      this.ProtocolPI.personId = result.obj.person_id;
+    }
+    this.IsElasticResultPerson = false;
+  }
+
+  setPiLeadUnit (leadUnitName) {
+    this.ProtocolPI.unitNumber = null;
+    this.protocolPersonLeadUnits.forEach(personeUnit => {
+      if (personeUnit.unitName === leadUnitName) {
+        this.ProtocolPI.unitNumber = personeUnit.unitNumber;
+        this.ProtocolPI.LeadUnitName = leadUnitName;
+       }
+    });
+  }
+
   saveGeneralInfo() {
     if (this.validateGeneralInfo()) {
-      if (!this.isGeneralInfoSaved) { // Change label of button from 'Proceed' to 'Save'
-      this.isGeneralInfoSaved = true;
+      if (!this.isGeneralInfoSaved) {
+      this.isGeneralInfoSaved = true; // Change label of button from 'Proceed' to 'Save'
+      this.generalInfo.personnelInfos = [];
+      this.generalInfo.personnelInfos[0] =  this.personnelInfo;
+      this.generalInfo.personnelInfos[0].personName =  this.ProtocolPI.personName;
+      this.generalInfo.personnelInfos[0].personId =  this.ProtocolPI.personId;
+      this.generalInfo.personnelInfos[0].primaryTitle = 'Test';
+      this.generalInfo.personnelInfos[0].protocolPersonRoleId = 'PI';
+      this.generalInfo.personnelInfos[0].protocolPersonRoleTypes = {protocolPersonRoleId: 'PI', description: 'Principal Investigator'};
+      this.generalInfo.personnelInfos[0].affiliationTypeCode = 2;
+      this.generalInfo.personnelInfos[0].protocolAffiliationTypes = {affiliationTypeCode: 2, description: 'Non-Faculty'};
+      this.generalInfo.personnelInfos[0].protocolLeadUnits = [{unitNumber: this.ProtocolPI.unitNumber}];
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].protocolPersonLeadUnits = {unitNumber: this.ProtocolPI.unitNumber,
+                                                                                        unitName: this.ProtocolPI.LeadUnitName};
+      this.generalInfo.personnelInfos[0].protocolPersonLeadUnits = {unitNumber: this.ProtocolPI.unitNumber,
+                                                                    unitName: this.ProtocolPI.LeadUnitName};
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].protocolPersonId = this.ProtocolPI.personName;
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].person_id = this.userDTO.personID;
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].updateTimestamp = new Date();
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].updateUser = this.userDTO.userName;
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].sequenceNumber = 1;
+      this.generalInfo.personnelInfos[0].protocolLeadUnits[0].leadUnitFlag = 'Y';
     }
     this.generalInfo.updateTimestamp = new Date();
     this.generalInfo.updateUser = localStorage.getItem('userName');
     this.commonVo.generalInfo = this.generalInfo;
-      this.requestObject = JSON.stringify(this.commonVo.generalInfo);
+    this.requestObject = JSON.stringify(this.commonVo.generalInfo);
       this._irbCreateService.updateProtocolGeneralInfo(this.commonVo).subscribe(
         data => {
            this.result = data;
+           if (this.protocolNumber == null) {
+            this.personalDataList = this.result.generalInfo.personnelInfos;
+            this.personnelInfo = {};
+           }
            this.protocolNumber = this.result.generalInfo.protocolNumber;
            this._router.navigate( ['/irb/irb-create/irbHome'], {queryParams: {protocolNumber: this.result.generalInfo.protocolNumber,
                                                                 protocolId: this.result.generalInfo.protocolId}});
            this.commonVo.generalInfo = this.result.generalInfo;
+
            this.generalInfo = this.result.generalInfo;
            this._sharedDataService.setGeneralInfo(this.generalInfo);
         });
@@ -276,11 +343,12 @@ export class IrbEditComponent implements OnInit, AfterViewInit {
 
   clearSelectedPIdata() {
     this.personnelInfo.personId = '';
+   // this.ProtocolPI.personId = '';
   }
 
 
   /** assign values to requestObject on selecting a particular person from elastic search */
-  selectedPiResult(result) {
+  selectedPersonResult(result) {
     this.personnelInfo.personName = '';
     this.personnelInfo.personName = result.obj.full_name;
     if (result.obj.person_id !== undefined) {
@@ -439,7 +507,8 @@ setFundingSourceType (typeCode) {
 }
 
 addFundingDetails(mode) {
-  if (this.fundingSource.fundingSourceTypeCode != null && this.fundingSource.fundingSourceTypeCode !== undefined) {
+  if (this.fundingSource.fundingSourceTypeCode != null && this.fundingSource.fundingSourceTypeCode !== undefined &&
+      this.fundingSource.fundingSource != null && this.fundingSource.fundingSource !== undefined) {
     this.invalidData.invalidFundingInfo = false;
     this.saveFundingDetails(mode);
     } else {

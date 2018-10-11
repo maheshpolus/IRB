@@ -22,10 +22,10 @@ import { IrbActionsComponent } from './irb-actions/irb-actions.component';
     ReactiveFormsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-  Ng2CompleterModule,
+    Ng2CompleterModule,
     FileDropModule,
     AppCommonModule
   ],
-  declarations: [IrbCreateHeaderComponent,IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent, IrbActionsComponent]//IrbHistoryComponent
+  declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent, IrbActionsComponent]
 })
 export class IrbCreateModule { }

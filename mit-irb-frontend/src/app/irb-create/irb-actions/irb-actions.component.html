@@ -1,488 +1,532 @@
 <div class="container-fluid">
-    <div class="row"><!--collapse-->
+  <div class="row">
+    <!--collapse-->
 
     <div class="col-12 bottom-space-20">
-       <div class="card coll-card-q border-radius">
-        <h5 class="card-header collapse_hd">Request An Action<i class="fa fa-info-circle" aria-hidden="true"></i></h5>
-        <div class="card-body collapse-card-body padding-top-bottom">
-            <div class="container-fluid">
-              <div class="row">
-                  <div class="col-lg-6 bottom-space-15">
-                    <div class="card request-action-cards" data-toggle="modal" data-target=".bd-example-modal-lg">
-                     <div class="card-body">
-                        <div class="row">
-                          <div class="col-3">
-                            <div class="media-left card-icon1 blue-circle-cards">
-                              <a href="#">
-                               <i class="fa fa-file-text-o"></i>
-                              </a>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                              <h5>Create Ammendment</h5>
-                              <p>If you need to do any changes in approved protocol</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 bottom-space-15">
-                    <div class="card request-action-cards">
-                     <div class="card-body">
-                        <div class="row">
-                          <div class="col-3">
-                            <div class="media-left card-icon1 green-circle-cards">
-                              <a href="#">
-                               <i class="fa fa-file-text-o"></i>
-                              </a>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                              <h5>Create Renewl</h5>
-                              <p>If you need to do any changes in approved protocol</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                   <div class="col-lg-6">
-                    <div class="card request-action-cards">
-                     <div class="card-body">
-                        <div class="row">
-                          <div class="col-3">
-                            <div class="media-left card-icon1 yellow-circle-cards">
-                              <a href="#">
-                               <i class="fa fa-file-text-o"></i>
-                              </a>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                              <h5>Create Renewl With Ammendment</h5>
-                              <p>If you need to do any changes in approved protocol</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                   <div class="col-lg-6">
-                    <div class="card request-action-cards" data-toggle="modal" data-target="#submitProtocolModal">
-                     <div class="card-body">
-                        <div class="row">
-                          <div class="col-3">
-                            <div class="media-left card-icon1 red-circle-cards">
-                              <a href="#">
-                               <i class="fa fa-file-text-o"></i>
-                              </a>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                              <h5>Submit for Review</h5>
-                              <p>If you want to submit the protocol application</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-            </div>
+      <div class="card coll-card-q border-radius-1">
+        <div class="card-header history-header">
+          <nav class="nav navbar-pg3">
+            <h5 class="collapse_hd">Request An Action</h5>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </nav>
         </div>
-      </div>
-    </div>
-
-
-      <div class="col-12">
-       <div class="card coll-card-q border-radius bottom-space-20">
-        <h5 class="card-header collapse_hd">Print <i class="fa fa-info-circle" aria-hidden="true"></i></h5>
-        <div class="card-body collapse-card-body padding10">
-            <div id="accordion">
-              <div class="card bottom-space-15">
-                <div class="card-header collapse-bg padding0-t-b paddingleft print-background" id="headingOne">
-                  <h5 class="mb-0">
-                    
-                    <span class="btn btn-link coll-click cardhead" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
-                    Protocol Details
-                    </span>
-                        <i class="fa fa-chevron-circle-down btn btn-link cl-rotate" aria-hidden="true" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne"></i>
-
-                  </h5>
-                  <hr class="col-hr">
-                </div>
-
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                  <div class="card-body qs-bdy background-white padding0 tbl-list1">
-                      <div class="row">
-                          <div class="col-md-12">
-                              <table class="table table-striped print-table">
-                                <thead class="print-background">
-                                  <tr>
-                                    <td scope="col" colspan="3">Protocol Summary</td>
-                                  
-                                    <td class="text-right" scope="col">
-                                      <span class="marginright15"><input type="checkbox" name="">Select All</span>
-                                      <span><input type="checkbox" name="">Select All</span>
-                                    </td>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                 
-                                  <tr>
-                                    <td scope="row"><span><input type="checkbox" name="">Protocol Details</span></td>
-                                    <td><span><input type="checkbox" name="">Funding Source</span></td>
-                                    <td><span><input type="checkbox" name="">Ammendal Renewal</span></td>
-                                    <td><span><input type="checkbox" name="">Oraganization</span></td>
-                                  </tr>
-                                   <tr>
-                                    <td scope="row"><span><input type="checkbox" name="">Action Hitory</span></td>
-                                    <td><span><input type="checkbox" name="">Other Data</span></td>
-                                    <td><span><input type="checkbox" name="">Investigator</span></td>
-                                    <td><span><input type="checkbox" name="">Subjects</span></td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row"><span><input type="checkbox" name="">Protocol Roles</span></td>
-                                    
-                                  </tr>
-                                  <tr>
-                                    <td class="text-right" scope="row" colspan="4"><button type="button" class="btn btn-primary print-btn">Print selected</button></td>
-                                    
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </div>
-                          
+        <div class="card-body collapse-card-body padding-top-bottom">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6 bottom-space-15">
+                <div class="card request-action-cards cursor-hover" data-toggle="modal" data-target=".bd-example-modal-lg">
+                  <div class="card-body half-padding">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="media-left card-icon1 blue-circle-cards">
+                          <a href="#">
+                            <i class="fa fa-file-text-o"></i>
+                          </a>
+                        </div>
                       </div>
+                      <div class="col-9">
+                        <h5>Create Ammendment</h5>
+                        <p>If you need to do any changes in approved protocol</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-             <div class="card">
-                <div class="card-header collapse-bg padding0-t-b print-background paddingleft" id="headingOne">
-                  <h5 class="mb-0">
-                    
-                    <span class="btn btn-link coll-click cardhead" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
-                    Questionare
-                    </span>
-                        <i class="fa fa-chevron-circle-down btn btn-link cl-rotate" aria-hidden="true" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne"></i>
-
-                  </h5>
-                  <hr class="col-hr">
-                </div>
-
-                <!-- <div id="collapseThree" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                  <div class="card-body qs-bdy background-white tbl-list1">
-
-                      <div class="row">
-                          <div class="col-md-12">
-                              <table class="table table-striped print-table">
-                                <thead class="print-background">
-                                  <tr>
-                                    <td scope="col" colspan="3">Protocol Summary</td>
-                                  
-                                    <td class="text-right" scope="col">
-                                      <span class="marginright15"><input type="checkbox" name="">Select All</span>
-                                      <span><input type="checkbox" name="">Select All</span>
-                                    </td>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                 
-                                  <tr>
-                                    <td scope="row"><span><input type="checkbox" name="">Protocol Details</span></td>
-                                    <td><span><input type="checkbox" name="">Funding Source</span></td>
-                                    <td><span><input type="checkbox" name="">Ammendal Renewal</span></td>
-                                    <td><span><input type="checkbox" name="">Oraganization</span></td>
-                                  </tr>
-                                   <tr>
-                                    <td scope="row"><span><input type="checkbox" name="">Action Hitory</span></td>
-                                    <td><span><input type="checkbox" name="">Other Data</span></td>
-                                    <td><span><input type="checkbox" name="">Investigator</span></td>
-                                    <td><span><input type="checkbox" name="">Subjects</span></td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row"><span><input type="checkbox" name="">Protocol Roles</span></td>
-                                    
-                                  </tr>
-                                  <tr>
-                                    <td class="text-right" scope="row" colspan="4"><button type="button" class="btn btn-primary print-btn">Print selected</button></td>
-                                    
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </div>
-                          
+              <div class="col-lg-6 bottom-space-15">
+                <div class="card request-action-cards-green cursor-hover card-box-nw">
+                  <div class="card-body half-padding">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="media-left card-icon1 green-circle-cards">
+                          <a href="#">
+                            <i class="fa fa-file-text-o"></i>
+                          </a>
+                        </div>
                       </div>
+                      <div class="col-9">
+                        <h5>Create Renewl</h5>
+                        <p>If you need to do any changes in approved protocol</p>
+                      </div>
+                    </div>
                   </div>
-                </div> -->
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="card request-action-cards-yellow cursor-hover card-box-nw">
+                  <div class="card-body half-padding">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="media-left card-icon1 yellow-circle-cards">
+                          <a href="#">
+                            <i class="fa fa-file-text-o"></i>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-9">
+                        <h5>Create Renewl With Ammendment</h5>
+                        <p>If you need to do any changes in approved protocol</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="card request-action-cards-red cursor-hover" data-toggle="modal" data-target="#submitProtocolModal">
+                  <div class="card-body half-padding">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="media-left card-icon1 red-circle-cards card-box-nw">
+                          <a href="#">
+                            <i class="fa fa-file-text-o"></i>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-9">
+                        <h5>Submit for Review</h5>
+                        <p>If you want to submit the protocol application</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
 
 
     <div class="col-12">
-       <div class="card coll-card-q border-radius">
-        <h5 class="card-header collapse_hd">Route Log<i class="fa fa-info-circle" aria-hidden="true"></i></h5>
-        <div class="card-body collapse-card-body padding-top-bottom">
-            <div class="container-fluid">
-                <div class="row">
-                  <div class="col-md-12">
-                      <table class="table route-log-table">
-                        <thead>
+      <div class="card coll-card-q border-radius-1 bottom-space-20">
+        <div class="card-header history-header">
+          <nav class="nav navbar-pg3">
+            <h5 class="collapse_hd">Print</h5>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </nav>
+        </div>
+        <div class="card-body collapse-card-body padding10">
+          <div id="accordion">
+            <div class="card bottom-space-15">
+              <div class="card-header collapse-bg padding0-t-b paddingleft print-background" id="headingOne">
+                <h5 class="mb-0">
+
+                  <span class="btn btn-link coll-click cardhead" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                    Protocol Details
+                  </span>
+                  <i class="fa fa-chevron-circle-down btn btn-link cl-rotate" aria-hidden="true" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseOne"></i>
+
+                </h5>
+                <hr class="col-hr">
+              </div>
+
+              <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body qs-bdy background-white padding0 tbl-list1">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table class="table table-striped print-table">
+                        <thead class="print-background">
                           <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Review status</th>
-                            <th scope="col">Action date</th>
-                            <th scope="col">Comments</th>
-                            <th scope="col">Attachments</th>
-                            <th class="text-center" scope="col">Action</th>
+                            <td scope="col" colspan="3">Protocol Summary</td>
+
+                            <td class="text-right" scope="col">
+                              <span class="marginright15">
+                                <input type="checkbox" name="">Select All</span>
+                              <span>
+                                <input type="checkbox" name="">Select All</span>
+                            </td>
                           </tr>
                         </thead>
                         <tbody>
+
                           <tr>
-                              <td class="route-tbl-bgclr" colspan="6">Stop 1 : Grand manager</td>
+                            <td scope="row">
+                              <span>
+                                <input type="checkbox" name="">Protocol Details</span>
+                            </td>
+                            <td>
+                              <span>
+                                <input type="checkbox" name="">Funding Source</span>
+                            </td>
+                            <td>
+                              <span>
+                                <input type="checkbox" name="">Ammendal Renewal</span>
+                            </td>
+                            <td>
+                              <span>
+                                <input type="checkbox" name="">Oraganization</span>
+                            </td>
                           </tr>
                           <tr>
-                            <td>Della woods</td>
-                            <td>Approved</td>
-                            <td>08-29-2018</td>
-                            <td></td>
-                            <td>No attachments</td>
-                            <td class="text-center"><i class="fa action-icons fa-level-down" aria-hidden="true"></i></td>
+                            <td scope="row">
+                              <span>
+                                <input type="checkbox" name="">Action Hitory</span>
+                            </td>
+                            <td>
+                              <span>
+                                <input type="checkbox" name="">Other Data</span>
+                            </td>
+                            <td>
+                              <span>
+                                <input type="checkbox" name="">Investigator</span>
+                            </td>
+                            <td>
+                              <span>
+                                <input type="checkbox" name="">Subjects</span>
+                            </td>
                           </tr>
                           <tr>
-                            <td>Della woods</td>
-                            <td>Approved</td>
-                            <td>08-29-2018</td>
-                            <td></td>
-                            <td>No attachments</td>
-                            <td class="text-center"><i class="fa action-icons fa-level-down" aria-hidden="true"></i></td>
+                            <td scope="row">
+                              <span>
+                                <input type="checkbox" name="">Protocol Roles</span>
+                            </td>
+
                           </tr>
                           <tr>
-                              <td class="route-tbl-bgclr" colspan="6">Stop 1 : Grand manager</td>
+                            <td class="text-right" scope="row" colspan="4">
+                              <button type="button" class="btn btn-primary print-btn">Print selected</button>
+                            </td>
+
                           </tr>
                         </tbody>
                       </table>
+                    </div>
+
                   </div>
                 </div>
+              </div>
             </div>
+            <div class="card">
+              <div class="card-header collapse-bg padding0-t-b print-background paddingleft" id="headingOne">
+                <h5 class="mb-0">
+
+                  <span class="btn btn-link coll-click cardhead" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+                    Questionnaire
+                  </span>
+                  <i class="fa fa-chevron-circle-down btn btn-link cl-rotate" aria-hidden="true" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseOne"></i>
+
+                </h5>
+                <hr class="col-hr">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="col-12">
+      <div class="card coll-card-q border-radius-1">
+        <h5 class="card-header collapse_hd">Route Log
+          <i class="fa fa-info-circle" aria-hidden="true"></i>
+        </h5>
+        <div class="card-body collapse-card-body padding-top-bottom">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table route-log-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Review status</th>
+                      <th scope="col">Action date</th>
+                      <th scope="col">Comments</th>
+                      <th scope="col">Attachments</th>
+                      <th class="text-center" scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="route-tbl-bgclr" colspan="6">Stop 1 : Grand manager</td>
+                    </tr>
+                    <tr>
+                      <td>Della woods</td>
+                      <td>Approved</td>
+                      <td>08-29-2018</td>
+                      <td></td>
+                      <td>No attachments</td>
+                      <td class="text-center">
+                        <i class="fa action-icons fa-level-down" aria-hidden="true"></i>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Della woods</td>
+                      <td>Approved</td>
+                      <td>08-29-2018</td>
+                      <td></td>
+                      <td>No attachments</td>
+                      <td class="text-center">
+                        <i class="fa action-icons fa-level-down" aria-hidden="true"></i>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="route-tbl-bgclr" colspan="6">Stop 1 : Grand manager</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- Crete Ammendment modal -->
+<!-- Crete Ammendment modal -->
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg mdl-lg-01">
-      <div class="modal-content border-radius">
-        <div class="modal-header modal-head98 d-flex justify-content-center">
-          <h5 class="modal-title  text-center" id="exampleModalLabel">Create Ammendent</h5>
-        </div>
-          <div class="container-fluid">
-              <div class="row">
-                  <!-- <section class="row sect-padding"> -->
-                      <div class="col-12 action-popup-header">
-                          <div class="row">
-                          <div class="col-12 top-aprv-details">
-                            <div class="row">
-                              <div class="col-12 apprve-date">
-                                <div class="row">
-                                  <div class="col-md-6 col-sm-6 col-12">
-                                    <h4>
-                                      IRB # : <span>0809002909</span>
-                                    </h4>
-                                    <p>
-                                      Expiration Date : <span>09/13/2018</span><br />
-                                      Title : <span>Social Cognitive Neuroscience of Healthy Human Adults</span>
-                                    </p>
-                                  </div>
-                                  <div class="col-md-3 col-sm-6 col-12">
-                                    <p>
-                                      Protocol Type : <span>Expedited</span><br />
-                                      Submission Status : <span></span><br />
-                                      PI : <span>Saxe, Rebecca R</span>
-                                    </p>
-                                  </div>
-                      
-                                  <div *ngIf="true" class="col-md-2 col-sm-6 col-12">
-                                    <span class="active-en">Active - Open to Enrollment</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          </div>
-                          </div>
-                        <!-- </section> -->
+  <div class="modal-dialog modal-lg mdl-lg-01">
+    <div class="modal-content border-radius-1">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">Create Ammendent</h5>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <!-- <section class="row sect-padding"> -->
+          <div class="col-12 action-popup-header">
+            <div class="row">
+              <div class="col-12 top-aprv-details">
+                <div class="row">
+                  <div class="col-12 apprve-date">
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6 col-12">
+                        <h4>
+                          IRB # :
+                          <span>0809002909</span>
+                        </h4>
+                        <p>
+                          Expiration Date :
+                          <span>09/13/2018</span>
+                          <br /> Title :
+                          <span>Social Cognitive Neuroscience of Healthy Human Adults</span>
+                        </p>
+                      </div>
+                      <div class="col-md-3 col-sm-6 col-12">
+                        <p>
+                          Protocol Type :
+                          <span>Expedited</span>
+                          <br /> Submission Status :
+                          <span></span>
+                          <br /> PI :
+                          <span>Saxe, Rebecca R</span>
+                        </p>
+                      </div>
 
-                  
-                  <div class="col-md-12">
-                       <table class="table modal-checkbox-table">
-                        <tbody>
-                         <tr>
-                            <td class="bold-600" colspan="4">*Ammend</td>
-                         </tr>
-                          <tr>
-                            <td scope="row"><span><input type="checkbox" name="">Protocol Details</span></td>
-                            <td><span><input type="checkbox" name="">Funding Source</span></td>
-                            <td><span><input type="checkbox" name="">Ammendal Renewal</span></td>
-                            <td><span><input type="checkbox" name="">Oraganization</span></td>
-                          </tr>
-                           <tr>
-                            <td scope="row"><span><input type="checkbox" name="">Action Hitory</span></td>
-                            <td><span><input type="checkbox" name="">Other Data</span></td>
-                            <td><span><input type="checkbox" name="">Investigator</span></td>
-                            <td><span><input type="checkbox" name="">Subjects</span></td>
-                          </tr>
-                          <tr>
-                            <td scope="row"><span><input type="checkbox" name="">Protocol Roles</span></td>
-                            
-                          </tr>
-                          <tr>
-                              <td class="bold-600" colspan="4">
-                                   <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">*Summary</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                  </div>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td colspan="4" class="text-center">
-                                <button type="button" class="btn btn-success" data-dismiss="modal">Create</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                              </td>
-                          </tr>
-                        </tbody>
-                      </table>
-  
+                      <div *ngIf="true" class="col-md-2 col-sm-6 col-12">
+                        <span class="active-en">Active - Open to Enrollment</span>
+                      </div>
+                    </div>
                   </div>
+                </div>
               </div>
+            </div>
           </div>
+          <!-- </section> -->
+
+
+          <div class="col-md-12">
+            <table class="table modal-checkbox-table">
+              <tbody>
+                <tr>
+                  <td class="bold-600" colspan="4">*Ammend</td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <span>
+                      <input type="checkbox" name="">Protocol Details</span>
+                  </td>
+                  <td>
+                    <span>
+                      <input type="checkbox" name="">Funding Source</span>
+                  </td>
+                  <td>
+                    <span>
+                      <input type="checkbox" name="">Ammendal Renewal</span>
+                  </td>
+                  <td>
+                    <span>
+                      <input type="checkbox" name="">Oraganization</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <span>
+                      <input type="checkbox" name="">Action Hitory</span>
+                  </td>
+                  <td>
+                    <span>
+                      <input type="checkbox" name="">Other Data</span>
+                  </td>
+                  <td>
+                    <span>
+                      <input type="checkbox" name="">Investigator</span>
+                  </td>
+                  <td>
+                    <span>
+                      <input type="checkbox" name="">Subjects</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <span>
+                      <input type="checkbox" name="">Protocol Roles</span>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td class="bold-600" colspan="4">
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">*Summary</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="text-center">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</div>
 <!--Create Ammendment modal--end-->
 
 
 <!-- Submit Ammendment modal modal -->
-<div id="submitProtocolModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg mdl-lg-01">
-      <div class="modal-content border-radius">
-        <div class="modal-header modal-head98 d-flex justify-content-center">
-          <h5 class="modal-title  text-center" id="exampleModalLabel">Submit for Review</h5>
-           
-        </div>
-          <div class="container-fluid">
-              <div class="row">
-                  <!-- <section class="row sect-padding"> -->
-                    <div class="col-12 action-popup-header">
-                      <div class="row">
-                      <div class="col-12 top-aprv-details">
-                        <div class="row">
-                          <div class="col-12 apprve-date">
-                            <div class="row">
-                              <div class="col-md-6 col-sm-6 col-12">
-                                <h4>
-                                  IRB # : <span>0809002909</span>
-                                </h4>
-                                <p>
-                                  Expiration Date : <span>09/13/2018</span><br />
-                                  Title : <span>Social Cognitive Neuroscience of Healthy Human Adults</span>
-                                </p>
-                              </div>
-                              <div class="col-md-3 col-sm-6 col-12">
-                                <p>
-                                  Protocol Type : <span>Expedited</span><br />
-                                  Submission Status : <span></span><br />
-                                  PI : <span>Saxe, Rebecca R</span>
-                                </p>
-                              </div>
-                  
-                              <div *ngIf="true" class="col-md-2 col-sm-6 col-12">
-                                <span class="active-en">Active - Open to Enrollment</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+<div id="submitProtocolModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg mdl-lg-01">
+    <div class="modal-content border-radius">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">Submit for Review</h5>
+
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <!-- <section class="row sect-padding"> -->
+          <div class="col-12 action-popup-header">
+            <div class="row">
+              <div class="col-12 top-aprv-details">
+                <div class="row">
+                  <div class="col-12 apprve-date">
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6 col-12">
+                        <h4>
+                          IRB # :
+                          <span>0809002909</span>
+                        </h4>
+                        <p>
+                          Expiration Date :
+                          <span>09/13/2018</span>
+                          <br /> Title :
+                          <span>Social Cognitive Neuroscience of Healthy Human Adults</span>
+                        </p>
                       </div>
+                      <div class="col-md-3 col-sm-6 col-12">
+                        <p>
+                          Protocol Type :
+                          <span>Expedited</span>
+                          <br /> Submission Status :
+                          <span></span>
+                          <br /> PI :
+                          <span>Saxe, Rebecca R</span>
+                        </p>
                       </div>
+
+                      <div *ngIf="true" class="col-md-2 col-sm-6 col-12">
+                        <span class="active-en">Active - Open to Enrollment</span>
                       </div>
-                    <!-- </section> -->
-                    <div class="col-md-12">
-                       <table class="table modal-checkbox-table">
-                        <tbody>
-                         <!-- <tr>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- </section> -->
+          <div class="col-md-12">
+            <table class="table modal-checkbox-table">
+              <tbody>
+                <!-- <tr>
                             <td class="bold-600" colspan="4">*Ammend</td>
                          </tr> -->
-                          <tr>
-                            <td scope="row">
-                              <span>Submission Type</span>
-                              <div class="options-font">
-                                  <select class="custom-select  mr-sm-2">
-                                      <option selected value="null">Please Select</option>
-                                      <option *ngFor="let submissionType of submissionTypes" value="{{submissionType.type}}">{{submissionType.type}}</option>
-                                    </select>
-                              </div></td>
-                            <td>
-                              <span>Type Qualifier</span>
-                              <div class="options-font">
-                                  <select class="custom-select  mr-sm-2">
-                                      <option selected value="null">Please Select</option>
-                                      <option *ngFor="let qualifier of typeQualifier" value="{{qualifier.type}}">{{qualifier.type}}</option>
-                                    </select>
-                              </div>
-                            </td>
-                            <td>
-                                <span>Submission Review Type</span>
-                                <div class="options-font">
-                                    <select class="custom-select  mr-sm-2">
-                                        <option selected value="null">Please Select</option>
-                                        <option *ngFor="let reviewType of reviewTypes" value="{{reviewType.type}}">{{reviewType.type}}</option>
-                                      </select>
-                                </div>
-                            </td>
-                          </tr>
-                           <tr>
-                              <td>
-                                  <span>Committee</span>
-                                  <div class="options-font">
-                                      <select class="custom-select  mr-sm-2">
-                                          <option selected value="null">Please Select</option>
-                                          <option *ngFor="let committee of committees" value="{{committee.type}}">{{committee.type}}</option>
-                                        </select>
-                                  </div>
-                              </td>
-                            <td scope="row">
-                                <span>Schedule Date</span>
-                                <div class="options-font">
-                                    <select class="custom-select  mr-sm-2">
-                                        <option selected value="null">Please Select</option>
-                                        <option *ngFor="let scheduleDate of scheduleDates" value="{{scheduleDate.type}}">{{scheduleDate.type}}</option>
-                                      </select>
-                                </div>
-                            </td>
-                          </tr>
-                          <tr>
-                              <td class="bold-600" colspan="4">
-                                   <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">*Summary</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                  </div>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td colspan="4" class="text-center">
-                                <button type="button" class="btn btn-success" data-dismiss="modal">Submit</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                              </td>
-                          </tr>
-                        </tbody>
-                      </table>
-  
-                  </div>
-              </div>
+                <tr>
+                  <td scope="row">
+                    <span>Submission Type</span>
+                    <div class="options-font">
+                      <select class="custom-select  mr-sm-2">
+                        <option selected value="null">Please Select</option>
+                        <option *ngFor="let submissionType of submissionTypes" value="{{submissionType.type}}">{{submissionType.type}}</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <span>Type Qualifier</span>
+                    <div class="options-font">
+                      <select class="custom-select  mr-sm-2">
+                        <option selected value="null">Please Select</option>
+                        <option *ngFor="let qualifier of typeQualifier" value="{{qualifier.type}}">{{qualifier.type}}</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <span>Submission Review Type</span>
+                    <div class="options-font">
+                      <select class="custom-select  mr-sm-2">
+                        <option selected value="null">Please Select</option>
+                        <option *ngFor="let reviewType of reviewTypes" value="{{reviewType.type}}">{{reviewType.type}}</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>Committee</span>
+                    <div class="options-font">
+                      <select class="custom-select  mr-sm-2">
+                        <option selected value="null">Please Select</option>
+                        <option *ngFor="let committee of committees" value="{{committee.type}}">{{committee.type}}</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td scope="row">
+                    <span>Schedule Date</span>
+                    <div class="options-font">
+                      <select class="custom-select  mr-sm-2">
+                        <option selected value="null">Please Select</option>
+                        <option *ngFor="let scheduleDate of scheduleDates" value="{{scheduleDate.type}}">{{scheduleDate.type}}</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="bold-600" colspan="4">
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">*Summary</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="text-center">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </div>
+        </div>
       </div>
     </div>
   </div>
-      <!--Submit Ammendment modal--end-->
+</div>
+<!--Submit Ammendment modal--end-->

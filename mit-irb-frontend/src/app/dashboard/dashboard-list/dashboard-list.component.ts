@@ -75,7 +75,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         exemptFormStartDate: null,
         exemptFormEndDate: null,
         exemptFormfacultySponsorName: null
-    }
+    };
 
     constructor( private _dashboardService: DashboardService,
         private _ngZone: NgZone,
@@ -206,7 +206,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.lastClickedTab = currentTab;
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
-        this.requestObject.dashboardType = currentTab;        
+        this.requestObject.dashboardType = currentTab;
         this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
@@ -302,29 +302,30 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.noIrbList =  false;
         this.lastClickedTab = currentTab;
         this.exemptParams.personId = this.userDTO.personID;
-        this.exemptParams.personRoleType = (this.userDTO.role=="CHAIR" || this.userDTO.role=="ADMIN")?"IRB_ADMIN":this.userDTO.role;
-        if(this.userDTO.jobTitle==null && this.exemptParams.personRoleType =="PI")
-        {
-            this.exemptParams.personRoleType ="STUDENT";
+        this.exemptParams.personRoleType =
+         (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN') ? 'IRB_ADMIN' : this.userDTO.role;
+        if (this.userDTO.jobTitle == null && this.exemptParams.personRoleType === 'PI') {
+            this.exemptParams.personRoleType = 'STUDENT';
         }
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
-        this.exemptParams.determination = this.requestObject.determination; 
-        if(this.requestObject.exemptFormStartDate!=null &&this.requestObject.exemptFormStartDate!='')
-        this.exemptParams.exemptFormStartDate=this.GetFormattedDate(this.requestObject.exemptFormStartDate);  
-        if(this.requestObject.exemptFormEndDate!=null &&this.requestObject.exemptFormEndDate!='')
-        this.exemptParams.exemptFormEndDate=this.GetFormattedDate(this.requestObject.exemptFormEndDate);    
-        this.exemptParams.exemptFormfacultySponsorName=this.requestObject.exemptFormfacultySponsorName;
-        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {  
+        this.exemptParams.determination = this.requestObject.determination;
+        if ( this.requestObject.exemptFormStartDate != null && this.requestObject.exemptFormStartDate !== '' ) {
+        this.exemptParams.exemptFormStartDate = this.GetFormattedDate(this.requestObject.exemptFormStartDate);
+        }
+        if (this.requestObject.exemptFormEndDate != null && this.requestObject.exemptFormEndDate !== '') {
+        this.exemptParams.exemptFormEndDate = this.GetFormattedDate(this.requestObject.exemptFormEndDate);
+        }
+        this.exemptParams.exemptFormfacultySponsorName = this.requestObject.exemptFormfacultySponsorName;
+        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
                     this.noIrbList = true;
                 } else {
-                    this.exemptListData = this.result.irbExemptFormList;                    
+                    this.exemptListData = this.result.irbExemptFormList;
                 }
             }
-            console.log("Exempt result",this.result);
         },
             error => {
                  console.log( 'Error in method getExemptListData()', error );
@@ -337,21 +338,21 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.determination = '';
         this.requestObject.title = '';
         this.requestObject.piName = '';
-        this.requestObject.exemptFormfacultySponsorName=null;
-        this.requestObject.exemptFormStartDate=null;
-        this.requestObject.exemptFormEndDate=null;
+        this.requestObject.exemptFormfacultySponsorName = null;
+        this.requestObject.exemptFormStartDate = null;
+        this.requestObject.exemptFormEndDate = null;
         this.exemptParams.determination = '';
         this.exemptParams.title = '';
         this.exemptParams.piName = '';
-        this.exemptParams.exemptFormfacultySponsorName=null;
-        this.exemptParams.exemptFormStartDate=null;
-        this.exemptParams.exemptFormEndDate=null;
+        this.exemptParams.exemptFormfacultySponsorName = null;
+        this.exemptParams.exemptFormStartDate = null;
+        this.exemptParams.exemptFormEndDate = null;
         this.getExemptListData('EXEMPT');
       }
-      GetFormattedDate(currentDate) { 
-        var month = currentDate.getMonth() + 1;
-        var day = currentDate .getDate();
-        var year = currentDate.getFullYear();
-        return month + "-" + day + "-" + year;
+      GetFormattedDate(currentDate) {
+        const month = currentDate.getMonth() + 1;
+        const day = currentDate .getDate();
+        const year = currentDate.getFullYear();
+        return month + '-' + day + '-' + year;
       }
 }

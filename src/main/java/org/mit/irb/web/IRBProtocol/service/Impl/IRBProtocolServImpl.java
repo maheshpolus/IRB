@@ -446,11 +446,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public ProtocolGeneralInfo loadProtocolById(Integer protocolId) {
-		return irbProtocolDao.loadProtocolById(protocolId);
-	}
-
-	@Override
 	public IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson) {
 		IRBProtocolVO irbProtocolVO = null;
 		try {

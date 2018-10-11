@@ -5,9 +5,9 @@
 			<h5 class="pageHeader">{{pageHeader}}</h5>
 		</div>
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-			<div class="borderBox">
-				<table class="table table-responsive tableSkin">
-					<thead>
+			<div class="borderBox box-shawdow">
+				<table class="table table-striped table-type-head table-responsive">
+					<thead class="popup-sub-header">
 						<tr>
 							<th>Protocol# <span></span>
 							</th>
@@ -19,7 +19,7 @@
 							<th width="6%">Action</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="tdy-color">
 						<tr *ngFor="let result of expandedList">
 							<td>{{result.PROTOCOL_NUMBER}}</td>
 							<td>{{result.TITLE}}</td>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IrbViewService } from '../../irb-view/irb-view.service'
+import { IrbViewService } from '../../irb-view/irb-view.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -30,8 +30,7 @@ export class IrbCreateHistroyComponent implements OnInit {
 
     /** sets requestObject and calls functions to load history list */
     ngOnInit() {
-        // this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get( 'protocolNumber' );
-        this.requestObject.protocolNumber = "0809002886"; 
+        this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get( 'protocolNumber' );
         this.loadHistoryList();
     }
 

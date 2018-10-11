@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class ExemptQuestionaireService {
-  formData = new FormData();
+formData = new FormData();
 constructor(private _http: HttpClient) { }
 
   getQuestionaire( params ) {
@@ -31,22 +31,21 @@ constructor(private _http: HttpClient) { }
     return this._http.post('/mit-irb/addExemptProtocolAttachments', this.formData);
   }
 
-showExemptProtocolChecklist(params){
+showExemptProtocolChecklist(params) {
     return this._http.post('/mit-irb/getExemptProtocolAttachmentList', params);
 }
 
-downloadExemptProtocolChecklist(checklistId){ 
-    return this._http.get('/mit-irb/downloadExemptProtocolAttachments', { 
+downloadExemptProtocolChecklist(checklistId) {
+    return this._http.get('/mit-irb/downloadExemptProtocolAttachments', {
         headers: new HttpHeaders().set('checkListId', checklistId.toString()),
-        responseType:'blob'
+        responseType: 'blob'
     });
 }
-  
+
   getActivityLogByExemptFormID( params ) {
     return this._http.post('/mit-irb/getExemptProtocolActivityLogs', params);
   }
-  approveOrDisapproveAction(params)
-  {
+  approveOrDisapproveAction(params) {
     return this._http.post('/mit-irb/approveOrDisapproveExemptProtocols', params);
   }
 }

@@ -1,10 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { IrbViewService } from '../../irb-view/irb-view.service';
 import { ActivatedRoute } from '@angular/router';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { IrbCreateService } from '../irb-create.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
-import { subscribeOn } from 'rxjs/operator/subscribeOn';
 import { ISubscription } from 'rxjs/Subscription';
 
 declare var $: any;
@@ -14,7 +13,7 @@ declare var $: any;
     styleUrls: ['./irb-create-attachment.component.css'],
     providers: [IrbCreateService]
 })
-export class IrbCreateAttachmentComponent implements OnInit {
+export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
 
     noIrbAttachments = false;
     editAttachment: any = [];
@@ -34,9 +33,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
     };
 
     irbAttachment: any = {};
-    /* formdataJson object */
     protocolAttachments: any = {};
-    /* formdataIRBJson object */
     irbAttachmentProtocol: any = {};
 
 
@@ -55,7 +52,6 @@ export class IrbCreateAttachmentComponent implements OnInit {
     attachmentTypeDescription: string;
     private subscription1: ISubscription;
 
-
     constructor(private _irbViewService: IrbViewService,
         private _activatedRoute: ActivatedRoute,
         public changeRef: ChangeDetectorRef,
@@ -65,9 +61,9 @@ export class IrbCreateAttachmentComponent implements OnInit {
     ngOnInit() {
         const reqobj = { protocolNumber: this._activatedRoute.snapshot.queryParamMap.get('protocolNumber') };
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
-        this.subscription1 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {
-            if (generalInfo !== undefined) {
-                this.generalInfo = generalInfo;
+        this.subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
+            if (commonVo !== undefined) {
+                this.generalInfo = commonVo.generalInfo;
             }
         });
         this._irbCreateService.getAttachmentTypes(null).subscribe(data => {
@@ -76,9 +72,19 @@ export class IrbCreateAttachmentComponent implements OnInit {
         });
         this.loadIrbAttachmentList(reqobj);
     }
+
+    ngOnDestroy() {
+        if (this.subscription1) {
+          this.subscription1.unsubscribe();
+        }
+      }
+
+    /** To Set the Attachment Type Description
+     * @param attachmentTypeCode - selected Attachment Type Code
+     */
     setAttachmentType(attachmentTypeCode) {
         this.attachmentTypes.forEach(attachmentType => {
-            if (attachmentType.typeCode == attachmentTypeCode) {
+            if (attachmentType.typeCode === attachmentTypeCode) {
                 this.attachmentTypeDescription = attachmentType.description;
 
             }
@@ -87,7 +93,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
 
     /**calls service to load Attachment list in protocol*/
     loadIrbAttachmentList(reqobj) {
-        this._irbCreateService.getIrbAttachmentList(reqobj).subscribe(data => {
+       this.subscription1 =  this._irbCreateService.getIrbAttachmentList(reqobj).subscribe(data => {
             this.result = data || [];
             if (this.result != null) {
                 if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
@@ -108,7 +114,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
     /**calls service to get attachment details and to download it
      * @param attachment - object of an attachment
      */
-    
+
     downloadAttachment(attachment) {
         this.requestObject.attachmentId = attachment.FILE_ID;
         this._irbViewService.downloadIrbAttachment(attachment.protocolAttachment.fileId).subscribe(data => {
@@ -122,21 +128,30 @@ export class IrbCreateAttachmentComponent implements OnInit {
             error => console.log('Error downloading the file.'),
             () => console.log('OK'));
     }
-    
+
+    /** To edit an Attachment
+     * @param index-index of the edited attachment object
+     * @param attachments-attachment object that is edited
+     */
     editAttachments(event: any, index, attachments) {
+        event.preventDefault();
         this.tempEditAttachment.description = attachments.description;
+        this.tempEditAttachment.typeCode = attachments.attachmentType.typeCode;
         this.editAttachment[index] = !this.editAttachment[index];
     }
-    
+
+    /**To rollback to the previous state if editing is cancelled
+     * @param  index- index of the edited attachment
+     * @param  attachments-attachment object that is edited
+     */
     cancelEditedattachments(event: any, index, attachments) {
         event.preventDefault();
         this.editAttachment[index] = !this.editAttachment[index];
         attachments.description = this.tempEditAttachment.description;
-        attachments.attachmentType.typeCode = this.tempEditAttachment.attachmentType.typeCode;
+        attachments.attachmentType.typeCode = this.tempEditAttachment.typeCode;
     }
-    
+
     saveEditedattachments(event: any, index, attachments) {
-        debugger
         event.preventDefault();
         this.editAttachment[index] = !this.editAttachment[index];
         attachments.acType = 'U';
@@ -157,7 +172,9 @@ export class IrbCreateAttachmentComponent implements OnInit {
                 this.irbAttachment = data;
             });
     }
-
+    /** Push the unique files choosen to uploaded file
+     * @param files- files choosen
+     */
     onChange(files: FileList) {
         this.fil = files;
         this.isDuplicate = false;
@@ -169,7 +186,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
             for (let index = 0; index < this.fil.length; index++) {
                 this.isDuplicate = false;
                 for (let j = 0; j < this.uploadedFile.length; j++) {
-                    if (this.fil[index].name == this.uploadedFile[j].name) {
+                    if (this.fil[index].name === this.uploadedFile[j].name) {
                         this.isDuplicate = true;
                     }
                 }
@@ -181,6 +198,9 @@ export class IrbCreateAttachmentComponent implements OnInit {
         this.changeRef.detectChanges();
     }
 
+     /** Push the unique files dropped to uploaded file
+     * @param files- files dropped
+     */
     public dropped(event: UploadEvent) {
         this.files = event.files;
         for (const file of this.files) {
@@ -194,7 +214,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
                         this.uploadedFile.push(info);
                     } else {
                         for (let i = 0; i < this.uploadedFile.length; i++) {
-                            if (this.uploadedFile[i].name == info.name) {
+                            if (this.uploadedFile[i].name === info.name) {
                                 this.isDuplicate = true;
                             }
                         }
@@ -208,30 +228,24 @@ export class IrbCreateAttachmentComponent implements OnInit {
             }
         }
     }
-
+    /**Remove an item from the uploded file
+     * @param item-item to be removed
+     */
     deleteFromUploadedFileList(item) {
         for (let i = 0; i < this.uploadedFile.length; i++) {
-            if (this.uploadedFile[i].name == item.name) {
+            if (this.uploadedFile[i].name === item.name) {
                 this.uploadedFile.splice(i, 1);
                 this.changeRef.detectChanges();
             }
             this.isDuplicate = false;
         }
     }
-    
-    showAddAttachmentPopUp(e) {
-        e.preventDefault();
-        this.showAddAttachment = true;
-        this.uploadedFile = [];
-        this.requestObject.attachmentTypeCode = '';
-        this.requestObject.attachmentDescription = '';
-        this.isMandatoryFilled = true;
-        this.changeRef.detectChanges();
-    }
 
+    /**calls the service to add the attachment
+     */
     addAttachments() {
         if (this.requestObject.attachmentTypeCode == null
-            || this.requestObject.attachmentDescription == '' || this.uploadedFile.length == 0) {
+            || this.requestObject.attachmentDescription === '' || this.uploadedFile.length === 0) {
             this.isMandatoryFilled = false;
         } else {
             this.irbAttachmentProtocol.acType = 'I';
@@ -271,7 +285,7 @@ export class IrbCreateAttachmentComponent implements OnInit {
                     this.irbAttachmentsList = this.result.protocolAttachmentList;
                     this.irbAttachment = data;
                     this.isMandatoryFilled = true;
-                    this.requestObject.attachmentTypeCode = '';
+                    this.requestObject.attachmentTypeCode = null;
                     this.requestObject.attachmentDescription = '';
                     this.uploadedFile = [];
                 }
@@ -279,31 +293,40 @@ export class IrbCreateAttachmentComponent implements OnInit {
         }
     }
 
-    closeAttachments() {
-        this.showAddAttachment = false;
-        this.uploadedFile = [];
-    }
-    
+    /** Save the attachment before confirming delete
+     * @param attachment- attachment object to be deleted
+     */
     tempSave(event, attachment) {
+        event.preventDefault();
         this.showPopup = true;
         this.tempSaveAttachment = attachment;
     }
+
+      /**Calls the service to delete the attachment after confirmation
+     */
     deleteAttachments(event) {
+        event.preventDefault();
         this.showPopup = false;
         this.tempSaveAttachment.acType = 'D';
         this._irbCreateService.addattachment(this.tempSaveAttachment, this.uploadedFile).subscribe(
             data => {
                 this.result = data;
+                if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
+                    this.noIrbAttachments = true;
+                } else {
+                    this.noIrbAttachments = false;
+                }
                 this.irbAttachmentsList = this.result.protocolAttachmentList;
                 this.irbAttachment = data;
             });
     }
-    
+    /**sort the Attachment list
+     */
     sortBy() {
         this.column = this.sortField;
         this.direction = parseInt(this.sortOrder, 10);
     }
-    
+
     triggerAdd() {
         $('#addAttach').trigger('click');
     }

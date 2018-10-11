@@ -1,5 +1,4 @@
-<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff"
-	type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -22,7 +21,9 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group ">
-                  <label>Type<span class="mandatory">*</span></label>
+                  <label>Type
+                    <span class="mandatory">*</span>
+                  </label>
                   <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
                     <option selected value=null>Please Select</option>
                     <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
@@ -31,7 +32,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Start Date</label>
+                  <label>Anticipated Start Date</label>
                   <label *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</label>
                   <div class="input-group  mb-4">
                     <input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
@@ -47,10 +48,10 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>End Date</label>
+                  <label>Anticipated End Date</label>
                   <label *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</label>
                   <div class="input-group mb-3">
-                    <input type="text" class="form-control"  [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
+                    <input type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
                       (ngModelChange)="validateEndDate()">
                     <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
                     <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
@@ -63,10 +64,59 @@
               </div>
 
             </div>
+
+            <div class="row" *ngIf="!isGeneralInfoSaved">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>PI
+                    <span class="mandatory">*</span>
+                  </label>
+                  <input [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit"
+                    type="text" class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
+                    (focus)="IsElasticResultPerson = true" (focusout)="IsElasticResultPerson = false" />
+                  <div class="sb-seachresults top-margin">
+                    <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
+                      <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
+                        <span [innerHTML]="result.label"></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Lead Unit
+                    <span class="mandatory">*</span>
+                  </label>
+                  <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
+                    [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
+                    placeholder="Lead unit"></ng2-completer>
+                </div>
+              </div>
+
+              <!-- <div class="col-md-5">
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="generalInfo.prtocolDescription"></textarea>
+                </div>
+              </div>
+              <div class="col-md-2 save-button">
+                <button type="button" class="btn btn-success" (click)="saveGeneralInfo()">
+                  <span *ngIf="!isGeneralInfoSaved">Proceed</span>
+                  <span *ngIf="isGeneralInfoSaved">Save</span>
+                </button>
+              </div> -->
+
+            </div>
+
+
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label>Title<span class="mandatory">*</span></label>
+                  <label>Title
+                    <span class="mandatory">*</span>
+                  </label>
                   <textarea class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
                 </div>
               </div>
@@ -85,20 +135,31 @@
 
             </div>
 
-            <div class="row">
-              <div class="col-md-10">
+            <div class="row bottom-margin">
+              <div class="col-md-12">
                 <div class="form-group">
-                  <label>Description</label>
-                  <textarea class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="generalInfo.prtocolDescription"></textarea>
+                  <label>Purpose of Study </label>
+                  <span class="sub-label"> ({{remainingLength}} characters left)</span>
+                  <textarea rows="12" class="form-control txt-area-fnt" maxlength="7500" id="purposeOfStudy" placeholder="Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters."
+                    [(ngModel)]="generalInfo.prtocolDescription" (ngModelChange)="remainingChar(generalInfo.prtocolDescription.length)"></textarea>
                 </div>
               </div>
-              <div class="col-md-2 save-button">
+              <!-- <div class="col-md-2 save-button">
                 <button type="button" class="btn btn-success margin-class" (click)="saveGeneralInfo()">
                   <span *ngIf="!isGeneralInfoSaved">Proceed</span>
                   <span *ngIf="isGeneralInfoSaved">Save</span>
                 </button>
-              </div>
+              </div> -->
 
+            </div>
+            <div class="row bottom-margin">
+              <!-- <div class="col-md-11"></div> -->
+              <div class="col-md-2">
+                <button type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
+                  <span *ngIf="!isGeneralInfoSaved">Proceed</span>
+                  <span *ngIf="isGeneralInfoSaved">Save</span>
+                </button>
+              </div>
             </div>
 
           </div>
@@ -143,7 +204,7 @@
                     (focus)="IsElasticResultPerson = true" (focusout)="IsElasticResultPerson = false" />
                   <div class="sb-seachresults top-margin">
                     <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
-                      <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
+                      <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)">
                         <span [innerHTML]="result.label"></span>
                       </li>
                     </ul>
@@ -177,13 +238,13 @@
               </div>
             </div>
             <div class="row top-dis-15">
-                <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
                     placeholder="email-id">
-                    </div>
-                  </div>
+                </div>
+              </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label>Lead unit
@@ -304,7 +365,9 @@
 
               <div class="col-md-5">
                 <div class="form-group">
-                  <label>Funding Type</label>
+                  <label>Funding Type
+                    <span class="mandatory">*</span>
+                  </label>
                   <select [class.poping-border]="isFundingInfoEdit" class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect"
                     [(ngModel)]="fundingSource.fundingSourceTypeCode" (ngModelChange)="setFundingSourceType(fundingSource.fundingSourceTypeCode)">
                     <option selected value="null">Please Select</option>
@@ -314,7 +377,9 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Source</label>
+                  <label>Source
+                    <span class="mandatory">*</span>
+                  </label>
                   <input type="text" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
                 </div>
               </div>
@@ -398,7 +463,9 @@
 
               <div class="col-md-5">
                 <div class="form-group">
-                  <label>Type</label>
+                  <label>Type
+                    <span class="mandatory">*</span>
+                  </label>
                   <select [class.poping-border]="isSubjectInfoEdit" class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect"
                     [(ngModel)]="protocolSubject.vulnerableSubjectTypeCode" (ngModelChange)="setSubjectType(protocolSubject.vulnerableSubjectTypeCode)">
                     <option selected value="null">Please Select</option>
@@ -408,7 +475,9 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Count</label>
+                  <label>Count
+                    <span class="mandatory">*</span>
+                  </label>
                   <input type="text" [class.poping-border]="isSubjectInfoEdit" class="form-control form-control-sm" placeholder="Count" [(ngModel)]="protocolSubject.subjectCount">
                 </div>
               </div>
@@ -464,7 +533,7 @@
       <div class="card history-card border-radius-1">
         <div class="card-header history-header">
           <nav class="nav navbar-pg3">
-            <h5>Collabrotors</h5>
+            <h5>Collaborators</h5>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
           </nav>
         </div>
@@ -480,7 +549,9 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Name</label>
+                  <label>Organization
+                    <span class="mandatory">*</span>
+                  </label>
                   <!-- <input type="text" class="form-control input-field-size" placeholder="Name"> -->
                   <ng2-completer [class.normal-border]="!isCollaboratorInfoEdit" [datasource]="collaboratorNames" [minSearchLength]="0" [(ngModel)]="collaboratorName"
                     (ngModelChange)="setCollaborator(collaboratorName)" class="input-field-size person-unit collaborator-holder"
@@ -499,14 +570,14 @@
                   <label>Approval Date</label>
                   <label *ngIf="invalidData.invalidApprovalDate" class="error">Approval Date should be less than Expiration Date</label>
                   <div class="input-group date-pickr-1 mb-3">
-                    <input type="text" class="form-control" [class.poping-border]="isCollaboratorInfoEdit" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
-                      [(ngModel)]="protocolCollaborator.approvalDate" (ngModelChange)="validateApprovalDate()" placeholder="mm/dd/yyyy">
+                    <input type="text" class="form-control" [class.poping-border]="isCollaboratorInfoEdit" [owlDateTime]="dt3" [(ngModel)]="protocolCollaborator.approvalDate"
+                      (ngModelChange)="validateApprovalDate()" placeholder="mm/dd/yyyy">
                     <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
-                    <!-- <div class="input-group-append input-span-1">
-                      <span class="input-group-text">
+                    <div class="input-group-append input-span-1">
+                      <span class="input-group-text" [owlDateTimeTrigger]="dt3">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                       </span>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -515,13 +586,13 @@
                   <label>Expiration Date </label>
                   <label *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</label>
                   <div class="input-group date-pickr-1 mb-3">
-                    <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4"
-                      [(ngModel)]="protocolCollaborator.expirationDate" (ngModelChange)="validateExpirationDate()" placeholder="mm/dd/yyyy">
-                    <!-- <div class="input-group-append input-span-1">
+                    <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control" [owlDateTime]="dt4" [(ngModel)]="protocolCollaborator.expirationDate"
+                      (ngModelChange)="validateExpirationDate()" placeholder="mm/dd/yyyy">
+                    <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt4">
                       <span class="input-group-text" [owlDateTimeTrigger]="dt3">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                       </span>
-                    </div> -->
+                    </div>
                     <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
                   </div>
                 </div>

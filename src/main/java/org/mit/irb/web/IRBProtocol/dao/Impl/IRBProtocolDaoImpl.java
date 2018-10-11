@@ -443,7 +443,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FORM_LIST", outputParam);
+			if(personID != ""){
+				result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FORM_LIST", outputParam);
+			} else{
+				result = null;
+			}
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getPersonExemptFormList:" + e);
@@ -964,6 +968,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			String protocolNUmber = generateProtocolNumber();
 			generalInfo.setProtocolNumber(protocolNUmber);
 			generalInfo.setSequenceNumber(1);
+			List<ProtocolPersonnelInfo> protocolPersonnelInfoList = new ArrayList<ProtocolPersonnelInfo>();
+			ProtocolPersonnelInfo protocolPersonnelInfo = generalInfo.getPersonnelInfos().get(0);
+			protocolPersonnelInfo.setProtocolGeneralInfo(generalInfo);
+			protocolPersonnelInfo.setProtocolNumber(protocolNUmber);
+			protocolPersonnelInfo.setSequenceNumber(1);
+			protocolPersonnelInfoList.add(protocolPersonnelInfo);
+			generalInfo.setPersonnelInfos(protocolPersonnelInfoList);
 		}
 		hibernateTemplate.saveOrUpdate(generalInfo);
 		irbProtocolVO.setGeneralInfo(generalInfo);
@@ -1228,15 +1239,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		}
 
 		return irbProtocolVO;
-	}
-
-	@Override
-	public ProtocolGeneralInfo loadProtocolById(Integer protocolId) {
-		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
-		queryGeneral.setInteger("protocolId", protocolId);
-		ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
-		return protocolGeneralInfoObj;
 	}
 
 	@Override

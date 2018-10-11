@@ -229,22 +229,54 @@ public interface IRBProtocolService {
 	 */
 	CommonVO approveOrDisapproveExemptProtocols(CommonVO vo) throws Exception;
 
+	/**
+	 * @param IRBProtocolVO
+	 * @return updated protocol personnel Information with latest status change
+	 * @throws Exception
+	 */
 	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo);
 
+	/**
+	 * @param IRBProtocolVO
+	 * @return updated Funding Source Information with latest status change
+	 * @throws Exception
+	 */
 	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource);
 
+	/**
+	 * @param IRBProtocolVO
+	 * @return updated Subject Information with latest status change
+	 * @throws Exception
+	 */
 	IRBProtocolVO updateSubject(ProtocolSubject protocolSubject);
 
+	/**
+	 * @param IRBProtocolVO
+	 * @return updated Collaborator Information with latest status change
+	 * @throws Exception
+	 */
 	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator);
 
+	/**
+	 * @return possible attachment types
+	 */
 	IRBProtocolVO loadAttachmentType();
 
+	/**
+	 * @param IRBProtocolVO
+	 * @return updated protocol Information with latest status change
+	 */
 	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
-	
-	ProtocolGeneralInfo loadProtocolById(Integer protocolId);
 
+	/**
+	 * @param IRBProtocolVO
+	 * @return updated protocol attachments Information with latest status change
+	 */
 	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson);
 
+	/**
+	 * @return list of attachments
+	 */
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 
 }

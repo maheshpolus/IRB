@@ -1,0 +1,634 @@
+<!-- COMMITTEE HOME -->
+<section class="row">
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		<div class="row">
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+				<div class="borderBox col-12">
+					<h4 class="borderBoxHeading">
+						Details
+						<button class="editBtn" *ngIf="editDetails ==false"
+							(click)="showEditDetails()">
+							<i class="fa fa-pencil"></i>
+						</button>
+						<button class="addBtn" *ngIf="editDetails" (click)="saveDetails()">
+							<i class="fa fa-floppy-o"></i>
+						</button>
+						<button class="editBtn" *ngIf="editDetails"
+							(click)="cancelEditDetails()">
+							<i class="fa fa-times"></i>
+						</button>
+					</h4>
+					<p *ngIf="errorFlag">
+						<span class="mandatory" style="font-size: 0.85em">{{error}}</span>
+					</p>
+					<div class="pullSide">
+						<table class="table tableSkin grid2" *ngIf="result?.committee">
+							<tbody>
+								<tr>
+									<td><label><span class="mandatory">*</span> Review
+											Type</label><br> <span *ngIf="editDetails != false"> <select
+											[(ngModel)]="result.committee.reviewTypeDescription"
+											name="Select Type" [disabled]="editDetails==false"
+											[ngClass]="editClass">
+												<option value="Select">Select</option>
+												<option *ngFor="let type of reviewTypes">{{type.description}}</option>
+										</select>
+									</span> <span *ngIf="editDetails == false"> <input type="text"
+											[disabled]="editDetails==false" [ngClass]="editClass"
+											[(ngModel)]="result.committee.reviewTypeDescription">
+									</span></td>
+									<td colspan="2"><label>Description</label><br> <input
+										type="text" [disabled]="editDetails==false"
+										[ngClass]="editClass"
+										[(ngModel)]="result.committee.description"></td>
+								</tr>
+								<tr>
+									<td><label><span class="mandatory">*</span> Min
+											Members for Quorum</label><br> <input type="number"
+										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
+										[(ngModel)]="result.committee.minimumMembersRequired" /></td>
+									<td><label><span class="mandatory">*</span> Adv
+											Submission Days</label><br> <input type="number"
+										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
+										[(ngModel)]="result.committee.advSubmissionDaysReq" /></td>
+									<td><label><span class="mandatory">*</span>
+											Maximum Protocols</label><br> <input type="number"
+										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
+										[(ngModel)]="result.committee.maxProtocols" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+				<div class="borderBox col-12">
+					<h4 class="borderBoxHeading ">
+						Area of Research
+						<button id="areaOfResearchAddBtn" class="addBtn" data-target="#editDetailsModal" data-toggle="modal"
+							(click)="showaddAreaOfResearch()">
+							<i class="fa fa-plus"></i>
+						</button>
+					</h4>
+					<div class="pullSide">
+						<table class="table table-responsive tableSkin " *ngIf="result?.committee">
+							<tr id="addAreaOfResearchRow"
+								*ngIf="addResearch && saveCommitteeFlag">
+								<td>Area of Research</td>
+								<td colspan="2">
+									<div>
+										<ng2-completer title="Add area of research"
+											[inputClass]="completerID"
+											[(ngModel)]="areaInput.researchAreaDescription"
+											[datasource]="areaList" [minSearchLength]="0"
+											(ngModelChange)="areaChangeFunction(areaInput)"
+											(selected)="onAreaSelect()"></ng2-completer>
+									</div>
+								</td>
+								<td>
+									<button class="btnSkin btnSkinPrimary" data-toggle="modal"
+										data-target="#warningModal"
+										(click)="addAreaOfResearch(areaInput)">Add</button>
+								</td>
+							</tr>
+							<tr>
+								<th title="">Sl No</th>
+								<th title="">Research Area Code</th>
+								<th title="">Code/Description</th>
+								<th title="">Action</th>
+							</tr>
+							<tr
+								*ngFor="let area of result.committee.researchAreas; let i=index">
+								<td><input type="text" class="committeeBoxNotEditable" [disabled]="true"
+									value="{{i+1}}" /></td>
+								<td><input type="text" class="committeeBoxNotEditable" [disabled]="true"
+									value="{{ area.researchAreaCode}}" /></td>
+								<td><input type="text" class="committeeBoxNotEditable" [disabled]="true"
+									value="{{ area.researchAreaDescription }}" /></td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a href="#" data-toggle="modal"
+											data-target="#warningModal, #editDetailsModal"
+											(click)="deleteAreaOfResearchConfirmation($event,area)"><i
+												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<div class="borderBox col-12">
+
+					<h4 class="borderBoxHeading">
+						Schedule
+						<button class="editBtn" (click)="showSchedulePopUp()"
+							data-toggle="modal" data-target="#exampleModalCenter, #editDetailsModal"
+							style="position: static; float: right;">
+							<i class="fa fa-plus">&nbsp;Generate Schedule</i>
+						</button>
+						<!-- Generate Schedules -->
+					</h4>
+					<div class="pullSide">
+						<table class="table table-responsive tableSkin" *ngIf="result?.committee">
+							<tr class="scheduleFilterBoxes">
+								<td class="noDataOnChart">From :</td>
+								<td><input [owlDateTimeTrigger]="fltrStrDt"
+									[owlDateTime]="fltrStrDt"
+									[(ngModel)]="result.scheduleData.filterStartDate"
+									class="committeeBox text-border-padding" />&nbsp;<span
+									class="fa fa-calendar fa-large"
+									[owlDateTimeTrigger]="fltrStrDt"></span> <owl-date-time
+										#fltrStrDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
+								</td>
+								<td class="noDataOnChart">To :</td>
+								<td><input [owlDateTimeTrigger]="fltrEndDt"
+									[owlDateTime]="fltrEndDt"
+									[(ngModel)]="result.scheduleData.filerEndDate"
+									class="committeeBox text-border-padding" />&nbsp;<span
+									class="fa fa-calendar fa-large"
+									[owlDateTimeTrigger]="fltrEndDt"></span> <owl-date-time
+										#fltrEndDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time></td>
+								<td><button type="button" class="btnSkin btnSkinPrimary"
+										(click)="filterSchedule()">Filter</button></td>
+								<td><button type="button" class="btnSkin btn-secondary"
+										(click)="resetFilterSchedule()">Clear</button></td>
+							</tr>
+							<tr>
+								<td colspan="8" ><span *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</span></td>
+							</tr>
+							<tr>
+								<th title="">Schedule Id</th>
+								<th title="">Schedule Date</th>
+								<th title="">Day of Week</th>
+								<th title="">Deadline</th>
+								<th title="">Status</th>
+								<th title="">Place</th>
+								<th title="">Time</th>
+								<th title="">Action</th>
+							</tr>
+							<tr
+								*ngFor="let committeScheduleData of result?.committee?.committeeSchedules; let i = index;">
+								<ng-container *ngIf="committeScheduleData.filter">
+								<td>{{ committeScheduleData.scheduleId }}</td>
+								<td><input [owlDateTimeTrigger]="schdlDt"
+									[owlDateTime]="schdlDt"
+									[(ngModel)]="committeScheduleData.scheduledDate"
+									[disabled]="!editSchedule[i] == true"
+									[ngClass]="(editSchedule[i] == true)? 'scheduleBoxes' : 'committeeBoxNotEditable'" />
+									<owl-date-time #schdlDt [pickerType]="'calendar'"
+										[pickerMode]="'dialog'"></owl-date-time></td>
+								<td>{{ committeScheduleData.dayOfWeek }}</td>
+								<td>{{ committeScheduleData.protocolSubDeadline }}</td>
+								<td><select [ngClass]="(!editSchedule[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
+										[disabled]="!editSchedule[i] == true" [(ngModel)]="committeScheduleData.scheduleStatus.description" >
+										<option *ngFor="let status of scheduleStatus">{{ status.description }}</option>
+									</select></td>
+								<td><input type="text"
+									[ngClass]="(!editSchedule[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
+									[disabled]="!editSchedule[i] == true"
+									[(ngModel)]="committeScheduleData.place"></td>
+								<td><span *ngIf="!editSchedule[i] == true">{{ committeScheduleData.time | date:'shortTime' }}</span>
+									<span *ngIf="!editSchedule[i] == false"> <input *ngIf="!editSchedule[i] == false" [owlDateTimeTrigger]="schdlTm" [owlDateTime]="schdlTm"
+											[(ngModel)]="scheduleTime" class="committeeBox text-border-padding" />
+										<owl-date-time #schdlTm [pickerType]="'timer'" [pickerMode]="'dialog'" [hour12Timer]=true></owl-date-time>
+									</span>
+								</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open {{committeScheduleData.scheduleId}}" *ngIf="!editSchedule[i] == true"
+											href="#" (click)="loadSchedules($event,committeScheduleData.scheduleId)"><i class="fa fa-eye"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == true" data-toggle="modal" data-target="#warningModal"
+											(click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i, committeScheduleData.scheduleId)"><i
+												class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == true"
+											data-toggle="modal" data-target="#deleteModal, #warningModal"
+											(click)="showDeleteModal($event, committeScheduleData.scheduleId, result.committee.committeeId, committeScheduleData.scheduledDate)"><i
+												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == false"
+											(click)="updateScheduleData($event, i, committeScheduleData)"><i
+												class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == false"
+											(click)="cancelEditSchedule($event, i)"><i
+												class="fa fa-times" aria-hidden="true"></i></a></li>
+									</ul>
+								</td>
+								</ng-container>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal for generate schedule-->
+			<div class="modal fade mySkinDialog modalFallBack"
+				*ngIf="showGenerateSchedule && saveCommitteeFlag"
+				id="exampleModalCenter" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Generate
+								Schedule</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="inputTxtCover">
+								<div class="row">
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+										<label><span class="mandatory">*&nbsp;</span>Start Date</label> <input
+											[owlDateTimeTrigger]="strdt" [owlDateTime]="strdt"
+											[min]="today"
+											[(ngModel)]="result.scheduleData.scheduleStartDate"
+											class="committeeBox text-border-padding" /> <span
+											class="fa fa-calendar fa-large" [owlDateTimeTrigger]="strdt"></span>
+										<owl-date-time #strdt [pickerType]="'calendar'"
+											[pickerMode]="'dialog'"></owl-date-time>
+
+									</div>
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+										<label><span class="mandatory">*&nbsp;</span>Start
+											Time</label> <input [owlDateTimeTrigger]="strTime"
+											[owlDateTime]="strTime" [(ngModel)]="displayTime"
+											class="committeeBox text-border-padding" /> <span
+											class="fa fa-clock-o fa-large" [owlDateTimeTrigger]="strTime"></span>
+										<owl-date-time #strTime [pickerType]="'timer'" [hour12Timer]=true
+											[pickerMode]="'dialog'"></owl-date-time>
+									</div>
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+										<label><span class="mandatory">*&nbsp;</span>Place</label><input
+											type="text" [(ngModel)]="result.scheduleData.place"
+											class="text-border-padding" />
+									</div>
+								</div>
+								<br>
+								<div>
+									<ul class="nav nav-tabs tabsIcon" id="myTab" role="tablist">
+										<li class="nav-item"><a class="nav-link active"
+											id="home-tab" data-toggle="tab" href="#Daily" role="tab"
+											aria-controls="home" aria-selected="true"
+											(click)="showTab('DAILY')">Daily</a></li>
+										<li class="nav-item"><a class="nav-link" id="profile-tab"
+											data-toggle="tab" href="#Weekly" role="tab"
+											aria-controls="profile" aria-selected="false"
+											(click)="showTab('WEEKLY')">Weekly</a></li>
+										<li class="nav-item"><a class="nav-link" id="contact-tab"
+											data-toggle="tab" href="#Monthly" role="tab"
+											aria-controls="contact" aria-selected="false"
+											(click)="showTab('MONTHLY')">Monthly</a></li>
+										<li class="nav-item"><a class="nav-link" id="contact-tab"
+											data-toggle="tab" href="#Yearly" role="tab"
+											aria-controls="contact" aria-selected="false"
+											(click)="showTab('YEARLY')">Yearly</a></li>
+										<li class="nav-item"><a class="nav-link" id="contact-tab"
+											data-toggle="tab" href="#Never" role="tab"
+											aria-controls="contact" aria-selected="false"
+											(click)="showTab('NEVER')">Never</a></li>
+									</ul>
+									<div class="tab-content" id="myTabContent">
+										<div class="tab-pane fade show active" id="Daily"
+											role="tabpanel" aria-labelledby="home-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" name="dayOption" value="XDAY"
+														[(ngModel)]="optionDay" (click)="sentDayOption()" checked />
+														Every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.dailySchedule.day" /></li>
+													<li>day(s)</li>
+													<li><input type="radio" name="dayOption"
+														value="WEEKDAY" [(ngModel)]="optionDay"
+														(click)="sentDayOption()" /> Every Weekday</li>
+												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="endDt"
+														[owlDateTime]="endDt"
+														[min]="result.scheduleData.dailySchedule.scheduleStartDate"
+														[(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="endDt"></span> <owl-date-time #endDt
+															[pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
+													</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="Weekly" role="tabpanel"
+											aria-labelledby="profile-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li>Recur every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.weeklySchedule.week" /></li>
+
+													<li>week(s) on:</li>
+												</ul>
+												<ul class="tablelayout">
+													<li *ngFor="let option of dayOptions"><input
+														type="checkbox" name="options" value="{{option.value}}"
+														[(ngModel)]="option.checked" /> {{option.name}}</li>
+												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="wkendDt"
+														[owlDateTime]="wkendDt"
+														[(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="wkendDt"></span> <owl-date-time
+															#wkendDt [pickerType]="'calendar'"
+															[pickerMode]="'dialog'"></owl-date-time></li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
+												</ul>
+											</div>
+
+										</div>
+										<div class="tab-pane fade" id="Monthly" role="tabpanel"
+											aria-labelledby="contact-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" name="monthOptionDay"
+														value="XDAYANDXMONTH" [(ngModel)]="monthOptionDay"
+														(click)="sentMonthOption()" checked /> Day</li>
+													<li><input type="number" min="1" max="31"
+														[(ngModel)]="result.scheduleData.monthlySchedule.day" /></li>
+													<li>of every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.monthlySchedule.option1Month" /></li>
+													<li>month(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><input type="radio" name="monthOptionDay"
+														value="XDAYOFWEEKANDXMONTH" [(ngModel)]="monthOptionDay"
+														(click)="sentMonthOption()" /> The</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.monthlySchedule.selectedMonthsWeek">
+															<option *ngFor="let day of selectedMonthWeek"
+																[value]="day.value" >{{day.name}}</option>
+													</select></li>
+													<li><select
+														[(ngModel)]="result.scheduleData.monthlySchedule.selectedDayOfWeek">
+															<option *ngFor="let day of dayOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li>of every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.monthlySchedule.option2Month" /></li>
+													<li>month(s)</li>
+												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="mnendDt"
+														[owlDateTime]="mnendDt"
+														[(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="mnendDt"></span> <owl-date-time
+															#mnendDt [pickerType]="'calendar'"
+															[pickerMode]="'dialog'"></owl-date-time></li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="Yearly" role="tabpanel"
+											aria-labelledby="contact-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" name="yearOption" value="XDAY"
+														[(ngModel)]="yearOption" (click)="sentYearOption()" />
+														Every</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedOption1Month">
+															<option *ngFor="let day of yearMonthOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li><input type="number" min="1" max="31"
+														[(ngModel)]="result.scheduleData.yearlySchedule.day" /></li>
+													<li>of every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.yearlySchedule.option1Year" /></li>
+													<li>year(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><input type="radio" name="yearOption"
+														value="CMPLX" [(ngModel)]="yearOption"
+														(click)="sentYearOption()" /> The</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedMonthsWeek">
+															<option *ngFor="let day of selectedMonthWeek"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedDayOfWeek">
+															<option *ngFor="let day of dayOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li>of</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedOption2Month">
+															<option *ngFor="let day of yearMonthOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li>of every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.yearlySchedule.option2Year" /></li>
+													<li>year(s)</li>
+												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="yrendDt"
+														[owlDateTime]="yrendDt"
+														[(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="yrendDt"></span> <owl-date-time
+															#yrendDt [pickerType]="'calendar'"
+															[pickerMode]="'dialog'"></owl-date-time></li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="Never" role="tabpanel"
+											aria-labelledby="contact-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li>Do not repeat this event.</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isStartDateBeforeToday || !isMandatoryFilled" class="mandatory"> {{scheduleValidationMessage}}</span></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btn-secondary"
+								data-dismiss="modal">Close</button>
+							<button type="button" class="btnSkin btnSkinPrimary"
+								data-toggle="modal" data-target="#skippedSchedules"
+								(click)="generateSchedule($event)">Generate Schedules</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal for show warning on conflicted dates on generate schedule -->
+
+			<div class="modal fade mySkinDialog modalFallBack"
+				*ngIf="isConflictDates" id="skippedSchedules" tabindex="-1"
+				role="dialog" aria-labelledby="skippedSchedulesTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="skippedSchedulesLongTitle">Already
+								scheduled for these dates?</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p class="forSkipSchedule">Schedules can not be generated on
+								the following date(s)</p>
+							<ul class="forSkipSchedule">
+								<li *ngFor="let conflictDate of conflictDates"><span
+									class="fa fa-calendar sp-color">&nbsp;&nbsp;{{
+										conflictDate }}&nbsp;&nbsp;</span> is skipped in recurrence, meeting
+									already scheduled.</li>
+							</ul>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								data-dismiss="modal" (click)="closeConflictDateModal()">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal for Show Warning-->
+			<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup || isScheduleEditWarningModalOpen"
+				id="warningModal" tabindex="-1" role="dialog"
+				aria-labelledby="deleteModalTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" *ngIf="deleteConfirmation">Want to
+								delete?</h5>
+							<h5 class="modal-title" *ngIf="duplicateIdFlag">Cannot Save!</h5>
+							<h5 class="modal-title"
+								*ngIf="duplicateAreaOfResearch || emptyAreaOfResearch">Cannot
+								Add!</h5>
+								<h5 class="modal-title" *ngIf="isScheduleEditWarningModalOpen">Cannot edit/delete!</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p *ngIf="deleteConfirmation">{{ this.deleteMsg }}</p>
+							<p *ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch || isScheduleEditWarningModalOpen">
+								{{ this.alertMsg }}</p>
+						</div>
+						<div class="modal-footer" *ngIf="deleteConfirmation">
+							<button type="button" class="btnSkin btn-secondary"
+								data-dismiss="modal" (click)="cancelDelete()">No</button>
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="deleteAreaOfResearch(areaOfResearchToDelete)"
+								data-dismiss="modal">Yes</button>
+						</div>
+						<div class="modal-footer"
+							*ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="duplicateId()" data-dismiss="modal">Ok</button>
+						</div>
+						<div class="modal-footer" *ngIf="isScheduleEditWarningModalOpen">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="cancelEditScheduleItem()" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of modal showing warnings -->
+			
+			<!-- Modal for Show Warning on Delete Schedule from List -->
+			<div class="modal fade mySkinDialog modalFallBack" *ngIf="isTodelete"
+				id="deleteModal" tabindex="-1" role="dialog"
+				aria-labelledby="deleteModalTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Want to
+								delete?</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>
+								Are you sure you want to delete the schedule on the date<span>
+									{{scheduledDate}}</span> ?
+							</p>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btn-secondary"
+								data-dismiss="modal">No</button>
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="deleteScheduleData()" data-dismiss="modal">Yes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Modal for Show Warning on Delete Schedule from List -->
+			
+			<!-- Modal for editCommittee Details warning -->
+			<div class="modal fade mySkinDialog modalFallBack"
+				*ngIf="isEditDetailsModalOpen" id="editDetailsModal" tabindex="-1"
+				role="dialog" aria-labelledby="editDetailsModalTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="skippedSchedulesLongTitle">Warning !!!</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p class="forSkipSchedule">You are in the middle of editing/creating Committee Details, please save/cancel to proceed on Committee Details</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								data-dismiss="modal" (click)="closeEditDetailsModalOpen()">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of edit comittee details modal -->
+			<!-- All Modal ends -->
+		</div>
+	</div>
+</section>

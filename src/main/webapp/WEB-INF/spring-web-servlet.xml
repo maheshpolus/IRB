@@ -41,6 +41,7 @@
 			<list>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolType</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.SponsorType</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolStatus</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits</value>

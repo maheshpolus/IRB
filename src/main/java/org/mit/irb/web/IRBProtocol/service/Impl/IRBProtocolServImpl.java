@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.json.JSONObject;
@@ -26,6 +28,7 @@ import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,10 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired
+	@Qualifier(value="irbProtocolService")
+	IRBProtocolService irbProtocolService;
 	
 	org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(IRBProtocolServImpl.class.getName());
 
@@ -467,5 +474,40 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
 		IRBProtocolVO irbProtocolVO = null;
 		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachmentsByProtocolNumber(protocolNumber);
+	}
+
+	@Override
+	public IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadSponsorTypes(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO modifyProtocolDetails(Integer protocolId,IRBProtocolVO irbProtocolVO) {
+		try{
+			irbProtocolVO.setProtocolId(protocolId);
+			ProtocolPersonnelInfo personnelInfo = new ProtocolPersonnelInfo();
+			ProtocolLeadUnits protocolLeadUnits = new ProtocolLeadUnits();
+			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
+		    ProtocolSubject protocolSubject= new ProtocolSubject();
+		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
+			irbProtocolVO = irbProtocolService.loadProtocolTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadSponsorTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadRoleTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolPersonLeadunits(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolAffiliationTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolSubjectTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolFundingSourceTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolCollaboratorNames(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
+			irbProtocolVO.setPersonnelInfo(personnelInfo);
+			irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
+			irbProtocolVO.setFundingSource(fundingSource);
+			irbProtocolVO.setProtocolSubject(protocolSubject);
+			irbProtocolVO.setProtocolCollaborator(protocolCollaborator);
+		} catch (Exception e) {
+			logger.error("Error in modifyProtocolDetails method : "+e.getMessage());
+		}
+		return irbProtocolVO;
 	}
 }

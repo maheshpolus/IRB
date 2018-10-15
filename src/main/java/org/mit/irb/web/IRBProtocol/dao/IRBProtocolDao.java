@@ -9,7 +9,6 @@ import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.common.dto.PersonDTO;
@@ -105,4 +104,6 @@ public interface IRBProtocolDao {
 			throws JsonParseException, JsonMappingException, IOException;
 
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
+
+	IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO);
 }

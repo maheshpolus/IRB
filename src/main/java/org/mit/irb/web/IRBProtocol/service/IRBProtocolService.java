@@ -279,4 +279,17 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 
+	/**
+	 * @param irbProtocolVO
+	 * @return list of sponsors
+	 */
+	IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO);
+
+	/**
+	 * @param protocolId 
+	 * @param irbProtocolVO
+	 * @return modify protocol like view,create,modify 
+	 */
+	IRBProtocolVO modifyProtocolDetails(Integer protocolId, IRBProtocolVO irbProtocolVO);
+
 }

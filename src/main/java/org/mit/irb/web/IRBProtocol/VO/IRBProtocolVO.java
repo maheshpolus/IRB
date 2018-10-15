@@ -6,7 +6,6 @@ import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
@@ -18,6 +17,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
+import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 
 /*VO Class to  fetch all the IRB Protocol information
  * @author anu
@@ -27,6 +27,7 @@ public class IRBProtocolVO {
 	private Integer protocolId;
 	private ProtocolGeneralInfo generalInfo;
 	private List<ProtocolType> protocolType;
+	private List<SponsorType> sponsorType;
 	private List<ProtocolPersonRoleTypes> personRoleTypes;
 	private List<ProtocolPersonLeadUnits> protocolPersonLeadUnits;
 	private List<ProtocolAffiliationTypes> affiliationTypes;
@@ -220,5 +221,13 @@ public class IRBProtocolVO {
 
 	public void setProtocolAttachmentList(List<IRBAttachmentProtocol> protocolAttachmentList) {
 		this.protocolAttachmentList = protocolAttachmentList;
+	}
+
+	public List<SponsorType> getSponsorType() {
+		return sponsorType;
+	}
+
+	public void setSponsorType(List<SponsorType> sponsorType) {
+		this.sponsorType = sponsorType;
 	}
 }

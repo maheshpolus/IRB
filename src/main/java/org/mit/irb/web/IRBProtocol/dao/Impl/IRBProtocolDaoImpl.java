@@ -45,6 +45,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
+import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -1295,6 +1296,22 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber");
 		query.setString("protocolNumber", protocolNumber);
 		irbProtocolVO.setProtocolAttachmentList(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(SponsorType.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		projList.add(Projections.property("sponsorName"), "sponsorName");
+		projList.add(Projections.property("sponsorTypeCode"), "sponsorTypeCode");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(SponsorType.class));
+		criteria.addOrder(Order.asc("sponsorName"));
+		List<SponsorType> sponsorType = criteria.list();
+		logger.info("Protocol Type in DAO: " + sponsorType);
+		irbProtocolVO.setSponsorType(sponsorType);
 		return irbProtocolVO;
 	}
 }

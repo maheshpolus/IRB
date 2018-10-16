@@ -42,7 +42,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     readonly strReturnedByPIActionType = '7';
     readonly strApprovedByPIActionType = '8';
 
-
+    continueBtnClicked = false;
     showQuestionaire = false;
     showAlert = true;
     ApproveRejectHeader = '';
@@ -199,14 +199,17 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         }
         if (this.isViewMode === '5' && this.requestObject.personDTO.personID === this.requestObject.irbExemptForm.personId) {
             this.isActionByPi = true;
+            this.continueBtnClicked = true;
         }
         if (this.isViewMode === '1' || this.isViewMode === '5') {
             this.isEditMode = true;
+            this.continueBtnClicked = true;
         }
         if (this.isViewMode == null || this.isViewMode === undefined || this.isViewMode === '1' || this.isViewMode === '5') {
             this.isViewMode = false;
         } else {
             this.isViewMode = true;
+            this.continueBtnClicked = true;
         }
         this.getPiUnits();
     }
@@ -358,7 +361,6 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** function to load exempt questionaire once the title and pi and exempt is created */
     loadQuestionaire() {
-        this.disableButton = true;
         this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
         this.showAlert = false;
         if (this.requestObject.irbExemptForm.personId !== '' &&
@@ -382,6 +384,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 this.alertMsg = this.NOFACULTY_TITILE_MESSAGE;
                 this.openWarningModal();
             } else {
+                this.disableButton = true;
+                this.continueBtnClicked = true;
                 this.requestObject.irbExemptForm.updateUser = this.userDTO.userName;
                 this.requestObject.irbExemptForm.actionTypesCode = this.strCreatedActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
@@ -593,7 +597,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                         } else {
                             this.showContinueButton = true;
                             this.modalHeading = 'Questionnaire Complete';
-                            this.alertMsg = 'Questionaire saved successfully!';
+                            this.alertMsg = 'Questionnaire saved successfully!';
                         }
                         if (this.result.hasOwnProperty('questionnaireDto')) {
                             this.questionaire.questionnaireQuestions = this.result.questionnaireDto.questionnaireQuestions;

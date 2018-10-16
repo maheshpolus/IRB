@@ -81,6 +81,12 @@
 		<button class="btn btn-primary tab_btn" type="submit">
 			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
 		</button>
+			<button class="btn btn-primary tab_btn" type="submit"
+		[routerLink]="['irbProtocol']"		
+		routerLinkActive="btnactive"
+		(click)="show_current_tab('irbProtocol')">
+		<i class="fa fa-sticky-note-o" aria-hidden="true"></i>Protocol
+	</button>
 		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
 		<button class="btn btn-primary tab_btn" type="submit"
 			[routerLink]="['irbCreateAttachment']"		
@@ -98,7 +104,7 @@
 			[routerLink]="['irbActions']"
 			routerLinkActive="btnactive"
 			(click)="show_current_tab('irbActions')">
-			<i class="fa fa-history" aria-hidden="true"></i>Actions
+			<i class="fa  fa-cog" aria-hidden="true"></i>Actions
 		</button>
 	</section>
 </div>

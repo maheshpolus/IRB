@@ -41,10 +41,10 @@
 						<h4>*Principal Investigator:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
-						<input class="form-control" type="text" *ngIf="!isViewMode" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
+						<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
 						 placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"
 						/>
-						<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.personName" *ngIf="isViewMode"
+						<input class="form-control" type="text" [disabled]="continueBtnClicked" [(ngModel)]="requestObject.irbExemptForm.personName" *ngIf="continueBtnClicked"
 						/>
 						<div class="sb-seachresults results-margin">
 							<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultPI">
@@ -58,7 +58,7 @@
 						<h4>Unit:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
-						<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search:Department Unit"
+						<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
 						 *ngIf="!isViewMode" [datasource]="unitName" [minSearchLength]="0" (ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
 						 (selected)="onUnitSelect()"></ng2-completer>
 						<input class="form-control unit-margin" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"

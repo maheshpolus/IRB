@@ -12,6 +12,11 @@ import { IrbCreateAttachmentComponent } from './irb-create-attachment/irb-create
 import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histroy.component';
 import { AppCommonModule } from '../common/common/common.module';
 import { IrbActionsComponent } from './irb-actions/irb-actions.component';
+import { CollaboratorsComponent } from './irb-edit/collaborators/collaborators.component';
+import { SubjectsComponent } from './irb-edit/subjects/subjects.component';
+import { FundingSourceComponent } from './irb-edit/funding-source/funding-source.component';
+import { PersonnelInfoComponent } from './irb-edit/personnel-info/personnel-info.component';
+import { GeneralDetailsComponent } from './irb-edit/general-details/general-details.component';
 
 @NgModule({
   imports: [
@@ -26,6 +31,6 @@ import { IrbActionsComponent } from './irb-actions/irb-actions.component';
     FileDropModule,
     AppCommonModule
   ],
-  declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent, IrbActionsComponent]
+  declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent, FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent]
 })
 export class IrbCreateModule { }

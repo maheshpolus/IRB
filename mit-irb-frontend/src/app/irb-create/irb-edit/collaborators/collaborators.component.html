@@ -1,0 +1,114 @@
+<div class="top-distance bottom-distance" *ngIf="isGeneralInfoSaved">
+  <div class="card history-card border-radius-1">
+    <div class="card-header history-header">
+      <nav class="nav navbar-pg3">
+        <h5>Collaborators</h5>
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </nav>
+    </div>
+
+    <div class="card-body card-paddng">
+      <div class="col-12  search-eidted-p padding-15">
+        <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo">
+          Please fill all mandatory fields marked
+          <strong>*</strong>
+        </div>
+      </div>
+      <div class="col-12  search-eidted-p padding-15">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Organization
+                <span class="mandatory">*</span>
+              </label>
+              <ng2-completer [class.normal-border]="!isCollaboratorInfoEdit" [datasource]="collaboratorNames" [minSearchLength]="0" [(ngModel)]="collaboratorName"
+                (ngModelChange)="setCollaborator(collaboratorName)" class="input-field-size person-unit collaborator-holder"
+                placeholder="Name"></ng2-completer>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Point of contact</label>
+              <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control input-field-size" [(ngModel)]="protocolCollaborator.pointOfContact"
+                placeholder="Point of contact">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Approval Date</label>
+              <label *ngIf="invalidData.invalidApprovalDate" class="error">Approval Date should be less than Expiration Date</label>
+              <div class="input-group date-pickr-1 mb-3">
+                <input type="text" class="form-control" [class.poping-border]="isCollaboratorInfoEdit" [owlDateTime]="dt3" [(ngModel)]="protocolCollaborator.approvalDate"
+                  (ngModelChange)="validateApprovalDate()" placeholder="mm/dd/yyyy">
+                <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                <div class="input-group-append input-span-1">
+                  <span class="input-group-text" [owlDateTimeTrigger]="dt3">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Expiration Date </label>
+              <label *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</label>
+              <div class="input-group date-pickr-1 mb-3">
+                <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control" [owlDateTime]="dt4" [(ngModel)]="protocolCollaborator.expirationDate"
+                  (ngModelChange)="validateExpirationDate()" placeholder="mm/dd/yyyy">
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt4">
+                  <span class="input-group-text" [owlDateTimeTrigger]="dt4">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 add-btn-1">
+            <button title="Add" *ngIf="!isCollaboratorInfoEdit" type="button" class="btn btn-success top-butn" (click)="addCollaboratorDetails('ADD')">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+            <button title="Save" *ngIf="isCollaboratorInfoEdit" (click)="addCollaboratorDetails('EDIT')" type="button" class="btn btn-success top-butn">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-12 users-list-tbl">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr" *ngIf="protocolCollaboratorList.length > 0">
+              <thead class="tbl-head-clr thead-font-size">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Point of contact</th>
+                  <th scope="col">Approval Date</th>
+                  <th scope="col">Expiration Date</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="tbody-font-size">
+                <tr *ngFor="let item of protocolCollaboratorList let l=index" [class.poping-border]="l == collaboratorEditIndex">
+                  <td>{{item.collaboratorNames?.organizationName}}</td>
+                  <td>{{item.pointOfContact}}</td>
+                  <td>{{item.approvalDate| date:"MM/dd/yyyy"}}</td>
+                  <td>{{item.expirationDate| date:"MM/dd/yyyy"}}</td>
+                  <td class="action-btn-list">
+                    <button title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

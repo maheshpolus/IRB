@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute} from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { IrbCreateService } from '../irb-create.service';
 
@@ -21,7 +22,8 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   constructor(private _sharedDataService: SharedDataService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _irbCreateService: IrbCreateService) { }
+    private _irbCreateService: IrbCreateService,
+    private _spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.subscription1 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {
@@ -52,8 +54,10 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
 
   getIRBProtocol() {
     const requestObject = { protocolId: this.protocolId};
+    this._spinner.show();
     this._irbCreateService.getEditDetails(requestObject).subscribe(
       data => {
+        this._spinner.hide();
         this.commonVo = data;
         this.generalInfo = this.commonVo.generalInfo;
         this._sharedDataService.setCommonVo(this.commonVo);

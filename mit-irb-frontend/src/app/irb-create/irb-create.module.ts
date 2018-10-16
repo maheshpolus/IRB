@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { CKEditorModule } from 'ngx-ckeditor';
 import { IrbCreateHeaderComponent } from './irb-create-header/irb-create-header.component';
 import { IrbEditComponent } from './irb-edit/irb-edit.component';
 import { IrbCreateRoutingModule } from '../irb-create/irb-create-routing.module';
@@ -17,6 +18,7 @@ import { SubjectsComponent } from './irb-edit/subjects/subjects.component';
 import { FundingSourceComponent } from './irb-edit/funding-source/funding-source.component';
 import { PersonnelInfoComponent } from './irb-edit/personnel-info/personnel-info.component';
 import { GeneralDetailsComponent } from './irb-edit/general-details/general-details.component';
+import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 
 @NgModule({
   imports: [
@@ -29,8 +31,11 @@ import { GeneralDetailsComponent } from './irb-edit/general-details/general-deta
     OwlNativeDateTimeModule,
     Ng2CompleterModule,
     FileDropModule,
-    AppCommonModule
+    AppCommonModule,
+    CKEditorModule
   ],
-  declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent, IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent, FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent]
+  declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent,
+    IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent,
+    FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent]
 })
 export class IrbCreateModule { }

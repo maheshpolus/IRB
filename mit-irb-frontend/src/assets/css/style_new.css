@@ -2976,7 +2976,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 }
 .errorquestion{
     color: #721c24;
-    background-color: #f9f2f3;
+    background-color: #f7d4d9;
     border-color: #f5c6cb;
     padding: 0.75rem 1.25rem;
     margin-bottom: 1rem;
@@ -3217,6 +3217,10 @@ transition: display .25s}
 {
 	padding: 15px;
 	padding-bottom: 0;
+}
+.padding-20
+{
+    padding: 20px;
 }
 .mb-15
 {
@@ -3921,3 +3925,8 @@ select#inlineFormCustomSelect
  .noAttachments{	
     text-align: center;	
  }
+/* irbProtocol styles */
+.protocol-editor-padding-top
+{
+    margin-top: 10px !important;
+}

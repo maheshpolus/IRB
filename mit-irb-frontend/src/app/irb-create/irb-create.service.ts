@@ -21,6 +21,9 @@ export class IrbCreateService {
   getIrbAttachmentList(params) {
     return this._http.post('/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber', params);
   }
+  saveScienceOfProtocol(params) {
+    return this._http.post('/mit-irb/saveScienceOfProtocol', params);
+  }
 
   addattachment(irbAttachmentProtocol: Object, uploadedFile) {
     this.formData.delete('files');

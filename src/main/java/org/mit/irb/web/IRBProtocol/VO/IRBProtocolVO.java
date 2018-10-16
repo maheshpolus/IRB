@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.VO;
 
 import java.util.List;
 
+import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
@@ -17,6 +18,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
+import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 
 /*VO Class to  fetch all the IRB Protocol information
@@ -46,7 +48,25 @@ public class IRBProtocolVO {
 	private List<ProtocolCollaborator> protocolCollaboratorList;
 	private ProtocolCollaborator protocolCollaborator;
 	private List<IRBAttachmentProtocol> protocolAttachmentList;
+	private ScienceOfProtocol scienceOfProtocol;
+	private List<AgeGroups> ageGroups;
+	
+	
+	public ScienceOfProtocol getScienceOfProtocol() {
+		return scienceOfProtocol;
+	}
 
+	public void setScienceOfProtocol(ScienceOfProtocol scienceOfProtocol) {
+		this.scienceOfProtocol = scienceOfProtocol;
+	}
+
+	public List<AgeGroups> getAgeGroups() {
+		return ageGroups;
+	}
+
+	public void setAgeGroups(List<AgeGroups> ageGroups) {
+		this.ageGroups = ageGroups;
+	}
 	public ProtocolGeneralInfo getGeneralInfo() {
 		return generalInfo;
 	}

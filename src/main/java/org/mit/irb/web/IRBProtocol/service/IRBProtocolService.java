@@ -11,6 +11,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
+import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
@@ -292,4 +293,15 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO modifyProtocolDetails(Integer protocolId, IRBProtocolVO irbProtocolVO);
 
+	/**
+	 * @param scienceOfProtocol
+	 * @return updated VO object
+	 */
+	IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol);
+
+	/**
+	 * @param irbProtocolVO
+	 * @return updated VO Object
+	 */
+	IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO);
 }

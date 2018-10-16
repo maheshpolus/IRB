@@ -40,6 +40,13 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.Award</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.Sponsor</value>	
+				<value>org.mit.irb.web.committee.pojo.Unit</value>
+				<value>org.mit.irb.web.committee.pojo.UnitAdministrator</value> 
+				<value>org.mit.irb.web.committee.pojo.UnitAdministratorType</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.EpsProposal</value>	
+				<value>org.mit.irb.web.IRBProtocol.pojo.Proposal</value>	
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolType</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.SponsorType</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolStatus</value>
@@ -58,6 +65,8 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementStatus</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.AgeGroups</value>
 
 				<!-- <value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
 					<value>org.mit.irb.web.committee.pojo.Committee</value>
@@ -95,7 +104,7 @@
 					<value>org.mit.irb.web.committee.pojo.ScheduleActItemType</value> 
 					<value>org.mit.irb.web.committee.pojo.ScheduleAgenda</value>
 					<value>org.mit.irb.web.committee.pojo.ScheduleStatus</value> 
-					<value>org.mit.irb.web.committee.pojo.Unit</value>
+					
 					<value>org.mit.irb.web.committee.pojo.UnitAdministrator</value> 
 					<value>org.mit.irb.web.committee.pojo.UnitAdministratorType</value> -->
 			</list>

@@ -48,11 +48,44 @@ public class ProtocolSubject {
 	
 	@Column(name="UPDATE_USER")
 	private String updateUser;
+	
+	@Column(name="DESCRIPTION")
+	private String description;
+	
+	@Column(name="CRITERIA")
+	private String criteria;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_SUBJECT_FK1"), name = "VULNERABLE_SUBJECT_TYPE_CODE", referencedColumnName = "VULNERABLE_SUBJECT_TYPE_CODE", insertable = false, updatable = false)
 	ProtocolSubjectTypes protocolSubjectTypes;
 	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "SYS_C002823877"), name = "AGE_GROUP_CODE", referencedColumnName = "AGE_GROUP_CODE", insertable = false, updatable = false)
+	AgeGroups ageGroups;
+	
+	public String getCriteria() {
+		return criteria;
+	}
+
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
+	}
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public AgeGroups getAgeGroups() {
+		return ageGroups;
+	}
+
+	public void setAgeGroups(AgeGroups ageGroups) {
+		this.ageGroups = ageGroups;
+	}
+
 	public Integer getProtocolVulnerableSubId() {
 		return protocolVulnerableSubId;
 	}

@@ -1,15 +1,10 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpSession;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.json.JSONObject;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
@@ -19,6 +14,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
+import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.constants.KeyConstants;
@@ -30,7 +26,6 @@ import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,8 +44,8 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	@Autowired
 	QuestionnaireService questionnaireService;
 	
-	@Autowired
-	private HibernateTemplate hibernateTemplate;
+/*	@Autowired
+	private HibernateTemplate hibernateTemplate;*/
 	
 	@Autowired
 	@Qualifier(value="irbProtocolService")
@@ -457,14 +452,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		IRBProtocolVO irbProtocolVO = null;
 		try {
 			irbProtocolVO = irbProtocolDao.addProtocolAttachments(files,formDataJson);
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return irbProtocolVO;
@@ -497,6 +485,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			irbProtocolVO = irbProtocolService.loadProtocolPersonLeadunits(irbProtocolVO);
 			irbProtocolVO = irbProtocolService.loadProtocolAffiliationTypes(irbProtocolVO);
 			irbProtocolVO = irbProtocolService.loadProtocolSubjectTypes(irbProtocolVO);
+			irbProtocolVO = irbProtocolService.loadProtocolAgeGroups(irbProtocolVO);
 			irbProtocolVO = irbProtocolService.loadProtocolFundingSourceTypes(irbProtocolVO);
 			irbProtocolVO = irbProtocolService.loadProtocolCollaboratorNames(irbProtocolVO);
 			irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
@@ -510,4 +499,18 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		}
 		return irbProtocolVO;
 	}
+	
+	@Override
+	public IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		irbProtocolVO = irbProtocolDao.saveScienceOfProtocol(irbProtocolVO,scienceOfProtocol);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO) {
+		irbProtocolVO = irbProtocolDao.loadProtocolAgeGroups(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
 }

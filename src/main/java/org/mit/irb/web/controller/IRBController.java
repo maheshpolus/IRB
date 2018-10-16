@@ -341,4 +341,14 @@ public class IRBController {
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}	
+	
+	@RequestMapping(value="/saveScienceOfProtocol", method=RequestMethod.POST)
+	public ResponseEntity<String> saveScienceOfProtocol(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO protocolVO) throws JsonProcessingException{
+		IRBProtocolVO irbProtocolVO= new IRBProtocolVO();
+		ObjectMapper mapper= new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol());
+		String responseData = mapper.writeValueAsString(irbProtocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
 }

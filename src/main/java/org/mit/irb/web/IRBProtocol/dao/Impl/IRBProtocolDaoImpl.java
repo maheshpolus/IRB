@@ -3,7 +3,6 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,29 +22,33 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.jdbc.Work;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
+import org.mit.irb.web.IRBProtocol.pojo.Award;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.Proposal;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
+import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.Sponsor;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
+import org.mit.irb.web.committee.pojo.Unit;
+import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -55,7 +58,6 @@ import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.notification.ExemptProtocolEmailNotification;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -1218,11 +1220,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);
 			irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
-
-			Query queryfundingSource = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
-			queryfundingSource.setInteger("protocolId", protocolId);
-			irbProtocolVO.setProtocolFundingSourceList(queryfundingSource.list());
+			Query queryScienceOfProtocol = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from ScienceOfProtocol p where p.protocolId =:protocolId");
+			queryScienceOfProtocol.setInteger("protocolId", protocolId);
+			irbProtocolVO.setScienceOfProtocol((ScienceOfProtocol)queryScienceOfProtocol.list().get(0));
+			irbProtocolVO = getProtocolFundingSource(protocolId,irbProtocolVO);
 
 			Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
@@ -1239,6 +1241,59 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
 		}
 
+		return irbProtocolVO;
+	}
+
+	private IRBProtocolVO getProtocolFundingSource(Integer protocolId,IRBProtocolVO irbProtocolVO) {
+		try{
+			Query queryfundingSource = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
+			queryfundingSource.setInteger("protocolId", protocolId);
+			List<ProtocolFundingSource> fundingSourceList = queryfundingSource.list();
+			for(ProtocolFundingSource protocolFundingSource:fundingSourceList){
+				switch(protocolFundingSource.getFundingSourceTypeCode()){
+				case "1":
+					Query querySponsorDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from Sponsor s where s.sponsorCode =:sponsorCode");
+					querySponsorDetails.setString("sponsorCode", protocolFundingSource.getFundingSource());
+					Sponsor sponsor = (Sponsor) querySponsorDetails.list().get(0);
+					protocolFundingSource.setTitle(sponsor.getSponsorName());
+				break;
+				case "2":
+					Query queryUnitDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from Unit u where u.unitNumber =:unitNumber");
+					queryUnitDetails.setString("unitNumber", protocolFundingSource.getFundingSource());
+					Unit unit = (Unit) queryUnitDetails.list().get(0);
+					protocolFundingSource.setTitle(unit.getUnitName());
+			    break;
+				case "4":
+					Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from EpsProposal dp where dp.proposalNumber =:proposalNumber");
+					queryDevProposal.setString("proposalNumber", protocolFundingSource.getFundingSource());
+					EpsProposal devProposal = (EpsProposal) queryDevProposal.list().get(0);
+					protocolFundingSource.setTitle(devProposal.getTitle());
+			    break;
+				case "5":
+					Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
+					queryProposal.setString("proposalNumber", protocolFundingSource.getFundingSource());
+					Proposal proposal = (Proposal) queryProposal.list().get(0);
+					protocolFundingSource.setTitle(proposal.getTitle());
+			    break;
+				case "6":
+					Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from Award a where a.awardNumber =:awardNumber and a.awardSequenceStatus =:awardSequenceStatus");
+					queryAwardDetails.setString("awardNumber", protocolFundingSource.getFundingSource());
+					queryAwardDetails.setString("awardSequenceStatus", KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE);
+					Award award = (Award) queryAwardDetails.list().get(0);
+					protocolFundingSource.setTitle(award.getTitle());
+				break;
+				}
+			}	
+			irbProtocolVO.setProtocolFundingSourceList(fundingSourceList);
+		}catch(Exception e) {
+			logger.error("Error in getProtocolFundingSource method"+e.getMessage());
+		}
 		return irbProtocolVO;
 	}
 
@@ -1312,6 +1367,23 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		List<SponsorType> sponsorType = criteria.list();
 		logger.info("Protocol Type in DAO: " + sponsorType);
 		irbProtocolVO.setSponsorType(sponsorType);
+		return irbProtocolVO;
+	}
+	
+	@Override
+	public IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol) {
+		hibernateTemplate.saveOrUpdate(scienceOfProtocol);
+		irbProtocolVO.setScienceOfProtocol(scienceOfProtocol);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(AgeGroups.class);
+		List<AgeGroups> ageGroups = criteria.list();
+		logger.info("Protocol Type in DAO: " + ageGroups);
+		irbProtocolVO.setAgeGroups(ageGroups);
 		return irbProtocolVO;
 	}
 }

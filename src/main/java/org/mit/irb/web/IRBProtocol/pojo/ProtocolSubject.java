@@ -54,7 +54,10 @@ public class ProtocolSubject {
 	
 	@Column(name="CRITERIA")
 	private String criteria;
-
+	
+	@Column(name="AGE_GROUP_CODE")
+	private Integer ageGroupCode;
+	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_SUBJECT_FK1"), name = "VULNERABLE_SUBJECT_TYPE_CODE", referencedColumnName = "VULNERABLE_SUBJECT_TYPE_CODE", insertable = false, updatable = false)
 	ProtocolSubjectTypes protocolSubjectTypes;
@@ -62,6 +65,14 @@ public class ProtocolSubject {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "SYS_C002823877"), name = "AGE_GROUP_CODE", referencedColumnName = "AGE_GROUP_CODE", insertable = false, updatable = false)
 	AgeGroups ageGroups;
+	
+	public Integer getAgeGroupCode() {
+		return ageGroupCode;
+	}
+
+	public void setAgeGroupCode(Integer ageGroupCode) {
+		this.ageGroupCode = ageGroupCode;
+	}
 	
 	public String getCriteria() {
 		return criteria;

@@ -1153,10 +1153,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			queryDelete.setInteger("protocolFundingSourceId", fundingSource.getProtocolFundingSourceId());
 			queryDelete.executeUpdate();
 		}
-		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+		irbProtocolVO = getProtocolFundingSource(fundingSource.getProtocolId(),irbProtocolVO);
+		
+		/*Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
 		query.setInteger("protocolId", fundingSource.getProtocolId());
-		irbProtocolVO.setProtocolFundingSourceList(query.list());
+		irbProtocolVO.setProtocolFundingSourceList(query.list());*/
 		return irbProtocolVO;
 	}
 
@@ -1224,6 +1226,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 					.createQuery("from ScienceOfProtocol p where p.protocolId =:protocolId");
 			queryScienceOfProtocol.setInteger("protocolId", protocolId);
 			irbProtocolVO.setScienceOfProtocol((ScienceOfProtocol)queryScienceOfProtocol.list().get(0));
+			
 			irbProtocolVO = getProtocolFundingSource(protocolId,irbProtocolVO);
 
 			Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
@@ -1250,51 +1253,84 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
 			queryfundingSource.setInteger("protocolId", protocolId);
 			List<ProtocolFundingSource> fundingSourceList = queryfundingSource.list();
-			for(ProtocolFundingSource protocolFundingSource:fundingSourceList){
+			fundingSourceList.forEach(protocolFundingSource -> {
 				switch(protocolFundingSource.getFundingSourceTypeCode()){
-				case "1":
-					Query querySponsorDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from Sponsor s where s.sponsorCode =:sponsorCode");
-					querySponsorDetails.setString("sponsorCode", protocolFundingSource.getFundingSource());
-					Sponsor sponsor = (Sponsor) querySponsorDetails.list().get(0);
-					protocolFundingSource.setTitle(sponsor.getSponsorName());
+				case KeyConstants.SPONSOR_FUNDING_SPONSOR_TYPE_CODE:
+					Sponsor sponsor = fetchSponsorDetail(protocolFundingSource.getFundingSource());			
+					protocolFundingSource.setSourceName(sponsor.getSponsorName());
+					protocolFundingSource.setTitle(null);
 				break;
-				case "2":
-					Query queryUnitDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from Unit u where u.unitNumber =:unitNumber");
-					queryUnitDetails.setString("unitNumber", protocolFundingSource.getFundingSource());
-					Unit unit = (Unit) queryUnitDetails.list().get(0);
-					protocolFundingSource.setTitle(unit.getUnitName());
+				case KeyConstants.UNIT_FUNDING_SPONSOR_TYPE_CODE:
+					Unit unit = fetchUnitDetail(protocolFundingSource.getFundingSource());
+					protocolFundingSource.setSourceName(unit.getUnitName());
+					protocolFundingSource.setTitle(null);
 			    break;
-				case "4":
-					Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from EpsProposal dp where dp.proposalNumber =:proposalNumber");
-					queryDevProposal.setString("proposalNumber", protocolFundingSource.getFundingSource());
-					EpsProposal devProposal = (EpsProposal) queryDevProposal.list().get(0);
+				case KeyConstants.DEV_PROP_FUNDING_SPONSOR_TYPE_CODE:
+					EpsProposal devProposal = fetchDevPropDetail(protocolFundingSource.getFundingSource()); 
 					protocolFundingSource.setTitle(devProposal.getTitle());
+					Sponsor devProposalsponsor = fetchSponsorDetail(devProposal.getSponsorCode());
+					protocolFundingSource.setSourceName(devProposalsponsor.getSponsorName());
 			    break;
-				case "5":
-					Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
-					queryProposal.setString("proposalNumber", protocolFundingSource.getFundingSource());
-					Proposal proposal = (Proposal) queryProposal.list().get(0);
+				case KeyConstants.PROPOSAL_FUNDING_SPONSOR_TYPE_CODE:
+					Proposal proposal = fetchProposal(protocolFundingSource.getFundingSource());
 					protocolFundingSource.setTitle(proposal.getTitle());
+					Sponsor proposalsponsor = fetchSponsorDetail(proposal.getSponsorCode());
+					protocolFundingSource.setSourceName(proposalsponsor.getSponsorName());
 			    break;
-				case "6":
-					Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from Award a where a.awardNumber =:awardNumber and a.awardSequenceStatus =:awardSequenceStatus");
-					queryAwardDetails.setString("awardNumber", protocolFundingSource.getFundingSource());
-					queryAwardDetails.setString("awardSequenceStatus", KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE);
-					Award award = (Award) queryAwardDetails.list().get(0);
+				case KeyConstants.AWARD_FUNDING_SPONSOR_TYPE_CODE:
+					Award award = fetchAwardDetail(protocolFundingSource.getFundingSource());
 					protocolFundingSource.setTitle(award.getTitle());
+					Sponsor awardSponsor = fetchSponsorDetail(award.getSponsorCode());	
+					protocolFundingSource.setSourceName(awardSponsor.getSponsorName());
 				break;
-				}
-			}	
+				}	
+			});	
 			irbProtocolVO.setProtocolFundingSourceList(fundingSourceList);
 		}catch(Exception e) {
 			logger.error("Error in getProtocolFundingSource method"+e.getMessage());
 		}
 		return irbProtocolVO;
+	}
+
+	private Proposal fetchProposal(String fundingSource) {
+		Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
+		queryProposal.setString("proposalNumber", fundingSource);
+		Proposal proposal = (Proposal) queryProposal.list().get(0);
+		return proposal;
+	}
+
+	private EpsProposal fetchDevPropDetail(String fundingSource) {
+		Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from EpsProposal dp where dp.proposalNumber =:proposalNumber");
+		queryDevProposal.setString("proposalNumber", fundingSource);
+		EpsProposal devProposal = (EpsProposal) queryDevProposal.list().get(0);					
+		return devProposal;
+	}
+
+	private Unit fetchUnitDetail(String fundingSource) {
+		Query queryUnitDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from Unit u where u.unitNumber =:unitNumber");
+		queryUnitDetails.setString("unitNumber", fundingSource);
+		Unit unit = (Unit) queryUnitDetails.list().get(0);
+		return unit;
+	}
+
+	private Sponsor fetchSponsorDetail(String fundingSource) {
+		Query querySponsorDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from Sponsor s where s.sponsorCode =:sponsorCode");
+		querySponsorDetails.setString("sponsorCode", fundingSource);
+		Sponsor sponsor = (Sponsor) querySponsorDetails.list().get(0);
+		return sponsor;
+	}
+
+	private Award fetchAwardDetail(String fundingSource) {
+		Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from Award a where a.awardNumber =:awardNumber and a.awardSequenceStatus =:awardSequenceStatus");
+		queryAwardDetails.setString("awardNumber", fundingSource);
+		queryAwardDetails.setString("awardSequenceStatus", KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE);
+		Award award = (Award) queryAwardDetails.list().get(0); 
+		return award;
 	}
 
 	@Override

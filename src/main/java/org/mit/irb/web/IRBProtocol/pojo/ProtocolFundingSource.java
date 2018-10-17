@@ -58,6 +58,9 @@ public class ProtocolFundingSource {
 	@Transient
 	private String title;
 	
+	@Transient
+	private String sourceName;
+	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_FUNDING_SOURCE_FK1"), name = "FUNDING_SOURCE_TYPE_CODE", referencedColumnName = "FUNDING_SOURCE_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolFundingSourceTypes protocolFundingSourceTypes;
@@ -76,6 +79,14 @@ public class ProtocolFundingSource {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getSourceName() {
+		return sourceName;
+	}
+
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
 	}
 
 	public Integer getProtocolId() {

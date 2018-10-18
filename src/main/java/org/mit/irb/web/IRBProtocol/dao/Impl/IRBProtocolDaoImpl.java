@@ -1154,11 +1154,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			queryDelete.executeUpdate();
 		}
 		irbProtocolVO = getProtocolFundingSource(fundingSource.getProtocolId(),irbProtocolVO);
-		
-		/*Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
-		query.setInteger("protocolId", fundingSource.getProtocolId());
-		irbProtocolVO.setProtocolFundingSourceList(query.list());*/
 		return irbProtocolVO;
 	}
 
@@ -1267,6 +1262,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			    break;
 				case KeyConstants.DEV_PROP_FUNDING_SPONSOR_TYPE_CODE:
 					EpsProposal devProposal = fetchDevPropDetail(protocolFundingSource.getFundingSource()); 
+					protocolFundingSource.setDocId(devProposal.getDocumentNumber());
 					protocolFundingSource.setTitle(devProposal.getTitle());
 					Sponsor devProposalsponsor = fetchSponsorDetail(devProposal.getSponsorCode());
 					protocolFundingSource.setSourceName(devProposalsponsor.getSponsorName());
@@ -1274,11 +1270,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				case KeyConstants.PROPOSAL_FUNDING_SPONSOR_TYPE_CODE:
 					Proposal proposal = fetchProposal(protocolFundingSource.getFundingSource());
 					protocolFundingSource.setTitle(proposal.getTitle());
+					protocolFundingSource.setDocId(proposal.getDocumentNumber());
 					Sponsor proposalsponsor = fetchSponsorDetail(proposal.getSponsorCode());
 					protocolFundingSource.setSourceName(proposalsponsor.getSponsorName());
 			    break;
 				case KeyConstants.AWARD_FUNDING_SPONSOR_TYPE_CODE:
 					Award award = fetchAwardDetail(protocolFundingSource.getFundingSource());
+					protocolFundingSource.setDocId(award.getDocumentNumber());
+					protocolFundingSource.setAwardId(award.getAwardId());
 					protocolFundingSource.setTitle(award.getTitle());
 					Sponsor awardSponsor = fetchSponsorDetail(award.getSponsorCode());	
 					protocolFundingSource.setSourceName(awardSponsor.getSponsorName());

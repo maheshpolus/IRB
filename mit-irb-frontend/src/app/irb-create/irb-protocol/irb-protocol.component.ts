@@ -3,6 +3,7 @@ import { IrbCreateService } from '../irb-create.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { ISubscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-irb-protocol',
@@ -12,17 +13,18 @@ import { ActivatedRoute } from '@angular/router';
 export class IrbProtocolComponent implements OnInit, OnDestroy {
  ckEditorConfig: {} = {
     height : '300px',
-    toolbarStartupExpanded : false,
-    toolbarCanCollapse : 1
+    toolbarCanCollapse : 1,
+    removePlugins: 'sourcearea',
   };
   protocolScience: string;
   requestObject: any = {};
   scientificId: any;
   private subscription1: ISubscription;
   commonVo: any = {};
+  isProtocolSaved = false;
 
   constructor( private _irbCreateService: IrbCreateService, private _sharedDataService: SharedDataService,
-     private _activatedRoute: ActivatedRoute) { }
+     private _activatedRoute: ActivatedRoute,  _spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this._activatedRoute.queryParams.subscribe(params => {
@@ -34,6 +36,7 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
         if (commonVo !== undefined) {
             this. commonVo = commonVo;
             if (this.commonVo.scienceOfProtocol != null) {
+            this.isProtocolSaved = true;
             this.protocolScience = this.commonVo.scienceOfProtocol.description;
             this.scientificId = this.commonVo.scienceOfProtocol.scientificId;
 
@@ -60,8 +63,8 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
    };
    this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
      this.commonVo = data;
-    //  this._sharedDataService.setCommonVo(this.commonVo);
      if (this.commonVo.scienceOfProtocol != null) {
+    this.isProtocolSaved = true;
      this.protocolScience = this.commonVo.scienceOfProtocol.description;
      }
    });

@@ -13,11 +13,12 @@
           Please fill all mandatory fields marked
           <strong>*</strong>
         </div>
+        
       </div>
       <div class="col-12 search-eidted-p padding-15">
         <div class="row">
 
-          <div class="col-md-5">
+          <div class="col-md-3">
             <div class="form-group">
               <label>Type
                 <span class="mandatory">*</span>
@@ -29,14 +30,36 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-3">
+              <div class="form-group">
+                <label>Age Group
+                  <span class="mandatory">*</span>
+                </label>
+                <select [class.poping-border]="isSubjectInfoEdit" class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect"
+                  [(ngModel)]="protocolSubject.ageGroupCode"  (ngModelChange)="setAgeGroup(protocolSubject.ageGroupCode)">
+                  <option selected value="null">Please Select</option>
+                  <option *ngFor="let ageGroup of protocolSubjectAgeGroupCategory" value="{{ageGroup.ageGroupCode}}">{{ageGroup.ageGroup}}</option>
+                </select>
+              </div>
+            </div>
+          <div class="col-md-2">
             <div class="form-group">
               <label>Count
                 <span class="mandatory">*</span>
               </label>
-              <input type="text" [class.poping-border]="isSubjectInfoEdit" class="form-control form-control-sm" placeholder="Count" [(ngModel)]="protocolSubject.subjectCount">
+              <input type="text" [class.poping-border]="isSubjectInfoEdit" class="form-control form-control-sm" maxlength="9" placeholder="Count" [(ngModel)]="protocolSubject.subjectCount">
             </div>
           </div>
+          
+
+          <div class="col-md-3">
+              <div class="form-group">
+                <label>Description
+                </label>
+                <input type="text" [class.poping-border]="isSubjectInfoEdit" class="form-control form-control-sm" placeholder="Description" [(ngModel)]="protocolSubject.description">
+              </div>
+            </div>
+            
 
           <div class="col-md-1 add-btn-1-fund">
             <button title="Add" *ngIf="!isSubjectInfoEdit" type="button" class="btn btn-success" (click)="addSubjectDetails('ADD')">
@@ -56,14 +79,18 @@
               <thead class="tbl-head-clr">
                 <tr>
                   <th scope="col">Type</th>
+                  <th scope="col">Age Group</th>
                   <th scope="col">Count</th>
+                  <th scope="col">Description</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of protocolSubjectList let k=index" [class.poping-border]="k == subjectEditIndex">
                   <td>{{item.protocolSubjectTypes?.description}}</td>
+                  <td>{{item.ageGroups?.ageGroup}}</td>
                   <td>{{item.subjectCount}}</td>
+                  <td>{{item.description}}
                   <td class="action-btn-list">
                     <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editSubjectDetails(item,k)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>

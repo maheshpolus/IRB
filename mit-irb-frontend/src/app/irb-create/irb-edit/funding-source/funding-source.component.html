@@ -22,8 +22,8 @@
               <label>Funding Type
                 <span class="mandatory">*</span>
               </label>
-              <select [class.poping-border]="isFundingInfoEdit" class="custom-select mr-sm-2 form-control-sm" id="inlineFormCustomSelect"
-                [(ngModel)]="fundingSource.fundingSourceTypeCode" (ngModelChange)="setFundingSourceType(fundingSource.fundingSourceTypeCode)">
+              <select [class.poping-border]="isFundingInfoEdit" class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="fundingSource.fundingSourceTypeCode"
+                (ngModelChange)="setFundingSourceType(fundingSource.fundingSourceTypeCode)">
                 <option selected value="null">Please Select</option>
                 <option *ngFor="let fundingSource of protocolFundingSourceTypes" value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}</option>
               </select>
@@ -34,13 +34,38 @@
               <label>Source
                 <span class="mandatory">*</span>
               </label>
-              <input type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
+              <!-- Sponsor Search Box -->
+              <ng2-completer *ngIf="sourceType.typeCode == '1'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
+                (ngModelChange)="selectedSponsor(fundingSource.sourceName)" [datasource]="sponsorList" [minSearchLength]="0"
+                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer>
+              <!-- Unit Search Box -->
+              <ng2-completer *ngIf="sourceType.typeCode == '2'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
+                (ngModelChange)="selectedDepartment(fundingSource.sourceName)" [datasource]="protocolPersonLeadUnits" [minSearchLength]="0"
+                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer>
+              <!-- Normal Input Field -->
+              <input *ngIf="sourceType.typeCode != '4' && sourceType.typeCode != '5' && sourceType.typeCode != '6' && sourceType.typeCode != '1' && sourceType.typeCode != '2'"
+                type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size"
+                placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
+              <!-- Award and Proposal Elastic field -->
+              <input *ngIf="sourceType.typeCode == '4' || sourceType.typeCode == '5' || sourceType.typeCode == '6'" placeholder="{{sourceType.placeholder}}"
+                [(ngModel)]="fundingSource.sourceName" (input)="clearData()" [class.poping-border]="isFundingInfoEdit" type="text"
+                class="form-control input-field-size" [formControl]="elasticSearchText" (focus)="IsElasticResultPerson = true"
+                (focusout)="IsElasticResultPerson = false" />
+              <div class="sb-seachresults top-margin">
+                <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
+                  <li *ngFor="let result of _results | async" (mousedown)="selectedFundingSource(result,sourceType.typeCode)">
+                    <span [innerHTML]="result.label"></span>
+                  </li>
+                </ul>
+              </div>
+              <!-- <input type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
+              <input type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource"> -->
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
               <label>Description</label>
-              <input type="text" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Description"
+              <input type="text" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="Description"
                 [(ngModel)]="fundingSource.description">
             </div>
           </div>
@@ -56,28 +81,82 @@
         </div>
 
       </div>
+      <div class="col-12 padding-030" *ngIf="showElasticBand" (click)="openKcFromElastic(sponsorDetails)">
+        <div class="row">
+          <div class="col-12 band-s">
+            <div class="col-12 padding0 close-bt" (click)="showElasticBand = false">X</div>
+            <div class="row" *ngIf="sourceType.typeCode =='6'">
+              <div class="col-12">
+                <label>Award#:</label>
+                <span>{{sponsorDetails?.award_number}}</span>
+              </div>
+              <div class="col-12">
+                <label>Acct#:</label>
+                <span>{{sponsorDetails?.account_number}}</span>
+                <label>Sponsor:</label>
+                <span>{{sponsorDetails?.sponsor_name}}</span>
+                <label>PI:</label>
+                <span>{{sponsorDetails?.pi_name}}</span>
+                <label>Lead Unit:</label>
+                <span>{{sponsorDetails?.lead_unit_name}}</span>
+              </div>
+              <div class="col-12">
+                <label>Title:</label>
+                <span>{{sponsorDetails?.title}}</span>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="sourceType.typeCode =='4' || sourceType.typeCode =='5'">
+              <div class="col-12">
+                <label>IP#:</label>
+                <span>{{sponsorDetails?.proposal_number}}</span>
+              </div>
+              <div class="col-12">
+                <label>Sponsor:</label>
+                <span *ngIf="sourceType.typeCode =='4'">{{sponsorDetails?.sponsor}}</span>
+                <span *ngIf="sourceType.typeCode !='4'">{{sponsorDetails?.sponsor_name}}</span>
+                <label>PI:</label>
+                <span>{{sponsorDetails?.pi_name}}</span>
+                <label>Lead Unit:</label>
+                <span>{{sponsorDetails?.lead_unit_name}}</span>
+              </div>
+              <div class="col-12">
+                <label>Title:</label>
+                <span>{{sponsorDetails?.title}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col-md-12 users-list-tbl">
         <div class="row">
           <div class="table-responsive">
-            <table class="table table-striped table-font-size" *ngIf="protocolFundingSourceList.length > 0">
-              <thead class="tbl-head-clr">
+            <table class="table table-striped tbl-p-clr" *ngIf="protocolFundingSourceList.length > 0">
+              <thead class="tbl-head-clr thead-font-size">
                 <tr>
                   <th scope="col">Funding Type</th>
                   <th scope="col">Source</th>
+                  <th scope="col">Funding Number/Code</th>
+                  <th scope="col">Title</th>
                   <th scope="col">Description</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="tbody-font-size">
                 <tr *ngFor="let item of protocolFundingSourceList let j=index" [class.poping-border]="j == fundingEditIndex">
                   <td>{{item.protocolFundingSourceTypes?.description}}</td>
-                  <td>{{item.fundingSource}}</td>
+                  <td>{{item.sourceName}}</td>
+                  <td>{{item.protocolFundingSourceId}}</td>
+                  <td>{{item.title}}</td>
                   <td>{{item.description}}</td>
 
                   <td class="action-btn-list">
                     <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
+                    <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                      </button>
                     <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>

@@ -67,8 +67,8 @@ public class LoginValidator extends BaseController {
 			session.setAttribute("personDTO" + session.getId(), personDTO);
 			session.setAttribute("user" + session.getId(), personDTO.getFullName());
 			// setting session to expiry in 30 mins
-			int timeoutValue = Integer.parseInt(IRBProperties.getProperty("SESSION_TIMEOUT_DEFAULT"));
-			session.setMaxInactiveInterval(timeoutValue * 60);
+			/*int timeoutValue = Integer.parseInt(IRBProperties.getProperty("SESSION_TIMEOUT_DEFAULT"));
+			session.setMaxInactiveInterval(timeoutValue * 60);*/
 			return true;
 		}
 		return false;

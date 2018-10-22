@@ -1,10 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {enableProdMode} from '@angular/core';
-import { FormsModule , ReactiveFormsModule} from '@angular/forms';
+import { enableProdMode } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { FileDropModule } from 'ngx-file-drop';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -27,19 +32,16 @@ import { LoginService } from './login/login.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
 import { IrbViewService } from './irb-view/irb-view.service';
 import { PiElasticService } from './common/service/pi-elastic.service';
-import {SharedDataService} from './common/service/shared-data.service';
-
+import { SharedDataService } from './common/service/shared-data.service';
+import { FilterPipe } from './common/directives/filter.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppCommonModule } from './common/common/common.module';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { FilterPipe } from './common/directives/filter.pipe';
-import { FileDropModule } from 'ngx-file-drop';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 enableProdMode();
 
-@NgModule( {
+@NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
@@ -53,7 +55,8 @@ enableProdMode();
         ExpandedViewComponent,
         ExemptQuestionaireComponent,
         ExemptCardComponent,
-        FilterPipe
+        FilterPipe,
+
     ],
     imports: [
         BrowserModule,
@@ -67,12 +70,13 @@ enableProdMode();
         FileDropModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        ToastModule.forRoot()
     ],
     providers: [AuthGuard, DashboardService,
-                { provide: LocationStrategy, useClass: HashLocationStrategy },
-                LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
-                SharedDataService],
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
+        SharedDataService],
     bootstrap: [AppComponent]
-} )
+})
 export class AppModule { }

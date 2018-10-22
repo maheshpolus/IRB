@@ -113,6 +113,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     this.sourceType.typeCode = typeCode;
     this.fundingSource.fundingSource = null;
     this.fundingSource.sourceName = null;
+    this.showElasticBand = false;
     if (typeCode === '6') {
       this.sourceType.placeholder = 'Search Award';
     } else if (typeCode === '4') {
@@ -385,7 +386,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   openKcFromElastic(item) {
-    const requestObj: any = {awardId: item.awardId, docId: item.document_number,
+    const requestObj: any = {awardId: item.award_id, docId: item.document_id,
                             fundingSourceTypeCode: this.fundingSource.fundingSourceTypeCode};
     this.openKcLink(requestObj);
   }

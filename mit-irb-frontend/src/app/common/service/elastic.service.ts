@@ -8,9 +8,15 @@ export class ElasticService {
     private _client: Client;
     URL_FOR_ELASTIC: string;
     IRB_INDEX: string;
+    AWARD_INDEX: string;
+    IP_INDEX: string;
+    DP_INDEX: string;
     constructor( private _http: HttpClient ) {
-/*        this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
-        this.IRB_INDEX = "irbprotocol";
+       /* this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+        this.IRB_INDEX = 'irbprotocol';
+        this.AWARD_INDEX = 'award';
+        this.IP_INDEX = 'proposal';
+        this.DP_INDEX = 'devproposal';
         if ( !this._client ) {
             this._connect();
        }*/
@@ -20,6 +26,9 @@ export class ElasticService {
                  if (elastic_config) {
                      this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
                      this.IRB_INDEX = elastic_config.IRB_INDEX;
+                     this.AWARD_INDEX = elastic_config.AWARD_INDEX;
+                     this.IP_INDEX = elastic_config.IP_INDEX;
+                     this.DP_INDEX = elastic_config.DP_INDEX;
                      if ( !this._client ) {
                          this._connect();
                     }
@@ -178,4 +187,220 @@ export class ElasticService {
           return Promise.resolve({});
       }
     }
+
+  /*All Award search query*/
+  awardSearch( term): any {
+    if ( term ) {
+      return this._client.search({
+        index: this.AWARD_INDEX,
+        type: 'award',
+        body: {
+          query: {
+            bool: {
+              should: [{
+                match: {
+                  award_number: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  sponsor_name: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  pi_name: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  account_number: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  lead_unit_number: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  lead_unit_name: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  sponsor_award_id: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              },
+              {
+                match: {
+                  title: {
+                    query: term,
+                    operator: 'or'
+                  }
+                }
+              }]
+            }
+          },
+          sort: [{
+            _score: {
+              order: 'desc'
+            }
+          }],
+          highlight: {
+            pre_tags: ['<b>'],
+            post_tags: ['</b>'],
+            fields: {
+              award_number: {},
+              pi_name: {},
+              sponsor_name: {},
+              account_number: {},
+              lead_unit_number: {},
+              lead_unit_name: {},
+              title: {},
+              sponsor_award_id: {}
+            }
+          }
+        }
+        });
+        } else {
+               return Promise.resolve({});
+             }
+  }
+
+  /*IP search query*/
+  searchIP( term, typeCode): any {
+    let index = this.IP_INDEX;
+    let type = 'proposal';
+    if (typeCode === '4') {
+      index = this.DP_INDEX;
+      type = 'devproposal';
+    } else if (typeCode === '5') {
+      index = this.IP_INDEX;
+      type = 'proposal';
+    }
+    if ( term ) {
+      return this._client.search({
+        index: index,
+        type: type,
+        body: {
+          query: {
+            bool: {
+              must: [{
+                bool: {
+                  should: [{
+                    match: {
+                      proposal_number: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      sponsor_name: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      pi_name: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      lead_unit_number: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      lead_unit_name: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      sponsor_award_id: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      status: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  },
+                  {
+                    match: {
+                      title: {
+                        query: term,
+                        operator: 'or'
+                      }
+                    }
+                  }
+                      ]
+                    }
+                  }]
+                }
+              },
+              sort: [{
+                _score: {
+                  order: 'desc'
+                }
+              }],
+              highlight: {
+                pre_tags: ['<b>'],
+                post_tags: ['</b>'],
+                fields: {
+                  proposal_number: {},
+                  pi_name: {},
+                  sponsor_name: {},
+                  lead_unit_number: {},
+                  lead_unit_name: {},
+                  title: {},
+                  sponsor_award_id: {},
+                  status: {}
+                }
+              }
+              }
+        });
+        } else {
+               return Promise.resolve({});
+             }
+  }
   }

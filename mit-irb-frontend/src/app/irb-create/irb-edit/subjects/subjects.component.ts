@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
 
 import 'rxjs/add/operator/debounceTime';
@@ -10,7 +10,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
 import { IrbCreateService } from '../../irb-create.service';
-import {SharedDataService} from '../../../common/service/shared-data.service';
+import { SharedDataService } from '../../../common/service/shared-data.service';
 
 @Component({
   selector: 'app-subjects',
@@ -33,10 +33,12 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   protocolSubjectList = [];
   protocolSubjectAgeGroups = [];
   protocolSubjectAgeGroupCategory = [];
-  invalidData = {invalidGeneralInfo: false, invalidStartDate : false, invalidEndDate : false,
+  invalidData = {
+    invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
-    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false};
-    flag = false;
+    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
+  };
+  flag = false;
 
   private subscription1: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
@@ -64,17 +66,17 @@ export class SubjectsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.subscription1) {
-     this.subscription1.unsubscribe();
+      this.subscription1.unsubscribe();
     }
   }
 
   loadEditDetails() {
     this.protocolSubjectTypes = this.commonVo.protocolSubjectTypes;
     this.protocolSubjectAgeGroups = this.commonVo.ageGroups;
-        // Look up Data - End
-        this.generalInfo = this.commonVo.generalInfo;
-        this.protocolSubject = this.commonVo.protocolSubject;
-        this.protocolSubjectList = this.commonVo.protocolSubjectList != null ? this.commonVo.protocolSubjectList : [];
+    // Look up Data - End
+    this.generalInfo = this.commonVo.generalInfo;
+    this.protocolSubject = this.commonVo.protocolSubject;
+    this.protocolSubjectList = this.commonVo.protocolSubjectList != null ? this.commonVo.protocolSubjectList : [];
   }
 
   setSubjectType(typeCode) {
@@ -82,15 +84,15 @@ export class SubjectsComponent implements OnInit, OnDestroy {
     this.protocolSubjectAgeGroupCategory = [];
     this.protocolSubjectTypes.forEach(subjectType => {
       if (subjectType.vulnerableSubjectTypeCode === typeCode) {
-        this.protocolSubject.protocolSubjectTypes = {vulnerableSubjectTypeCode: typeCode, description: subjectType.description};
+        this.protocolSubject.protocolSubjectTypes = { vulnerableSubjectTypeCode: typeCode, description: subjectType.description };
       }
     });
-  this.setAgeGroupCategory(typeCode);
+    this.setAgeGroupCategory(typeCode);
 
   }
   setAgeGroup(ageGroupCode) {
     this.protocolSubjectAgeGroupCategory.forEach(ageGroupCategory => {
-      if ( ageGroupCategory.ageGroupCode.toString() === ageGroupCode ) {
+      if (ageGroupCategory.ageGroupCode.toString() === ageGroupCode) {
         this.protocolSubject.ageGroups = {
           ageGroupCode: ageGroupCode,
           ageGroup: ageGroupCategory.ageGroup
@@ -110,23 +112,23 @@ export class SubjectsComponent implements OnInit, OnDestroy {
 
   addSubjectDetails(mode) {
     if (this.protocolSubject.vulnerableSubjectTypeCode != null && this.protocolSubject.vulnerableSubjectTypeCode !== undefined
-          && this.protocolSubject.subjectCount != null && this.protocolSubject.subjectCount !== undefined
-          && this.protocolSubject.ageGroupCode != null && this.protocolSubject.ageGroupCode !== undefined) {
-            this.invalidData.invalidSubjectInfo = false;
-            this.saveSubjectDetails(mode);
-      } else {
-        this.invalidData.invalidSubjectInfo = true;
-      }
-      if (mode === 'EDIT') {
-        this.isSubjectInfoEdit = false;
-        this.subjectEditIndex = null;
-      }
+      && this.protocolSubject.subjectCount != null && this.protocolSubject.subjectCount !== undefined
+      && this.protocolSubject.ageGroupCode != null && this.protocolSubject.ageGroupCode !== undefined) {
+      this.invalidData.invalidSubjectInfo = false;
+      this.saveSubjectDetails(mode);
+    } else {
+      this.invalidData.invalidSubjectInfo = true;
+    }
+    if (mode === 'EDIT') {
+      this.isSubjectInfoEdit = false;
+      this.subjectEditIndex = null;
+    }
   }
 
   editSubjectDetails(item, index) {
     this.subjectEditIndex = index;
     this.isSubjectInfoEdit = true;
-    this.protocolSubject = Object.assign({}, item) ;
+    this.protocolSubject = Object.assign({}, item);
     this.setAgeGroupCategory(this.protocolSubject.vulnerableSubjectTypeCode);
   }
 
@@ -148,10 +150,10 @@ export class SubjectsComponent implements OnInit, OnDestroy {
     }
     this._irbCreateService.updateSubject(this.commonVo).subscribe(
       data => {
-         this.result = data;
-         this.protocolSubject = {};
-         this.protocolSubjectAgeGroupCategory = [];
-         this.protocolSubjectList = this.result.protocolSubjectList;
+        this.result = data;
+        this.protocolSubject = {};
+        this.protocolSubjectAgeGroupCategory = [];
+        this.protocolSubjectList = this.result.protocolSubjectList;
       });
   }
 

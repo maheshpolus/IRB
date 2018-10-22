@@ -9,13 +9,14 @@
 					</nav>
 				</div>
 				<div class="card-body card-paddng">
-            <div class="col-12  search-eidted-p padding-20">
-            <ck-editor name="editor1" [readonly]="isProtocolSaved" [config]="ckEditorConfig" [(ngModel)]="protocolScience" skin="moono-lisa" language="en" [fullPage]="true"></ck-editor>
-            <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
-                <button title="Save" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" [hidden]="isProtocolSaved" (click)="saveProtocolScience()" aria-label="Close">Save</button>
-                <button title="Edit" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" [hidden]="!isProtocolSaved" (click)="isProtocolSaved = false;" aria-label="Close">Edit</button>
-            </section>
-            </div>
+					<div class="col-12  search-eidted-p padding-20">
+						<ck-editor name="editor1" [config]="ckEditorConfig" [(ngModel)]="protocolScience" skin="moono-lisa" language="en" [fullPage]="true"></ck-editor>
+						<section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+							<button title="Save" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" [hidden]="isProtocolSaved" (click)="saveProtocolScience()"
+							 aria-label="Close">Save</button>
+							<!-- <button title="Edit" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" [hidden]="!isProtocolSaved" (click)="isProtocolSaved = false;" aria-label="Close">Edit</button> -->
+						</section>
+					</div>
 				</div>
 			</div>
 		</div>

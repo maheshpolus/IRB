@@ -5,11 +5,14 @@ import { ISubscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
+declare var $: any;
+
 @Component({
   selector: 'app-irb-protocol',
   templateUrl: './irb-protocol.component.html',
   styleUrls: ['./irb-protocol.component.css']
 })
+
 export class IrbProtocolComponent implements OnInit, OnDestroy {
   ckEditorConfig: {} = {
     height: '300px',
@@ -17,6 +20,7 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
     removePlugins: 'sourcearea',
   };
   protocolScience: string;
+  isProtocolScienceEmpty = false;
   requestObject: any = {};
   scientificId: any;
   private subscription1: ISubscription;
@@ -52,6 +56,10 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
   }
 
   saveProtocolScience() {
+    if (($('#editor1 iframe').contents().find('body').text()).toString() === '') {
+      this.isProtocolScienceEmpty = true;
+    } else {
+      this.isProtocolScienceEmpty = false;
     this.commonVo.scienceOfProtocol = {
       scientificId: (this.scientificId == null || this.scientificId === undefined) ? null : this.scientificId,
       protocolId: this.requestObject.protocolId,
@@ -64,11 +72,17 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
     };
     this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
       this.commonVo = data;
+      this.toastr.success('Protocol saved successfully', null, {toastLife: 2000});
       if (this.commonVo.scienceOfProtocol != null) {
-        this.toastr.success('Protocol saved successfully');
         this.protocolScience = this.commonVo.scienceOfProtocol.description;
       }
-    });
+    },
+    error => {
+      this.toastr.error('Failed to save Protocol', null, {toastLife: 2000});
+      console.log('Error in saveScienceOfProtocol ', error);
+  }
+  );
+}
 
   }
 

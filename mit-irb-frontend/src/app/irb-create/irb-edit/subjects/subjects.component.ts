@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
 
@@ -38,7 +38,6 @@ export class SubjectsComponent implements OnInit, OnDestroy {
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
   };
-  flag = false;
 
   private subscription1: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
@@ -80,7 +79,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   }
 
   setSubjectType(typeCode) {
-    this.flag = false;
+
     this.protocolSubjectAgeGroupCategory = [];
     this.protocolSubjectTypes.forEach(subjectType => {
       if (subjectType.vulnerableSubjectTypeCode === typeCode) {

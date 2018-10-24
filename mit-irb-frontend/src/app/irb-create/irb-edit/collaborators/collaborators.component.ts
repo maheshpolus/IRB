@@ -1,22 +1,10 @@
-import { Component, OnInit, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { Router, ActivatedRoute} from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-
 import { IrbCreateService } from '../../irb-create.service';
-import { PiElasticService } from '../../../common/service/pi-elastic.service';
-import {SharedDataService} from '../../../common/service/shared-data.service';
-import { IrbViewService } from '../../../irb-view/irb-view.service';
+import { SharedDataService } from '../../../common/service/shared-data.service';
 
 @Component({
   selector: 'app-collaborators',
@@ -26,23 +14,24 @@ import { IrbViewService } from '../../../irb-view/irb-view.service';
 export class CollaboratorsComponent implements OnInit, OnDestroy {
 
   userDTO: any = {};
-  protocolNumber = null;
-  protocolId = null;
-  isGeneralInfoSaved = false;
   commonVo: any = {};
   generalInfo: any = {};
+  result: any = {};
   protocolCollaborator: any = {};
+  protocolCollaboratorList = [];
+  isGeneralInfoSaved = false;
   isCollaboratorInfoEdit = false;
+  protocolNumber = null;
+  protocolId = null;
   collaboratorEditIndex = null;
   collaboratorName = null;
-  protocolCollaboratorList = [];
-  result: any = {};
   protected collaboratorNames: CompleterData;
-  invalidData = {invalidGeneralInfo: false, invalidStartDate : false, invalidEndDate : false,
+  invalidData = {
+    invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
-    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false};
-
-  private subscription1: ISubscription;
+    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
+  };
+  private $subscription1: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
     private _sharedDataService: SharedDataService,
     private _irbCreateService: IrbCreateService,
@@ -58,7 +47,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
       if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
         this.commonVo = commonVo;
         this.loadEditDetails();
@@ -67,17 +56,17 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription1) {
-     this.subscription1.unsubscribe();
+    if (this.$subscription1) {
+      this.$subscription1.unsubscribe();
     }
   }
 
   loadEditDetails() {
-      this.collaboratorNames = this._completerService.
-                                  local(this.commonVo.collaboratorNames, 'organizationName,organizationId', 'organizationName');
-      this.generalInfo = this.commonVo.generalInfo;
-      this.protocolCollaborator = this.commonVo.protocolCollaborator != null ? this.commonVo.protocolCollaborator : {};
-      this.protocolCollaboratorList = this.commonVo.protocolCollaboratorList != null ? this.commonVo.protocolCollaboratorList : [];
+    this.collaboratorNames = this._completerService.
+      local(this.commonVo.collaboratorNames, 'organizationName,organizationId', 'organizationName');
+    this.generalInfo = this.commonVo.generalInfo;
+    this.protocolCollaborator = this.commonVo.protocolCollaborator != null ? this.commonVo.protocolCollaborator : {};
+    this.protocolCollaboratorList = this.commonVo.protocolCollaboratorList != null ? this.commonVo.protocolCollaboratorList : [];
   }
 
   setCollaborator(collaboratorName) {
@@ -85,7 +74,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.commonVo.collaboratorNames.forEach(collaborator => {
       if (collaborator.organizationName === collaboratorName) {
         this.protocolCollaborator.organizationId = collaborator.organizationId;
-        this.protocolCollaborator.collaboratorNames = {organizationId: collaborator.organizationId, organizationName: collaboratorName};
+        this.protocolCollaborator.collaboratorNames = { organizationId: collaborator.organizationId, organizationName: collaboratorName };
       }
     });
   }
@@ -94,7 +83,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     if (this.protocolCollaborator.expirationDate !== null && this.protocolCollaborator.expirationDate !== undefined) {
       if (this.protocolCollaborator.expirationDate < this.protocolCollaborator.approvalDate) {
         this.invalidData.invalidApprovalDate = true;
-    } else {
+      } else {
         this.invalidData.invalidApprovalDate = false;
         this.invalidData.invalidExpirationDate = false;
       }
@@ -128,7 +117,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   editCollaboratorDetails(item, index) {
     this.collaboratorEditIndex = index;
     this.isCollaboratorInfoEdit = true;
-    this.protocolCollaborator = Object.assign({}, item) ;
+    this.protocolCollaborator = Object.assign({}, item);
     this.collaboratorName = this.protocolCollaborator.collaboratorNames.organizationName;
   }
 
@@ -154,10 +143,10 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     }
     this._irbCreateService.updateCollaborator(this.commonVo).subscribe(
       data => {
-         this.result = data;
-         this.protocolCollaborator = {};
-         this.collaboratorName = null;
-         this.protocolCollaboratorList = this.result.protocolCollaboratorList;
+        this.result = data;
+        this.protocolCollaborator = {};
+        this.collaboratorName = null;
+        this.protocolCollaboratorList = this.result.protocolCollaboratorList;
       });
   }
 

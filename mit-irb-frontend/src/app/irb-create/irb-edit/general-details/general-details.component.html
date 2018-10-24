@@ -1,166 +1,122 @@
 <div>
-    <div class="card history-card border-radius-1">
-      <div class="card-header history-header">
-        <nav class="nav navbar-pg3">
-          <h5>General</h5>
-          <i class="fa fa-info-circle" aria-hidden="true"></i>
-        </nav>
+  <div class="card history-card border-radius-1">
+    <div class="card-header history-header">
+      <nav class="nav navbar-pg3">
+        <h5>General</h5>
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </nav>
+    </div>
+    <div class="card-body card-paddng">
+      <div class="col-12  search-eidted-p padding-15">
+        <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo">
+          Please fill all mandatory fields marked
+          <strong>*</strong>
+        </div>
       </div>
-
-      <div class="card-body card-paddng">
-        <div class="col-12  search-eidted-p padding-15">
-          <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo">
-            Please fill all mandatory fields marked
-            <strong>*</strong>
+      <div class="col-12  search-eidted-p padding-15">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group ">
+              <label>Type
+                <span class="mandatory">*</span>
+              </label>
+              <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                <option selected value=null>Please Select</option>
+                <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Anticipated Start Date</label>
+              <label *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</label>
+              <div class="input-group  mb-4">
+                <input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
+                  (ngModelChange)="validateStartDate()">
+                <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1">
+                  <span class="input-group-text">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Anticipated End Date</label>
+              <label *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</label>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
+                  (ngModelChange)="validateEndDate()">
+                <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
+                  <span class="input-group-text">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-12  search-eidted-p padding-15">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group ">
-                <label>Type
-                  <span class="mandatory">*</span>
-                </label>
-                <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
-                  <option selected value=null>Please Select</option>
-                  <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
-                </select>
+        <div class="row" *ngIf="!isGeneralInfoSaved">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>PI
+                <span class="mandatory">*</span>
+              </label>
+              <input [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit" type="text"
+                class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
+                (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" />
+              <div class="sb-seachresults top-margin">
+                <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
+                  <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
+                    <span [innerHTML]="result.label"></span>
+                  </li>
+                </ul>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Anticipated Start Date</label>
-                <label *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</label>
-                <div class="input-group  mb-4">
-                  <input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
-                    (ngModelChange)="validateStartDate()">
-                  <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1">
-                    <span class="input-group-text">
-                      <i class="fa fa-calendar" aria-hidden="true"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Anticipated End Date</label>
-                <label *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</label>
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
-                    (ngModelChange)="validateEndDate()">
-                  <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
-                    <span class="input-group-text">
-                      <i class="fa fa-calendar" aria-hidden="true"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="row" *ngIf="!isGeneralInfoSaved">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>PI
-                  <span class="mandatory">*</span>
-                </label>
-                <input [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit"
-                  type="text" class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
-                  (focus)="IsElasticResultPerson = true" (focusout)="IsElasticResultPerson = false" />
-                <div class="sb-seachresults top-margin">
-                  <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
-                    <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
-                      <span [innerHTML]="result.label"></span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Lead Unit
-                  <span class="mandatory">*</span>
-                </label>
-                <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
-                  [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
-                  placeholder="Lead unit"></ng2-completer>
-              </div>
-            </div>
-
-            <!-- <div class="col-md-5">
-              <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="generalInfo.prtocolDescription"></textarea>
-              </div>
-            </div>
-            <div class="col-md-2 save-button">
-              <button type="button" class="btn btn-success" (click)="saveGeneralInfo()">
-                <span *ngIf="!isGeneralInfoSaved">Proceed</span>
-                <span *ngIf="isGeneralInfoSaved">Save</span>
-              </button>
-            </div> -->
-
-          </div>
-
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Title
-                  <span class="mandatory">*</span>
-                </label>
-                <textarea class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
-              </div>
-            </div>
-            <!-- <div class="col-md-5">
-              <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="generalInfo.prtocolDescription"></textarea>
-              </div>
-            </div>
-            <div class="col-md-2 save-button">
-              <button type="button" class="btn btn-success" (click)="saveGeneralInfo()">
-                <span *ngIf="!isGeneralInfoSaved">Proceed</span>
-                <span *ngIf="isGeneralInfoSaved">Save</span>
-              </button>
-            </div> -->
-
-          </div>
-
-          <div class="row bottom-margin">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Purpose of Study </label>
-                <span class="sub-label"> ({{remainingLength}} characters left)</span>
-                <textarea rows="12" class="form-control txt-area-fnt" maxlength="7500" id="purposeOfStudy" placeholder="Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters."
-                  [(ngModel)]="generalInfo.prtocolDescription" (ngModelChange)="remainingChar(generalInfo.prtocolDescription.length)"></textarea>
-              </div>
-            </div>
-            <!-- <div class="col-md-2 save-button">
-              <button type="button" class="btn btn-success margin-class" (click)="saveGeneralInfo()">
-                <span *ngIf="!isGeneralInfoSaved">Proceed</span>
-                <span *ngIf="isGeneralInfoSaved">Save</span>
-              </button>
-            </div> -->
-
-          </div>
-          <div class="row bottom-margin">
-            <!-- <div class="col-md-11"></div> -->
-            <div class="col-md-2">
-              <button type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
-                <span *ngIf="!isGeneralInfoSaved">Proceed</span>
-                <span *ngIf="isGeneralInfoSaved">Save</span>
-              </button>
             </div>
           </div>
-
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Lead Unit
+                <span class="mandatory">*</span>
+              </label>
+              <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
+                [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
+                placeholder="Lead unit"></ng2-completer>
+            </div>
+          </div>
         </div>
-
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Title
+                <span class="mandatory">*</span>
+              </label>
+              <textarea class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row bottom-margin">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Purpose of Study </label>
+              <span class="sub-label"> ({{remainingLength}} characters left)</span>
+              <textarea rows="12" class="form-control txt-area-fnt" maxlength="7500" id="purposeOfStudy" placeholder="Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters."
+                [(ngModel)]="generalInfo.prtocolDescription" (ngModelChange)="remainingChar(generalInfo.prtocolDescription.length)"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row bottom-margin">
+          <div class="col-md-2">
+            <button type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
+              <span *ngIf="!isGeneralInfoSaved">Proceed</span>
+              <span *ngIf="isGeneralInfoSaved">Save</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</div>

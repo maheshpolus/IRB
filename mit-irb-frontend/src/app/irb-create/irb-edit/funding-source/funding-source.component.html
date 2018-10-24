@@ -6,7 +6,6 @@
         <i class="fa fa-info-circle" aria-hidden="true"></i>
       </nav>
     </div>
-
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15">
         <div class="alert alert-danger " *ngIf="invalidData.invalidFundingInfo">
@@ -48,18 +47,16 @@
                 placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
               <!-- Award and Proposal Elastic field -->
               <input *ngIf="sourceType.typeCode == '4' || sourceType.typeCode == '5' || sourceType.typeCode == '6'" placeholder="{{sourceType.placeholder}}"
-                [(ngModel)]="fundingSource.sourceName" (input)="clearData()" [class.poping-border]="isFundingInfoEdit" type="text"
-                class="form-control input-field-size" [formControl]="elasticSearchText" (focus)="IsElasticResultPerson = true"
-                (focusout)="IsElasticResultPerson = false" />
+                [(ngModel)]="fundingSource.sourceName" [class.poping-border]="isFundingInfoEdit" type="text"
+                class="form-control input-field-size" [formControl]="elasticSearchText" (focus)="isElasticResultPerson = true"
+                (focusout)="isElasticResultPerson = false" />
               <div class="sb-seachresults top-margin">
-                <ul class="sb-results-dropdown-menu" *ngIf="IsElasticResultPerson">
+                <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
                   <li *ngFor="let result of _results | async" (mousedown)="selectedFundingSource(result,sourceType.typeCode)">
                     <span [innerHTML]="result.label"></span>
                   </li>
                 </ul>
               </div>
-              <!-- <input type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
-              <input type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control form-control-sm" placeholder="Source" [(ngModel)]="fundingSource.fundingSource"> -->
             </div>
           </div>
           <div class="col-md-3">
@@ -76,10 +73,8 @@
             <button title="Save" *ngIf="isFundingInfoEdit" type="button" class="btn btn-success f-btn-top" (click)="addFundingDetails('EDIT')">
               <i class="fa fa-floppy-o add-button" aria-hidden="true"></i>
             </button>
-
           </div>
         </div>
-
       </div>
       <div class="col-12 padding-030" *ngIf="showElasticBand" (click)="openKcFromElastic(sponsorDetails)">
         <div class="row">
@@ -105,7 +100,6 @@
                 <span>{{sponsorDetails?.title}}</span>
               </div>
             </div>
-
             <div class="row" *ngIf="sourceType.typeCode =='4' || sourceType.typeCode =='5'">
               <div class="col-12">
                 <label>IP#:</label>
@@ -149,14 +143,13 @@
                   <td>{{item.protocolFundingSourceId}}</td>
                   <td>{{item.title}}</td>
                   <td>{{item.description}}</td>
-
                   <td class="action-btn-list">
                     <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
                     <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                      </button>
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
                     <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>

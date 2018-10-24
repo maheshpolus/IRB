@@ -32,6 +32,7 @@
                     </div>
                     <div class="col-8 apprve-date">
                       <h4 class="ml-10">*Description</h4>
+
                       <textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding " placeholder="Description" [(ngModel)]="requestObject.attachmentDescription"></textarea>
                     </div>
                   </div>
@@ -41,6 +42,7 @@
                     <input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none" />
                     <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
                     </div>
+
                   </file-drop>
                   <div class="filechip">
                     <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
@@ -136,7 +138,6 @@
           </div>
         </div>
       </div>
-
       <!-- delete warning modal -->
       <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteAttachment" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
         aria-hidden="true">
@@ -144,6 +145,7 @@
           <div class="modal-content modal-text-color">
             <div class="modal-header popup-header">
               <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
               <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

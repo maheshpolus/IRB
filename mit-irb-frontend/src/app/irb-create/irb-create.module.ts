@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { CKEditorModule } from 'ngx-ckeditor';
-
 import { IrbCreateHeaderComponent } from './irb-create-header/irb-create-header.component';
 import { IrbEditComponent } from './irb-edit/irb-edit.component';
 import { IrbCreateRoutingModule } from '../irb-create/irb-create-routing.module';

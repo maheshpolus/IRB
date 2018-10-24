@@ -1,6 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
+
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
+
 import { IrbCreateService } from '../../irb-create.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
 
@@ -11,27 +19,27 @@ import { SharedDataService } from '../../../common/service/shared-data.service';
 })
 export class SubjectsComponent implements OnInit, OnDestroy {
 
+  userDTO: any = {};
   protocolNumber = null;
   protocolId = null;
-  subjectEditIndex = null;
-  userDTO: any = {};
+  isGeneralInfoSaved = false;
   commonVo: any = {};
   generalInfo: any = {};
   result: any = {};
-  protocolSubject: any = {};
   protocolSubjectTypes = [];
+  protocolSubject: any = {};
+  isSubjectInfoEdit = false;
+  subjectEditIndex = null;
   protocolSubjectList = [];
   protocolSubjectAgeGroups = [];
   protocolSubjectAgeGroupCategory = [];
-  isSubjectInfoEdit = false;
-  isGeneralInfoSaved = false;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
   };
 
-  private $subscription1: ISubscription;
+  private subscription1: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
     private _sharedDataService: SharedDataService,
     private _irbCreateService: IrbCreateService) { }
@@ -47,7 +55,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+    this.subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
       if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
         this.commonVo = commonVo;
         this.loadEditDetails();
@@ -56,8 +64,8 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.$subscription1) {
-      this.$subscription1.unsubscribe();
+    if (this.subscription1) {
+      this.subscription1.unsubscribe();
     }
   }
 

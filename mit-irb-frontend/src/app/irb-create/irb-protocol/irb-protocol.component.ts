@@ -14,20 +14,17 @@ declare var $: any;
 })
 
 export class IrbProtocolComponent implements OnInit, OnDestroy {
-
-
-
-  requestObject: any = {};
-  commonVo: any = {};
-  scientificId: any;
-  isProtocolScienceEmpty = false;
-  protocolScience: string;
   ckEditorConfig: {} = {
     height: '300px',
     toolbarCanCollapse: 1,
     removePlugins: 'sourcearea',
   };
-  private $subscription1: ISubscription;
+  protocolScience: string;
+  isProtocolScienceEmpty = false;
+  requestObject: any = {};
+  scientificId: any;
+  private subscription1: ISubscription;
+  commonVo: any = {};
 
 
   constructor(private _irbCreateService: IrbCreateService, private _sharedDataService: SharedDataService,
@@ -41,7 +38,7 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
       this.requestObject.protocolNumber = params['protocolNumber'];
     });
 
-    this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
+    this.subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
       if (commonVo !== undefined) {
         this.commonVo = commonVo;
         if (this.commonVo.scienceOfProtocol != null) {
@@ -53,8 +50,8 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy() {
-    if (this.$subscription1) {
-      this.$subscription1.unsubscribe();
+    if (this.subscription1) {
+      this.subscription1.unsubscribe();
     }
   }
 
@@ -63,29 +60,29 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
       this.isProtocolScienceEmpty = true;
     } else {
       this.isProtocolScienceEmpty = false;
-      this.commonVo.scienceOfProtocol = {
-        scientificId: (this.scientificId == null || this.scientificId === undefined) ? null : this.scientificId,
-        protocolId: this.requestObject.protocolId,
-        protocolNumber: this.requestObject.protocolNumber,
-        description: this.protocolScience,
-        updateUser: localStorage.getItem('userName'),
-        updatetimestamp: new Date(),
-        sequenceNumber: 1
+    this.commonVo.scienceOfProtocol = {
+      scientificId: (this.scientificId == null || this.scientificId === undefined) ? null : this.scientificId,
+      protocolId: this.requestObject.protocolId,
+      protocolNumber: this.requestObject.protocolNumber,
+      description: this.protocolScience,
+      updateUser: localStorage.getItem('userName'),
+      updatetimestamp: new Date(),
+      sequenceNumber: 1
 
-      };
-      this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
-        this.commonVo = data;
-        this.toastr.success('Protocol saved successfully', null, { toastLife: 2000 });
-        if (this.commonVo.scienceOfProtocol != null) {
-          this.protocolScience = this.commonVo.scienceOfProtocol.description;
-        }
-      },
-        error => {
-          this.toastr.error('Failed to save Protocol', null, { toastLife: 2000 });
-          console.log('Error in saveScienceOfProtocol ', error);
-        }
-      );
-    }
+    };
+    this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
+      this.commonVo = data;
+      this.toastr.success('Protocol saved successfully', null, {toastLife: 2000});
+      if (this.commonVo.scienceOfProtocol != null) {
+        this.protocolScience = this.commonVo.scienceOfProtocol.description;
+      }
+    },
+    error => {
+      this.toastr.error('Failed to save Protocol', null, {toastLife: 2000});
+      console.log('Error in saveScienceOfProtocol ', error);
+  }
+  );
+}
 
   }
 

@@ -6,13 +6,6 @@ import { ISubscription } from 'rxjs/Subscription';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-
 import { IrbCreateService } from '../../irb-create.service';
 import { ElasticService } from '../../../common/service/elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
@@ -25,26 +18,26 @@ import { SharedDataService } from '../../../common/service/shared-data.service';
 export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy {
 
   elasticSearchText: FormControl = new FormControl('');
-  message = '';
-  IsElasticResultPerson = false;
   _results: Subject<Array<any>> = new Subject<Array<any>>();
-  userDTO: any = {};
+  sponsorList: CompleterData;
+  protocolPersonLeadUnits: CompleterData;
   protocolNumber = null;
   protocolId = null;
-  isGeneralInfoSaved = false;
-  showElasticBand = false;
+  fundingEditIndex = null;
+  userDTO: any = {};
   commonVo: any = {};
   generalInfo: any = {};
   sourceType: any = {};
   result: any = {};
   sponsorDetails: any = {};
-  protocolFundingSourceTypes = [];
-  sponsorList: CompleterData;
-  protocolPersonLeadUnits: CompleterData;
   fundingSource: any = {};
-  isFundingInfoEdit = false;
-  fundingEditIndex = null;
+  protocolFundingSourceTypes = [];
   protocolFundingSourceList = [];
+  isElasticResultPerson = false;
+  isFundingInfoEdit = false;
+  isGeneralInfoSaved = false;
+  showElasticBand = false;
+  message = '';
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
@@ -210,10 +203,6 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
           });
           if (results.length > 0) {
             this.message = '';
-          } else {
-            // if (this.personnelInfo.personName && this.personnelInfo.personName.trim()) {
-            //   this.message = 'nothing was found';
-            // }
           }
           resolve(results);
         });
@@ -285,13 +274,8 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
             });
 
           });
-
           if (results.length > 0) {
             this.message = '';
-          } else {
-            // if (this.seachTextModel && this.seachTextModel.trim()) {
-            //   this.message = 'nothing was found';
-            // }
           }
           resolve(results);
         });
@@ -305,21 +289,16 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
 
-  /**show message if elastic search failed */
+  /* show message if elastic search failed */
   handleError(): any {
     this.message = 'something went wrong';
   }
 
-  clearData() {
-    // this.personnelInfo.personId = '';
-    // this.ProtocolPI.personId = '';
-  }
-
-  /** assign values to requestObject on selecting a particular person from elastic search */
+  /* assign values to requestObject on selecting a particular person from elastic search */
   selectedFundingSource(result, typeCode) {
     this.showElasticBand = true;
     this.sponsorDetails = result.obj;
-    this.IsElasticResultPerson = false;
+    this.isElasticResultPerson = false;
     if (typeCode === '6') {
       this.fundingSource.fundingSource = result.obj.award_number;
       this.fundingSource.sourceName = result.obj.sponsor_name;
@@ -337,7 +316,6 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     this.commonVo.sponsorType.forEach(sponsor => {
       if (sponsor.sponsorName === fundingSource) {
         this.fundingSource.fundingSource = sponsor.sponsorCode;
-        // this.fundingSource.sourceName = sponsor.sponsorName;
       }
     });
   }
@@ -347,7 +325,6 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     this.commonVo.protocolPersonLeadUnits.forEach(unit => {
       if (unit.unitName === fundingSource) {
         this.fundingSource.fundingSource = unit.unitNumber;
-        // this.fundingSource.sourceName = sponsor.sponsorName;
       }
     });
   }
@@ -386,8 +363,10 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   openKcFromElastic(item) {
-    const requestObj: any = {awardId: item.award_id, docId: item.document_id,
-                            fundingSourceTypeCode: this.fundingSource.fundingSourceTypeCode};
+    const requestObj: any = {
+      awardId: item.award_id, docId: item.document_id,
+      fundingSourceTypeCode: this.fundingSource.fundingSourceTypeCode
+    };
     this.openKcLink(requestObj);
   }
 

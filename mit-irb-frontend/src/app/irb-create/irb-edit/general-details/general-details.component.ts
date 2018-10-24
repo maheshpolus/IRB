@@ -6,13 +6,6 @@ import { Subject } from 'rxjs/Subject';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-
 import { IrbCreateService } from '../../irb-create.service';
 import { PiElasticService } from '../../../common/service/pi-elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
@@ -24,31 +17,28 @@ import { SharedDataService } from '../../../common/service/shared-data.service';
 })
 export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   personSearchText: FormControl = new FormControl('');
-  message = '';
   _results: Subject<Array<any>> = new Subject<Array<any>>();
   protocolNumber = null;
   protocolId = null;
-  personalInfo = {};
-  personalDataList = [];
   protected protocolPersonLeadUnitsCopy: CompleterData;
-  isGeneralInfoSaved = false;
+  requestObject = {};
+  userDTO: any = {};
   result: any = {};
   commonVo: any = {};
-  protocolType = [];
-  protocolPersonLeadUnits = [];
   generalInfo: any = {};
   personnelInfo: any = {};
   ProtocolPI: any = {};
-  fundingSource: any = {};
   protocolSubject: any = {};
-  protocolCollaborator: any = {};
-  IsElasticResultPerson = false;
+  personalDataList = [];
+  protocolType = [];
+  protocolPersonLeadUnits = [];
+  isGeneralInfoSaved = false;
+  isElasticResultPerson = false;
+  message = '';
   personType = 'employee';
-  requestObject = {};
-  userDTO: any = {};
   remainingLength = 7500;
-  private subscription1: ISubscription;
-  invalidData = {invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false};
+  private $subscription1: ISubscription;
+  invalidData = { invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false };
 
   constructor(private _irbCreateService: IrbCreateService,
     private _ngZone: NgZone,
@@ -68,20 +58,19 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.isGeneralInfoSaved = true;
       }
     });
-
-    this.subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
       if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
         this.commonVo = commonVo;
         this.loadEditDetails();
       }
     });
-}
+  }
 
-ngOnDestroy() {
- if (this.subscription1) {
-  this.subscription1.unsubscribe();
- }
-}
+  ngOnDestroy() {
+    if (this.$subscription1) {
+      this.$subscription1.unsubscribe();
+    }
+  }
 
   ngAfterViewInit() {
     this.personSearchText
@@ -165,7 +154,7 @@ ngOnDestroy() {
     if (result.obj.person_id !== undefined) {
       this.ProtocolPI.personId = result.obj.person_id;
     }
-    this.IsElasticResultPerson = false;
+    this.isElasticResultPerson = false;
   }
 
   setPiLeadUnit(leadUnitName) {
@@ -177,7 +166,6 @@ ngOnDestroy() {
       }
     });
   }
-
   saveGeneralInfo() {
     if (this.validateGeneralInfo()) {
       if (!this.isGeneralInfoSaved) {
@@ -253,7 +241,6 @@ ngOnDestroy() {
       this._ngZone.runOutsideAngular(() => {
         let hits_source: Array<any> = [];
         let hits_highlight: Array<any> = [];
-        const hits_out: Array<any> = [];
         const results: Array<any> = [];
         let personName: string;
         let test;
@@ -307,6 +294,5 @@ ngOnDestroy() {
 
   clearSelectedPIdata() {
     this.personnelInfo.personId = '';
-    // this.ProtocolPI.personId = '';
   }
 }

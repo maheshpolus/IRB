@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { Routes, RouterModule } from '@angular/router';
 import { IrbCreateHeaderComponent } from './irb-create-header/irb-create-header.component';
 import { IrbEditComponent } from './irb-edit/irb-edit.component';

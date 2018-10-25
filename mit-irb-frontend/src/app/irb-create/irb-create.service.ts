@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class IrbCreateService {
   formData = new FormData();
 
-  constructor(private router: Router, private _http: HttpClient) { }
+  constructor(private _http: HttpClient) { }
+
   getEditDetails(params) {
     return this._http.post('/mit-irb/createIRBProtocol', params);
   }
@@ -18,9 +18,11 @@ export class IrbCreateService {
   updateProtocolPersonInfo(params) {
     return this._http.post('/mit-irb/updateProtocolPersonInfo', params);
   }
+
   getIrbAttachmentList(params) {
     return this._http.post('/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber', params);
   }
+
   saveScienceOfProtocol(params) {
     return this._http.post('/mit-irb/saveScienceOfProtocol', params);
   }
@@ -34,6 +36,7 @@ export class IrbCreateService {
     this.formData.append('formDataJson', JSON.stringify(irbAttachmentProtocol));
     return this._http.post('/mit-irb/addProtocolAttachments', this.formData);
   }
+
   getAttachmentTypes(params) {
     return this._http.post('/mit-irb/loadAttachmentType', params);
   }
@@ -41,9 +44,11 @@ export class IrbCreateService {
   updateFundingSource(params) {
     return this._http.post('/mit-irb/updateFundingSource', params);
   }
+
   updateSubject(params) {
     return this._http.post('/mit-irb/updateSubject', params);
   }
+
   updateCollaborator(params) {
     return this._http.post('/mit-irb/updateCollaborator', params);
   }

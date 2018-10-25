@@ -36,7 +36,6 @@
           <div class="col-md-2">
             <div class="form-group">
               <label>Approval Date</label>
-              <label *ngIf="invalidData.invalidApprovalDate" class="error">Approval Date should be less than Expiration Date</label>
               <div class="input-group date-pickr-1 mb-3">
                 <input type="text" class="form-control" [class.poping-border]="isCollaboratorInfoEdit" [owlDateTime]="dt3" [(ngModel)]="protocolCollaborator.approvalDate"
                   (ngModelChange)="validateApprovalDate()" placeholder="mm/dd/yyyy">
@@ -47,12 +46,12 @@
                   </span>
                 </div>
               </div>
+              <span *ngIf="invalidData.invalidApprovalDate" class="error">Approval Date should be less than Expiration Date</span>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-group">
               <label>Expiration Date </label>
-              <label *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</label>
               <div class="input-group date-pickr-1 mb-3">
                 <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control" [owlDateTime]="dt4" [(ngModel)]="protocolCollaborator.expirationDate"
                   (ngModelChange)="validateExpirationDate()" placeholder="mm/dd/yyyy">
@@ -63,6 +62,7 @@
                 </div>
                 <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
               </div>
+              <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span>
             </div>
           </div>
           <div class="col-md-1 add-btn-1">

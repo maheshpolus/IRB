@@ -15,11 +15,26 @@ declare var $: any;
 })
 export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
 
-    noIrbAttachments = false;
+    irbAttachment: any = {};
+    protocolAttachments: any = {};
+    irbAttachmentProtocol: any = {};
+    tempSaveAttachment: any = {};
+    tempEditAttachment: any = {};
+    result: any = {};
     editAttachment: any = [];
     irbAttachmentsList: any[] = [];
     attachmentTypes = [];
-    result: any = {};
+    uploadedFile: File[] = [];
+    files: UploadFile[] = [];
+    attachmentList: any[] = [];
+    noIrbAttachments = false;
+    showAddAttachment = false;
+    isMandatoryFilled = true;
+    showPopup = false;
+    isDuplicate = false;
+    fil: FileList;
+    generalInfo: any;
+    attachmentTypeDescription: string;
     sortOrder = '1';
     sortField = 'UPDATE_TIMESTAMP';
     direction: number;
@@ -31,26 +46,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         attachmentTypeCode: null,
         attachmentDescription: ''
     };
-
-    irbAttachment: any = {};
-    protocolAttachments: any = {};
-    irbAttachmentProtocol: any = {};
-
-
-    /*Attachment variables */
-    fil: FileList;
-    uploadedFile: File[] = [];
-    files: UploadFile[] = [];
-    attachmentList: any[] = [];
-    showAddAttachment = false;
-    isMandatoryFilled = true;
-    showPopup = false;
-    tempSaveAttachment: any = {};
-    tempEditAttachment: any = {};
-    isDuplicate = false;
-    generalInfo: any;
-    attachmentTypeDescription: string;
-    private subscription1: ISubscription;
+    private $subscription1: ISubscription;
 
     constructor(private _irbViewService: IrbViewService,
         private _activatedRoute: ActivatedRoute,
@@ -61,7 +57,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     ngOnInit() {
         const reqobj = { protocolNumber: this._activatedRoute.snapshot.queryParamMap.get('protocolNumber') };
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
-        this.subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
+        this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
             if (commonVo !== undefined) {
                 this.generalInfo = commonVo.generalInfo;
             }
@@ -74,10 +70,10 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.subscription1) {
-          this.subscription1.unsubscribe();
+        if (this.$subscription1) {
+            this.$subscription1.unsubscribe();
         }
-      }
+    }
 
     /** To Set the Attachment Type Description
      * @param attachmentTypeCode - selected Attachment Type Code
@@ -93,7 +89,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
 
     /**calls service to load Attachment list in protocol*/
     loadIrbAttachmentList(reqobj) {
-       this.subscription1 =  this._irbCreateService.getIrbAttachmentList(reqobj).subscribe(data => {
+        this.$subscription1 = this._irbCreateService.getIrbAttachmentList(reqobj).subscribe(data => {
             this.result = data || [];
             if (this.result != null) {
                 if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
@@ -125,7 +121,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             a.click();
 
         },
-            error => console.log('Error downloading the file.'),
+            error => console.log('Error downloading the file.', error),
             () => console.log('OK'));
     }
 
@@ -198,9 +194,9 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.changeRef.detectChanges();
     }
 
-     /** Push the unique files dropped to uploaded file
-     * @param files- files dropped
-     */
+    /** Push the unique files dropped to uploaded file
+    * @param files- files dropped
+    */
     public dropped(event: UploadEvent) {
         this.files = event.files;
         for (const file of this.files) {
@@ -302,8 +298,8 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.tempSaveAttachment = attachment;
     }
 
-      /**Calls the service to delete the attachment after confirmation
-     */
+    /**Calls the service to delete the attachment after confirmation
+   */
     deleteAttachments(event) {
         event.preventDefault();
         this.showPopup = false;

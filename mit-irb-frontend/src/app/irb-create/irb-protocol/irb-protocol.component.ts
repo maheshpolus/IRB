@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
-import { IrbCreateService } from '../irb-create.service';
-import { SharedDataService } from '../../common/service/shared-data.service';
 import { ISubscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { IrbCreateService } from '../irb-create.service';
+import { SharedDataService } from '../../common/service/shared-data.service';
 
 declare var $: any;
 
@@ -14,18 +14,18 @@ declare var $: any;
 })
 
 export class IrbProtocolComponent implements OnInit, OnDestroy {
+
+  isProtocolScienceEmpty = false;
+  requestObject: any = {};
+  commonVo: any = {};
+  scientificId: any;
+  protocolScience: string;
   ckEditorConfig: {} = {
     height: '300px',
     toolbarCanCollapse: 1,
     removePlugins: 'sourcearea',
   };
-  protocolScience: string;
-  isProtocolScienceEmpty = false;
-  requestObject: any = {};
-  scientificId: any;
-  private subscription1: ISubscription;
-  commonVo: any = {};
-
+  private $subscription1: ISubscription;
 
   constructor(private _irbCreateService: IrbCreateService, private _sharedDataService: SharedDataService,
     private _activatedRoute: ActivatedRoute, public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -38,7 +38,7 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
       this.requestObject.protocolNumber = params['protocolNumber'];
     });
 
-    this.subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
+    this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
       if (commonVo !== undefined) {
         this.commonVo = commonVo;
         if (this.commonVo.scienceOfProtocol != null) {
@@ -50,8 +50,8 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy() {
-    if (this.subscription1) {
-      this.subscription1.unsubscribe();
+    if (this.$subscription1) {
+      this.$subscription1.unsubscribe();
     }
   }
 
@@ -60,30 +60,29 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
       this.isProtocolScienceEmpty = true;
     } else {
       this.isProtocolScienceEmpty = false;
-    this.commonVo.scienceOfProtocol = {
-      scientificId: (this.scientificId == null || this.scientificId === undefined) ? null : this.scientificId,
-      protocolId: this.requestObject.protocolId,
-      protocolNumber: this.requestObject.protocolNumber,
-      description: this.protocolScience,
-      updateUser: localStorage.getItem('userName'),
-      updatetimestamp: new Date(),
-      sequenceNumber: 1
+      this.commonVo.scienceOfProtocol = {
+        scientificId: (this.scientificId == null || this.scientificId === undefined) ? null : this.scientificId,
+        protocolId: this.requestObject.protocolId,
+        protocolNumber: this.requestObject.protocolNumber,
+        description: this.protocolScience,
+        updateUser: localStorage.getItem('userName'),
+        updatetimestamp: new Date(),
+        sequenceNumber: 1
 
-    };
-    this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
-      this.commonVo = data;
-      this.toastr.success('Protocol saved successfully', null, {toastLife: 2000});
-      if (this.commonVo.scienceOfProtocol != null) {
-        this.protocolScience = this.commonVo.scienceOfProtocol.description;
-      }
-    },
-    error => {
-      this.toastr.error('Failed to save Protocol', null, {toastLife: 2000});
-      console.log('Error in saveScienceOfProtocol ', error);
-  }
-  );
-}
-
+      };
+      this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
+        this.commonVo = data;
+        this.toastr.success('Protocol saved successfully', null, { toastLife: 2000 });
+        if (this.commonVo.scienceOfProtocol != null) {
+          this.protocolScience = this.commonVo.scienceOfProtocol.description;
+        }
+      },
+        error => {
+          this.toastr.error('Failed to save Protocol', null, { toastLife: 2000 });
+          console.log('Error in saveScienceOfProtocol ', error);
+        }
+      );
+    }
   }
 
 }

@@ -29,8 +29,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <label>Anticipated Start Date</label>
-              <label *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</label>
-              <div class="input-group  mb-4">
+              <div class="input-group  mb-2">
                 <input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
                   (ngModelChange)="validateStartDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
@@ -40,13 +39,13 @@
                   </span>
                 </div>
               </div>
+              <span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label>Anticipated End Date</label>
-              <label *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</label>
-              <div class="input-group mb-3">
+              <div class="input-group mb-2">
                 <input type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
                   (ngModelChange)="validateEndDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
@@ -56,6 +55,7 @@
                   </span>
                 </div>
               </div>
+              <span *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</span>
             </div>
           </div>
         </div>

@@ -4,7 +4,8 @@
 			<div class="card">
 				<div class="card-header nav-header-link">
 					<nav class="nav navbar-pg3">
-						<a class="nav-link active">Attachments</a> <a class="nav-link">Notes</a>
+						<a class="nav-link active">Attachments</a>
+						<a class="nav-link">Notes</a>
 						<i class="fa fa-info-circle" aria-hidden="true"></i>
 					</nav>
 				</div>
@@ -13,20 +14,17 @@
 
 					<div class="col-md-4 col-sm-4 col-lg-4">
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="sortOrder"
-								[(ngModel)]="sortOrder" (ngModelChange)="sortBy()"
-								id="inlineCheckbox1" value="-1"> <label
-								class="form-check-label radio-label" for="inlineCheckbox1">ASC</label>
+							<input class="form-check-input" type="radio" name="sortOrder" [(ngModel)]="sortOrder" (ngModelChange)="sortBy()" id="inlineCheckbox1"
+							 value="-1">
+							<label class="form-check-label radio-label" for="inlineCheckbox1">ASC</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" id="inlineCheckbox2"
-								[(ngModel)]="sortOrder" name="sortOrder"
-								(ngModelChange)="sortBy()" value="1"> <label
-								class="form-check-label radio-label" for="inlineCheckbox2">DSC</label>
+							<input class="form-check-input" type="radio" id="inlineCheckbox2" [(ngModel)]="sortOrder" name="sortOrder" (ngModelChange)="sortBy()"
+							 value="1">
+							<label class="form-check-label radio-label" for="inlineCheckbox2">DSC</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<select class="custom-select mr-sm-2" [(ngModel)]="sortField"
-								(ngModelChange)="sortBy()" id="inlineFormCustomSelect">
+							<select class="custom-select mr-sm-2" [(ngModel)]="sortField" (ngModelChange)="sortBy()" id="inlineFormCustomSelect">
 								<option value="UPDATE_TIMESTAMP">UPDATE TIMESTAMP</option>
 								<option value="ATTACHMENT_TYPE">ATTACHMENT TYPE</option>
 							</select>
@@ -44,14 +42,17 @@
 									</tr>
 								</thead>
 								<tbody class="tdy-color">
-									<tr
-										*ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}">
+									<tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}">
 										<td scope="row">{{attachments.ATTACHMENT_TYPE}}</td>
 										<td>{{attachments.DESCRIPTION}}</td>
-										<td><span class="pdf"
-											(click)="downloadAttachment(attachments)"><i
-												class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>{{attachments.FILE_NAME}}</span></span></td>
-										<td>{{attachments.UPDATE_USER_NAME}} {{(attachments.UPDATE_TIMESTAMP ===' ' || attachments.UPDATE_TIMESTAMP ===null) ? ' ':(attachments.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</td>
+										<td>
+											<span class="pdf" (click)="downloadAttachment(attachments)">
+												<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+												<span>{{attachments.FILE_NAME}}</span>
+											</span>
+										</td>
+										<td>{{attachments.UPDATE_USER_NAME}} {{(attachments.UPDATE_TIMESTAMP ===' ' || attachments.UPDATE_TIMESTAMP ===null)
+											? ' ':(attachments.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</td>
 									</tr>
 								</tbody>
 							</table>

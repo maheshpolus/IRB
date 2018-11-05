@@ -20,6 +20,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   _results: Subject<Array<any>> = new Subject<Array<any>>();
   protected protocolPersonLeadUnitsCopy: CompleterData;
   personLeadUnit = null;
+  editPersonLeadUnit = null;
   protocolId = null;
   protocolNumber = null;
   editIndex = null;
@@ -27,7 +28,9 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   commonVo: any = {};
   generalInfo: any = {};
   personnelInfo: any = {};
+  editPersonnelInfo: any = {};
   result: any = {};
+  selectedPerson: any = {};
   personRoleTypes = [];
   protocolPersonLeadUnits = [];
   affiliationTypes = [];
@@ -35,11 +38,12 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   irbPersonDetailedTraining: any[] = [];
   message = '';
   personType = 'employee';
-  personPlaceHolder = 'Search Employee Name';
+  personPlaceHolder = 'Search for an Employee Name';
   personalInfoSelectedRow: number;
   isElasticResultPerson = false;
   isPersonalInfoEdit = false;
   isGeneralInfoSaved = false;
+  showPersonElasticBand = false;
   irbPersonDetailedList: any;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
@@ -127,6 +131,9 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         let hits_highlight: Array<any> = [];
         const results: Array<any> = [];
         let personName: string;
+        let email: string;
+        // let title: string;
+        let home_unit: string;
         let test;
         this._elasticsearchService.personSearch(searchString, this.personType)
           .then((searchResult) => {
@@ -146,8 +153,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
                 if (typeof (hits_highlight[j].full_name) !== 'undefined') {
                   personName = hits_highlight[j].full_name;
                 }
+                if (typeof (hits_source[j].email_address) !== 'undefined') {
+                  email = hits_source[j].email_address;
+                }
+                if (typeof (hits_source[j].home_unit) !== 'undefined') {
+                  home_unit = hits_source[j].home_unit;
+                }
                 results.push({
-                  label: personName,
+                  label: personName + ' | ' + email + ' | ' + home_unit,
                   obj: test
                 });
               });
@@ -177,12 +190,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   clearSelectedPIdata() {
-    this.personnelInfo.personId = '';
+   // this.personnelInfo.personId = '';
   }
 
 
   /** assign values to requestObject on selecting a particular person from elastic search */
   selectedPersonResult(result) {
+    this.showPersonElasticBand = true;
+    this.selectedPerson = result.obj;
     this.personnelInfo.personName = '';
     this.personnelInfo.personName = result.obj.full_name;
     if (result.obj.person_id !== undefined) {
@@ -191,21 +206,28 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     if (result.obj.rolodex_id !== undefined) {
       this.personnelInfo.personId = result.obj.rolodex_id;
     }
+    this.personnelInfo.emailAddress = result.obj.email_address;
+    this.personnelInfo.primaryTitle = result.obj.title;
     this.isElasticResultPerson = false;
   }
 
   changePersonType(type) {
     if (type === 'employee') {
-      this.personPlaceHolder = 'Search Employee Name';
+      this.personPlaceHolder = 'Search for an Employee Name';
     } else {
-      this.personPlaceHolder = 'Search Non-Employee Name';
+      this.personPlaceHolder = 'Search for a Non-Employee Name';
     }
   }
 
-  setPersonRole(roleId) {
+  setPersonRole(roleId, mode) {
     this.personRoleTypes.forEach(personeRole => {
       if (personeRole.protocolPersonRoleId === roleId) {
-        this.personnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
+        if (mode === 'ADD') {
+          this.personnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
+        } else if (mode === 'EDIT') {
+          this.editPersonnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
+        }
+
       }
     });
   }
@@ -242,10 +264,47 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  setPersonAffiliation(affiliation) {
+  setPersonLeadUnitEdit(leadUnitName) {
+    if (this.editPersonnelInfo.protocolLeadUnits != null) {
+      if (this.editPersonnelInfo.protocolLeadUnits[0].protocolUnitsId != null) {
+        this.editPersonnelInfo.protocolPersonLeadUnits = null;
+        this.protocolPersonLeadUnits.forEach(personeUnit => {
+          if (personeUnit.unitName === leadUnitName) {
+            this.editPersonnelInfo.protocolLeadUnits[0].unitNumber = personeUnit.unitNumber;
+            this.editPersonnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
+          }
+        });
+      } else {
+        this.editPersonnelInfo.protocolLeadUnits = null;
+        this.editPersonnelInfo.protocolPersonLeadUnits = null;
+        this.protocolPersonLeadUnits.forEach(personeUnit => {
+          if (personeUnit.unitName === leadUnitName) {
+            this.editPersonnelInfo.protocolLeadUnits = [{ unitNumber: personeUnit.unitNumber }];
+            this.editPersonnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
+          }
+        });
+      }
+    } else {
+      this.editPersonnelInfo.protocolLeadUnits = null;
+      this.editPersonnelInfo.protocolPersonLeadUnits = null;
+      this.protocolPersonLeadUnits.forEach(personeUnit => {
+        if (personeUnit.unitName === leadUnitName) {
+          this.editPersonnelInfo.protocolLeadUnits = [{ unitNumber: personeUnit.unitNumber }];
+          this.editPersonnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
+        }
+      });
+    }
+  }
+
+  setPersonAffiliation(affiliation, mode) {
     this.affiliationTypes.forEach(personAffiliation => {
       if (personAffiliation.affiliationTypeCode.toString() === affiliation) {
-        this.personnelInfo.protocolAffiliationTypes = { affiliationTypeCode: affiliation, description: personAffiliation.description };
+        if (mode === 'ADD') {
+          this.personnelInfo.protocolAffiliationTypes = { affiliationTypeCode: affiliation, description: personAffiliation.description };
+        } else if (mode === 'EDIT') {
+          this.editPersonnelInfo.protocolAffiliationTypes = { affiliationTypeCode: affiliation, description: personAffiliation.description};
+        }
+
       }
     });
 
@@ -255,18 +314,18 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.editIndex = index;
     this.personalInfoSelectedRow = index;
     this.isPersonalInfoEdit = true;
-    this.personnelInfo = Object.assign({}, selectedItem);
-    this.personLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
+    this.editPersonnelInfo = Object.assign({}, selectedItem);
+    this.editPersonLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
   }
 
-  addPersonalDetails(mode) {
-    if (!(this.personnelInfo.personId == null || this.personnelInfo.personId === undefined) &&
-      !(this.personnelInfo.protocolPersonRoleId == null || this.personnelInfo.protocolPersonRoleId === undefined) &&
-      !(this.personnelInfo.primaryTitle == null || this.personnelInfo.primaryTitle === undefined) &&
-      !(this.personnelInfo.protocolLeadUnits == null || this.personnelInfo.protocolLeadUnits === undefined) &&
-      !(this.personnelInfo.protocolAffiliationTypes == null || this.personnelInfo.protocolAffiliationTypes === undefined)) {
+  addPersonalDetails(personnelInfo, mode) {
+    if (!(personnelInfo.personId == null || personnelInfo.personId === undefined) &&
+      !(personnelInfo.protocolPersonRoleId == null || personnelInfo.protocolPersonRoleId === undefined) &&
+      !(personnelInfo.protocolLeadUnits == null || personnelInfo.protocolLeadUnits === undefined) &&
+      !(personnelInfo.protocolAffiliationTypes == null || personnelInfo.protocolAffiliationTypes === undefined)) {
       this.invalidData.invalidPersonnelInfo = false;
-      this.savePersonalInfo(mode);
+      this.showPersonElasticBand = false;
+      this.savePersonalInfo(personnelInfo, mode);
     } else {
       this.invalidData.invalidPersonnelInfo = true;
     }
@@ -276,43 +335,47 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  savePersonalInfo(mode) {
+  savePersonalInfo(personnelInfo, mode) {
     if (mode !== 'DELETE') {
-      this.personnelInfo.acType = 'U';
-      this.personnelInfo.updateTimestamp = new Date();
-      this.personnelInfo.updateUser = localStorage.getItem('userName');
-      this.personnelInfo.sequenceNumber = 1;
-      this.personnelInfo.protocolNumber = this.protocolNumber;
+      personnelInfo.acType = 'U';
+      personnelInfo.updateTimestamp = new Date();
+      personnelInfo.updateUser = localStorage.getItem('userName');
+      personnelInfo.sequenceNumber = 1;
+      personnelInfo.protocolNumber = this.protocolNumber;
       // Setting Person Lead Unit Details
-      this.personnelInfo.protocolLeadUnits[0].protocolPersonId = this.personnelInfo.personId;
-      this.personnelInfo.protocolLeadUnits[0].protocolNumber = this.protocolNumber;
-      this.personnelInfo.protocolLeadUnits[0].person_id = this.userDTO.personID;
-      this.personnelInfo.protocolLeadUnits[0].updateTimestamp = new Date();
-      this.personnelInfo.protocolLeadUnits[0].updateUser = this.userDTO.userName;
-      this.personnelInfo.protocolLeadUnits[0].protocolId = this.generalInfo.protocolId;
-      this.personnelInfo.protocolLeadUnits[0].sequenceNumber = 1;
-      if (this.personnelInfo.protocolPersonRoleId === 'PI') {
-        this.personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'Y';
+      personnelInfo.protocolLeadUnits[0].protocolPersonId = this.personnelInfo.personId;
+      personnelInfo.protocolLeadUnits[0].protocolNumber = this.protocolNumber;
+      personnelInfo.protocolLeadUnits[0].person_id = this.userDTO.personID;
+      personnelInfo.protocolLeadUnits[0].updateTimestamp = new Date();
+      personnelInfo.protocolLeadUnits[0].updateUser = this.userDTO.userName;
+      personnelInfo.protocolLeadUnits[0].protocolId = this.generalInfo.protocolId;
+      personnelInfo.protocolLeadUnits[0].sequenceNumber = 1;
+      if (personnelInfo.protocolPersonRoleId === 'PI') {
+        personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'Y';
       } else {
-        this.personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'N';
+        personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'N';
       }
       // End setting Person Lead Unit Details
-      this.personnelInfo.protocolGeneralInfo = this.generalInfo;
-      this.commonVo.personnelInfo = this.personnelInfo;
+      personnelInfo.protocolGeneralInfo = this.generalInfo;
+      this.commonVo.personnelInfo = personnelInfo;
     }
     this._irbCreateService.updateProtocolPersonInfo(this.commonVo).subscribe(
       data => {
         this.result = data;
         this.personnelInfo = {};
+        this.editPersonnelInfo = {};
         this.personLeadUnit = null;
+        this.editPersonLeadUnit = null;
         this.personalDataList = this.result.protocolPersonnelInfoList;
+        this.generalInfo.personnelInfos = this.result.protocolPersonnelInfoList;
+        this._sharedDataService.setGeneralInfo(this.generalInfo);
       });
   }
   deletePersonalDetails(index) {
     this.commonVo.personnelInfo = this.personalDataList[index];
     this.commonVo.personnelInfo.acType = 'D';
     this.commonVo.personnelInfo.protocolGeneralInfo = this.generalInfo;
-    this.savePersonalInfo('DELETE');
+    this.savePersonalInfo(null, 'DELETE');
   }
 
 

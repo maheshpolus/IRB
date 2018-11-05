@@ -15,7 +15,7 @@
       </div>
       <div class="col-12  search-eidted-p padding-15">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-12">
             <div class="form-group">
               <div class="form-check-inline">
                 <label class="form-check-label">
@@ -28,7 +28,7 @@
                 </label>
                 <span class="mandatory">*</span>
               </div>
-              <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit"
+              <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()"
                 type="text" class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
                 (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" />
               <div class="sb-seachresults top-margin">
@@ -40,19 +40,42 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-12 padding-030" *ngIf="showPersonElasticBand">
+            <div class="row">
+              <div class="col-12 band-s">
+                <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
+                <div class="row">
+                  <div class="col-12">
+                    <label>Name:</label>
+                    <span>{{selectedPerson?.full_name}}</span>
+                  </div>
+                  <div class="col-12">
+                    <label>Username:</label>
+                    <span>{{selectedPerson?.user_name}}</span>
+                    <label>Email:</label>
+                    <span>{{selectedPerson?.email_address}}</span>
+                    <label>Phone no:</label>
+                    <span>{{selectedPerson?.phone_number}}</span>
+                    <label>Title:</label>
+                    <span>{{selectedPerson?.title}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-4">
             <div class="form-group">
               <label>Role
                 <span class="mandatory">*</span>
               </label>
-              <select [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId)"
+              <select [disabled] = "personnelInfo.personId === null" [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId)"
                 class="custom-select mr-sm-2" id="customRoleSelect">
                 <option selected value="null">Please Select</option>
                 <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
               </select>
             </div>
-          </div>
-          <div class="col-md-4">
+          </div> -->
+          <!-- <div class="col-md-4">
             <div class="form-group">
               <label>Title
                 <span class="mandatory">*</span>
@@ -60,14 +83,26 @@
               <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.primaryTitle" class="form-control input-field-size"
                 placeholder="Title">
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row top-dis-15">
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
             <div class="form-group">
               <label>Email</label>
               <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
                 placeholder="email-id">
+            </div>
+          </div> -->
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Role
+                <span class="mandatory">*</span>
+              </label>
+              <select [disabled]="personnelInfo.personId === null" [(ngModel)]="personnelInfo.protocolPersonRoleId"
+                (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId,'ADD')" class="custom-select mr-sm-2" id="customRoleSelect">
+                <option selected value="null">Please Select</option>
+                <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
+              </select>
             </div>
           </div>
           <div class="col-md-4">
@@ -75,31 +110,31 @@
               <label>Lead unit
                 <span class="mandatory">*</span>
               </label>
-              <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit" (ngModelChange)="setPersonLeadUnit(personLeadUnit)"
-                [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
-                placeholder="Lead unit"></ng2-completer>
+              <ng2-completer [disabled]="personnelInfo.personId === null" [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit"
+                (ngModelChange)="setPersonLeadUnit(personLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
+                class="input-field-size person-unit" placeholder="Lead unit"></ng2-completer>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label>Affiliate
+              <label>Affiliation
                 <span class="mandatory">*</span>
               </label>
-              <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.affiliationTypeCode"
-                (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode)">
+              <select [disabled]="personnelInfo.personId === null" class="custom-select  mr-sm-2" id="inlineFormCustomSelect"
+                [(ngModel)]="personnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
                 <option selected value="null">Please Select</option>
                 <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
               </select>
             </div>
           </div>
           <div class="col-md-1 add-btn-1">
-            <button title="Add" *ngIf="!isPersonalInfoEdit" (click)="addPersonalDetails('ADD')" type="button" class="btn btn-success top-butn">
+            <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button" class="btn btn-success top-butn">
               <i class="fa fa-plus" aria-hidden="true"></i>
 
             </button>
-            <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails('EDIT')" type="button" class="btn btn-success top-butn">
+            <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
               <i class="fa fa-floppy-o" aria-hidden="true"></i>
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -113,7 +148,7 @@
                   <th scope="col">Role</th>
                   <th scope="col">Email</th>
                   <th scope="col">Unit</th>
-                  <th scope="col">Affiliate</th>
+                  <th scope="col">Affiliation</th>
                   <th scope="col">Primary Title</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -121,14 +156,36 @@
               <tbody class="tbody-font-size">
                 <tr *ngFor="let item of personalDataList let i=index" [class.poping-border]="i == personalInfoSelectedRow">
                   <td>{{item.personName}}</td>
-                  <td>{{item.protocolPersonRoleTypes?.description}}</td>
+                  <td *ngIf="i != personalInfoSelectedRow">{{item.protocolPersonRoleTypes?.description}}</td>
+                  <td *ngIf="i == personalInfoSelectedRow">
+                    <select [(ngModel)]="editPersonnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(editPersonnelInfo.protocolPersonRoleId,'EDIT')"
+                      class="custom-select mr-sm-2" id="customRoleSelect">
+                      <option selected value="null">Please Select</option>
+                      <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
+                    </select>
+                  </td>
                   <td>{{item.emailAddress}}</td>
-                  <td>{{item.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
-                  <td>{{item.protocolAffiliationTypes?.description}}</td>
+                  <td *ngIf="i != personalInfoSelectedRow">{{item.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
+                  <td *ngIf="i == personalInfoSelectedRow">
+                    <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="editPersonLeadUnit"
+                      (ngModelChange)="setPersonLeadUnitEdit(editPersonLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
+                      class="person-unit" placeholder="Lead unit"></ng2-completer>
+                  </td>
+                  <td *ngIf="i != personalInfoSelectedRow">{{item.protocolAffiliationTypes?.description}}</td>
+                  <td *ngIf="i == personalInfoSelectedRow">
+                    <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect"
+                      [(ngModel)]="editPersonnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
+                      <option selected value="null">Please Select</option>
+                      <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
+                    </select>
+                  </td>
                   <td>{{item.primaryTitle}}</td>
                   <td class="action-btn-list">
-                    <button title="Edit" (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="!isPersonalInfoEdit" title="Edit" (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button *ngIf="isPersonalInfoEdit" title="Save" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-primary edit-btn-1">
+                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
                     <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
                       <i class="fa fa-eye" aria-hidden="true"></i>

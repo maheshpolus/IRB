@@ -46,21 +46,7 @@ public interface IRBProtocolDao {
 	IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId,
 			Integer previousGroupActionId);
 
-	IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO);
-
 	IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo);
-
-	IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO);
-
-	IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO);
-
-	IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO);
-
-	IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO);
-
-	IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO);
-
-	IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO);
 
 	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo);
 
@@ -70,8 +56,6 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator);
 
-	IRBProtocolVO loadAttachmentType();
-
 	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
 
 	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson)
@@ -79,9 +63,6 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 
-	IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO);
-
 	IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol);
-
-	IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO);
+	
 }

@@ -15,6 +15,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
+import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.constants.KeyConstants;
@@ -49,6 +50,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	@Autowired
 	@Qualifier(value="irbProtocolService")
 	IRBProtocolService irbProtocolService;
+	
+	@Autowired
+	IRBProtocolInitLoadService initLoadService;
 	
 	org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(IRBProtocolServImpl.class.getName());
 
@@ -124,47 +128,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		return irbProtocolVO;
 	}
 
-	@Override
-	public IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolTypes(irbProtocolVO);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadRoleTypes(irbProtocolVO);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolPersonLeadunits(irbProtocolVO);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolAffiliationTypes(irbProtocolVO);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolSubjectTypes(irbProtocolVO);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolFundingSourceTypes(irbProtocolVO);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolCollaboratorNames(irbProtocolVO);
-		return irbProtocolVO;
-	}
+	
 
 	@Override
 	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo) {
@@ -194,12 +158,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		return irbProtocolVO;
 	}
 
-	@Override
-	public IRBProtocolVO loadAttachmentType() {
-		IRBProtocolVO irbProtocolVO = null;
-		irbProtocolVO = irbProtocolDao.loadAttachmentType();
-		return irbProtocolVO;
-	}
 
 	@Override
 	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
@@ -218,16 +176,11 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		return irbProtocolVO;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
 		IRBProtocolVO irbProtocolVO = null;
 		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachmentsByProtocolNumber(protocolNumber);
-	}
-
-	@Override
-	public IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadSponsorTypes(irbProtocolVO);
-		return irbProtocolVO;
 	}
 
 	@Override
@@ -239,15 +192,15 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
-			irbProtocolVO = irbProtocolService.loadProtocolTypes(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadSponsorTypes(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadRoleTypes(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadProtocolPersonLeadunits(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadProtocolAffiliationTypes(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadProtocolSubjectTypes(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadProtocolAgeGroups(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadProtocolFundingSourceTypes(irbProtocolVO);
-			irbProtocolVO = irbProtocolService.loadProtocolCollaboratorNames(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolTypes(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadSponsorTypes(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadRoleTypes(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolSubjectTypes(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
+			irbProtocolVO = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
 			irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
 			irbProtocolVO.setPersonnelInfo(personnelInfo);
 			irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
@@ -264,12 +217,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		irbProtocolVO = irbProtocolDao.saveScienceOfProtocol(irbProtocolVO,scienceOfProtocol);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO) {
-		irbProtocolVO = irbProtocolDao.loadProtocolAgeGroups(irbProtocolVO);
 		return irbProtocolVO;
 	}
 

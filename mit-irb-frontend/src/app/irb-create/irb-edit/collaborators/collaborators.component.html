@@ -99,6 +99,9 @@
                     <button title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
+                    <button title="Persons" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#collaboratorPersonModal">
+                      <i class="fa fa-user-o" aria-hidden="true"></i>
+                    </button>
                     <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
@@ -112,3 +115,206 @@
     </div>
   </div>
 </div>
+
+<!-- modal -->
+<div class="modal fade bd-example-modal-lg" id="collaboratorPersonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Person Details
+        </h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-popup">
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head">Collaborator</h4>
+        </div>
+        <!-- section1 -->
+        <div class="modal-padding">
+          <div class="row">
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for=""> Organization : </label>
+              {{irbPersonDetailedList?.FULL_NAME}}
+            </div>
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for="">Point of contact : </label>
+              {{irbPersonDetailedList?.EMAIL_ADDRESS}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for=""> Approval Date : </label>
+              {{irbPersonDetailedList?.PRIMARY_TITLE}}
+            </div>
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for=""> Expiration Date : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
+            </div>
+          </div>
+        </div>
+        <!-- section2 -->
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head sub-head-width">Persons</h4>
+          <a class="cursor-hover" (click)="isShowAddPerson = !isShowAddPerson">
+            <i class="fa fa-plus" aria-hidden="true"> Add Persons</i>
+          </a>
+        </div>
+        <div class="modal-padding">
+          <div *ngIf="isShowAddPerson">
+            <div class="row">
+                <div class="col-md-1 col lg- 1 col-sm-1 col-6">
+                    <label class="modal-label" for="">Add </label>
+                  </div>
+              <div class="col-md-3 col lg- 3 col-sm-3 col-6">
+                <label class="modal-label" for="">Name </label>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for="">Role </label>
+              </div>
+              <div class="col-md-3 col lg- 3 col-sm-3 col-6">
+                <label class="modal-label" for="">Affiliate </label>
+              </div>
+            </div>
+            <div class="row" *ngFor="let personalData of personalDataList">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6 bottom-distance">
+                <div class="row">
+                  <div class="modal-label col-3 pr-0" for=""><input type="checkbox"/> </div>
+                  <div class="col-9">
+                      {{personalData.personName}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                {{personalData.protocolPersonRoleTypes?.description}}
+
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                {{personalData.protocolAffiliationTypes?.description}}
+              </div>
+              
+            </div>
+          </div>
+          <div class="popup-div">
+            <table class="table table-striped">
+              <thead class="popup-header">
+                <tr>
+                  <th class="table-align-head" scope="col">Name</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Unit</th>
+                  <th scope="col" class="submitted-header">Affiliate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let info of irbPersonDetailedTraining">
+                  <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+                  <td>{{info.SCORE}}</td>
+                  <td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
+                  <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td>
+                </tr>
+                <tr>
+                    <td class="table-align" scope="row">dfsdfsdf</td>
+                    <td>sdfsdf</td>
+                    <td>sdfsdfs</td>
+                    <td>fgdfgdf</td>
+                  </tr>
+                  <tr>
+                      <td class="table-align" scope="row">dfsdfsdf</td>
+                      <td>sdfsdf</td>
+                      <td>sdfsdfs</td>
+                      <td>fgdfgdf</td>
+                    </tr>
+                    <tr>
+                        <td class="table-align" scope="row">dfsdfsdf</td>
+                        <td>sdfsdf</td>
+                        <td>sdfsdfs</td>
+                        <td>fgdfgdf</td>
+                      </tr>
+                      <tr>
+                          <td class="table-align" scope="row">dfsdfsdf</td>
+                          <td>sdfsdf</td>
+                          <td>sdfsdfs</td>
+                          <td>fgdfgdf</td>
+                        </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- section3 -->
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head sub-head-width">Attachments</h4>
+          <a class="cursor-hover" (click)="isShowAddAttachment = !isShowAddAttachment">
+            <i class="fa fa-plus" aria-hidden="true"> Add Attachments</i>
+          </a>
+        </div>
+        <div class="modal-padding">
+          <div class="row mb-15" *ngIf="isShowAddAttachment">
+            <div class="col-12">
+              <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+                <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+                </button>
+                <input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none" />
+                <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+                </div>
+              </file-drop>
+            </div>
+          </div>
+          <div class="popup-div">
+            <table class="table table-striped">
+              <thead class="popup-header">
+                <tr>
+                  <th class="table-align-head" scope="col">Description</th>
+                  <th scope="col">Score</th>
+                  <th scope="col">Followup Date</th>
+                  <th scope="col" class="submitted-header">Submitted Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let info of irbPersonDetailedTraining">
+                  <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+                  <td>{{info.SCORE}}</td>
+                  <td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
+                  <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td>
+                </tr>
+                <tr>
+                  <td class="table-align" scope="row">fgdfgdf</td>
+                  <td>gdfgdfgd</td>
+                  <td>hjhg</td>
+                  <td>hgjghjghj</td>
+                </tr>
+                <tr>
+                  <td class="table-align" scope="row">fgdfgdf</td>
+                  <td>gdfgdfgd</td>
+                  <td>hjhg</td>
+                  <td>hgjghjghj</td>
+                </tr>
+                <tr>
+                  <td class="table-align" scope="row">fgdfgdf</td>
+                  <td>gdfgdfgd</td>
+                  <td>hjhg</td>
+                  <td>hgjghjghj</td>
+                </tr>
+                <tr>
+                  <td class="table-align" scope="row">fgdfgdf</td>
+                  <td>gdfgdfgd</td>
+                  <td>hjhg</td>
+                  <td>hgjghjghj</td>
+                </tr>
+                <tr>
+                  <td class="table-align" scope="row">fgdfgdf</td>
+                  <td>gdfgdfgd</td>
+                  <td>hjhg</td>
+                  <td>hgjghjghj</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+<!-- modal-end -->

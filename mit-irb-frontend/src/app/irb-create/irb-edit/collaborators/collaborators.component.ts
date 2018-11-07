@@ -18,9 +18,13 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   generalInfo: any = {};
   result: any = {};
   protocolCollaborator: any = {};
+  selectedPerson: any = {};
   protocolCollaboratorList = [];
+  personalDataList = [];
   isGeneralInfoSaved = false;
   isCollaboratorInfoEdit = false;
+  isShowAddPerson = false;
+  isShowAddAttachment = false;
   protocolNumber = null;
   protocolId = null;
   collaboratorEditIndex = null;
@@ -32,6 +36,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
   };
   private $subscription1: ISubscription;
+  private $subscription2: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
     private _sharedDataService: SharedDataService,
     private _irbCreateService: IrbCreateService,
@@ -51,6 +56,15 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
         this.commonVo = commonVo;
         this.loadEditDetails();
+      }
+    });
+
+    this.$subscription2 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {
+      if (generalInfo !== undefined) {
+        this.generalInfo = generalInfo;
+        if (this.generalInfo.personnelInfos != null && this.generalInfo.personnelInfos !== undefined) {
+          this.personalDataList = this.generalInfo.personnelInfos;
+        }
       }
     });
   }
@@ -148,6 +162,12 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.collaboratorName = null;
         this.protocolCollaboratorList = this.result.protocolCollaboratorList;
       });
+  }
+
+  // Persons Popup Methods
+
+  addCollaboratorPerson() {
+
   }
 
 }

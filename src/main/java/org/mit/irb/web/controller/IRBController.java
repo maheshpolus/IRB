@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
+import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
@@ -44,6 +45,9 @@ public class IRBController {
 	@Autowired
 	@Qualifier(value="irbExemptProtocolService")
 	IRBExemptProtocolService irbExemptProtocolService;
+	
+	@Autowired
+	IRBProtocolInitLoadService irbProtocolInitLoadService;
 	
 	protected static Logger logger = Logger.getLogger(IRBController.class.getName());
 	
@@ -320,7 +324,7 @@ public class IRBController {
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.loadAttachmentType();
+		protocolVO = irbProtocolInitLoadService.loadAttachmentType();
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}

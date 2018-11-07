@@ -29,43 +29,6 @@ public interface IRBProtocolService {
 	 */
 	IRBViewProfile getIRBProtocolDetails(String protocolNumber);
 
-	/**
-	 * return all the possible protocol types. 
-	 */
-	IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO);
-	
-	/**
-	 * return all the possible protocol types. 
-	 */
-	IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO);
-	
-	/**
-	 * return all lead units. 
-	 */
-	IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO);
-	
-	/**
-	 * return list of affiliation. 
-	 */
-	IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO);
-	
-
-	/**
-	 * return list of subject types. 
-	 */
-	IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO);
-	
-	/**
-	 * return list of subject types. 
-	 */
-	IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO);
-	
-	/**
-	 * @param generalInfo
-	 * @return IRBProtocolVO with updated general information
-	 */
-	
-	IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO);
 	
 	/**
 	 * @param generalInfo
@@ -169,10 +132,7 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator);
 
-	/**
-	 * @return possible attachment types
-	 */
-	IRBProtocolVO loadAttachmentType();
+
 
 	/**
 	 * @param IRBProtocolVO
@@ -191,11 +151,7 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 
-	/**
-	 * @param irbProtocolVO
-	 * @return list of sponsors
-	 */
-	IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO);
+
 
 	/**
 	 * @param protocolId 
@@ -210,9 +166,5 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol);
 
-	/**
-	 * @param irbProtocolVO
-	 * @return updated VO Object
-	 */
-	IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO);
+	
 }

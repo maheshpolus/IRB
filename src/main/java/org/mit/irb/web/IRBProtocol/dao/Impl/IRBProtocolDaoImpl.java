@@ -32,6 +32,8 @@ import org.mit.irb.web.IRBProtocol.pojo.Proposal;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
@@ -745,6 +747,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber");
 		query.setString("protocolNumber", protocolNumber);
 		irbProtocolVO.setProtocolAttachmentList(query.list());
+		Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorAttachments p where p.protocolNumber =:protocolNumber");
+		queryAttachment.setString("protocolNumber", protocolNumber);
+		irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());
 		return irbProtocolVO;
 	}
 
@@ -752,6 +757,82 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	public IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol) {
 		hibernateTemplate.saveOrUpdate(scienceOfProtocol);
 		irbProtocolVO.setScienceOfProtocol(scienceOfProtocol);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) throws JsonParseException, JsonMappingException, IOException {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		ProtocolCollaboratorAttachments protocolCollaboratorAttachments = mapper.readValue(formDataJson, ProtocolCollaboratorAttachments.class);
+		if (protocolCollaboratorAttachments.getAcType().equals("I")) {
+			for (int i = 0; i < files.length; i++) {
+				ProtocolCollaboratorAttachments irbCollaboratorAttachmentProtocol = new ProtocolCollaboratorAttachments();
+				irbCollaboratorAttachmentProtocol.setCollaboratorId(protocolCollaboratorAttachments.getCollaboratorId());
+				irbCollaboratorAttachmentProtocol.setProtocolId(protocolCollaboratorAttachments.getProtocolId());
+				irbCollaboratorAttachmentProtocol.setProtocolNumber(protocolCollaboratorAttachments.getProtocolNumber());
+				irbCollaboratorAttachmentProtocol.setSequenceNumber(protocolCollaboratorAttachments.getSequenceNumber());
+				irbCollaboratorAttachmentProtocol.setDescription(protocolCollaboratorAttachments.getDescription());
+				irbCollaboratorAttachmentProtocol.setUpdateUser(protocolCollaboratorAttachments.getUpdateUser());
+				irbCollaboratorAttachmentProtocol.setUpdateTimestamp(protocolCollaboratorAttachments.getUpdateTimestamp());
+				irbCollaboratorAttachmentProtocol.setCreateDate(protocolCollaboratorAttachments.getCreateDate());
+				irbCollaboratorAttachmentProtocol.setTypeCode(protocolCollaboratorAttachments.getTypeCode());
+				irbCollaboratorAttachmentProtocol.setAttachmentType(protocolCollaboratorAttachments.getAttachmentType());
+				ProtocolAttachments attachments = new ProtocolAttachments();
+				attachments.setContentType(files[i].getContentType());
+				attachments.setFileName(files[i].getOriginalFilename());
+				attachments.setFileData(files[i].getBytes());
+				attachments.setSequenceNumber(protocolCollaboratorAttachments.getProtocolAttachments().getSequenceNumber());
+				attachments.setUpdateTimestamp(protocolCollaboratorAttachments.getProtocolAttachments().getUpdateTimestamp());
+				attachments.setUpdateUser(protocolCollaboratorAttachments.getProtocolAttachments().getUpdateUser());
+				irbCollaboratorAttachmentProtocol.setProtocolAttachments(attachments);
+				hibernateTemplate.saveOrUpdate(irbCollaboratorAttachmentProtocol);
+			} 
+		}else if(protocolCollaboratorAttachments.getAcType().equals("U")){
+				ProtocolAttachments attachments = protocolCollaboratorAttachments.getProtocolAttachments();
+				for (int i = 0; i < files.length; i++) {
+					attachments.setContentType(files[i].getContentType());
+					attachments.setFileName(files[i].getOriginalFilename());
+					attachments.setFileData(files[i].getBytes());
+					attachments.setUpdateTimestamp(protocolCollaboratorAttachments.getProtocolAttachments().getUpdateTimestamp());
+					attachments.setUpdateUser(protocolCollaboratorAttachments.getProtocolAttachments().getUpdateUser());
+				}
+				hibernateTemplate.saveOrUpdate(protocolCollaboratorAttachments);
+		}else if (protocolCollaboratorAttachments.getAcType().equals("D")) {
+			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from ProtocolCollaboratorAttachments p where p.collaboratorAttachmentId =:collaboratorAttachmentId");
+			queryDeletAttachment.setInteger("collaboratorAttachmentId", protocolCollaboratorAttachments.getCollaboratorAttachmentId());
+			queryDeletAttachment.executeUpdate();
+			Query queryDeletProtocolAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("delete from ProtocolAttachments p where p.fileId =:fileId");
+			queryDeletProtocolAttachment.setInteger("fileId", protocolCollaboratorAttachments.getProtocolAttachments().getFileId());
+			queryDeletProtocolAttachment.executeUpdate();
+		}
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId");
+		query.setInteger("collaboratorId", protocolCollaboratorAttachments.getCollaboratorId());
+		irbProtocolVO.setProtocolCollaboratorAttachmentsList(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO addCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		for(ProtocolCollaboratorPersons person: protocolCollaboratorPersons){
+			hibernateTemplate.save(person);
+		}
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorPersons p where p.collaboratorId =:collaboratorId");
+		query.setInteger("collaboratorId", protocolCollaboratorPersons.get(0).getCollaboratorId());
+		irbProtocolVO.setProtocolCollaboratorPersons(query.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorPersons p where p.collaboratorId =:collaboratorId");
+		query.setInteger("collaboratorId", collaboratorId);
+		irbProtocolVO.setProtocolCollaboratorPersons(query.list());
+		Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId");
+		queryAttachment.setInteger("collaboratorId", collaboratorId);
+		irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());
 		return irbProtocolVO;
 	}
 

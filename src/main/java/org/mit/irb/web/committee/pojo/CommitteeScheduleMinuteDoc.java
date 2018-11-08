@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_SCHEDULE_MINUTE_DOC")
+@Table(name = "IRB_COMM_SCHEDULE_MINUTE_DOC")
 public class CommitteeScheduleMinuteDoc implements Serializable {
 
 	private static final long serialVersionUID = 1L;

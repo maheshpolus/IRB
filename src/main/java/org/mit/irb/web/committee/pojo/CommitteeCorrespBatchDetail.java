@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_CORRESP_BATCH_DETAIL")
+@Table(name = "IRB_COMM_CORRESP_BATCH_DETAIL")
 public class CommitteeCorrespBatchDetail implements Serializable {
 
 	private static final long serialVersionUID = 1L;

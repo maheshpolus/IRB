@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "PROTOCOL_SUBMISSION_V")
+@Table(name = "MITKC_IRB_PROTOCOL_SUBMISSION")
 public class ProtocolSubmission implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -28,13 +28,13 @@ public class ProtocolSubmission implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_PROTOCOL_SUBMISSION8"), name = "FIBI_SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_PROTOCOL_SUBMISSION8"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "SUBMISSION_NUMBER")
 	private Integer submissionNumber;
 
-	@Column(name = "FIBI_COMMITTEE_ID")
+	@Column(name = "COMMITTEE_ID")
 	private String committeeId;
 
 	@Column(name = "PROTOCOL_ID")
@@ -43,14 +43,20 @@ public class ProtocolSubmission implements Serializable {
 	@Column(name = "PROTOCOL_NUMBER")
 	private String protocolNumber;
 
-	@Column(name = "PI_PERSON_NAME")
+	@Transient
 	private String piPersonName;
-
-	@Column(name = "PI_PERSON_ID")
+	
+	@Transient
 	private String piPersonId;
+	
+/*	@Column(name = "PI_PERSON_NAME")
+	private String piPersonName;*/
 
-	@Column(name = "PROTOCOL_TITLE")
-	private String protocolTitle;
+/*	@Column(name = "PI_PERSON_ID")
+	private String piPersonId;*/
+
+/*	@Column(name = "PROTOCOL_TITLE")
+	private String protocolTitle;*/
 
 	@Column(name = "SUBMISSION_TYPE_CODE")
 	private String submissionTypeCode;
@@ -83,9 +89,9 @@ public class ProtocolSubmission implements Serializable {
 	@Column(name = "SUBMISSION_DATE")
 	private Date submissionDate;
 
-	@Column(name = "PROTOCOL_ACTIVE")
+/*	@Column(name = "PROTOCOL_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean protocolActive;
+	private Boolean protocolActive;*/
 
 	@Transient
 	private String documentNumber;
@@ -122,13 +128,13 @@ public class ProtocolSubmission implements Serializable {
 		this.piPersonName = piPersonName;
 	}
 
-	public String getProtocolTitle() {
+	/*public String getProtocolTitle() {
 		return protocolTitle;
 	}
 
 	public void setProtocolTitle(String protocolTitle) {
 		this.protocolTitle = protocolTitle;
-	}
+	}*/
 
 	public String getSubmissionTypeCode() {
 		return submissionTypeCode;
@@ -214,13 +220,13 @@ public class ProtocolSubmission implements Serializable {
 		this.committeeId = committeeId;
 	}
 
-	public Boolean getProtocolActive() {
+	/*public Boolean getProtocolActive() {
 		return protocolActive;
 	}
 
 	public void setProtocolActive(Boolean protocolActive) {
 		this.protocolActive = protocolActive;
-	}
+	}*/
 
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;

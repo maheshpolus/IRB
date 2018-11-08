@@ -33,7 +33,7 @@ import org.mit.irb.web.committee.schedule.Time12HrFmt;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_SCHEDULE")
+@Table(name = "IRB_COMM_SCHEDULE")
 public class CommitteeSchedule implements Serializable, Comparable<CommitteeSchedule> {
 
 	private static final long serialVersionUID = 1L;

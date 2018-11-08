@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Entity
-@Table(name = "PROTOCOL_CONTINGENCY")
+@Table(name = "MITKC_IRB_PROTOCOL_CONTINGENCY")
 public class ProtocolContingency implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -28,12 +28,12 @@ public class ProtocolContingency implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	@Version
+	/*@Version
 	@Column(name = "VER_NBR", length = 8)
-	protected Long versionNumber;
+	protected Long versionNumber;*/
 
-	@Column(name = "OBJ_ID", length = 36, unique = true)
-	protected String objectId;
+/*	@Column(name = "OBJ_ID", length = 36, unique = true)
+	protected String objectId;*/
 
 	public String getProtocolContingencyCode() {
 		return protocolContingencyCode;
@@ -71,19 +71,19 @@ public class ProtocolContingency implements Serializable {
 		return serialVersionUID;
 	}
 
-	public Long getVersionNumber() {
+	/*public Long getVersionNumber() {
 		return versionNumber;
 	}
 
 	public void setVersionNumber(Long versionNumber) {
 		this.versionNumber = versionNumber;
-	}
+	}*/
 
-	public String getObjectId() {
+/*	public String getObjectId() {
 		return objectId;
 	}
 
 	public void setObjectId(String objectId) {
 		this.objectId = objectId;
-	}
+	}*/
 }

@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "MIT_IRB_COMMITTEE")
+@Table(name = "IRB_COMMITTEE")
 public class Committee implements Serializable {
 
 	private static final long serialVersionUID = 1L;

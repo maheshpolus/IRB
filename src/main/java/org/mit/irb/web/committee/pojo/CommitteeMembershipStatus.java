@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_MEMBERSHIP_STATUS")
+@Table(name = "IRB_COMM_MEMBERSHIP_STATUS")
 public class CommitteeMembershipStatus implements Serializable {
 
 	private static final long serialVersionUID = 1L;

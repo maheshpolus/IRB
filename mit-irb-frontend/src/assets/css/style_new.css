@@ -980,15 +980,15 @@ display:inline-block;
     top: 10px;
     border: 0;
     background: transparent;
-    font-size: 1.2em;
+    font-size: 1em;
+    font-weight: bold;
     padding: 0;
-    cursor: pointer;
+    cursor: pointer !important;
+    color: #a92034;
+}
+.addBtn:hover {
     color: #5e5e5e;
 }
-.borderBoxHeading:hover .addBtn{
-    color: #17BFBF;
-}
-
 
 
 
@@ -2702,6 +2702,12 @@ ul.sb-results-dropdown-menu > li:last-child {
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
 }
+.popup-sub-header i{
+    background: #a92034 !important;
+    color: #fff !important;
+    padding-left: 10px;
+    cursor: pointer;
+}
 .sub-head-width{
     display: inline-block;
     width: 80%;
@@ -3428,6 +3434,14 @@ transition: display .25s}
     font-weight: bold;
    
 }
+.attachment-btn-position
+{
+    position: relative;
+    z-index: 1;
+}
+.a-right:hover{
+color: #5e5e5e !important;
+}
 .icon-padding
 {
     margin-right: 5px;
@@ -3639,6 +3653,9 @@ transition: display .25s}
     padding: 2px;
     color: red;
 }	
+.pl-5{
+    padding-left: 5px !important;
+}
 .btn-mt-10
 {
     margin-top: 10px;
@@ -4026,3 +4043,11 @@ input:disabled{
 /* .padding-0{
     padding: 0px!important;
 } */
+.person-label{
+    margin-left: 30px;
+    font-weight: bold;
+}
+.filechip-div{
+    margin-left: 5px;
+    margin-bottom: 5px;
+}

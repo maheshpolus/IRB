@@ -52,4 +52,19 @@ export class IrbCreateService {
   updateCollaborator(params) {
     return this._http.post('/mit-irb/updateCollaborator', params);
   }
+  addCollaboratorAttachments(protocolCollaboratorAttachments: Object, uploadedFile) {
+    this.formData.delete('files');
+    this.formData.delete('formDataJson');
+    for (let i = 0; i < uploadedFile.length; i++) {
+      this.formData.append('files', uploadedFile[i]);
+    }
+    this.formData.append('formDataJson', JSON.stringify(protocolCollaboratorAttachments));
+    return this._http.post('/mit-irb/addCollaboratorAttachments', this.formData);
+  }
+  loadCollaboratorPersonsAndAttachments(params) {
+    return this._http.post('/mit-irb/loadCollaboratorPersonsAndAttachments', params);
+  }
+  addCollaboratorPersons(params) {
+    return this._http.post('/mit-irb/addCollaboratorPersons', params);
+  }
 }

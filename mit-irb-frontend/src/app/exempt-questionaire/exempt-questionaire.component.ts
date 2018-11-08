@@ -153,6 +153,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     isDuplicate = false;
     disableButton = false;
     showContinueButton = false;
+    invalidData = {
+        invalidStartDate : false,
+        invalidEndDate: false,
+        invalidExemptData: false
+    };
 
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
@@ -359,6 +364,28 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.IsElasticResultFaculty = false;
     }
 
+    validateStartDate() {
+        if (this.requestObject.exemptProtocolEndDate != null || this.requestObject.exemptProtocolEndDate !== undefined) {
+        if (Date.parse(this.requestObject.exemptProtocolStartDate) >= Date.parse(this.requestObject.exemptProtocolEndDate)) {
+       this.invalidData.invalidStartDate = true;
+        } else {
+            this.invalidData.invalidStartDate = false;
+            this.invalidData.invalidEndDate = false;
+        }
+    }
+}
+
+    validateEndDate() {
+        if (this.requestObject.exemptProtocolEndDate != null || this.requestObject.exemptProtocolEndDate !== undefined) {
+        if (Date.parse(this.requestObject.exemptProtocolEndDate) <= Date.parse(this.requestObject.exemptProtocolStartDate)) {
+            this.invalidData.invalidEndDate = true;
+        } else {
+            this.invalidData.invalidStartDate = false;
+            this.invalidData.invalidEndDate = false;
+        }
+    }
+ }
+
     /** function to load exempt questionaire once the title and pi and exempt is created */
     loadQuestionaire() {
         this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
@@ -385,6 +412,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 this.openWarningModal();
             } else {
                 this.disableButton = true;
+                this.showAlert = false;
+                this.invalidData.invalidExemptData = false;
                 this.continueBtnClicked = true;
                 this.requestObject.irbExemptForm.updateUser = this.userDTO.userName;
                 this.requestObject.irbExemptForm.actionTypesCode = this.strCreatedActionType;
@@ -412,13 +441,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             }
         } else if (this.requestObject.irbExemptForm.personId === ''
             && this.requestObject.irbExemptForm.personName !== '' && this.requestObject.irbExemptForm.personName !== null) {
-            this.showAlert = true;
+                this.showAlert = true;
             this.modalHeading = 'Alert';
             this.alertMsg = 'Please enter valid data';
         } else {
-            this.showAlert = true;
-            this.modalHeading = 'Alert';
-            this.alertMsg = 'Please provide the mandatory fields';
+            this.invalidData.invalidExemptData = true;
         }
     }
 
@@ -583,7 +610,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '') &&
             (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
             (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
-            this._spinner.show();
+            this.invalidData.invalidExemptData = false;
+                this._spinner.show();
             this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
                 data => {
                     this.result = data;
@@ -616,9 +644,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 }
             );
         } else {
-            this.openSaveModal();
-            this.modalHeading = 'Alert';
-            this.alertMsg = 'Please provide the mandatory fields';
+            this.invalidData.invalidExemptData = true;
         }
     }
 

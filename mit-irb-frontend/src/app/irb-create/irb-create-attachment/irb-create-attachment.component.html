@@ -1,3 +1,4 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -15,148 +16,171 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
               <div class="row">
                 <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-                  <div class="alert alert-danger " *ngIf="!isMandatoryFilled">
-                    Please fill all mandatory fields marked
-                    <strong>*</strong>
+                  <a class="pdf a-right attachment-btn-position" data-toggle="modal" data-target="#attachmentModal" (click)="clearAttachmentPopup()">
+                    <i class="fa fa-plus icon-padding"></i>Add Attachment
+                  </a>
+                  <div class="col-12 mt-10">
+                    <div class="table-responsive" *ngIf="!noIrbAttachments">
+                    <table class="table table-striped table-type-head">
+                      <thead class="popup-sub-header">
+                        <tr>
+                          <th scope="col" class="pdf" (click)="sortBy('attachmentType.description')">Type<i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="!isTimeStampSorting"></i></th>
+                          <th scope="col">Description</th>
+                          <th scope="col">File</th>
+                          <th scope="col" class="pdf" (click)="sortBy('updateTimestamp')">Updated By<i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="isTimeStampSorting"></i></th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tdy-color">
+                        <tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}; let i = index" [class.poping-border]="i == attachmentSelectedRow">
+                          <td>{{attachments.attachmentType.description}}</td>
+                          <td>{{attachments.description}}</td>
+                          <td style="width: 30%" class="padding-table-content">{{attachments.protocolAttachment.fileName}} </td>
+                          <td class="padding-table-content">{{attachments.updateUser}} {{(attachments.updateTimestamp ===' ' || attachments.updateTimestamp
+                            ===null) ? ' ':(attachments.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
+                          <td>
+                            <ul class="actionButtonGroup padding-icons">
+                              <li>
+                                <a title="Delete Attachment" (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
+                                  <i class="fa fa-trash-o delete-color"></i>
+                                </a>
+                              </li>
+                              <li>
+                                <a (click)="downloadAttachment(attachments)" title="Download Attachment">
+                                  <i class="fa fa-download download-color" aria-hidden="true"></i>
+                                </a>
+                              </li>
+                              <li>
+                                <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                  <i class="fa fa-edit edit-color"></i>
+                                </a>
+                              </li>
+                            </ul>
+                          </td>
+                        </tr>
+                        <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
+                            <td>{{protocolCollaboratorAttachment?.attachmentType?.description}}</td>
+                            <td>{{protocolCollaboratorAttachment?.description}}</td>
+                            <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</td>
+                            <td class="padding-table-content">{{protocolCollaboratorAttachment?.updateUser}} {{(protocolCollaboratorAttachment?.updateTimestamp ===' ' || protocolCollaboratorAttachment.updateTimestamp
+                               ===null) ? ' ':(protocolCollaboratorAttachment.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
+                           <td>
+                               <ul class="actionButtonGroup padding-icons">
+                                   <li>
+                                     <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachment">
+                                       <i class="fa fa-trash-o delete-color"></i>
+                                     </a>
+                                   </li>
+                                   <li>
+                                     <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
+                                       <i class="fa fa-download download-color" aria-hidden="true"></i>
+                                     </a>
+                                   </li>
+                                   <li>
+                                      <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                        <i class="fa fa-edit edit-color"></i>
+                                      </a>
+                                    </li>
+                                 </ul>
+                           </td>
+                          </tr>
+
+                      </tbody>
+                    </table>
                   </div>
-                  <div class="alert alert-danger " *ngIf="isDuplicate">
-                    File already choosen. Please choose a different one
                   </div>
-                  <div class="row col-12 form-group">
-                    <div class="col-4 apprve-date">
-                      <h4>*Type</h4>
-                      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode" (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
-                        <option value=null selected>Please Select</option>
-                        <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
-                      </select>
-                    </div>
-                    <div class="col-8 apprve-date">
-                      <h4 class="ml-10">*Description</h4>
-                      <textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding " placeholder="Description" [(ngModel)]="requestObject.attachmentDescription"></textarea>
-                    </div>
+                  <div class="col-md-12" *ngIf="noIrbAttachments">
+                    <p class="noAttachments">No attachments associated with this protocol.</p>
                   </div>
-                  <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
-                    <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+                </div>
+              </div>
+            </div>
+
+            <!-- delete warning modal -->
+            <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteAttachment" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content modal-text-color">
+                  <div class="modal-header popup-header">
+                    <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
                     </button>
-                    <input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none" />
-                    <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
-                    </div>
-                  </file-drop>
-                  <div class="filechip">
-                    <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
-                      <i class="fa fa-close pdf" (click)="deleteFromUploadedFileList(item)"></i>
-                    </span>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure you want to delete this item?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
+                    <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments()" data-dismiss="modal">Yes</button>
                   </div>
                 </div>
               </div>
             </div>
-            <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
-              <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" aria-label="Close" (click)="addAttachments()">Add</button>
-            </section>
-            <div class="col-12 mt-10">
-              <div class="table-responsive" *ngIf="!noIrbAttachments">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="sortOrder" [(ngModel)]="sortOrder" (ngModelChange)="sortBy()" id="inlineCheckbox1"
-                    value="-1">
-                  <label class="form-check-label radio-label" for="inlineCheckbox1">ASC</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" id="inlineCheckbox2" [(ngModel)]="sortOrder" name="sortOrder" (ngModelChange)="sortBy()"
-                    value="1">
-                  <label class="form-check-label radio-label" for="inlineCheckbox2">DSC</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <select class="custom-select mr-sm-2" [(ngModel)]="sortField" (ngModelChange)="sortBy()" id="inlineFormCustomSelect">
-                    <option value="UPDATE_TIMESTAMP">UPDATE TIMESTAMP</option>
-                    <option value="ATTACHMENT_TYPE">ATTACHMENT TYPE</option>
-                  </select>
+            <!-- delete warning modal ends -->
+
+            <!-- Add Attachment Modal-->
+            <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"
+              data-backdrop="static" data-keyboard="false">
+              <div class="modal-dialog modal-full" role="document">
+                <div class="modal-content">
+                  <div class="modal-header popup-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Attachment</h5>
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="clearAttachmentPopup()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body modal-popup">
+                    <div class="modal-padding">
+                      <div class="alert alert-danger " *ngIf="!isMandatoryFilled">
+                        Please fill all mandatory fields marked
+                        <strong>*</strong>
+                      </div>
+                      <div class="alert alert-danger " *ngIf="multipleFile">
+                        Cannot Add Multiple Files
+                      </div>
+                      <div class="row col-12 form-group">
+                        <div class="col-4 apprve-date">
+                          <h4>*Type</h4>
+                          <select [class.poping-border]="isAttachmentedit" class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode"
+                            (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
+                            <option value=null selected>Please Select</option>
+                            <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
+                          </select>
+                        </div>
+                        <div class="col-8 apprve-date">
+                          <h4 class="ml-10">*Description</h4>
+                          <textarea [class.poping-border]="isAttachmentedit" rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding "
+                            placeholder="Description" [(ngModel)]="requestObject.attachmentDescription"></textarea>
+                        </div>
+                      </div>
+                      <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+                        <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+                        </button>
+                        <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
+                        <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+                        </div>
+                      </file-drop>
+                      <div class="filechip">
+                        <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+                          <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+                        </span>
+                      </div>
+                      <div class="filechip" *ngIf="isReplaceAttachment">
+                        <span>{{ tempEditAttachment?.protocolAttachment?.fileName }}
+                          <i title="Replace Attachment" class="fa fa-close pdf" (click)="replaceAttachment()"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+                    <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="!isAttachmentEdit"
+                      aria-label="Close" (click)="addAttachments()">Add</button>
+                    <button title="Save Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isAttachmentEdit"
+                      aria-label="Close" (click)="saveEditedattachments()">Save</button>
+                  </section>
                 </div>
               </div>
-              <table class="table table-striped table-type-head">
-                <thead class="popup-sub-header">
-                  <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">File</th>
-                    <th scope="col">Updated By</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody class="tdy-color">
-                  <tr *ngFor="let attachments of irbAttachmentsList let i = index">
-                    <td>
-                      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" [class.poping-border]="editAttachment[i] == true" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"
-                        [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.attachmentType.typeCode" (ngModelChange)="setAttachmentType(attachments.attachmentType.typeCode)">
-                        <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input [class.poping-border]="editAttachment[i] == true" class="form-control" type="text" [ngClass]="(!editAttachment[i] == false)? 'checklistEditable' : 'checklistDescNotEditable'"
-                        [disabled]="!editAttachment[i] == true" [(ngModel)]="attachments.description">
-                    </td>
-                    <td style="width: 30%" class="padding-table-content">{{attachments.protocolAttachment.fileName}} </td>
-                    <td class="padding-table-content">{{attachments.updateUser}} {{(attachments.updateTimestamp ===' ' || attachments.updateTimestamp ===null)
-                      ? ' ':(attachments.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
-                    <td>
-                      <ul class="actionButtonGroup padding-icons">
-                        <li>
-                          <a title="Delete {{attachments.protocolAttachment.fileId}}" (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
-                            <i class="fa fa-trash-o delete-color"></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a (click)="downloadAttachment(attachments)" title="Download {{attachments.protocolAttachment.fileId}}">
-                            <i class="fa fa-download download-color" aria-hidden="true"></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a *ngIf="!editAttachment[i] == true" (click)="editAttachments($event,i, attachments)" title="Edit {{attachments.protocolAttachment.fileId}}">
-                            <i class="fa fa-edit edit-color"></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a *ngIf="!editAttachment[i] == false" href="#" (click)="saveEditedattachments($event,i, attachments)">
-                            <i class="fa fa-floppy-o save-color" title="Save {{attachments.protocolAttachment.fileId}}" aria-hidden="true"></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a *ngIf="!editAttachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)" title="Cancel {{attachments.protocolAttachment.fileId}}">
-                            <i class="fa fa-times cancel-color" aria-hidden="true"></i>
-                          </a>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
-            <div class="col-md-12" *ngIf="noIrbAttachments">
-              <p class="noAttachments">No attachments associated with this protocol.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- delete warning modal -->
-      <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteAttachment" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content modal-text-color">
-            <div class="modal-header popup-header">
-              <h5 class="modal-title modal-text-color">Want to delete?</h5>
-
-              <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Are you sure you want to delete this item?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
-              <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- delete warning modal ends -->
+            <!--Add Attachment modal ends-->

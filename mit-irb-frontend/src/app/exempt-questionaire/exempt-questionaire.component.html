@@ -18,7 +18,13 @@
 						<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
 					</div>
 				</div>
-				<div class="col-12 apprve-date display" *ngIf="showQuestionaire">
+				<div class="col-12  search-eidted-p padding-15">
+						<div class="alert alert-danger " *ngIf="invalidData.invalidExemptData">
+								Please fill all mandatory fields marked
+								<strong>*</strong>
+						</div>
+					  </div>
+				<div class="col-12 apprve-date display mt-0" *ngIf="showQuestionaire">
 					<div class="title-head">
 						<h4 class="pl0">
 							Exempt Id :
@@ -27,17 +33,20 @@
 						</h4>
 					</div>
 				</div>
-				<div class="col-12 apprve-date">
-					<div class="col-2 title-head pl0">
+				<div class="col-12 apprve-date mt-0">
+					<div class="row">
+					<div class="col-2 title-head pl-15">
 						<h4>*Title:</h4>
 					</div>
 					<div class="col-9 width-exempt searchBox display">
 						<input class="form-control" type="text" [disabled]="isViewMode" maxlength="250" [(ngModel)]="requestObject.irbExemptForm.exemptTitle"
 						 placeholder="Enter Exempt Title">
 					</div>
+					</div>
 				</div>
-				<div class="col-12 apprve-date">
-					<div class="col-2 title-head pl0">
+				<div class="col-12 apprve-date mt-0">
+						<div class="row">
+					<div class="col-2 title-head pl-15">
 						<h4>*Principal Investigator:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
@@ -64,36 +73,52 @@
 						<input class="form-control unit-margin" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"
 						 *ngIf="isViewMode" />
 					</div>
+					</div>
 				</div>
 				<!--Text change Ends-->
 
-				<div class="col-12 apprve-date">
-					<div class="col-2 title-head pl0">
+				<div class="col-12 apprve-date mt-0">
+						<div class="row">
+					<div class="col-2 title-head pl-15">
 						<h4>*Start Date:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
 						<input [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt4" placeholder="mm/dd/yyyy"
-						 [(ngModel)]="requestObject.exemptProtocolStartDate">
+						 [(ngModel)]="requestObject.exemptProtocolStartDate" (ngModelChange)="validateStartDate()">
 						<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
 						<span title="Choose Start Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt4">
 							<i class="fa fa-calendar" aria-hidden="true"></i>
 						</span>
+						
+						<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
 					</div>
 					<div class="col-1 title-head ">
 						<h4>*End Date:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
 						<input [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
-						 [(ngModel)]="requestObject.exemptProtocolEndDate">
+						 [(ngModel)]="requestObject.exemptProtocolEndDate"(ngModelChange)="validateEndDate()">
 						<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
 						<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">
 							<i class="fa fa-calendar" aria-hidden="true"></i>
 						</span>
+						<span *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</span>
+					</div>
 					</div>
 				</div>
-
-				<div class="col-12 apprve-date">
-					<div class="col-2 title-head pl0">
+				<!-- <div class="col-12">
+					<div class="row">
+					<div class="col-6">
+						<span *ngIf="invalidData.invalidEndDate" class="error">Start Date should be less than End Date</span>
+					 </div>
+					<div class="col-6">
+							<span *ngIf="invalidData.invalidEndDate" class="error">Start Date should be less than End Date</span>
+				 </div>
+				</div>
+				</div> -->
+				<div class="col-12 apprve-date mt-0">
+						<div class="row">
+					<div class="col-2 title-head pl-15">
 						<h4 class="sponsorFont">Faculty Sponsor:</h4>
 					</div>
 					<div class="col-4  width-exempt searchBox display">
@@ -111,8 +136,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-12 apprve-date">
-					<div class="col-2 title-head pl0">
+				</div>
+				<div class="col-12 apprve-date mt-0">
+						<div class="row">
+					<div class="col-2 title-head pl-15">
 						<h4>*Summary:</h4>
 					</div>
 					<div class="col-9 width-exempt searchBox dsp-flex">
@@ -122,6 +149,7 @@
 				<div *ngIf="!isViewMode" class="col-12 exempt-id">
 					<button [hidden]="showQuestionaire" id="#continueBtn" class="btn mb-3 btn-primary tab_btn center-button" (click)="loadQuestionaire()"
 					 data-toggle="modal" data-target="#alertModal" [disabled]="disableButton">Continue</button>
+				</div>
 				</div>
 				<!--new end-->
 			</div>

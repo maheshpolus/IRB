@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PROTOCOL_ACTION_TYPE")
+@Table(name = "MITKC_IRB_PROTOCOL_ACTION_TYPE")
 public class ProtocolActionType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

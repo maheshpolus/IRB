@@ -360,4 +360,37 @@ public class IRBController {
 		String responseData = mapper.writeValueAsString(irbProtocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
+	
+	@RequestMapping(value = "/addCollaboratorAttachments", method = RequestMethod.POST)
+	public ResponseEntity<String> addCollaboratorAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) throws JsonProcessingException {
+		logger.info("Request for Protocol Collaborator Attachments Modification");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.addCollaboratorAttachments(files, formDataJson);
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/addCollaboratorPersons", method = RequestMethod.POST)
+	public ResponseEntity<String> addCollaboratorPersons(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
+		logger.info("Request for addCollaboratorPersons");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.addCollaboratorPersons(irbProtocolVO.getProtocolCollaboratorPersons());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/loadCollaboratorPersonsAndAttachments", method = RequestMethod.POST)
+	public ResponseEntity<String> loadCollaboratorPersonsAndAttachments(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
+		logger.info("Request for loadCollaboratorPersonsAndAttachments");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.loadCollaboratorPersonsAndAttachments(irbProtocolVO.getCollaboratorId());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
 }

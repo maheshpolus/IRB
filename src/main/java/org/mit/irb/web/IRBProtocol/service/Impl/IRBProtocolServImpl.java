@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
@@ -217,6 +219,31 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		irbProtocolVO = irbProtocolDao.saveScienceOfProtocol(irbProtocolVO,scienceOfProtocol);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) {
+		IRBProtocolVO irbProtocolVO = null;
+		try {
+			irbProtocolVO = irbProtocolDao.addCollaboratorAttachments(files,formDataJson);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO addCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		irbProtocolVO = irbProtocolDao.addCollaboratorPersons(protocolCollaboratorPersons);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		irbProtocolVO = irbProtocolDao.loadCollaboratorPersonsAndAttachments(collaboratorId);
 		return irbProtocolVO;
 	}
 

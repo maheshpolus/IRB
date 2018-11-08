@@ -8,6 +8,8 @@ import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
@@ -50,7 +52,9 @@ public class IRBProtocolVO {
 	private List<IRBAttachmentProtocol> protocolAttachmentList;
 	private ScienceOfProtocol scienceOfProtocol;
 	private List<AgeGroups> ageGroups;
-	
+	private List<ProtocolCollaboratorAttachments> protocolCollaboratorAttachmentsList;
+	private List<ProtocolCollaboratorPersons> protocolCollaboratorPersons;
+	private Integer collaboratorId;
 	
 	public ScienceOfProtocol getScienceOfProtocol() {
 		return scienceOfProtocol;
@@ -249,5 +253,30 @@ public class IRBProtocolVO {
 
 	public void setSponsorType(List<SponsorType> sponsorType) {
 		this.sponsorType = sponsorType;
+	}
+
+	public List<ProtocolCollaboratorAttachments> getProtocolCollaboratorAttachmentsList() {
+		return protocolCollaboratorAttachmentsList;
+	}
+
+	public void setProtocolCollaboratorAttachmentsList(
+			List<ProtocolCollaboratorAttachments> protocolCollaboratorAttachmentsList) {
+		this.protocolCollaboratorAttachmentsList = protocolCollaboratorAttachmentsList;
+	}
+
+	public List<ProtocolCollaboratorPersons> getProtocolCollaboratorPersons() {
+		return protocolCollaboratorPersons;
+	}
+
+	public void setProtocolCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons) {
+		this.protocolCollaboratorPersons = protocolCollaboratorPersons;
+	}
+
+	public Integer getCollaboratorId() {
+		return collaboratorId;
+	}
+
+	public void setCollaboratorId(Integer collaboratorId) {
+		this.collaboratorId = collaboratorId;
 	}
 }

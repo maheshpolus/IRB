@@ -3,9 +3,11 @@ package org.mit.irb.web.IRBProtocol.service;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
@@ -166,5 +168,22 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol);
 
-	
+	/**
+	 * @param files
+	 * @param attachmentsObject
+	 * @return updated VO object
+	 */
+	IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson);
+
+	/**
+	 * @param protocolCollaboratorPersonsList
+	 * @return updated VO object
+	 */
+	IRBProtocolVO addCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons);
+
+	/**
+	 * @param collaboratorId
+	 * @return updated VO object with collaborator persons and attachments
+	 */
+	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
 }

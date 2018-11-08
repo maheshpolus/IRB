@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_SCHEDULE_MINUTES")
+@Table(name = "IRB_COMM_SCHEDULE_MINUTES")
 public class CommitteeScheduleMinutes implements Serializable {
 
 	private static final long serialVersionUID = 1L;

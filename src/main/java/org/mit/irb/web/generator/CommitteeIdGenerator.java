@@ -26,7 +26,7 @@ public class CommitteeIdGenerator implements IdentifierGenerator {
 		try {
 			Statement statement = connection.createStatement();
 
-			ResultSet rs = statement.executeQuery("select count(1) from FIBI_COMMITTEE");
+			ResultSet rs = statement.executeQuery("select count(1) from IRB_COMMITTEE");
 
 			if (rs.next()) {
 				int id = rs.getInt(1) + 101;

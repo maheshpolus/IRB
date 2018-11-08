@@ -31,7 +31,7 @@ import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 import org.mit.irb.web.committee.view.PersonDetailsView;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_MEMBERSHIPS")
+@Table(name = "IRB_COMM_MEMBERSHIPS")
 public class CommitteeMemberships implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
@@ -64,5 +66,11 @@ public interface IRBProtocolDao {
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 
 	IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol);
+
+	IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) throws JsonParseException, JsonMappingException, IOException;
+
+	IRBProtocolVO addCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons);
+
+	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
 	
 }

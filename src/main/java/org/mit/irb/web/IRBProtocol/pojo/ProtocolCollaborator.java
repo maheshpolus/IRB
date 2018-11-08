@@ -1,7 +1,9 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -9,9 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.Parameter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -64,6 +71,14 @@ public class ProtocolCollaborator {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_ORGANIZATION_FK1"), name = "ORGANIZATION_ID", referencedColumnName = "ORGANIZATION_ID", insertable = false, updatable = false)
 	CollaboratorNames collaboratorNames;
+	
+	//@JsonIgnore
+	@OneToMany(mappedBy = "protocolCollaborator", orphanRemoval = true, cascade = { CascadeType.ALL })
+	private List<ProtocolCollaboratorAttachments> protocolCollaboratorAttachments;
+	
+	//@JsonIgnore 
+	@OneToMany(mappedBy = "protocolCollaborator", orphanRemoval = true, cascade = { CascadeType.ALL })
+	private List<ProtocolCollaboratorPersons> protocolCollaboratorPersons;
 	
 	public Integer getProtocolLocationId() {
 		return protocolLocationId;

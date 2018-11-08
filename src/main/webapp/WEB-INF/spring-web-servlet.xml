@@ -67,8 +67,10 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementStatus</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.AgeGroups</value>
-
-				<!-- <value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments</value>
+				
+					<value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
 					<value>org.mit.irb.web.committee.pojo.Committee</value>
 					<value>org.mit.irb.web.committee.pojo.CommitteeCorrespBatch</value> 
 					<value>org.mit.irb.web.committee.pojo.CommitteeCorrespBatchDetail</value> 
@@ -76,9 +78,9 @@
 					<value>org.mit.irb.web.committee.pojo.CommitteeMemberRoles</value> 
 					<value>org.mit.irb.web.committee.pojo.CommitteeMemberships</value>
 					<value>org.mit.irb.web.committee.pojo.CommitteeMembershipStatus</value> 
-					<value>org.mit.irb.web.committee.pojo.CommitteeMembershipType.java</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeMembershipType</value> 
 					<value>org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange</value> 
-					<value>org.mit.irb.web.committee.pojo.CommitteeResearchAreas.java</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeResearchAreas</value> 
 					<value>org.mit.irb.web.committee.pojo.CommitteeSchedule</value>
 					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleActItems</value> 
 					<value>org.mit.irb.web.committee.pojo.CommitteeScheduleAttachment</value> 
@@ -91,7 +93,7 @@
 					<value>org.mit.irb.web.committee.pojo.MembershipRole</value>
 					<value>org.mit.irb.web.committee.pojo.MinuteEntryType</value> 
 					<value>org.mit.irb.web.committee.pojo.ProtocolActionType</value>
-					<value>org.mit.irb.web.committee.pojo.CommitteeResearchAreas.java</value> 
+					<value>org.mit.irb.web.committee.pojo.CommitteeResearchAreas</value> 
 					<value>org.mit.irb.web.committee.pojo.ProtocolContingency</value>
 					<value>org.mit.irb.web.committee.pojo.ProtocolReviewType</value> 
 					<value>org.mit.irb.web.committee.pojo.ProtocolSubmission</value>
@@ -106,7 +108,9 @@
 					<value>org.mit.irb.web.committee.pojo.ScheduleStatus</value> 
 					
 					<value>org.mit.irb.web.committee.pojo.UnitAdministrator</value> 
-					<value>org.mit.irb.web.committee.pojo.UnitAdministratorType</value> -->
+					<value>org.mit.irb.web.committee.pojo.UnitAdministratorType</value>
+					<value>org.mit.irb.web.committee.view.PersonDetailsView</value>
+					<value>org.mit.irb.web.committee.view.ProtocolView</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

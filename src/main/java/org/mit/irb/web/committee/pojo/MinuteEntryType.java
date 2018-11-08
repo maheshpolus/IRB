@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MIT_IRB_MINUTE_ENTRY_TYPE")
+@Table(name = "IRB_MINUTE_ENTRY_TYPE")
 public class MinuteEntryType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

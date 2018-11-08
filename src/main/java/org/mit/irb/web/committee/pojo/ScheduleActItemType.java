@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MIT_IRB_SCHEDULE_ACT_ITEM_TYPE")
+@Table(name = "IRB_SCHEDULE_ACT_ITEM_TYPE")
 public class ScheduleActItemType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

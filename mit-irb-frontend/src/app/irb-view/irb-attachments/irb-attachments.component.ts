@@ -14,10 +14,10 @@ export class IrbAttachmentsComponent implements OnInit {
 
     irbAttachmentsList: any[] = [];
     result: any;
-    sortOrder = '1';
-    sortField = 'UPDATE_TIMESTAMP';
-    direction: number;
-    column: any;
+    isUpArrow = true;
+    isTimeStampSorting = true;
+    direction = 1;
+    column = 'UPDATE_TIMESTAMP';
 
     requestObject = {
             protocolNumber: '',
@@ -41,7 +41,6 @@ export class IrbAttachmentsComponent implements OnInit {
                     this.noIrbAttachments = true;
                 } else {
                     this.irbAttachmentsList = this.result.irbViewProtocolAttachmentList;
-                    this.sortBy();
                 }
             }
 
@@ -70,8 +69,10 @@ export class IrbAttachmentsComponent implements OnInit {
     }
 
     /**set column and direction to sort attachments */
-    sortBy() {
-        this.column = this.sortField;
-        this.direction = parseInt( this.sortOrder, 10 );
+    sortBy(column) {
+        this.isUpArrow = !this.isUpArrow;
+        this.isTimeStampSorting = column === 'UPDATE_TIMESTAMP' ? true : false;
+        this.column = column;
+        this.direction = this.direction === 1 ? -1 : 1;
     }
 }

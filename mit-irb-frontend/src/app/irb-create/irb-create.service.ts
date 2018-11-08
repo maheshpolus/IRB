@@ -1,49 +1,70 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class IrbCreateService {
   formData = new FormData();
 
-  constructor( private router: Router, private _http: HttpClient) { }
+  constructor(private _http: HttpClient) { }
+
   getEditDetails(params) {
-     return this._http.post('/mit-irb/createIRBProtocol', params);
+    return this._http.post('/mit-irb/createIRBProtocol', params);
   }
 
   updateProtocolGeneralInfo(params) {
     return this._http.post('/mit-irb/updateProtocolGeneralInfo', params);
- }
+  }
 
- updateProtocolPersonInfo(params) {
-  return this._http.post('/mit-irb/updateProtocolPersonInfo', params);
-}
-getIrbAttachmentList(params) {
-  return this._http.post('/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber', params);
-}
+  updateProtocolPersonInfo(params) {
+    return this._http.post('/mit-irb/updateProtocolPersonInfo', params);
+  }
 
-addattachment(irbAttachmentProtocol: Object, uploadedFile) {
-  this.formData.delete( 'files' );
-      this.formData.delete( 'formDataJson' );
-      // this.formData.delete('formDataIRBJson');
-      for ( let i = 0; i < uploadedFile.length; i++ ) {
-          this.formData.append( 'files', uploadedFile[i] );
-      }
-      this.formData.append( 'formDataJson', JSON.stringify( irbAttachmentProtocol ) );
-      // this.formData.append( 'formDataIRBJson', JSON.stringify( irbAttachmentProtocol ) );
-  return this._http.post('/mit-irb/addProtocolAttachments', this.formData);
-}
-getAttachmentTypes(params) {
-  return this._http.post('/mit-irb/loadAttachmentType', params);
-}
+  getIrbAttachmentList(params) {
+    return this._http.post('/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber', params);
+  }
 
-updateFundingSource(params) {
-  return this._http.post('/mit-irb/updateFundingSource', params);
-}
-updateSubject(params) {
-  return this._http.post('/mit-irb/updateSubject', params);
-}
-updateCollaborator(params) {
-  return this._http.post('/mit-irb/updateCollaborator', params);
-}
+  saveScienceOfProtocol(params) {
+    return this._http.post('/mit-irb/saveScienceOfProtocol', params);
+  }
+
+  addattachment(irbAttachmentProtocol: Object, uploadedFile) {
+    this.formData.delete('files');
+    this.formData.delete('formDataJson');
+    for (let i = 0; i < uploadedFile.length; i++) {
+      this.formData.append('files', uploadedFile[i]);
+    }
+    this.formData.append('formDataJson', JSON.stringify(irbAttachmentProtocol));
+    return this._http.post('/mit-irb/addProtocolAttachments', this.formData);
+  }
+
+  getAttachmentTypes(params) {
+    return this._http.post('/mit-irb/loadAttachmentType', params);
+  }
+
+  updateFundingSource(params) {
+    return this._http.post('/mit-irb/updateFundingSource', params);
+  }
+
+  updateSubject(params) {
+    return this._http.post('/mit-irb/updateSubject', params);
+  }
+
+  updateCollaborator(params) {
+    return this._http.post('/mit-irb/updateCollaborator', params);
+  }
+  addCollaboratorAttachments(protocolCollaboratorAttachments: Object, uploadedFile) {
+    this.formData.delete('files');
+    this.formData.delete('formDataJson');
+    for (let i = 0; i < uploadedFile.length; i++) {
+      this.formData.append('files', uploadedFile[i]);
+    }
+    this.formData.append('formDataJson', JSON.stringify(protocolCollaboratorAttachments));
+    return this._http.post('/mit-irb/addCollaboratorAttachments', this.formData);
+  }
+  loadCollaboratorPersonsAndAttachments(params) {
+    return this._http.post('/mit-irb/loadCollaboratorPersonsAndAttachments', params);
+  }
+  addCollaboratorPersons(params) {
+    return this._http.post('/mit-irb/addCollaboratorPersons', params);
+  }
 }

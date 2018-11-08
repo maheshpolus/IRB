@@ -1,76 +1,41 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-12">
-			<div class="card history-card">
+			<div class="card history-card border-radius-1">
 				<div class="card-header history-header">
 					<nav class="nav navbar-pg3">
 						<h5>History</h5>
 						<i class="fa fa-info-circle" aria-hidden="true"></i>
 					</nav>
 				</div>
-
 				<div class="card-body card-paddng">
-					<!-- <div class="col-12 datepicker-outer">
-	            	<form>
-      					  <div class="form-row">
-      					    <div class="col-12 col-sm-6 col-md-3 action-h">
-      					       <h6>Action Date Range : </h6>
-      					    </div>
-      					    <div class="col-12 col-sm-6 col-md-3">
-                      <div class="input-group date">
-                        <input type="text" class="form-control" placeholder="Start Date" onfocus="(this.type='date')">
-                        <div class="input-group-addon">
-                           <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </div>
-                    </div>
-
-      					    </div>
-      					    <div class="col-12 col-sm-6 col-md-3">
-      					      <div class="input-group date">
-                        <input type="text" class="form-control" placeholder="End Date" onfocus="(this.type='date')">
-                        <div class="input-group-addon">
-                           <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </div>
-                    </div>
-      					    </div>
-      					    <div class="col-12 col-sm-6 col-md-3 btn-ot">
-      					    	<button class="btn btn-primary search-btn1" type="submit"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
-      					    	<button class="btn btn-primary close-btn1" type="submit"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
-      					    </div>
-      					  </div>
-      					</form>
-	            </div> -->
 					<div id="accordion">
-						<div class="card"
-							*ngFor="let history of irbHistoryList;let i=index">
-							<div class="card-header history-coll-header"
-								id="{{'heading' + i }}">
+						<div class="card" *ngFor="let history of irbHistoryList;let i=index">
+							<div class="card-header history-coll-header" id="{{'heading' + i }}">
 								<div class="row">
 									<div class="col-12 col-sm-12 col-md-8">
 										<p>{{history.COMMENTS}}</p>
 									</div>
 									<div class="col-12 col-sm-12 col-md-4">
 										<ul class="icon-list-coll">
-											<li><i class="fa fa-question-circle-o"
-												aria-hidden="true"></i></li>
-											<li><i class="fa fa-envelope-open-o" aria-hidden="true"></i></li>
-											<li><i class="fa fa-file-pdf-o" aria-hidden="true"></i></li>
+											<li>
+												<i class="fa fa-question-circle-o" aria-hidden="true"></i>
+											</li>
+											<li>
+												<i class="fa fa-envelope-open-o" aria-hidden="true"></i>
+											</li>
+											<li>
+												<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+											</li>
 										</ul>
 									</div>
 								</div>
-								<i class="btn btn-link history-link collapsed"
-									[ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'"
-									(click)="toggle(i)" data-toggle="collapse"
-									[attr.data-target]="'#'+'collapse' + i" aria-expanded="false"
-									[attr.aria-controls]="'collapse' + i "></i>
+								<i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'" (click)="toggle(i)"
+								 data-toggle="collapse" [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i "></i>
 							</div>
-
-							<div id="{{'collapse' + i }}" class="collapse" *ngIf="isExpanded[i]==true"
-								[attr.aria-labelledby]="'heading' + i " data-parent="#accordion">
+							<div id="{{'collapse' + i }}" class="collapse" *ngIf="isExpanded[i]==true" [attr.aria-labelledby]="'heading' + i " data-parent="#accordion">
 								<div class="card-body history-card-body">
-									<div class="row list-of-his"
-										[ngClass]="{'history-line':i!=irbHistoryDetails.length-1}"
-										*ngFor="let historyDet of irbHistoryDetails;let i = index">
+									<div class="row list-of-his" [ngClass]="{'history-line':i!=irbHistoryDetails.length-1}" *ngFor="let historyDet of irbHistoryDetails;let i = index">
 										<div class="col-12 col-sm-4 col-md-4">
 											<ul>
 												<li class="history-action">{{historyDet.PROTOCOL_ACTION}}</li>
@@ -78,21 +43,25 @@
 										</div>
 										<div class="col-12 col-md-4 col-md-4">
 											<ul>
-												<li>Update User : <span>{{historyDet.UPDATE_USER_NAME}}</span></li>
+												<li>Update User :
+													<span>{{historyDet.UPDATE_USER_NAME}}</span>
+												</li>
 											</ul>
 										</div>
 										<div class="col-12 col-sm-4 col-md-4">
 											<ul>
-												<li>Action Date : <span>{{(historyDet.ACTION_DATE === ' ' || historyDet.ACTION_DATE === null ) ? ' ':(historyDet.ACTION_DATE | date: 'MM/dd/yyyy')}}</span></li>
+												<li>Action Date :
+													<span>{{(historyDet.ACTION_DATE === ' ' || historyDet.ACTION_DATE === null ) ? ' ':(historyDet.ACTION_DATE | date:
+														'MM/dd/yyyy')}}
+													</span>
+												</li>
 											</ul>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div
-							class="card-header history-coll-header card card-list-no-data noHistory"
-							*ngIf="noHistoryList">
+						<div class="card-header history-coll-header card card-list-no-data noHistory" *ngIf="noHistoryList">
 							<div class="col-12">No history details found</div>
 						</div>
 					</div>

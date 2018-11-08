@@ -1,108 +1,108 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class=" pushFixedHeaderFooter">
-<div class="headerPush"></div>
-<div class="container-fluid">
-
-	<section class="row sect-padding">
-		<div class="col-12 top-aprv-details">
-			<div class="row">
-				<div class="col-12 apprve-date">
-					<div class="row">
-						<div class="col-md-6 col-sm-6 col-12">
-							<h4>
-								IRB # : <span>{{generalInfo?.protocolNumber}}</span>
-							</h4>
-							<p>
-								Expiration Date : <span>{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}</span><br />
-								Title : <span>{{generalInfo?.protocolTitle}}</span>
-							</p>
+	<div class="headerPush"></div>
+	<div class="container-fluid">
+		<section class="row sect-padding">
+			<div class="col-12 top-aprv-details">
+				<div class="row">
+					<div class="col-12 apprve-date">
+						<div class="row">
+							<div class="col-md-6 col-sm-6 col-12">
+								<h4>
+									IRB # :
+									<span>{{generalInfo?.protocolNumber}}</span>
+								</h4>
+								<p>
+									Expiration Date :
+									<span>{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}</span>
+									<br /> Title :
+									<span>{{generalInfo?.protocolTitle}}</span>
+								</p>
+							</div>
+							<div class="col-md-3 col-sm-6 col-12">
+								<p>
+									Protocol Type :
+									<span>{{generalInfo?.protocolType?.description}}</span>
+									<br /> Submission Status :
+									<span></span>
+									<br /> PI :
+									<span>{{piName}}</span>
+								</p>
+							</div>
+							<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
+								<span class="active-en">{{generalInfo?.protocolStatus?.description}}</span>
+							</div>
+							<div class="i-icon-top">
+								<span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne"
+								 aria-expanded="false" aria-controls="collapseOne"> </span>
+							</div>
+							<div class="info-icon-header">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>
+							</div>
 						</div>
-						<div class="col-md-3 col-sm-6 col-12">
-							<p>
-								Protocol Type : <span>{{generalInfo?.protocolType?.description}}</span><br />
-								Submission Status : <span></span><br />
-								PI : <span></span>
-							</p>
+					</div>
+				</div>
+				<div id="headingOne" class="expand-div">
+					<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+						<div class="row protocol-top apprve-date">
+							<hr class="hr-line">
+							<div class="col-6">
+								<p>
+									Last Approval Date :
+									<span>{{generalInfo.lastApprovalDate| date:"MM/dd/yyyy"}}</span>
+									<br /> Anticipated Start Date :
+									<span>{{generalInfo.protocolStartDate| date:"MM/dd/yyyy"}}</span>
+								</p>
+							</div>
+							<div class="col-6">
+								<p>
+									Lead Unit :
+									<span></span>
+									<br /> Anticipated End Date :
+									<span>{{generalInfo.protocolEndDate| date:"MM/dd/yyyy"}}</span>
+								</p>
+							</div>
 						</div>
-
-						<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
-							<span class="active-en">{{generalInfo?.protocolStatus?.description}}</span>
-						</div>
-
-						<div class="i-icon-top">
-
-							<span class="collapsed" (click)="toggle()"
-								[ngClass]="isExpanded==true?'up-arrow':'down-arrow'"
-								data-toggle="collapse" data-target="#collapseOne"
-								aria-expanded="false" aria-controls="collapseOne"> </span>
-						</div>
-						<div class="info-icon-header">
-							<i class="fa fa-info-circle" aria-hidden="true"></i>
+						<div class="row  protocol-top apprve-date">
+							<div class="col-12">
+								<p>
+									Purpose of Study :
+									<span>{{generalInfo.prtocolDescription}}</span>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="headingOne" class="expand-div">
-				<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
-					<div class="row protocol-top apprve-date">
-						<hr class="hr-line">
-						<div class="col-6">
-							<p>
-								Last Approval Date : <span>{{generalInfo.lastApprovalDate| date:"MM/dd/yyyy"}}</span><br />
-								Expected Start Date : <span>{{generalInfo.protocolStartDate| date:"MM/dd/yyyy"}}</span>
-							</p>
-						</div>
-						<div class="col-6">
-							<p>
-								Lead Unit : <span></span><br />
-								Anticipated End Date : <span>{{generalInfo.protocolEndDate| date:"MM/dd/yyyy"}}</span>
-							</p>
-						</div>
-					</div>
-					<div class="row  protocol-top apprve-date">
-						<div class="col-12">
-							<p>
-								Description : <span>{{generalInfo.prtocolDescription}}</span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-</div>
-<div class="container-fluid">
-	<section class="row btn-row-med sect-padding">
-		<button class="btn btn-primary tab_btn" [routerLink]="['irbHome']"		
-			(click)="show_current_tab('irbHome')"
-			routerLinkActive="btnactive">
-			<i class="fa fa-home" aria-hidden="true"></i>General
-		</button>
-		<button class="btn btn-primary tab_btn" type="submit">
-			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
-		</button>
-		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
-		<button class="btn btn-primary tab_btn" type="submit"
-			[routerLink]="['irbCreateAttachment']"		
-			routerLinkActive="btnactive"
-			(click)="show_current_tab('irbCreateAttachment')">
-			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
-		</button>
-		<button class="btn btn-primary tab_btn" [routerLink]="['irbHistory']" type="submit"
-			[routerLink]="['irbHistory']"
-			routerLinkActive="btnactive"
-			(click)="show_current_tab('irbHistory')">
-			<i class="fa fa-history" aria-hidden="true"></i>History
-		</button>
-		<button class="btn btn-primary tab_btn" [routerLink]="['irbActions']" type="submit"
-			[routerLink]="['irbActions']"
-			routerLinkActive="btnactive"
-			(click)="show_current_tab('irbActions')">
-			<i class="fa fa-history" aria-hidden="true"></i>Actions
-		</button>
-	</section>
-</div>
+		</section>
+	</div>
+	<div class="container-fluid">
+		<section class="row btn-row-med sect-padding">
+			<button class="btn btn-primary tab_btn" [routerLink]="['irbHome']" (click)="show_current_tab('irbHome')" routerLinkActive="btnactive">
+				<i class="fa fa-home" aria-hidden="true"></i>General
+			</button>
+			<button class="btn btn-primary" type="submit" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol">
+				<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
+			</button>
+			<button class="btn btn-primary" type="submit" [routerLink]="['irbProtocol']" routerLinkActive="btnactive" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
+			 [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbProtocol')">
+				<i class="fa fa-sticky-note-o" aria-hidden="true"></i>Protocol
+			</button>
+			<button class="btn btn-primary" type="submit" [routerLink]="['irbCreateAttachment']" routerLinkActive="btnactive" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
+			 [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbCreateAttachment')">
+				<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
+			</button>
+			<button class="btn btn-primary" [routerLink]="['irbHistory']" type="submit" [routerLink]="['irbHistory']" routerLinkActive="btnactive"
+			 [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbHistory')">
+				<i class="fa fa-history" aria-hidden="true"></i>History
+			</button>
+			<button class="btn btn-primary" [routerLink]="['irbActions']" type="submit" [routerLink]="['irbActions']" routerLinkActive="btnactive"
+			 [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbActions')">
+				<i class="fa  fa-cog" aria-hidden="true"></i>Actions
+			</button>
+		</section>
+	</div>
 </div>
 <div>
 	<router-outlet></router-outlet>
 </div>
-

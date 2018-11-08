@@ -10,12 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
+import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
+import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
@@ -45,6 +41,13 @@ public class IRBController {
 	@Autowired
 	@Qualifier(value="irbProtocolService")
 	IRBProtocolService irbProtocolService;
+	
+	@Autowired
+	@Qualifier(value="irbExemptProtocolService")
+	IRBExemptProtocolService irbExemptProtocolService;
+	
+	@Autowired
+	IRBProtocolInitLoadService irbProtocolInitLoadService;
 	
 	protected static Logger logger = Logger.getLogger(IRBController.class.getName());
 	
@@ -160,7 +163,7 @@ public class IRBController {
 	
 	@RequestMapping(value = "/getPersonExemptFormList", method = RequestMethod.POST)
 	public ResponseEntity<String> getPersonExemptFormList(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException, ParseException{
-		IRBViewProfile irbViewProfile = irbProtocolService.getPersonExemptFormList(vo);
+		IRBViewProfile irbViewProfile = irbExemptProtocolService.getPersonExemptFormList(vo);
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(irbViewProfile);
@@ -169,7 +172,7 @@ public class IRBController {
 	@RequestMapping(value = "/savePersonExemptForm", method = RequestMethod.POST)
 	public ResponseEntity<String> savePersonExemptForms(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		HttpStatus status = HttpStatus.OK;
-		CommonVO commonVO = irbProtocolService.savePersonExemptForms(vo.getIrbExemptForm(),vo.getPersonDTO());
+		CommonVO commonVO = irbExemptProtocolService.savePersonExemptForms(vo.getIrbExemptForm(),vo.getPersonDTO());
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
@@ -180,7 +183,7 @@ public class IRBController {
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		PersonDTO personDTO = vo.getPersonDTO();
-		CommonVO commonVo = irbProtocolService.saveQuestionnaire(vo.getIrbExemptForm(), vo.getQuestionnaireDto(),vo.getQuestionnaireInfobean(), personDTO);
+		CommonVO commonVo = irbExemptProtocolService.saveQuestionnaire(vo.getIrbExemptForm(), vo.getQuestionnaireDto(),vo.getQuestionnaireInfobean(), personDTO);
 		String responseData = mapper.writeValueAsString(commonVo);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -189,7 +192,7 @@ public class IRBController {
 	public ResponseEntity<String> getPersonExemptForm(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;		 
-		CommonVO commonVO = irbProtocolService.getPersonExemptForm(vo.getIrbExemptForm(), vo.getPersonDTO());
+		CommonVO commonVO = irbExemptProtocolService.getPersonExemptForm(vo.getIrbExemptForm(), vo.getPersonDTO());
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -198,7 +201,7 @@ public class IRBController {
 	public ResponseEntity<String> getEvaluateMessage(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;		 
-		CommonVO commonVO = irbProtocolService.getEvaluateMessage(vo.getIrbExemptForm());
+		CommonVO commonVO = irbExemptProtocolService.getEvaluateMessage(vo.getIrbExemptForm());
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -207,7 +210,7 @@ public class IRBController {
 	public ResponseEntity<String> getLeadunitAutoCompleteList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
-		ArrayList<HashMap<String, Object>> leadunitList = irbProtocolService.getLeadunitAutoCompleteList();
+		ArrayList<HashMap<String, Object>> leadunitList = irbExemptProtocolService.getLeadunitAutoCompleteList();
 		String responseData = mapper.writeValueAsString(leadunitList);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -216,7 +219,7 @@ public class IRBController {
 	public ResponseEntity<String> approveOrDisapproveExemptProtocols(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception{
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
-		CommonVO commonVO = irbProtocolService.approveOrDisapproveExemptProtocols(vo);
+		CommonVO commonVO = irbExemptProtocolService.approveOrDisapproveExemptProtocols(vo);
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -226,7 +229,7 @@ public class IRBController {
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		CommonVO commonVO = new CommonVO();
-		commonVO = irbProtocolService.getExemptProtocolActivityLogs(vo.getIrbExemptForm().getExemptFormID());
+		commonVO = irbExemptProtocolService.getExemptProtocolActivityLogs(vo.getIrbExemptForm().getExemptFormID());
 		String responseData = mapper.writeValueAsString(commonVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -237,21 +240,21 @@ public class IRBController {
 		ArrayList<HashMap<String, Object>> result = null;
 		ObjectMapper mapper = new ObjectMapper();
 		HttpStatus status =HttpStatus.OK;
-		result = irbProtocolService.addExemptProtocolAttachments(files, formDataJson);
+		result = irbExemptProtocolService.addExemptProtocolAttachments(files, formDataJson);
 		String responseData = mapper.writeValueAsString(result);
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
 	@RequestMapping(value = "/downloadExemptProtocolAttachments", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> downloadExemptProtocolAttachments(HttpServletResponse response, @RequestHeader("checkListId") String checkListId) {
-		return irbProtocolService.downloadExemptProtocolAttachments(checkListId);
+		return irbExemptProtocolService.downloadExemptProtocolAttachments(checkListId);
 	}
 	
 	@RequestMapping(value = "/getExemptProtocolAttachmentList", method = RequestMethod.POST)
 	public ResponseEntity<String> getExemptProtocolAttachmentList(HttpServletRequest request, HttpServletResponse response,@RequestBody CommonVO vo) throws Exception{
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
-		ArrayList<HashMap<String, Object>> leadunitList = irbProtocolService.getExemptProtocolAttachmentList(vo.getIrbExemptForm().getExemptFormID());
+		ArrayList<HashMap<String, Object>> leadunitList = irbExemptProtocolService.getExemptProtocolAttachmentList(vo.getIrbExemptForm().getExemptFormID());
 		String responseData = mapper.writeValueAsString(leadunitList);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -261,27 +264,7 @@ public class IRBController {
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO.setProtocolId(vo.getProtocolId());
-		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
-		ProtocolPersonnelInfo personnelInfo = new ProtocolPersonnelInfo();
-		ProtocolLeadUnits protocolLeadUnits = new ProtocolLeadUnits();
-		ProtocolFundingSource fundingSource= new ProtocolFundingSource();
-	    ProtocolSubject protocolSubject= new ProtocolSubject();
-	    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
-		irbProtocolVO = irbProtocolService.loadProtocolTypes(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadRoleTypes(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadProtocolPersonLeadunits(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadProtocolAffiliationTypes(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadProtocolSubjectTypes(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadProtocolFundingSourceTypes(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadProtocolCollaboratorNames(irbProtocolVO);
-		irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
-		//irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
-		irbProtocolVO.setPersonnelInfo(personnelInfo);
-		irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
-		irbProtocolVO.setFundingSource(fundingSource);
-		irbProtocolVO.setProtocolSubject(protocolSubject);
-		irbProtocolVO.setProtocolCollaborator(protocolCollaborator);
+		irbProtocolVO = irbProtocolService.modifyProtocolDetails(vo.getProtocolId(),irbProtocolVO);
 		String responseData = mapper.writeValueAsString(irbProtocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -341,18 +324,7 @@ public class IRBController {
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.loadAttachmentType();
-		String responseData = mapper.writeValueAsString(protocolVO);
-		return new ResponseEntity<String>(responseData, status);
-	}
-
-	@RequestMapping(value = "/loadProtocolById", method = RequestMethod.POST)
-	public ResponseEntity<String> loadProtocolById(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception{
-		ObjectMapper mapper=new ObjectMapper();
-		HttpStatus status = HttpStatus.OK;
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		ProtocolGeneralInfo generalInfo = irbProtocolService.loadProtocolById(irbProtocolVO.getProtocolId());
-		protocolVO.setGeneralInfo(generalInfo);
+		protocolVO = irbProtocolInitLoadService.loadAttachmentType();
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -378,4 +350,47 @@ public class IRBController {
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}	
+	
+	@RequestMapping(value="/saveScienceOfProtocol", method=RequestMethod.POST)
+	public ResponseEntity<String> saveScienceOfProtocol(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO protocolVO) throws JsonProcessingException{
+		IRBProtocolVO irbProtocolVO= new IRBProtocolVO();
+		ObjectMapper mapper= new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;
+		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol());
+		String responseData = mapper.writeValueAsString(irbProtocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/addCollaboratorAttachments", method = RequestMethod.POST)
+	public ResponseEntity<String> addCollaboratorAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) throws JsonProcessingException {
+		logger.info("Request for Protocol Collaborator Attachments Modification");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.addCollaboratorAttachments(files, formDataJson);
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/addCollaboratorPersons", method = RequestMethod.POST)
+	public ResponseEntity<String> addCollaboratorPersons(HttpServletRequest request, HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
+		logger.info("Request for addCollaboratorPersons");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.addCollaboratorPersons(irbProtocolVO.getProtocolCollaboratorPersons());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/loadCollaboratorPersonsAndAttachments", method = RequestMethod.POST)
+	public ResponseEntity<String> loadCollaboratorPersonsAndAttachments(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
+		logger.info("Request for loadCollaboratorPersonsAndAttachments");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolService.loadCollaboratorPersonsAndAttachments(irbProtocolVO.getCollaboratorId());
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
 }

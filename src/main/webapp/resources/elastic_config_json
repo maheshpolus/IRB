@@ -1,6 +1,13 @@
 {
 "URL_FOR_ELASTIC":"https://coeus-qa.mit.edu/es/",
+"KC_BASE_URL":"https://kc-qa-wkly.mit.edu/kc-qa-wkly/",
+"URL_FOR_KC_FRAME" : "",
+"URL_FOR_KC_AWARD" : "../../../../awardHome.do?methodToCall=docHandler&placeHolderAwardId={awardId}&docId={docId}&command=displayDocSearchView&businessObjectClassName=org.kuali.kra.award.home.Award&docFormKey=88888888&__login_user={user}&kcComp=true",
+"URL_FOR_KC_IP" : "../../../../institutionalProposalHome.do?viewDocument=true&docId={docId}&docTypeName=InstitutionalProposalDocument&methodToCall=docHandler&docOpenedfromIPSearch=true&command=displayDocSearchView&formKey=ed9b8b81-209b-4ec9-b2bb-4f401f3edcf0&__login_user={user}&kcComp=true", 
 "IRB_INDEX":"irbprotocol",
 "PERSON_INDEX":"mitperson",
-"NON_EMPLOYEE_INDEX":"mitrolodex"
+"NON_EMPLOYEE_INDEX":"mitrolodex",
+"AWARD_INDEX":"award",
+"IP_INDEX":"proposal",
+"DP_INDEX":"devproposal"
 }

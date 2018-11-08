@@ -1,0 +1,25 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12">
+			<div class="card history-card border-radius-1">
+				<div class="card-header history-header">
+					<nav class="nav navbar-pg3">
+						<h5>Protocol</h5>
+						<i class="fa fa-info-circle" aria-hidden="true"></i>
+					</nav>
+				</div>
+				<div class="card-body card-paddng">
+					<div class="col-12  search-eidted-p padding-20">
+							<div class="alert alert-danger " *ngIf="isProtocolScienceEmpty">
+									Please add the science of protocol to proceed
+							</div>
+						<ck-editor id= "editor1" name="editor1" [config]="ckEditorConfig" [(ngModel)]="protocolScience" skin="moono-lisa" language="en" [fullPage]="true"></ck-editor>
+						<section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+							<button title="Save" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" [hidden]="isProtocolSaved" (click)="saveProtocolScience()"
+							 aria-label="Close">Save</button>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

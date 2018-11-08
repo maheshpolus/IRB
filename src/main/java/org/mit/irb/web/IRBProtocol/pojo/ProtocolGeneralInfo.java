@@ -1,7 +1,6 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /*
@@ -81,10 +80,7 @@ public class ProtocolGeneralInfo {
 
 	@Column(name = "FDA_APPLICATION_NUMBER")
 	private String fdaApplicationNumber;
-
 	
-	@GenericGenerator(name = "seq_comm_id", strategy = "org.mit.irb.web.generator.ProtocolIdGenerator")
-	@GeneratedValue(generator = "seq_comm_id")  
 	@Column(name = "PROTOCOL_NUMBER")
 	private String protocolNumber;
 
@@ -108,16 +104,11 @@ public class ProtocolGeneralInfo {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolPersonnelInfo> personnelInfos;
-
-	/*@JsonManagedReference
+	
+	@JsonIgnore 
 	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
-	private List<IRBAttachmentProtocol> attachmentProtocols;*/
-
-/*	public ProtocolGeneralInfo() {
-		personnelInfos = new ArrayList<>();
-		attachmentProtocols = new ArrayList<>();
-	}*/
-
+	private List<IRBAttachmentProtocol> attachmentProtocols;
+	
 	public Integer getProtocolId() {
 		return protocolId;
 	}
@@ -302,12 +293,11 @@ public class ProtocolGeneralInfo {
 		this.personnelInfos = personnelInfos;
 	}
 
-	/*public List<IRBAttachmentProtocol> getAttachmentProtocols() {
+	public List<IRBAttachmentProtocol> getAttachmentProtocols() {
 		return attachmentProtocols;
 	}
 
 	public void setAttachmentProtocols(List<IRBAttachmentProtocol> attachmentProtocols) {
 		this.attachmentProtocols = attachmentProtocols;
-	}*/
-
+	}
 }

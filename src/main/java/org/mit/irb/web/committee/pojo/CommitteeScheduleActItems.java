@@ -19,7 +19,7 @@ import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "MIT_IRB_COMM_SCHEDULE_ACT_ITEMS")
+@Table(name = "IRB_COMM_SCHEDULE_ACT_ITEMS")
 public class CommitteeScheduleActItems implements Serializable {
 
 	private static final long serialVersionUID = 1L;

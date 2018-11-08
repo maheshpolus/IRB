@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MIT_IRB_MEMBER_STATUS_CHANGE")
+@Table(name = "IRB_COMM_MEMBER_STATUS_CHANGE")
 public class CommitteeMemberStatusChange implements Serializable {
 
 	private static final long serialVersionUID = 1L;

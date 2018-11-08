@@ -1,158 +1,175 @@
 {
 	"/mit-irb/loginCheck": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getDashboardSnapshot": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getDashboardProtocolList": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getUserDetails": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolPersons": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolFundingSource": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolVulnerableSubject": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolLocation": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolSpecialReview": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolDetails": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getMITKCPersonInfo": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/logout": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getAttachmentList": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/downloadAttachment": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getExpandedSnapShotView": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getDashboardProtocolType": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getProtocolHistotyGroupList": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getProtocolHistotyGroupDetails": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/savePersonExemptForm": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/saveQuestionnaire": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getPersonExemptForm": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getPersonExemptFormList": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getLeadunitAutoCompleteList": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getEvaluateMessage": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/resources/string_config_json": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/getExemptProtocolActivityLogs": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/approveOrDisapproveExemptProtocols": {
-		"target": "http://192.168.1.93:8090",
+		"target": "http://192.168.1.85:8090",
 		"secure": false
 	},
 	"/mit-irb/addExemptProtocolAttachments":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 					"secure" : false
 	},
 	"/mit-irb/getExemptProtocolAttachmentList":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/downloadExemptProtocolAttachments":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/createIRBProtocol":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/updateProtocolGeneralInfo":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/updateProtocolPersonInfo":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/updateFundingSource":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/updateSubject":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/updateCollaborator":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/addProtocolAttachments":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/loadAttachmentType":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.85:8090",
 		"secure" : false
 	},
 	"/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber":{
-		"target" : "http://192.168.1.93:8090",
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/saveScienceOfProtocol":{
+		"target" : "http://192.168.1.85:8090",
+		"secure" : false
+	},
+	"/mit-irb/addCollaboratorAttachments":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	}
+	,
+	"/mit-irb/loadCollaboratorPersonsAndAttachments":{
+		"target" : "http://192.168.1.93:8080",
+		"secure" : false
+	},
+	"/mit-irb/addCollaboratorPersons":{
+		"target" : "http://192.168.1.93:8080",
 		"secure" : false
 	}
 }

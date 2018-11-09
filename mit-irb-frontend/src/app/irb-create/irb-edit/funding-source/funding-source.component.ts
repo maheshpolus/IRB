@@ -32,8 +32,10 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   sponsorDetails: any = {};
   fundingSource: any = {};
   protocolFundingSourceTypes = [];
+  sponsorSearchResult: any = [];
   protocolFundingSourceList = [];
   isElasticResultPerson = false;
+  isSponsorFundingSearch = false;
   isFundingInfoEdit = false;
   isGeneralInfoSaved = false;
   showElasticBand = false;
@@ -96,8 +98,6 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     this.generalInfo = this.commonVo.generalInfo;
     this.fundingSource = this.commonVo.fundingSource;
     this.protocolFundingSourceList = this.commonVo.protocolFundingSourceList != null ? this.commonVo.protocolFundingSourceList : [];
-    this.sponsorList = this._completerService.local(
-      this.commonVo.sponsorType, 'sponsorName', 'sponsorName');
     this.protocolPersonLeadUnits = this._completerService.local(
       this.commonVo.protocolPersonLeadUnits, 'unitName,unitNumber', 'unitName');
   }
@@ -125,6 +125,16 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
         this.fundingSource.protocolFundingSourceTypes = { fundingSourceTypeCode: typeCode, description: SourceType.description };
       }
     });
+  }
+  getSponsorList() {
+    this.commonVo.searchString = this.fundingSource.sourceName;
+    this._irbCreateService.loadSponsorTypes(this.commonVo).subscribe(
+      data => {
+        this.result = data;
+        this.sponsorSearchResult = this.result.sponsorSearchResult;
+      });
+    // this.sponsorList = this._completerService.local(
+    //     this.sponsorSearchResult, 'sponsorName', 'sponsorName');
   }
 
   /**fetches elastic search results
@@ -313,8 +323,9 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
 
   selectedSponsor(fundingSource) {
     this.fundingSource.fundingSource = null;
-    this.commonVo.sponsorType.forEach(sponsor => {
+    this.sponsorSearchResult.forEach(sponsor => {
       if (sponsor.sponsorName === fundingSource) {
+        this.fundingSource.sourceName = fundingSource;
         this.fundingSource.fundingSource = sponsor.sponsorCode;
       }
     });

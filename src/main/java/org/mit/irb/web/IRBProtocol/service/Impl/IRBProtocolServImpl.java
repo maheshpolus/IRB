@@ -195,7 +195,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
 			irbProtocolVO = initLoadService.loadProtocolTypes(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadSponsorTypes(irbProtocolVO);
+			//irbProtocolVO = initLoadService.loadSponsorTypes(irbProtocolVO);
 			irbProtocolVO = initLoadService.loadRoleTypes(irbProtocolVO);
 			irbProtocolVO = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
 			irbProtocolVO = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);

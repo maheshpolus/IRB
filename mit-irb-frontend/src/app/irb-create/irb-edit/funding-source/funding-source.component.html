@@ -34,9 +34,21 @@
                 <span class="mandatory">*</span>
               </label>
               <!-- Sponsor Search Box -->
-              <ng2-completer *ngIf="sourceType.typeCode == '1'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
-                (ngModelChange)="selectedSponsor(fundingSource.sourceName)" [datasource]="sponsorList" [minSearchLength]="0"
-                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer>
+              <!-- <ng2-completer *ngIf="sourceType.typeCode == '1'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName" (change)="getSponsorList($event)"
+                (ngModelChange)="selectedSponsor(fundingSource.sourceName)" [datasource]="sponsorList" [minSearchLength]="0" (click)="getCompleteSponsorList()"
+                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
+                <!-- <div class="searchBox"> -->
+                <input type="text" *ngIf="sourceType.typeCode == '1'" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="{{sourceType.placeholder}}" [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getSponsorList()" (focus)="isSponsorFundingSearch = true" (focusout)="isSponsorFundingSearch = false">
+                <!-- <a href="#" class="searchButton" (click)="clearsearchBox($event)">
+                    <i [ngClass]="iconClass"></i>
+                    </a> -->
+                  <div class="sb-seachresults top-margin">
+                    <ul class="sb-results-dropdown-menu" *ngIf="isSponsorFundingSearch">
+                      <li *ngFor="let result of sponsorSearchResult" (mousedown)="selectedSponsor(result.sponsorName)"><span [innerHTML]="result.sponsorName"></span></li>
+                    </ul>
+                  </div>
+                  <!-- </div> -->
+
               <!-- Unit Search Box -->
               <ng2-completer *ngIf="sourceType.typeCode == '2'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
                 (ngModelChange)="selectedDepartment(fundingSource.sourceName)" [datasource]="protocolPersonLeadUnits" [minSearchLength]="0"

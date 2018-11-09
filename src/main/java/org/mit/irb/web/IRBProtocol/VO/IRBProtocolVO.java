@@ -55,6 +55,8 @@ public class IRBProtocolVO {
 	private List<ProtocolCollaboratorAttachments> protocolCollaboratorAttachmentsList;
 	private List<ProtocolCollaboratorPersons> protocolCollaboratorPersons;
 	private Integer collaboratorId;
+	private String searchString;
+	private List<SponsorSearchResult> sponsorSearchResult;
 	
 	public ScienceOfProtocol getScienceOfProtocol() {
 		return scienceOfProtocol;
@@ -278,5 +280,21 @@ public class IRBProtocolVO {
 
 	public void setCollaboratorId(Integer collaboratorId) {
 		this.collaboratorId = collaboratorId;
+	}
+
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+
+	public List<SponsorSearchResult> getSponsorSearchResult() {
+		return sponsorSearchResult;
+	}
+
+	public void setSponsorSearchResult(List<SponsorSearchResult> sponsorSearchResult) {
+		this.sponsorSearchResult = sponsorSearchResult;
 	}
 }

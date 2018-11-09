@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.util.List;
 
+import org.apache.commons.collections4.ListUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -69,18 +70,16 @@ public class IRBProtocolInitLoadDaoImpl implements IRBProtocolInitLoadDao{
 	
 	@Override
 	public IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO) {
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(SponsorType.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("sponsorCode"), "sponsorCode");
-		projList.add(Projections.property("sponsorName"), "sponsorName");
-		projList.add(Projections.property("sponsorTypeCode"), "sponsorTypeCode");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(SponsorType.class));
-		criteria.addOrder(Order.asc("sponsorName"));
-		List<SponsorType> sponsorType = criteria.list();
-		logger.info("Protocol Type in DAO: " + sponsorType);
-		irbProtocolVO.setSponsorType(sponsorType);
-		return irbProtocolVO;
+		final String likeCriteria = "%" + irbProtocolVO.getSearchString().toUpperCase() + "%";
+		Query query = session.createQuery("SELECT NEW org.mit.irb.web.IRBProtocol.VO.SponsorSearchResult(t.sponsorCode, t.sponsorName) " +
+                "FROM Sponsor t " +
+                "WHERE UPPER(t.sponsorCode) like :likeCriteria OR UPPER(t.acronym) like :likeCriteria or UPPER(t.sponsorName) like :likeCriteria");
+		query.setParameter("likeCriteria", likeCriteria);
+		logger.info("Sponsors Type in DAO: " + ListUtils.emptyIfNull(query.setMaxResults(25).list()));
+		protocolVO.setSponsorSearchResult(ListUtils.emptyIfNull(query.setMaxResults(25).list()));
+		return protocolVO;
 	}
 	
 	@Override

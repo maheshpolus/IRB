@@ -67,4 +67,7 @@ export class IrbCreateService {
   addCollaboratorPersons(params) {
     return this._http.post('/mit-irb/addCollaboratorPersons', params);
   }
+  loadSponsorTypes(params) {
+    return this._http.post('/mit-irb/loadSponsorTypes', params);
+  }
 }

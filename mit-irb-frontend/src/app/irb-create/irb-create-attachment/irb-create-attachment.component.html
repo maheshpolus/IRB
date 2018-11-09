@@ -20,76 +20,81 @@
                     <i class="fa fa-plus icon-padding"></i>Add Attachment
                   </a>
                   <div class="col-12 mt-10">
-                    <div class="table-responsive" *ngIf="!noIrbAttachments">
-                    <table class="table table-striped table-type-head">
-                      <thead class="popup-sub-header">
-                        <tr>
-                          <th scope="col" class="pdf" (click)="sortBy('attachmentType.description')">Type<i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="!isTimeStampSorting"></i></th>
-                          <th scope="col">Description</th>
-                          <th scope="col">File</th>
-                          <th scope="col" class="pdf" (click)="sortBy('updateTimestamp')">Updated By<i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="isTimeStampSorting"></i></th>
-                          <th scope="col">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody class="tdy-color">
-                        <tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}; let i = index" [class.poping-border]="i == attachmentSelectedRow">
-                          <td>{{attachments.attachmentType.description}}</td>
-                          <td>{{attachments.description}}</td>
-                          <td style="width: 30%" class="padding-table-content">{{attachments.protocolAttachment.fileName}} </td>
-                          <td class="padding-table-content">{{attachments.updateUser}} {{(attachments.updateTimestamp ===' ' || attachments.updateTimestamp
-                            ===null) ? ' ':(attachments.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
-                          <td>
-                            <ul class="actionButtonGroup padding-icons">
-                              <li>
-                                <a title="Delete Attachment" (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
-                                  <i class="fa fa-trash-o delete-color"></i>
-                                </a>
-                              </li>
-                              <li>
-                                <a (click)="downloadAttachment(attachments)" title="Download Attachment">
-                                  <i class="fa fa-download download-color" aria-hidden="true"></i>
-                                </a>
-                              </li>
-                              <li>
-                                <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
-                                  <i class="fa fa-edit edit-color"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </td>
-                        </tr>
-                        <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
+                    <div class="table-responsive" *ngIf="((noIrbAttachments==false)||(protocolCollaboratorAttachmentsList?.length!=0))">
+                      <table class="table table-striped table-type-head">
+                        <thead class="popup-sub-header">
+                          <tr>
+                            <th scope="col" class="pdf" (click)="sortBy('attachmentType.description')">Type
+                              <i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="!isTimeStampSorting"></i>
+                            </th>
+                            <th scope="col">Description</th>
+                            <th scope="col">File</th>
+                            <th scope="col" class="pdf" (click)="sortBy('updateTimestamp')">Updated By
+                              <i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="isTimeStampSorting"></i>
+                            </th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody class="tdy-color">
+                          <tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}; let i = index" [class.poping-border]="i == attachmentSelectedRow">
+                            <td>{{attachments?.attachmentType?.description}}</td>
+                            <td>{{attachments?.description}}</td>
+                            <td style="width: 30%" class="padding-table-content">{{attachments?.protocolAttachment?.fileName}} </td>
+                            <td class="padding-table-content">{{attachments?.updateUser}} {{(attachments?.updateTimestamp ===' ' || attachments.updateTimestamp
+                              ===null) ? ' ':(attachments?.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
+                            <td>
+                              <ul class="actionButtonGroup padding-icons">
+                                <li>
+                                  <a title="Delete Attachment" (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
+                                    <i class="fa fa-trash-o delete-color"></i>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="downloadAttachment(attachments)" title="Download Attachment">
+                                    <i class="fa fa-download download-color" aria-hidden="true"></i>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                    <i class="fa fa-edit edit-color"></i>
+                                  </a>
+                                </li>
+                              </ul>
+                            </td>
+                          </tr>
+                          <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
                             <td>{{protocolCollaboratorAttachment?.attachmentType?.description}}</td>
                             <td>{{protocolCollaboratorAttachment?.description}}</td>
                             <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</td>
-                            <td class="padding-table-content">{{protocolCollaboratorAttachment?.updateUser}} {{(protocolCollaboratorAttachment?.updateTimestamp ===' ' || protocolCollaboratorAttachment.updateTimestamp
-                               ===null) ? ' ':(protocolCollaboratorAttachment.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
-                           <td>
-                               <ul class="actionButtonGroup padding-icons">
-                                   <li>
-                                     <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachment">
-                                       <i class="fa fa-trash-o delete-color"></i>
-                                     </a>
-                                   </li>
-                                   <li>
-                                     <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
-                                       <i class="fa fa-download download-color" aria-hidden="true"></i>
-                                     </a>
-                                   </li>
-                                   <li>
+                            <td class="padding-table-content">{{protocolCollaboratorAttachment?.updateUser}} {{(protocolCollaboratorAttachment?.updateTimestamp
+                              ===' ' || protocolCollaboratorAttachment.updateTimestamp ===null) ? ' ':(protocolCollaboratorAttachment.updateTimestamp
+                              | date: 'MM/dd/yyyy')}}</td>
+                            <td>
+                              <ul class="actionButtonGroup padding-icons">
+                                <li>
+                                  <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachmentsCollaborator">
+                                    <i class="fa fa-trash-o delete-color"></i>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
+                                    <i class="fa fa-download download-color" aria-hidden="true"></i>
+                                  </a>
+                                </li>
+                                <!-- <li>
                                       <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
                                         <i class="fa fa-edit edit-color"></i>
                                       </a>
-                                    </li>
-                                 </ul>
-                           </td>
+                                    </li> -->
+                              </ul>
+                            </td>
                           </tr>
 
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  </div>
-                  <div class="col-md-12" *ngIf="noIrbAttachments">
+                  <div class="col-md-12" *ngIf="((noIrbAttachments==true)&&(protocolCollaboratorAttachmentsList?.length==0))">
                     <p class="noAttachments">No attachments associated with this protocol.</p>
                   </div>
                 </div>
@@ -119,6 +124,28 @@
               </div>
             </div>
             <!-- delete warning modal ends -->
+            <!-- delete warning modal for colloborator attachment -->
+            <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteAttachmentsCollaborator" tabindex="-1" role="dialog"
+              aria-labelledby="deleteModalTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content modal-text-color">
+                  <div class="modal-header popup-header">
+                    <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure you want to delete this item?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
+                    <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachmentsCollaborator()" data-dismiss="modal">Yes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <!-- Add Attachment Modal-->
             <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"

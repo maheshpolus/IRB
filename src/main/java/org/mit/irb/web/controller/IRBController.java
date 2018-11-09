@@ -393,4 +393,14 @@ public class IRBController {
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}
+	@RequestMapping(value = "/loadSponsorTypes", method = RequestMethod.POST)
+	public ResponseEntity<String> loadSponsorTypes(HttpServletRequest request, HttpServletResponse response,@RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException  {
+		logger.info("Request for loadSponsorTypes");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		ObjectMapper mapper = new ObjectMapper();
+		HttpStatus status =HttpStatus.OK;
+		protocolVO = irbProtocolInitLoadService.loadSponsorTypes(irbProtocolVO);
+		String responseData = mapper.writeValueAsString(protocolVO);
+		return new ResponseEntity<String>(responseData, status);
+	}
 }

@@ -6,7 +6,6 @@
         <i class="fa fa-info-circle" aria-hidden="true"></i>
       </nav>
     </div>
-
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15">
         <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo">
@@ -74,56 +73,78 @@
             </button>
           </div>
         </div>
-
       </div>
       <div class="col-md-12 users-list-tbl">
         <div class="row">
           <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr" *ngIf="protocolCollaboratorList.length > 0">
+            <table id="collaboratorTable" class="table table-striped tbl-p-clr" *ngIf="protocolCollaboratorList.length > 0">
               <thead class="tbl-head-clr thead-font-size">
                 <tr>
+                  <th></th>
                   <th scope="col">Name</th>
                   <th scope="col">Point of contact</th>
                   <th scope="col">Approval Date</th>
                   <th scope="col">Expiration Date</th>
-                  <th scope="col" width="20%">Persons</th>
-                  <th scope="col" width="20%">Approval Letter</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody class="tbody-font-size">
-                <tr>
-                <tr *ngFor="let item of protocolCollaboratorList let l=index" [class.poping-border]="l == collaboratorEditIndex">
-                 
-                   
+              <tbody *ngFor="let item of protocolCollaboratorList let l=index" class="tbody-font-size">
+                <tr [class.poping-border]="l == collaboratorEditIndex">
+
+                  <td>
+                    <span class="pdf" title="Click Here" (click)="toggle(item,l)">
+                      <i class="fa accordion-toggle" [ngClass]="(iconValue==l)?'fa-minus':'fa-plus'" data-toggle="collapse"
+                        [attr.data-target]="'#' + i"></i>
+                    </span>
+                  </td>
                   <td>{{item.collaboratorNames?.organizationName}}</td>
                   <td>{{item.pointOfContact}}</td>
                   <td>{{item.approvalDate| date:"MM/dd/yyyy"}}</td>
                   <td>{{item.expirationDate| date:"MM/dd/yyyy"}}</td>
-                  <td width="20%">
-                    
-                      <div *ngIf="item?.protocolLocationId == protocolCollaboratorPersons[0]?.collaboratorId " class="filechip"><span *ngFor="let person of protocolCollaboratorPersons">{{person?.personnelInfo?.personName}}</span></div>
-
-                    </td>
-                    <td  width="20%">
-
-                            <div *ngIf="item?.protocolLocationId == protocolCollaboratorAttachmentsList[0]?.collaboratorId " class="filechip pdf"><span *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList" (click)="downloadAttachment(protocolCollaboratorAttachment)">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</span></div>
-                  
-                    </td>
                   <td class="action-btn-list">
                     <button title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
-                    <button title="Persons" type="button" (click)="setCollaboratorPersonDetails(item)" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#collaboratorPersonModal">
+                    <button title="Persons" type="button" (click)="setCollaboratorPersonDetails(item)" class="btn btn-primary view-btn-1" data-toggle="modal"
+                      data-target="#collaboratorPersonModal">
                       <i class="fa fa-user-o" aria-hidden="true"></i>
                     </button>
                     <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
-                  <!-- <div class="filechip"><span>Saxe Rebecca R</span><span>Ann Sweety</span></div> -->
-                  </tr>
-                
+                </tr>
+                <tr>
+                  <td colspan="12" class="hiddenRow" *ngIf="iconValue==l">
+                    <div id={{l}}>
+                      <table id="collaboratorTable" class="table table-striped">
+                        <tbody>
+                          <tr>
+                            <td></td>
+                            <td class="label-font">Persons</td>
+                            <td>
+                              <div class="filechipCollaborator" *ngIf="protocolCollaboratorPersons?.length > 0">
+                                <span *ngFor="let person of protocolCollaboratorPersons">{{person?.personnelInfo?.personName}}</span>
+                              </div>
+                              <div class="filechip" *ngIf="protocolCollaboratorPersons?.length == 0">No persons Added</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td class="label-font">Approval Letter</td>
+                            <td>
+                              <div class="filechipCollaborator pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
+                                <span *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList" (click)="downloadAttachment(protocolCollaboratorAttachment)"
+                                  title="download">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</span>
+                              </div>
+                              <div class="filechip pdf" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -181,9 +202,9 @@
         <div class="modal-padding">
           <div *ngIf="isShowAddPerson">
             <div class="row">
-                <div class="col-md-1 col lg- 1 col-sm-1 col-6">
-                    <label class="modal-label" for="">Add </label>
-                  </div>
+              <div class="col-md-1 col lg- 1 col-sm-1 col-6">
+                <label class="modal-label" for="">Add </label>
+              </div>
               <div class="col-md-3 col lg- 3 col-sm-3 col-6">
                 <label class="modal-label" for="">Name </label>
               </div>
@@ -197,9 +218,11 @@
             <div class="row" *ngFor="let personalData of personalDataList let i=index">
               <div class="col-md-4 col lg- 4 col-sm-4 col-6 bottom-distance">
                 <div class="row">
-                  <div class="modal-label col-3 pr-0" for=""><input type="checkbox" [(ngModel)]="isPersonSelected[i]" (Change)="isPersonSelected[i]=!isPersonSelected[i]"/> </div>
+                  <div class="modal-label col-3 pr-0" for="">
+                    <input type="checkbox" [(ngModel)]="isPersonSelected[i]" (Change)="isPersonSelected[i]=!isPersonSelected[i]"
+                    /> </div>
                   <div class="col-9">
-                      {{personalData.personName}}
+                    {{personalData.personName}}
                   </div>
                 </div>
               </div>
@@ -212,23 +235,22 @@
               </div>
             </div>
             <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
-                <button title="Add Persons" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button"
-                  aria-label="Close" (click)="addCollaboratorPerson()">Add</button>
-                </section>
+              <button title="Add Persons" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" aria-label="Close" (click)="addCollaboratorPerson()">Add</button>
+            </section>
           </div>
           <div class="popup-div" *ngIf="protocolCollaboratorPersons?.length != 0">
             <table class="table table-striped">
               <thead class="popup-header">
                 <tr>
-                  <th class="table-align-head" scope="col">Name</th>
+                  <th scope="col">Name</th>
                   <th scope="col">Role</th>
                   <th scope="col">Unit</th>
-                  <th scope="col" class="submitted-header">Affiliate</th>
+                  <th scope="col">Affiliate</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let protocolCollaboratorPerson of protocolCollaboratorPersons">
-                  <td class="table-align" scope="row">{{protocolCollaboratorPerson?.personnelInfo?.personName}}</td>
+                  <td scope="row">{{protocolCollaboratorPerson?.personnelInfo?.personName}}</td>
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolPersonRoleTypes?.description}}</td>
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolAffiliationTypes?.description}}</td>
@@ -247,21 +269,19 @@
         </div>
         <div class="modal-padding">
           <div class="row mb-15" *ngIf="isShowAddAttachment">
-              <div class="row col-12 form-group">
-                  <div class="col-4 apprve-date">
-                    <h4>*Type</h4>
-                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode"
-                      (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
-                      <option value=null selected>Please Select</option>
-                      <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
-                    </select>
-                  </div>
-                  <div class="col-8 apprve-date">
-                    <h4 class="ml-10">*Description</h4>
-                    <textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding "
-                      placeholder="Description" [(ngModel)]="requestObject.attachmentDescription"></textarea>
-                  </div>
-                </div>
+            <div class="row col-12 form-group">
+              <div class="col-4 apprve-date">
+                <h4>*Type</h4>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode" (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
+                  <option value=null selected>Please Select</option>
+                  <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
+                </select>
+              </div>
+              <div class="col-8 apprve-date">
+                <h4 class="ml-10">*Description</h4>
+                <textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding " placeholder="Description" [(ngModel)]="requestObject.attachmentDescription"></textarea>
+              </div>
+            </div>
             <div class="col-12">
               <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
                 <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
@@ -272,48 +292,49 @@
               </file-drop>
             </div>
             <div class="filechip pl-5">
-                <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
-                  <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
-                </span>
-              </div>
-              <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
-                  <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="!isAttachmentEdit"
-                    aria-label="Close" (click)="addAttachments()">Add</button>
-                  </section>
+              <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+                <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+              </span>
+            </div>
+            <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+              <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="!isAttachmentEdit"
+                aria-label="Close" (click)="addAttachments()">Add</button>
+            </section>
           </div>
           <div class="popup-div" *ngIf="protocolCollaboratorAttachmentsList?.length!=0">
             <table class="table table-striped">
               <thead class="popup-header">
-                  <tr>
-                      <th scope="col">Type</th>
-                      <th scope="col">Description</th>
-                      <th scope="col">File</th>
-                      <th scope="col">Updated By</th>
-                      <th scope="col">Action</th>
-                    </tr>
+                <tr>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                  <th scope="col" style="width: 30%" class="padding-table-content">File</th>
+                  <th scope="col" class="padding-table-content">Updated By</th>
+                  <th scope="col">Action</th>
+                </tr>
               </thead>
               <tbody>
-               <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
-                 <td>{{protocolCollaboratorAttachment?.attachmentType?.description}}</td>
-                 <td>{{protocolCollaboratorAttachment?.description}}</td>
-                 <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</td>
-                 <td class="padding-table-content">{{protocolCollaboratorAttachment?.updateUser}} {{(protocolCollaboratorAttachment?.updateTimestamp ===' ' || protocolCollaboratorAttachment.updateTimestamp
-                    ===null) ? ' ':(protocolCollaboratorAttachment.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
-                <td>
+                <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
+                  <td>{{protocolCollaboratorAttachment?.attachmentType?.description}}</td>
+                  <td>{{protocolCollaboratorAttachment?.description}}</td>
+                  <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</td>
+                  <td class="padding-table-content">{{protocolCollaboratorAttachment?.updateUser}} {{(protocolCollaboratorAttachment?.updateTimestamp ==='
+                    ' || protocolCollaboratorAttachment.updateTimestamp ===null) ? ' ':(protocolCollaboratorAttachment.updateTimestamp
+                    | date: 'MM/dd/yyyy')}}</td>
+                  <td>
                     <ul class="actionButtonGroup padding-icons">
-                        <li>
-                          <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachment">
-                            <i class="fa fa-trash-o delete-color"></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
-                            <i class="fa fa-download download-color" aria-hidden="true"></i>
-                          </a>
-                        </li>
-                      </ul>
-                </td>
-               </tr>
+                      <li>
+                        <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachment">
+                          <i class="fa fa-trash-o delete-color"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
+                          <i class="fa fa-download download-color" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -325,23 +346,23 @@
 </div>
 <!-- modal-end -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteAttachment" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
-aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-  <div class="modal-content modal-text-color">
-    <div class="modal-header popup-header">
-      <h5 class="modal-title modal-text-color">Want to delete?</h5>
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
 
-      <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>Are you sure you want to delete this item?</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
-      <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments()" data-dismiss="modal">Yes</button>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments()" data-dismiss="modal">Yes</button>
+      </div>
     </div>
   </div>
-</div>
 </div>

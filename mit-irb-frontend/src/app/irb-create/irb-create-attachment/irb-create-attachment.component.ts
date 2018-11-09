@@ -95,13 +95,14 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.$subscription1 = this._irbCreateService.getIrbAttachmentList(reqobj).subscribe(data => {
             this.result = data || [];
             if (this.result != null) {
+                this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
                 if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
                     this.noIrbAttachments = true;
-                } else {
-                    this.generalInfo = this.result.protocolAttachmentList[0].protocolGeneralInfo;
-                    this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
-                    this.irbAttachmentsList = this.result.protocolAttachmentList;
                     this._spinner.hide();
+                } else {
+                    this._spinner.hide();
+                    this.generalInfo = this.result.protocolAttachmentList[0].protocolGeneralInfo;
+                    this.irbAttachmentsList = this.result.protocolAttachmentList;
                 }
             }
         },
@@ -308,6 +309,16 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 }
                 this.irbAttachmentsList = this.result.protocolAttachmentList;
                 this.irbAttachment = data;
+            });
+    }
+    deleteAttachmentsCollaborator() {
+        this.tempSaveAttachment.acType = 'D';
+        this._irbCreateService.addCollaboratorAttachments(this.tempSaveAttachment, this.uploadedFile).subscribe(
+            data => {
+                this.result = data;
+                this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
+                this.uploadedFile = [];
+                this.requestObject.attachmentDescription = '';
             });
     }
     /**sort the Attachment list

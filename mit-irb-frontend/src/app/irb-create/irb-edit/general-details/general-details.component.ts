@@ -255,11 +255,11 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
               hits_source.forEach((elmnt, j) => {
                 personName = hits_source[j].full_name;
                 test = hits_source[j];
-                if (typeof (hits_highlight[j].first_name) !== 'undefined') {
+                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].first_name) !== undefined) {
                   personName = hits_highlight[j].first_name;
                 }
 
-                if (typeof (hits_highlight[j].full_name) !== 'undefined') {
+                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].full_name) !== undefined) {
                   personName = hits_highlight[j].full_name;
                 }
                 results.push({

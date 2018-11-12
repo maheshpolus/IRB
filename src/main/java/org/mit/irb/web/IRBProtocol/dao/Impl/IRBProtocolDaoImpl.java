@@ -518,25 +518,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		protocolSubject.setSequenceNumber(1);
-		
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		Statement statement;
-		try {
-			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select * from MITKC_IRB_PROTO_VULNERABLE_SUB where PROTOCOL_NUMBER='1810000069'");
-			while(rs.next()){
-				logger.info("info"+rs.getInt(1));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		
 		if (protocolSubject.getAcType().equals("U")) {
 			hibernateTemplate.saveOrUpdate(protocolSubject);
 		} else {
@@ -545,21 +526,36 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			queryDelete.setInteger("protocolVulnerableSubId", protocolSubject.getProtocolVulnerableSubId());
 			queryDelete.executeUpdate();
 		}
-		/*Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
 		query.setInteger("protocolId", protocolSubject.getProtocolId());
-		irbProtocolVO.setProtocolSubjectList(query.list());*/
+		irbProtocolVO.setProtocolSubjectList(query.list());
 		return irbProtocolVO;
 	}
 
 	@Override
 	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/YYYY");
 		protocolCollaborator.setSequenceNumber(1);
 		if (protocolCollaborator.getAcType().equals("U")) {
 			hibernateTemplate.saveOrUpdate(protocolCollaborator);
-		} else {
+		} else if (protocolCollaborator.getAcType().equals("D")){
+			Session sessionDelPersons = hibernateTemplate.getSessionFactory().openSession();
+			Transaction transactionDelPersons = sessionDelPersons.beginTransaction();
+			Query queryDelPersons = sessionDelPersons.createQuery("delete from ProtocolCollaboratorPersons p where p.collaboratorId =:collaboratorId");
+			queryDelPersons.setInteger("collaboratorId", protocolCollaborator.getProtocolLocationId());
+			queryDelPersons.executeUpdate();
+			transactionDelPersons.commit();
+			sessionDelPersons.close();
+			
+			Session sessionDeleAttachments = hibernateTemplate.getSessionFactory().openSession();
+			Transaction transactionDeleAttachments = sessionDeleAttachments.beginTransaction();
+			Query queryDeleAttachments = sessionDeleAttachments.createQuery("delete from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId");
+			queryDeleAttachments.setInteger("collaboratorId", protocolCollaborator.getProtocolLocationId());
+			queryDeleAttachments.executeUpdate();
+			transactionDeleAttachments.commit();
+			sessionDeleAttachments.close();
+			
 			Query queryDelete = hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("delete from ProtocolCollaborator p where p.protocolLocationId =:protocolLocationId");
 			queryDelete.setInteger("protocolLocationId", protocolCollaborator.getProtocolLocationId());
@@ -569,12 +565,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
 		query.setInteger("protocolId", protocolCollaborator.getProtocolId());
 		irbProtocolVO.setProtocolCollaboratorList(query.list());
-
 		return irbProtocolVO;
 	}
 
 	
-
 	@Override
 	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
 		Integer protocolId = null;
@@ -610,7 +604,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		} else {
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
 		}
-
 		return irbProtocolVO;
 	}
 
@@ -765,21 +758,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	@Override
 	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		
-		
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(ProtocolCollaboratorAttachments.class);
 		criteria.add(Restrictions.eq("protocolNumber", protocolNumber));
 		List<ProtocolCollaboratorAttachments> attachmentsCollaborator = criteria.list();
 		irbProtocolVO.setProtocolCollaboratorAttachmentsList(attachmentsCollaborator);
-		/*Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorAttachments p where p.protocolNumber =:protocolNumber");
-		queryAttachment.setString("protocolNumber", protocolNumber);
-		irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());*/
-		
 		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber");
 		query.setString("protocolNumber", protocolNumber);
 		irbProtocolVO.setProtocolAttachmentList(query.list());
-		
 		return irbProtocolVO;
 	}
 
@@ -848,9 +834,17 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		for(ProtocolCollaboratorPersons person: protocolCollaboratorPersons){
 			Session session = hibernateTemplate.getSessionFactory().openSession();
 			Transaction transaction =session.beginTransaction();
-			session.saveOrUpdate(person);
-			transaction.commit();
-			session.close();
+			if(person.getAcType().equals("U")){
+				session.saveOrUpdate(person);
+				transaction.commit();
+				session.close();
+			} else if(person.getAcType().equals("D")){
+				Query queryDeletePerson= session.createQuery("delete from ProtocolCollaboratorPersons p where p.collaboratorPersonId =:collaboratorPersonId");
+				queryDeletePerson.setInteger("collaboratorPersonId", person.getCollaboratorPersonId());
+				queryDeletePerson.executeUpdate();
+				transaction.commit();
+				session.close();
+			}
 		}
 		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorPersons p where p.collaboratorId =:collaboratorId");
 		query.setInteger("collaboratorId", protocolCollaboratorPersons.get(0).getCollaboratorId());

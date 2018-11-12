@@ -146,17 +146,17 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
               hits_source.forEach((elmnt, j) => {
                 personName = hits_source[j].full_name;
                 test = hits_source[j];
-                if (typeof (hits_highlight[j].first_name) !== 'undefined') {
+                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].first_name) !== undefined) {
                   personName = hits_highlight[j].first_name;
                 }
 
-                if (typeof (hits_highlight[j].full_name) !== 'undefined') {
+                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].full_name) !== undefined) {
                   personName = hits_highlight[j].full_name;
                 }
-                if (typeof (hits_source[j].email_address) !== 'undefined') {
+                if (hits_highlight[j] !== undefined && typeof (hits_source[j].email_address) !== undefined) {
                   email = hits_source[j].email_address;
                 }
-                if (typeof (hits_source[j].home_unit) !== 'undefined') {
+                if (hits_highlight[j] !== undefined && typeof (hits_source[j].home_unit) !== undefined) {
                   home_unit = hits_source[j].home_unit;
                 }
                 results.push({
@@ -348,7 +348,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       personnelInfo.protocolLeadUnits[0].person_id = this.userDTO.personID;
       personnelInfo.protocolLeadUnits[0].updateTimestamp = new Date();
       personnelInfo.protocolLeadUnits[0].updateUser = this.userDTO.userName;
-      personnelInfo.protocolLeadUnits[0].protocolId = this.generalInfo.protocolId;
+      personnelInfo.protocolLeadUnits[0].protocolId = this.protocolId;
       personnelInfo.protocolLeadUnits[0].sequenceNumber = 1;
       if (personnelInfo.protocolPersonRoleId === 'PI') {
         personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'Y';

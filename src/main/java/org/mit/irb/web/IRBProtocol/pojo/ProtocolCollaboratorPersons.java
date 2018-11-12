@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -47,6 +48,9 @@ public class ProtocolCollaboratorPersons {
 	@Column(name="UPDATE_USER")
 	private String updateUser;
 
+	@Transient
+	private String acType;
+	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTO_LOCATION_PERSON_FK1"), name = "PROTOCOL_PERSON_ID", referencedColumnName = "PROTOCOL_PERSON_ID", insertable = false, updatable = false)
 	ProtocolPersonnelInfo personnelInfo;
@@ -132,5 +136,13 @@ public class ProtocolCollaboratorPersons {
 
 	public void setProtocolCollaborator(ProtocolCollaborator protocolCollaborator) {
 		this.protocolCollaborator = protocolCollaborator;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 }

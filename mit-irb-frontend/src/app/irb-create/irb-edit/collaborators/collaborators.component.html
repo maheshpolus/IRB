@@ -105,9 +105,9 @@
                     <button title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
-                    <button title="Persons" type="button" (click)="setCollaboratorPersonDetails(item)" class="btn btn-primary view-btn-1" data-toggle="modal"
+                    <button title="More Details" type="button" (click)="setCollaboratorPersonDetails(item)" class="btn btn-primary view-btn-1" data-toggle="modal"
                       data-target="#collaboratorPersonModal">
-                      <i class="fa fa-user-o" aria-hidden="true"></i>
+                      <i class="fa fa-arrow-right" aria-hidden="true"></i>
                     </button>
                     <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1">
                       <i class="fa fa-trash" aria-hidden="true"></i>
@@ -175,20 +175,20 @@
           <div class="row">
             <div class="col-md-6 col lg- 6 col-sm-6 col-6">
               <label class="modal-label" for=""> Organization : </label>
-              {{protocolCollaborator?.collaboratorNames?.organizationName}}
+              {{protocolCollaboratorSelected?.collaboratorNames?.organizationName}}
             </div>
             <div class="col-md-6 col lg- 6 col-sm-6 col-6">
               <label class="modal-label" for="">Point of contact : </label>
-              {{protocolCollaborator?.pointOfContact}}
+              {{protocolCollaboratorSelected?.pointOfContact}}
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 col lg- 6 col-sm-6 col-6">
               <label class="modal-label" for=""> Approval Date : </label>
-              {{protocolCollaborator?.approvalDate| date:"MM/dd/yyyy"}}
+              {{protocolCollaboratorSelected?.approvalDate| date:"MM/dd/yyyy"}}
             </div>
             <div class="col-md-6 col lg- 6 col-sm-6 col-6">
-              <label class="modal-label" for=""> Expiration Date : </label>{{protocolCollaborator?.expirationDate| date:"MM/dd/yyyy"}}
+              <label class="modal-label" for=""> Expiration Date : </label>{{protocolCollaboratorSelected?.expirationDate| date:"MM/dd/yyyy"}}
             </div>
           </div>
         </div>
@@ -201,6 +201,7 @@
         </div>
         <div class="modal-padding">
           <div *ngIf="isShowAddPerson">
+            <div *ngIf="personalDataList != null && personalDataList.length > 0">
             <div class="row">
               <div class="col-md-1 col lg- 1 col-sm-1 col-6">
                 <label class="modal-label" for="">Add </label>
@@ -208,11 +209,11 @@
               <div class="col-md-3 col lg- 3 col-sm-3 col-6">
                 <label class="modal-label" for="">Name </label>
               </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <div class="col-md-3 col lg- 3 col-sm-4 col-6">
                 <label class="modal-label" for="">Role </label>
               </div>
               <div class="col-md-3 col lg- 3 col-sm-3 col-6">
-                <label class="modal-label" for="">Affiliate </label>
+                <label class="modal-label" for="">Affiliation </label>
               </div>
             </div>
             <div class="row" *ngFor="let personalData of personalDataList let i=index">
@@ -226,7 +227,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <div class="col-md-3 col lg- 3 col-sm-3 col-6">
                 {{personalData.protocolPersonRoleTypes?.description}}
 
               </div>
@@ -238,6 +239,8 @@
               <button title="Add Persons" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" aria-label="Close" (click)="addCollaboratorPerson()">Add</button>
             </section>
           </div>
+          <div *ngIf="personalDataList == null || personalDataList.length <= 0" class="alertMsg"><b>No more persons to Add.</b></div>
+          </div>
           <div class="popup-div" *ngIf="protocolCollaboratorPersons?.length != 0">
             <table class="table table-striped">
               <thead class="popup-header">
@@ -245,7 +248,8 @@
                   <th scope="col">Name</th>
                   <th scope="col">Role</th>
                   <th scope="col">Unit</th>
-                  <th scope="col">Affiliate</th>
+                  <th scope="col">Affiliation</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -254,6 +258,14 @@
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolPersonRoleTypes?.description}}</td>
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolAffiliationTypes?.description}}</td>
+                  <td><ul class="actionButtonGroup padding-icons">
+                      <li>
+                        <a title="Remove Person" (click)="deletePerson(protocolCollaboratorPerson)">
+                          <i class="fa fa-trash-o delete-color"></i>
+                        </a>
+                      </li>
+                      </ul>
+                      </td>
                 </tr>
               </tbody>
             </table>

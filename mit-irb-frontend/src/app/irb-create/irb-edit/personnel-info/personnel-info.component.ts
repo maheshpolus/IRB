@@ -348,7 +348,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       personnelInfo.protocolLeadUnits[0].person_id = this.userDTO.personID;
       personnelInfo.protocolLeadUnits[0].updateTimestamp = new Date();
       personnelInfo.protocolLeadUnits[0].updateUser = this.userDTO.userName;
-      personnelInfo.protocolLeadUnits[0].protocolId = this.generalInfo.protocolId;
+      personnelInfo.protocolLeadUnits[0].protocolId = this.protocolId;
       personnelInfo.protocolLeadUnits[0].sequenceNumber = 1;
       if (personnelInfo.protocolPersonRoleId === 'PI') {
         personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'Y';

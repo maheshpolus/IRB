@@ -451,7 +451,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
       this.fundingSource.updateUser = localStorage.getItem('userName');
       this.fundingSource.sequenceNumber = 1;
       this.fundingSource.protocolNumber = this.protocolNumber;
-      this.fundingSource.protocolId = this.generalInfo.protocolId;
+      this.fundingSource.protocolId = this.protocolId;
       this.fundingSource.acType = 'U';
       this.commonVo.fundingSource = this.fundingSource;
     }
@@ -459,7 +459,10 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
       data => {
         this.result = data;
         this.fundingSource = {};
+        this.fundingSource.fundingSourceTypeCode = null;
+        this.sourceType.placeholder = null;
         this.protocolFundingSourceList = this.result.protocolFundingSourceList;
+
       });
   }
 

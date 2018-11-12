@@ -135,7 +135,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
       this.protocolSubject.updateUser = localStorage.getItem('userName');
       this.protocolSubject.sequenceNumber = 1;
       this.protocolSubject.protocolNumber = this.protocolNumber;
-      this.protocolSubject.protocolId = this.generalInfo.protocolId;
+      this.protocolSubject.protocolId = this.protocolId;
       this.protocolSubject.acType = 'U';
       this.commonVo.protocolSubject = this.protocolSubject;
     }

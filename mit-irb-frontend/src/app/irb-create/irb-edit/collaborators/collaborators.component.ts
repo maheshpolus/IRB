@@ -330,9 +330,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
   addAttachments() {
     this.protocolCollaboratorAttachments = {
-      collaboratorId: this.protocolCollaborator.protocolLocationId,
-      protocolId: this.protocolCollaborator.protocolId,
-      protocolNumber: this.protocolCollaborator.protocolNumber,
+      collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
+      protocolId: this.protocolCollaboratorSelected.protocolId,
+      protocolNumber: this.protocolCollaboratorSelected.protocolNumber,
       sequenceNumber: 1,
       description: this.requestObject.attachmentDescription,
       updateTimestamp: new Date(),

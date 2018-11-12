@@ -22,6 +22,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   generalInfo: any = {};
   result: any = {};
   protocolCollaborator: any = {};
+  tempSaveCollaboratorPerson: any = {};
+  protocolCollaboratorSelected: any = {};
   protocolCollaboratorAttachments: any = {};
   tempSaveAttachment: any = {};
   protocolCollaboratorAttachmentsList: any = [];
@@ -30,6 +32,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   protocolCollaboratorList = [];
   personsSelected = [];
   personalDataList = [];
+  personalDataListCopy = [];
   attachmentTypes = [];
   uploadedFile: File[] = [];
   files: UploadFile[] = [];
@@ -88,6 +91,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.generalInfo = generalInfo;
         if (this.generalInfo.personnelInfos != null && this.generalInfo.personnelInfos !== undefined) {
           this.personalDataList = this.generalInfo.personnelInfos;
+          this.personalDataListCopy = Object.assign([], this.generalInfo.personnelInfos);
           this.isPersonSelected.length = this.generalInfo.personnelInfos.length;
         }
       }
@@ -194,9 +198,11 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   setCollaboratorPersonDetails(item) {
-    this.protocolCollaborator = Object.assign({}, item);
-    this.loadCollaboratorPersonsAndAttachment(this.protocolCollaborator.protocolLocationId);
-  }
+    this.isShowAddPerson = false;
+    this.isShowAddAttachment = false;
+    this.protocolCollaboratorSelected = Object.assign({}, item);
+    this.loadCollaboratorPersonsAndAttachment(this.protocolCollaboratorSelected.protocolLocationId);
+      }
   loadCollaboratorPersonsAndAttachment(CollaboratorId) {
     this.commonVo.collaboratorId = CollaboratorId;
     this._irbCreateService.loadCollaboratorPersonsAndAttachments(this.commonVo).subscribe(
@@ -205,25 +211,29 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList == null ?
           null : this.result.protocolCollaboratorAttachmentsList;
         this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ? null : this.result.protocolCollaboratorPersons;
-
+        if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons !== undefined) {
+          this.removePersonFromPersonInfo();
+        }
       });
   }
   // Persons Popup Methods
 
   addCollaboratorPerson() {
-
     for (let index = 0; index < this.isPersonSelected.length; index++) {
       if (this.isPersonSelected[index] === true) {
         this.isPersonSelected[index] = !this.isPersonSelected[index];
         this.personsSelected.push({
-          collaboratorId: this.protocolCollaborator.protocolLocationId,
+          collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
           personId: this.personalDataList[index].protocolPersonId,
           protocolId: this.protocolCollaborator.protocolId,
           protocolNumber: this.protocolCollaborator.protocolNumber,
           sequenceNumber: 1,
           updateTimestamp: new Date(),
-          updateUser: localStorage.getItem('userName')
+          updateUser: localStorage.getItem('userName'),
+          acType: 'U'
         });
+
+        // this.personsSelected.push(this.personalDataList[index]);
       }
     }
     this.commonVo.protocolCollaboratorPersons = this.personsSelected;
@@ -232,9 +242,40 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.result = data;
         this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ?
           null : this.result.protocolCollaboratorPersons;
+          if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons !== undefined) {
+            this.removePersonFromPersonInfo();
+          }
         this.personsSelected = [];
       });
 
+  }
+  removePersonFromPersonInfo() {
+    for (let index = 0; index < this.personalDataList.length; index++) {
+      this.protocolCollaboratorPersons.forEach(protocolCollaboratorPerson => {
+        if (protocolCollaboratorPerson.personnelInfo.protocolPersonId === this.personalDataList[index].protocolPersonId  ) {
+          this.personalDataList.splice(index, 1);
+        }
+      });
+
+    }
+  }
+  deletePerson(protocolCollaboratorPerson) {
+    this.personalDataListCopy.forEach(personalData => {
+      if (protocolCollaboratorPerson.personId === personalData.protocolPersonId) {
+        this.personalDataList.push(personalData);
+      }
+    });
+    // this.personalDataList.push(protocolCollaboratorPerson);
+    protocolCollaboratorPerson.acType = 'D';
+    this.personsSelected.push(protocolCollaboratorPerson);
+    this.commonVo.protocolCollaboratorPersons = this.personsSelected;
+    this._irbCreateService.addCollaboratorPersons(this.commonVo).subscribe(
+      data => {
+        this.result = data;
+        this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ?
+          null : this.result.protocolCollaboratorPersons;
+        this.personsSelected = [];
+      });
   }
   // attachment popup methods
   triggerAdd() {
@@ -356,7 +397,6 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.iconValue = index;
       this.loadCollaboratorPersonsAndAttachment(item.protocolLocationId);
     }
-
 
   }
 

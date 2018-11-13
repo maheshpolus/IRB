@@ -20,9 +20,9 @@ public class ProtocolAttachments implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GenericGenerator(name = "ProtocolFileIdGenerator", strategy = "increment", parameters = {
+/*	@GenericGenerator(name = "ProtocolFileIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolFileIdGenerator")
+	@GeneratedValue(generator = "ProtocolFileIdGenerator")*/
 	@Column(name = "FILE_ID")
 	private Integer fileId;
 

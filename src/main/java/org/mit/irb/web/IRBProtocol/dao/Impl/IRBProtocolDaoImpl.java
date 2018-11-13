@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
@@ -722,6 +724,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				irbAttachmentProtocol.setUpdateTimestamp(attachmentProtocol.getUpdateTimestamp());
 				irbAttachmentProtocol.setUpdateUser(attachmentProtocol.getUpdateUser());
 				ProtocolAttachments attachments = new ProtocolAttachments();
+				attachments.setFileId(generateAttachmentFileId());
 				attachments.setContentType(files[i].getContentType());
 				attachments.setFileName(files[i].getOriginalFilename());
 				attachments.setFileData(files[i].getBytes());
@@ -755,6 +758,24 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return irbProtocolVO;
 	}
 
+	private int generateAttachmentFileId() {
+		int generatedId = 0;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection connection = sessionImpl.connection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("select SEQ_ATTACHMENT_ID.nextval from dual");
+			if (rs.next()) {
+				int id = rs.getInt(1);
+				generatedId= id;
+				return generatedId;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return generatedId;
+	}
 	@Override
 	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
@@ -795,6 +816,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				irbCollaboratorAttachmentProtocol.setTypeCode(protocolCollaboratorAttachments.getTypeCode());
 				irbCollaboratorAttachmentProtocol.setAttachmentType(protocolCollaboratorAttachments.getAttachmentType());
 				ProtocolAttachments attachments = new ProtocolAttachments();
+				attachments.setFileId(generateAttachmentFileId());
 				attachments.setContentType(files[i].getContentType());
 				attachments.setFileName(files[i].getOriginalFilename());
 				attachments.setFileData(files[i].getBytes());

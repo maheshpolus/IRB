@@ -54,7 +54,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
-    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
+    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false,
+    invalidAttachmentInfo: false, invalidCollaboratorPersonInfo: false
   };
   requestObject = {
     attachmentTypeCode: null,
@@ -90,7 +91,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       if (generalInfo !== undefined) {
         this.generalInfo = generalInfo;
         if (this.generalInfo.personnelInfos != null && this.generalInfo.personnelInfos !== undefined) {
-          this.personalDataList = this.generalInfo.personnelInfos;
+          this.personalDataList = Object.assign([], this.generalInfo.personnelInfos);
           this.personalDataListCopy = Object.assign([], this.generalInfo.personnelInfos);
           this.isPersonSelected.length = this.generalInfo.personnelInfos.length;
         }
@@ -105,6 +106,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
+    }
+    if (this.$subscription2) {
+      this.$subscription2.unsubscribe();
     }
   }
 
@@ -194,6 +198,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.protocolCollaborator = {};
         this.collaboratorName = null;
         this.protocolCollaboratorList = this.result.protocolCollaboratorList;
+        this.commonVo.protocolCollaborator = {};
+        this.commonVo.protocolCollaboratorList = this.protocolCollaboratorList;
       });
   }
 
@@ -202,7 +208,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.isShowAddAttachment = false;
     this.protocolCollaboratorSelected = Object.assign({}, item);
     this.loadCollaboratorPersonsAndAttachment(this.protocolCollaboratorSelected.protocolLocationId);
-      }
+  }
   loadCollaboratorPersonsAndAttachment(CollaboratorId) {
     this.commonVo.collaboratorId = CollaboratorId;
     this._irbCreateService.loadCollaboratorPersonsAndAttachments(this.commonVo).subscribe(
@@ -219,9 +225,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   // Persons Popup Methods
 
   addCollaboratorPerson() {
-    for (let index = 0; index < this.isPersonSelected.length; index++) {
-      if (this.isPersonSelected[index] === true) {
-        this.isPersonSelected[index] = !this.isPersonSelected[index];
+    this.isPersonSelected.forEach((isPersonSelected, index) => {
+      if (isPersonSelected === true) {
         this.personsSelected.push({
           collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
           personId: this.personalDataList[index].protocolPersonId,
@@ -232,41 +237,39 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
           updateUser: localStorage.getItem('userName'),
           acType: 'U'
         });
-
-        // this.personsSelected.push(this.personalDataList[index]);
       }
-    }
-    this.commonVo.protocolCollaboratorPersons = this.personsSelected;
-    this._irbCreateService.addCollaboratorPersons(this.commonVo).subscribe(
-      data => {
-        this.result = data;
-        this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ?
-          null : this.result.protocolCollaboratorPersons;
+    });
+    if (this.personsSelected != null && this.personsSelected.length === 0) {
+      this.invalidData.invalidCollaboratorPersonInfo = true;
+    } else {
+      this.invalidData.invalidCollaboratorPersonInfo = false;
+      this.commonVo.protocolCollaboratorPersons = this.personsSelected;
+      this._irbCreateService.addCollaboratorPersons(this.commonVo).subscribe(
+        data => {
+          this.result = data;
+          this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ?
+            null : this.result.protocolCollaboratorPersons;
           if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons !== undefined) {
             this.removePersonFromPersonInfo();
           }
-        this.personsSelected = [];
-      });
-
+          this.personsSelected = [];
+          this.isPersonSelected = [];
+        });
+    }
   }
   removePersonFromPersonInfo() {
-    for (let index = 0; index < this.personalDataList.length; index++) {
-      this.protocolCollaboratorPersons.forEach(protocolCollaboratorPerson => {
-        if (protocolCollaboratorPerson.personnelInfo.protocolPersonId === this.personalDataList[index].protocolPersonId  ) {
+    this.protocolCollaboratorPersons.forEach(protocolCollaboratorPerson => {
+      this.personalDataList.forEach((personData, index) => {
+        if (protocolCollaboratorPerson.personnelInfo.protocolPersonId === personData.protocolPersonId) {
           this.personalDataList.splice(index, 1);
         }
       });
 
-    }
+    });
   }
   deletePerson(protocolCollaboratorPerson) {
-    this.personalDataListCopy.forEach(personalData => {
-      if (protocolCollaboratorPerson.personId === personalData.protocolPersonId) {
-        this.personalDataList.push(personalData);
-      }
-    });
-    // this.personalDataList.push(protocolCollaboratorPerson);
     protocolCollaboratorPerson.acType = 'D';
+    this.personalDataList.push(protocolCollaboratorPerson.personnelInfo);
     this.personsSelected.push(protocolCollaboratorPerson);
     this.commonVo.protocolCollaboratorPersons = this.personsSelected;
     this._irbCreateService.addCollaboratorPersons(this.commonVo).subscribe(
@@ -329,37 +332,43 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     });
   }
   addAttachments() {
-    this.protocolCollaboratorAttachments = {
-      collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
-      protocolId: this.protocolCollaboratorSelected.protocolId,
-      protocolNumber: this.protocolCollaboratorSelected.protocolNumber,
-      sequenceNumber: 1,
-      description: this.requestObject.attachmentDescription,
-      updateTimestamp: new Date(),
-      createDate: new Date(),
-      updateUser: localStorage.getItem('userName'),
-      acType: 'I'
+    if (this.requestObject.attachmentTypeCode == null
+      || this.requestObject.attachmentDescription === '' || this.uploadedFile.length === 0) {
+      this.invalidData.invalidAttachmentInfo = true;
+    } else {
+      this.invalidData.invalidAttachmentInfo = false;
+      this.protocolCollaboratorAttachments = {
+        collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
+        protocolId: this.protocolCollaboratorSelected.protocolId,
+        protocolNumber: this.protocolCollaboratorSelected.protocolNumber,
+        sequenceNumber: 1,
+        description: this.requestObject.attachmentDescription,
+        updateTimestamp: new Date(),
+        createDate: new Date(),
+        updateUser: localStorage.getItem('userName'),
+        acType: 'I'
 
-    };
-    this.protocolCollaboratorAttachments.protocolAttachments = {
-      sequenceNumber: 1,
-      updateTimestamp: new Date(),
-      updateUser: localStorage.getItem('userName')
+      };
+      this.protocolCollaboratorAttachments.protocolAttachments = {
+        sequenceNumber: 1,
+        updateTimestamp: new Date(),
+        updateUser: localStorage.getItem('userName')
 
-    };
-    this.protocolCollaboratorAttachments.attachmentType = {
-      typeCode: this.requestObject.attachmentTypeCode,
-      description: this.attachmentTypeDescription
-    };
-    this.protocolCollaboratorAttachments.typeCode = this.requestObject.attachmentTypeCode;
-    this._irbCreateService.addCollaboratorAttachments(this.protocolCollaboratorAttachments, this.uploadedFile).subscribe(
-      data => {
-        this.result = data;
-        this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
-        this.uploadedFile = [];
-        this.requestObject.attachmentDescription = '';
-        this.requestObject.attachmentTypeCode = '';
-      });
+      };
+      this.protocolCollaboratorAttachments.attachmentType = {
+        typeCode: this.requestObject.attachmentTypeCode,
+        description: this.attachmentTypeDescription
+      };
+      this.protocolCollaboratorAttachments.typeCode = this.requestObject.attachmentTypeCode;
+      this._irbCreateService.addCollaboratorAttachments(this.protocolCollaboratorAttachments, this.uploadedFile).subscribe(
+        data => {
+          this.result = data;
+          this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
+          this.uploadedFile = [];
+          this.requestObject.attachmentDescription = '';
+          this.requestObject.attachmentTypeCode = null;
+        });
+    }
   }
   tempSave(event, attachment) {
     event.preventDefault();

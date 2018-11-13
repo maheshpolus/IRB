@@ -462,6 +462,8 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
         this.fundingSource.fundingSourceTypeCode = null;
         this.sourceType.placeholder = null;
         this.protocolFundingSourceList = this.result.protocolFundingSourceList;
+        this.commonVo.fundingSource = {};
+        this.commonVo.protocolFundingSourceList = this.protocolFundingSourceList;
 
       });
   }

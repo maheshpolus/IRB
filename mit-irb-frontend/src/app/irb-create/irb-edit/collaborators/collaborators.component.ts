@@ -194,6 +194,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.protocolCollaborator = {};
         this.collaboratorName = null;
         this.protocolCollaboratorList = this.result.protocolCollaboratorList;
+        this.commonVo.protocolCollaborator = {};
+        this.commonVo.protocolCollaboratorList = this.protocolCollaboratorList;
       });
   }
 

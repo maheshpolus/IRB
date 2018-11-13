@@ -201,6 +201,11 @@
         </div>
         <div class="modal-padding">
           <div *ngIf="isShowAddPerson">
+              <div class="col-12  search-eidted-p padding-15">
+                  <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorPersonInfo">
+                    Please select the persons to be added
+                  </div>
+                </div>
             <div *ngIf="personalDataList != null && personalDataList.length > 0">
             <div class="row">
               <div class="col-md-1 col lg- 1 col-sm-1 col-6">
@@ -281,6 +286,12 @@
         </div>
         <div class="modal-padding">
           <div class="row mb-15" *ngIf="isShowAddAttachment">
+              <div class="col-12  search-eidted-p padding-15">
+                  <div class="alert alert-danger " *ngIf="invalidData.invalidAttachmentInfo">
+                    Please fill all mandatory fields marked
+                    <strong>*</strong>
+                  </div>
+                </div>
             <div class="row col-12 form-group">
               <div class="col-4 apprve-date">
                 <h4>*Type</h4>

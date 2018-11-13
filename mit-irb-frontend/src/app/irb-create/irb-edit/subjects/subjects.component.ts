@@ -144,6 +144,8 @@ export class SubjectsComponent implements OnInit, OnDestroy {
         this.result = data;
         this.protocolSubject = {};
         this.protocolSubjectAgeGroupCategory = [];
+        this.protocolSubject.vulnerableSubjectTypeCode = null;
+        this.protocolSubject.ageGroupCode = null;
         this.protocolSubjectList = this.result.protocolSubjectList;
         this.commonVo.protocolSubject = {};
         this.commonVo.protocolSubjectList = this.protocolSubjectList;

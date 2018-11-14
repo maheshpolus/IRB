@@ -87,7 +87,7 @@
                   <td>{{item.protocolSubjectTypes?.description}}</td>
                   <td>{{item.ageGroups?.ageGroup}}</td>
                   <td>{{item.subjectCount}}</td>
-                  <td>{{item.description}}
+                  <td title="{{item.description}}">{{item.description| slice:0:25}} <span *ngIf="item.description != null && item.description.length > 25"> ...</span></td>
                     <td class="action-btn-list">
                       <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editSubjectDetails(item,k)">
                         <i class="fa fa-pencil" aria-hidden="true"></i>

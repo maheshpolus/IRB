@@ -153,8 +153,8 @@
                   <td>{{item.protocolFundingSourceTypes?.description}}</td>
                   <td>{{item.sourceName}}</td>
                   <td>{{item.protocolFundingSourceId}}</td>
-                  <td>{{item.title}}</td>
-                  <td>{{item.description}}</td>
+                  <td title="{{item.title}}">{{item.title| slice:0:25}}<span *ngIf="item.title != null && item.title.length > 25"> ...</span></td>
+                  <td title="{{item.description}}">{{item.description| slice:0:25}}<span *ngIf="item.description != null && item.description.length > 25"> ...</span></td>
                   <td class="action-btn-list">
                     <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>

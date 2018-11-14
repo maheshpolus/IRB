@@ -179,12 +179,12 @@
                       <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
                     </select>
                   </td>
-                  <td>{{item.primaryTitle}}</td>
+                  <td title="{{item.primaryTitle}}">{{item.primaryTitle| slice:0:12}}<span *ngIf="item.primaryTitle != null && item.primaryTitle.length > 12"> ...</span></td>
                   <td class="action-btn-list">
-                    <button *ngIf="!isPersonalInfoEdit" title="Edit" (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
-                    <button *ngIf="isPersonalInfoEdit" title="Save" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="isPersonalInfoEdit && i == personalInfoSelectedRow" title="Save" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
                     <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">

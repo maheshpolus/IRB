@@ -4070,3 +4070,9 @@ input:disabled{
 .alertMsg {
     text-align: center;
 }
+.person-modal-scroll
+{
+     overflow-y: auto;
+     max-height: 300px;/*newly added*/
+     /* margin-bottom: 20px !important; */
+}

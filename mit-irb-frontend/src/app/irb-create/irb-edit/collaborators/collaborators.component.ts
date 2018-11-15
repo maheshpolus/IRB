@@ -40,6 +40,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   isPersonSelected: boolean[] = [];
   isGeneralInfoSaved = false;
   isCollaboratorInfoEdit = false;
+  showDeletePopup = false;
   isShowAddPerson = false;
   isShowAddAttachment = false;
   showPopup = false;
@@ -178,7 +179,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.commonVo.protocolCollaborator.updateTimestamp = new Date();
     this.commonVo.protocolCollaborator.protocolOrgTypeCode = 1;
     this.commonVo.protocolCollaborator.updateUser = localStorage.getItem('userName');
-    this.saveCollaboratorDetails('DELETE');
+    this.showDeletePopup = true;
   }
 
   saveCollaboratorDetails(mode) {

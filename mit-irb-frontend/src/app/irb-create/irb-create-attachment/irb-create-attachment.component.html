@@ -50,19 +50,19 @@
                                   </a>
                                 </li>
                                 <li>
-                                  <a (click)="downloadAttachment(attachments)" title="Download Attachment">
+                                  <a (click)="downloadAttachment(attachments.protocolAttachment)" title="Download Attachment">
                                     <i class="fa fa-download download-color" aria-hidden="true"></i>
                                   </a>
                                 </li>
                                 <li>
-                                  <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                  <a (click)="editAttachments(attachments,i,false)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
                                     <i class="fa fa-edit edit-color"></i>
                                   </a>
                                 </li>
                               </ul>
                             </td>
                           </tr>
-                          <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
+                          <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList | orderBy: {property: column, direction: direction}; let i = index" [class.poping-border]="i == attachmentSelectedRowCollaborator">
                             <td>{{protocolCollaboratorAttachment?.attachmentType?.description}}</td>
                             <td>{{protocolCollaboratorAttachment?.description}}</td>
                             <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</td>
@@ -77,15 +77,15 @@
                                   </a>
                                 </li>
                                 <li>
-                                  <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
+                                  <a (click)="downloadAttachment(protocolCollaboratorAttachment.protocolAttachments)" title="Download Attachment">
                                     <i class="fa fa-download download-color" aria-hidden="true"></i>
                                   </a>
                                 </li>
-                                <!-- <li>
-                                      <a (click)="editAttachments(attachments,i)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                <li>
+                                      <a (click)="editAttachments(protocolCollaboratorAttachment,i,true)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
                                         <i class="fa fa-edit edit-color"></i>
                                       </a>
-                                    </li> -->
+                                    </li>
                               </ul>
                             </td>
                           </tr>
@@ -195,7 +195,7 @@
                         </span>
                       </div>
                       <div class="filechip" *ngIf="isReplaceAttachment">
-                        <span>{{ tempEditAttachment?.protocolAttachment?.fileName }}
+                        <span>{{ fileName }}
                           <i title="Replace Attachment" class="fa fa-close pdf" (click)="replaceAttachment()"></i>
                         </span>
                       </div>

@@ -44,11 +44,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   isPersonalInfoEdit = false;
   isGeneralInfoSaved = false;
   showPersonElasticBand = false;
+  showDeletePopup = false;
+  alertMessage: string;
   irbPersonDetailedList: any;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
-    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false
+    invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false,
+    isPersonAdded: false, isPiExists: false
   };
   private $subscription1: ISubscription;
   private $subscription2: ISubscription;
@@ -190,7 +193,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   clearSelectedPIdata() {
-   // this.personnelInfo.personId = '';
+    // this.personnelInfo.personId = '';
   }
 
 
@@ -220,16 +223,25 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   setPersonRole(roleId, mode) {
-    this.personRoleTypes.forEach(personeRole => {
-      if (personeRole.protocolPersonRoleId === roleId) {
-        if (mode === 'ADD') {
-          this.personnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
-        } else if (mode === 'EDIT') {
-          this.editPersonnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
+    if (roleId === 'PI') {
+      this.personalDataList.forEach(personData => {
+        if (personData.protocolPersonRoleId === 'PI') {
+          this.invalidData.isPiExists = true;
         }
+      });
+    } else {
+      this.invalidData.isPiExists = false;
+      this.personRoleTypes.forEach(personeRole => {
+        if (personeRole.protocolPersonRoleId === roleId) {
+          if (mode === 'ADD') {
+            this.personnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
+          } else if (mode === 'EDIT') {
+            this.editPersonnelInfo.protocolPersonRoleTypes = { protocolPersonRoleId: roleId, description: personeRole.description };
+          }
 
-      }
-    });
+        }
+      });
+    }
   }
 
   setPersonLeadUnit(leadUnitName) {
@@ -302,7 +314,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         if (mode === 'ADD') {
           this.personnelInfo.protocolAffiliationTypes = { affiliationTypeCode: affiliation, description: personAffiliation.description };
         } else if (mode === 'EDIT') {
-          this.editPersonnelInfo.protocolAffiliationTypes = { affiliationTypeCode: affiliation, description: personAffiliation.description};
+          this.editPersonnelInfo.protocolAffiliationTypes = {
+             affiliationTypeCode: affiliation, description: personAffiliation.description };
         }
 
       }
@@ -317,21 +330,34 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.editPersonnelInfo = Object.assign({}, selectedItem);
     this.editPersonLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
   }
-
   addPersonalDetails(personnelInfo, mode) {
+    this.invalidData.isPersonAdded = false;
     if (!(personnelInfo.personId == null || personnelInfo.personId === undefined) &&
       !(personnelInfo.protocolPersonRoleId == null || personnelInfo.protocolPersonRoleId === undefined) &&
       !(personnelInfo.protocolLeadUnits == null || personnelInfo.protocolLeadUnits === undefined) &&
       !(personnelInfo.protocolAffiliationTypes == null || personnelInfo.protocolAffiliationTypes === undefined)) {
-      this.invalidData.invalidPersonnelInfo = false;
-      this.showPersonElasticBand = false;
-      this.savePersonalInfo(personnelInfo, mode);
+      if (mode !== 'EDIT') {
+        this.personalDataList.forEach(personData => {
+          if (personData.personId === personnelInfo.personId) {
+            this.invalidData.isPersonAdded = true;
+          }
+
+        });
+        this.showPersonElasticBand = false;
+        if (!this.invalidData.isPersonAdded && !this.invalidData.isPiExists) {
+          this.invalidData.invalidPersonnelInfo = false;
+          this.savePersonalInfo(personnelInfo, mode);
+        }
+      }
     } else {
       this.invalidData.invalidPersonnelInfo = true;
     }
     if (mode === 'EDIT') {
-      this.isPersonalInfoEdit = false;
-      this.personalInfoSelectedRow = null;
+      if (!this.invalidData.isPiExists) {
+        this.isPersonalInfoEdit = false;
+        this.personalInfoSelectedRow = null;
+        this.savePersonalInfo(personnelInfo, mode);
+      }
     }
   }
 
@@ -363,8 +389,10 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       data => {
         this.result = data;
         this.personnelInfo = {};
+        this.invalidData.isPersonAdded = false;
         this.editPersonnelInfo = {};
         this.personLeadUnit = null;
+        this.personnelInfo.personId = null;
         this.editPersonLeadUnit = null;
         this.personalDataList = this.result.protocolPersonnelInfoList;
         this.generalInfo.personnelInfos = this.result.protocolPersonnelInfoList;
@@ -375,7 +403,12 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.commonVo.personnelInfo = this.personalDataList[index];
     this.commonVo.personnelInfo.acType = 'D';
     this.commonVo.personnelInfo.protocolGeneralInfo = this.generalInfo;
-    this.savePersonalInfo(null, 'DELETE');
+    this.showDeletePopup = true;
+    if (this.commonVo.personnelInfo.protocolPersonRoleId === 'PI') {
+      this.alertMessage = 'You are going to delete the PI. Are you sure you want to delete this item?';
+    } else {
+      this.alertMessage = 'Are you sure you want to delete this item?';
+    }
   }
 
 

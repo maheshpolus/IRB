@@ -137,7 +137,7 @@
       <div class="col-md-12 users-list-tbl">
         <div class="row">
           <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr" *ngIf="protocolFundingSourceList.length > 0">
+            <table class="table table-striped tbl-p-clr" *ngIf="protocolFundingSourceList?.length > 0">
               <thead class="tbl-head-clr thead-font-size">
                 <tr>
                   <th scope="col">Funding Type</th>
@@ -162,7 +162,7 @@
                     <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
-                    <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)">
+                    <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)" data-toggle="modal" data-target="#deleteFundingSourceDetails">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
@@ -171,6 +171,28 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--delete warning modal-->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteFundingSourceDetails" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveFundingDetails('DELETE');" data-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>

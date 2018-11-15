@@ -72,8 +72,8 @@
       <div class="col-md-12 users-list-tbl">
         <div class="row">
           <div class="table-responsive">
-            <table class="table table-striped table-font-size" *ngIf="protocolSubjectList?.length > 0">
-              <thead class="tbl-head-clr">
+            <table class="table table-striped tbl-p-clr" *ngIf="protocolSubjectList?.length > 0">
+              <thead class="tbl-head-clr thead-font-size">
                 <tr>
                   <th scope="col">Type</th>
                   <th scope="col">Age Group</th>
@@ -82,7 +82,7 @@
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="tbody-font-size">
                 <tr *ngFor="let item of protocolSubjectList let k=index" [class.poping-border]="k == subjectEditIndex">
                   <td>{{item.protocolSubjectTypes?.description}}</td>
                   <td>{{item.ageGroups?.ageGroup}}</td>
@@ -92,7 +92,7 @@
                       <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editSubjectDetails(item,k)">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                       </button>
-                      <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteSubjectDetails(k)">
+                      <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteSubjectDetails(k)" data-toggle="modal" data-target="#deleteSubjectDetails">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                       </button>
                     </td>
@@ -101,6 +101,28 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteSubjectDetails" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveSubjectDetails('DELETE')" data-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>

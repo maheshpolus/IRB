@@ -12,6 +12,9 @@
           Please fill all mandatory fields marked
           <strong>*</strong>
         </div>
+        <div class="alert alert-danger " *ngIf="invalidData.isPersonAdded">
+          Person already added please choose a different person
+        </div>
       </div>
       <div class="col-12  search-eidted-p padding-15">
         <div class="row">
@@ -28,9 +31,9 @@
                 </label>
                 <span class="mandatory">*</span>
               </div>
-              <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()"
-                type="text" class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
-                (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" />
+              <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text" class="form-control input-field-size"
+                placeholder="{{personPlaceHolder}}" [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
+                (focusout)="isElasticResultPerson = false" />
               <div class="sb-seachresults top-margin">
                 <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
                   <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)">
@@ -98,11 +101,12 @@
               <label>Role
                 <span class="mandatory">*</span>
               </label>
-              <select [disabled]="personnelInfo.personId === null" [(ngModel)]="personnelInfo.protocolPersonRoleId"
-                (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId,'ADD')" class="custom-select mr-sm-2" id="customRoleSelect">
+              <select [disabled]="personnelInfo.personId === null" [(ngModel)]="personnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId,'ADD')"
+                class="custom-select mr-sm-2" id="customRoleSelect">
                 <option selected value="null">Please Select</option>
                 <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
               </select>
+              <span *ngIf="invalidData.isPiExists" class="error">PI already exists please choose a different role</span>
             </div>
           </div>
           <div class="col-md-4">
@@ -120,8 +124,8 @@
               <label>Affiliation
                 <span class="mandatory">*</span>
               </label>
-              <select [disabled]="personnelInfo.personId === null" class="custom-select  mr-sm-2" id="inlineFormCustomSelect"
-                [(ngModel)]="personnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
+              <select [disabled]="personnelInfo.personId === null" class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="personnelInfo.affiliationTypeCode"
+                (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
                 <option selected value="null">Please Select</option>
                 <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
               </select>
@@ -141,7 +145,7 @@
       <div class="col-md-12 users-list-tbl">
         <div class="row">
           <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr" *ngIf="personalDataList.length > 0">
+            <table class="table table-striped tbl-p-clr" *ngIf="personalDataList?.length > 0">
               <thead class="tbl-head-clr thead-font-size">
                 <tr>
                   <th scope="col">Name</th>
@@ -167,30 +171,34 @@
                   <td>{{item.emailAddress}}</td>
                   <td *ngIf="i != personalInfoSelectedRow">{{item.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
                   <td *ngIf="i == personalInfoSelectedRow">
-                    <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="editPersonLeadUnit"
-                      (ngModelChange)="setPersonLeadUnitEdit(editPersonLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
-                      class="person-unit" placeholder="Lead unit"></ng2-completer>
+                    <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="editPersonLeadUnit" (ngModelChange)="setPersonLeadUnitEdit(editPersonLeadUnit)"
+                      [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="person-unit" placeholder="Lead unit"></ng2-completer>
                   </td>
                   <td *ngIf="i != personalInfoSelectedRow">{{item.protocolAffiliationTypes?.description}}</td>
                   <td *ngIf="i == personalInfoSelectedRow">
-                    <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect"
-                      [(ngModel)]="editPersonnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
+                    <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="editPersonnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
                       <option selected value="null">Please Select</option>
                       <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
                     </select>
                   </td>
-                  <td title="{{item.primaryTitle}}">{{item.primaryTitle| slice:0:12}}<span *ngIf="item.primaryTitle != null && item.primaryTitle.length > 12"> ...</span></td>
+                  <td title="{{item.primaryTitle}}">{{item.primaryTitle| slice:0:12}}
+                    <span *ngIf="item.primaryTitle != null && item.primaryTitle.length > 12">
+                    ...</span>
+                  </td>
                   <td class="action-btn-list">
-                    <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button"
+                      class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
-                    <button *ngIf="isPersonalInfoEdit && i == personalInfoSelectedRow" title="Save" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="isPersonalInfoEdit && i == personalInfoSelectedRow" title="Save" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')"
+                      type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
                     <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
-                    <button title="Delete" (click)="deletePersonalDetails(i)" type="button" class="btn btn-primary delete-btn-1">
+                    <button title="Delete" (click)="deletePersonalDetails(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                      data-target="#deletePersonnelInfoDetails">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
@@ -298,3 +306,24 @@
   </div>
 </div>
 <!-- modal-end -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deletePersonnelInfoDetails" tabindex="-1"
+  role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{alertMessage}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="savePersonalInfo(null, 'DELETE')" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -25,6 +25,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   protocolSubjectAgeGroupCategory = [];
   isSubjectInfoEdit = false;
   isGeneralInfoSaved = false;
+  showDeletePopup = false;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
@@ -126,7 +127,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   deleteSubjectDetails(index) {
     this.commonVo.protocolSubject = this.protocolSubjectList[index];
     this.commonVo.protocolSubject.acType = 'D';
-    this.saveSubjectDetails('DELETE');
+    this.showDeletePopup = true;
   }
 
   saveSubjectDetails(mode) {

@@ -8,12 +8,7 @@
     </div>
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15">
-        <div class="alert alert-danger " *ngIf="invalidData.invalidPersonnelInfo">
-          Please fill all mandatory fields marked
-          <strong>*</strong>
-        </div>
-        <div class="alert alert-danger " *ngIf="invalidData.isPersonAdded">
-          Person already added please choose a different person
+        <div class="alert alert-danger " *ngIf="invalidData.invalidPersonnelInfo" [innerHTML]="warningMessage">
         </div>
       </div>
       <div class="col-12  search-eidted-p padding-15">

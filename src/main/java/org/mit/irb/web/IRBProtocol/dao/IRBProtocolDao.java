@@ -50,7 +50,7 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo);
 
-	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo);
+	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo, ProtocolGeneralInfo generalInfo);
 
 	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource);
 

@@ -2,9 +2,11 @@ package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,7 +28,9 @@ public class IRBAttachmentProtocol {
 	@GeneratedValue(generator = "IRBProtocolAttachmentIdGenerator")
 	@Column(name = "PA_PROTOCOL_ID")
 	private Integer paProtocolId;
-
+	
+	
+	@Basic(fetch = FetchType.LAZY)
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_ATT_PROTOCOL_FK2"), name = "PROTOCOL_ID", referencedColumnName = "PROTOCOL_ID")
 	private ProtocolGeneralInfo protocolGeneralInfo;
@@ -57,7 +61,7 @@ public class IRBAttachmentProtocol {
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_ATT_PROTOCOL_FK4"), name = "STATUS_CD", referencedColumnName = "STATUS_CD", insertable = false, updatable = false)
 	private IRBAttachementStatus attachementStatus;
 
-	@ManyToOne(optional = true, cascade = { CascadeType.ALL })
+	@ManyToOne(optional = true, cascade = { CascadeType.ALL})
 	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_ATTACHMENT_PROTO_FK5"), name = "FILE_ID", referencedColumnName = "FILE_ID")
 	private ProtocolAttachments protocolAttachment;
 
@@ -130,12 +134,6 @@ public class IRBAttachmentProtocol {
 	public void setDocumentId(Integer documentId) {
 		this.documentId = documentId;
 	}
-
-	/*
-	 * public Integer getFileId() { return fileId; }
-	 * 
-	 * public void setFileId(Integer fileId) { this.fileId = fileId; }
-	 */
 
 	public String getDescription() {
 		return description;

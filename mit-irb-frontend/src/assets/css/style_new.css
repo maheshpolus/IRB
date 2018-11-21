@@ -207,8 +207,8 @@ header a:hover{
 }
 
 .tabs>li.active>a,.tabs>li>a:hover {
-    color: #26A69A;
-    border-color: #26A69A;
+    color: #a92034;
+    border-color: #a92034;
     text-decoration: none;
     transition: border-color  .25s, color .25s;
     
@@ -238,7 +238,7 @@ header a:hover{
 }
 
 .tableSkin thead th {
-    color: #26A69A;
+    color: #a92034;
     font-size: .85em;
     font-weight: bold;
     padding: 10px;
@@ -564,7 +564,7 @@ header{
 .loginArea>ul>li>h3 {
     margin: 0;
     font-size: 1.2em;
-    color: #26A69A;
+    color: #a92034;
 }
 
 .loginArea>ul>li>.btnSkin {
@@ -754,7 +754,7 @@ transition: display .25s}
 .tabsIcon {
     list-style: none;
     padding: 0;
-    border-bottom: 1px #26A69A solid;
+    border-bottom: 1px #a92034 solid;
 }
 
 .tabsIcon>li {
@@ -778,7 +778,7 @@ transition: display .25s}
 
 .tabsIcon>li.active a,.tabsIcon>li:hover a {
     color: #FFFFFF;
-    background: #26A69A;
+    background: #a92034;
 }
 .tabsIcon>li.active a>span,.tabsIcon>li:hover a>span{
 display:inline-block;
@@ -796,7 +796,7 @@ display:inline-block;
     border-top: 0;
 }
 .grid2 label{
-    color: #26A69A;
+    color: #a92034;
     margin-bottom: .2em;
     font-size: 1.1em;
 }
@@ -816,7 +816,7 @@ display:inline-block;
 }
 .setBody {
     margin-bottom: 1em;
-    display: none;
+/*     display: none; */
 }
 .setBody>p {
     font-size: .8em;
@@ -870,7 +870,7 @@ display:inline-block;
 }
 
 .setHead:hover a {
-    color: #26A69A;
+    color: #a92034;
 }
 
 .setHead:hover:after {
@@ -944,7 +944,7 @@ display:inline-block;
 }
 
 #awardItemFromHierarchy:hover{
-	color:#26A69A !important;
+	color:#a92034 !important;
 }
 
 #searchField {
@@ -971,7 +971,7 @@ display:inline-block;
     color: #5e5e5e;
 }
 .borderBoxHeading:hover .editBtn{
-    color: #26a69a;
+    color: #a92034;
 }
 
 .addBtn {
@@ -1044,7 +1044,7 @@ cursor: pointer;
     }
 
 .pullBack * {
-    color: #26A69A;
+    color: #a92034;
     position: absolute;
     top: 49%;
     right: 5px;
@@ -1105,21 +1105,21 @@ cursor: pointer;
 
 .view_external_link{
    
-    border:2px solid #26A69A; 
+    border:2px solid #a92034; 
      padding:4px; 
     border-radius:4px; 
     text-decoration:none;
-    color:#26A69A !important;
+    color:#a92034 !important;
     font-size: 14px;
     
 }
 .view_external_link:hover {
     text-decoration:none;
-     color: #26A69A !important;
-     /* border:2px solid #26A69A;  */
+     color: #a92034 !important;
+     /* border:2px solid #a92034;  */
 }
 .filterLink{
-   color: #26A69A;
+   color: #a92034;
     display: inline-block;
     font-size: .8em;
     margin-top: 5px; 

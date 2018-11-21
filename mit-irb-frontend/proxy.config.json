@@ -175,5 +175,129 @@
 	"/mit-irb/loadSponsorTypes":{
 		"target" : "http://192.168.1.93:8080",
 		"secure" : false
+	},
+	"/mit-irb/createCommittee": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/saveCommittee": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/loadCommitteeById": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/saveAreaOfResearch": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/deleteAreaOfResearch": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/addSchedule": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteSchedule": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/updateSchedule": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/filterCommitteeScheduleDates": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/resetCommitteeScheduleDates": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/updateCommitteeSchedule": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/addCommitteeMembership": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/saveCommitteeMembers": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteMemberRoles": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteMemberExpertise": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteCommitteeMembers": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/saveCommitteeMembersRole": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/saveCommitteeMembersExpertise": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/updateMemberRoles": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/loadScheduleById": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/addOtherActions": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteOtherActions": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/addScheduleAttachment": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteScheduleAttachment": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/addCommitteeScheduleMinute": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/updateCommitteeScheduleMinute": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/addOthersPresent": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/updateScheduleAttendance": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/deleteScheduleAttendance": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/downloadScheduleAttachment": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
+	},
+	"/mit-irb/updateScheduleAttachment": {
+		"target": "http://192.168.1.93:8080",
+		"secure": false
 	}
 }

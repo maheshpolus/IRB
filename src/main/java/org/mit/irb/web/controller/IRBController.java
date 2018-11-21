@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 /*
  * Controller for getting IRB protocol details. 
@@ -261,12 +263,11 @@ public class IRBController {
 	
 	@RequestMapping(value = "/createIRBProtocol", method = RequestMethod.POST)
 	public ResponseEntity<String> createIRBProtocol(HttpServletRequest request, HttpServletResponse response,@RequestBody CommonVO vo) throws Exception{
-		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		irbProtocolVO = irbProtocolService.modifyProtocolDetails(vo.getProtocolId(),irbProtocolVO);
-		String responseData = mapper.writeValueAsString(irbProtocolVO);
-		return new ResponseEntity<String>(responseData, status);
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		return new ResponseEntity<String>(ow.writeValueAsString(irbProtocolVO), status);
 	}
 	
 	@RequestMapping(value = "/updateProtocolGeneralInfo", method = RequestMethod.POST)
@@ -284,7 +285,7 @@ public class IRBController {
 		ObjectMapper mapper=new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo());
+		protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo(),irbProtocolVO.getGeneralInfo());
 		String responseData = mapper.writeValueAsString(protocolVO);
 		return new ResponseEntity<String>(responseData, status);
 	}

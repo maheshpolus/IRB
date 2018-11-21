@@ -153,7 +153,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.initialLoadChild();
     }
 
-    loadTempData() {
+    loadTempData() { debugger;
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.resultTemp = data;
             if ( this.resultTemp.committee !== undefined ) {
@@ -262,12 +262,12 @@ export class CommitteeHomeComponent implements OnInit {
         this.committeeConfigurationService.changeEditFlag( this.editDetails );
     }
 
-    saveDetails( dataObject ) {
+    saveDetails( dataObject ) { debugger;
         if ( dataObject !== undefined ) {
             this.result = dataObject.result;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         }
-        if ( ( this.result.committee.minimumMembersRequired == undefined || this.result.committee.advSubmissionDaysReq == undefined || this.result.committee.maxProtocols == undefined || this.Type == undefined || this.Name == undefined || this.unitName == undefined || this.unitName == '' ) || ( this.result.committee.reviewTypeDescription == 'Select' || this.result.committee.reviewTypeDescription == '' ) ) {
+        if ( ( this.result.committee.minimumMembersRequired == undefined || this.result.committee.advSubmissionDaysReq == undefined || this.result.committee.maxProtocols == undefined || this.Type == undefined || this.result.committee.committeeName == undefined || this.result.committee.homeUnitName == undefined || this.result.committee.homeUnitName == '' ) || ( this.result.committee.reviewTypeDescription == 'Select' || this.result.committee.reviewTypeDescription == '' ) ) {
             this.errorFlag = true;
             this.error = '*Please fill all the mandatory fields marked';
         }
@@ -364,7 +364,7 @@ export class CommitteeHomeComponent implements OnInit {
             this.result.committee.minimumMembersRequired = '';
             this.result.committee.advSubmissionDaysReq = '';
             this.result.committee.maxProtocols = '';
-            this.router.navigate( ['/committee'], { queryParams: { mode: 'create' } } );
+            this.router.navigate( ['/irb/committee'], { queryParams: { mode: 'create' } } );
         }
     }
 
@@ -824,6 +824,6 @@ export class CommitteeHomeComponent implements OnInit {
 
     loadSchedules( event: any, scheduleId ) {
         event.preventDefault();
-        this.router.navigate( ['committee/schedule'], { queryParams: { 'scheduleId': scheduleId } } );
+        this.router.navigate( ['/irb/committee/schedule'], { queryParams: { 'scheduleId': scheduleId } } );
     }
 }

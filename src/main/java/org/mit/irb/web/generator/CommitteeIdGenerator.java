@@ -9,6 +9,7 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
 import org.mit.irb.web.committee.pojo.Committee;
@@ -18,7 +19,7 @@ public class CommitteeIdGenerator implements IdentifierGenerator {
 	protected static Logger logger = Logger.getLogger(CommitteeIdGenerator.class.getName());
 
 	@Override
-	public Serializable generate(SessionImplementor sessionImplementor, Object object) throws HibernateException {
+	public Serializable generate(SharedSessionContractImplementor sessionImplementor, Object object) throws HibernateException {
 		Committee committee = (Committee) object;
 		String prefix = committee.getCommitteeType().getDescription();
 		Connection connection = sessionImplementor.connection();

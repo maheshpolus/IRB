@@ -98,6 +98,8 @@
                 <span>{{sponsorDetails?.award_number}}</span>
               </div>
               <div class="col-12">
+                <div class="row">
+                <div class="col-11">
                 <label>Acct#:</label>
                 <span>{{sponsorDetails?.account_number}}</span>
                 <label>Sponsor:</label>
@@ -106,6 +108,13 @@
                 <span>{{sponsorDetails?.pi_name}}</span>
                 <label>Lead Unit:</label>
                 <span>{{sponsorDetails?.lead_unit_name}}</span>
+              </div>
+              <div class="col-1 action-btn-list">
+                  <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcFromElastic(sponsorDetails)">
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+              </div>
+              </div>
               </div>
               <div class="col-12">
                 <label>Title:</label>
@@ -118,6 +127,8 @@
                 <span>{{sponsorDetails?.proposal_number}}</span>
               </div>
               <div class="col-12">
+                <div class="row">
+                <div class="col-11">
                 <label>Sponsor:</label>
                 <span *ngIf="sourceType.typeCode =='4'">{{sponsorDetails?.sponsor}}</span>
                 <span *ngIf="sourceType.typeCode !='4'">{{sponsorDetails?.sponsor_name}}</span>
@@ -125,6 +136,13 @@
                 <span>{{sponsorDetails?.pi_name}}</span>
                 <label>Lead Unit:</label>
                 <span>{{sponsorDetails?.lead_unit_name}}</span>
+                </div>
+                <div class="col-1 action-btn-list">
+                    <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcFromElastic(sponsorDetails)">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                      </button>
+                </div>
+                </div>
               </div>
               <div class="col-12">
                 <label>Title:</label>

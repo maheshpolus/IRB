@@ -32,7 +32,6 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   protocolCollaboratorList = [];
   personsSelected = [];
   personalDataList = [];
-  personalDataListCopy = [];
   attachmentTypes = [];
   uploadedFile: File[] = [];
   files: UploadFile[] = [];
@@ -51,6 +50,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   fil: FileList;
   iconValue = -1;
   attachmentTypeDescription: string;
+  warningMessage: string;
   protected collaboratorNames: CompleterData;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
@@ -93,8 +93,11 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.generalInfo = generalInfo;
         if (this.generalInfo.personnelInfos != null && this.generalInfo.personnelInfos !== undefined) {
           this.personalDataList = Object.assign([], this.generalInfo.personnelInfos);
-          this.personalDataListCopy = Object.assign([], this.generalInfo.personnelInfos);
           this.isPersonSelected.length = this.generalInfo.personnelInfos.length;
+          if (this.protocolCollaboratorSelected.protocolLocationId != null
+            && this.protocolCollaboratorSelected.protocolLocationId !== undefined ) {
+          this.loadCollaboratorPersonsAndAttachment(this.protocolCollaboratorSelected.protocolLocationId);
+          }
         }
       }
     });
@@ -133,6 +136,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
 
   validateApprovalDate() {
     if (this.protocolCollaborator.expirationDate !== null && this.protocolCollaborator.expirationDate !== undefined) {
+      this.protocolCollaborator.expirationDate = new Date(this.protocolCollaborator.expirationDate);
       if (this.protocolCollaborator.expirationDate < this.protocolCollaborator.approvalDate) {
         this.invalidData.invalidApprovalDate = true;
       } else {
@@ -144,6 +148,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
 
   validateExpirationDate() {
     if (this.protocolCollaborator.approvalDate !== null && this.protocolCollaborator.approvalDate !== undefined) {
+      this.protocolCollaborator.approvalDate = new Date(this.protocolCollaborator.approvalDate);
       if (this.protocolCollaborator.expirationDate < this.protocolCollaborator.approvalDate) {
         this.invalidData.invalidExpirationDate = true;
       } else {
@@ -154,11 +159,19 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   addCollaboratorDetails(mode) {
-    if (this.protocolCollaborator.collaboratorNames != null && this.protocolCollaborator.collaboratorNames !== undefined) {
+    if (this.protocolCollaborator.collaboratorNames != null && this.protocolCollaborator.collaboratorNames !== undefined
+      && this.invalidData.invalidApprovalDate === false && this.invalidData.invalidExpirationDate === false) {
       this.invalidData.invalidCollaboratorInfo = false;
       this.saveCollaboratorDetails(mode);
     } else {
       this.invalidData.invalidCollaboratorInfo = true;
+      if (this.invalidData.invalidApprovalDate) {
+        this.warningMessage = 'Approval Date should be less than Expiration Date';
+      } else if (this.invalidData.invalidExpirationDate) {
+        this.warningMessage = 'Expiration Date should be greater than Approval Date';
+      } else {
+        this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
+      }
     }
     if (mode === 'EDIT') {
       this.isCollaboratorInfoEdit = false;
@@ -405,6 +418,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.iconValue = -1;
     } else {
       this.iconValue = index;
+      this.protocolCollaboratorSelected = Object.assign({}, item);
       this.loadCollaboratorPersonsAndAttachment(item.protocolLocationId);
     }
 

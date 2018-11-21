@@ -45,13 +45,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   isGeneralInfoSaved = false;
   showPersonElasticBand = false;
   showDeletePopup = false;
+  warningMessage: string;
   alertMessage: string;
   irbPersonDetailedList: any;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false,
-    isPersonAdded: false, isPiExists: false
+    isPersonAdded: false, isPiExists: false, invalidPersonDetails: false
   };
   private $subscription1: ISubscription;
 
@@ -317,32 +318,35 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.editPersonLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
   }
   addPersonalDetails(personnelInfo, mode) {
-    this.invalidData.isPersonAdded = false;
     if (!(personnelInfo.personId == null || personnelInfo.personId === undefined) &&
       !(personnelInfo.protocolPersonRoleId == null || personnelInfo.protocolPersonRoleId === undefined) &&
       !(personnelInfo.protocolLeadUnits == null || personnelInfo.protocolLeadUnits === undefined) &&
-      !(personnelInfo.protocolAffiliationTypes == null || personnelInfo.protocolAffiliationTypes === undefined)) {
-      if (mode !== 'EDIT') {
+      !(personnelInfo.protocolAffiliationTypes == null || personnelInfo.protocolAffiliationTypes === undefined)
+        && !this.invalidData.isPiExists) {
+        this.invalidData.invalidPersonnelInfo = false;
+        if (mode !== 'EDIT') {
         this.personalDataList.forEach(personData => {
           if (personData.personId === personnelInfo.personId) {
-            this.invalidData.isPersonAdded = true;
+            this.invalidData.invalidPersonnelInfo = true;
+            this.warningMessage = 'Person already added please choose a different person';
           }
 
         });
+        if (!this.invalidData.invalidPersonnelInfo) {
         this.showPersonElasticBand = false;
-        if (!this.invalidData.isPersonAdded && !this.invalidData.isPiExists) {
-          this.invalidData.invalidPersonnelInfo = false;
           this.savePersonalInfo(personnelInfo, mode);
         }
+      } else {
+          this.isPersonalInfoEdit = false;
+          this.personalInfoSelectedRow = null;
+          this.savePersonalInfo(personnelInfo, mode);
       }
     } else {
       this.invalidData.invalidPersonnelInfo = true;
-    }
-    if (mode === 'EDIT') {
-      if (!this.invalidData.isPiExists) {
-        this.isPersonalInfoEdit = false;
-        this.personalInfoSelectedRow = null;
-        this.savePersonalInfo(personnelInfo, mode);
+      if (this.invalidData.isPiExists) {
+        this.warningMessage = 'PI already exists please choose a different role';
+      } else {
+      this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
       }
     }
   }

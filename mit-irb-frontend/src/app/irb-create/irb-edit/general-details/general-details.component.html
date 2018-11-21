@@ -8,9 +8,7 @@
     </div>
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15">
-        <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo">
-          Please fill all mandatory fields marked
-          <strong>*</strong>
+        <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo" [innerHTML]="warningMessage">
         </div>
       </div>
       <div class="col-12  search-eidted-p padding-15">

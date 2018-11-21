@@ -322,7 +322,7 @@ export class CommitteeHomeComponent implements OnInit {
                 }
                 this.committeeConfigurationService.currentactivatedTab.subscribe( data => {
                     if ( data === 'committee_members' ) {
-                        this.router.navigate( ['/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
+                        this.router.navigate( ['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
                     }
                 } );
             } );

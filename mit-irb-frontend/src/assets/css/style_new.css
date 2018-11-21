@@ -3282,7 +3282,9 @@ transition: display .25s}
 }
 .tbl-head-clr
 {
-	background: #dadada;
+    background: #a92135;
+    color: #fff;
+
 }
 .search-eidted-p label
 {
@@ -3653,11 +3655,35 @@ color: #5e5e5e !important;
     font-size: 14px;
     padding: 3px 8px 3px 12px;
     border-radius: 11px;
-    color:white;
-    background-color: #505050;
-    box-shadow: 2px 1px 1px #cecaca;
+    /* color:white;
+    background-color: #505050; */
+    border: 1px solid #a92135;
+    color: #a92135;
     
 }
+.filechipCollaboratorAttachment span {
+    display: inline-block;
+    padding: 0 25px;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 14px;
+    padding: 3px 8px 3px 12px;
+    border-radius: 11px;
+    /* color:white;
+    background-color: #505050; */
+    border: 1px solid #a92135;   
+    background-color: #a92135;
+    color: #fff; 
+
+}
+.filechipCollaboratorAttachment span i {
+    display: inline-block;
+    margin: -1px -2px 0 3px;
+    border-radius: 50%;
+    background-color: white;
+    padding: 2px;
+    color: red;
+}	
 .label-font{
     font-weight:bold;
 }

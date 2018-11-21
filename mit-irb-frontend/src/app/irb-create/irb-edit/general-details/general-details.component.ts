@@ -36,6 +36,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   isElasticResultPerson = false;
   message = '';
   personType = 'employee';
+  warningMessage: string;
   remainingLength = 7500;
   private $subscription1: ISubscription;
   invalidData = { invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false };
@@ -231,6 +232,13 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       return true;
     } else {
       this.invalidData.invalidGeneralInfo = true;
+      if (this.invalidData.invalidStartDate === true) {
+        this.warningMessage = 'Start Date should be less than End Date';
+      } else if (this.invalidData.invalidEndDate === true) {
+        this.warningMessage = 'End Date should be greater than Start Date';
+      } else {
+        this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
+      }
       return false;
     }
   }

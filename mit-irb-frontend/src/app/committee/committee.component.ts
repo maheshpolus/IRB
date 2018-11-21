@@ -153,7 +153,7 @@ export class CommitteeComponent implements OnInit {
             }
             else {
                 this.currentTab = current_tab;
-                this.router.navigate( ['/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
+                this.router.navigate( ['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
             }
 
         } else if ( current_tab == 'committee_home' ) {

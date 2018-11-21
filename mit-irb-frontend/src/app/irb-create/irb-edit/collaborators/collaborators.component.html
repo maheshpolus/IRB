@@ -8,9 +8,7 @@
     </div>
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15">
-        <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo">
-          Please fill all mandatory fields marked
-          <strong>*</strong>
+        <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo" [innerHTML]="warningMessage">
         </div>
       </div>
       <div class="col-12  search-eidted-p padding-15">
@@ -126,18 +124,19 @@
                               <div class="filechipCollaborator" *ngIf="protocolCollaboratorPersons?.length > 0">
                                 <span *ngFor="let person of protocolCollaboratorPersons">{{person?.personnelInfo?.personName}}</span>
                               </div>
-                              <div class="filechip" *ngIf="protocolCollaboratorPersons?.length == 0">No persons Added</div>
+                              <div class="label-font" *ngIf="protocolCollaboratorPersons?.length == 0">No persons Added</div>
                             </td>
                           </tr>
                           <tr>
                             <td></td>
                             <td class="label-font">Approval Letter</td>
                             <td>
-                              <div class="filechipCollaborator pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
+                              <div class="filechipCollaboratorAttachment pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
                                 <span *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList" (click)="downloadAttachment(protocolCollaboratorAttachment)"
-                                  title="download">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</span>
+                                  title="download">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}<i class="fa fa-download"></i>
+                                </span>
                               </div>
-                              <div class="filechip pdf" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
+                              <div class="label-font" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
                             </td>
                           </tr>
                         </tbody>

@@ -214,7 +214,9 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
             }
           });
           this.commonVo.generalInfo = this.result.generalInfo;
-
+          this.commonVo.protocolPersonnelInfoList = this.result.generalInfo.personnelInfos;
+          this.commonVo.personnelInfo = {};
+          this._sharedDataService.setCommonVo(this.commonVo);
           this.generalInfo = this.result.generalInfo;
           this._sharedDataService.setGeneralInfo(this.generalInfo);
         });

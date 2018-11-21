@@ -31,12 +31,14 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     this.$subscription1 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {
       if (generalInfo !== undefined) {
         this.generalInfo = generalInfo;
-        if (this.generalInfo.personnelInfos != null) {
+        if (this.generalInfo.personnelInfos != null && this.generalInfo.personnelInfos.length > 0) {
           this.generalInfo.personnelInfos.forEach(element => {
             if (element.protocolPersonRoleId === 'PI') {
               this.piName = element.personName;
             }
           });
+        } else {
+          this.piName = null;
         }
       }
     });
@@ -67,12 +69,14 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
         this.commonVo = data;
         this.generalInfo = this.commonVo.generalInfo;
         this._sharedDataService.setCommonVo(this.commonVo);
-        if (this.commonVo.generalInfo.personnelInfos != null) {
+        if (this.commonVo.generalInfo.personnelInfos != null && this.commonVo.generalInfo.personnelInfos.length > 0) {
           this.commonVo.generalInfo.personnelInfos.forEach(element => {
             if (element.protocolPersonRoleId === 'PI') {
               this.piName = element.personName;
             }
           });
+        } else {
+          this.piName = null;
         }
       });
   }

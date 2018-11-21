@@ -54,7 +54,6 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     isPersonAdded: false, isPiExists: false
   };
   private $subscription1: ISubscription;
-  private $subscription2: ISubscription;
 
   constructor(private _activatedRoute: ActivatedRoute,
     private _sharedDataService: SharedDataService,
@@ -79,24 +78,11 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.loadEditDetails();
       }
     });
-    this.$subscription2 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {
-      if (generalInfo !== undefined) {
-        this.generalInfo = generalInfo;
-        if (this.generalInfo.personnelInfos != null && this.generalInfo.personnelInfos !== undefined) {
-          this.personalDataList = this.generalInfo.personnelInfos;
-          this.personnelInfo = {};
-        }
-      }
-    });
-
   }
 
   ngOnDestroy() {
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
-    }
-    if (this.$subscription2) {
-      this.$subscription2.unsubscribe();
     }
   }
 
@@ -119,7 +105,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
     this.protocolPersonLeadUnitsCopy = this._completerService.local(this.protocolPersonLeadUnits, 'unitName,unitNumber', 'unitName');
     this.affiliationTypes = this.commonVo.affiliationTypes;
-    this.generalInfo = this.commonVo.generalInfo;
+    this.generalInfo = Object.assign({}, this.commonVo.generalInfo);
     this.personnelInfo = this.commonVo.personnelInfo;
     this.personalDataList = this.commonVo.protocolPersonnelInfoList != null ? this.commonVo.protocolPersonnelInfoList : [];
   }
@@ -382,7 +368,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'N';
       }
       // End setting Person Lead Unit Details
-      personnelInfo.protocolGeneralInfo = this.generalInfo;
+     // personnelInfo.protocolGeneralInfo = this.generalInfo;
       this.commonVo.personnelInfo = personnelInfo;
     }
     this._irbCreateService.updateProtocolPersonInfo(this.commonVo).subscribe(
@@ -395,14 +381,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.personnelInfo.personId = null;
         this.editPersonLeadUnit = null;
         this.personalDataList = this.result.protocolPersonnelInfoList;
-        this.generalInfo.personnelInfos = this.result.protocolPersonnelInfoList;
+        this.generalInfo.personnelInfos = Object.assign([], this.result.protocolPersonnelInfoList);
         this._sharedDataService.setGeneralInfo(this.generalInfo);
       });
   }
   deletePersonalDetails(index) {
     this.commonVo.personnelInfo = this.personalDataList[index];
     this.commonVo.personnelInfo.acType = 'D';
-    this.commonVo.personnelInfo.protocolGeneralInfo = this.generalInfo;
+  //  this.commonVo.personnelInfo.protocolGeneralInfo = this.generalInfo;
     this.showDeletePopup = true;
     if (this.commonVo.personnelInfo.protocolPersonRoleId === 'PI') {
       this.alertMessage = 'You are going to delete the PI. Are you sure you want to delete this item?';

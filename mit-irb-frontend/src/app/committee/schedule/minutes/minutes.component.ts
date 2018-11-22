@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import {ScheduleConfigurationService} from '../schedule-configuration.service';
-import { MinutesService } from "../minutes/minutes.service";
-import { Subject } from "rxjs/Subject";
+import { MinutesService } from '../minutes/minutes.service';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 @Component({
   selector: 'app-minutes',
   templateUrl: './minutes.component.html'
 })
-export class MinutesComponent implements OnInit {
+export class MinutesComponent implements OnInit, OnDestroy {
 
     result: any;
-    isMinuteEntryPoppedUp: boolean = false;
-    isContigencyPoppedUp: boolean = false;
+    isMinuteEntryPoppedUp = false;
+    isContigencyPoppedUp = false;
     isEditMinuteItem = {};
     selectedOptionEntityType: string;
     currenEntryTab: string;
@@ -25,7 +25,7 @@ export class MinutesComponent implements OnInit {
     privateCommentFlag = false;
     finalFlag = false;
     isMandatoryFilled = true;
-    minuteValidationMessage = "* Please fill the mandatory fields.";
+    minuteValidationMessage = '* Please fill the mandatory fields.';
     isToDelete = false;
     entryDescriptionOnEdit: string;
     attendances: Array<any> = [];
@@ -47,7 +47,7 @@ export class MinutesComponent implements OnInit {
                 this.entityType = this.result.minuteEntrytypes;
                 this.contingencyList = this.result.protocolContingencies;
             }
-            this.selectedOptionEntityType = "1";
+            this.selectedOptionEntityType = '1';
             this.setDefaultModalValues();
         } );
     }
@@ -56,7 +56,7 @@ export class MinutesComponent implements OnInit {
         this.onDestroy$.complete();
     }
     setDefaultModalValues() {
-        this.entryDescription = "";
+        this.entryDescription = '';
         this.selectedProtocolContingencyCode = null;
         this.selectedProtocol = 'Select';
         this.selectedOtherBusItem = 'Select';
@@ -64,10 +64,10 @@ export class MinutesComponent implements OnInit {
         this.finalFlag = false;
         this.isMandatoryFilled = true;
     }
-  
+
     showAddMinutes( $event ) {
-        this.selectedOptionEntityType = "1";
-        if ( this.isMinuteEntryPoppedUp == false ) {
+        this.selectedOptionEntityType = '1';
+        if ( this.isMinuteEntryPoppedUp === false ) {
             this.isMinuteEntryPoppedUp = true;
         }
         this.setDefaultModalValues();
@@ -84,51 +84,51 @@ export class MinutesComponent implements OnInit {
 
     onOtherItemSelect( newValue ) {
         this.selectedOtherBusItem = newValue;
-        this.entryDescription = ( this.selectedOtherBusItem == 'Select' ) ? "" : this.selectedOtherBusItem.itemDescription;
-        if ( this.selectedOtherBusItem == 'Select' ) {
+        this.entryDescription = ( this.selectedOtherBusItem === 'Select' ) ? '' : this.selectedOtherBusItem.itemDescription;
+        if ( this.selectedOtherBusItem === 'Select' ) {
             this.selectedOtherBusItem = {};
         }
     }
 
     searchContigency() {
-        if ( this.isContigencyPoppedUp == false ) {
+        if ( this.isContigencyPoppedUp === false ) {
             this.isContigencyPoppedUp = true;
         }
     }
 
     selectContigencyItem( e, contigencyItem ) {
         this.selectedProtocolContingencyCode = contigencyItem.protocolContingencyCode;
-        if ( this.isContigencyPoppedUp == true ) {
+        if ( this.isContigencyPoppedUp === true ) {
             this.isContigencyPoppedUp = false;
         }
         this.entryDescription = contigencyItem.description;
     }
 
     generateAttendance() {
-        if ( this.entryDescription != "" ) {
+        if ( this.entryDescription !== '' ) {
             this.isMandatoryFilled = false;
-            this.minuteValidationMessage = "* Attendance already generated.";
+            this.minuteValidationMessage = '* Attendance already generated.';
         } else {
             this.attendances = this.result.committeeSchedule.committeeScheduleAttendances;
             if ( this.attendances.length > 0 ) {
                 this.attendances.forEach(( value, index ) => {
-                    if ( value.memberPresent == true ) {
-                        if ( value.guestFlag == true ) {
-                            this.entryDescription = this.entryDescription + value.personName + " Guest" + "\n";
-                        } else if ( value.alternateFlag == true ) {
-                            this.entryDescription = this.entryDescription + value.personName + " Alternate for" + value.alternateFor + "\n";
+                    if ( value.memberPresent === true ) {
+                        if ( value.guestFlag === true ) {
+                            this.entryDescription = this.entryDescription + value.personName + 'Guest' + '\n';
+                        } else if ( value.alternateFlag === true ) {
+                            this.entryDescription = this.entryDescription + value.personName + 'Alternate for' + value.alternateFor + '\n';
                         } else {
-                            this.entryDescription = this.entryDescription + value.personName + "\n";
+                            this.entryDescription = this.entryDescription + value.personName + '\n';
                         }
                     }
                 } );
             } else {
-                this.entryDescription = "";
+                this.entryDescription = '';
             }
         }
-        if ( this.entryDescription == "" ) {
+        if ( this.entryDescription === '' ) {
             this.isMandatoryFilled = false;
-            this.minuteValidationMessage = "* No one present to generate attendace.";
+            this.minuteValidationMessage = '* No one present to generate attendace.';
         }
     }
 
@@ -137,36 +137,39 @@ export class MinutesComponent implements OnInit {
             this.result.newCommitteeScheduleMinute = {};
         }
         switch ( this.selectedOptionEntityType ) {
-            case '1': this.isMandatoryFilled = this.entryDescription == "" ? false : true; break;
-            case '2': this.isMandatoryFilled = this.entryDescription == "" ? false : true; break;
+            case '1': this.isMandatoryFilled = this.entryDescription === '' ? false : true; break;
+            case '2': this.isMandatoryFilled = this.entryDescription === '' ? false : true; break;
             case '3': this.contingencyList.forEach(( value, index ) => {
-                if ( value.protocolContingencyCode == this.selectedProtocolContingencyCode ) {
+                if ( value.protocolContingencyCode === this.selectedProtocolContingencyCode ) {
                     this.result.newCommitteeScheduleMinute.protocolContingency = value;
                 }
             } );
-                this.isMandatoryFilled = ( this.selectedProtocol == 'Select' || this.selectedProtocol == null || this.entryDescription == "" ) ? false : true;
+                this.isMandatoryFilled =
+                ( this.selectedProtocol === 'Select' || this.selectedProtocol == null || this.entryDescription === '' ) ? false : true;
                 break;
-            case '4': this.isMandatoryFilled = ( ( this.selectedOtherBusItem == ( 'Select' || null ) ) || this.entryDescription == "" ) ? false : true;
+            case '4': this.isMandatoryFilled =
+            ( ( this.selectedOtherBusItem === ( 'Select' || null ) ) || this.entryDescription === '' ) ? false : true;
                 break;
-            case '5': this.isMandatoryFilled = this.entryDescription == "" ? false : true; break;
+            case '5': this.isMandatoryFilled = this.entryDescription === '' ? false : true; break;
             case '6': this.contingencyList.forEach(( value, index ) => {
-                if ( value.protocolContingencyCode == this.selectedProtocolContingencyCode ) {
+                if ( value.protocolContingencyCode === this.selectedProtocolContingencyCode ) {
                     this.result.newCommitteeScheduleMinute.protocolContingency = value;
                 }
             } );
-                this.isMandatoryFilled = ( this.selectedProtocol == 'Select' || this.selectedProtocol == null || this.entryDescription == "" ) ? false : true;
+                this.isMandatoryFilled =
+                ( this.selectedProtocol === 'Select' || this.selectedProtocol == null || this.entryDescription === '' ) ? false : true;
                 break;
         }
 
         this.entityType.forEach(( value, index ) => {
-            if ( value.minuteEntryTypecode == this.selectedOptionEntityType ) {
+            if ( value.minuteEntryTypecode === this.selectedOptionEntityType ) {
                 this.result.newCommitteeScheduleMinute.minuteEntrytype = value;
             }
         } );
         this.result.scheduleId = this.result.committeeSchedule.scheduleId;
-        this.result.newCommitteeScheduleMinute.minuteEntryTypeCode = parseInt( this.selectedOptionEntityType );
+        this.result.newCommitteeScheduleMinute.minuteEntryTypeCode =parseInt( this.selectedOptionEntityType );
         this.result.newCommitteeScheduleMinute.protocolContingencyCode = this.selectedProtocolContingencyCode;
-        if ( this.selectedProtocol == 'Select' ) {
+        if ( this.selectedProtocol === 'Select' ) {
             this.selectedProtocol = null;
         }
         this.result.committeeId = this.result.committeeSchedule.committeeId;
@@ -179,7 +182,7 @@ export class MinutesComponent implements OnInit {
         this.result.newCommitteeScheduleMinute.updateUser = localStorage.getItem( 'currentUser' );
         this.result.newCommitteeScheduleMinute.createTimestamp = new Date();
         this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
-        if ( this.isMandatoryFilled == true ) {
+        if ( this.isMandatoryFilled === true ) {
             this.minutesService.saveMinuteData( this.result ).takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
             } );
@@ -193,7 +196,7 @@ export class MinutesComponent implements OnInit {
 
     saveAndClose() {
         this.saveMinutes();
-        if ( this.isMinuteEntryPoppedUp == true && this.isMandatoryFilled == true ) {
+        if ( this.isMinuteEntryPoppedUp === true && this.isMandatoryFilled === true ) {
             this.isMinuteEntryPoppedUp = false;
         }
     }
@@ -214,11 +217,11 @@ export class MinutesComponent implements OnInit {
 
     deleteMinuteItem( e ) {
         e.preventDefault();
-        var deleteRequestData: any = {};
+        const deleteRequestData: any = {};
         deleteRequestData.committeeId = this.committeeId;
         deleteRequestData.scheduleId = this.scheduleId;
         deleteRequestData.commScheduleMinuteId = this.minuteListItem.commScheduleMinutesId;
-        if ( this.isToDelete == true ) {
+        if ( this.isToDelete === true ) {
             this.isToDelete = false;
         }
         this.minutesService.deleteMinuteData( deleteRequestData ).takeUntil(this.onDestroy$).subscribe( data => {
@@ -230,7 +233,7 @@ export class MinutesComponent implements OnInit {
     updateMinuteItem( e, i, minuteItem ) {
         e.preventDefault();
         this.isEditMinuteItem[i] = !this.isEditMinuteItem[i];
-        if(minuteItem.minuteEntry != "") {
+        if (minuteItem.minuteEntry !== '') {
             this.result.newCommitteeScheduleMinute = minuteItem;
             this.result.committeeId = this.result.committeeSchedule.committeeId;
             this.result.scheduleId = this.result.committeeSchedule.scheduleId;

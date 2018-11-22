@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ScheduleHomeService } from "./schedule-home.service";
+import { ScheduleHomeService } from './schedule-home.service';
 import { DatePipe } from '@angular/common';
-import { ScheduleConfigurationService } from "../schedule-configuration.service";
+import { ScheduleConfigurationService } from '../schedule-configuration.service';
 
 @Component( {
     selector: 'app-schedule-home',
@@ -11,13 +11,13 @@ import { ScheduleConfigurationService } from "../schedule-configuration.service"
 } )
 export class ScheduleHomeComponent implements OnInit {
 
-    showProtocol: boolean = false;
-    showAttendance: boolean = false;
-    showOtherActions: boolean = false;
-    showAttachment: boolean = false;
+    showProtocol = false;
+    showAttendance = false;
+    showOtherActions = false;
+    showAttachment = false;
     result: any = {};
     committeeSchedule: any = {};
-    editDetails: boolean = false;
+    editDetails = false;
     isCommitteeDetailsEditMode = false;
     editClass: string;
     editFlag: boolean;
@@ -40,7 +40,10 @@ export class ScheduleHomeComponent implements OnInit {
     scheduleStatusSelected: string;
     scheduleStatus: any = [];
 
-    constructor( public scheduleConfigurationService: ScheduleConfigurationService, private datePipe: DatePipe, public router: Router, private scheduleHomeService: ScheduleHomeService ) {
+    constructor( public scheduleConfigurationService: ScheduleConfigurationService,
+        private datePipe: DatePipe,
+        public router: Router,
+        private scheduleHomeService: ScheduleHomeService ) {
         this.result.committeeSchedule = {};
     }
 
@@ -105,7 +108,7 @@ export class ScheduleHomeComponent implements OnInit {
         this.result.committeeSchedule.viewEndTime.time = this.datePipe.transform( this.scheduleEndTime, 'hh:mm' );
         this.result.committeeSchedule.viewEndTime.meridiem = this.datePipe.transform( this.scheduleEndTime, 'aa' );
         this.scheduleStatus.forEach(( value, index ) => {
-            if ( value.description == this.scheduleStatusSelected ) {
+            if ( value.description === this.scheduleStatusSelected ) {
                 value.updateTimestamp = new Date();
                 value.updateUser = localStorage.getItem( 'currentUser' );
                 this.result.committeeSchedule.scheduleStatus = value;

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Client, SearchResponse } from 'elasticsearch';
+import { Client} from 'elasticsearch';
 
 @Injectable()
 export class CommitteeMemberEmployeeElasticService {
@@ -111,7 +110,6 @@ export class CommitteeMemberEmployeeElasticService {
                                 unit_name: {},
                                   addr_line_1: {},
                                     phone_nbr: {},
-                                  
                         }
                     }
                 }

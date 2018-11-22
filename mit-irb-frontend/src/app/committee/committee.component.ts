@@ -1,23 +1,23 @@
-import { Component, OnInit, ViewChild, ContentChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ContentChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommitteeHomeComponent } from './committee-home/committee-home.component';
 
 import { CommitteCreateEditService } from './committee-create-edit.service';
 import { CommitteeSaveService } from './committee-save.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { CommitteeMembersComponent } from "./committee-members/committee-members.component";
-import { Subject } from "rxjs/Subject";
+import { CommitteeMembersComponent } from './committee-members/committee-members.component';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import { CommitteeConfigurationService } from "../common/service/committee-configuration.service";
+import { CommitteeConfigurationService } from '../common/service/committee-configuration.service';
 @Component( {
     selector: 'app-committee',
     templateUrl: './committee.component.html',
     providers: [CommitteCreateEditService, CommitteeSaveService, CommitteeHomeComponent, CommitteeMembersComponent]
 } )
 
-export class CommitteeComponent implements OnInit {
-    currentTab: string = 'committee_home';
-    schedule: boolean = false;
+export class CommitteeComponent implements OnInit, OnDestroy {
+    currentTab = 'committee_home';
+    schedule = false;
     mode: string;
     class: string;
     id: string;
@@ -30,18 +30,18 @@ export class CommitteeComponent implements OnInit {
     scheduleStatus: any = [];
     result: any = {};
     homeUnitInput: any = [];
-    editDetails: boolean = false;
+    editDetails = false;
     homeUnitName: string;
-    editFlag: boolean = false;
+    editFlag = false;
     constantClass: string;
     areaList: any = [];
     showPopup = false;
     middleOfEdit = false;
     middleOfSave = false;
-    alertMsgNotSaved: string = '';
-    alertMsgMiddleOfEdit: string = '';
+    alertMsgNotSaved = '';
+    alertMsgMiddleOfEdit = '';
     public dataServiceHomeUnit: CompleterData;
-    isOnEditMembers: boolean = false;
+    isOnEditMembers = false;
     memberData: any = [];
     alertMsgMemberMiddleOfEdit: string;
     public onDestroy$ = new Subject<void>();
@@ -50,7 +50,12 @@ export class CommitteeComponent implements OnInit {
     @ContentChild( CommitteeHomeComponent )
     private committeeHomeObj: CommitteeHomeComponent;
 
-    constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
+    constructor( public route: ActivatedRoute,
+        public router: Router,
+        public committeCreateService: CommitteCreateEditService,
+        private completerService: CompleterService,
+        public committeeSaveService: CommitteeSaveService,
+        public committeeConfigurationService: CommitteeConfigurationService ) {
         this.result.committee = {};
         this.result.committee.committeeType = {};
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
@@ -71,7 +76,7 @@ export class CommitteeComponent implements OnInit {
     }
 
     initLoadParent() {
-        if ( this.mode == 'create' ) {
+        if ( this.mode === 'create' ) {
             this.editFlag = true;
             this.committeCreateService.getCommitteeData( '1' )
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
@@ -92,20 +97,19 @@ export class CommitteeComponent implements OnInit {
             this.class = 'scheduleBoxes';
             this.constantClass = 'scheduleBoxes';
             this.homeUnitInput.unitName = '';
-        }
-        else if ( this.mode == 'view' ) {
+        } else if ( this.mode === 'view' ) {
             this.committeCreateService.loadCommittee( this.id )
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
-                    this.result = data || []; ;
+                    this.result = data || [];
                     if ( this.result != null ) {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
-                        var ts = new Date( this.result.committee.updateTimestamp );
+                        const ts = new Date( this.result.committee.updateTimestamp );
                         let month = String( ts.getMonth() + 1 );
                         let day = String( ts.getDate() );
                         const year = String( ts.getFullYear() );
-                        if ( month.length < 2 ) month = '0' + month;
-                        if ( day.length < 2 ) day = '0' + day;
-                        this.lastUpdated = `${day}/${month}/${year}` + " by " + this.result.committee.updateUser;
+                        if ( month.length < 2 ) {month = '0' + month; }
+                        if ( day.length < 2 ) {day = '0' + day; }
+                        this.lastUpdated = `${day}/${month}/${year}` + ' by ' + this.result.committee.updateUser;
                         this.homeUnits = this.result.homeUnits;
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         this.homeUnitInput.unitName = this.result.committee.homeUnitName;
@@ -136,27 +140,25 @@ export class CommitteeComponent implements OnInit {
         e.preventDefault();
         this.committeeConfigurationService.changeActivatedtab( current_tab );
         this.clear();
-        if ( current_tab == 'committee_members' ) {
+        if ( current_tab === 'committee_members' ) {
             this.committeeConfigurationService.currentEditFlag.subscribe( data => {
                 this.editFlag = data;
             } );
             if ( this.editFlag ) {
                 this.showPopup = true;
-                if ( this.mode == 'view' ) {
+                if ( this.mode === 'view' ) {
                     this.middleOfEdit = true;
                     this.alertMsgMiddleOfEdit = 'You are in the middle of editing Committee Details, Do you want to stay on the page..?';
-                }
-                else if ( this.mode == 'create' ) {
+                } else if ( this.mode === 'create' ) {
                     this.middleOfSave = true;
                     this.alertMsgNotSaved = 'You have to save the committee to proceed!';
                 }
-            }
-            else {
+            } else {
                 this.currentTab = current_tab;
                 this.router.navigate( ['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
             }
 
-        } else if ( current_tab == 'committee_home' ) {
+        } else if ( current_tab === 'committee_home' ) {
             this.committeeConfigurationService.currentMemberEditFlag.takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.isOnEditMembers = data;
 
@@ -167,17 +169,16 @@ export class CommitteeComponent implements OnInit {
                     this.memberData = data;
                 } );
                 this.alertMsgMemberMiddleOfEdit = 'You are in the middle of editing a Member Details, Do you want to stay on the page..?';
-            }
-            else {
+            } else {
                 this.currentTab = current_tab;
-                this.router.navigate( ['/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
+                this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
             }
         }
     }
 
     saveAndContinue( data ) {
         this.editFlag = !this.editFlag;
-        this.class = "committeeBoxNotEditable";
+        this.class = 'committeeBoxNotEditable';
         this.currentTab = 'committee_members';
         this.clear();
         this.activatedRoute.saveDetails( data );
@@ -193,7 +194,7 @@ export class CommitteeComponent implements OnInit {
 
     homeChangeFunction( unitName ) {
         this.homeUnits.forEach(( value, index ) => {
-            if ( value.unitName == unitName ) {
+            if ( value.unitName === unitName ) {
                 this.result.committee.homeUnitNumber = value.unitNumber;
             }
         } );
@@ -201,7 +202,7 @@ export class CommitteeComponent implements OnInit {
 
     onHomeSelect() {
         this.homeUnits.forEach(( value, index ) => {
-            if ( value.unitName == this.result.committee.homeUnitName ) {
+            if ( value.unitName === this.result.committee.homeUnitName ) {
                 this.result.committee.homeUnitNumber = value.unitNumber;
             }
         } );
@@ -223,7 +224,7 @@ export class CommitteeComponent implements OnInit {
             this.id = this.result.committee.committeeId;
         } );
 
-        if ( this.mode == 'view' ) {
+        if ( this.mode === 'view' ) {
             this.initLoadParent();
             this.editDetails = false;
             this.class = 'committeeBoxNotEditable';
@@ -239,7 +240,7 @@ export class CommitteeComponent implements OnInit {
         this.isOnEditMembers = false;
         this.committeeConfigurationService.changeEditMemberFlag( this.isOnEditMembers );
         this.showPopup = false;
-        this.class = "committeeBoxNotEditable";
+        this.class = 'committeeBoxNotEditable';
         this.currentTab = 'committee_home';
         this.clear();
         this.activatedRoute.saveDetails( Object );

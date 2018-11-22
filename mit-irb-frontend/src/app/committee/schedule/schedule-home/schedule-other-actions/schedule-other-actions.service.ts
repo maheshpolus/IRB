@@ -3,7 +3,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ScheduleOtherActionsService {
@@ -12,7 +12,7 @@ export class ScheduleOtherActionsService {
     }
 
     public addOtherActions( committeeId, scheduleId: number, committeeScheduleActItems: Object ): Observable<JSON> {
-        var params = {
+        const params = {
             committeeId: committeeId,
             scheduleId: scheduleId,
             committeeScheduleActItems: committeeScheduleActItems
@@ -20,12 +20,12 @@ export class ScheduleOtherActionsService {
         return this.http.post( '/mit-irb/addOtherActions', params )
             .catch( error => {
                 console.error( error.message || error );
-                return Observable.throw( error.message || error )
+                return Observable.throw( error.message || error );
             } );
     }
 
     public deleteOtherActions( committeeId, scheduleId: number, commScheduleActItemsId ): Observable<JSON> {
-        var params = {
+        const params = {
             committeeId: committeeId,
             scheduleId: scheduleId,
             commScheduleActItemsId: commScheduleActItemsId
@@ -33,7 +33,7 @@ export class ScheduleOtherActionsService {
         return this.http.post( '/mit-irb/deleteOtherActions', params )
             .catch( error => {
                 console.error( error.message || error );
-                return Observable.throw( error.message || error )
+                return Observable.throw( error.message || error );
             } );
     }
 }

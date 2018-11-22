@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ScheduleConfigurationService } from "../../schedule-configuration.service";
-import { Subscription } from "rxjs/Subscription";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ScheduleConfigurationService } from '../../schedule-configuration.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component( {
     selector: 'app-protocol-submitted',
     templateUrl: './protocol-submitted.component.html'
 } )
-export class ProtocolSubmittedComponent implements OnInit {
+export class ProtocolSubmittedComponent implements OnInit, OnDestroy {
     public result: any = {};
     outputPath: string;
     userName: string;
-    public subscription : Subscription;
+    public subscription: Subscription;
     constructor( private scheduleConf: ScheduleConfigurationService) { }
 
     ngOnInit() {

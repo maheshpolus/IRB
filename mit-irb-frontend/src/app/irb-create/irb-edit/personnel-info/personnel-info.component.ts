@@ -238,7 +238,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.protocolPersonLeadUnits.forEach(personeUnit => {
           if (personeUnit.unitName === leadUnitName) {
             this.personnelInfo.protocolLeadUnits[0].unitNumber = personeUnit.unitNumber;
-            this.personnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
+            this.personnelInfo.protocolLeadUnits[0].protocolPersonLeadUnits = {
+               unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
           }
         });
       } else {
@@ -247,7 +248,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.protocolPersonLeadUnits.forEach(personeUnit => {
           if (personeUnit.unitName === leadUnitName) {
             this.personnelInfo.protocolLeadUnits = [{ unitNumber: personeUnit.unitNumber }];
-            this.personnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
+            this.personnelInfo.protocolLeadUnits[0].protocolPersonLeadUnits = {
+               unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
           }
         });
       }
@@ -257,7 +259,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       this.protocolPersonLeadUnits.forEach(personeUnit => {
         if (personeUnit.unitName === leadUnitName) {
           this.personnelInfo.protocolLeadUnits = [{ unitNumber: personeUnit.unitNumber }];
-          this.personnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
+          this.personnelInfo.protocolLeadUnits[0].protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
         }
       });
     }

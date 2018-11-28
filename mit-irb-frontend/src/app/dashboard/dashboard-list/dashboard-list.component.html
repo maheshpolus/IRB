@@ -44,7 +44,13 @@
 			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
 				<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>
 			</li>
-			<span>
+			<li [ngClass]="{activenav:(lastClickedTab == 'COMMITTEE')}">
+				<a (click)="getCommitteeScheduleListData('COMMITTEE')">Committees</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'SCHEDULE')}">
+				<a (click)="getCommitteeScheduleListData('SCHEDULE')">Schedules</a>
+			</li>
+			<span *ngIf="lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
 				<a (click)="showAdvanceSearch()">
 					<i class="fa fa-glass"></i>
 				</a>
@@ -97,7 +103,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-4 col-lg-4" *ngIf="(lastClickedTab !== 'EXEMPT')">
+						<div class="col-md-4 col-sm-4 col-lg-4" *ngIf="(lastClickedTab !== 'EXEMPT' && lastClickedTab !== 'COMMITTEE' && lastClickedTab !== 'SCHEDULE')">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="sortOrder" [(ngModel)]="sortOrder" (ngModelChange)="sortBy()" id="inlineCheckbox1"
 								 value="-1">
@@ -218,12 +224,24 @@
 					</div>
 				</div>
 			</div>
-			<ng-container *ngIf="lastClickedTab != 'EXEMPT'">
+			<ng-container *ngIf="lastClickedTab != 'EXEMPT' && lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No Irb protocol found for this status</div>
 				<app-card-details *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 				|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
 				 [irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
 			</ng-container>
+			<ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
+					<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
+					<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
+					 [irbList]="irbListData"></app-committee-card>
+				</ng-container>
+				<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
+						<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
+						<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
+						 [irbList]="irbListData"></app-schedule-card>
+					</ng-container>
 			<ng-container *ngIf="lastClickedTab == 'EXEMPT'">
 				<div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>
 				<app-exempt-card [exemptList]="exemptListData" [userDTO]="userDTO" [showBtn]="noIrbList"></app-exempt-card>

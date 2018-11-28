@@ -36,6 +36,8 @@ import { SharedDataService } from './common/service/shared-data.service';
 import { FilterPipe } from './common/directives/filter.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppCommonModule } from './common/common/common.module';
+import { CommitteeCardComponent } from './dashboard/dashboard-list/committee-card/committee-card.component';
+import { ScheduleCardComponent } from './dashboard/dashboard-list/schedule-card/schedule-card.component';
 
 
 
@@ -56,6 +58,8 @@ enableProdMode();
         ExemptQuestionaireComponent,
         ExemptCardComponent,
         FilterPipe,
+        CommitteeCardComponent,
+        ScheduleCardComponent,
 
     ],
     imports: [

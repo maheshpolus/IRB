@@ -10,7 +10,8 @@ export class CardDetailsComponent  {
 
   @Input() irbList: any = [];
 
-  constructor(private _router: Router) { }
+  constructor(private _router: Router) {
+   }
 
   /**Opens Irb Component
    * @protocolNumber - unique id for protocol

@@ -2,15 +2,17 @@
 <section class="row snapshot-responsive" *ngIf="roleType == 'PI'">
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
-			<div class="media top-card-outer"
-				(click)="expandedView('AMMEND_RENEW')">
+			<div class="media top-card-outer" (click)="expandedView('AMMEND_RENEW')">
 				<div class="media-left card-icon1">
-					<a><i class="fa fa-file-text-o"></i> </a>
+					<a>
+						<i class="fa fa-file-text-o"></i>
+					</a>
 				</div>
 				<div class="media-body top-card-body">
 					<h4 class="media-heading">{{snapshots?.ammendRenewCount}}</h4>
 					<p>
-						Ammend/Renewals in <br>Progress
+						Ammend/Renewals in
+						<br>Progress
 					</p>
 				</div>
 			</div>
@@ -18,16 +20,17 @@
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards revision-req-card">
-			<div class="media top-card-outer"
-				(click)="expandedView('REVISION_REQ')">
+			<div class="media top-card-outer" (click)="expandedView('REVISION_REQ')">
 				<div class="media-left card-icon1 circle2">
-					<a> <i class="fa fa-file-text-o"></i>
+					<a>
+						<i class="fa fa-file-text-o"></i>
 					</a>
 				</div>
 				<div class="media-body top-card-body cap2">
 					<h4 class="media-heading">{{snapshots?.revisionReqCount}}</h4>
 					<p>
-						Revision <br>Requested
+						Revision
+						<br>Requested
 					</p>
 				</div>
 			</div>
@@ -35,16 +38,17 @@
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
-			<div class="media top-card-outer"
-				(click)="expandedView('AWAITING_RESP')">
+			<div class="media top-card-outer" (click)="expandedView('AWAITING_RESP')">
 				<div class="media-left card-icon1 circle3">
-					<a> <i class="fa fa-file-text-o"></i>
+					<a>
+						<i class="fa fa-file-text-o"></i>
 					</a>
 				</div>
 				<div class="media-body top-card-body cap3">
 					<h4 class="media-heading">{{snapshots?.awaitingRespCount}}</h4>
 					<p>
-						Awaiting IRB <br>Response
+						Awaiting IRB
+						<br>Response
 					</p>
 				</div>
 			</div>
@@ -53,11 +57,20 @@
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards link-card">
 			<ul>
-				<li><a class="pdf" (click)="goToQuestionaire()"><i class="fa fa-check-square-o"></i>Start Exempt 
-						Evaluation</a></li>
-				<li><a class="pdf" (click)="goToCreateProtocol()"><i class="fa fa-plus"></i>Create 
-							Protocol</a></li>
-				<li><a routerLink='/irb/committee' [queryParams]="{mode:'create'}"><i class="fa fa-calendar"></i>IRB Schedules</a></li>
+				<li>
+					<a class="pdf" (click)="goToQuestionaire()">
+						<i class="fa fa-check-square-o"></i>Start Exempt Evaluation
+					</a>
+				</li>
+				<li>
+					<a class="pdf" (click)="goToCreateProtocol()">
+						<i class="fa fa-plus"></i>Create Protocol
+					</a>
+				</li>
+				<li>
+					<a routerLink='/irb/committee' [queryParams]="{mode:'create'}">
+						<i class="fa fa-calendar"></i>IRB Schedules</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -69,7 +82,9 @@
 		<div class="col-12 top-cards">
 			<div class="media schedule-card-outer">
 				<div class="media-left card-icon1">
-					<a><i class="fa fa-file-text-o"></i> </a>
+					<a>
+						<i class="fa fa-file-text-o"></i>
+					</a>
 				</div>
 				<div class="media-body top-card-body-schedule cap1">
 					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDatePrev | date: 'MM/dd/yyyy'}}</h4>
@@ -83,7 +98,8 @@
 		<div class="col-12 top-cards">
 			<div class="media schedule-card-outer">
 				<div class="media-left card-icon1 circle2">
-					<a> <i class="fa fa-file-text-o"></i>
+					<a>
+						<i class="fa fa-file-text-o"></i>
 					</a>
 				</div>
 				<div class="media-body top-card-body-schedule cap2">
@@ -96,10 +112,10 @@
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
-			<div class="media top-card-outer"
-				(click)="expandedView('REVISION_REQ')">
+			<div class="media top-card-outer" (click)="expandedView('REVISION_REQ')">
 				<div class="media-left card-icon1 circle3">
-					<a> <i class="fa fa-file-text-o"></i>
+					<a>
+						<i class="fa fa-file-text-o"></i>
 					</a>
 				</div>
 				<div class="media-body top-card-body-schedule cap3">
@@ -112,13 +128,19 @@
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards schedule-class link-card">
 			<ul>
-					<li><a class="pdf" (click)="goToQuestionaire()"><i class="fa fa-check-square-o"></i>Start Exempt 
-						Evaluation</a></li>
-				<li><a><i class="fa fa-check-square-o"></i>COUHES</a></li>
-				<li><a routerLink='/irb/committee' [queryParams]="{mode:'create'}"><i class="fa fa-calendar"></i>IRB Schedules</a></li>
-				<li><a title="Open" routerLink='/irb/committee'
-				[queryParams]="{mode:'view','id':'IRB-102'}"><i
-							class="fa fa-eye"></i>Open Committee</a></li>
+				<li>
+					<a class="pdf" (click)="goToQuestionaire()">
+						<i class="fa fa-check-square-o"></i>Start Exempt Evaluation
+					</a>
+				</li>
+				<li>
+					<a>
+						<i class="fa fa-check-square-o"></i>COUHES</a>
+				</li>
+				<li>
+					<a title="Create Committe" routerLink='/irb/committee' [queryParams]="{mode:'create'}">
+						<i class="fa fa-plus"></i>Create Committee</a>
+				</li>
 			</ul>
 		</div>
 	</div>

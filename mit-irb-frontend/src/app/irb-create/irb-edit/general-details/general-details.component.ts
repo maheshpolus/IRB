@@ -197,7 +197,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.generalInfo.personnelInfos[0].protocolLeadUnits[0].leadUnitFlag = 'Y';
       }
       this.generalInfo.updateTimestamp = new Date();
-      this.generalInfo.updateUser = localStorage.getItem('userName');
+      this.generalInfo.updateUser = this.userDTO.userName;
       this.commonVo.generalInfo = this.generalInfo;
       this.requestObject = JSON.stringify(this.commonVo.generalInfo);
       this._irbCreateService.updateProtocolGeneralInfo(this.commonVo).subscribe(

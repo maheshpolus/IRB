@@ -133,7 +133,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   saveSubjectDetails(mode) {
     if (mode !== 'DELETE') {
       this.protocolSubject.updateTimestamp = new Date();
-      this.protocolSubject.updateUser = localStorage.getItem('userName');
+      this.protocolSubject.updateUser = this.userDTO.userName;
       this.protocolSubject.sequenceNumber = 1;
       this.protocolSubject.protocolNumber = this.protocolNumber;
       this.protocolSubject.protocolId = this.protocolId;

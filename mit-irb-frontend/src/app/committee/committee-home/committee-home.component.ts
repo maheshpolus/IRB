@@ -128,6 +128,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     displayTime: any = {};
     isMandatoryFilterFilled = true;
     isFilterDatePrevious = true;
+    isFilterClicked = false;
     listDate: string;
     listStatus: string;
     listTime: string;

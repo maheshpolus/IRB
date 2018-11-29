@@ -16,6 +16,7 @@ declare var $: any;
 export class IrbProtocolComponent implements OnInit, OnDestroy {
 
   isProtocolScienceEmpty = false;
+  userDTO: any = {};
   requestObject: any = {};
   commonVo: any = {};
   scientificId: any;
@@ -37,6 +38,7 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
       this.requestObject.protocolId = params['protocolId'];
       this.requestObject.protocolNumber = params['protocolNumber'];
     });
+    this.userDTO = this._activatedRoute.snapshot.data['irb'];
 
     this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
       if (commonVo !== undefined) {
@@ -65,7 +67,7 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
         protocolId: this.requestObject.protocolId,
         protocolNumber: this.requestObject.protocolNumber,
         description: this.protocolScience,
-        updateUser: localStorage.getItem('userName'),
+        updateUser: this.userDTO.userName,
         updatetimestamp: new Date(),
         sequenceNumber: 1
 

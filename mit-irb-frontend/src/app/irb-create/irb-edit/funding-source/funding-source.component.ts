@@ -449,7 +449,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   saveFundingDetails(mode) {
     if (mode !== 'DELETE') {
       this.fundingSource.updateTimestamp = new Date();
-      this.fundingSource.updateUser = localStorage.getItem('userName');
+      this.fundingSource.updateUser = this.userDTO.userName;
       this.fundingSource.sequenceNumber = 1;
       this.fundingSource.protocolNumber = this.protocolNumber;
       this.fundingSource.protocolId = this.protocolId;

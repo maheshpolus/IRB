@@ -191,14 +191,14 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.commonVo.protocolCollaborator.acType = 'D';
     this.commonVo.protocolCollaborator.updateTimestamp = new Date();
     this.commonVo.protocolCollaborator.protocolOrgTypeCode = 1;
-    this.commonVo.protocolCollaborator.updateUser = localStorage.getItem('userName');
+    this.commonVo.protocolCollaborator.updateUser = this.userDTO.userName;
     this.showDeletePopup = true;
   }
 
   saveCollaboratorDetails(mode) {
     if (mode !== 'DELETE') {
       this.protocolCollaborator.updateTimestamp = new Date();
-      this.protocolCollaborator.updateUser = localStorage.getItem('userName');
+      this.protocolCollaborator.updateUser = this.userDTO.userName;
       this.protocolCollaborator.sequenceNumber = 1;
       this.protocolCollaborator.protocolOrgTypeCode = 1;
       this.protocolCollaborator.protocolNumber = this.protocolNumber;
@@ -248,7 +248,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
           protocolNumber: this.protocolCollaborator.protocolNumber,
           sequenceNumber: 1,
           updateTimestamp: new Date(),
-          updateUser: localStorage.getItem('userName'),
+          updateUser: this.userDTO.userName,
           acType: 'U'
         });
       }
@@ -359,14 +359,14 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         description: this.requestObject.attachmentDescription,
         updateTimestamp: new Date(),
         createDate: new Date(),
-        updateUser: localStorage.getItem('userName'),
+        updateUser: this.userDTO.userName,
         acType: 'I'
 
       };
       this.protocolCollaboratorAttachments.protocolAttachments = {
         sequenceNumber: 1,
         updateTimestamp: new Date(),
-        updateUser: localStorage.getItem('userName')
+        updateUser: this.userDTO.userName
 
       };
       this.protocolCollaboratorAttachments.attachmentType = {

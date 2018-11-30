@@ -19,6 +19,7 @@ export class ScheduleOtherActionsComponent implements OnInit, OnDestroy {
     scheduleId: number;
     tempOtherAction: any = {};
     showPopup = false;
+    isAddClicked = false;
     currentUser = localStorage.getItem( 'currentUser');
     isMandatoryFilled = true;
     mandatoryMessage: string;

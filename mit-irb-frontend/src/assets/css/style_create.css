@@ -2071,6 +2071,10 @@ input:disabled{
 .border-left-card::before 
 {
  border: none !important;
+ 
+}
+.border-left-card .row {
+    box-shadow: none !important;
 }
 .in-past
 {
@@ -2092,4 +2096,12 @@ input:disabled{
 .table-padding th:first-child, .table-padding td:first-child
 {
     padding: .75rem !important;
+}
+.pt-35
+{
+    padding-top: 35px;
+}
+.plr-15
+{
+    padding: 0 15px !important;
 }

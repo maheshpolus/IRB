@@ -7,6 +7,7 @@ import { ScheduleAttachmentsService } from './schedule-attachments.service';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
+declare var $: any;
 @Component( {
     selector: 'app-schedule-attachments',
     templateUrl: './schedule-attachments.component.html',
@@ -135,6 +136,7 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
             this.newCommitteeScheduleAttachment.updateTimestamp = timestamp;
             this.newCommitteeScheduleAttachment.updateUser = this.currentUser;
             this.result.newCommitteeScheduleAttachment = this.newCommitteeScheduleAttachment;
+            $('#addAttachment').modal('toggle');
             this.scheduleAttachmentsService.addAttachments(
                 this.result.committeeSchedule.scheduleId,
                 this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode,
@@ -212,6 +214,10 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
     closeAttachments() {
         this.showAddAttachment = false;
         this.uploadedFile = [];
+    }
+
+    triggerAdd() {
+        $('#addAttach').trigger('click');
     }
 
 }

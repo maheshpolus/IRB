@@ -1107,7 +1107,7 @@ transition: display .25s}
 .users-list-tbl .row
 {
 	padding:15px;
-	padding-bottom: 0;
+	/* padding-bottom: 0; */
 }
 .action-btn-list .btn
 {
@@ -2104,4 +2104,17 @@ input:disabled{
 .plr-15
 {
     padding: 0 15px !important;
+}
+.schedule-box
+{
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+.p-75 th, .p-75 td
+{
+    padding: .75rem !important;
+}
+.text-color 
+{
+    color: #AF2034;
 }

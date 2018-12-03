@@ -7,6 +7,8 @@ export class CommitteeConfigurationService {
     currentMode = this.committeeMode.asObservable();
     private committeeAreaOfResearch = new BehaviorSubject<any[]>([]);
     currentAreaOfResearch = this.committeeAreaOfResearch.asObservable();
+    private committeeHomeUnits = new BehaviorSubject<any[]>([]);
+    currentHomeUnits = this.committeeHomeUnits.asObservable();
     private committeeData = new BehaviorSubject<any[]>([]);
     currentCommitteeData = this.committeeData.asObservable();
     private currentMember = new BehaviorSubject<any[]>([]);
@@ -29,7 +31,9 @@ export class CommitteeConfigurationService {
     changeAreaOfResearch(areaOfResearch: any[]) {
         this.committeeAreaOfResearch.next(areaOfResearch);
     }
-
+    changeHomeUnits(homeUnits: any[]) {
+        this.committeeHomeUnits.next(homeUnits);
+    }
     changeCommmitteeData(data: any[]) {
         this.committeeData.next(data);
     }

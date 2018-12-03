@@ -7,6 +7,7 @@ import { CompleterService} from 'ng2-completer';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { CommitteeConfigurationService } from '../../common/service/committee-configuration.service';
+import { ISubscription } from 'rxjs/Subscription';
 
 @Component( {
     selector: 'app-committee-home',
@@ -48,7 +49,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     reviewTypes: any[];
     areaList: any = [];
     scheduleStatus: any[];
-
+    committeeData: any = {};
     result: any = {};
     resultTemp: any = {};
     showPopup = false;
@@ -66,7 +67,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     addResearchArea: string;
 
     showGenerateSchedule = false;
-    committeeData: any = {};
+    homeUnitData: any = {};
     scheduleData: any = {};
     sendScheduleRequestData: any;
     optionDay = 'XDAY';
@@ -118,6 +119,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     isConflictDates = false;
     isMandatoryFilled = true;
     conflictDates: any = [];
+    homeUnitList: any = [];
     filterStartDate: string;
     filerEndDate: string;
     today: any;
@@ -141,6 +143,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     isEditDetailsModalOpen = false;
     isScheduleEditWarningModalOpen = false;
     public onDestroy$ = new Subject<void>();
+
 
     constructor( public route: ActivatedRoute,
         private datePipe: DatePipe,
@@ -171,9 +174,13 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.Unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitName = this.resultTemp.committee.homeUnitName;
                 this.reviewTypes = this.resultTemp.reviewTypes;
+                // this.homeUnitList = this.resultTemp.homeUnits;
                 this.committeeConfigurationService.currentAreaOfResearch.subscribe( data2 => {
                     this.areaList = data2;
                 } );
+                this.committeeConfigurationService.currentHomeUnits.subscribe( result => {
+                    this.homeUnitList = result;
+                });
                 this.scheduleStatus = this.resultTemp.scheduleStatus;
             }
         } );
@@ -256,7 +263,21 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         this.showGenerateSchedule = false;
         this.deleteConfirmation = false;
     }
+    homeChangeFunction( unitName ) {
+        this.homeUnitList.forEach(( value, index ) => {
+            if ( value.unitName === unitName ) {
+                this.result.committee.homeUnitNumber = value.unitNumber;
+            }
+        } );
+    }
 
+    onHomeSelect() {
+        this.homeUnitList.forEach(( value, index ) => {
+            if ( value.unitName === this.result.committee.homeUnitName ) {
+                this.result.committee.homeUnitNumber = value.unitNumber;
+            }
+        } );
+    }
     showEditDetails() {
         this.editDetails = !this.editDetails;
         this.saveCommitteeFlag = false;

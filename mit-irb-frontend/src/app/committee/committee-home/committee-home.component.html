@@ -46,7 +46,7 @@
 										</label>
 													<ng2-completer title="Enter Home Unit"
 														[(ngModel)]="result.committee.homeUnitName"
-														[datasource]="homeUnitList" [minSearchLength]="0"
+														[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
 														(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
 														(selected)="onHomeSelect()" class="input-field-size person-unit" [disabled]=" editDetails == false"></ng2-completer>
 											</div>

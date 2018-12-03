@@ -57,6 +57,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     duplicateIdFlag = false;
     emptyAreaOfResearch = false;
     duplicateAreaOfResearch = false;
+    isAddClicked = false;
     deleteMsg = '';
     alertMsg = '';
     name: string;

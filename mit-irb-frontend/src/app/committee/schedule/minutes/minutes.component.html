@@ -2,10 +2,11 @@
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="col-12 border-box schedule-box">
-               <h4 class="borderBoxHeading">Minutes
-                    <button title="add new entry" id="minutesAddBtn" data-target="#minuteModal" data-toggle="modal" class="addBtn" (click)="showAddMinutes($event)">
+               <h4 class="borderBoxHeading pointer text-color" title="add new entry" id="minutesAddBtn" data-target="#minuteModal" data-toggle="modal" (click)="showAddMinutes($event)">
+					<i class="fa fa-plus"></i> Minutes
+                    <!-- <button title="add new entry" id="minutesAddBtn" data-target="#minuteModal" data-toggle="modal" class="addBtn" (click)="showAddMinutes($event)">
 					<i class="fa fa-plus"></i>	
-					</button>
+					</button> -->
 				</h4>
 				
 				<div class="col-md-12 users-list-tbl"  *ngIf="result?.committeeSchedule?.committeeScheduleMinutes.length > 0">
@@ -74,10 +75,232 @@
 					</table>
 				</div> -->
 			</div>
-        </div>
+		</div>
+		
+<!-- Minute Entry Modal -->
+
+
+
+
+<!-- Minute Entry Modal Ends -->
+<div class="modal fade bd-example-modal-lg"  *ngIf="isMinuteEntryPoppedUp" id="minuteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Minute Entry
+        </h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-popup">
+
+			<div class="col-12">
+					<div class="row">
+						<div class="col-8">
+								<div class="form-group">
+						<label>Entity Type <span class="mandatory">*</span></label>
+						<select name="entityType" class= "custom-select  mr-sm-2" (ngModelChange)="onEntityTypeChange($event)" [(ngModel)]="selectedOptionEntityType">
+							<option *ngFor="let type of entityType" [value]="type?.minuteEntryTypecode">{{type?.description}}</option>
+						</select>
+						</div>
+					</div>
+					<div class="col-2">
+							<div class="form-group">
+						<input type="checkbox" [checked]="finalFlag" (change)="finalFlag = !finalFlag" name="final" />
+						<label>Final</label>
+						</div>
+					</div>
+					<div class="col-2">
+							<div class="form-group">
+						<input type="checkbox" [checked]="privateCommentFlag" (change)="privateCommentFlag = !privateCommentFlag" name="private" />
+						<label>Private</label>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div class="tab-content" id="myTabContent">
+						<div id="generalComments" *ngIf="selectedOptionEntityType == '1' ">
+							<div class="col-12">
+							<div class="form-group">
+									<label>Entry <span class="mandatory">*</span></label>
+									<!-- <li><label><span class="mandatory">*&nbsp;</span>Entry</label></li> -->
+									<textarea name="description" class="form-control txt-area-fnt" rows="4" [(ngModel)]="entryDescription"></textarea>
+							</div>
+								</div>
+								<div *ngIf="!isMandatoryFilled">
+										<span  class="mandatory"> {{minuteValidationMessage}}</span>
+								</div>
+							</div>
+
+							<div id="adverseEvents" *ngIf="selectedOptionEntityType == '5' ">
+									<div class="col-12">
+									<div class="form-group">
+											<label>Entry <span class="mandatory">*</span></label>
+											<!-- <li><label><span class="mandatory">*&nbsp;</span>Entry</label></li> -->
+											<textarea name="description" class="form-control txt-area-fnt" rows="4" [(ngModel)]="entryDescription"></textarea>
+									</div>
+										</div>
+										<div *ngIf="!isMandatoryFilled">
+												<span  class="mandatory"> {{minuteValidationMessage}}</span>
+										</div>
+									</div>
+
+									<div id="attendance" *ngIf="selectedOptionEntityType == '2' ">
+											<div class="col-12">
+												<div class="row">
+												<div class="col-9">
+											<div class="form-group">
+													<label>Entry <span class="mandatory">*</span></label>
+													<!-- <li><label><span class="mandatory">*&nbsp;</span>Entry</label></li> -->
+													<textarea name="description" class="form-control txt-area-fnt" rows="4" [(ngModel)]="entryDescription"></textarea>
+											</div>
+											</div>
+											<div class="col-3">
+													<button type="button" class="btnSkin btnSkinPrimary" (click)="generateAttendance()">Gen. Attendance</button>
+												</div>
+										
+										</div>
+												</div>
+												<div *ngIf="!isMandatoryFilled">
+														<span  class="mandatory"> {{minuteValidationMessage}}</span>
+												</div>
+											</div>
+											<div id="otherBusiness" *ngIf="selectedOptionEntityType == '4' ">
+													<div class="col-12">
+														<div class="row">
+																<div class="col-6">
+																		<div class="form-group">
+																				<label>Other Bussiness Type<span class="mandatory">*</span></label>
+																				<select name="otherBusinessItems" class= "custom-select  mr-sm-2" (ngModelChange)="onOtherItemSelect($event)" [(ngModel)]="selectedOtherBusItem">
+																						<option>Select</option>
+																						<option *ngFor="let item of result?.committeeSchedule?.committeeScheduleActItems" [ngValue]="item">{{ item.itemDescription }}</option>
+																					</select>
+																	</div>
+																	</div>
+														<div class="col-12">
+													<div class="form-group">
+															<label>Entry <span class="mandatory">*</span></label>
+															<!-- <li><label><span class="mandatory">*&nbsp;</span>Entry</label></li> -->
+															<textarea name="description" class="form-control txt-area-fnt" rows="4" [(ngModel)]="entryDescription"></textarea>
+													</div>
+													</div>
+													
+												
+												</div>
+														</div>
+														<div *ngIf="!isMandatoryFilled">
+																<span  class="mandatory"> {{minuteValidationMessage}}</span>
+														</div>
+													</div>
+													<div id="protocol" *ngIf="selectedOptionEntityType == '3' ">
+														<div class="col-12">
+															<div class="row">
+																		<div class="col-5">
+																				<div class="form-group">
+																						<label>Protocol<span class="mandatory">*</span></label>
+																						<select name="otherBusinessItems" class= "custom-select  mr-sm-2" (ngModelChange)="onProtocolSelect($event)" [(ngModel)]="selectedProtocol">
+																								<option>Select</option>
+																								<option *ngFor="let protocol of result?.committeeSchedule?.protocolSubmissions" [value]="protocol?.protocolNumber">{{protocol?.protocolNumber}}</option>
+																							</select>
+																			</div>
+																			</div>
+																			<div class="col-7">
+																					<div class="form-group">
+																							<label>Contingency Code</label>
+																							<input type="text" class="form-control input-field-size" disabled="disabled" [(ngModel)]="selectedProtocolContingencyCode"/>
+													<button class="searchBtn" id="searchContingency2" (click)="searchContigency()" data-target="#contigencyModal" data-toggle="modal">
+														&nbsp;<i class="fa fa-search"></i>
+													</button>
+																					</div>
+																					</div>
+																			</div>
+																			</div>
+																<div class="col-12">
+															<div class="form-group">
+																	<label>Entry <span class="mandatory">*</span></label>
+																	<!-- <li><label><span class="mandatory">*&nbsp;</span>Entry</label></li> -->
+																	<textarea name="description" class="form-control txt-area-fnt" rows="4" [(ngModel)]="entryDescription"></textarea>
+															</div>
+															</div>
+															
+														
+														<!-- </div>
+																</div> -->
+																<div *ngIf="!isMandatoryFilled">
+																		<span  class="mandatory"> {{minuteValidationMessage}}</span>
+																</div>
+															</div>
+															<div id="protocolReviewerComment" *ngIf="selectedOptionEntityType == '6' ">
+																	<div class="col-12">
+																		<div class="row">
+																					<div class="col-5">
+																							<div class="form-group">
+																									<label>Protocol<span class="mandatory">*</span></label>
+																									<select name="otherBusinessItems" class= "custom-select  mr-sm-2" (ngModelChange)="onProtocolSelect($event)" [(ngModel)]="selectedProtocol">
+																											<option>Select</option>
+																											<option *ngFor="let protocol of result?.committeeSchedule?.protocolSubmissions" [value]="protocol?.protocolNumber">{{protocol?.protocolNumber}}</option>
+																										</select>
+																						</div>
+																						</div>
+																						<div class="col-7">
+																								<div class="form-group">
+																										<label>Contingency Code</label>
+																										<input type="text" class="form-control input-field-size" disabled="disabled" [(ngModel)]="selectedProtocolContingencyCode"/>
+																<button class="searchBtn" id="searchContingency2" (click)="searchContigency()" data-target="#contigencyModal" data-toggle="modal">
+																	&nbsp;<i class="fa fa-search"></i>
+																</button>
+																								</div>
+																								</div>
+																						</div>
+																						</div>
+																			<div class="col-12">
+																		<div class="form-group">
+																				<label>Entry <span class="mandatory">*</span></label>
+																				<!-- <li><label><span class="mandatory">*&nbsp;</span>Entry</label></li> -->
+																				<textarea name="description" class="form-control txt-area-fnt" rows="4" [(ngModel)]="entryDescription"></textarea>
+																		</div>
+																		</div>
+																		
+																	
+																	<!-- </div>
+																			</div> -->
+																			<div *ngIf="!isMandatoryFilled">
+																					<span  class="mandatory"> {{minuteValidationMessage}}</span>
+																			</div>
+																		</div>
+													
+											
+
+
+						</div>
+						
+		  
+		</div>
+		<div class="modal-footer ">
+				<button type="button" class="btnSkin btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btnSkin btnSkinPrimary" (click)="saveAndClose()">Save & Close</button>
+				<button type="button" class="btnSkin btnSkinPrimary" (click)="saveAndNew()">Save & New</button>
+
+		</div>
+		</div>
+		</div>
+		</div>
+
+
+
+
+
+
+
+
+
+
         
         <!-- Minute Entry Modal -->
-        <div class="modal fade mySkinDialog fallback" *ngIf="isMinuteEntryPoppedUp" id="minuteModal" tabindex="-1" role="dialog"
+        <!-- <div class="modal fade mySkinDialog fallback" *ngIf="isMinuteEntryPoppedUp" id="minuteModal" tabindex="-1" role="dialog"
 				aria-labelledby="minuteModalCenterTitle" aria-hidden="true">
 				<div class="modal-dialog modal-lg modal-dialog-centered"
 					role="document">
@@ -222,10 +445,60 @@
 						</div>
 					</div>
 				</div>
-			</div>
-        <!-- modal ends -->
+			</div> -->
+		<!-- modal ends -->
+				<!-- Modal for contigency list -->
+
+
+
+
+				        
+
+						<div class="modal fade bd-example-modal-lg"  *ngIf="isContigencyPoppedUp" id="contigencyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+						aria-hidden="true">
+						<div class="modal-dialog modal-lg" role="document">
+						  <div class="modal-content">
+							<div class="modal-header popup-header">
+							  <h5 class="modal-title" id="exampleModalLongTitle">Contigency LookUp
+							  </h5>
+							  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							  </button>
+							</div>
+							<div class="modal-body modal-popup">
+
+									<div class="table-responsive">
+											<table class="table table-striped tbl-p-clr">
+											  <thead class="tbl-head-clr thead-font-size p-75">
+													<tr>
+															
+															<th title="">Code</th>
+															<th title="">Description</th>
+														</tr>
+														</thead>
+														<tbody class="tbody-font-size p-75">
+																<tr *ngFor="let contigencyItem of contingencyList" >
+																		<td class="demo-class" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.protocolContingencyCode}}</td>
+																		<td class="demo-class" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.description}}</td>
+																	</tr>
+
+															</tbody>
+									
+											
+										</table>
+										</div>
+								</div>
+								<div class="modal-footer">
+
+									</div>
+								</div>
+								</div>
+								</div>
+								<!-- Modal for contigency list Ends -->
+
+
         <!-- Modal for contigency list -->
-        <div class="modal fade mySkinDialog fallback" *ngIf="isContigencyPoppedUp" id="contigencyModal" tabindex="-1" role="dialog"
+        <!-- <div class="modal fade mySkinDialog fallback" *ngIf="isContigencyPoppedUp" id="contigencyModal" tabindex="-1" role="dialog"
 				aria-labelledby="contigencyModalCenterTitle" aria-hidden="true">
 				<div class="modal-dialog modal-lg modal-dialog-centered"
 					role="document">
@@ -251,10 +524,35 @@
 						</div>
 					</div>
 				</div>
+			</div> -->
+		<!-- ends contigency modal -->
+		
+		
+		<!-- Delete Modal -->
+		
+		<div class="modal fade mySkinDialog modalFallBack" *ngIf="isToDelete" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+		  <div class="modal-content modal-text-color">
+			<div class="modal-header popup-header">
+			  <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+			  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
 			</div>
-        <!-- ends contigency modal -->
-        <!-- Delete Modal -->
-        <div class="modal fade mySkinDialog fallback" *ngIf="isToDelete" id="deleteModal" tabindex="-1" role="dialog"
+			<div class="modal-body">
+			  <p>Are you sure you want to delete this item?</p>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="isToDelete = false">No</button>
+			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteMinuteItem($event)" data-dismiss="modal">Yes</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+        <!-- <div class="modal fade mySkinDialog fallback" *ngIf="isToDelete" id="deleteModal" tabindex="-1" role="dialog"
 				aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered"
 					role="document">
@@ -275,7 +573,10 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!--  ends delete confirm modal -->   
 	</div>
 </div>
+
+
+

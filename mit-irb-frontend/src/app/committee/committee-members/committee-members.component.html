@@ -48,7 +48,7 @@
 				<br>
 				<div *ngIf="showAddMember==true" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
 					<div class="row">
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard border-left-card" style="padding:0px">
+							<div class="col-12 border-box schedule-box mb15">
 							<div class="row form-group padding-15">
 								<div class="col-12">
 									<div class="form-check-inline">
@@ -119,28 +119,34 @@
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span>
+									<a (click)="deleteMember($event,member.commMembershipId)">
+											<i class="fa fa-times"></i>
+										</a>
 								</span>
 								<a href="#" (click)="showMembersTab($event,member.personId, member)">
 									<i [ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
-								<span>
+								<!-- <span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 										<i class="fa fa-trash-o"></i>
 									</a>
-								</span>
+								</span> -->
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'yyyy-MM-dd'}} to {{member.termEndDate |date:'yyyy-MM-dd'}} )</span>
+									<a (click)="deleteMember($event,member.commMembershipId)">
+											<i class="fa fa-times"></i>
+										</a>
 								</span>
 								<a href="#" (click)="showMembersNonEmployeesTab($event,member.rolodexId, member)">
 									<i [ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
-								<span>
+								<!-- <span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 										<i class="fa fa-trash-o"></i>
 									</a>
-								</span>
+								</span> -->
 							</div>
 
 							<div class="setBody" style="display: block;" *ngIf="member.personId == personId && showMembers==true || member.rolodexId == rolodexId && showNonEmployeeMembers == true ">
@@ -542,28 +548,34 @@
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'yyyy-MM-dd'}} to {{member.termEndDate |date:'yyyy-MM-dd'}} )</span>
+									<a (click)="deleteMember($event,member.commMembershipId)">
+											<i class="fa fa-times"></i>
+										</a>
 								</span>
 								<a href="#" (click)="showMembersTab($event,member.personId, member)">
 									<i [ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
-								<span>
+								<!-- <span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 										<i class="fa fa-trash-o"></i>
 									</a>
-								</span>
+								</span> -->
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span>
+									<a (click)="deleteMember($event,member.commMembershipId)">
+											<i class="fa fa-times"></i>
+										</a>
 								</span>
 								<a href="#" (click)="showMembersNonEmployeesTab($event,member.rolodexId, member)">
 									<i [ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
-								<span>
+								<!-- <span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 										<i class="fa fa-trash-o"></i>
 									</a>
-								</span>
+								</span> -->
 							</div>
 
 							<div class="setBody" style="display: block;" *ngIf="member.personId == personId && showMembers==true || member.rolodexId == rolodexId && showNonEmployeeMembers == true">
@@ -604,7 +616,7 @@
 																	<label>Membership Type
 																	</label>
 																	<select id="membershipType" [disabled]="editDetails==false" class="custom-select  mr-sm-2 fontsize-persondetails" (change)="memberTypeChange(member,$event.target.value)"
-																	 [ngClass]="editClass">
+																	>
 
 																		<option *ngFor="let type of memberList.committeeMembershipTypes" (value)="type" [selected]="member.committeeMembershipType.description==type.description">{{type.description}}</option>
 
@@ -762,7 +774,7 @@
 
 
 
-													<div class="table-responsive" *ngIf="member?.committeeMemberRoles">
+													<div class="table-responsive" *ngIf="member?.committeeMemberRoles && member.committeeMemberRoles.length >0">
 														<table class="table table-striped tbl-p-clr table-padding">
 															<thead class="tbl-head-clr thead-font-size">
 																<tr>

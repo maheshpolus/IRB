@@ -40,7 +40,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     middleOfSave = false;
     alertMsgNotSaved = '';
     alertMsgMiddleOfEdit = '';
-    public dataServiceHomeUnit: CompleterData;
+    public dataServiceHomeUnit: any = [];
     isOnEditMembers = false;
     memberData: any = [];
     alertMsgMemberMiddleOfEdit: string;
@@ -93,6 +93,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                         this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
                         this.committeeConfigurationService.changeAreaOfResearch( this.areaList );
                         this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
+                        this.committeeConfigurationService.changeHomeUnits(this.dataServiceHomeUnit);
                     }
                 } );
             this.committeeConfigurationService.changeMode( this.mode );
@@ -121,6 +122,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                         this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
                         this.committeeConfigurationService.changeAreaOfResearch( this.areaList );
                         this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
+                        this.committeeConfigurationService.changeHomeUnits(this.dataServiceHomeUnit);
                     }
                 } );
             this.committeeConfigurationService.changeMode( this.mode );

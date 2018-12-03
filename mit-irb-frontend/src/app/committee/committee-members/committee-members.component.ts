@@ -128,7 +128,8 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                 this.memberExist = true;
                 this.expandMemberToSave();
             }
-            if ( this.resultLoadedById.committee.committeeMemberships.length === 0 ) {
+            if ( this.resultLoadedById.committee !== undefined &&
+                this.resultLoadedById.committee.committeeMemberships.length === 0 ) {
                 this.memberExist = false;
             } else {
                 this.memberExist = true;
@@ -648,20 +649,24 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
 
     expandMemberToSave() {
         this.showPopup = false;
-        this.resultLoadedById.committee.committeeMemberships.forEach(( value, index ) => {
-            if ( value.updateTimestamp == null ||
-                value.committeeMemberRoles.length === 0 || value.committeeMemberExpertises.length === 0 ) {
-                this.memberAdded = true;
-                this.showEditDetails();
-                if ( value.personId == null ) {
-                    this.rolodexId = value.rolodexId;
-                    this.showNonEmployeeMembers = true;
-                } else if ( value.rolodexId == null ) {
-                    this.personId = value.personId;
-                    this.showMembers = true;
-                }
-            }
-        } );
+        if (this.resultLoadedById.committee !== undefined && this.resultLoadedById.committee.committeeMemberships !== undefined &&
+            this.resultLoadedById.committee.committeeMemberships !== null &&
+            this.resultLoadedById.committee.committeeMemberships.length > 0) {
+                this.resultLoadedById.committee.committeeMemberships.forEach(( value, index ) => {
+                    if ( value.updateTimestamp == null ||
+                        value.committeeMemberRoles.length === 0 || value.committeeMemberExpertises.length === 0 ) {
+                        this.memberAdded = true;
+                        this.showEditDetails();
+                        if ( value.personId == null ) {
+                            this.rolodexId = value.rolodexId;
+                            this.showNonEmployeeMembers = true;
+                        } else if ( value.rolodexId == null ) {
+                            this.personId = value.personId;
+                            this.showMembers = true;
+                        }
+                    }
+                } );
+        }
     }
 
     modalFooterClear() {

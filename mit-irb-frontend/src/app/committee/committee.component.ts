@@ -60,15 +60,18 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this.result.committee.committeeType = {};
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
         this.id = this.route.snapshot.queryParamMap.get( 'id' );
+        const test =  this.route.snapshot.firstChild.url[0].path;
+        this.currentTab = (test === 'committeeHome' ? 'committee_home' : 'committee_members');
     }
-
     ngOnDestroy() {
         this.onDestroy$.next();
         this.onDestroy$.complete();
     }
 
+
     ngOnInit() {
         this.initLoadParent();
+
     }
 
     onActivate( componentRef ) {

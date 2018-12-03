@@ -115,7 +115,10 @@
 			</div>
 			<div class="card-body card-paddng">
 			<div class="col-12  search-eidted-p padding-15" *ngIf="result?.committee">
-				<div class="row"><!-- *ngIf="addResearch && saveCommitteeFlag">-->
+					<a class="pdf generate-schedule" (click)="isAddClicked = !isAddClicked" >
+							<i class="fa fa-plus icon-padding"></i>Add Area of Research
+						  </a>
+				<div class="row" *ngIf="isAddClicked"><!-- *ngIf="addResearch && saveCommitteeFlag">-->
 					<div class="col-11">
 						<div class="form-group ">
 								<label>Area of Research

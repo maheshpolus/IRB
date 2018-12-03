@@ -3,11 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 import { CommitteeSaveService } from '../committee-save.service';
-import { CompleterService} from 'ng2-completer';
+import { CompleterService, CompleterData} from 'ng2-completer';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { CommitteeConfigurationService } from '../../common/service/committee-configuration.service';
-import { ISubscription } from 'rxjs/Subscription';
+
 
 @Component( {
     selector: 'app-committee-home',
@@ -142,6 +142,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     scheduleTime: any;
     isEditDetailsModalOpen = false;
     isScheduleEditWarningModalOpen = false;
+    public dataServiceHomeUnit: CompleterData;
     public onDestroy$ = new Subject<void>();
 
 
@@ -174,13 +175,14 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.Unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitName = this.resultTemp.committee.homeUnitName;
                 this.reviewTypes = this.resultTemp.reviewTypes;
+                if ( this.resultTemp.homeUnits != null || this.resultTemp.homeUnits !== undefined) {
+                    this.homeUnitList = this.resultTemp.homeUnits;
+                    this.dataServiceHomeUnit = this.completerService.local( this.homeUnitList, 'unitName', 'unitName' );
+                }
                 // this.homeUnitList = this.resultTemp.homeUnits;
                 this.committeeConfigurationService.currentAreaOfResearch.subscribe( data2 => {
                     this.areaList = data2;
                 } );
-                this.committeeConfigurationService.currentHomeUnits.subscribe( result => {
-                    this.homeUnitList = result;
-                });
                 this.scheduleStatus = this.resultTemp.scheduleStatus;
             }
         } );

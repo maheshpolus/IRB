@@ -621,7 +621,7 @@ header{
 }
 
 .actionButtonGroup>li>a {
-    color: #a92034!important;
+    color: #a92034;/*!important; commented for showing attendence in  committee schedule*/
     cursor: pointer;
 }
 

@@ -12,6 +12,9 @@
 		</div>
 		<div class="card-body card-paddng">
 			<div class="col-12  search-eidted-p padding-15" *ngIf="result?.committee">
+					<div *ngIf="errorFlag">
+							<span class="mandatory" style="font-size: 0.85em">{{error}}</span>
+					</div>
 				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group ">
@@ -104,7 +107,7 @@
 </div>
 </div>
 <!--Area of research-->
-<div class="col-12">
+<div class="col-12" *ngIf="showDetails">
 	<div class="top-distance">
 		<div class="card history-card border-radius-1">
 			<div class="card-header history-header">
@@ -172,7 +175,7 @@
 			</div>
 			
 <!--Generate Schedules-->
-<div class="col-12">
+<div class="col-12" *ngIf="showDetails">
 		<div class="top-distance">
 			<div class="card history-card border-radius-1">
 				<div class="card-header history-header">
@@ -248,6 +251,10 @@
 												</button>
 					
 									  </div>
+									  
+				
+							<div *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</div>
+						
 									  </div>
 									  </div>
 								 
@@ -672,8 +679,8 @@
 									</div>
 					</div>
 					<div class="modal-footer btn-row-med">
-							<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal">Close</button>
-							<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-toggle="modal" data-dismiss="modal" (click)="generateSchedule($event)">Generate Schedules</button>
+							<!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal">Close</button> -->
+							<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-toggle="modal"  data-target="#skippedSchedules" (click)="generateSchedule($event)">Generate Schedules</button>
 					  </div>
 		  </div>
 		  </div>

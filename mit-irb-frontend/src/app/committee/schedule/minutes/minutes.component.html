@@ -26,11 +26,11 @@
 										<tbody class="tbody-font-size p-75">
 												<tr *ngFor="let minute of result?.committeeSchedule?.committeeScheduleMinutes; let i=index">
 														
-														<td>{{ minute.minuteEntrytype.description }}<span *ngIf="minute.minuteEntryTypeCode == 6 || minute.minuteEntryTypeCode == 3">&nbsp;-&nbsp;{{minute.protocolNumber}}</span></td>
+														<td>{{ minute?.minuteEntrytype?.description }}<span *ngIf="minute.minuteEntryTypeCode == 6 || minute.minuteEntryTypeCode == 3">&nbsp;-&nbsp;{{minute?.protocolNumber}}</span></td>
 														<td class="form-group "><textarea class="form-control txt-area-fnt" [disabled]="(!isEditMinuteItem[i] == true)" value="{{ minute.minuteEntry }}" rows="3" cols ="50" [(ngModel)]="minute.minuteEntry"></textarea>
 														</td>
-														<td><i [ngClass]=" (minute.privateCommentFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
-														<td><i [ngClass]=" (minute.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
+														<td><i [ngClass]=" (minute?.privateCommentFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
+														<td><i [ngClass]=" (minute?.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
 														<td>
 															<ul class="actionButtonGroup">
 																<li title="edit"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
@@ -492,8 +492,8 @@
 														</thead>
 														<tbody class="tbody-font-size p-75">
 																<tr *ngFor="let contigencyItem of contingencyList" >
-																		<td class="pointer" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.protocolContingencyCode}}</td>
-																		<td class="pointer" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.description}}</td>
+																		<td class="pointer" data-dismiss="modal" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.protocolContingencyCode}}</td>
+																		<td class="pointer" data-dismiss="modal" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.description}}</td>
 																	</tr>
 
 															</tbody>

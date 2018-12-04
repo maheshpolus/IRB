@@ -247,7 +247,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this.currentTab = 'committee_home';
         this.clear();
         this.activatedRoute.saveDetails( Object );
-        this.router.navigate( ['/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
+        this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
     }
 
     stayOnPage() {

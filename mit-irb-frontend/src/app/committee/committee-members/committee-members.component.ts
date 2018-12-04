@@ -69,6 +69,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     selectedExpertise: string;
     nonEmployeeFlag = false;
 
+    showValidationMessage = false;
     selectedRole: string;
     searchString: string;
     hits_source: any[];
@@ -581,6 +582,10 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             this.modalMessage = 'You are yet to save the details of an already added member. Please add details and save to proceed';
             this.modalTitle = 'Warning!!!';
         } else {
+            if (this.selectedMember.id == null || this.selectedMember.id === undefined) {
+                this.showValidationMessage = true;
+            } else {
+                this.showValidationMessage = false;
             this.committeCreateEditService.addMember(
                  this.selectedMember.id, this.committeeId, this.nonEmployeeFlag, this.resultLoadedById.committee )
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
@@ -603,6 +608,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             } );
             this.searchTextModel = '';
         }
+    }
     }
 
     onSelectRole() {

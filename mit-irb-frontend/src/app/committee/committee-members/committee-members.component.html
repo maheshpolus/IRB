@@ -1,26 +1,29 @@
 <!-- MODAL FOR WARNING MESSAGE -->
-<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="modalWarning" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">{{modalTitle}}</h5>
+<div class="modal fade mySkinDialog modalFallBack"*ngIf="showPopup" id="modalWarning" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content modal-text-color">
+				  <div class="modal-header popup-header">
+					<h5 class="modal-title modal-text-color">{{modalTitle}}</h5>
+					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						  </button>
 			</div>
 			<div class="modal-body">
 				<p>{{modalMessage}}</p>
 			</div>
 			<div class="modal-footer" *ngIf="!memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
-				<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" (click)="showPopup=false">Ok</button>
+				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="showPopup=false">Ok</button>
 			</div>
 			<div class="modal-footer" *ngIf="memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
-				<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" (click)="expandMemberToSave()">Ok</button>
+				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="expandMemberToSave()">Ok</button>
 			</div>
 			<div class="modal-footer" *ngIf="IsToDeleteRole">
 				<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="modalFooterClear()">No</button>
-				<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" (click)="deleteRole()">Yes</button>
+				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="deleteRole()">Yes</button>
 			</div>
 			<div class="modal-footer" *ngIf="IsToDeleteExpertise">
 				<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="modalFooterClear()">No</button>
-				<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" (click)="deleteExpertise()">Yes</button>
+				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="deleteExpertise()">Yes</button>
 			</div>
 		</div>
 	</div>
@@ -92,12 +95,14 @@
 												<p class="searchMessage text-left">{{message}}</p>
 											</div>
 										</div>
-
+										
 										<div class="col-1 add-btn-1">
 											<button title="Add" type="button" class="btn btn-success" data-toggle="modal" data-target="#modalWarning" (click)="addMember()">
 												<i class="fa fa-plus" aria-hidden="true"></i>
 											</button>
+								
 										</div>
+										<div class="mandatory" *ngIf="showValidationMessage">* Please choose the member to be added</div>
 
 									</div>
 								</div>
@@ -336,9 +341,7 @@
 
 														</div>
 														<div *ngIf="roleFieldsFilled == false">
-															<td colspan="5">
 																<span class="mandatory">{{roleWarningMessage}}</span>
-															</td>
 														</div>
 														<div class="table-responsive" *ngIf="member?.committeeMemberRoles && member.committeeMemberRoles.length >0">
 															<table class="table table-striped tbl-p-clr table-padding">
@@ -711,7 +714,7 @@
 												</nav>
 											</div>
 											<div class="card-body card-paddng">
-
+													<div class=" borderBox col-12">
 
 												<div>
 													<div class="col-12">
@@ -772,7 +775,9 @@
 
 													<!-- <button class="btnSkin btnSkinPrimary" (click)="roleAddtoTable(member)">Add</button> -->
 
-
+													<div *ngIf="roleFieldsFilled == false">
+															<span class="mandatory">{{roleWarningMessage}}</span>
+													</div>
 
 													<div class="table-responsive" *ngIf="member?.committeeMemberRoles && member.committeeMemberRoles.length >0">
 														<table class="table table-striped tbl-p-clr table-padding">
@@ -861,6 +866,7 @@
 
 											</div>
 										</div>
+										</div>
 
 									<!-- END Role DETAILS INACTIVE FIXED -->
 
@@ -882,6 +888,9 @@
 														</nav>
 													</div>
 													<div class="card-body card-paddng">
+															<div class=" borderBox col-12">
+
+																	<div>
 															<div class="col-12">
 																	<div class="row">
 																			<div class="col-md-4">
@@ -936,6 +945,8 @@
 																			</div>
 																
 															</div>
+													</div>
+													</div>
 													</div>
 												</div>
 										</div>

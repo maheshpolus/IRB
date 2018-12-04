@@ -8,7 +8,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { CommitteeConfigurationService } from '../../common/service/committee-configuration.service';
 
-
+declare var $: any;
 @Component( {
     selector: 'app-committee-home',
     templateUrl: './committee-home.component.html',
@@ -131,6 +131,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     displayTime: any = {};
     isMandatoryFilterFilled = true;
     isFilterDatePrevious = true;
+    showDetails = false;
     isFilterClicked = false;
     listDate: string;
     listStatus: string;
@@ -189,6 +190,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+
     }
 
     ngOnDestroy() {
@@ -236,12 +238,14 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                     this.minMembers = this.result.committee.minimumMembersRequired;
                     this.advSubDays = this.result.committee.advSubmissionDaysReq;
                     this.maxProtocols = this.result.committee.maxProtocols;
-                    this.saveCommitteeFlag = true;
+                    this.showDetails = true;
+                     this.saveCommitteeFlag = true;
                 } else {
                     this.editClass = 'scheduleBoxes';
                     this.editAreaClass = 'scheduleBoxes';
                     this.editDetails = true;
                     this.Id = this.result.committee.committeeId;
+                    this.showDetails = false;
                 }
             }
         } );
@@ -294,11 +298,12 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.result = dataObject.result;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         }
-        if ( ( this.result.committee.minimumMembersRequired === undefined ||
-            this.result.committee.advSubmissionDaysReq === undefined ||
-            this.result.committee.maxProtocols === undefined || this.Type === undefined ||
+        if ( ( this.result.committee.minimumMembersRequired == null ||
+            this.result.committee.advSubmissionDaysReq === null ||
+            this.result.committee.maxProtocols === null || this.Type === null ||
+            this.result.committee.committeeName === null || this.result.committee.committeeName == null ||
             this.result.committee.committeeName === undefined ||
-            this.result.committee.homeUnitName === undefined || this.result.committee.homeUnitName === '' )
+            this.result.committee.homeUnitName === null || this.result.committee.homeUnitName === '' )
          || ( this.result.committee.reviewTypeDescription === 'Select' || this.result.committee.reviewTypeDescription === '' ) ) {
             this.errorFlag = true;
             this.error = '*Please fill all the mandatory fields marked';
@@ -308,6 +313,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.deleteConfirmation = false;
             this.error = '';
             this.errorFlag = false;
+            this.showDetails = true;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
             this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data;
@@ -680,6 +686,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         }
 
         if ( this.isDatePrevious === false && this.isStartDateBeforeToday === false && this.isMandatoryFilled === true ) {
+            $('#exampleModalCenter').modal('toggle');
             this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;

@@ -4,6 +4,8 @@ import {ScheduleConfigurationService} from '../schedule-configuration.service';
 import { MinutesService } from '../minutes/minutes.service';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+
+declare var $: any;
 @Component({
   selector: 'app-minutes',
   templateUrl: './minutes.component.html'
@@ -162,12 +164,12 @@ export class MinutesComponent implements OnInit, OnDestroy {
         }
 
         this.entityType.forEach(( value, index ) => {
-            if ( value.minuteEntryTypecode === this.selectedOptionEntityType ) {
+            if ( value.minuteEntryTypecode === parseInt( this.selectedOptionEntityType, 10 ) ) {
                 this.result.newCommitteeScheduleMinute.minuteEntrytype = value;
             }
         } );
         this.result.scheduleId = this.result.committeeSchedule.scheduleId;
-        this.result.newCommitteeScheduleMinute.minuteEntryTypeCode =parseInt( this.selectedOptionEntityType );
+        this.result.newCommitteeScheduleMinute.minuteEntryTypeCode = parseInt( this.selectedOptionEntityType, 10 );
         this.result.newCommitteeScheduleMinute.protocolContingencyCode = this.selectedProtocolContingencyCode;
         if ( this.selectedProtocol === 'Select' ) {
             this.selectedProtocol = null;
@@ -198,6 +200,7 @@ export class MinutesComponent implements OnInit, OnDestroy {
         this.saveMinutes();
         if ( this.isMinuteEntryPoppedUp === true && this.isMandatoryFilled === true ) {
             this.isMinuteEntryPoppedUp = false;
+            $('#minuteModal').modal('toggle');
         }
     }
 

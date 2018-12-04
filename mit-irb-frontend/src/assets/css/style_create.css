@@ -2126,14 +2126,14 @@ input:disabled{
 {
     margin-top: 15px !important;
 }
-/* .return-committee-color
+.return-committee-color
 {
     color: #628e08;
     padding: 3px 20px;
     border-radius: 10px;
     border: 1px solid #628e08;
 }
-.return-committee-color:hover a
+.return-committee-color:hover 
 {
-    color: #ccc !important;
-} */
+    color: #2c4d13 !important;
+}

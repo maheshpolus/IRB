@@ -123,7 +123,7 @@
 						<div class="set" *ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && ( member.committeeMemberRoles.length == 0 || member.committeeMemberExpertises.length == 0 )">
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span>
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate | date: 'MM/dd/yyyy'}} to {{member.termEndDate | date: 'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
@@ -139,7 +139,7 @@
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'yyyy-MM-dd'}} to {{member.termEndDate |date:'yyyy-MM-dd'}} )</span>
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate | date: 'MM/dd/yyyy'}} to {{member.termEndDate | date: 'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
@@ -550,7 +550,7 @@
 
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'yyyy-MM-dd'}} to {{member.termEndDate |date:'yyyy-MM-dd'}} )</span>
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'MM/dd/yyyy'}} to {{member.termEndDate |date:'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
@@ -566,7 +566,7 @@
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span>
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'MM/dd/yyyy'}} to {{member.termEndDate |date:'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>

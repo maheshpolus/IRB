@@ -293,7 +293,7 @@
 																	<owl-date-time #schdlDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time> -->
 																</td>
 																<td>{{ committeScheduleData.dayOfWeek }}</td>
-																<td>{{ committeScheduleData.protocolSubDeadline }}</td>
+																<td>{{ committeScheduleData.protocolSubDeadline | date: 'MM/dd/yyyy' }}</td>
 																<td>
 																		<select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="committeScheduleData.scheduleStatus.description" [disabled]="!editSchedule[i] == true">
 																				<option selected value=null>Please Select</option>

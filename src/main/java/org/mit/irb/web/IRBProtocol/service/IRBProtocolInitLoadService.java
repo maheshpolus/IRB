@@ -1,6 +1,9 @@
 package org.mit.irb.web.IRBProtocol.service;
 
+import java.util.concurrent.Future;
+
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.springframework.scheduling.annotation.Async;
 
 public interface IRBProtocolInitLoadService {
 	/**
@@ -8,14 +11,16 @@ public interface IRBProtocolInitLoadService {
 	 * @return IRBProtocolVO with updated general information
 	 */
 	
-	IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO);
-	
+
+	@Async
+	public Future<IRBProtocolVO> loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO);
 	/**
 	 * @param irbProtocolVO
 	 * @return updated VO Object
 	 */
-	IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO);
-	
+
+	@Async
+	public Future<IRBProtocolVO> loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO);
 	/**
 	 * @param irbProtocolVO
 	 * @return list of sponsors
@@ -30,31 +35,43 @@ public interface IRBProtocolInitLoadService {
 	/**
 	 * return all the possible protocol types. 
 	 */
-	IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO);
+	
+	@Async
+	public Future<IRBProtocolVO> loadProtocolTypes(IRBProtocolVO irbProtocolVO);
 	
 	/**
 	 * return all the possible protocol types. 
 	 */
-	IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO);
-	
+
+	@Async
+	public Future<IRBProtocolVO> loadRoleTypes(IRBProtocolVO irbProtocolVO);
 	/**
 	 * return all lead units. 
 	 */
-	IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO);
-	
+
+	@Async
+	public Future<IRBProtocolVO> loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO);
 	/**
 	 * return list of affiliation. 
 	 */
-	IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO);
-	
+
+	@Async
+	public Future<IRBProtocolVO> loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO);
 
 	/**
 	 * return list of subject types. 
 	 */
-	IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO);
-	
+
+	@Async
+	public Future<IRBProtocolVO> loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO);
 	/**
 	 * return list of subject types. 
 	 */
-	IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO);
+	
+	@Async
+	public Future<IRBProtocolVO> loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO);
+	
+	public IRBProtocolVO loadCommitteeList();
+	
+	public IRBProtocolVO loadCommitteeScheduleList();
 }

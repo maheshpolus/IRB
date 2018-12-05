@@ -10,8 +10,11 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -65,6 +68,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -523,7 +528,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			queryDelete.setInteger("protocolFundingSourceId", fundingSource.getProtocolFundingSourceId());
 			queryDelete.executeUpdate();
 		}
-		irbProtocolVO = getProtocolFundingSource(fundingSource.getProtocolId(), irbProtocolVO);
+		try {
+			irbProtocolVO = getProtocolFundingSource(fundingSource.getProtocolId(), irbProtocolVO).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		return irbProtocolVO;
 	}
 
@@ -584,44 +595,73 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
+	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO){
 		Integer protocolId = null;
 		protocolId = irbProtocolVO.getProtocolId();
 		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
 		if (protocolId != null) {
-			Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
-			queryGeneral.setInteger("protocolId", protocolId);
-			if (!queryGeneral.list().isEmpty()) {
-				ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
-				irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);
-				irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
-			}
-			Query queryScienceOfProtocol = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from ScienceOfProtocol p where p.protocolId =:protocolId");
-			queryScienceOfProtocol.setInteger("protocolId", protocolId);
-			if (!queryScienceOfProtocol.list().isEmpty()) {
-				irbProtocolVO.setScienceOfProtocol((ScienceOfProtocol) queryScienceOfProtocol.list().get(0));
-			}
-			irbProtocolVO = getProtocolFundingSource(protocolId, irbProtocolVO);
-
-			Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
-			queryprotocolSubject.setInteger("protocolId", protocolId);
-			irbProtocolVO.setProtocolSubjectList(queryprotocolSubject.list());
-
-			Query queryCollaborator = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
-			queryCollaborator.setInteger("protocolId", protocolId);
-			List<ProtocolCollaborator> collaborators = queryCollaborator.list();
-			irbProtocolVO.setProtocolCollaboratorList(collaborators);
+			getGeneralPersonnelInfoList(irbProtocolVO);
+			getSubjectoList(irbProtocolVO);
+			getScienceOfProtocol(irbProtocolVO);
+			getCollaboratorList(irbProtocolVO);
+			getProtocolFundingSource(protocolId, irbProtocolVO);
 		} else {
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
 		}
 		return irbProtocolVO;
 	}
 
-	private IRBProtocolVO getProtocolFundingSource(Integer protocolId, IRBProtocolVO irbProtocolVO) {
+	
+	@Async
+	public Future<IRBProtocolVO> getGeneralPersonnelInfoList(IRBProtocolVO irbProtocolVO){
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
+		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());
+		if (!queryGeneral.list().isEmpty()) {
+			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
+			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);
+			irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
+			System.out.println("general info is set "+new Date());
+		}
+		return new AsyncResult<>(irbProtocolVO);
+	}
+	
+	@Async
+	public Future<IRBProtocolVO> getCollaboratorList(IRBProtocolVO irbProtocolVO){
+		Query queryCollaborator = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
+		queryCollaborator.setInteger("protocolId", irbProtocolVO.getProtocolId());
+		List<ProtocolCollaborator> collaborators = queryCollaborator.list();
+		irbProtocolVO.setProtocolCollaboratorList(collaborators);
+		System.out.println("Collaborator info is set "+new Date());
+		return new AsyncResult<>(irbProtocolVO);
+	}
+	
+	@Async
+	public Future<IRBProtocolVO> getSubjectoList(IRBProtocolVO irbProtocolVO){
+			Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
+		.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
+		queryprotocolSubject.setInteger("protocolId", irbProtocolVO.getProtocolId());
+		irbProtocolVO.setProtocolSubjectList(queryprotocolSubject.list());
+		System.out.println("subject list is set "+new Date());
+		return new AsyncResult<>(irbProtocolVO);
+	}
+	
+	
+	@Async
+	public Future<IRBProtocolVO> getScienceOfProtocol(IRBProtocolVO irbProtocolVO){
+		Query queryScienceOfProtocol = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ScienceOfProtocol p where p.protocolId =:protocolId");
+		queryScienceOfProtocol.setInteger("protocolId", irbProtocolVO.getProtocolId());
+		if (!queryScienceOfProtocol.list().isEmpty()) {
+			irbProtocolVO.setScienceOfProtocol((ScienceOfProtocol) queryScienceOfProtocol.list().get(0));
+		}
+		System.out.println("science of protocol is set "+new Date());
+		return new AsyncResult<>(irbProtocolVO);
+	}
+	
+	@Async
+	private Future<IRBProtocolVO> getProtocolFundingSource(Integer protocolId, IRBProtocolVO irbProtocolVO) {
 		try {
 			Query queryfundingSource = hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
@@ -631,36 +671,64 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				fundingSourceList.forEach(protocolFundingSource -> {
 					switch (protocolFundingSource.getFundingSourceTypeCode()) {
 					case KeyConstants.SPONSOR_FUNDING_SPONSOR_TYPE_CODE:
-						Sponsor sponsor = fetchSponsorDetail(protocolFundingSource.getFundingSource());
-						protocolFundingSource.setSourceName(sponsor.getSponsorName());
-						protocolFundingSource.setTitle(null);
+						Sponsor sponsor = null;
+						try {
+							sponsor = fetchSponsorDetail(protocolFundingSource.getFundingSource()).get();
+							protocolFundingSource.setSourceName(sponsor.getSponsorName());
+							protocolFundingSource.setTitle(null);
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
 						break;
 					case KeyConstants.UNIT_FUNDING_SPONSOR_TYPE_CODE:
-						Unit unit = fetchUnitDetail(protocolFundingSource.getFundingSource());
-						protocolFundingSource.setSourceName(unit.getUnitName());
-						protocolFundingSource.setTitle(null);
+						Unit unit = null;
+						try {
+							unit = fetchUnitDetail(protocolFundingSource.getFundingSource()).get();
+							protocolFundingSource.setSourceName(unit.getUnitName());
+							protocolFundingSource.setTitle(null);
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
 						break;
 					case KeyConstants.DEV_PROP_FUNDING_SPONSOR_TYPE_CODE:
-						EpsProposal devProposal = fetchDevPropDetail(protocolFundingSource.getFundingSource());
-						protocolFundingSource.setDocId(devProposal.getDocumentNumber());
-						protocolFundingSource.setTitle(devProposal.getTitle());
-						Sponsor devProposalsponsor = fetchSponsorDetail(devProposal.getSponsorCode());
-						protocolFundingSource.setSourceName(devProposalsponsor.getSponsorName());
+						EpsProposal devProposal = null;
+						try {
+							devProposal = fetchDevPropDetail(protocolFundingSource.getFundingSource()).get();
+							protocolFundingSource.setDocId(devProposal.getDocumentNumber());
+							protocolFundingSource.setTitle(devProposal.getTitle());
+							Sponsor devProposalsponsor = null;
+							devProposalsponsor = fetchSponsorDetail(devProposal.getSponsorCode()).get();
+							protocolFundingSource.setSourceName(devProposalsponsor.getSponsorName());
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
 						break;
 					case KeyConstants.PROPOSAL_FUNDING_SPONSOR_TYPE_CODE:
-						Proposal proposal = fetchProposal(protocolFundingSource.getFundingSource());
-						protocolFundingSource.setTitle(proposal.getTitle());
-						protocolFundingSource.setDocId(proposal.getDocumentNumber());
-						Sponsor proposalsponsor = fetchSponsorDetail(proposal.getSponsorCode());
-						protocolFundingSource.setSourceName(proposalsponsor.getSponsorName());
+						Proposal proposal = null;
+						try {
+							proposal = fetchProposal(protocolFundingSource.getFundingSource()).get();
+							protocolFundingSource.setTitle(proposal.getTitle());
+							protocolFundingSource.setDocId(proposal.getDocumentNumber());
+							Sponsor proposalsponsor = null;
+							proposalsponsor = fetchSponsorDetail(proposal.getSponsorCode()).get();
+							protocolFundingSource.setSourceName(proposalsponsor.getSponsorName());
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
+						
 						break;
 					case KeyConstants.AWARD_FUNDING_SPONSOR_TYPE_CODE:
-						Award award = fetchAwardDetail(protocolFundingSource.getFundingSource());
-						protocolFundingSource.setDocId(award.getDocumentNumber());
-						protocolFundingSource.setAwardId(award.getAwardId());
-						protocolFundingSource.setTitle(award.getTitle());
-						Sponsor awardSponsor = fetchSponsorDetail(award.getSponsorCode());
-						protocolFundingSource.setSourceName(awardSponsor.getSponsorName());
+						Award award = null;
+						try {
+							award = fetchAwardDetail(protocolFundingSource.getFundingSource()).get();
+							protocolFundingSource.setDocId(award.getDocumentNumber());
+							protocolFundingSource.setAwardId(award.getAwardId());
+							protocolFundingSource.setTitle(award.getTitle());
+							Sponsor awardSponsor = fetchSponsorDetail(award.getSponsorCode()).get();
+							protocolFundingSource.setSourceName(awardSponsor.getSponsorName());
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
 						break;
 					}
 				});
@@ -669,48 +737,53 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		} catch (Exception e) {
 			logger.error("Error in getProtocolFundingSource method" + e.getMessage());
 		}
-		return irbProtocolVO;
+		System.out.println("Funding source is set "+new Date());
+		return new AsyncResult<>(irbProtocolVO);
 	}
-
-	private Proposal fetchProposal(String fundingSource) {
+	
+	private Future<Proposal> fetchProposal(String fundingSource) {
 		Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
 				"from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
 		queryProposal.setString("proposalNumber", fundingSource);
 		Proposal proposal = (Proposal) queryProposal.list().get(0);
-		return proposal;
+		return new AsyncResult<>(proposal);
 	}
 
-	private EpsProposal fetchDevPropDetail(String fundingSource) {
+	@Async
+	private Future<EpsProposal> fetchDevPropDetail(String fundingSource) {
 		Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from EpsProposal dp where dp.proposalNumber =:proposalNumber");
 		queryDevProposal.setString("proposalNumber", fundingSource);
 		EpsProposal devProposal = (EpsProposal) queryDevProposal.list().get(0);
-		return devProposal;
+		return new AsyncResult<>(devProposal);
 	}
 
-	private Unit fetchUnitDetail(String fundingSource) {
+	@Async
+	private  Future<Unit> fetchUnitDetail(String fundingSource) {
 		Query queryUnitDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from Unit u where u.unitNumber =:unitNumber");
 		queryUnitDetails.setString("unitNumber", fundingSource);
 		Unit unit = (Unit) queryUnitDetails.list().get(0);
-		return unit;
+		return new AsyncResult<>(unit);
 	}
 
-	private Sponsor fetchSponsorDetail(String fundingSource) {
+	@Async
+	private Future<Sponsor> fetchSponsorDetail(String fundingSource) {
 		Query querySponsorDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from Sponsor s where s.sponsorCode =:sponsorCode");
 		querySponsorDetails.setString("sponsorCode", fundingSource);
 		Sponsor sponsor = (Sponsor) querySponsorDetails.list().get(0);
-		return sponsor;
+		return new AsyncResult<>(sponsor);
 	}
 
-	private Award fetchAwardDetail(String fundingSource) {
+	@Async
+	private  Future<Award> fetchAwardDetail(String fundingSource) {
 		Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
 				"from Award a where a.awardNumber =:awardNumber and a.awardSequenceStatus =:awardSequenceStatus");
 		queryAwardDetails.setString("awardNumber", fundingSource);
 		queryAwardDetails.setString("awardSequenceStatus", KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE);
 		Award award = (Award) queryAwardDetails.list().get(0);
-		return award;
+		return new AsyncResult<>(award);
 	}
 
 	@Override
@@ -921,5 +994,4 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());
 		return irbProtocolVO;
 	}
-
 }

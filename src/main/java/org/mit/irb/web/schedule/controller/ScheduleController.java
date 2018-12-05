@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,127 +32,115 @@ public class ScheduleController {
 	private ScheduleService scheduleService;
 	
 	@RequestMapping(value = "/loadScheduleById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> loadScheduleById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo loadScheduleById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for loadScheduleById");
-		HttpStatus status= HttpStatus.OK;
 		logger.info("scheduleId : " + vo.getScheduleId());
-		String committeeDatas = scheduleService.loadScheduleById(vo.getScheduleId());
-		return new ResponseEntity<String> (committeeDatas,status);
+		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo.getScheduleId());
+		return ScheduleVo;
 	}
 
 	@RequestMapping(value = "/updateSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> updateSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo updateSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for updateSchedule");
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas = scheduleService.updateSchedule(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo = scheduleService.updateSchedule(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/addOtherActions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> addOtherActions(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
-		HttpStatus status= HttpStatus.OK;
+	public @ResponseBody ScheduleVo addOtherActions(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for addOtherActions");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("scheduleId : " + vo.getScheduleId());
 		logger.info("scheduleActItemTypecode : " + vo.getCommitteeScheduleActItems().getScheduleActItemTypecode());
 		logger.info("scheduleActItemTypeDescription : " + vo.getCommitteeScheduleActItems().getScheduleActItemTypeDescription());
 		logger.info("itemDescription : " + vo.getCommitteeScheduleActItems().getItemDescription());
-		String scheduleDatas = scheduleService.addOtherActions(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo = scheduleService.addOtherActions(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/deleteOtherActions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> deleteOtherActions(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
-		HttpStatus status= HttpStatus.OK;
+	public @ResponseBody ScheduleVo deleteOtherActions(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for deleteOtherActions");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
 		logger.info("actionItemId : " + vo.getCommScheduleActItemsId());
-		String scheduleDatas = scheduleService.deleteOtherActions(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo = scheduleService.deleteOtherActions(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/addCommitteeScheduleMinute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> addCommitteeScheduleMinute(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
-		HttpStatus status= HttpStatus.OK;
+	public @ResponseBody ScheduleVo addCommitteeScheduleMinute(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for addCommitteeScheduleMinute");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
-		String scheduleDatas =  scheduleService.addCommitteeScheduleMinute(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo =  scheduleService.addCommitteeScheduleMinute(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/updateScheduleAttendance", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> updateCommitteeSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo updateCommitteeSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for updateScheduleAttendance");
-		HttpStatus status= HttpStatus.OK;
 		logger.info("CommitteeId : " + vo.getCommitteeId());
 		logger.info("ScheduleId : " + vo.getScheduleId());
 		logger.info("AttendanceId : " + vo.getUpdatedAttendance().getCommitteeScheduleAttendanceId());
 		logger.info("MemberPresent : " + vo.getUpdatedAttendance().getMemberPresent());
-		String scheduleDatas =  scheduleService.updateScheduleAttendance(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo =  scheduleService.updateScheduleAttendance(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/addOthersPresent", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> addOthersPresent(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo addOthersPresent(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for addOthersPresent");
-		HttpStatus status= HttpStatus.OK;
 		logger.info("ScheduleId : " + vo.getScheduleId());
-		String scheduleDatas =  scheduleService.addOthersPresent(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo =  scheduleService.addOthersPresent(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/deleteScheduleMinute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> deleteScheduleMinute(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo deleteScheduleMinute(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for deleteScheduleMinute");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
 		logger.info("CommitteeScheduleMinuteId : " + vo.getCommScheduleMinuteId());
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas =  scheduleService.deleteScheduleMinute(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo =  scheduleService.deleteScheduleMinute(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/deleteScheduleAttachment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> deleteScheduleAttachment(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo deleteScheduleAttachment(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for deleteScheduleAttachment");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
 		logger.info("CommitteeScheduleAttachId : " + vo.getCommScheduleAttachId());
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas =  scheduleService.deleteScheduleAttachment(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo =  scheduleService.deleteScheduleAttachment(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/addScheduleAttachment", method = RequestMethod.POST)
-	public ResponseEntity<String> addScheduleAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) {
+	public @ResponseBody ScheduleVo addScheduleAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) {
 		logger.info("Requesting for addScheduleAttachment");
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas =  scheduleService.addScheduleAttachment(files, formDataJson);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo =  scheduleService.addScheduleAttachment(files, formDataJson);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/updateScheduleAttachment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> updateScheduleAttachment(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo updateScheduleAttachment(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for updateScheduleAttendance");
 		logger.info("CommitteeId : " + vo.getCommitteeId());
 		logger.info("ScheduleId : " + vo.getScheduleId());
 		logger.info("AttachmentId : " + vo.getNewCommitteeScheduleAttachment().getCommScheduleAttachId());
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas = scheduleService.updateScheduleAttachment(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo scheduleVo = scheduleService.updateScheduleAttachment(vo);
+		return scheduleVo;
 	}
 
 	@RequestMapping(value = "/deleteScheduleAttendance", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> deleteScheduleAttendance(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo deleteScheduleAttendance(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for deleteScheduleAttachment");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
 		logger.info("CommitteeScheduleAttendanceId : " + vo.getCommScheduleAttendanceId());
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas =  scheduleService.deleteScheduleAttendance(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo ScheduleVo =  scheduleService.deleteScheduleAttendance(vo);
+		return ScheduleVo;
 	}
 
 	@RequestMapping(value = "/downloadScheduleAttachment", method = RequestMethod.GET)
@@ -163,12 +152,11 @@ public class ScheduleController {
 	}
 
 	@RequestMapping(value = "/updateCommitteeScheduleMinute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> updateCommitteeScheduleMinute(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ScheduleVo updateCommitteeScheduleMinute(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for updateCommitteeScheduleMinute");
 		logger.info("committeeId : " + vo.getCommitteeId());
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
-		HttpStatus status= HttpStatus.OK;
-		String scheduleDatas =  scheduleService.updateCommitteeScheduleMinute(vo);
-		return  new ResponseEntity<String> (scheduleDatas,status);
+		ScheduleVo ScheduleVo =  scheduleService.updateCommitteeScheduleMinute(vo);
+		return ScheduleVo;
 	}
 }

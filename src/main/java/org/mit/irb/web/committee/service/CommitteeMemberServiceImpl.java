@@ -28,7 +28,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 	private CommitteeDao committeeDao;
 
 	@Override
-	public String addCommitteeMembership(CommitteeVo committeeVo) {
+	public CommitteeVo addCommitteeMembership(CommitteeVo committeeVo) {
 		CommitteeMemberships membership = new CommitteeMemberships();
 		Committee committee = committeeVo.getCommittee();
 		membership.setNonEmployeeFlag(committeeVo.isNonEmployeeFlag());
@@ -49,13 +49,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 		committeeVo.setCommittee(committee);
 		committeeVo.setCommitteeMembershipTypes(committeeDao.getMembershipTypes());
 		committeeVo.setMembershipRoles(committeeDao.getMembershipRoles());
-
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	@Override
-	public String saveCommitteeMembers(CommitteeVo committeeVo) {
+	public CommitteeVo saveCommitteeMembers(CommitteeVo committeeVo) {
 		Committee committee = committeeVo.getCommittee();
 		List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
 		if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
@@ -84,12 +82,12 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committee = committeeDao.saveCommittee(committee);
 			committeeVo.setCommittee(committee);
 		}
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		//String response = committeeDao.convertObjectToJSON(committeeVo); //changes made here it was committeVo
+		return committeeVo;
 	}
 
 	@Override
-	public String deleteCommitteeMembers(CommitteeVo committeeVo) {
+	public CommitteeVo deleteCommitteeMembers(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			List<CommitteeMemberships> list = committee.getCommitteeMemberships();
@@ -118,11 +116,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committeeVo.setMessage("Problem occurred in deleting committee member");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String saveCommitteeMembersRole(CommitteeVo committeeVo) {
+	public CommitteeVo saveCommitteeMembersRole(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			CommitteeMemberRoles role = committeeVo.getCommitteeMemberRole();
@@ -159,11 +157,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committeeVo.setMessage("Problem occurred in saving member role");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String deleteMemberRoles(CommitteeVo committeeVo) {
+	public CommitteeVo deleteMemberRoles(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
@@ -197,11 +195,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committeeVo.setMessage("Problem occurred in deleting member role");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String updateMemberRoles(CommitteeVo committeeVo) {
+	public CommitteeVo updateMemberRoles(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
@@ -232,11 +230,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committeeVo.setMessage("Problem occurred in updating member role");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String deleteExpertise(CommitteeVo committeeVo) {
+	public CommitteeVo deleteExpertise(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
@@ -271,11 +269,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committeeVo.setMessage("Problem occurred in deleting member expertise");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String saveCommitteeMembersExpertise(CommitteeVo committeeVo) {
+	public CommitteeVo saveCommitteeMembersExpertise(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			CommitteeMemberExpertise expertise = committeeVo.getCommitteeMemberExpertise();
@@ -310,7 +308,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committeeVo.setMessage("Problem occurred in saving member expertise");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,6 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
@@ -23,12 +27,16 @@ public class ProtocolSubmission implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "SUBMISSION_ID")
-	private Long submissionId;
+	@GenericGenerator(name = "protocolSubmissionIdGererator", strategy = "increment", parameters = {
+			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
+	@GeneratedValue(generator = "protocolSubmissionIdGererator")
+	@Column(name = "SUBMISSION_ID", updatable = false, nullable = false)
+
+	private Integer submissionId;
 
 	@JsonBackReference
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_PROTOCOL_SUBMISSION8"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name ="MITKC_IRB_PROTO_SUBMISSION_FK7"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "SUBMISSION_NUMBER")
@@ -38,7 +46,7 @@ public class ProtocolSubmission implements Serializable {
 	private String committeeId;
 
 	@Column(name = "PROTOCOL_ID")
-	private Long protocolId;
+	private Integer protocolId;
 
 	@Column(name = "PROTOCOL_NUMBER")
 	private String protocolNumber;
@@ -60,9 +68,9 @@ public class ProtocolSubmission implements Serializable {
 
 	@Column(name = "SUBMISSION_TYPE_CODE")
 	private String submissionTypeCode;
-
+	
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "SUBMISSION_TYPE_CODE", referencedColumnName = "SUBMISSION_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "MITKC_IRB_PROTO_SUBMISSION_FK6"), name = "SUBMISSION_TYPE_CODE", referencedColumnName = "SUBMISSION_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionType protocolSubmissionType;
 
 	@Column(name = "SUBMISSION_TYPE_QUAL_CODE")
@@ -95,22 +103,6 @@ public class ProtocolSubmission implements Serializable {
 
 	@Transient
 	private String documentNumber;
-
-	public Long getSubmissionId() {
-		return submissionId;
-	}
-
-	public void setSubmissionId(Long submissionId) {
-		this.submissionId = submissionId;
-	}
-
-	public Long getProtocolId() {
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId) {
-		this.protocolId = protocolId;
-	}
 
 	public String getProtocolNumber() {
 		return protocolNumber;
@@ -258,6 +250,22 @@ public class ProtocolSubmission implements Serializable {
 
 	public void setSubmissionNumber(Integer submissionNumber) {
 		this.submissionNumber = submissionNumber;
+	}
+
+	public Integer getSubmissionId() {
+		return submissionId;
+	}
+
+	public void setSubmissionId(Integer submissionId) {
+		this.submissionId = submissionId;
+	}
+
+	public Integer getProtocolId() {
+		return protocolId;
+	}
+
+	public void setProtocolId(Integer protocolId) {
+		this.protocolId = protocolId;
 	}
 
 }

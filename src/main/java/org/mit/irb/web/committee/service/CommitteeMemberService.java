@@ -10,57 +10,58 @@ public interface CommitteeMemberService {
 	/**
 	 * This method is used to add committee members.
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return a String of details of committee with CommitteeMembership.
+	 * @return a CommitteeVo of details of committee with CommitteeMembership.
 	 */
-	public String addCommitteeMembership(CommitteeVo committeeVo);
+	public CommitteeVo addCommitteeMembership(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to save committee member.
 	 * @param committeeVo - Object of CommitteeVo.
 	 * @return a String of details of committee with CommitteeMembership.
 	 */
-	public String saveCommitteeMembers(CommitteeVo committeeVo);
+	
+	public CommitteeVo saveCommitteeMembers(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to delete committee members.
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return a String of details of committee with updated list of CommitteeMembership.
+	 * @return a CommitteeVo of details of committee with updated list of CommitteeMembership.
 	 */
-	public String deleteCommitteeMembers(CommitteeVo committeeVo);
+	public CommitteeVo deleteCommitteeMembers(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to save committee member roles. 
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return a String of details of committee with list of CommitteeMembershipRoles.
+	 * @return a CommitteeVo of details of committee with list of CommitteeMembershipRoles.
 	 */
-	public String saveCommitteeMembersRole(CommitteeVo committeeVo);
+	public CommitteeVo saveCommitteeMembersRole(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to delete member roles.
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return a String of details of committee with updated list of CommitteeMembershipRoles.
+	 * @return a CommitteeVo of details of committee with updated list of CommitteeMembershipRoles.
 	 */
-	public String deleteMemberRoles(CommitteeVo committeeVo);
+	public CommitteeVo deleteMemberRoles(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to update member roles.
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return a String of details of committee with updated list of CommitteeMembershipRoles.
+	 * @return a CommitteeVo of details of committee with updated list of CommitteeMembershipRoles.
 	 */
-	public String updateMemberRoles(CommitteeVo committeeVo);
+	public CommitteeVo updateMemberRoles(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to delete expertise.
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return a String of details of committee with updated list of CommitteeMemberExpertise.
+	 * @return a CommitteeVo of details of committee with updated list of CommitteeMemberExpertise.
 	 */
-	public String deleteExpertise(CommitteeVo committeeVo);
+	public CommitteeVo deleteExpertise(CommitteeVo committeeVo);
 
 	/**
 	 * This method is used to save committee members expertise.
 	 * @param committeeVo - Object of CommitteeVo.
-	 * @return  a String of details of committee with list of CommitteeMemberExpertise.
+	 * @return  a CommitteeVo of details of committee with list of CommitteeMemberExpertise.
 	 */
-	public String saveCommitteeMembersExpertise(CommitteeVo committeeVo);
+	public CommitteeVo saveCommitteeMembersExpertise(CommitteeVo committeeVo);
 
 }

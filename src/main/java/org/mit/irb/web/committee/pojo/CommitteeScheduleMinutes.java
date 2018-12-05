@@ -27,6 +27,7 @@ public class CommitteeScheduleMinutes implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+
 	@Id
 	@GenericGenerator(name = "muinutesIdGererator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
@@ -36,7 +37,7 @@ public class CommitteeScheduleMinutes implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK2_MIT_IRB_COMM_SCHEDULE_MINUTES"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCHEDULE_MINUTES1"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "ENTRY_NUMBER")
@@ -45,15 +46,15 @@ public class CommitteeScheduleMinutes implements Serializable {
 	@Column(name = "MINUTE_ENTRY_TYPE_CODE")
 	private Integer minuteEntryTypeCode;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_SCHEDULE_MINUTES"), name = "MINUTE_ENTRY_TYPE_CODE", referencedColumnName = "MINUTE_ENTRY_TYPE_CODE", insertable = false, updatable = false)
+	@ManyToOne(optional = false, cascade = { CascadeType.REFRESH })
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCHEDULE_MINUTES2"), name = "MINUTE_ENTRY_TYPE_CODE", referencedColumnName = "MINUTE_ENTRY_TYPE_CODE", insertable = false, updatable = false)
 	private MinuteEntryType minuteEntrytype;
 
 	@Column(name = "PROTOCOL_CONTINGENCY_CODE")
 	private String protocolContingencyCode;
 
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_SCH_MINUTES2"), name = "PROTOCOL_CONTINGENCY_CODE", referencedColumnName = "PROTOCOL_CONTINGENCY_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCH_MINUTES3"), name = "PROTOCOL_CONTINGENCY_CODE", referencedColumnName = "PROTOCOL_CONTINGENCY_CODE", insertable = false, updatable = false)
 	private ProtocolContingency protocolContingency;
 
 	@Column(name = "PROTOCOL_NUMBER")
@@ -66,7 +67,7 @@ public class CommitteeScheduleMinutes implements Serializable {
 	private Integer protocolId;
 
 	@Column(name = "SUBMISSION_ID")
-	private Long submissionId;
+	private Integer submissionId;
 
 	@Column(name = "REVIEWER_ID")
 	private Integer reviewerId;
@@ -74,11 +75,11 @@ public class CommitteeScheduleMinutes implements Serializable {
 	@Column(name = "SUBMISSION_NUMBER")
 	private Integer submissionNumber;
 
-	@Column(name = "PRIVATE_COMMENT_FLAG")
+	@Column(name = "PRIVATE_COMMENT_FLAG")   //need to chk with string
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean privateCommentFlag;
 
-	@Column(name = "MINUTE_ENTRY")
+	@Column(name = "MINUTE_ENTRY")   //need to check long data type
 	private String minuteEntry;
 
 	@Column(name = "FINAL_FLAG")
@@ -107,7 +108,7 @@ public class CommitteeScheduleMinutes implements Serializable {
 	private Integer commScheduleActItemsId;
 
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_FIBI_COMM_SCH_MINUTES3"), name = "COMM_SCHEDULE_ACT_ITEMS_ID", referencedColumnName = "COMM_SCHEDULE_ACT_ITEMS_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCH_MINUTES4"), name = "COMM_SCHEDULE_ACT_ITEMS_ID", referencedColumnName = "COMM_SCHEDULE_ACT_ITEMS_ID", insertable = false, updatable = false)
 	private CommitteeScheduleActItems scheduleActItems;
 
 	@Transient
@@ -193,11 +194,11 @@ public class CommitteeScheduleMinutes implements Serializable {
 		this.protocolId = protocolId;
 	}
 
-	public Long getSubmissionId() {
+	public Integer getSubmissionId() {
 		return submissionId;
 	}
 
-	public void setSubmissionId(Long submissionId) {
+	public void setSubmissionId(Integer submissionId) {
 		this.submissionId = submissionId;
 	}
 

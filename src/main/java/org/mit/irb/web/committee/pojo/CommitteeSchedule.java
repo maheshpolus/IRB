@@ -7,10 +7,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -47,7 +49,7 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 
 	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_SCHEDULE_2"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCHEDULE_2"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
 	private Committee committee;
 
 	@Transient
@@ -72,7 +74,7 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 	private Integer scheduleStatusCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_FIBI_COMM_SCHEDULE"), name = "SCHEDULE_STATUS_CODE", referencedColumnName = "SCHEDULE_STATUS_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCHEDULE"), name = "SCHEDULE_STATUS_CODE", referencedColumnName = "SCHEDULE_STATUS_CODE", insertable = false, updatable = false)
 	private ScheduleStatus scheduleStatus;
 
 	@Column(name = "MEETING_DATE")
@@ -96,6 +98,9 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
+	@Transient
+	private String updatedDate;
+	
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
@@ -107,13 +112,16 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 	@OneToMany(mappedBy = "committeeSchedule", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolSubmission> protocolSubmissions;
 
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeSchedule", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeScheduleAttendance> committeeScheduleAttendances;
 
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeSchedule", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeScheduleActItems> committeeScheduleActItems;
+
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeSchedule", orphanRemoval = true, cascade = { CascadeType.ALL })
@@ -472,6 +480,14 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 
 	public void setAvailableToReviewers(Boolean availableToReviewers) {
 		this.availableToReviewers = availableToReviewers;
+	}
+
+	public String getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(String updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
 }

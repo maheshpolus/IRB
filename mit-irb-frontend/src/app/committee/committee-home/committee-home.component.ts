@@ -184,7 +184,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.committeeConfigurationService.currentAreaOfResearch.subscribe( data2 => {
                     this.areaList = data2;
                 } );
-                this.scheduleStatus = this.resultTemp.scheduleStatus;
+                if (this.resultTemp.scheduleStatus !== null) {
+                    this.scheduleStatus = this.resultTemp.scheduleStatus;
+                }
             }
         } );
     }

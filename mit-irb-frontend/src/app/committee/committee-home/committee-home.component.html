@@ -61,7 +61,7 @@
 				<div class="row bottom-margin">
 					<div class="col-md-4">
 						<div class="form-group ">
-							<label>Min Members for Quorum
+							<label>Minimum Members for Quorum
 								<span class="mandatory">*</span>
 							</label>
 							<input type="number" [disabled]="editDetails==false" min="1" [(ngModel)]="result.committee.minimumMembersRequired" class="form-control input-field-size">
@@ -69,7 +69,7 @@
 					</div>
 					<div class="col-md-4">
 						<div class="form-group ">
-							<label>Adv Submission Days
+							<label>Advance Submission Days
 								<span class="mandatory">*</span>
 							</label>
 							<input type="number" [disabled]="editDetails==false" min="1" [(ngModel)]="result.committee.advSubmissionDaysReq" class="form-control input-field-size">
@@ -135,7 +135,8 @@
 					</div>
 					</div>
 					<div class="col-md-1 add-btn-1">
-							<button title="Add" type="button" class="btn btn-success top-butn" (click)="addAreaOfResearch(areaInput)">
+							<button title="Add" type="button" data-toggle="modal"
+							data-target="#warningModal" class="btn btn-success top-butn" (click)="addAreaOfResearch(areaInput)">
 							  <i class="fa fa-plus" aria-hidden="true"></i>
 							</button>
 						  </div>
@@ -514,6 +515,8 @@
 														  </span>
 														</div>
 														</div>
+														</div>
+														</div>
 											<!-- <ul class="tablelayout half-width">
 												<li>
 													<span class="mandatory">*&nbsp;</span>Ending on</li>
@@ -532,8 +535,8 @@
 											</ul>
 										</div>
 										</div>
-										</div>
-										</div>
+										
+										
 								<div class="tab-pane fade" id="Monthly" role="tabpanel" aria-labelledby="contact-tab">
 										<div class="tabCover">
 											<ul class="tablelayout padding-0">

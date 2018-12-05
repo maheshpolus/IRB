@@ -1,29 +1,29 @@
-import { Component, OnInit, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, Observable } from 'rxjs';
+import { Subject} from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
-import { ScheduleConfigurationService } from "../../schedule-configuration.service";
-import { ScheduleAttendanceService } from "./schedule-attendance.service";
+import { ScheduleConfigurationService } from '../../schedule-configuration.service';
+import { ScheduleAttendanceService } from './schedule-attendance.service';
 
 import 'rxjs/add/operator/takeUntil';
-import { CommitteeMemberNonEmployeeElasticService } from "../../../../common/service/committee-members-nonEmployee-elastic-search.service";
-import { CommitteeMemberEmployeeElasticService } from "../../../../common/service/committee-members-employees-elastic-search.service";
+import { CommitteeMemberNonEmployeeElasticService } from '../../../../common/service/committee-members-nonEmployee-elastic-search.service';
+import { CommitteeMemberEmployeeElasticService } from '../../../../common/service/committee-members-employees-elastic-search.service';
 
 @Component( {
     selector: 'app-schedule-attendance',
     templateUrl: './schedule-attendance.component.html'
 } )
-export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
+export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterViewInit {
     result: any = {};
-    showCommentFlag: boolean = false;
-    presentFlag: boolean = false;
+    showCommentFlag = false;
+    presentFlag = false;
     attendanceIndex: number;
     commentsIndex: number;
     searchText: FormControl = new FormControl( '' );
-    nonEmployeeFlag: boolean = false;
+    nonEmployeeFlag = false;
     message: string;
-    showAddMember: boolean = false;
+    showAddMember = false;
     public onDestroy$ = new Subject<void>();
     elasticSearchresults: any = [];
     searchString: string;
@@ -46,15 +46,15 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     _results: Subject<Array<any>> = new Subject<Array<any>>();
     activeMembers = true;
     inactiveMembers: string;
-    searchActive: boolean = false;
-    iconClass: string = 'fa fa-search';
+    searchActive = false;
+    iconClass = 'fa fa-search';
     selectedMember: any = {};
 
     guestMemberObj: any = {};
     updatingMemberObj: any = {};
     scheduleId: number;
     committeeId: string;
-    attendanceShowFlag: boolean = false;
+    attendanceShowFlag = false;
     editFlagEnabled = {};
     editIndex: number;
     tempAlternateFor: string;
@@ -65,9 +65,14 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     showPopup: boolean;
     deletingMeberObj;
     commentFlgEnabled = {};
-    placeHolderText: string = 'Search an employee';
+    placeHolderText = 'Search an employee';
 
-    constructor( private scheduleConfigurationService: ScheduleConfigurationService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, private scheduleAttendanceService: ScheduleAttendanceService, private activatedRoute: ActivatedRoute ) {
+    constructor( private scheduleConfigurationService: ScheduleConfigurationService,
+        public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService,
+        private _ngZone: NgZone,
+        public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService,
+        private scheduleAttendanceService: ScheduleAttendanceService,
+        private activatedRoute: ActivatedRoute ) {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
         this.currentUser = localStorage.getItem( 'currentUser' );
     }
@@ -90,7 +95,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
             .distinctUntilChanged()
             .switchMap( searchString => {
                 return new Promise<Array<String>>(( resolve, reject ) => {
-                    if ( this.nonEmployeeFlag == false ) {
+                    if ( this.nonEmployeeFlag === false ) {
                         this._ngZone.runOutsideAngular(() => {
                             this.committeeMemberEmployeeElasticService.search( searchString )
                                 .then(( searchResult ) => {
@@ -127,11 +132,11 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
                                     } );
                                 } )
                                 .catch(( error ) => {
-                                    alert( "catch error" );
+                                    console.log('error');
                                 } );
                         } );
                     }
-                    if ( this.nonEmployeeFlag == true ) {
+                    if ( this.nonEmployeeFlag === true ) {
                         this._ngZone.runOutsideAngular(() => {
                             this.committeeMemberNonEmployeeElasticService.search( searchString )
                                 .then(( searchResult ) => {
@@ -167,7 +172,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
 
                                 } )
                                 .catch(( error ) => {
-                                    console.log( "catch error", error );
+                                    console.log( 'catch error', error );
 
                                 } );
                         } );
@@ -212,12 +217,13 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.guestMemberObj.roleName = '';
         this.guestMemberObj.updateTimestamp = new Date().getTime();
         this.guestMemberObj.updateUser = this.currentUser;
-        this.scheduleAttendanceService.addGuestMember( this.guestMemberObj, this.scheduleId ).takeUntil(this.onDestroy$).subscribe( data => {
+        this.scheduleAttendanceService.addGuestMember( this.guestMemberObj, this.scheduleId )
+        .takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data;
         } );
     }
     selected( value ) {
-        this.searchTextModel = value.label
+        this.searchTextModel = value.label;
         this.selectedMember = value;
     }
 
@@ -230,15 +236,15 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.attendanceShowFlag = !this.attendanceShowFlag;
         this.showCommentFlag = !this.showCommentFlag;
         this.commentsIndex = commentIndex;
-        if((!this.commentFlgEnabled[commentIndex]) == true){
+        if ((!this.commentFlgEnabled[commentIndex]) === true) {
             this.commentFlgEnabled[commentIndex] = true;
         }
     }
 
     editAttendanceData( event: any, index: number, memberObj ) {
         event.preventDefault();
-        if((!this.editFlagEnabled[index]) == true){
-            this.editFlagEnabled[index]= true;
+        if ((!this.editFlagEnabled[index]) === true) {
+            this.editFlagEnabled[index] = true;
         }
         this.tempAlternateFor = memberObj.alternateFor;
         this.tempComment = memberObj.comments;
@@ -249,10 +255,10 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         this.showCommentFlag = false;
         this.attendanceShowFlag = false;
-        if((!this.editFlagEnabled[index]) == false){
+        if ((!this.editFlagEnabled[index]) === false) {
             this.editFlagEnabled[index] = false;
         }
-        if((!this.commentFlgEnabled[index]) == false){
+        if ((!this.commentFlgEnabled[index]) === false) {
             this.commentFlgEnabled[index] = false;
         }
         this.committeeId = this.result.committeeSchedule.committeeId;
@@ -275,7 +281,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         memberObj.comments = this.tempComment;
         memberObj.memberPresent = this.tempMemberPresent;
     }
-    
+
     hideComment( event: any, commentIndex: number ) {
         this.showCommentFlag = false;
         this.commentsIndex = commentIndex;
@@ -283,7 +289,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
 
     markAttendance( event: any, memberObj, index ) {
         event.preventDefault();
-        if ( memberObj.memberPresent == true ) {
+        if ( memberObj.memberPresent === true ) {
             memberObj.memberPresent = false;
         } else {
             memberObj.memberPresent = true;
@@ -314,12 +320,13 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     deleteAttendance( event: any ) {
         this.showPopup = false;
         this.committeeId = this.result.committeeSchedule.committeeId;
-        this.scheduleAttendanceService.deleteScheduleMemberAttendance( this.committeeId, this.scheduleId, this.deletingMeberObj.committeeScheduleAttendanceId )
+        this.scheduleAttendanceService.deleteScheduleMemberAttendance(
+            this.committeeId, this.scheduleId, this.deletingMeberObj.committeeScheduleAttendanceId )
             .takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data;
             } );
     }
-    
+
     onSearchValueChange() {
         this.iconClass = this.searchTextModel ? 'fa fa-times' : 'fa fa-search';
         this.elasticSearchresults = [];

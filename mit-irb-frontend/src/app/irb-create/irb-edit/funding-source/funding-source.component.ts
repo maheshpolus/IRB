@@ -39,6 +39,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   isFundingInfoEdit = false;
   isGeneralInfoSaved = false;
   showElasticBand = false;
+  showDeletePopup = false;
   message = '';
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
@@ -442,13 +443,13 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   deleteFundingDetails(index) {
     this.commonVo.fundingSource = this.protocolFundingSourceList[index];
     this.commonVo.fundingSource.acType = 'D';
-    this.saveFundingDetails('DELETE');
+    this.showDeletePopup = true;
   }
 
   saveFundingDetails(mode) {
     if (mode !== 'DELETE') {
       this.fundingSource.updateTimestamp = new Date();
-      this.fundingSource.updateUser = localStorage.getItem('userName');
+      this.fundingSource.updateUser = this.userDTO.userName;
       this.fundingSource.sequenceNumber = 1;
       this.fundingSource.protocolNumber = this.protocolNumber;
       this.fundingSource.protocolId = this.protocolId;

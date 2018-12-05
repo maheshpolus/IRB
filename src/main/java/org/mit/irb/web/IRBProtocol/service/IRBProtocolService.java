@@ -111,7 +111,7 @@ public interface IRBProtocolService {
 	 * @return updated protocol personnel Information with latest status change
 	 * @throws Exception
 	 */
-	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo);
+	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo, ProtocolGeneralInfo generalInfo);
 
 	/**
 	 * @param IRBProtocolVO
@@ -186,4 +186,5 @@ public interface IRBProtocolService {
 	 * @return updated VO object with collaborator persons and attachments
 	 */
 	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
+
 }

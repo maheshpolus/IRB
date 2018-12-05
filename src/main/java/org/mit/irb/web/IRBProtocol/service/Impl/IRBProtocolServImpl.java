@@ -1,21 +1,31 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Future;
 
-import org.json.JSONObject;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
+import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
@@ -29,13 +39,12 @@ import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
 @Service(value = "irbProtocolService")
@@ -43,6 +52,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@Autowired
 	IRBProtocolDao irbProtocolDao;
+	
+	@Autowired
+	HibernateTemplate hibernateTemplate;
 	
 	@Autowired
 	@Qualifier(value="questionnaireService")
@@ -130,12 +142,10 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		return irbProtocolVO;
 	}
 
-	
-
 	@Override
-	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo) {
+	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = null;
-		irbProtocolVO = irbProtocolDao.updateProtocolPersonInfo(personnelInfo);
+		irbProtocolVO = irbProtocolDao.updateProtocolPersonInfo(personnelInfo,generalInfo);
 		return irbProtocolVO;
 	}
 
@@ -194,15 +204,22 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
-			irbProtocolVO = initLoadService.loadProtocolTypes(irbProtocolVO);
-			//irbProtocolVO = initLoadService.loadSponsorTypes(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadRoleTypes(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadProtocolSubjectTypes(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
-			irbProtocolVO = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolTypes = initLoadService.loadProtocolTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> roleTypes = initLoadService.loadRoleTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolPersonLeadunits = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolAffiliationTypes = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolSubjectTypes = initLoadService.loadProtocolSubjectTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolAgeGroups = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
+		    irbProtocolVO = protocolTypes.get();
+			irbProtocolVO = roleTypes.get();
+			irbProtocolVO = protocolPersonLeadunits.get();
+			irbProtocolVO = protocolAffiliationTypes.get();
+			irbProtocolVO = protocolSubjectTypes.get();
+			irbProtocolVO = protocolAgeGroups.get();
+			irbProtocolVO = protocolFundingSourceTypes.get();
+			irbProtocolVO = protocolCollaboratorNames.get();
 			irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
 			irbProtocolVO.setPersonnelInfo(personnelInfo);
 			irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
@@ -246,5 +263,4 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		irbProtocolVO = irbProtocolDao.loadCollaboratorPersonsAndAttachments(collaboratorId);
 		return irbProtocolVO;
 	}
-
 }

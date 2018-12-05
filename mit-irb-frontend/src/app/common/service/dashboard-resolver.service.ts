@@ -12,8 +12,8 @@ export class DashboardResolverService implements Resolve<any> {
   requestObject = {
           userName :  sessionStorage.getItem('ActivatedUser')
   };
-  
+
   resolve() {
-    return this._http.post('/mit-irb/getUserDetails',this.requestObject);
+    return this._http.post('/mit-irb/getUserDetails', this.requestObject);
     }
 }

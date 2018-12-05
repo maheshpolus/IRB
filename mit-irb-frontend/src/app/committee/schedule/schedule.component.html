@@ -1,10 +1,47 @@
-<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+<div id="scrollToTop">
 	<div class="container-fluid pushFixedHeaderFooter">
 		<div class="headerPush"></div>
 		<!-- Session handling component -->
-		<app-sessiontimeout> </app-sessiontimeout>
+        <app-sessiontimeout> </app-sessiontimeout>
+        <div class="container-fluid">
+                <section class="row sect-padding">
+                    <div class="col-12 top-aprv-details">
+                        <div class="row">
+                            <div class="col-12 apprve-date">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-12"> 
+                                        <h4>
+                                            ID # :
+                                            <span>{{result?.committee?.committeeId}}</span>
+                                        </h4>
+                                        <p>
+                                            Home Unit :
+                                            <span>{{result?.committee?.homeUnitName}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-12">
+                                        <p>
+                                            Name :
+                                            <span>{{result?.committee?.committeeName}}</span>
+                                            <br /> Last updated User :
+                                            <span>{{lastUpdated}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-12">
+                                        <p>
+                                            Type:
+                                            <span>{{result?.committee?.committeeType?.description}}</span>
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
 		   <section class="row" >
-            <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><br>
+            <!-- <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><br>
                <div class="h6"> COMMITTEE</div>
             </div>
             
@@ -32,7 +69,7 @@
                         <span>{{this.result?.committee?.updateTimestamp | date:'shortDate'}} by {{this.result?.committee?.updateUser}}</span>
                     </div>
                 </div>
-            </div> 
+            </div>  -->
             <!-- tabs in committee view -->
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="row">

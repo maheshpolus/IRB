@@ -8,9 +8,7 @@
     </div>
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15">
-        <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo">
-          Please fill all mandatory fields marked
-          <strong>*</strong>
+        <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo" [innerHTML]="warningMessage">
         </div>
       </div>
       <div class="col-12  search-eidted-p padding-15">
@@ -76,7 +74,7 @@
       </div>
       <div class="col-md-12 users-list-tbl">
         <div class="row">
-          <div class="table-responsive">
+          <div class="table table-striped">
             <table id="collaboratorTable" class="table table-striped tbl-p-clr" *ngIf="protocolCollaboratorList.length > 0">
               <thead class="tbl-head-clr thead-font-size">
                 <tr>
@@ -109,7 +107,7 @@
                       data-target="#collaboratorPersonModal">
                       <i class="fa fa-arrow-right" aria-hidden="true"></i>
                     </button>
-                    <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1">
+                    <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal" data-target="#deleteCollaboratorDetails">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
@@ -126,18 +124,19 @@
                               <div class="filechipCollaborator" *ngIf="protocolCollaboratorPersons?.length > 0">
                                 <span *ngFor="let person of protocolCollaboratorPersons">{{person?.personnelInfo?.personName}}</span>
                               </div>
-                              <div class="filechip" *ngIf="protocolCollaboratorPersons?.length == 0">No persons Added</div>
+                              <div class="label-font" *ngIf="protocolCollaboratorPersons?.length == 0">No persons Added</div>
                             </td>
                           </tr>
                           <tr>
                             <td></td>
                             <td class="label-font">Approval Letter</td>
                             <td>
-                              <div class="filechipCollaborator pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
+                              <div class="filechipCollaboratorAttachment pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
                                 <span *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList" (click)="downloadAttachment(protocolCollaboratorAttachment)"
-                                  title="download">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</span>
+                                  title="download">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}<i class="fa fa-download"></i>
+                                </span>
                               </div>
-                              <div class="filechip pdf" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
+                              <div class="label-font" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
                             </td>
                           </tr>
                         </tbody>
@@ -244,9 +243,9 @@
               <button title="Add Persons" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" aria-label="Close" (click)="addCollaboratorPerson()">Add</button>
             </section>
           </div>
-          <div *ngIf="personalDataList == null || personalDataList.length <= 0" class="alertMsg"><b>No more persons to Add.</b></div>
+          <div *ngIf="personalDataList == null || personalDataList?.length <= 0" class="alertMsg"><b>No more persons to Add.</b></div>
           </div>
-          <div class="popup-div" *ngIf="protocolCollaboratorPersons?.length != 0">
+          <div class="popup-div person-modal-scroll" *ngIf="protocolCollaboratorPersons?.length != 0">
             <table class="table table-striped">
               <thead class="popup-header">
                 <tr>
@@ -324,7 +323,7 @@
                 aria-label="Close" (click)="addAttachments()">Add</button>
             </section>
           </div>
-          <div class="popup-div" *ngIf="protocolCollaboratorAttachmentsList?.length!=0">
+          <div class="popup-div person-modal-scroll" *ngIf="protocolCollaboratorAttachmentsList?.length!=0">
             <table class="table table-striped">
               <thead class="popup-header">
                 <tr>
@@ -385,6 +384,29 @@
       <div class="modal-footer">
         <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
         <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments()" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--delete warning modal-->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteCollaboratorDetails" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveCollaboratorDetails('DELETE');" data-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>

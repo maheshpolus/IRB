@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from 'rxjs/Subscription';
 
 import { ScheduleService } from '../schedule/schedule.service';
 import { ScheduleConfigurationService } from './schedule-configuration.service';
@@ -9,14 +9,17 @@ import { ScheduleConfigurationService } from './schedule-configuration.service';
     selector: 'app-schedule-component',
     templateUrl: './schedule.component.html'
 } )
-export class ScheduleComponent implements OnInit {
+export class ScheduleComponent implements OnInit, OnDestroy {
 
-    currentTab: string = 'schedule_home';
+    currentTab = 'schedule_home';
     scheduleId: number;
     result: any = {};
-    public loadScheduleDataSub : Subscription;
+    public loadScheduleDataSub: Subscription;
 
-    constructor( private scheduleService: ScheduleService, private router: Router, private activatedRoute: ActivatedRoute, private scheduleConfigurationService: ScheduleConfigurationService ) { 
+    constructor( private scheduleService: ScheduleService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private scheduleConfigurationService: ScheduleConfigurationService ) {
     }
 
     ngOnInit() {
@@ -24,7 +27,7 @@ export class ScheduleComponent implements OnInit {
         this.loadScheduleDataSub = this.scheduleService.loadScheduleData( this.scheduleId ).
             subscribe( data => {
                 this.result = data;
-                if(this.result !== null){
+                if (this.result !== null) {
                     this.scheduleConfigurationService.changeScheduleData( this.result );
                 }
             } );

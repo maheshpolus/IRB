@@ -3,15 +3,15 @@ package org.mit.irb.web.IRBProtocol.pojo;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "ATTACHMENT_FILE")
@@ -20,9 +20,6 @@ public class ProtocolAttachments implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-/*	@GenericGenerator(name = "ProtocolFileIdGenerator", strategy = "increment", parameters = {
-			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolFileIdGenerator")*/
 	@Column(name = "FILE_ID")
 	private Integer fileId;
 
@@ -31,8 +28,10 @@ public class ProtocolAttachments implements Serializable {
 
 	@Column(name = "FILE_NAME")
 	private String fileName;
-
+	
+	@JsonIgnore
 	@Column(name = "FILE_DATA")
+	@Basic(fetch = FetchType.LAZY)
 	private byte[] fileData;
 
 	@Column(name = "UPDATE_TIMESTAMP")

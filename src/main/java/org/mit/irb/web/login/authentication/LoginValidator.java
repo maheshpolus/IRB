@@ -86,15 +86,12 @@ public class LoginValidator extends BaseController {
 				try {
 					procedureCall = "{call GET_AB_PERSON_DETAILS(?, ?)}";
 					callableStatement = connection.prepareCall(procedureCall);
-
 					callableStatement.setString(1, userName);
 					callableStatement.registerOutParameter(2, OracleTypes.CURSOR);
-
 					// Call Stored Procedure
 					callableStatement.executeUpdate();
 					// get cursor and cast it to ResultSet
 					resultSet = (ResultSet) callableStatement.getObject(2);
-
 					while (resultSet.next()) {
 						personDTO.setPersonID(resultSet.getString("prncpl_id"));
 						personDTO.setFirstName(resultSet.getString("first_nm"));
@@ -113,7 +110,6 @@ public class LoginValidator extends BaseController {
 							personDTO.setRole(role);
 							logger.info("in checkIRBUserRole" +role);
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -190,7 +186,6 @@ public class LoginValidator extends BaseController {
 		}
 		return result;
 	}
-
 
 	public LoginService getLoginService() {
 		return loginService;

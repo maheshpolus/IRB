@@ -1,6 +1,34 @@
-<div>
+<div class="col-12 border-box schedule-box mt15">
+
+		<h4 class="borderBoxHeading pointer text-color"  (click)="showAddAttachmentPopUp($event)" data-toggle="modal" data-target="#addAttachment">
+				<i class="fa fa-plus"></i> Add Attachment
+		</h4>
+<!-- Modal for delete attachment confirmation -->
+		<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteAttachment" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+		  <div class="modal-content modal-text-color">
+			<div class="modal-header popup-header">
+			  <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+			  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+			  <p>Are you sure you want to delete this item?</p>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
+			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+
 	<!--  DELETE WARNING MODAL -->
-	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
+	<!-- <div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
 		id="deleteAttachment" tabindex="-1" role="dialog"
 		aria-labelledby="deleteModalTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
@@ -24,10 +52,77 @@
 				</div>
 			</div>
 		</div>
+	</div> -->
+
+
+
+
+
+	<div class="modal fade" id="addAttachment" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"
+	data-backdrop="static" data-keyboard="false" *ngIf="showAddAttachment">
+	<div class="modal-dialog modal-full" role="document">
+	  <div class="modal-content">
+		<div class="modal-header popup-header">
+		  <h5 class="modal-title" id="exampleModalLongTitle">Add Attachment</h5>
+		  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="showAddAttachment==false">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body modal-popup">
+		  <div class="modal-padding">
+			<div class="row col-12 form-group">
+			  <div class="col-4 apprve-date">
+				<h4>*Type</h4>
+				<select class="custom-select mr-sm-2" id="inlineFormCustomSelect"  [(ngModel)]="attachment.description"
+				(change)="attachmentTypeChange($event.target.value)">
+				  <option value=null selected>Please Select</option>
+				  <option *ngFor="let type of result?.attachmentTypes"
+									(value)="type">{{type.description}}</option>
+				</select>
+			  </div>
+			  <div class="col-8 apprve-date">
+				<h4 class="ml-10">*Description</h4>
+				<textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding "
+				id="desc" placeholder="Description"
+				[(ngModel)]="attachmentTypeDescription"></textarea>
+			  </div>
+			</div>
+			<file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+			  <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+			  </button>
+			  <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
+			  <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+			  </div>
+			</file-drop>
+			<div class="filechip">
+			  <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+				<i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+			  </span>
+			</div>
+			
+		  </div>
+		</div>
+		<section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+		  <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10"
+			aria-label="Close" (click)="addAttachments()">Add</button>
+		</section>
+	  </div>
 	</div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
 
 	<!-- ADD ATTACHMENT MODAL -->
-	<div class="modal fade mySkinDialog modalFallBack" id="addAttachment"
+	<!-- <div class="modal fade mySkinDialog modalFallBack" id="addAttachment"
 		tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle"
 		aria-hidden="true" *ngIf="showAddAttachment">
 		<div class="modal-dialog modal-lg modal-dialog-centered"
@@ -73,19 +168,68 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row">
+	</div> -->
+
+
+	<!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-left">
+			<div class="col-md-4">
+					<a class="pdf generate-schedule"  (click)="showAddAttachmentPopUp($event)" data-toggle="modal" data-target="#addAttachment">
+						<i class="fa fa-plus icon-padding"></i>Add Attachment
+					</a>
+				</div>
+	</div> -->
+
+	<!-- <div class="row">
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
 			<a href="#" title="add new attachment" class="addTextBtn" (click)="showAddAttachmentPopUp($event)" data-toggle="modal" data-target="#addAttachment">
 				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 			</a>
 		</div>
-	</div>
-	<br>
-	<table class="table table-responsive tableSkin"
+	</div> -->
+	
+	<div class="col-md-12 users-list-tbl"  *ngIf="result?.committeeSchedule?.committeeScheduleAttachments?.length > 0">
+			<div class="row">
+			  <div class="table-responsive">
+				<table class="table table-striped tbl-p-clr">
+				  <thead class="tbl-head-clr thead-font-size p-75">
+						<tr>
+								<th title="">Attachment Type</th>
+								<th title="">Description</th>
+								<th title="">File Name</th>
+								<th title="">Action</th>
+							</tr>
+							</thead>
+							<tbody class="tbody-font-size p-75">
+									<tr
+									*ngFor="let attachments of result?.committeeSchedule?.committeeScheduleAttachments;let i=index">
+									<td>{{attachments.attachmentType.description}}</td>
+									<td> <input type="text"  class="form-control input-field-size" [ngClass]="(!editScheduleattachment[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" 
+										[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
+									<td>{{attachments.fileName}}</td>
+									<td><ul class="actionButtonGroup">
+											<li><a (click)="tempSave($event,attachments)"
+												data-toggle="modal" data-target="#deleteAttachment"><i
+													class="fa fa-trash-o"></i></a></li>
+											<li><a
+												(click)="downloadAttachements($event, attachments)"
+												title="Open{{attachments.commScheduleAttachId}}"> <i
+													class="fa fa-download" aria-hidden="true"></i></a></li>
+											<li>
+												<a *ngIf="!editScheduleattachment[i] == true" (click)="editAttachments($event,i, attachments)"><i class="fa fa-edit"></i></a>
+											</li>
+											<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="saveEditedattachments($event,i, attachments)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+											<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+										</ul>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+							</div>
+							</div>
+							</div>
+	<!-- <table class="table table-responsive tableSkin"
 		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments?.length !== 0">
 		<tr>
-			<th title="">Sl Number</th>
 			<th title="">Attachment Type</th>
 			<th title="">Description</th>
 			<th title="">File Name</th>
@@ -93,7 +237,6 @@
 		</tr>
 		<tr
 			*ngFor="let attachments of result?.committeeSchedule?.committeeScheduleAttachments;let i=index">
-			<td>{{i+1}}</td>
 			<td>{{attachments.attachmentType.description}}</td>
 			<td> <input type="text" [ngClass]="(!editScheduleattachment[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" 
 				[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
@@ -114,7 +257,7 @@
 				</ul>
 			</td>
 		</tr>
-	</table>
+	</table> -->
 	<div
 		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments?.length == 0"
 		class="noDataOnChart">No attachment to Show</div>

@@ -57,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private ScheduleDao scheduleDao;
 
 	@Override
-	public String loadScheduleById(Integer scheduleId) {
+	public ScheduleVo loadScheduleById(Integer scheduleId) {
 		ScheduleVo scheduleVo = new ScheduleVo();
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleId);
 		scheduleVo.setCommitteeSchedule(committeeSchedule);
@@ -100,7 +100,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 				committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
 			}
 		}
-		return committeeDao.convertObjectToJSON(scheduleVo);
+		return scheduleVo;
 	}
 
 	/*
@@ -393,7 +393,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public String updateSchedule(ScheduleVo scheduleVo) {
+	public ScheduleVo updateSchedule(ScheduleVo scheduleVo) {
 		Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 		CommitteeSchedule committeeSchedule = scheduleVo.getCommitteeSchedule();
 		committeeSchedule.setCommittee(committee);
@@ -405,8 +405,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		committee.getCommitteeSchedules().add(committeeSchedule);
 		committee = committeeDao.saveCommittee(committee);
 		scheduleVo.setCommittee(committee);
-		String response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	/*
@@ -427,7 +426,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public String addOtherActions(ScheduleVo scheduleVo) {
+	public ScheduleVo addOtherActions(ScheduleVo scheduleVo) {
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleActItems committeeScheduleActItems = scheduleVo.getCommitteeScheduleActItems();
 
@@ -446,8 +445,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		committeeSchedule.setCommittee(committee);
 		committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
 		scheduleVo.setCommitteeSchedule(committeeSchedule);
-		String response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	public Integer getNextActionItemNumber(CommitteeSchedule committeeSchedule) {
@@ -461,7 +459,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public String deleteOtherActions(ScheduleVo scheduleVo) {
+	public ScheduleVo deleteOtherActions(ScheduleVo scheduleVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 			List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
@@ -489,16 +487,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleVo.setMessage("Problem occurred in deleting Schedule other action item");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(scheduleVo);
+		return scheduleVo;
 	}
 
 	@Override
-	public String addCommitteeScheduleMinute(ScheduleVo scheduleVo) {
+	public ScheduleVo addCommitteeScheduleMinute(ScheduleVo scheduleVo) {
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleMinutes committeeScheduleMinute = scheduleVo.getNewCommitteeScheduleMinute();
 
 		String protocolNumber = null;
-		Long submissionId = null;
+		Integer submissionId = null;
 		Integer submissionNumber = null;
 
 		if (committeeScheduleMinute.getProtocolNumber() != null) {
@@ -535,8 +533,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		committeeSchedule.getCommitteeScheduleMinutes().add(committeeScheduleMinute);
 		committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
 		scheduleVo.setCommitteeSchedule(committeeSchedule);
-		String response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	protected Integer getNextMinuteEntryNumber(CommitteeSchedule committeeSchedule) {
@@ -624,8 +621,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public String updateScheduleAttendance(ScheduleVo scheduleVo) {
-		String response = "";
+	public ScheduleVo updateScheduleAttendance(ScheduleVo scheduleVo) {
 		Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
 		CommitteeScheduleAttendance scheduleAttendance = scheduleVo.getUpdatedAttendance();
@@ -646,13 +642,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		committeeDao.saveCommittee(committee);
 		scheduleVo.setCommittee(committee);
-		response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	@Override
-	public String addOthersPresent(ScheduleVo scheduleVo) {
-		String response = "";
+	public ScheduleVo addOthersPresent(ScheduleVo scheduleVo) {
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleAttendance scheduleAttendance = scheduleVo.getUpdatedAttendance();
 		scheduleAttendance.setCommitteeSchedule(committeeSchedule);
@@ -660,12 +654,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 		committeeSchedule.getCommitteeScheduleAttendances().add(scheduleAttendance);
 		committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
 		scheduleVo.setCommitteeSchedule(committeeSchedule);
-		response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	@Override
-	public String deleteScheduleMinute(ScheduleVo scheduleVo) {
+	public ScheduleVo deleteScheduleMinute(ScheduleVo scheduleVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 			List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
@@ -693,11 +686,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleVo.setMessage("Problem occurred in deleting Schedule minute");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(scheduleVo);
+		return scheduleVo;
 	}
 
 	@Override
-	public String deleteScheduleAttachment(ScheduleVo scheduleVo) {
+	public ScheduleVo deleteScheduleAttachment(ScheduleVo scheduleVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 			List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
@@ -725,11 +718,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleVo.setMessage("Problem occurred in deleting Schedule attachment");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(scheduleVo);
+		return scheduleVo;
 	}
 
 	@Override
-	public String addScheduleAttachment(MultipartFile[] files, String formDataJSON) {
+	public ScheduleVo addScheduleAttachment(MultipartFile[] files, String formDataJSON) {
 		ScheduleVo scheduleVo = new ScheduleVo();
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -757,12 +750,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	@Override
-	public String deleteScheduleAttendance(ScheduleVo scheduleVo) {
+	public ScheduleVo deleteScheduleAttendance(ScheduleVo scheduleVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 			List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
@@ -790,11 +782,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleVo.setMessage("Problem occurred in deleting Schedule attendance");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(scheduleVo);
+		return scheduleVo;
 	}
 
 	@Override
-	public String updateScheduleAttachment(ScheduleVo scheduleVo) {
+	public ScheduleVo updateScheduleAttachment(ScheduleVo scheduleVo) {
 		String response = "";
 		Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
@@ -812,8 +804,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		committeeDao.saveCommittee(committee);
 		scheduleVo.setCommittee(committee);
-		response = committeeDao.convertObjectToJSON(scheduleVo);
-		return response;
+		return scheduleVo;
 	}
 
 	@Override
@@ -837,8 +828,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public String updateCommitteeScheduleMinute(ScheduleVo vo) {
-		String response = "";
+	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo) {
 		Committee committee = committeeDao.fetchCommitteeById(vo.getCommitteeId());
 		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
 		CommitteeScheduleMinutes scheduleMinutes = vo.getNewCommitteeScheduleMinute();
@@ -855,7 +845,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		committeeDao.saveCommittee(committee);
 		vo.setCommittee(committee);
-		response = committeeDao.convertObjectToJSON(vo);
-		return response;
+		return vo;
 	}
 }

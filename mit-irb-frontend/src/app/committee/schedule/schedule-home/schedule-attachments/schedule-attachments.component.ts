@@ -1,18 +1,19 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ScheduleService } from '../../schedule.service';
 import { ScheduleConfigurationService } from '../../schedule-configuration.service';
 import { ActivatedRoute } from '@angular/router';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { ScheduleAttachmentsService } from './schedule-attachments.service';
-import { Subject } from "rxjs/Subject";
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 
+declare var $: any;
 @Component( {
     selector: 'app-schedule-attachments',
     templateUrl: './schedule-attachments.component.html',
     changeDetection: ChangeDetectionStrategy.Default
 } )
-export class ScheduleAttachmentsComponent implements OnInit {
+export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
     scheduleId;
     fil: FileList;
     result: any = {};
@@ -21,23 +22,26 @@ export class ScheduleAttachmentsComponent implements OnInit {
     attachmentTypeDescription;
     newCommitteeScheduleAttachment: any = {};
     attachmentObject: any = {};
-    showAddAttachment: boolean = false;
+    showAddAttachment = false;
     public files: UploadFile[] = [];
     uploadedFile: any[] = [];
     attachmentList: any[] = [];
     tempSaveAttachment: any = {};
     currentUser: string;
     fileName: string;
-    nullAttachmentData: boolean = false;
+    nullAttachmentData = false;
     attachmentEditIndex: number;
-    editScheduleattachment: any={};
-    tempEditObject : any ={};
-    ismandatoryFilled: boolean = true;
+    editScheduleattachment: any = {};
+    tempEditObject: any = {};
+    ismandatoryFilled = true;
     attachmentWarningMsg: string;
     attachment: any = {};
 
-    constructor( public scheduleAttachmentsService: ScheduleAttachmentsService, public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService, public activatedRoute: ActivatedRoute ) {
-        this.currentUser = localStorage.getItem( "currentUser" );
+    constructor( public scheduleAttachmentsService: ScheduleAttachmentsService,
+        public scheduleConfigurationService: ScheduleConfigurationService,
+        public scheduleService: ScheduleService,
+        public activatedRoute: ActivatedRoute ) {
+        this.currentUser = localStorage.getItem( 'currentUser');
     }
 
     ngOnInit() {
@@ -49,27 +53,27 @@ export class ScheduleAttachmentsComponent implements OnInit {
             }
         } );
     }
-    
+
     ngOnDestroy() {
         this.onDestroy$.next();
         this.onDestroy$.complete();
     }
 
-    //when file list changes
+    // when file list changes
     onChange( files: FileList ) {
         this.fil = files;
         this.ismandatoryFilled = true;
-        for ( var i = 0; i < this.fil.length; i++ ) {
+        for ( let i = 0; i < this.fil.length; i++ ) {
             this.uploadedFile.push( this.fil[i] );
         }
     }
 
-    //change type option
+    // change type option
     attachmentTypeChange( type ) {
-        var d = new Date();
-        var timestamp = d.getTime();
-        for ( let attachmentType of this.result.attachmentTypes ) {
-            if ( attachmentType.description == type ) {
+        const d = new Date();
+        const timestamp = d.getTime();
+        for ( const attachmentType of this.result.attachmentTypes ) {
+            if ( attachmentType.description === type ) {
                 this.attachmentObject.attachmentTypecode = attachmentType.attachmentTypecode;
                 this.attachmentObject.description = attachmentType.description;
                 this.attachment.description = attachmentType.description;
@@ -79,27 +83,27 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
-    //files are dropped in drag and drop space
+    // files are dropped in drag and drop space
     public dropped( event: UploadEvent ) {
         this.files = event.files;
         this.ismandatoryFilled = true;
-        for ( let file of this.files ) {
+        for ( const file of this.files ) {
             this.attachmentList.push( file );
         }
         for ( const file of event.files) {
-           if( file.fileEntry.isFile){
+           if ( file.fileEntry.isFile) {
             const fileEntry = file.fileEntry as FileSystemFileEntry;
             fileEntry.file((info: File) => {
                 this.uploadedFile.push( info);
-            }); 
+            });
         }
         }
     }
 
-    //delete file function
+    // delete file function
     deleteFromUploadedFileList( item ) {
-        for ( var i = 0; i < this.uploadedFile.length; i++ ) {
-            if ( this.uploadedFile[i].name == item.name ) {
+        for ( let i = 0; i < this.uploadedFile.length; i++ ) {
+            if ( this.uploadedFile[i].name === item.name ) {
                 this.uploadedFile.splice( i, 1 );
             }
         }
@@ -115,36 +119,41 @@ export class ScheduleAttachmentsComponent implements OnInit {
     }
 
     addAttachments() {
-        if ( this.attachment.description == 'Select' ) {
+        if ( this.attachment.description === 'Select' ) {
             this.ismandatoryFilled = false;
             this.attachmentWarningMsg = '* Please select an attachment type';
-        } else if (this.uploadedFile.length == 0 ) {
+        } else if (this.uploadedFile.length === 0 ) {
             this.ismandatoryFilled = false;
             this.attachmentWarningMsg = '* Please choose at least one file to attach';
         } else {
             this.ismandatoryFilled = true;
             this.showAddAttachment = false;
-            var d = new Date();
-            var timestamp = d.getTime();
+            const d = new Date();
+            const timestamp = d.getTime();
             this.newCommitteeScheduleAttachment.attachmentType = this.attachmentObject;
             this.newCommitteeScheduleAttachment.attachmentTypeCode = this.attachmentObject.attachmentTypecode;
             this.newCommitteeScheduleAttachment.description = this.attachmentTypeDescription;
             this.newCommitteeScheduleAttachment.updateTimestamp = timestamp;
             this.newCommitteeScheduleAttachment.updateUser = this.currentUser;
             this.result.newCommitteeScheduleAttachment = this.newCommitteeScheduleAttachment;
-            this.scheduleAttachmentsService.addAttachments( this.result.committeeSchedule.scheduleId, this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode, this.uploadedFile, this.attachmentTypeDescription, this.currentUser ).takeUntil(this.onDestroy$).subscribe( data => {
+            $('#addAttachment').modal('toggle');
+            this.scheduleAttachmentsService.addAttachments(
+                this.result.committeeSchedule.scheduleId,
+                this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode,
+                 this.uploadedFile, this.attachmentTypeDescription, this.currentUser )
+                 .takeUntil(this.onDestroy$).subscribe( data => {
                 this.uploadedFile = [];
-                var temp:any = {};
+                let temp: any = {};
                 temp = data;
                 this.result.committeeSchedule = temp.committeeSchedule;
             },
                 error => {
-                    console.log( "error", error )
+                    console.log( 'error', error );
                 } );
         }
     }
 
-    //temporarily save while showing modal pop up
+    // temporarily save while showing modal pop up
     tempSave( event, attachment ) {
         this.showPopup = true;
         this.tempSaveAttachment = attachment;
@@ -153,32 +162,35 @@ export class ScheduleAttachmentsComponent implements OnInit {
     deleteAttachments( event ) {
         event.preventDefault();
         this.showPopup = false;
-        this.scheduleAttachmentsService.deleteAttachments( this.result.committeeSchedule.scheduleId, this.result.committee.committeeId, this.tempSaveAttachment.commScheduleAttachId ).takeUntil(this.onDestroy$).subscribe( data => {
-        var temp:any = {};
+        this.scheduleAttachmentsService.deleteAttachments(
+            this.result.committeeSchedule.scheduleId, this.result.committee.committeeId, this.tempSaveAttachment.commScheduleAttachId )
+        .takeUntil(this.onDestroy$).subscribe( data => {
+        let temp: any = {};
         temp = data;
         this.result.committeeSchedule = temp.committeeSchedule;
         } );
     }
 
-    downloadAttachements( event,attachments ) {
+    downloadAttachements( event, attachments ) {
         event.preventDefault();
-        this.scheduleAttachmentsService.downloadAttachment( attachments.commScheduleAttachId, attachments.mimeType ).takeUntil(this.onDestroy$).subscribe(
+        this.scheduleAttachmentsService.downloadAttachment( attachments.commScheduleAttachId, attachments.mimeType )
+        .takeUntil(this.onDestroy$).subscribe(
             data => {
-                var a = document.createElement( "a" );
+                const a = document.createElement( 'a' );
                 a.href = URL.createObjectURL( data );
                 a.download = attachments.fileName;
                 a.click();
             } );
         return false;
     }
-    
-    editAttachments(event: any, index, attachments){
+
+    editAttachments(event: any, index, attachments) {
         event.preventDefault();
         this.tempEditObject.description = attachments.description;
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
     }
-    
-    saveEditedattachments(event: any,index, attachments){
+
+    saveEditedattachments(event: any, index, attachments) {
         event.preventDefault();
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
         this.attachmentObject = {};
@@ -186,21 +198,26 @@ export class ScheduleAttachmentsComponent implements OnInit {
         this.attachmentObject.updateTimestamp = new Date().getTime();
         this.attachmentObject.updateUser = this.currentUser;
         this.attachmentObject.commScheduleAttachId = attachments.commScheduleAttachId;
-        this.scheduleAttachmentsService.updateScheduleAttachments(this.result.committee.committeeId, this.result.committeeSchedule.scheduleId, this.attachmentObject)
-        .takeUntil(this.onDestroy$).subscribe(data=>{
+        this.scheduleAttachmentsService.updateScheduleAttachments(
+            this.result.committee.committeeId, this.result.committeeSchedule.scheduleId, this.attachmentObject)
+        .takeUntil(this.onDestroy$).subscribe(data => {
             this.result = data;
         });
     }
-    
-    cancelEditedattachments(event:any,index, attachments){
+
+    cancelEditedattachments(event: any, index, attachments) {
         event.preventDefault();
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
         attachments.description = this.tempEditObject.description;
     }
 
-    closeAttachments(){
-        this.showAddAttachment=false;
+    closeAttachments() {
+        this.showAddAttachment = false;
         this.uploadedFile = [];
     }
-   
+
+    triggerAdd() {
+        $('#addAttach').trigger('click');
+    }
+
 }

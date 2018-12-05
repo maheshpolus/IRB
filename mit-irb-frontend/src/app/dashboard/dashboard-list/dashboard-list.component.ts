@@ -13,11 +13,11 @@ import { ElasticService } from '../../common/service/elastic.service';
 import { DashboardService } from '../dashboard.service';
 
 
-@Component( {
+@Component({
     selector: 'app-dashboard-list',
     templateUrl: './dashboard-list.component.html',
     styleUrls: ['./dashboard-list.component.css']
-} )
+})
 
 export class DashboardListComponent implements OnInit, AfterViewInit {
 
@@ -26,20 +26,20 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     isAdvancesearch = false;
     isAdvancsearchPerformed = false;
 
-    @Input() userDTO: any ;
+    @Input() userDTO: any;
     lastClickedTab = 'ALL';
     requestObject = {
-            personId : '',
-            personRoleType : '',
-            protocolNumber : '',
-            title : '',
-            piName : '',
-            protocolTypeCode : '',
-            dashboardType : '',
-            determination : '',
-            exemptFormStartDate: '',
-            exemptFormEndDate: '',
-            exemptFormfacultySponsorName: ''
+        personId: '',
+        personRoleType: '',
+        protocolNumber: '',
+        title: '',
+        piName: '',
+        protocolTypeCode: '',
+        dashboardType: '',
+        determination: '',
+        exemptFormStartDate: '',
+        exemptFormEndDate: '',
+        exemptFormfacultySponsorName: ''
     };
     protocolTypeList = [];
     result: any;
@@ -54,7 +54,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /**elastic search variables */
     message = '';
     _results: Subject<Array<any>> = new Subject<Array<any>>();
-    searchText: FormControl = new FormControl( '' );
+    searchText: FormControl = new FormControl('');
     seachTextModel: string;
     IsElasticResult = false;
     protocol: string;
@@ -67,20 +67,20 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     elasticResultTab = false;
 
     exemptParams = {
-        personId : '',
-        personRoleType : '',
-        title : '',
-        piName : '',
-        determination : '',
+        personId: '',
+        personRoleType: '',
+        title: '',
+        piName: '',
+        determination: '',
         exemptFormStartDate: null,
         exemptFormEndDate: null,
         exemptFormfacultySponsorName: null
     };
 
-    constructor( private _dashboardService: DashboardService,
+    constructor(private _dashboardService: DashboardService,
         private _ngZone: NgZone,
         private _elasticsearchService: ElasticService,
-        private _router: Router ) { }
+        private _router: Router) { }
 
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
@@ -93,12 +93,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         this.searchText
             .valueChanges
-            .map(( text: any ) => text ? text.trim() : '' )
-            .do( searchString => searchString ? this.message = 'searching...' : this.message = '' )
-            .debounceTime( 500 )
+            .map((text: any) => text ? text.trim() : '')
+            .do(searchString => searchString ? this.message = 'searching...' : this.message = '')
+            .debounceTime(500)
             .distinctUntilChanged()
-            .switchMap( searchString => {
-                return new Promise<Array<String>>(( resolve, reject ) => {
+            .switchMap(searchString => {
+                return new Promise<Array<String>>((resolve, reject) => {
                     this._ngZone.runOutsideAngular(() => {
                         let hits_source: Array<any> = [];
                         let hits_highlight: Array<any> = [];
@@ -112,114 +112,114 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                         let exp_date: string;
                         let test;
                         this._elasticsearchService.irbSearch(searchString)
-                            .then(( searchResult ) => {
-                              this._ngZone.run(() => {
-                                hits_source = ( ( searchResult.hits || {} ).hits || [] )
-                                    .map(( hit ) => hit._source );
-                                hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
-                                    .map(( hit ) => hit.highlight );
-
-                                hits_source.forEach(( elmnt, j ) => {
-                                    protocol_number = hits_source[j].protocol_number;
-                                    title = hits_source[j].title;
-                                   // lead_unit = hits_source[j].lead_unit_name;
-                                    exp_date = hits_source[j].expiration_date;
-                                    protocol_type = hits_source[j].protocol_type;
-                                    personName = hits_source[j].pi_name;
-                                    status = hits_source[j].status;
-                                    test = hits_source[j];
-
-                                    if ( typeof ( hits_highlight[j].protocol_number ) !== 'undefined' ) {
-                                        protocol_number = hits_highlight[j].protocol_number;
-                                    }
-                                    if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
-                                        title = hits_highlight[j].title;
-                                    }
-                                   /* if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
-                                        lead_unit = hits_highlight[j].lead_unit_name;
-                                    }
-                                    if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
-                                        unit_number = hits_highlight[j].lead_unit_number;
-                                    }*/
-                                    if ( typeof ( hits_highlight[j].protocol_type ) !== 'undefined' ) {
-                                        protocol_type = hits_highlight[j].protocol_type;
-                                    }
-                                    if ( typeof ( hits_highlight[j].pi_name ) !== 'undefined' ) {
-                                        personName = hits_highlight[j].pi_name;
-                                    }
-                                    if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
-                                        status = hits_highlight[j].status;
-                                    }
-                                    results.push( {
-                                        label: protocol_number + '  :  ' + title
-                                        /*+ '  |  ' + unit_number
-                                        + '  |  ' + lead_unit*/
-                                        + '  |  ' + protocol_type
-                                        + '  |  ' + personName
-                                        + '  |  ' + status,
-                                        obj: test
-                                    } );
-                                } );
-                                if ( results.length > 0 ) {
-                                    this.message = '';
-                                } else {
-                                    if ( this.seachTextModel && this.seachTextModel.trim() ) {
-                                        this.message = 'nothing was found';
-                                    }
-                                }
-                                resolve( results );
-                            } );
-
-                            } )
-                            .catch(( error ) => {
+                            .then((searchResult) => {
                                 this._ngZone.run(() => {
-                                    reject( error );
-                                } );
-                            } );
-                    } );
-                } );
-            } )
-            .catch( this.handleError )
-            .subscribe( this._results );
-      }
+                                    hits_source = ((searchResult.hits || {}).hits || [])
+                                        .map((hit) => hit._source);
+                                    hits_highlight = ((searchResult.hits || {}).hits || [])
+                                        .map((hit) => hit.highlight);
+
+                                    hits_source.forEach((elmnt, j) => {
+                                        protocol_number = hits_source[j].protocol_number;
+                                        title = hits_source[j].title;
+                                        // lead_unit = hits_source[j].lead_unit_name;
+                                        exp_date = hits_source[j].expiration_date;
+                                        protocol_type = hits_source[j].protocol_type;
+                                        personName = hits_source[j].pi_name;
+                                        status = hits_source[j].status;
+                                        test = hits_source[j];
+
+                                        if (typeof (hits_highlight[j].protocol_number) !== 'undefined') {
+                                            protocol_number = hits_highlight[j].protocol_number;
+                                        }
+                                        if (typeof (hits_highlight[j].title) !== 'undefined') {
+                                            title = hits_highlight[j].title;
+                                        }
+                                        /* if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
+                                             lead_unit = hits_highlight[j].lead_unit_name;
+                                         }
+                                         if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
+                                             unit_number = hits_highlight[j].lead_unit_number;
+                                         }*/
+                                        if (typeof (hits_highlight[j].protocol_type) !== 'undefined') {
+                                            protocol_type = hits_highlight[j].protocol_type;
+                                        }
+                                        if (typeof (hits_highlight[j].pi_name) !== 'undefined') {
+                                            personName = hits_highlight[j].pi_name;
+                                        }
+                                        if (typeof (hits_highlight[j].status) !== 'undefined') {
+                                            status = hits_highlight[j].status;
+                                        }
+                                        results.push({
+                                            label: protocol_number + '  :  ' + title
+                                                /*+ '  |  ' + unit_number
+                                                + '  |  ' + lead_unit*/
+                                                + '  |  ' + protocol_type
+                                                + '  |  ' + personName
+                                                + '  |  ' + status,
+                                            obj: test
+                                        });
+                                    });
+                                    if (results.length > 0) {
+                                        this.message = '';
+                                    } else {
+                                        if (this.seachTextModel && this.seachTextModel.trim()) {
+                                            this.message = 'nothing was found';
+                                        }
+                                    }
+                                    resolve(results);
+                                });
+
+                            })
+                            .catch((error) => {
+                                this._ngZone.run(() => {
+                                    reject(error);
+                                });
+                            });
+                    });
+                });
+            })
+            .catch(this.handleError)
+            .subscribe(this._results);
+    }
 
     /** handles error in elastic search */
     handleError(): any {
-    this.message = 'something went wrong';
+        this.message = 'something went wrong';
     }
 
     /**get advance search results
      * @param currentTab - value of current tab
      */
-    getAdvanceSearch( currentTab ) {
+    getAdvanceSearch(currentTab) {
         this.isAdvancsearchPerformed = true;
-        this.getIrbListData( currentTab );
+        this.getIrbListData(currentTab);
     }
 
     /** calls service to load irb protocols in dashboard
      * @param currentTab - value of current tab
      */
-    getIrbListData( currentTab ) {
+    getIrbListData(currentTab) {
         this.irbListData = [];
-        this.noIrbList =  false;
+        this.noIrbList = false;
         this.seachTextModel = '';
         this.lastClickedTab = currentTab;
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
         this.requestObject.dashboardType = currentTab;
-        this._dashboardService.getIrbList( this.requestObject ).subscribe( data => {
+        this._dashboardService.getIrbList(this.requestObject).subscribe(data => {
             this.result = data || [];
-            if ( this.result != null ) {
-                if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0 ) {
+            if (this.result != null) {
+                if (this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0) {
                     this.noIrbList = true;
                 } else {
-                this.irbListData = this.result.dashBoardDetailMap;
-                this.sortBy();
+                    this.irbListData = this.result.dashBoardDetailMap;
+                    this.sortBy();
                 }
             }
         },
             error => {
-                 console.log( 'Error in method getIrbListData()' , error );
+                console.log('Error in method getIrbListData()', error);
             },
         );
     }
@@ -227,7 +227,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /** sets value of column and direction to implement sorting */
     sortBy() {
         this.column = this.sortField;
-        this.direction =  parseInt(this.sortOrder, 10);
+        this.direction = parseInt(this.sortOrder, 10);
     }
 
     /*show or hide advance search fields*/
@@ -248,18 +248,18 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.status = result.obj.status;
         this.elasticResultTab = true;
         this.seachTextModel = '';
-      }
+    }
 
-      /** method to close elastic search result*/
-      closeResultTab() {
+    /** method to close elastic search result*/
+    closeResultTab() {
         this.seachTextModel = '';
         this.elasticResultTab = false;
-      }
+    }
 
-      /** clear all fields in advance search and load orginal irb protocol list if none of the fields where empty*/
-      clear() {
+    /** clear all fields in advance search and load orginal irb protocol list if none of the fields where empty*/
+    clear() {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
-        this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ) {
+            this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '') {
             this.requestObject.protocolNumber = '';
             this.requestObject.title = '';
             this.requestObject.piName = '';
@@ -267,60 +267,60 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.getIrbListData(this.lastClickedTab);
             this.isAdvancsearchPerformed = false;
         }
-      }
+    }
 
-      /**opens irb view module of a selected protocol
-       * @param protocolNumber -unique identifier of a protocol
-       */
-      openIrb( protocolNumber ) {
-          this._router.navigate( ['/irb/irb-view/irbOverview'] , {queryParams: {protocolNumber: protocolNumber}});
-      }
+    /**opens irb view module of a selected protocol
+     * @param protocolNumber -unique identifier of a protocol
+     */
+    openIrb(protocolNumber) {
+        this._router.navigate(['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } });
+    }
 
-      /**fetch protocolTypes to show in dropdown*/
-      getIrbProtocolTypes() {
-        this._dashboardService.getProtocolType().subscribe( data => {
-              this.result = data || [];
-              if ( this.result != null ) {
-                  if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0 ) {
-                      this.noProtocolList = true;
-                  } else {
-                  this.protocolTypeList = this.result.dashBoardDetailMap;
-                  }
-              }
-          },
-              error => {
-                   console.log( 'Error in method getIrbProtocolTypes()', error );
-              },
-          );
-      }
+    /**fetch protocolTypes to show in dropdown*/
+    getIrbProtocolTypes() {
+        this._dashboardService.getProtocolType().subscribe(data => {
+            this.result = data || [];
+            if (this.result != null) {
+                if (this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0) {
+                    this.noProtocolList = true;
+                } else {
+                    this.protocolTypeList = this.result.dashBoardDetailMap;
+                }
+            }
+        },
+            error => {
+                console.log('Error in method getIrbProtocolTypes()', error);
+            },
+        );
+    }
 
-      /**fetch exempt protocols
-       * @param currentTab - value of current tab
-      */
-      getExemptListData(currentTab) {
+    /**fetch exempt protocols
+     * @param currentTab - value of current tab
+    */
+    getExemptListData(currentTab) {
         this.exemptListData = [];
-        this.noIrbList =  false;
+        this.noIrbList = false;
         this.lastClickedTab = currentTab;
         this.exemptParams.personId = this.userDTO.personID;
         this.exemptParams.personRoleType =
-         (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN') ? 'IRB_ADMIN' : this.userDTO.role;
+            (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN') ? 'IRB_ADMIN' : this.userDTO.role;
         if (this.userDTO.jobTitle == null && this.exemptParams.personRoleType === 'PI') {
             this.exemptParams.personRoleType = 'STUDENT';
         }
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
         this.exemptParams.determination = this.requestObject.determination;
-        if ( this.requestObject.exemptFormStartDate != null && this.requestObject.exemptFormStartDate !== '' ) {
-        this.exemptParams.exemptFormStartDate = this.GetFormattedDate(this.requestObject.exemptFormStartDate);
+        if (this.requestObject.exemptFormStartDate != null && this.requestObject.exemptFormStartDate !== '') {
+            this.exemptParams.exemptFormStartDate = this.GetFormattedDate(this.requestObject.exemptFormStartDate);
         }
         if (this.requestObject.exemptFormEndDate != null && this.requestObject.exemptFormEndDate !== '') {
-        this.exemptParams.exemptFormEndDate = this.GetFormattedDate(this.requestObject.exemptFormEndDate);
+            this.exemptParams.exemptFormEndDate = this.GetFormattedDate(this.requestObject.exemptFormEndDate);
         }
         this.exemptParams.exemptFormfacultySponsorName = this.requestObject.exemptFormfacultySponsorName;
-        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe( data => {
+        this._dashboardService.getExemptProtocols(this.exemptParams).subscribe(data => {
             this.result = data || [];
-            if ( this.result != null ) {
-                if ( this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0 ) {
+            if (this.result != null) {
+                if (this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0) {
                     this.noIrbList = true;
                 } else {
                     this.exemptListData = this.result.irbExemptFormList;
@@ -328,13 +328,65 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             }
         },
             error => {
-                 console.log( 'Error in method getExemptListData()', error );
+                console.log('Error in method getExemptListData()', error);
             },
         );
-      }
+    }
 
-      /** clear all fields in advance search of exempt studies*/
-      clearExemptSearch() {
+    getCommitteeScheduleListData(tab) {
+        this.noIrbList = false;
+        this.irbListData = [];
+        this.lastClickedTab = tab;
+        if (tab === 'COMMITTEE') {
+            this._dashboardService.loadCommitteeList().subscribe(data => {
+                this.result = data || [];
+                if (this.result != null) {
+                    if (this.result.committeList == null || this.result.committeList.length === 0) {
+                        this.noIrbList = true;
+                    } else {
+                        this.irbListData = this.result.committeList;
+                        this.column = 'committeeId';
+                        this.direction = parseInt(this.sortOrder, 10);
+                    }
+                }
+            },
+                error => {
+                    console.log('Error in method getExemptListData()', error);
+                },
+            );
+        } else if (tab === 'SCHEDULE') {
+            this._dashboardService.loadCommitteeScheduleList().subscribe(data => {
+                this.result = data || [];
+                if (this.result != null) {
+                    if (this.result.committeSchedulList == null || this.result.committeSchedulList.length === 0) {
+                        this.noIrbList = true;
+                    } else {
+                        const currentDate = new Date();
+                        currentDate.setHours(0, 0, 0, 0);
+                        this.irbListData = this.result.committeSchedulList;
+                        this.irbListData.forEach(element => {
+                            element.scheduledDate = new Date(element.scheduledDate);
+                            element.scheduledDate.setHours(0, 0, 0, 0);
+                            if (currentDate <= element.scheduledDate) {
+                                element.isActive = true;
+                            } else {
+                                element.isActive = false;
+                            }
+                        });
+                        this.column = 'committeeId';
+                        this.direction = parseInt(this.sortOrder, 10);
+                    }
+                }
+            },
+                error => {
+                    console.log('Error in method getExemptListData()', error);
+                },
+            );
+        }
+    }
+
+    /** clear all fields in advance search of exempt studies*/
+    clearExemptSearch() {
         this.requestObject.determination = '';
         this.requestObject.title = '';
         this.requestObject.piName = '';
@@ -348,11 +400,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptParams.exemptFormStartDate = null;
         this.exemptParams.exemptFormEndDate = null;
         this.getExemptListData('EXEMPT');
-      }
-      GetFormattedDate(currentDate) {
+    }
+    GetFormattedDate(currentDate) {
         const month = currentDate.getMonth() + 1;
-        const day = currentDate .getDate();
+        const day = currentDate.getDate();
         const year = currentDate.getFullYear();
         return month + '-' + day + '-' + year;
-      }
+    }
 }

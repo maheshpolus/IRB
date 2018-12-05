@@ -35,7 +35,6 @@ import org.mit.irb.web.committee.view.PersonDetailsView;
 public class CommitteeMemberships implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GenericGenerator(name = "membershipIdGererator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
@@ -45,7 +44,7 @@ public class CommitteeMemberships implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_MEMBERSHIPS"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBERSHIPS"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
 	private Committee committee;
 
 	@Column(name = "MEMBERSHIP_ID")
@@ -78,7 +77,7 @@ public class CommitteeMemberships implements Serializable {
 	private Date termEndDate;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_MEMBERSHIPS_2"), name = "MEMBERSHIP_TYPE_CODE", referencedColumnName = "MEMBERSHIP_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBERSHIPS_2"), name = "MEMBERSHIP_TYPE_CODE", referencedColumnName = "MEMBERSHIP_TYPE_CODE", insertable = false, updatable = false)
 	private CommitteeMembershipType committeeMembershipType;
 
 	@Column(name = "MEMBERSHIP_TYPE_CODE")

@@ -1,25 +1,24 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
-import { CommitteCreateEditService } from '../committee-create-edit.service';
 import { CommitteeSaveService } from '../committee-save.service';
-import { CompleterService, CompleterData } from 'ng2-completer';
-import { Subject } from "rxjs/Subject";
+import { CompleterService, CompleterData} from 'ng2-completer';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import { CommitteeConfigurationService } from "../../common/service/committee-configuration.service";
+import { CommitteeConfigurationService } from '../../common/service/committee-configuration.service';
 
+declare var $: any;
 @Component( {
     selector: 'app-committee-home',
     templateUrl: './committee-home.component.html',
     providers: [CommitteeSaveService]
 } )
 
-export class CommitteeHomeComponent implements OnInit {
-    addResearch: boolean = false;
-    editDetails: boolean = false;
-    editResearch: boolean = false;
+export class CommitteeHomeComponent implements OnInit, OnDestroy {
+    addResearch = false;
+    editDetails = false;
+    editResearch = false;
     deleteResearch = false;
     showSaveAreaOfResearch = false;
     reviewType: string;
@@ -35,7 +34,7 @@ export class CommitteeHomeComponent implements OnInit {
     maxProtocols: string;
     mode: string;
     public areaInput: any = {};
-    slNo: number = 0;
+    slNo = 0;
     public researchArea: any = {};
     public dataServiceArea: any = [];
 
@@ -50,7 +49,7 @@ export class CommitteeHomeComponent implements OnInit {
     reviewTypes: any[];
     areaList: any = [];
     scheduleStatus: any[];
-
+    committeeData: any = {};
     result: any = {};
     resultTemp: any = {};
     showPopup = false;
@@ -59,22 +58,23 @@ export class CommitteeHomeComponent implements OnInit {
     duplicateIdFlag = false;
     emptyAreaOfResearch = false;
     duplicateAreaOfResearch = false;
-    deleteMsg: string = '';
-    alertMsg: string = '';
+    isAddClicked = false;
+    deleteMsg = '';
+    alertMsg = '';
     name: string;
     unit: string;
     unitname: string;
     addResearchArea: string;
 
     showGenerateSchedule = false;
-    committeeData: any = {};
+    homeUnitData: any = {};
     scheduleData: any = {};
     sendScheduleRequestData: any;
-    optionDay: string = 'XDAY';
-    currentScheduleTab: string = 'DAILY';
+    optionDay = 'XDAY';
+    currentScheduleTab = 'DAILY';
     editSchedule = {};
-    editScheduleClass: string = 'committeeBoxNotEditable';
-    showConflictDates: boolean = false;
+    editScheduleClass = 'committeeBoxNotEditable';
+    showConflictDates = false;
 
     dayOptions = [
         { name: 'Sunday', value: 'Sunday', checked: false },
@@ -107,29 +107,32 @@ export class CommitteeHomeComponent implements OnInit {
         { name: 'December', value: 'DECEMBER' }
     ];
 
-    monthOptionDay: string = 'XDAYANDXMONTH';
+    monthOptionDay = 'XDAYANDXMONTH';
     selectedDayOfWeek: string;
-    day: number = 1;
-    option1Month: number = 1;
-    yearOption: string = 'XDAY';
-    isTodelete: boolean = false;
+    day = 1;
+    option1Month = 1;
+    yearOption = 'XDAY';
+    isTodelete = false;
     scheduledDate: string;
     scheduleId: string;
     committeeId: string;
-    isConflictDates: boolean = false;
-    isMandatoryFilled: boolean = true;
+    isConflictDates = false;
+    isMandatoryFilled = true;
     conflictDates: any = [];
+    homeUnitList: any = [];
     filterStartDate: string;
     filerEndDate: string;
     today: any;
     scheduleValidationMessage: string;
     filterValidationMessage: string;
-    isDatePrevious: boolean = true;
-    isStartDateBeforeToday: boolean = false;
+    isDatePrevious = true;
+    isStartDateBeforeToday = false;
     dateTime: { time: string, meridiem: string };
     displayTime: any = {};
-    isMandatoryFilterFilled: boolean = true;
-    isFilterDatePrevious: boolean = true;
+    isMandatoryFilterFilled = true;
+    isFilterDatePrevious = true;
+    showDetails = false;
+    isFilterClicked = false;
     listDate: string;
     listStatus: string;
     listTime: string;
@@ -140,9 +143,16 @@ export class CommitteeHomeComponent implements OnInit {
     scheduleTime: any;
     isEditDetailsModalOpen = false;
     isScheduleEditWarningModalOpen = false;
+    public dataServiceHomeUnit: CompleterData;
     public onDestroy$ = new Subject<void>();
 
-    constructor( public route: ActivatedRoute, private datePipe: DatePipe, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
+
+    constructor( public route: ActivatedRoute,
+        private datePipe: DatePipe,
+        public router: Router,
+        private completerService: CompleterService,
+        public committeeSaveService: CommitteeSaveService,
+        private committeeConfigurationService: CommitteeConfigurationService ) {
         this.committeeConfigurationService.currentMode.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.mode = data;
         }, error => { }, () => {
@@ -166,15 +176,23 @@ export class CommitteeHomeComponent implements OnInit {
                 this.Unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitName = this.resultTemp.committee.homeUnitName;
                 this.reviewTypes = this.resultTemp.reviewTypes;
-                this.committeeConfigurationService.currentAreaOfResearch.subscribe( data => {
-                    this.areaList = data
+                if ( this.resultTemp.homeUnits != null || this.resultTemp.homeUnits !== undefined) {
+                    this.homeUnitList = this.resultTemp.homeUnits;
+                    this.dataServiceHomeUnit = this.completerService.local( this.homeUnitList, 'unitName', 'unitName' );
+                }
+                // this.homeUnitList = this.resultTemp.homeUnits;
+                this.committeeConfigurationService.currentAreaOfResearch.subscribe( data2 => {
+                    this.areaList = data2;
                 } );
-                this.scheduleStatus = this.resultTemp.scheduleStatus;
+                if (this.resultTemp.scheduleStatus !== null) {
+                    this.scheduleStatus = this.resultTemp.scheduleStatus;
+                }
             }
         } );
     }
 
     ngOnInit() {
+
     }
 
     ngOnDestroy() {
@@ -186,13 +204,13 @@ export class CommitteeHomeComponent implements OnInit {
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;
             if ( this.result.committee !== undefined ) {
-                if ( this.result.committee == null || this.result.committee == undefined ) {
+                if ( this.result.committee == null || this.result.committee === undefined ) {
                     this.result.committee = {};
                 }
-                if ( this.result.committee.committeeSchedules == null || this.result.committee.committeeSchedules == undefined ) {
+                if ( this.result.committee.committeeSchedules == null || this.result.committee.committeeSchedules === undefined ) {
                     this.result.committee.committeeSchedules = [];
                 }
-                if ( this.result.scheduleData == null || this.result.scheduleData == undefined ) {
+                if ( this.result.scheduleData == null || this.result.scheduleData === undefined ) {
                     this.result.scheduleData = {};
                     this.result.scheduleData.time = {};
                     this.result.scheduleData.dailySchedule = {};
@@ -202,12 +220,12 @@ export class CommitteeHomeComponent implements OnInit {
                     this.result.scheduleData.yearlySchedule = {};
                     this.result.committee.committeeSchedules.scheduleStatus = {};
                     this.result.scheduleData.recurrenceType = 'DAILY';
-                    if ( this.optionDay == 'XDAY' ) {
+                    if ( this.optionDay === 'XDAY' ) {
                         this.result.scheduleData.dailySchedule.day = 1;
                     }
                 }
 
-                if ( this.mode == 'view' ) {
+                if ( this.mode === 'view' ) {
                     this.errorFlag = false;
                     this.editDetails = false;
                     this.committeeConfigurationService.changeEditFlag( this.editDetails );
@@ -222,20 +240,21 @@ export class CommitteeHomeComponent implements OnInit {
                     this.minMembers = this.result.committee.minimumMembersRequired;
                     this.advSubDays = this.result.committee.advSubmissionDaysReq;
                     this.maxProtocols = this.result.committee.maxProtocols;
-                    this.saveCommitteeFlag = true;
-                }
-                else {
+                    this.showDetails = true;
+                     this.saveCommitteeFlag = true;
+                } else {
                     this.editClass = 'scheduleBoxes';
                     this.editAreaClass = 'scheduleBoxes';
                     this.editDetails = true;
                     this.Id = this.result.committee.committeeId;
+                    this.showDetails = false;
                 }
             }
         } );
     }
 
     showaddAreaOfResearch() {
-        if ( this.editDetails == true ) {
+        if ( this.editDetails === true ) {
             this.isEditDetailsModalOpen = true;
         }
         if ( this.saveCommitteeFlag ) {
@@ -252,7 +271,21 @@ export class CommitteeHomeComponent implements OnInit {
         this.showGenerateSchedule = false;
         this.deleteConfirmation = false;
     }
+    homeChangeFunction( unitName ) {
+        this.homeUnitList.forEach(( value, index ) => {
+            if ( value.unitName === unitName ) {
+                this.result.committee.homeUnitNumber = value.unitNumber;
+            }
+        } );
+    }
 
+    onHomeSelect() {
+        this.homeUnitList.forEach(( value, index ) => {
+            if ( value.unitName === this.result.committee.homeUnitName ) {
+                this.result.committee.homeUnitNumber = value.unitNumber;
+            }
+        } );
+    }
     showEditDetails() {
         this.editDetails = !this.editDetails;
         this.saveCommitteeFlag = false;
@@ -267,39 +300,44 @@ export class CommitteeHomeComponent implements OnInit {
             this.result = dataObject.result;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         }
-        if ( ( this.result.committee.minimumMembersRequired == undefined || this.result.committee.advSubmissionDaysReq == undefined || this.result.committee.maxProtocols == undefined || this.Type == undefined || this.Name == undefined || this.unitName == undefined || this.unitName == '' ) || ( this.result.committee.reviewTypeDescription == 'Select' || this.result.committee.reviewTypeDescription == '' ) ) {
+        if ( ( this.result.committee.minimumMembersRequired == null ||
+            this.result.committee.advSubmissionDaysReq === null ||
+            this.result.committee.maxProtocols === null || this.Type === null ||
+            this.result.committee.committeeName === null || this.result.committee.committeeName == null ||
+            this.result.committee.committeeName === undefined ||
+            this.result.committee.homeUnitName === null || this.result.committee.homeUnitName === '' )
+         || ( this.result.committee.reviewTypeDescription === 'Select' || this.result.committee.reviewTypeDescription === '' ) ) {
             this.errorFlag = true;
             this.error = '*Please fill all the mandatory fields marked';
-        }
-        else {
+        } else {
             this.isEditDetailsModalOpen = false;
             this.showGenerateSchedule = false;
             this.deleteConfirmation = false;
             this.error = '';
             this.errorFlag = false;
+            this.showDetails = true;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
             this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data;
             } );
-            if ( this.mode == 'create' ) {
+            if ( this.mode === 'create' ) {
                 this.result.updateType = 'SAVE';
                 this.result.committee.committeeType.committeeTypeCode = '1';
-                this.result.committee.createUser = localStorage.getItem( "currentUser" );
+                this.result.committee.createUser = localStorage.getItem( 'currentUser' );
                 this.result.committee.createTimestamp = new Date().getTime();
-                this.result.committee.updateUser = localStorage.getItem( "currentUser" );
+                this.result.committee.updateUser = localStorage.getItem( 'currentUser' );
                 this.result.committee.updateTimestamp = new Date().getTime();
-            }
-            else if ( this.mode == 'view' ) {
+            } else if ( this.mode === 'view' ) {
                 this.result.updateType = 'UPDATE';
-                this.result.committee.updateUser = localStorage.getItem( "currentUser" );
+                this.result.committee.updateUser = localStorage.getItem( 'currentUser' );
                 this.result.committee.updateTimestamp = new Date().getTime();
             }
-            this.result.currentUser = localStorage.getItem( "currentUser" );
-            if ( this.editDetails == false ) {
+            this.result.currentUser = localStorage.getItem( 'currentUser' );
+            if ( this.editDetails === false ) {
                 this.editClass = 'committeeBoxNotEditable';
             }
             this.reviewTypes.forEach(( value, index ) => {
-                if ( value.description == this.result.committee.reviewTypeDescription ) {
+                if ( value.description === this.result.committee.reviewTypeDescription ) {
                     this.result.committee.applicableReviewTypecode = value.reviewTypeCode;
                     this.result.committee.reviewTypeDescription = value.description;
                 }
@@ -309,20 +347,21 @@ export class CommitteeHomeComponent implements OnInit {
                 if ( this.result != null ) {
                     this.committeeConfigurationService.changeCommmitteeData( this.result );
                     this.saveCommitteeFlag = true;
-                    if ( this.mode == 'view' ) {
+                    if ( this.mode === 'view' ) {
                         this.initialLoadChild();
-                    }
-                    else {
+                    } else {
                         this.editDetails = !this.editDetails;
                         this.committeeConfigurationService.changeEditFlag( this.editDetails );
                         this.mode = 'view';
                         this.initialLoadChild();
                         this.committeeConfigurationService.changeMode( this.mode );
+						// Change the url in view mode
+                        this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
                     }
                 }
-                this.committeeConfigurationService.currentactivatedTab.subscribe( data => {
-                    if ( data === 'committee_members' ) {
-                        this.router.navigate( ['/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
+                this.committeeConfigurationService.currentactivatedTab.subscribe( data2 => {
+                    if ( data2 === 'committee_members' ) {
+                        this.router.navigate( ['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
                     }
                 } );
             } );
@@ -337,7 +376,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.errorFlag = false;
         this.isEditDetailsModalOpen = false;
         this.showGenerateSchedule = false;
-        if ( this.mode == 'view' ) {
+        if ( this.mode === 'view' ) {
             this.editDetails = !this.editDetails;
             this.committeeConfigurationService.changeEditFlag( this.editDetails );
             if ( !this.editDetails ) {
@@ -354,8 +393,7 @@ export class CommitteeHomeComponent implements OnInit {
             this.result.committee.minimumMembersRequired = this.minMembers;
             this.result.committee.advSubmissionDaysReq = this.advSubDays;
             this.result.committee.maxProtocols = this.maxProtocols;
-        }
-        else {
+        } else {
             this.result.committee.committeeType.description = '';
             this.result.committee.committeeName = '';
             this.result.committee.homeUnitName = '';
@@ -364,7 +402,7 @@ export class CommitteeHomeComponent implements OnInit {
             this.result.committee.minimumMembersRequired = '';
             this.result.committee.advSubmissionDaysReq = '';
             this.result.committee.maxProtocols = '';
-            this.router.navigate( ['/committee'], { queryParams: { mode: 'create' } } );
+            this.router.navigate( ['/irb/committee'], { queryParams: { mode: 'create' } } );
         }
     }
 
@@ -373,22 +411,22 @@ export class CommitteeHomeComponent implements OnInit {
         this.addResearchArea = '0';
         this.editAreaClass = 'committeeBoxNotEditable';
         for ( let i = 0; i < this.result.committee.researchAreas.length; i++ ) {
-            if ( Object.researchAreaCode == this.result.committee.researchAreas[i].researchAreaCode ) {
+            if ( Object.researchAreaCode === this.result.committee.researchAreas[i].researchAreaCode ) {
                 this.addResearchArea = '1';
             }
         }
-        if ( this.addResearchArea == '1' ) {
+        if ( this.addResearchArea === '1' ) {
             this.showPopup = true;
             this.duplicateAreaOfResearch = true;
             this.alertMsg = 'Cannot add  Research area since it is already there in the committee!';
-        }
-        else if ( Object.researchAreaDescription == '' || Object.researchAreaDescription == undefined ) {
+        } else if ( Object.researchAreaDescription === '' || Object.researchAreaDescription === undefined ) {
             this.showPopup = true;
             this.emptyAreaOfResearch = true;
             this.alertMsg = 'Please select an Area of research to add!';
-        }
-        else {
-            this.committeeSaveService.saveResearchAreaCommitteeData( this.result.committee.committeeId, Object ).takeUntil( this.onDestroy$ ).subscribe( data => {
+        } else {
+            this.committeeSaveService.saveResearchAreaCommitteeData( this.result.committee.committeeId, Object )
+            .takeUntil( this.onDestroy$ )
+            .subscribe( data => {
                 this.result = data || [];
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
@@ -410,10 +448,10 @@ export class CommitteeHomeComponent implements OnInit {
 
     onAreaSelect() {
         this.areaList._data.forEach(( value, index ) => {
-            if ( value.description == this.areaInput.researchAreaDescription ) {
+            if ( value.description === this.areaInput.researchAreaDescription ) {
                 this.areaInput.researchAreaCode = value.researchAreaCode;
                 this.areaInput.researchAreaDescription = value.description;
-                this.areaInput.updateUser = localStorage.getItem( "currentUser" );
+                this.areaInput.updateUser = localStorage.getItem( 'currentUser' );
                 this.areaInput.updateTimestamp = new Date().getTime();
             }
         } );
@@ -421,7 +459,7 @@ export class CommitteeHomeComponent implements OnInit {
 
     deleteAreaOfResearchConfirmation( $event, Object ) {
         event.preventDefault();
-        if ( this.editDetails == true ) {
+        if ( this.editDetails === true ) {
             this.isEditDetailsModalOpen = true;
         } else {
             this.showPopup = true;
@@ -443,15 +481,15 @@ export class CommitteeHomeComponent implements OnInit {
 
     deleteAreaOfResearch( Object ) {
 
-        if ( this.result.committee.researchAreas.length != null && Object.commResearchAreasId != undefined ) {
-            this.committeeSaveService.deleteAreaOfResearch( Object.commResearchAreasId, this.result.committee.committeeId ).takeUntil( this.onDestroy$ ).subscribe( data => {
+        if ( this.result.committee.researchAreas.length != null && Object.commResearchAreasId !== undefined ) {
+            this.committeeSaveService.deleteAreaOfResearch( Object.commResearchAreasId, this.result.committee.committeeId )
+            .takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
-        }
-        else if ( Object.commResearchAreasId == undefined || Object.commResearchAreasId == null ) {
+        } else if ( Object.commResearchAreasId === undefined || Object.commResearchAreasId == null ) {
             this.result.committee.researchAreas.forEach(( value, index ) => {
-                if ( value.researchAreaCode == Object.researchAreaCode ) {
+                if ( value.researchAreaCode === Object.researchAreaCode ) {
                     this.result.committee.researchAreas.splice( index, 1 );
                 }
             } );
@@ -462,16 +500,16 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     showSchedulePopUp() {
-        if ( this.editDetails == true ) {
+        if ( this.editDetails === true ) {
             this.isEditDetailsModalOpen = true;
         } else {
-            if ( this.showGenerateSchedule == false ) {
+            if ( this.showGenerateSchedule === false ) {
                 this.showGenerateSchedule = true;
             }
-            var q = new Date();
-            var m = q.getMonth();
-            var d = q.getDate();
-            var y = q.getFullYear();
+            const q = new Date();
+            const m = q.getMonth();
+            const d = q.getDate();
+            const y = q.getFullYear();
             this.today = new Date( y, m, d );
             this.result.scheduleData = {};
             this.result.scheduleData.time = {};
@@ -501,8 +539,8 @@ export class CommitteeHomeComponent implements OnInit {
             case 'MONTHLY': this.monthOptionDay = 'XDAYANDXMONTH';
                 this.result.scheduleData.monthlySchedule.day = 1;
                 this.result.scheduleData.monthlySchedule.option1Month = 1;
-                this.result.scheduleData.monthlySchedule.selectedMonthsWeek = "";
-                this.result.scheduleData.monthlySchedule.selectedDayOfWeek = "";
+                this.result.scheduleData.monthlySchedule.selectedMonthsWeek = '';
+                this.result.scheduleData.monthlySchedule.selectedDayOfWeek = '';
                 this.result.scheduleData.monthlySchedule.option2Month = null;
                 break;
             case 'YEARLY': this.yearOption = 'XDAY';
@@ -515,21 +553,21 @@ export class CommitteeHomeComponent implements OnInit {
 
     sentDayOption() {
         setTimeout(() => {
-            if ( this.optionDay == 'XDAY' ) {
+            if ( this.optionDay === 'XDAY' ) {
                 this.result.scheduleData.dailySchedule.day = 1;
             } else {
-                this.result.scheduleData.dailySchedule.day = "";
+                this.result.scheduleData.dailySchedule.day = '';
             }
         }, 100 );
     }
 
     sentMonthOption() {
         setTimeout(() => {
-            if ( this.monthOptionDay == 'XDAYANDXMONTH' ) {
+            if ( this.monthOptionDay === 'XDAYANDXMONTH' ) {
                 this.result.scheduleData.monthlySchedule.day = 1;
                 this.result.scheduleData.monthlySchedule.option1Month = 1;
-                this.result.scheduleData.monthlySchedule.selectedMonthsWeek = "";
-                this.result.scheduleData.monthlySchedule.selectedDayOfWeek = "";
+                this.result.scheduleData.monthlySchedule.selectedMonthsWeek = '';
+                this.result.scheduleData.monthlySchedule.selectedDayOfWeek = '';
                 this.result.scheduleData.monthlySchedule.option2Month = null;
             } else {
                 this.result.scheduleData.monthlySchedule.day = null;
@@ -541,7 +579,7 @@ export class CommitteeHomeComponent implements OnInit {
 
     sentYearOption() {
         setTimeout(() => {
-            if ( this.yearOption == 'XDAY' ) {
+            if ( this.yearOption === 'XDAY' ) {
                 this.result.scheduleData.yearlySchedule.day = 1;
                 this.result.scheduleData.yearlySchedule.option1Year = 1;
                 this.result.scheduleData.yearlySchedule.option2Year = null;
@@ -562,11 +600,11 @@ export class CommitteeHomeComponent implements OnInit {
         this.sendScheduleRequestData.scheduleData.weeklySchedule = {};
         this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
         this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
-        this.sendScheduleRequestData.currentUser = localStorage.getItem( "currentUser" );
+        this.sendScheduleRequestData.currentUser = localStorage.getItem( 'currentUser' );
         this.sendScheduleRequestData.committee = this.result.committee;
         if ( this.result.scheduleData.scheduleStartDate < this.today ) {
             this.isStartDateBeforeToday = true;
-            this.scheduleValidationMessage = "* Please ensure start date is today or upcomming days"
+            this.scheduleValidationMessage = '* Please ensure start date is today or upcomming days';
         } else {
             this.isStartDateBeforeToday = false;
         }
@@ -575,13 +613,16 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.dailySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
+                    this.scheduleValidationMessage = '* Please ensure the end date is after the start date';
                 } else {
                     this.isDatePrevious = false;
                 }
-                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.dailySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null || this.result.scheduleData.place == "" || this.result.scheduleData.place == undefined ) {
+                if ( this.result.scheduleData.scheduleStartDate == null ||
+                    this.result.scheduleData.dailySchedule.scheduleEndDate == null ||
+                    this.displayTime == null || this.result.scheduleData.place == null ||
+                    this.result.scheduleData.place === '' || this.result.scheduleData.place === undefined ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = '* Please fill the mandatory fields.';
                 } else {
                     this.isMandatoryFilled = true;
                 }
@@ -590,13 +631,15 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData.weeklySchedule.daysOfWeek = this.selectedOptions;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.weeklySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
+                    this.scheduleValidationMessage = '* Please ensure the end date is after the start date';
                 } else {
                     this.isDatePrevious = false;
                 }
-                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.weeklySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                if ( this.result.scheduleData.scheduleStartDate == null ||
+                    this.result.scheduleData.weeklySchedule.scheduleEndDate == null ||
+                    this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = '* Please fill the mandatory fields.';
                 } else {
                     this.isMandatoryFilled = true;
                 }
@@ -605,13 +648,15 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData.monthlySchedule.monthOption = this.monthOptionDay;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.monthlySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
+                    this.scheduleValidationMessage = '* Please ensure the end date is after the start date';
                 } else {
                     this.isDatePrevious = false;
                 }
-                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.monthlySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                if ( this.result.scheduleData.scheduleStartDate == null ||
+                    this.result.scheduleData.monthlySchedule.scheduleEndDate == null ||
+                    this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = '* Please fill the mandatory fields.';
                 } else {
                     this.isMandatoryFilled = true;
                 }
@@ -620,28 +665,32 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData.yearlySchedule.yearOption = this.yearOption;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.yearlySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
+                    this.scheduleValidationMessage = '* Please ensure the end date is after the start date';
                 } else {
                     this.isDatePrevious = false;
                 }
-                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.yearlySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                if ( this.result.scheduleData.scheduleStartDate == null ||
+                    this.result.scheduleData.yearlySchedule.scheduleEndDate == null ||
+                    this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = '* Please fill the mandatory fields.';
                 } else {
                     this.isMandatoryFilled = true;
                 }
                 break;
             case 'NEVER': this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
-                if ( this.result.scheduleData.scheduleStartDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                if ( this.result.scheduleData.scheduleStartDate == null ||
+                    this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = '* Please fill the mandatory fields.';
                 } else {
                     this.isMandatoryFilled = true;
                 }
                 break;
         }
 
-        if ( this.isDatePrevious == false && this.isStartDateBeforeToday == false && this.isMandatoryFilled == true ) {
+        if ( this.isDatePrevious === false && this.isStartDateBeforeToday === false && this.isMandatoryFilled === true ) {
+            $('#exampleModalCenter').modal('toggle');
             this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;
@@ -662,11 +711,11 @@ export class CommitteeHomeComponent implements OnInit {
 
     editScheduleData( e, date, status, place, time, i, scheduleId ) {
         e.preventDefault();
-        if ( this.isScheduleListItemEditMode == true ) {
-            this.alertMsg = "You are editing a schedule data with serial number : " + ( scheduleId );
+        if ( this.isScheduleListItemEditMode === true ) {
+            this.alertMsg = 'You are editing a schedule data with serial number : ' + ( scheduleId );
             this.isScheduleEditWarningModalOpen = true;
         } else {
-            this.alertMsg = "";
+            this.alertMsg = '';
             this.isScheduleEditWarningModalOpen = false;
             this.isScheduleListItemEditMode = true;
             this.scheduleTime = new Date( time );
@@ -680,23 +729,23 @@ export class CommitteeHomeComponent implements OnInit {
 
     showDeleteModal( e, scheduleId, committeeId, scheduledDate ) {
         e.preventDefault();
-        if ( this.isScheduleListItemEditMode == true ) {
-            this.alertMsg = "You are editing a schedule data with serial number : " + ( scheduleId );
+        if ( this.isScheduleListItemEditMode === true ) {
+            this.alertMsg = 'You are editing a schedule data with serial number : ' + ( scheduleId );
             this.isScheduleEditWarningModalOpen = true;
         } else {
-            this.alertMsg = "";
+            this.alertMsg = '';
             this.isScheduleEditWarningModalOpen = false;
             this.scheduledDate = scheduledDate;
             this.scheduleId = scheduleId;
             this.committeeId = committeeId;
-            if ( this.isTodelete == false ) {
+            if ( this.isTodelete === false ) {
                 this.isTodelete = true;
             }
         }
     }
 
     closeConflictDateModal() {
-        if ( this.isConflictDates == true ) {
+        if ( this.isConflictDates === true ) {
             this.isConflictDates = false;
         }
     }
@@ -705,7 +754,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.sendScheduleRequestData = {};
         this.sendScheduleRequestData.scheduleId = this.scheduleId;
         this.sendScheduleRequestData.committeeId = this.committeeId;
-        if ( this.isTodelete == true ) {
+        if ( this.isTodelete === true ) {
             this.isTodelete = false;
         }
         this.committeeSaveService.deleteScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
@@ -727,9 +776,9 @@ export class CommitteeHomeComponent implements OnInit {
         scheduleObject.viewTime.time = this.datePipe.transform( this.scheduleTime, 'hh:mm' );
         scheduleObject.viewTime.meridiem = this.datePipe.transform( this.scheduleTime, 'aa' );
         scheduleObject.scheduleStatus.updateTimestamp = new Date();
-        scheduleObject.scheduleStatus.updateUser = localStorage.getItem( "currentUser" );
+        scheduleObject.scheduleStatus.updateUser = localStorage.getItem( 'currentUser' );
         this.scheduleStatus.forEach(( value, index ) => {
-            if ( value.description == scheduleObject.scheduleStatus.description ) {
+            if ( value.description === scheduleObject.scheduleStatus.description ) {
                 value.updateTimestamp = new Date();
                 value.updateUser = localStorage.getItem( 'currentUser' );
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
@@ -760,25 +809,25 @@ export class CommitteeHomeComponent implements OnInit {
     get selectedOptions() {
         return this.dayOptions
             .filter( option => option.checked )
-            .map( option => option.value )
+            .map( option => option.value );
     }
 
     filterSchedule() {
         if ( this.result.scheduleData.filterStartDate > this.result.scheduleData.filerEndDate ) {
             this.isFilterDatePrevious = true;
-            this.filterValidationMessage = "* Please ensure that the To : Date is greater than or equal to the From : Date.";
+            this.filterValidationMessage = '* Please ensure that the To : Date is greater than or equal to the From : Date.';
         } else {
             this.isFilterDatePrevious = false;
         }
         if ( this.result.scheduleData.filterStartDate == null || this.result.scheduleData.filerEndDate == null ) {
             this.isMandatoryFilterFilled = false;
-            this.filterValidationMessage = "* Please enter the necessary dates to apply filter.";
+            this.filterValidationMessage = '* Please enter the necessary dates to apply filter.';
         } else {
             this.isMandatoryFilterFilled = true;
         }
-        if ( this.isMandatoryFilterFilled == true && this.isFilterDatePrevious == false ) {
+        if ( this.isMandatoryFilterFilled === true && this.isFilterDatePrevious === false ) {
             this.sendScheduleRequestData = {};
-            if ( this.result.scheduleData == null || this.result.scheduleData == undefined ) {
+            if ( this.result.scheduleData == null || this.result.scheduleData === undefined ) {
                 this.sendScheduleRequestData.scheduleData = {};
             } else {
                 this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
@@ -793,7 +842,7 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     resetFilterSchedule() {
-        if ( this.isFilterDatePrevious == true || this.isMandatoryFilterFilled == false ) {
+        if ( this.isFilterDatePrevious === true || this.isMandatoryFilterFilled === false ) {
             this.isFilterDatePrevious = false;
             this.isMandatoryFilterFilled = true;
             this.result.scheduleData.filterStartDate = null;
@@ -824,6 +873,6 @@ export class CommitteeHomeComponent implements OnInit {
 
     loadSchedules( event: any, scheduleId ) {
         event.preventDefault();
-        this.router.navigate( ['committee/schedule'], { queryParams: { 'scheduleId': scheduleId } } );
+        this.router.navigate( ['/irb/committee/schedule'], { queryParams: { 'scheduleId': scheduleId } } );
     }
 }

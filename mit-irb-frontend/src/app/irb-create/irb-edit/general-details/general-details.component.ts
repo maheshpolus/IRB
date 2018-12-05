@@ -36,6 +36,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   isElasticResultPerson = false;
   message = '';
   personType = 'employee';
+  warningMessage: string;
   remainingLength = 7500;
   private $subscription1: ISubscription;
   invalidData = { invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false };
@@ -196,7 +197,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.generalInfo.personnelInfos[0].protocolLeadUnits[0].leadUnitFlag = 'Y';
       }
       this.generalInfo.updateTimestamp = new Date();
-      this.generalInfo.updateUser = localStorage.getItem('userName');
+      this.generalInfo.updateUser = this.userDTO.userName;
       this.commonVo.generalInfo = this.generalInfo;
       this.requestObject = JSON.stringify(this.commonVo.generalInfo);
       this._irbCreateService.updateProtocolGeneralInfo(this.commonVo).subscribe(
@@ -214,7 +215,9 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
             }
           });
           this.commonVo.generalInfo = this.result.generalInfo;
-
+          this.commonVo.protocolPersonnelInfoList = this.result.generalInfo.personnelInfos;
+          this.commonVo.personnelInfo = {};
+          this._sharedDataService.setCommonVo(this.commonVo);
           this.generalInfo = this.result.generalInfo;
           this._sharedDataService.setGeneralInfo(this.generalInfo);
         });
@@ -229,6 +232,13 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       return true;
     } else {
       this.invalidData.invalidGeneralInfo = true;
+      if (this.invalidData.invalidStartDate === true) {
+        this.warningMessage = 'Start Date should be less than End Date';
+      } else if (this.invalidData.invalidEndDate === true) {
+        this.warningMessage = 'End Date should be greater than Start Date';
+      } else {
+        this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
+      }
       return false;
     }
   }

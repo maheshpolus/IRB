@@ -18,4 +18,10 @@ export class DashboardService {
   getExemptProtocols(params) {
     return this._http.post('/mit-irb/getPersonExemptFormList', params);
   }
+  loadCommitteeList() {
+    return this._http.post('/mit-irb/loadCommitteeList', null);
+}
+loadCommitteeScheduleList() {
+    return this._http.post('/mit-irb/loadCommitteeScheduleList', null);
+}
 }

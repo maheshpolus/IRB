@@ -16,6 +16,7 @@ declare var $: any;
 })
 export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
 
+    userDTO: any = {};
     irbAttachment: any = {};
     irbAttachmentProtocol: any = {};
     tempSaveAttachment: any = {};
@@ -28,6 +29,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     files: UploadFile[] = [];
     attachmentList: any[] = [];
     isTimeStampSorting = true;
+    isCollaboratorEdit = false;
     noIrbAttachments = false;
     isMandatoryFilled = true;
     showPopup = false;
@@ -38,8 +40,10 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     fil: FileList;
     generalInfo: any;
     attachmentTypeDescription: string;
+    fileName: string;
     direction = 1;
     attachmentSelectedRow: number;
+    attachmentSelectedRowCollaborator: number;
     column = 'updateTimestamp';
     requestObject = {
         protocolNumber: '',
@@ -69,6 +73,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             this.result = data;
             this.attachmentTypes = this.result.irbAttachementTypes;
         });
+        // this.userDTO = this._activatedRoute.snapshot.data['irb'];
         this.loadIrbAttachmentList(reqobj);
     }
 
@@ -118,11 +123,11 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
 
     downloadAttachment(attachment) {
         this.requestObject.attachmentId = attachment.FILE_ID;
-        this._irbViewService.downloadIrbAttachment(attachment.protocolAttachment.fileId).subscribe(data => {
+        this._irbViewService.downloadIrbAttachment(attachment.fileId).subscribe(data => {
             const a = document.createElement('a');
             const blob = new Blob([data], { type: data.type });
             a.href = URL.createObjectURL(blob);
-            a.download = attachment.protocolAttachment.fileName;
+            a.download = attachment.fileName;
             a.click();
 
         },
@@ -134,8 +139,15 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
      * @param index-index of the edited attachment object
      * @param attachments-attachment object that is edited
      */
-    editAttachments(attachments, index) {
+    editAttachments(attachments, index, isCollaboratorEdit) {
+        this.isCollaboratorEdit = isCollaboratorEdit;
+        if (this.isCollaboratorEdit) {
+        this.attachmentSelectedRowCollaborator = index;
+        this.fileName = attachments.protocolAttachments.fileName;
+        } else {
         this.attachmentSelectedRow = index;
+        this.fileName = attachments.protocolAttachment.fileName;
+        }
         this.isAttachmentEdit = true;
         this.requestObject.attachmentTypeCode = attachments.attachmentType.typeCode;
         this.requestObject.attachmentDescription = attachments.description;
@@ -155,6 +167,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.isMandatoryFilled = false;
                 $('#attachmentModal').modal('toggle');
                 this.attachmentSelectedRow = null;
+                this.attachmentSelectedRowCollaborator = null;
                 this.isAttachmentEdit = false;
                 this.tempEditAttachment.acType = 'U';
                 this.tempEditAttachment.attachmentType = {
@@ -169,6 +182,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.tempEditAttachment.updateTimestamp = new Date();
                 this.tempEditAttachment.updateUser = localStorage.getItem('userName');
                 this._spinner.show();
+                if (!this.isCollaboratorEdit) {
                 this._irbCreateService.addattachment(this.tempEditAttachment, this.uploadedFile).subscribe(
                     data => {
                         this.result = data;
@@ -181,7 +195,20 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                         this._spinner.hide();
                         this.irbAttachment = data;
                         this.uploadedFile = [];
+                        this.isMandatoryFilled = true;
                     });
+                } else {
+                this._irbCreateService.addCollaboratorAttachments(this.tempEditAttachment, this.uploadedFile).subscribe(
+                    data => {
+                      this.result = data;
+                      this._spinner.hide();
+                      this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
+                      this.uploadedFile = [];
+                      this.requestObject.attachmentDescription = '';
+                      this.requestObject.attachmentTypeCode = null;
+                      this.isMandatoryFilled = true;
+                    });
+                }
             }
         }
     }
@@ -338,6 +365,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.requestObject.attachmentTypeCode = null;
         this.requestObject.attachmentDescription = null;
         this.attachmentSelectedRow = null;
+        this.attachmentSelectedRowCollaborator = null;
         this.isAttachmentEdit = false;
         this.isReplaceAttachment = false;
         this.uploadedFile = [];

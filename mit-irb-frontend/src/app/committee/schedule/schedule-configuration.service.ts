@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class ScheduleConfigurationService {
 
@@ -7,7 +6,7 @@ export class ScheduleConfigurationService {
     currentScheduleData = this.scheduleData.asObservable();
     scheduleHomeEdit = new BehaviorSubject<boolean>(false);
     currentschedulehomeEdit = this.scheduleHomeEdit.asObservable();
-    
+
     constructor() {
 
     }

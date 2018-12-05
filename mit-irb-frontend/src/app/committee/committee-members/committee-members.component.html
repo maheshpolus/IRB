@@ -177,8 +177,8 @@
 																	<div class="form-group ">
 																		<label>Person Name
 																		</label>
-																		<div *ngIf="!member.nonEmployeeFlag">{{member.personDetails.fullName}}</div>
-																		<div *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</div>
+																		<div *ngIf="!member.nonEmployeeFlag">{{member?.personDetails?.fullName}}</div>
+																		<div *ngIf="member.nonEmployeeFlag">{{member?.rolodex?.fullName}}</div>
 																	</div>
 																</div>
 																<div class="col-md-3">
@@ -194,7 +194,7 @@
 																</div>
 																<div class="col-md-3">
 																	<div class="form-group">
-																		<label>Term Start Date</label>
+																		<label>Term Start Date<span class="mandatory">*</span></label>
 																		<div class="input-group  mb-2">
 																			<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																			 [(ngModel)]="member.termStartDate">
@@ -209,7 +209,7 @@
 																</div>
 																<div class="col-md-3">
 																	<div class="form-group">
-																		<label>Term End Date</label>
+																		<label>Term End Date <span class="mandatory">*</span></label>
 																		<div class="input-group  mb-2">
 																			<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																			 [(ngModel)]="member.termEndDate">
@@ -260,7 +260,9 @@
 
 															</div>
 														</div>
-
+														<div *ngIf="isTermDateFilled == false"> 
+																<span class="mandatory">{{roleWarningMessage}}</span>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -349,7 +351,7 @@
 																	<tr>
 																		<th scope="col"> Role</th>
 																		<th scope="col">Start Date</th>
-																		<th scope="col">Start Date</th>
+																		<th scope="col">End Date</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
@@ -628,7 +630,7 @@
 															</div>
 															<div class="col-md-3">
 																<div class="form-group">
-																	<label>Term Start Date</label>
+																	<label>Term Start Date <span class="mandatory">*</span></label>
 																	<div class="input-group  mb-2">
 																		<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt11" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																		 [(ngModel)]="member.termStartDate">
@@ -643,7 +645,7 @@
 															</div>
 															<div class="col-md-3">
 																<div class="form-group">
-																	<label>Term End Date</label>
+																	<label>Term End Date <span class="mandatory">*</span></label>
 																	<div class="input-group  mb-2">
 																		<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt12" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																		 [(ngModel)]="member.termEndDate">
@@ -694,7 +696,9 @@
 
 														</div>
 													</div>
-
+													<div *ngIf="isTermDateFilled == false"> 
+															<span class="mandatory">{{roleWarningMessage}}</span>
+													</div>
 												</div>
 											</div>
 										</div>

@@ -355,6 +355,8 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                         this.mode = 'view';
                         this.initialLoadChild();
                         this.committeeConfigurationService.changeMode( this.mode );
+						// Change the url in view mode
+                        this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
                     }
                 }
                 this.committeeConfigurationService.currentactivatedTab.subscribe( data2 => {

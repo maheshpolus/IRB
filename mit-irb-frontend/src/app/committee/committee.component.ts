@@ -71,6 +71,9 @@ export class CommitteeComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.initLoadParent();
+        this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
+            this.result = data;
+        });
 
     }
 

@@ -12,17 +12,17 @@
 								<div class="col-md-4 col-sm-4 col-12"> 
 									<h4>
 										ID # :
-										<span>{{result.committee.committeeId}}</span>
+										<span>{{result?.committee?.committeeId}}</span>
 									</h4>
 									<p>
 										Home Unit :
-										<span>{{result.committee.homeUnitName}}</span>
+										<span>{{result?.committee?.homeUnitName}}</span>
 									</p>
 								</div>
 								<div class="col-md-4 col-sm-4 col-12">
 									<p>
 										Name :
-										<span>{{result.committee.committeeName}}</span>
+										<span>{{result?.committee?.committeeName}}</span>
 										<br /> Last updated User :
 										<span>{{lastUpdated}}</span>
 									</p>
@@ -30,7 +30,7 @@
 								<div class="col-md-4 col-sm-4 col-12">
 									<p>
 										Type:
-										<span>{{result.committee.committeeType.description}}</span>
+										<span>{{result?.committee?.committeeType?.description}}</span>
 									</p>
 								</div>
 								<!-- <div class="i-icon-top">

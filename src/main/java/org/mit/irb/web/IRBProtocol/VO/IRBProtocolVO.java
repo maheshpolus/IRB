@@ -22,6 +22,8 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
+import org.mit.irb.web.committee.pojo.Committee;
+import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 
 /*VO Class to  fetch all the IRB Protocol information
  * @author anu
@@ -57,6 +59,8 @@ public class IRBProtocolVO {
 	private Integer collaboratorId;
 	private String searchString;
 	private List<SponsorSearchResult> sponsorSearchResult;
+	private List<Committee> committeList;
+	private List< CommitteeSchedule> committeSchedulList;
 	
 	public ScienceOfProtocol getScienceOfProtocol() {
 		return scienceOfProtocol;
@@ -296,5 +300,21 @@ public class IRBProtocolVO {
 
 	public void setSponsorSearchResult(List<SponsorSearchResult> sponsorSearchResult) {
 		this.sponsorSearchResult = sponsorSearchResult;
+	}
+
+	public List<CommitteeSchedule> getCommitteSchedulList() {
+		return committeSchedulList;
+	}
+
+	public void setCommitteSchedulList(List<CommitteeSchedule> committeSchedulList) {
+		this.committeSchedulList = committeSchedulList;
+	}
+
+	public List<Committee> getCommitteList() {
+		return committeList;
+	}
+
+	public void setCommitteList(List<Committee> committeList) {
+		this.committeList = committeList;
 	}
 }

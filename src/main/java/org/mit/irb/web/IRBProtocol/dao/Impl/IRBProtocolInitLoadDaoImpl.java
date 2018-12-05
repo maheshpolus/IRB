@@ -1,6 +1,10 @@
 package org.mit.irb.web.IRBProtocol.dao.Impl;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.commons.collections4.ListUtils;
 import org.apache.log4j.Logger;
@@ -22,9 +26,13 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
+import org.mit.irb.web.committee.pojo.Committee;
+import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,32 +49,6 @@ public class IRBProtocolInitLoadDaoImpl implements IRBProtocolInitLoadDao{
 	}
 	
 	Logger logger = Logger.getLogger(IRBProtocolInitLoadDaoImpl.class.getName());
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public IRBProtocolVO loadProtocolTypes(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolType.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("protocolTypeCode"), "protocolTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolType.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolType> protocolType = criteria.list();
-		logger.info("Protocol Type in DAO: " + protocolType);
-		irbProtocolVO.setProtocolType(protocolType);
-		return irbProtocolVO;
-	}
-	
-	@Override
-	public IRBProtocolVO loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(AgeGroups.class);
-		List<AgeGroups> ageGroups = criteria.list();
-		logger.info("Protocol Type in DAO: " + ageGroups);
-		irbProtocolVO.setAgeGroups(ageGroups);
-		return irbProtocolVO;
-	}
 	
 	@Override
 	public IRBProtocolVO loadSponsorTypes(IRBProtocolVO irbProtocolVO) {
@@ -89,95 +71,34 @@ public class IRBProtocolInitLoadDaoImpl implements IRBProtocolInitLoadDao{
 		irbProtocolVO.setIrbAttachementTypes(query.list());
 		return irbProtocolVO;
 	}
-	
+
 	@Override
-	public IRBProtocolVO loadRoleTypes(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolPersonRoleTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("protocolPersonRoleId"), "protocolPersonRoleId");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolPersonRoleTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolPersonRoleTypes> rolelType = criteria.list();
-		logger.info("Role Type in DAO: " + rolelType);
-		irbProtocolVO.setPersonRoleTypes(rolelType);
+	public IRBProtocolVO loadCommitteeList() {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO(); 
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from Committee");
+		List<Committee> committeList = query.list();
+		if(!committeList.isEmpty()){
+			for(Committee committee:committeList ){
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
+				committee.setUpdatedDate(dateFormatter.format((Timestamp) committee.getUpdateTimestamp()));
+			}
+		}
+		irbProtocolVO.setCommitteList(committeList);
 		return irbProtocolVO;
 	}
 
 	@Override
-	public IRBProtocolVO loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolPersonLeadUnits.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("unitNumber"), "unitNumber");
-		projList.add(Projections.property("unitName"), "unitName");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolPersonLeadUnits.class));
-		criteria.addOrder(Order.asc("unitName"));
-		List<ProtocolPersonLeadUnits> protocolPersonLeadUnits = criteria.list();
-		logger.info("Leadunits in DAO: " + protocolPersonLeadUnits);
-		irbProtocolVO.setProtocolPersonLeadUnits(protocolPersonLeadUnits);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolAffiliationTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("affiliationTypeCode"), "affiliationTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolAffiliationTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolAffiliationTypes> protocolAffiliationTypes = criteria.list();
-		logger.info("protocolAffiliationTypes in DAO: " + protocolAffiliationTypes);
-		irbProtocolVO.setAffiliationTypes(protocolAffiliationTypes);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolSubjectTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("vulnerableSubjectTypeCode"), "vulnerableSubjectTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolSubjectTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolSubjectTypes> protocolSubjectTypes = criteria.list();
-		logger.info("protocolSubjectTypes in DAO: " + protocolSubjectTypes);
-		irbProtocolVO.setProtocolSubjectTypes(protocolSubjectTypes);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolFundingSourceTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("fundingSourceTypeCode"), "fundingSourceTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList)
-				.setResultTransformer(Transformers.aliasToBean(ProtocolFundingSourceTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolFundingSourceTypes> protocolFundingSourceTypes = criteria.list();
-		logger.info("protocolFundingSourceTypes in DAO: " + protocolFundingSourceTypes);
-		irbProtocolVO.setProtocolFundingSourceTypes(protocolFundingSourceTypes);
-		return irbProtocolVO;
-	}
-
-	@Override
-	public IRBProtocolVO loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(CollaboratorNames.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("organizationId"), "organizationId");
-		projList.add(Projections.property("organizationName"), "organizationName");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CollaboratorNames.class));
-		criteria.addOrder(Order.asc("organizationName"));
-		List<CollaboratorNames> collaboratorNames = criteria.list();
-		logger.info("collaboratorNames in DAO: " + collaboratorNames);
-		irbProtocolVO.setCollaboratorNames(collaboratorNames);
+	public IRBProtocolVO loadCommitteeScheduleList() {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO(); 
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from CommitteeSchedule");
+		List<CommitteeSchedule> committeScheduleList = query.list();
+		if(!committeScheduleList.isEmpty()){
+			for(CommitteeSchedule schedule:committeScheduleList ){
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
+				schedule.setUpdatedDate(dateFormatter.format((Timestamp) schedule.getUpdateTimestamp()));
+			}
+		}
+		irbProtocolVO.setCommitteSchedulList(committeScheduleList);
 		return irbProtocolVO;
 	}
 }

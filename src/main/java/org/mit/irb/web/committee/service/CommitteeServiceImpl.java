@@ -13,6 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +57,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Autowired
 	private CommitteeScheduleService committeeScheduleService;
 
+	@Autowired
+	private HibernateTemplate hibernateTemplate;
+	
 	@Override
-	public String fetchInitialDatas() {
+	public CommitteeVo fetchInitialDatas() {
 		CommitteeVo committeeVo = new CommitteeVo();
 		List<ProtocolReviewType> reviewTypes = committeeDao.fetchAllReviewType();
 		committeeVo.setReviewTypes(reviewTypes);
@@ -67,12 +71,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 		committeeVo.setResearchAreas(researchAreas);
 		List<ScheduleStatus> scheduleStatus = committeeDao.fetchAllScheduleStatus();
 		committeeVo.setScheduleStatus(scheduleStatus);
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	@Override
-	public String createCommittee(Integer committeeTypeCode) {
+	public CommitteeVo createCommittee(Integer committeeTypeCode) {
 		CommitteeVo committeeVo = new CommitteeVo();
 		Committee committee = new Committee();
 		committeeVo.setCommitteeTypeCode(committeeTypeCode);
@@ -91,13 +94,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 
 		committeeVo.setCommitteeMembershipTypes(committeeDao.getMembershipTypes());
 		committeeVo.setMembershipRoles(committeeDao.getMembershipRoles());
-
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	@Override
-	public String saveCommittee(CommitteeVo vo) {
+	public CommitteeVo saveCommittee(CommitteeVo vo) {
 		Committee committee = vo.getCommittee();
 		committee = committeeDao.saveCommittee(committee);
 		vo.setStatus(true);
@@ -108,12 +109,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 			vo.setMessage("Committee updated successfully");
 		}
 		vo.setCommittee(committee);
-		String response = committeeDao.convertObjectToJSON(vo);
-		return response;
+		return vo;
 	}
 
 	@Override
-	public String loadCommitteeById(String committeeId) {
+	public CommitteeVo loadCommitteeById(String committeeId) {
 		CommitteeVo committeeVo = new CommitteeVo();
 		Committee committee = committeeDao.fetchCommitteeById(committeeId);
 		List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
@@ -135,13 +135,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 		committeeVo.setHomeUnits(committeeDao.fetchAllHomeUnits());
 		committeeVo.setResearchAreas(committeeDao.fetchAllResearchAreas());
 		committeeVo.setScheduleStatus(committeeDao.fetchAllScheduleStatus());
-
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	@Override
-	public String addSchedule(CommitteeVo committeeVo) throws ParseException {
+	public CommitteeVo addSchedule(CommitteeVo committeeVo) throws ParseException {
 
 		ScheduleData scheduleData = committeeVo.getScheduleData();
 		Committee committee = committeeVo.getCommittee();
@@ -242,8 +240,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 		logger.info("skippedDates : " + skippedDates);
 		committee = committeeDao.saveCommittee(committee);
 		committeeVo.setCommittee(committee);
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	protected Time24HrFmt getTime24hFmt(Date date, int min) throws ParseException {
@@ -283,7 +280,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			committeeSchedule.setScheduleStatus(defaultStatus);
 			committeeSchedule.setUpdateTimestamp(committeeDao.getCurrentTimestamp());
 			committeeSchedule.setUpdateUser(committeeVo.getCurrentUser());
-
+			hibernateTemplate.saveOrUpdate(committeeSchedule); //code is changes since schedule is not saved properly
 			committee.getCommitteeSchedules().add(committeeSchedule);
 		}
 	}
@@ -324,7 +321,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 	}
 
 	@Override
-	public String saveAreaOfResearch(CommitteeVo committeeVo) {
+	public CommitteeVo saveAreaOfResearch(CommitteeVo committeeVo) {
 		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 		CommitteeResearchAreas committeeResearchAreas = committeeVo.getCommitteeResearchArea();
 		/*committeeResearchAreas.setCommittee(committee);
@@ -339,12 +336,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 		committee.getResearchAreas().add(researchAreas);
 		committee = committeeDao.saveCommittee(committee);
 		committeeVo.setCommittee(committee);
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	@Override
-	public String deleteAreaOfResearch(CommitteeVo committeeVo) {
+	public CommitteeVo deleteAreaOfResearch(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			List<CommitteeResearchAreas> list = committee.getResearchAreas();
@@ -366,11 +362,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 			committeeVo.setMessage("Problem occurred in deleting committee research area");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String deleteSchedule(CommitteeVo committeeVo) {
+	public CommitteeVo deleteSchedule(CommitteeVo committeeVo) {
 		try {
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 			List<CommitteeSchedule> list = committee.getCommitteeSchedules();
@@ -392,11 +388,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 			committeeVo.setMessage("Problem occurred in deleting committee schedule");
 			e.printStackTrace();
 		}
-		return committeeDao.convertObjectToJSON(committeeVo);
+		return committeeVo;
 	}
 
 	@Override
-	public String filterCommitteeScheduleDates(CommitteeVo committeeVo) {
+	public CommitteeVo filterCommitteeScheduleDates(CommitteeVo committeeVo) {
 		ScheduleData scheduleData = committeeVo.getScheduleData();
 		Committee committee = committeeVo.getCommittee();
 		Date startDate = scheduleData.getFilterStartDate();
@@ -414,8 +410,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 				schedule.setFilter(false);
 			}
 		}
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	private List<CommitteeSchedule> getSortedCommitteeScheduleList(Committee committee) {
@@ -425,7 +420,7 @@ public class CommitteeServiceImpl implements CommitteeService {
     }
 
 	@Override
-	public String resetCommitteeScheduleDates(CommitteeVo committeeVo) {
+	public CommitteeVo resetCommitteeScheduleDates(CommitteeVo committeeVo) {
 		ScheduleData scheduleData = committeeVo.getScheduleData();
 		Committee committee = committeeVo.getCommittee();
 		for (CommitteeSchedule schedule : getSortedCommitteeScheduleList(committee)) {
@@ -433,12 +428,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 		}
 		scheduleData.setFilterStartDate(null);
 		scheduleData.setFilerEndDate(null);
-		String response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 	@Override
-	public String updateCommitteeSchedule(CommitteeVo committeeVo) {
+	public CommitteeVo updateCommitteeSchedule(CommitteeVo committeeVo) {
 		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
 		CommitteeSchedule schedule = committeeVo.getCommitteeSchedule();
@@ -464,8 +458,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			committeeDao.saveCommittee(committee);
 		}
 		committeeVo.setCommittee(committee);
-		response = committeeDao.convertObjectToJSON(committeeVo);
-		return response;
+		return committeeVo;
 	}
 
 }

@@ -186,4 +186,5 @@ public interface IRBProtocolService {
 	 * @return updated VO object with collaborator persons and attachments
 	 */
 	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
+
 }

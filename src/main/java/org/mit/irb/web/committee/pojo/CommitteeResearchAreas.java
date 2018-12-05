@@ -23,17 +23,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class CommitteeResearchAreas implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GenericGenerator(name = "researchIdGererator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
 	@GeneratedValue(generator = "researchIdGererator")
-	@Column(name = "COMM_RESEARCH_AREAS_ID", updatable = false, nullable = false)
+	@Column(name = "COMM_RESEARCH_AREAS_ID")
 	private Integer commResearchAreasId;
 
 	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_RESEARCH_AREAS"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_RESEARCH_AREAS"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
 	private Committee committee;
 
 	@Column(name = "RESEARCH_AREA_CODE")

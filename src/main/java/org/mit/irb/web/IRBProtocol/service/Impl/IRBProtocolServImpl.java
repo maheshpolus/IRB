@@ -142,8 +142,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		return irbProtocolVO;
 	}
 
-	
-
 	@Override
 	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = null;
@@ -206,15 +204,14 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
-		    
-		    Future<IRBProtocolVO> protocolTypes = loadProtocolTypes(irbProtocolVO);
-		    Future<IRBProtocolVO> roleTypes = loadRoleTypes(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolPersonLeadunits = loadProtocolPersonLeadunits(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolAffiliationTypes = loadProtocolAffiliationTypes(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolSubjectTypes = loadProtocolSubjectTypes(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolAgeGroups = loadProtocolAgeGroups(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolFundingSourceTypes = loadProtocolFundingSourceTypes(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolCollaboratorNames = loadProtocolCollaboratorNames(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolTypes = initLoadService.loadProtocolTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> roleTypes = initLoadService.loadRoleTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolPersonLeadunits = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolAffiliationTypes = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolSubjectTypes = initLoadService.loadProtocolSubjectTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolAgeGroups = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
 		    irbProtocolVO = protocolTypes.get();
 			irbProtocolVO = roleTypes.get();
 			irbProtocolVO = protocolPersonLeadunits.get();
@@ -233,121 +230,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			logger.error("Error in modifyProtocolDetails method : "+e.getMessage());
 		}
 		return irbProtocolVO;
-	}
-	
-	@Async
-	public Future<IRBProtocolVO> loadProtocolTypes(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolType.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("protocolTypeCode"), "protocolTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolType.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolType> protocolType = criteria.list();
-		irbProtocolVO.setProtocolType(protocolType);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
-	}
-	
-	@Async
-	public Future<IRBProtocolVO> loadRoleTypes(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(AgeGroups.class);
-		List<AgeGroups> ageGroups = criteria.list();
-		irbProtocolVO.setAgeGroups(ageGroups);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
-	}
-
-	@Async
-	public Future<IRBProtocolVO> loadProtocolPersonLeadunits(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolPersonRoleTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("protocolPersonRoleId"), "protocolPersonRoleId");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolPersonRoleTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolPersonRoleTypes> rolelType = criteria.list();
-		irbProtocolVO.setPersonRoleTypes(rolelType);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
-	}
-	
-	@Async
-	public Future<IRBProtocolVO> loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolPersonLeadUnits.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("unitNumber"), "unitNumber");
-		projList.add(Projections.property("unitName"), "unitName");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolPersonLeadUnits.class));
-		criteria.addOrder(Order.asc("unitName"));
-		List<ProtocolPersonLeadUnits> protocolPersonLeadUnits = criteria.list();
-		irbProtocolVO.setProtocolPersonLeadUnits(protocolPersonLeadUnits);
-		return new AsyncResult<>(irbProtocolVO);
-	}
-	
-	@Async
-	public Future<IRBProtocolVO> loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolAffiliationTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("affiliationTypeCode"), "affiliationTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolAffiliationTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolAffiliationTypes> protocolAffiliationTypes = criteria.list();
-		irbProtocolVO.setAffiliationTypes(protocolAffiliationTypes);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
-	}
-	
-	@Async
-	public Future<IRBProtocolVO> loadProtocolAgeGroups(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolSubjectTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("vulnerableSubjectTypeCode"), "vulnerableSubjectTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolSubjectTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolSubjectTypes> protocolSubjectTypes = criteria.list();
-		irbProtocolVO.setProtocolSubjectTypes(protocolSubjectTypes);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
-	}
-	
-	
-	@Async
-	public Future<IRBProtocolVO> loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(ProtocolFundingSourceTypes.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("fundingSourceTypeCode"), "fundingSourceTypeCode");
-		projList.add(Projections.property("description"), "description");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolFundingSourceTypes.class));
-		criteria.addOrder(Order.asc("description"));
-		List<ProtocolFundingSourceTypes> protocolFundingSourceTypes = criteria.list();
-		irbProtocolVO.setProtocolFundingSourceTypes(protocolFundingSourceTypes);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
-	}
-	
-	@Async
-	public Future<IRBProtocolVO> loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO){
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(CollaboratorNames.class);
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("organizationId"), "organizationId");
-		projList.add(Projections.property("organizationName"), "organizationName");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CollaboratorNames.class));
-		criteria.addOrder(Order.asc("organizationName"));
-		List<CollaboratorNames> collaboratorNames = criteria.list();
-		irbProtocolVO.setCollaboratorNames(collaboratorNames);
-		session.flush();
-		return new AsyncResult<>(irbProtocolVO);
 	}
 	
 	@Override

@@ -12,6 +12,9 @@ export class SharedDataService {
   public commonVo = new BehaviorSubject<any>({});
   CommonVoVariable = this.commonVo.asObservable();
 
+  public currentTab = new BehaviorSubject<any>('ALL');
+  currentTabVariable = this.currentTab.asObservable();
+
   getGeneralInfo() {
     return this.generalInfo;
   }
@@ -27,5 +30,9 @@ export class SharedDataService {
  setCommonVo(commonVo: any) {
     this.commonVo.next(commonVo);
   }
+
+  changeCurrentTab(currentTab: any) {
+    this.currentTab.next(currentTab);
+}
 
 }

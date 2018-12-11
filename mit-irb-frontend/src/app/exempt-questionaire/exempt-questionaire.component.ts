@@ -16,6 +16,7 @@ import 'rxjs/add/operator/catch';
 
 import { ExemptQuestionaireService } from './exempt-questionaire.service';
 import { PiElasticService } from '../common/service/pi-elastic.service';
+import { SharedDataService } from '../common/service/shared-data.service';
 declare var $: any;
 
 @Component({
@@ -162,7 +163,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
         private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
-        private _router: Router) { }
+        private _router: Router, private _sharedDataService: SharedDataService) { }
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
@@ -1223,5 +1224,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     continueWithQstnr() {
         this.showContinueButton = false;
         $('#alertModal').modal('hide');
+    }
+
+    returnToExemptList(event) {
+        event.preventDefault();
+        this._sharedDataService.changeCurrentTab('EXEMPT');
+        this._router.navigate(['/irb/dashboard']);
     }
 }

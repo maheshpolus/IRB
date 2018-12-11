@@ -1331,17 +1331,18 @@ cursor: pointer;
 .navbarmed span a
 {
     display: block;
-    width: 30px;
+    width: 150px;
     height: 30px;
-    background: #c5c6c8;
-    border-radius: 50%;
+    /* background: #c5c6c8; */
+    /* border-radius: 50%; */
     text-align: center;
-    color: #fff;
+    color: #a92034 !important;
+    font-size: 15px;
 }
 .navbarmed span a i
 {
    line-height: 30px;
-   font-size: 12px;
+   font-size: 17px;
 }
 .navigate
 {
@@ -2081,4 +2082,36 @@ div
 
 .text-right{
 	text-align:right !important;
+}
+#returnToDasboardLink{
+	color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.sort-labels {
+    background: #fff;
+    padding-top: 10px;
+}
+.sort-fields> label {
+    font-weight: 500;
+    font-size: 0.7rem;
+}
+.sort-field-selected {
+    background: #C5C6C8;
+    border-radius: 6px;
+}
+.sort-fields-padding {
+    cursor: pointer;
+    padding: 0.45rem;
+    margin-bottom: 0;
+}
+.sort-fields> label> i {
+    font-weight: bold;
+}
+.align-view-btn {
+    text-align: right;
+}
+.elastic-view-margin {
+	margin-top: 13px;
 }

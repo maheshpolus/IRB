@@ -1,5 +1,5 @@
 <!-- Snapshot of PI -->
-<section class="row snapshot-responsive" *ngIf="roleType == 'PI'">
+<section class="row snapshot-responsive" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
 			<div class="media top-card-outer" (click)="expandedView('AMMEND_RENEW')">
@@ -11,8 +11,8 @@
 				<div class="media-body top-card-body">
 					<h4 class="media-heading">{{snapshots?.ammendRenewCount}}</h4>
 					<p>
-						Ammend/Renewals in
-						<br>Progress
+						Amendments/Renewals In
+						<br> Progress
 					</p>
 				</div>
 			</div>
@@ -111,17 +111,19 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards">
-			<div class="media top-card-outer" (click)="expandedView('REVISION_REQ')">
-				<div class="media-left card-icon1 circle3">
-					<a>
-						<i class="fa fa-file-text-o"></i>
-					</a>
-				</div>
-				<div class="media-body top-card-body-schedule cap3">
-					<h4 class="media-heading">{{snapshots?.revisionReqCount}}</h4>
-					<p>Pending responses</p>
-				</div>
+			<div class="col-12 top-cards">
+				<!-- <div class="media top-card-outer"
+					(click)="expandedView('REVISION_REQ')"> -->
+				<div class="media schedule-card-outer">
+					<div class="media-left card-icon1 circle3">
+						<a>
+							<i class="fa fa-file-text-o"></i>
+						</a>
+					</div>
+					<div class="media-body top-card-body-schedule cap3">
+						<h4 class="media-heading">{{snapshots?.revisionReqCount}}</h4>
+						<p>Pending responses</p>
+					</div>
 			</div>
 		</div>
 	</div>

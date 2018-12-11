@@ -11,6 +11,7 @@ import 'rxjs/add/operator/catch';
 
 import { ElasticService } from '../../common/service/elastic.service';
 import { DashboardService } from '../dashboard.service';
+import { SharedDataService } from '../../common/service/shared-data.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
     @Input() userDTO: any;
     lastClickedTab = 'ALL';
-    requestObject = {
+    requestObject: any = {
         personId: '',
         personRoleType: '',
         protocolNumber: '',
@@ -55,7 +56,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     message = '';
     _results: Subject<Array<any>> = new Subject<Array<any>>();
     searchText: FormControl = new FormControl('');
-    seachTextModel: string;
+    searchTextModel: string;
+    iconClass: any;
     IsElasticResult = false;
     protocol: string;
     protocolType: string;
@@ -66,7 +68,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     expiry_date: string;
     elasticResultTab = false;
 
-    exemptParams = {
+    exemptParams: any = {
         personId: '',
         personRoleType: '',
         title: '',
@@ -80,11 +82,20 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     constructor(private _dashboardService: DashboardService,
         private _ngZone: NgZone,
         private _elasticsearchService: ElasticService,
-        private _router: Router) { }
+        private _router: Router,
+        private _sharedDataService: SharedDataService) { }
 
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
-        this.getIrbListData('ALL');
+        this._sharedDataService.currentTab.subscribe(data => {
+            this.lastClickedTab = data;
+        });
+        if (this.lastClickedTab === 'EXEMPT') {
+            this.getExemptListData(this.lastClickedTab);
+        } else {
+            this.getIrbListData(this.lastClickedTab);
+        }
+
         this.roleType = this.userDTO.role;
         this.getIrbProtocolTypes();
     }
@@ -163,7 +174,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                                     if (results.length > 0) {
                                         this.message = '';
                                     } else {
-                                        if (this.seachTextModel && this.seachTextModel.trim()) {
+                                        if (this.searchTextModel && this.searchTextModel.trim()) {
                                             this.message = 'nothing was found';
                                         }
                                     }
@@ -188,6 +199,17 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.message = 'something went wrong';
     }
 
+    /** changes the icon in searchbox*/
+    protocolSearchValueChange() {
+        this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : 'fa fa-search fa-med';
+    }
+
+    /** clears the text entered for elastic search*/
+    clearsearchBox(e) {
+        e.preventDefault();
+        this.searchTextModel = '';
+    }
+
     /**get advance search results
      * @param currentTab - value of current tab
      */
@@ -202,8 +224,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     getIrbListData(currentTab) {
         this.irbListData = [];
         this.noIrbList = false;
-        this.seachTextModel = '';
+        this.searchTextModel = '';
         this.lastClickedTab = currentTab;
+        if (!this.isAdvancesearch) {
+            this.requestObject = { protocolTypeCode: '' };
+        }
+        this._sharedDataService.changeCurrentTab(currentTab);
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
         this.requestObject.dashboardType = currentTab;
@@ -222,6 +248,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 console.log('Error in method getIrbListData()', error);
             },
         );
+    }
+
+    /** sets value of direction to implement sorting */
+    updateSortOrder() {
+        this.sortOrder = this.sortOrder === '1' ? '-1' : '1';
+        this.sortBy();
     }
 
     /** sets value of column and direction to implement sorting */
@@ -247,12 +279,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.title = result.obj.title;
         this.status = result.obj.status;
         this.elasticResultTab = true;
-        this.seachTextModel = '';
+        this.searchTextModel = '';
     }
 
     /** method to close elastic search result*/
     closeResultTab() {
-        this.seachTextModel = '';
+        this.searchTextModel = '';
         this.elasticResultTab = false;
     }
 
@@ -301,6 +333,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptListData = [];
         this.noIrbList = false;
         this.lastClickedTab = currentTab;
+        if (!this.isAdvancesearch) {
+            this.requestObject = { protocolTypeCode: '' };
+            this.exemptParams = {};
+        }
+        this._sharedDataService.changeCurrentTab(currentTab);
         this.exemptParams.personId = this.userDTO.personID;
         this.exemptParams.personRoleType =
             (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN') ? 'IRB_ADMIN' : this.userDTO.role;

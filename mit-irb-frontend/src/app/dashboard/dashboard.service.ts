@@ -24,4 +24,7 @@ export class DashboardService {
 loadCommitteeScheduleList() {
     return this._http.post('/mit-irb/loadCommitteeScheduleList', null);
 }
+checkingPersonsRightToViewProtocol(params) {
+    return this._http.post('/mit-irb/checkingPersonsRightToViewProtocol', params);
+  }
 }

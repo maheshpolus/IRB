@@ -450,7 +450,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 {
     margin: 0;
 }
-.icon-list-coll li i
+.icon-list-coll li i, .review-comment-icon
 {
 	width: 35px;
     height: 35px;
@@ -460,6 +460,15 @@ ul.sb-results-dropdown-menu > li:last-child {
     line-height: 35px;
     color: #fff;
     font-size: 1rem;
+}
+.review-border
+{
+    padding: 10px;
+    border-bottom: 1px solid #8C8C8C;
+}
+.review-modal-height {
+    max-height: 490px;
+    overflow-y: auto;
 }
 .history-link
 {

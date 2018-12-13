@@ -305,7 +305,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
      * @param protocolNumber -unique identifier of a protocol
      */
     openIrb(protocolNumber) {
-        this._router.navigate(['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } });
+        const reqstobj = {'protocolNumber': protocolNumber, 'personId': this.userDTO.personID};
+        this._dashboardService.checkingPersonsRightToViewProtocol(reqstobj).subscribe(data => {
+            const response: any = data;
+            if (response.userHasRightToViewProtocol === 1) {
+                this._router.navigate(['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } });
+            }
+        });
     }
 
     /**fetch protocolTypes to show in dropdown*/

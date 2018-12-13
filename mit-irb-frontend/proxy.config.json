@@ -307,5 +307,22 @@
 	"/mit-irb/loadCommitteeScheduleList": {
 		"target": "http://192.168.1.66:8081",
 		"secure": false
+	},
+	"/mit-irb/loadProtocolHistoryCorrespondanceLetter":{
+		"target" : "http://192.168.1.66:8081",
+		"secure" : false
+	},	
+	"/mit-irb/loadProtocolHistoryActionComments":{
+		"target" : "http://192.168.1.66:8081",
+		"secure" : false
+	},
+	"/mit-irb/checkingPersonsRightToViewProtocol":{
+		"target" : "http://192.168.1.66:8081",
+		"secure" : false
+	},
+	"/getApplicableQuestionnaire":{
+		"target" : "http://192.168.1.18:8080/questionnaire",
+		"secure" : false
 	}
+	
 }

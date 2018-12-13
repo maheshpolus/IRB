@@ -42,4 +42,13 @@ export class IrbViewService {
   getProtocolHistotyGroupDetails(params) {
       return this._http.post('/mit-irb/getProtocolHistotyGroupDetails', params);
   }
+  loadProtocolHistoryCorrespondanceLetter(actionId) {
+      return this._http.get( '/mit-irb/loadProtocolHistoryCorrespondanceLetter', {
+          headers: new HttpHeaders().set('protocolActionId', actionId.toString()),
+          responseType: 'blob'
+      } );
+  }
+  loadProtocolHistoryActionComments(params) {
+    return this._http.post('/mit-irb/loadProtocolHistoryActionComments', params);
+}
 }

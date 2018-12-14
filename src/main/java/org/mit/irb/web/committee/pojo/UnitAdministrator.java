@@ -32,11 +32,9 @@ public class UnitAdministrator implements Serializable {
 	@Column(name = "PERSON_ID")
 	private String personId;
 
-	@Id
 	@Column(name = "UNIT_ADMINISTRATOR_TYPE_CODE")
 	private String unitAdministratorTypeCode;
 
-	@Id
 	@Column(name = "UNIT_NUMBER")
 	private String unitNumber;
 

@@ -1,12 +1,9 @@
 package org.mit.irb.web.controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
@@ -25,7 +22,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -102,7 +98,7 @@ public class LoginController extends BaseController {
 	    	  personDTO = loginValidator.readPersonData(vo.getUserName());
 	    	  role = loginService.checkIRBUserRole(vo.getUserName());
 	    	  personDTO.setRole(role);
-	    	  
+	    	  logger.info("Logged in User Role: "+role);
 	      } else{
 	    	  personDTO = (PersonDTO) httpSession.getAttribute("personDTO"+httpSession.getId());
 	      }

@@ -2,37 +2,19 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import org.apache.commons.collections4.ListUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
-import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
-import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
-import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

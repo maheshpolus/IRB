@@ -1,7 +1,6 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,7 +9,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name="SPONSOR")
 public class SponsorType {
-	
 	@Id
 	@Column(name = "SPONSOR_CODE")
 	private String sponsorCode;

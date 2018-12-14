@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
@@ -41,7 +40,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
@@ -388,7 +386,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 				isActiveMember = isActiveMembership(committeeMembership, scheduleDate);
 			}
 		}
-
 		return isActiveMember;
 	}
 
@@ -429,7 +426,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public ScheduleVo addOtherActions(ScheduleVo scheduleVo) {
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleActItems committeeScheduleActItems = scheduleVo.getCommitteeScheduleActItems();
-
 		CommitteeScheduleActItems scheduleActItem = new CommitteeScheduleActItems();
 		scheduleActItem.setCommitteeSchedule(committeeSchedule);
 		scheduleActItem.setScheduleActItemTypecode(committeeScheduleActItems.getScheduleActItemTypecode());
@@ -439,7 +435,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		scheduleActItem.setUpdateTimestamp(committeeScheduleActItems.getUpdateTimestamp());
 		scheduleActItem.setUpdateUser(committeeScheduleActItems.getUpdateUser());
 		scheduleActItem = scheduleDao.addOtherActions(scheduleActItem);
-
 		committeeSchedule.getCommitteeScheduleActItems().add(scheduleActItem);
 		Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 		committeeSchedule.setCommittee(committee);
@@ -494,7 +489,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public ScheduleVo addCommitteeScheduleMinute(ScheduleVo scheduleVo) {
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleMinutes committeeScheduleMinute = scheduleVo.getNewCommitteeScheduleMinute();
-
 		String protocolNumber = null;
 		Integer submissionId = null;
 		Integer submissionNumber = null;
@@ -508,7 +502,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 				}
 			}
 		}
-
 		Integer entryNumber = getNextMinuteEntryNumber(committeeSchedule);
 		String minuteEntryTypeCode = committeeScheduleMinute.getMinuteEntryTypeCode().toString();
 
@@ -517,7 +510,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		committeeScheduleMinute.setProtocolNumber(protocolNumber);
 		committeeScheduleMinute.setEntryNumber(entryNumber);
 		committeeScheduleMinute.setCommitteeSchedule(committeeSchedule);
-
 		if (Constants.ATTENDANCE.equals(minuteEntryTypeCode)) {
 			addAttendanceMinuteEntry(committeeSchedule, committeeScheduleMinute);
 		} else if (Constants.ACTION_ITEM.equals(minuteEntryTypeCode)) {
@@ -528,7 +520,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 			resetProtocolFields(committeeScheduleMinute);
 			resetActionItemFields(committeeScheduleMinute);
 		}
-
 		committeeScheduleMinute = scheduleDao.addCommitteeScheduleMinute(committeeScheduleMinute);
 		committeeSchedule.getCommitteeScheduleMinutes().add(committeeScheduleMinute);
 		committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
@@ -616,7 +607,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 				break;
 			}
 		}
-
 		return actionItem;
 	}
 

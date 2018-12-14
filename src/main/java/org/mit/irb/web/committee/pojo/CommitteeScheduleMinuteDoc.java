@@ -25,7 +25,7 @@ public class CommitteeScheduleMinuteDoc implements Serializable {
 	private Integer scheduleId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_SCH_MINUTE_DOC"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCH_MINUTE_DOC"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID", insertable = false, updatable = false)
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "MINUTE_NUMBER")

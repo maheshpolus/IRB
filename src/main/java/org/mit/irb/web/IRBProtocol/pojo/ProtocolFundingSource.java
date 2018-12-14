@@ -11,12 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
-@Table(name="MITKC_IRB_PROTO_FUNDING_SOURCE")
+@Table(name="IRB_PROTO_FUNDING_SOURCE")
 public class ProtocolFundingSource {	
 	@Id
 	@GenericGenerator(name = "ProtocolFundingSourceIdGenerator", strategy = "increment", parameters = {
@@ -68,7 +67,7 @@ public class ProtocolFundingSource {
 	private Integer awardId;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_FUNDING_SOURCE_FK1"), name = "FUNDING_SOURCE_TYPE_CODE", referencedColumnName = "FUNDING_SOURCE_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_FUNDING_SOURCE_FK1"), name = "FUNDING_SOURCE_TYPE_CODE", referencedColumnName = "FUNDING_SOURCE_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolFundingSourceTypes protocolFundingSourceTypes;
 	
 	public Integer getProtocolFundingSourceId() {

@@ -17,9 +17,7 @@ import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,10 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 /*
  * Controller for getting IRB protocol details. 
@@ -70,8 +65,8 @@ public class IRBController {
 	}
 
 	@RequestMapping(value = "/getIRBprotocolFundingSource", method = RequestMethod.POST)
-	public @ResponseBody IRBViewProfile getIRBprotocolFundingSource(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) throws JsonProcessingException {
+	public @ResponseBody IRBViewProfile getIRBprotocolFundingSource(@RequestBody CommonVO vo,
+			HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 		String protocolNumber = vo.getProtocolNumber();
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolFundingSource(protocolNumber);
 		return irbViewProfile;
@@ -86,16 +81,16 @@ public class IRBController {
 	}
 
 	@RequestMapping(value = "/getIRBprotocolVulnerableSubject", method = RequestMethod.POST)
-	public @ResponseBody IRBViewProfile getIRBprotocolVulnerableSubject(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) throws JsonProcessingException {
+	public @ResponseBody IRBViewProfile getIRBprotocolVulnerableSubject(@RequestBody CommonVO vo,
+			HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 		String protocolNumber = vo.getProtocolNumber();
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolVulnerableSubject(protocolNumber);
 		return irbViewProfile;
 	}
 
 	@RequestMapping(value = "/getIRBprotocolSpecialReview", method = RequestMethod.POST)
-	public @ResponseBody IRBViewProfile getIRBprotocolSpecialReview(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) throws JsonProcessingException {
+	public @ResponseBody IRBViewProfile getIRBprotocolSpecialReview(@RequestBody CommonVO vo,
+			HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 		String protocolNumber = vo.getProtocolNumber();
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBProtocolSpecialReview(protocolNumber);
 		return irbViewProfile;
@@ -156,8 +151,7 @@ public class IRBController {
 	public @ResponseBody CommonVO saveQuestionnaire(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody CommonVO vo) throws Exception {
 		PersonDTO personDTO = vo.getPersonDTO();
-		CommonVO commonVo = irbExemptProtocolService.saveQuestionnaire(vo.getIrbExemptForm(), vo.getQuestionnaireDto(),
-				vo.getQuestionnaireInfobean(), personDTO);
+		CommonVO commonVo = irbExemptProtocolService.saveQuestionnaire(vo.getIrbExemptForm(), vo.getQuestionnaireDto(), vo.getQuestionnaireInfobean(), personDTO);
 		return commonVo;
 	}
 
@@ -190,8 +184,7 @@ public class IRBController {
 	}
 
 	@RequestMapping(value = "/getExemptProtocolActivityLogs", method = RequestMethod.POST)
-	public @ResponseBody CommonVO getExemptProtocolActivityLogs(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody CommonVO vo) throws Exception {
+	public @ResponseBody CommonVO getExemptProtocolActivityLogs(HttpServletRequest request, HttpServletResponse response, @RequestBody CommonVO vo) throws Exception {
 		CommonVO commonVO = new CommonVO();
 		commonVO = irbExemptProtocolService.getExemptProtocolActivityLogs(vo.getIrbExemptForm().getExemptFormID());
 		return commonVO;
@@ -213,11 +206,32 @@ public class IRBController {
 		return irbExemptProtocolService.downloadExemptProtocolAttachments(checkListId);
 	}
 
+	@RequestMapping(value = "/loadProtocolHistoryCorrespondanceLetter", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> loadProtocolHistoryCorrespondanceLetter(HttpServletResponse response,
+			@RequestHeader("protocolActionId") Integer protocolActionId) throws JsonProcessingException {
+		logger.info("loadProtocolHistoryCorrespondanceLetter");
+		ResponseEntity<byte[]> attachmentData = irbProtocolService.loadProtocolHistoryCorrespondanceLetter(protocolActionId);
+		return attachmentData;
+	}
+
+	@RequestMapping(value = "/loadProtocolHistoryActionComments", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile loadProtocolHistoryCorrespondenceComments(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
+		logger.info("loadProtocolHistoryActionComments");
+		return irbProtocolService.loadProtocolHistoryActionComments(vo.getProtocolNumber(), vo.getProtocolActionId(), vo.getProtocolActionTypecode());
+	}
+
+	@RequestMapping(value = "/checkingPersonsRightToViewProtocol", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile checkingPersonsRightToViewProtocol(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
+		logger.info("checkingPersonsRightToViewProtocol");
+		return irbProtocolService.checkingPersonsRightToViewProtocol(vo.getPersonId(), vo.getProtocolNumber());
+	}
+
 	@RequestMapping(value = "/getExemptProtocolAttachmentList", method = RequestMethod.POST)
 	public @ResponseBody ArrayList<HashMap<String, Object>> getExemptProtocolAttachmentList(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody CommonVO vo) throws Exception {
-		ArrayList<HashMap<String, Object>> leadunitList = irbExemptProtocolService
-				.getExemptProtocolAttachmentList(vo.getIrbExemptForm().getExemptFormID());
+		ArrayList<HashMap<String, Object>> leadunitList = irbExemptProtocolService.getExemptProtocolAttachmentList(vo.getIrbExemptForm().getExemptFormID());
 		return leadunitList;
 	}
 
@@ -241,8 +255,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO updateProtocolPersonInfo(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo(),
-				irbProtocolVO.getGeneralInfo());
+		protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo(), irbProtocolVO.getGeneralInfo());
 		return protocolVO;
 	}
 

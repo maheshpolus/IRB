@@ -23,14 +23,14 @@ public class CommitteeMemberStatusChange implements Serializable {
 	private Integer commMemberStatusChangeId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_MBR_STATUS_CHNG_3"), name = "COMM_MEMBERSHIP_ID", referencedColumnName = "COMM_MEMBERSHIP_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MBR_STATUS_CHNG_3"), name = "COMM_MEMBERSHIP_ID", referencedColumnName = "COMM_MEMBERSHIP_ID", insertable = false, updatable = false)
 	private CommitteeMemberships committeeMemberships;
 
 	@Column(name = "COMM_MEMBERSHIP_ID")
 	private Integer commMembershipId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_MBR_STATUS_CHNG_2"), name = "MEMBERSHIP_STATUS_CODE", referencedColumnName = "MEMBERSHIP_STATUS_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MBR_STATUS_CHNG_2"), name = "MEMBERSHIP_STATUS_CODE", referencedColumnName = "MEMBERSHIP_STATUS_CODE", insertable = false, updatable = false)
 	private CommitteeMembershipStatus committeeMembershipStatus;
 
 	@Column(name = "MEMBERSHIP_STATUS_CODE")

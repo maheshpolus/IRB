@@ -77,6 +77,10 @@ public class CommonVO {
 	
 	private String exemptFormEndDate;
 	
+	private Integer protocolActionId;
+	
+	private String protocolActionTypecode;
+	
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -331,5 +335,21 @@ public class CommonVO {
 
 	public void setExemptFormEndDate(String exemptFormEndDate) {
 		this.exemptFormEndDate = exemptFormEndDate;
+	}
+
+	public Integer getProtocolActionId() {
+		return protocolActionId;
+	}
+
+	public void setProtocolActionId(Integer protocolActionId) {
+		this.protocolActionId = protocolActionId;
+	}
+
+	public String getProtocolActionTypecode() {
+		return protocolActionTypecode;
+	}
+
+	public void setProtocolActionTypecode(String protocolActionTypecode) {
+		this.protocolActionTypecode = protocolActionTypecode;
 	}
 }

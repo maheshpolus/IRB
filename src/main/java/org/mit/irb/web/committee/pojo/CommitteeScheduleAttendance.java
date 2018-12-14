@@ -35,7 +35,7 @@ public class CommitteeScheduleAttendance implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_SCH_ATTENDANCE"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCH_ATTENDANCE"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "PERSON_ID")

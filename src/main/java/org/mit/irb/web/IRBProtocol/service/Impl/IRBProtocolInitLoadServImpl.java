@@ -2,7 +2,6 @@ package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.util.List;
 import java.util.concurrent.Future;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -77,8 +76,10 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
+
 	@Async
 	public Future<IRBProtocolVO> loadProtocolAffiliationTypes(IRBProtocolVO irbProtocolVO){
+
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(ProtocolPersonLeadUnits.class);
 		ProjectionList projList = Projections.projectionList();
@@ -91,6 +92,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		session.flush();
 		return new AsyncResult<>(irbProtocolVO);
 	}
+
 
 	@Async
 	public Future<IRBProtocolVO> loadProtocolSubjectTypes(IRBProtocolVO irbProtocolVO){
@@ -107,6 +109,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
+
 	@Async
 	public Future<IRBProtocolVO> loadProtocolFundingSourceTypes(IRBProtocolVO irbProtocolVO){
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -121,6 +124,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		session.flush();
 		return new AsyncResult<>(irbProtocolVO);
 	}
+
 
 	@Async
 	public Future<IRBProtocolVO> loadProtocolCollaboratorNames(IRBProtocolVO irbProtocolVO){

@@ -53,7 +53,7 @@ public class Committee implements Serializable {
 	private Integer committeeTypeCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMMITTEE"), name = "COMMITTEE_TYPE_CODE", referencedColumnName = "COMMITTEE_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMMITTEE"), name = "COMMITTEE_TYPE_CODE", referencedColumnName = "COMMITTEE_TYPE_CODE", insertable = false, updatable = false)
 	private CommitteeType committeeType;
 
 	@Column(name = "MINIMUM_MEMBERS_REQUIRED")

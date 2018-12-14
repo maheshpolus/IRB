@@ -1,24 +1,15 @@
 package org.mit.irb.web.IRBProtocol.service;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
-import org.mit.irb.web.common.VO.CommonVO;
-import org.mit.irb.web.common.dto.PersonDTO;
-import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
-import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -186,5 +177,20 @@ public interface IRBProtocolService {
 	 * @return updated VO object with collaborator persons and attachments
 	 */
 	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
+
+	/**
+	 * download correspondence letter in history
+	 */ 
+	ResponseEntity<byte[]> loadProtocolHistoryCorrespondanceLetter(Integer protocolActionId);
+
+	/**
+	 * load Protocol History Action Comments
+	 */ 
+	IRBViewProfile loadProtocolHistoryActionComments(String protocolNumber, Integer protocolActionId, String protocolActionTypecode);
+
+	/**
+	 * check for users right to view the protocol
+	 */ 
+	IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber);
 
 }

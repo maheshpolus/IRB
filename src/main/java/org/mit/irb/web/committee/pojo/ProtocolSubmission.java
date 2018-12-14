@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -21,22 +20,20 @@ import org.hibernate.annotations.Parameter;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "MITKC_IRB_PROTOCOL_SUBMISSION")
+@Table(name="IRB_PROTOCOL_SUBMISSION")
 public class ProtocolSubmission implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GenericGenerator(name = "protocolSubmissionIdGererator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
 	@GeneratedValue(generator = "protocolSubmissionIdGererator")
 	@Column(name = "SUBMISSION_ID", updatable = false, nullable = false)
-
 	private Integer submissionId;
 
 	@JsonBackReference
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name ="MITKC_IRB_PROTO_SUBMISSION_FK7"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name ="IRB_PROTO_SUBMISSION_FK7"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "SUBMISSION_NUMBER")
@@ -70,28 +67,28 @@ public class ProtocolSubmission implements Serializable {
 	private String submissionTypeCode;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey =@ForeignKey(name = "MITKC_IRB_PROTO_SUBMISSION_FK6"), name = "SUBMISSION_TYPE_CODE", referencedColumnName = "SUBMISSION_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK6"), name = "SUBMISSION_TYPE_CODE", referencedColumnName = "SUBMISSION_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionType protocolSubmissionType;
 
 	@Column(name = "SUBMISSION_TYPE_QUAL_CODE")
 	private String submissionTypeQualifierCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "SUBMISSION_TYPE_QUAL_CODE", referencedColumnName = "SUBMISSION_TYPE_QUAL_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK8"), name = "SUBMISSION_TYPE_QUAL_CODE", referencedColumnName = "SUBMISSION_TYPE_QUAL_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionQualifierType qualifierType;
 
 	@Column(name = "SUBMISSION_STATUS_CODE")
 	private String submissionStatusCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "SUBMISSION_STATUS_CODE", referencedColumnName = "SUBMISSION_STATUS_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK5"),name = "SUBMISSION_STATUS_CODE", referencedColumnName = "SUBMISSION_STATUS_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionStatus submissionStatus;
 
 	@Column(name = "PROTOCOL_REVIEW_TYPE_CODE")
 	private String protocolReviewTypeCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "PROTOCOL_REVIEW_TYPE_CODE", referencedColumnName = "PROTOCOL_REVIEW_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK9"),name = "PROTOCOL_REVIEW_TYPE_CODE", referencedColumnName = "PROTOCOL_REVIEW_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolReviewType protocolReviewType;
 
 	@Column(name = "SUBMISSION_DATE")

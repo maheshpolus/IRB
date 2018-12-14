@@ -5,16 +5,11 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-/*import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;*/
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-//import org.apache.log4j.Logger;
 import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.utils.DBEngine;
@@ -28,8 +23,7 @@ import org.springframework.ui.Model;
  */
 public class BaseController{
 	
-	protected static Logger logger = Logger.getLogger(BaseController.class
-			.getName());
+	protected static Logger logger = Logger.getLogger(BaseController.class.getName());
 	
 	DBEngine dbUtils = new DBEngine();
 	protected Connection connection = null;
@@ -102,7 +96,6 @@ public class BaseController{
 	}
 
 	public static void close(CallableStatement callableStatement) {
-
 		if (callableStatement != null) {
 			try {
 				callableStatement.close();
@@ -145,7 +138,6 @@ public class BaseController{
 			model = null;
 		}
 		return model;
-		
 	}
 	
 	protected boolean isPersonAlive(HttpSession session) {

@@ -34,15 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service(value = "irbExemptProtocolDao")
 @Transactional
 public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
-
-	DBEngine dbEngine;
 	
 	@Autowired
 	ExemptProtocolEmailNotification exemptProtocolEmailNotification;
 	
+	DBEngine dbEngine;
 	Logger logger = Logger.getLogger(IRBExemptProtocolDaoImpl.class.getName());
 	
-
 	IRBExemptProtocolDaoImpl() {
 		dbEngine = new DBEngine();
 	}
@@ -57,21 +55,14 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 			ArrayList<InParameter> inputParam = null;
 			for (int i = 0; i < files.length; i++) {
 				inputParam = new ArrayList<>();
-				inputParam.add(
-						new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListId));
-				inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,
-						irbExemptForm.getExemptFormID()));
-				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,
-						irbExemptForm.getCheckListDescription()));
-				inputParam.add(
-						new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, files[i].getOriginalFilename()));
+				inputParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListId));
+				inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,irbExemptForm.getExemptFormID()));
+				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListDescription()));
+				inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, files[i].getOriginalFilename()));
 				inputParam.add(new InParameter("AV_FILE_DATA", DBEngineConstants.TYPE_BLOB, files[i].getBytes()));
-				inputParam.add(
-						new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
-				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,
-						irbExemptForm.getUpdateUser()));
-				inputParam.add(
-						new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListAcType()));
+				inputParam.add(new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
+				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,irbExemptForm.getUpdateUser()));
+				inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING, irbExemptForm.getCheckListAcType()));
 				dbEngine.executeProcedure(inputParam, "UPD_IRB_EXEMPT_FORM_CHECKLST");
 			}
 		} catch (DBException e) {
@@ -115,11 +106,9 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 		try {
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
-			inParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER,
-					checkListAttachmentId));
+			inParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER, checkListAttachmentId));
 			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam,
-					"GET_IRB_EXEMPT_FORM_CKLST_FILE", outParam);
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_EXEMPT_FORM_CKLST_FILE", outParam);
 			if (result != null && !result.isEmpty()) {
 				HashMap<String, Object> hmResult = result.get(0);
 				ByteArrayOutputStream byteArrayOutputStream = null;

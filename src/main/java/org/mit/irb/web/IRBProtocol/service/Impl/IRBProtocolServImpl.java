@@ -1,47 +1,25 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
-
 import java.util.List;
 import java.util.concurrent.Future;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
-import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
-import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
-import org.mit.irb.web.common.VO.CommonVO;
-import org.mit.irb.web.common.constants.KeyConstants;
-import org.mit.irb.web.common.dto.PersonDTO;
-import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
-import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateTemplate;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,6 +91,11 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
+	public ResponseEntity<byte[]> loadProtocolHistoryCorrespondanceLetter(Integer protocolActionId) {
+		return irbProtocolDao.loadProtocolHistoryCorrespondanceLetter(protocolActionId);
+	}
+	
+	@Override
 	public ResponseEntity<byte[]> downloadAttachments(String attachmentId) {
 		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadAttachments(attachmentId);
 		return attachments;
@@ -141,6 +124,8 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		IRBProtocolVO irbProtocolVO = irbProtocolDao.updateGeneralInfo(generalInfo);
 		return irbProtocolVO;
 	}
+
+
 
 	@Override
 	public IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo,ProtocolGeneralInfo generalInfo) {
@@ -262,5 +247,19 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		irbProtocolVO = irbProtocolDao.loadCollaboratorPersonsAndAttachments(collaboratorId);
 		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBViewProfile loadProtocolHistoryActionComments(String protocolNumber,Integer protocolActionId, String protocolActionTypecode) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		irbViewProfile = irbProtocolDao.loadProtocolHistoryActionComments(protocolNumber,protocolActionId,protocolActionTypecode);
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		irbViewProfile = irbProtocolDao.checkingPersonsRightToViewProtocol(personId, protocolNumber);
+		return irbViewProfile;
 	}
 }

@@ -11,17 +11,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-
 import oracle.jdbc.OracleTypes;
 import org.mit.irb.web.common.dto.*;
-
 import org.mit.irb.web.common.utils.*;
 import org.mit.irb.web.controller.BaseController;
 import org.mit.irb.web.login.dao.LoginDao;
@@ -34,41 +29,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class LoginValidator extends BaseController {
+
 	@Autowired
-	@Qualifier(value="loginService")
+	@Qualifier(value = "loginService")
 	LoginService loginService;
 
 	@Autowired
 	private LoginDao loginDao;
-	
+
 	protected static Logger logger = Logger.getLogger(LoginValidator.class.getName());
+
 	Statement statement = null;
 	ResultSet resultSet = null;
 	DBEngine dbUtils = new DBEngine();
 
 	public LoginValidator() {
 	}
-	
+
 	// login credentials checking and return boolean value for DB user
 	public Boolean loginCheck(String loginMode, String userName, String password, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		boolean isLoginSuccess = false;
 		if ("USERID".equalsIgnoreCase(loginMode)) {
 			isLoginSuccess = new UserIdAuthentication().Authenticate(userName, password);
-
 		} else if ("TouchStone".equalsIgnoreCase(loginMode)) {
 			isLoginSuccess = new TouchstoneAuthService().authenticate(request, request.getSession());
-
 		}
-
 		if (isLoginSuccess) {
 			HttpSession session = request.getSession();
 			PersonDTO personDTO = readPersonData(userName);
 			session.setAttribute("personDTO" + session.getId(), personDTO);
 			session.setAttribute("user" + session.getId(), personDTO.getFullName());
 			// setting session to expiry in 30 mins
-			/*int timeoutValue = Integer.parseInt(IRBProperties.getProperty("SESSION_TIMEOUT_DEFAULT"));
-			session.setMaxInactiveInterval(timeoutValue * 60);*/
+			/*
+			 * int timeoutValue = Integer.parseInt(IRBProperties.getProperty(
+			 * "SESSION_TIMEOUT_DEFAULT"));
+			 * session.setMaxInactiveInterval(timeoutValue * 60);
+			 */
 			return true;
 		}
 		return false;
@@ -88,9 +85,7 @@ public class LoginValidator extends BaseController {
 					callableStatement = connection.prepareCall(procedureCall);
 					callableStatement.setString(1, userName);
 					callableStatement.registerOutParameter(2, OracleTypes.CURSOR);
-					// Call Stored Procedure
 					callableStatement.executeUpdate();
-					// get cursor and cast it to ResultSet
 					resultSet = (ResultSet) callableStatement.getObject(2);
 					while (resultSet.next()) {
 						personDTO.setPersonID(resultSet.getString("prncpl_id"));
@@ -108,8 +103,10 @@ public class LoginValidator extends BaseController {
 						try {
 							String role = checkIRBUserRole(userName);
 							personDTO.setRole(role);
-							logger.info("in checkIRBUserRole" +role);
+							logger.info("in checkIRBUserRole" + role);
 						} catch (Exception e) {
+							;
+							logger.error("Exception checkIRBUserRole ", e);
 							e.printStackTrace();
 						}
 					}
@@ -124,10 +121,10 @@ public class LoginValidator extends BaseController {
 				dbUtils.endTxn(connection);
 			}
 		}
-		logger.info("personDto" +personDTO.getUnitName()+personDTO);
+		logger.info("personDto" + personDTO.getUnitName() + personDTO);
 		return personDTO;
 	}
-	
+
 	public Integer checkUserType(String personId, String unitNumber) throws DBException, IOException, SQLException {
 		ArrayList<InParameter> inParam = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
@@ -142,30 +139,32 @@ public class LoginValidator extends BaseController {
 		}
 		return userType;
 	}
-	
+
 	public String checkIRBUserRole(String personId) throws Exception {
 		String role = null;
+		logger.info("checkIRBUserRole");
 		ArrayList<HashMap<String, Object>> result = null;
 		result = checkIRBUserRoles(personId);
-		for (HashMap<String, Object> map : result){
-			for (Entry<String, Object> entry : map.entrySet()){
-				if(entry.getKey().equals("IS_IRB_ADMIN") && entry.getValue().equals("Y")){
-					role = "ADMIN";
-					return role;
-				} else if(entry.getKey().equals("IS_IRB_CHAIR") && entry.getValue().equals("Y")){
-					role = "CHAIR";
-					return role;
-				} else if(entry.getKey().equals("IS_IRB_REVIEWER") && entry.getValue().equals("Y")){
-					role = "REVIEWER";
-					return role;
-				} else{
-					role = "PI";
-				}
-			}
+		HashMap<String, Object> maps = result.get(0);
+		if (maps.get("IS_IRB_ADMIN").equals("Y")) {
+			role = "ADMIN";
+			return role;
+		} else if (maps.get("IS_IRB_CHAIR").equals("Y")) {
+			role = "CHAIR";
+			return role;
+		} else if (maps.get("IS_IRB_DEPT_ADMIN").equals("Y")) {
+			role = "DEPT_ADMIN";
+			return role;
+		} else if (maps.get("IS_IRB_REVIEWER").equals("Y")) {
+			role = "REVIEWER";
+			return role;
+		} else if (maps.get("IS_IRB_PI").equals("Y")) {
+			role = "PI";
+			return role;
 		}
 		return role;
 	}
-	
+
 	public ArrayList<HashMap<String, Object>> checkIRBUserRoles(String personId) {
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();

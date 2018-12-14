@@ -54,23 +54,25 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public String checkIRBUserRole(String personId) throws Exception {
 		String role = null;
+		logger.info("checkIRBUserRole ");
 		ArrayList<HashMap<String, Object>> result = null;
 		result = loginDao.checkIRBUserRole(personId);
-		for (HashMap<String, Object> map : result){
-			for (Entry<String, Object> entry : map.entrySet()){
-				if(entry.getKey().equals("IS_IRB_ADMIN") && entry.getValue().equals("Y")){
-					role = "ADMIN";
-					return role;
-				} else if(entry.getKey().equals("IS_IRB_CHAIR") && entry.getValue().equals("Y")){
-					role = "CHAIR";
-					return role;
-				} else if(entry.getKey().equals("IS_IRB_REVIEWER") && entry.getValue().equals("Y")){
-					role = "REVIEWER";
-					return role;
-				} else{
-					role = "PI";
-				}
-			}
+		HashMap<String, Object> maps = result.get(0);
+		if(maps.get("IS_IRB_ADMIN").equals("Y")){
+			role = "ADMIN";
+			return role;
+		} else if(maps.get("IS_IRB_CHAIR").equals("Y")){
+			role = "CHAIR";
+			return role;
+		} else if(maps.get("IS_IRB_DEPT_ADMIN").equals("Y")){
+			role = "DEPT_ADMIN";
+			return role;
+		} else if(maps.get("IS_IRB_REVIEWER").equals("Y")){
+			role = "REVIEWER";
+			return role;
+		}else if(maps.get("IS_IRB_PI").equals("Y")){
+			role = "PI";
+			return role;
 		}
 		return role;
 	}

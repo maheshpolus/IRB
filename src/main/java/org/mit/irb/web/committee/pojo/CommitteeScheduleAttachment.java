@@ -33,11 +33,11 @@ public class CommitteeScheduleAttachment implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_ATTACHMENT"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_ATTACHMENT"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_SCHE_ATTACH_TYPE"), name = "ATTACHMENT_TYPE_CODE", referencedColumnName = "ATTACHMENT_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_SCHE_ATTACH_TYPE"), name = "ATTACHMENT_TYPE_CODE", referencedColumnName = "ATTACHMENT_TYPE_CODE", insertable = false, updatable = false)
 	private CommitteeScheduleAttachType attachmentType;
 
 	@Column(name = "ATTACHMENT_ID")

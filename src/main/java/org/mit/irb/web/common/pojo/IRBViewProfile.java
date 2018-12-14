@@ -27,6 +27,8 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbProtocolLeadUnitMap;
 	private ArrayList<HashMap<String, Object>> irbProtocolAffiliateMap;	
 	private ArrayList<HashMap<String, Object>> irbProtocolTitleMap;		
+	private ArrayList<HashMap<String, Object>> irbProtocolHistoryActionComments;		
+	private Integer userHasRightToViewProtocol;
 	
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
@@ -174,5 +176,20 @@ public class IRBViewProfile {
 	public void setIrbProtocolTitleMap(ArrayList<HashMap<String, Object>> irbProtocolTitleMap) {
 		this.irbProtocolTitleMap = irbProtocolTitleMap;
 	}
-	
+
+	public ArrayList<HashMap<String, Object>> getIrbProtocolHistoryActionComments() {
+		return irbProtocolHistoryActionComments;
+	}
+
+	public void setIrbProtocolHistoryActionComments(ArrayList<HashMap<String, Object>> irbProtocolHistoryActionComments) {
+		this.irbProtocolHistoryActionComments = irbProtocolHistoryActionComments;
+	}
+
+	public Integer getUserHasRightToViewProtocol() {
+		return userHasRightToViewProtocol;
+	}
+
+	public void setUserHasRightToViewProtocol(Integer userHasRightToViewProtocol) {
+		this.userHasRightToViewProtocol = userHasRightToViewProtocol;
+	}	
 }

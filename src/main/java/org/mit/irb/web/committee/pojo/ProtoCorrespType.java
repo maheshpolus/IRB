@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MITKC_IRB_PROTO_CORRESP_TYPE")
+@Table(name = "IRB_PROTO_CORRESP_TYPE")
 public class ProtoCorrespType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -2,12 +2,10 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,37 +20,24 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
-import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.Award;
-import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Proposal;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Sponsor;
-import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.constants.KeyConstants;
 
@@ -302,6 +287,39 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
+	public ResponseEntity<byte[]> loadProtocolHistoryCorrespondanceLetter(Integer protocolActionId) {
+
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_INTEGER, protocolActionId));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_PROTO_CORRESP_LETTER", outParam);
+			if (result != null && !result.isEmpty()) {
+				logger.info("Correspondence letter data exists");
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("CORRESPONDENCE");
+				byte[] data = byteArrayOutputStream.toByteArray();
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType("application/pdf"));
+				String filename = "TEST_NAME";
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(data.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in downloadAttachments method:" + e);
+		}
+		return attachmentData;
+
+	}
+
+	@Override
 	public ResponseEntity<byte[]> downloadAttachments(String attachmentId) {
 		Integer attachmentsId = Integer.parseInt(attachmentId);
 		ResponseEntity<byte[]> attachmentData = null;
@@ -331,6 +349,60 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			logger.info("Exception in downloadAttachments method:" + e);
 		}
 		return attachmentData;
+	}
+
+	@Override
+	public IRBViewProfile loadProtocolHistoryActionComments(String protocolNumber, Integer protocolActionId,
+			String protocolActionTypecode) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
+		inputParam.add(new InParameter("AV_PROTOCOL_ACTION_ID", DBEngineConstants.TYPE_INTEGER, protocolActionId));
+		inputParam.add(
+				new InParameter("AV_PROTOCOL_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING, protocolActionTypecode));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_ACTN_COMMENTS", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in loadProtocolHistoryCorrespondenceComments:" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in loadProtocolHistoryCorrespondenceComments:" + e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in loadProtocolHistoryCorrespondenceComments:" + e);
+		}
+		if (result != null && !result.isEmpty()) {
+			logger.info("Action comments exists");
+			irbViewProfile.setIrbProtocolHistoryActionComments(result);
+		}
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		Integer userHasRight = null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			inParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, personId));
+			inParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
+			outParam.add(new OutParameter("hasRight", DBEngineConstants.TYPE_INTEGER));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction(inParam,
+					"fn_irb_pers_has_right_in_proto", outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				userHasRight = Integer.parseInt((String) hmResult.get("hasRight"));
+				irbViewProfile.setUserHasRightToViewProtocol(userHasRight);
+			}
+		} catch (Exception e) {
+			logger.error("Error in methord checkingPersonsRightToViewProtocol", e);
+		}
+		return irbViewProfile;
 	}
 
 	@Override
@@ -452,6 +524,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				currentMonth = currentMonth;
 			} else {
 				currentMonth = "0" + currentMonth;
+
 			}
 			prefix = String.valueOf(year).substring(2) + currentMonth;
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -498,6 +571,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			queryDeleteLeadUnits.setInteger("protocolUnitsId",
 					personnelInfo.getProtocolLeadUnits().get(0).getProtocolUnitsId());
 			queryDeleteLeadUnits.executeUpdate();
+
 			Query queryDeleteCollaboratorPerson = hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("delete from ProtocolCollaboratorPersons p where  p.personId =:personId");
 			queryDeleteCollaboratorPerson.setInteger("personId", personnelInfo.getProtocolPersonId());
@@ -507,11 +581,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			queryDeletePerson.setInteger("protocolPersonId", personnelInfo.getProtocolPersonId());
 			queryDeletePerson.executeUpdate();
 		}
-		
 		Query queryPersonList = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolPersonnelInfo p where p.protocolNumber =:protocolNumber");
 		queryPersonList.setString("protocolNumber", personnelInfo.getProtocolNumber());
-		List<ProtocolPersonnelInfo> protocolPersonnelInfoList= queryPersonList.list();
+		List<ProtocolPersonnelInfo> protocolPersonnelInfoList = queryPersonList.list();
 		irbProtocolVO.setProtocolPersonnelInfoList(protocolPersonnelInfoList);
 		return irbProtocolVO;
 	}
@@ -595,7 +668,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO){
+	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
 		Integer protocolId = null;
 		protocolId = irbProtocolVO.getProtocolId();
 		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
@@ -611,9 +684,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return irbProtocolVO;
 	}
 
-	
 	@Async
-	public Future<IRBProtocolVO> getGeneralPersonnelInfoList(IRBProtocolVO irbProtocolVO){
+	public Future<IRBProtocolVO> getGeneralPersonnelInfoList(IRBProtocolVO irbProtocolVO) {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
 		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());
@@ -621,45 +693,44 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);
 			irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
-			System.out.println("general info is set "+new Date());
+			System.out.println("general info is set " + new Date());
 		}
 		return new AsyncResult<>(irbProtocolVO);
 	}
-	
+
 	@Async
-	public Future<IRBProtocolVO> getCollaboratorList(IRBProtocolVO irbProtocolVO){
+	public Future<IRBProtocolVO> getCollaboratorList(IRBProtocolVO irbProtocolVO) {
 		Query queryCollaborator = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
 		queryCollaborator.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		List<ProtocolCollaborator> collaborators = queryCollaborator.list();
 		irbProtocolVO.setProtocolCollaboratorList(collaborators);
-		System.out.println("Collaborator info is set "+new Date());
+		System.out.println("Collaborator info is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
-	
+
 	@Async
-	public Future<IRBProtocolVO> getSubjectoList(IRBProtocolVO irbProtocolVO){
-			Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
-		.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
+	public Future<IRBProtocolVO> getSubjectoList(IRBProtocolVO irbProtocolVO) {
+		Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
 		queryprotocolSubject.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		irbProtocolVO.setProtocolSubjectList(queryprotocolSubject.list());
-		System.out.println("subject list is set "+new Date());
+		System.out.println("subject list is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
-	
-	
+
 	@Async
-	public Future<IRBProtocolVO> getScienceOfProtocol(IRBProtocolVO irbProtocolVO){
+	public Future<IRBProtocolVO> getScienceOfProtocol(IRBProtocolVO irbProtocolVO) {
 		Query queryScienceOfProtocol = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ScienceOfProtocol p where p.protocolId =:protocolId");
 		queryScienceOfProtocol.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		if (!queryScienceOfProtocol.list().isEmpty()) {
 			irbProtocolVO.setScienceOfProtocol((ScienceOfProtocol) queryScienceOfProtocol.list().get(0));
 		}
-		System.out.println("science of protocol is set "+new Date());
+		System.out.println("science of protocol is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
-	
+
 	@Async
 	private Future<IRBProtocolVO> getProtocolFundingSource(Integer protocolId, IRBProtocolVO irbProtocolVO) {
 		try {
@@ -715,7 +786,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 						} catch (InterruptedException | ExecutionException e) {
 							e.printStackTrace();
 						}
-						
+
 						break;
 					case KeyConstants.AWARD_FUNDING_SPONSOR_TYPE_CODE:
 						Award award = null;
@@ -730,6 +801,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 							e.printStackTrace();
 						}
 						break;
+
 					}
 				});
 				irbProtocolVO.setProtocolFundingSourceList(fundingSourceList);
@@ -737,10 +809,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		} catch (Exception e) {
 			logger.error("Error in getProtocolFundingSource method" + e.getMessage());
 		}
-		System.out.println("Funding source is set "+new Date());
+		System.out.println("Funding source is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
-	
+
 	private Future<Proposal> fetchProposal(String fundingSource) {
 		Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
 				"from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
@@ -759,7 +831,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Async
-	private  Future<Unit> fetchUnitDetail(String fundingSource) {
+	private Future<Unit> fetchUnitDetail(String fundingSource) {
 		Query queryUnitDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from Unit u where u.unitNumber =:unitNumber");
 		queryUnitDetails.setString("unitNumber", fundingSource);
@@ -777,7 +849,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Async
-	private  Future<Award> fetchAwardDetail(String fundingSource) {
+	private Future<Award> fetchAwardDetail(String fundingSource) {
 		Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
 				"from Award a where a.awardNumber =:awardNumber and a.awardSequenceStatus =:awardSequenceStatus");
 		queryAwardDetails.setString("awardNumber", fundingSource);
@@ -924,6 +996,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				attachments.setUpdateUser(protocolCollaboratorAttachments.getProtocolAttachments().getUpdateUser());
 				irbCollaboratorAttachmentProtocol.setProtocolAttachments(attachments);
 				hibernateTemplate.saveOrUpdate(irbCollaboratorAttachmentProtocol);
+
 			}
 		} else if (protocolCollaboratorAttachments.getAcType().equals("U")) {
 			ProtocolAttachments attachments = protocolCollaboratorAttachments.getProtocolAttachments();
@@ -934,6 +1007,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				attachments.setUpdateTimestamp(
 						protocolCollaboratorAttachments.getProtocolAttachments().getUpdateTimestamp());
 				attachments.setUpdateUser(protocolCollaboratorAttachments.getProtocolAttachments().getUpdateUser());
+
 			}
 			hibernateTemplate.saveOrUpdate(protocolCollaboratorAttachments);
 		} else if (protocolCollaboratorAttachments.getAcType().equals("D")) {
@@ -988,8 +1062,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				.createQuery("from ProtocolCollaboratorPersons p where p.collaboratorId =:collaboratorId");
 		query.setInteger("collaboratorId", collaboratorId);
 		irbProtocolVO.setProtocolCollaboratorPersons(query.list());
-		Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId");
+		Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId");
 		queryAttachment.setInteger("collaboratorId", collaboratorId);
 		irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());
 		return irbProtocolVO;

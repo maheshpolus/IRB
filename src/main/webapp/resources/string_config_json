@@ -8,5 +8,6 @@
 "NOT_EXEMPT_MSG_SUBMIT":"Based on the highlighted question(s) above, your research is not eligible for exempt status and requires Comprehensive Review.",
 "PI_DECLARATION":"As PI, I certify that the information is complete and accurate to the best of my knowledge. I understand that the determination of the proposed research is based solely upon the information provided in this questionnaire and I agree to revise my questionnaire should any of these facts change or be determined to be inaccurate or incomplete.<br\/><br\/> If my research is determine to not meet the criteria for exempt status, I understand that I must submit an application for Comprehensive Review and will do so prior to the start of my research.",
 "NOFACULTY_MESSAGE" : "Your study need to be reviewed by a faculty sponsor, please add a faculty sponsor",
- "NOFACULTY_TITILE_MESSAGE":"The faculty sponsor you added doesn’t qualify to be a faculty sponsor, still need to continue?"
+"NOFACULTY_TITILE_MESSAGE":"The Faculty Sponsor you have selected may not have <a href=\"http:\/\/couhes.mit.edu\/definitions#Principal%20investigatorCurrent\" target=\"_blank\">PI Status<\/a> as determined by MIT, would you like to continue?",
+"NOFACULTY_WARNING_MESSAGE":"The Faculty Sponsor you have selected may not have <a href=\"http:\/\/couhes.mit.edu\/definitions#Principal%20investigatorCurrent\" target=\"_blank\">PI Status<\/a> as determined by MIT."
 }

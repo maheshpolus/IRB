@@ -1,43 +1,42 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="UNIT")
+@Table(name = "UNIT")
 public class ProtocolPersonLeadUnits {
 	@Id
-	@Column(name="UNIT_NUMBER")
+	@Column(name = "UNIT_NUMBER")
 	private String unitNumber;
-	
-	@Column(name="UNIT_NAME")
+
+	@Column(name = "UNIT_NAME")
 	private String unitName;
-	
-	@Column(name="ORGANIZATION_ID")
+
+	@Column(name = "ORGANIZATION_ID")
 	private String organizationId;
-	
-	@Column(name="UPDATE_TIMESTAMP")
+
+	@Column(name = "UPDATE_TIMESTAMP")
 	private Date updateTimestamp;
-	
-	@Column(name="UPDATE_USER")
+
+	@Column(name = "UPDATE_USER")
 	private String updateUser;
-	
-	@Column(name="PARENT_UNIT_NUMBER")
+
+	@Column(name = "PARENT_UNIT_NUMBER")
 	private String parentUnitNumber;
-	
-	@Column(name="ACTIVE_FLAG")
+
+	@Column(name = "ACTIVE_FLAG")
 	private char activeFlag;
 
-	@Column(name="VER_NBR")
+	@Column(name = "VER_NBR")
 	private Integer verNumber;
-	
-	@Column(name="OBJ_ID")
+
+	@Column(name = "OBJ_ID")
 	private String objId;
-	
+
 	public String getUnitNumber() {
 		return unitNumber;
 	}

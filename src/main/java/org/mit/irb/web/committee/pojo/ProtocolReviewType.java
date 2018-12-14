@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "MITKC_IRB_PROTOCOL_REVIEW_TYPE")
+@Table(name = "IRB_PROTOCOL_REVIEW_TYPE")
 public class ProtocolReviewType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

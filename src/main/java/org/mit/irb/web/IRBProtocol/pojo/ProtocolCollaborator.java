@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="MITKC_IRB_PROTOCOL_LOCATION")
+@Table(name="IRB_PROTOCOL_LOCATION")
 public class ProtocolCollaborator {
 	@Id
 	@Column(name="PROTOCOL_LOCATION_ID", updatable = false, nullable = false)
@@ -69,14 +69,12 @@ public class ProtocolCollaborator {
 	private String pointOfContact;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_ORGANIZATION_FK1"), name = "ORGANIZATION_ID", referencedColumnName = "ORGANIZATION_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ORGANIZATION_FK1"), name = "ORGANIZATION_ID", referencedColumnName = "ORGANIZATION_ID", insertable = false, updatable = false)
 	CollaboratorNames collaboratorNames;
 	
-	//@JsonIgnore
 	@OneToMany(mappedBy = "protocolCollaborator", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolCollaboratorAttachments> protocolCollaboratorAttachments;
 	
-	//@JsonIgnore 
 	@OneToMany(mappedBy = "protocolCollaborator", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolCollaboratorPersons> protocolCollaboratorPersons;
 	

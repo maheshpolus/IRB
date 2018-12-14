@@ -2,21 +2,16 @@ package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.io.Serializable;
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "AFFILIATION_TYPE")
+@Table(name ="AFFILIATION_TYPE")
 public class ProtocolAffiliationTypes implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * @author anujoseph
 	 */

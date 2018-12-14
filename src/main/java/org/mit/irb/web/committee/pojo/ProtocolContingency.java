@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Entity
-@Table(name = "MITKC_IRB_PROTOCOL_CONTINGENCY")
+@Table(name = "IRB_PROTOCOL_CONTINGENCY")
 public class ProtocolContingency implements Serializable {
 
 	private static final long serialVersionUID = 1L;

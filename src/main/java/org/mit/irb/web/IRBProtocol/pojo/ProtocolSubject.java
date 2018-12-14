@@ -1,7 +1,6 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -11,12 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 @Entity
-@Table(name="MITKC_IRB_PROTO_VULNERABLE_SUB")
+@Table(name="IRB_PROTO_VULNERABLE_SUB")
 public class ProtocolSubject {
 	@Id
 	@GenericGenerator(name = "ProtocolSubjectIdGenerator", strategy = "increment", parameters = {
@@ -59,7 +57,7 @@ public class ProtocolSubject {
 	private Integer ageGroupCode;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_SUBJECT_FK1"), name = "VULNERABLE_SUBJECT_TYPE_CODE", referencedColumnName = "VULNERABLE_SUBJECT_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_SUBJECT_FK1"), name = "VULNERABLE_SUBJECT_TYPE_CODE", referencedColumnName = "VULNERABLE_SUBJECT_TYPE_CODE", insertable = false, updatable = false)
 	ProtocolSubjectTypes protocolSubjectTypes;
 	
 	@ManyToOne(optional = true)

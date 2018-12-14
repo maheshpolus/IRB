@@ -28,6 +28,7 @@ public class LoginDaoImpl implements LoginDao{
 	
 	@Override
 	public ArrayList<HashMap<String, Object>> checkIRBUserRole(String personId) {
+		 logger.info("checkIRBUserRole Service ");
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();

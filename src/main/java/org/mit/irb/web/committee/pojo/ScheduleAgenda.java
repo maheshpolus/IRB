@@ -25,7 +25,7 @@ public class ScheduleAgenda implements Serializable {
 	private Integer scheduleId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_FIBI_COMM_SCHEDULE_AGENDA"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_SCHEDULE_AGENDA"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID", insertable = false, updatable = false)
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "AGENDA_NUMBER")

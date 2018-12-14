@@ -1,14 +1,13 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="MITKC_IRB_PERSON_ROLES")
+@Table(name="IRB_PERSON_ROLES")
 public class ProtocolPersonRoleTypes {
 	@Id
 	@Column(name = "PROTOCOL_PERSON_ROLE_ID")

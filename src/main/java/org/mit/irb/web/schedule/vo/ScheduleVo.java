@@ -1,7 +1,6 @@
 package org.mit.irb.web.schedule.vo;
 
 import java.util.List;
-
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;

@@ -19,7 +19,6 @@ public interface IRBExemptProtocolService {
 	 * @return return list of all exempt form
 	 * @throws ParseException 
 	 */
-	
 	IRBViewProfile getPersonExemptFormList(CommonVO vo) throws ParseException;	
 	
 	/**

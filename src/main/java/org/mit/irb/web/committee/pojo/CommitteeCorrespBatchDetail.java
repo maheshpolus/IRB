@@ -22,7 +22,7 @@ public class CommitteeCorrespBatchDetail implements Serializable {
 	private Integer correspBatchDetailId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MIT_IRB_FIBI_COMM_CORRESP_BATCH_DTL"), name = "CORRESP_BATCH_ID", referencedColumnName = "CORRESP_BATCH_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_CORRESP_BATCH_DTL"), name = "CORRESP_BATCH_ID", referencedColumnName = "CORRESP_BATCH_ID")
 	private CommitteeCorrespBatch committeeCorrespBatch;
 
 	@Column(name = "PROTOCOL_NUMBER")

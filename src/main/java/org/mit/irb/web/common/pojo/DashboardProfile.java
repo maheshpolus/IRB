@@ -3,8 +3,6 @@ package org.mit.irb.web.common.pojo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.view.IRBViews;
 import org.mit.irb.web.common.view.SnapshotData;
 

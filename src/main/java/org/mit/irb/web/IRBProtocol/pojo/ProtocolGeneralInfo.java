@@ -2,7 +2,6 @@ package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -26,9 +23,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 */
 
 @Entity
-@Table(name = "MITKC_IRB_PROTOCOL")
+@Table(name = "IRB_PROTOCOL")
 public class ProtocolGeneralInfo {
-
 	@Id
 	@GenericGenerator(name = "ProtocolIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
@@ -94,11 +90,11 @@ public class ProtocolGeneralInfo {
 	private String updateUser;
 
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_PROTOCOL_FK1"), name = "PROTOCOL_TYPE_CODE", referencedColumnName = "PROTOCOL_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_FK1"), name = "PROTOCOL_TYPE_CODE", referencedColumnName = "PROTOCOL_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolType protocolType;
 
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_PROTOCOL_FK2"), name = "PROTOCOL_STATUS_CODE", referencedColumnName = "PROTOCOL_STATUS_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_FK2"), name = "PROTOCOL_STATUS_CODE", referencedColumnName = "PROTOCOL_STATUS_CODE", insertable = false, updatable = false)
 	private ProtocolStatus protocolStatus;
 
 	@JsonManagedReference

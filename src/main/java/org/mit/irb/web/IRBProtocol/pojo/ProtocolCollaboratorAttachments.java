@@ -39,8 +39,6 @@ public class ProtocolCollaboratorAttachments {
 	@Column(name="SEQUENCE_NUMBER")
 	private Integer sequenceNumber; 
 	
-/*	@Column(name="FILE_NAME")
-	private String fileName;  we need file type instaed of file name*/
 	
 	@Column(name="DESCRIPTION")
 	private String description;
@@ -111,14 +109,6 @@ public class ProtocolCollaboratorAttachments {
 	public void setSequenceNumber(Integer sequenceNumber) {
 		this.sequenceNumber = sequenceNumber;
 	}
-
-/*	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}*/
 
 	public String getDescription() {
 		return description;

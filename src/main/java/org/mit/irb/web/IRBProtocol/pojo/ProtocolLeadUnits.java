@@ -1,17 +1,13 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.ForeignKey;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -19,48 +15,48 @@ import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name="MITKC_IRB_PROTOCOL_UNITS")
+@Table(name = "IRB_PROTOCOL_UNITS")
 public class ProtocolLeadUnits {
 	@Id
 	@GenericGenerator(name = "ProtocolLeadUnitIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
 	@GeneratedValue(generator = "ProtocolLeadUnitIdGenerator")
-	@Column(name="PROTOCOL_UNITS_ID")
+	@Column(name = "PROTOCOL_UNITS_ID")
 	private Integer protocolUnitsId;
 
 	@JsonBackReference
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_PROTOCOL_UNITS_FK1"), name = "PROTOCOL_PERSON_ID", referencedColumnName = "PROTOCOL_PERSON_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_UNITS_FK1"), name = "PROTOCOL_PERSON_ID", referencedColumnName = "PROTOCOL_PERSON_ID")
 	private ProtocolPersonnelInfo personnelInfo;
-	
+
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "MITKC_IRB_PROTOCOL_UNITS_FK2"), name = "UNIT_NUMBER", referencedColumnName = "UNIT_NUMBER", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_UNITS_FK2"), name = "UNIT_NUMBER", referencedColumnName = "UNIT_NUMBER", insertable = false, updatable = false)
 	private ProtocolPersonLeadUnits protocolPersonLeadUnits;
-	
-	@Column(name="PROTOCOL_NUMBER")
+
+	@Column(name = "PROTOCOL_NUMBER")
 	private String protocolNumber;
-	
-	@Column(name="SEQUENCE_NUMBER")
+
+	@Column(name = "SEQUENCE_NUMBER")
 	private Integer sequenceNumber;
-	
-	@Column(name="UNIT_NUMBER")
+
+	@Column(name = "UNIT_NUMBER")
 	private String unitNumber;
-	
-	@Column(name="LEAD_UNIT_FLAG")
+
+	@Column(name = "LEAD_UNIT_FLAG")
 	private String leadUnitFlag;
-	
-	@Column(name="PERSON_ID")
+
+	@Column(name = "PERSON_ID")
 	private String person_id;
-	
-	@Column(name="UPDATE_TIMESTAMP")
+
+	@Column(name = "UPDATE_TIMESTAMP")
 	private Date updateTimestamp;
-	
-	@Column(name="UPDATE_USER")
+
+	@Column(name = "UPDATE_USER")
 	private String updateUser;
-	
-	@Column(name="PROTOCOL_ID")
+
+	@Column(name = "PROTOCOL_ID")
 	private Integer protocolId;
-	
+
 	public Integer getProtocolUnitsId() {
 		return protocolUnitsId;
 	}

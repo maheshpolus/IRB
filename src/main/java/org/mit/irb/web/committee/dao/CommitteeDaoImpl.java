@@ -30,6 +30,8 @@ import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
 import org.mit.irb.web.committee.pojo.MembershipRole;
 import org.mit.irb.web.committee.pojo.ProtocolReviewType;
+import org.mit.irb.web.committee.pojo.ProtocolSubmission;
+import org.mit.irb.web.committee.pojo.ProtocolSubmissionQualifierType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Rolodex;
@@ -257,6 +259,8 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	@Override
 	public CommitteeSchedule getCommitteeScheduleById(Integer scheduleId) {
 		CommitteeSchedule committeeSchedule = hibernateTemplate.get(CommitteeSchedule.class, scheduleId);
+		ProtocolSubmissionQualifierType protocolSubmissionQualifierType = hibernateTemplate.get(ProtocolSubmissionQualifierType.class, "12");
+		//ProtocolSubmission protocolSubmission =(ProtocolSubmission) hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolSubmission").list().get(0);
 		return committeeSchedule;
 	}
 

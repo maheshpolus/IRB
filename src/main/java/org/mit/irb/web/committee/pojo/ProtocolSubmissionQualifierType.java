@@ -5,17 +5,24 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 @Entity
-@Table(name = "SUBMISSION_TYPE_QUALIFIER")
+@Table(name ="SUBMISSION_TYPE_QUALIFIER")
 public class ProtocolSubmissionQualifierType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "SUBMISSION_TYPE_QUAL_CODE")
+	@GenericGenerator(name = "protocolSubmissionQualifierTypeIdGererator", strategy = "increment", parameters = {
+			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
+	@GeneratedValue(generator = "protocolSubmissionQualifierTypeIdGererator")
+	@Column(name = "SUBMISSION_TYPE_QUAL_CODE", updatable = false, nullable = false)
 	private String submissionQualifierTypeCode;
 
 	@Column(name = "DESCRIPTION")

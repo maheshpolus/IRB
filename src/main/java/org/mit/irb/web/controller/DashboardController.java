@@ -2,11 +2,9 @@ package org.mit.irb.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.common.VO.CommonVO;
-import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.dashboard.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +68,7 @@ public class DashboardController {
 	public ResponseEntity<String> getDashboardProtocolList(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) {
 		HttpStatus status = HttpStatus.OK;
-		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(),
-				 vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(), vo.getProtocolTypeCode(), vo.getTitle());
+		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(), vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(), vo.getProtocolTypeCode(), vo.getTitle());
 		ObjectMapper mapper = new ObjectMapper();
 		String responseData = null;
 		try {

@@ -34,7 +34,7 @@ public class CommitteeMemberRoles implements Serializable {
 
     @JsonBackReference
     @ManyToOne(cascade = { CascadeType.REFRESH })
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_MIT_IRB_COMM_MEMBER_ROLES"), name = "COMM_MEMBERSHIP_ID", referencedColumnName = "COMM_MEMBERSHIP_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBER_ROLES"), name = "COMM_MEMBERSHIP_ID", referencedColumnName = "COMM_MEMBERSHIP_ID")
 	private CommitteeMemberships committeeMemberships;
 
 	@Column(name = "MEMBERSHIP_ROLE_CODE")

@@ -11,21 +11,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="VULNERABLE_SUBJECT_AGE_GROUP")
+@Table(name = "VULNERABLE_SUBJECT_AGE_GROUP")
 public class AgeGroups {
 	@Id
-	@Column(name="AGE_GROUP_CODE")
+	@Column(name = "AGE_GROUP_CODE")
 	private Integer ageGroupCode;
-	
-	@Column(name="AGE_GROUP")
+
+	@Column(name = "AGE_GROUP")
 	private String ageGroup;
-	
-	@Column(name="UPDATE_TIMESTAMP")
+
+	@Column(name = "UPDATE_TIMESTAMP")
 	private Date updateTimestamp;
-	
-	@Column(name="UPDATE_USER")
+
+	@Column(name = "UPDATE_USER")
 	private String updateUser;
-	
+
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK1_VULNERABLE_SUBJ_AGE_GROUP"), name = "VULNERABLE_SUBJECT_TYPE_CODE", referencedColumnName = "VULNERABLE_SUBJECT_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolSubjectTypes protocolSubjectTypes;

@@ -1,6 +1,6 @@
 <section class="row nav_toggle">
 	<div class="navigate">
-		<ul class="navbarmed" *ngIf="roleType == 'PI'">
+		<ul class="navbarmed" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
 			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
 				<a (click)="getIrbListData('ALL')">My Protocols</a>
 			</li>
@@ -21,7 +21,8 @@
 			</li>
 			<span>
 				<a (click)="showAdvanceSearch()">
-					<i class="fa fa-glass"></i>
+					<i *ngIf="isAdvancesearch" class="fa fa-minus-circle"></i>
+					<i *ngIf="!isAdvancesearch" class="fa fa-plus-circle"></i> Advanced Search
 				</a>
 			</span>
 		</ul>
@@ -52,7 +53,8 @@
 			</li>
 			<span *ngIf="lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
 				<a (click)="showAdvanceSearch()">
-					<i class="fa fa-glass"></i>
+					<i *ngIf="isAdvancesearch" class="fa fa-minus-circle"></i>
+					<i *ngIf="!isAdvancesearch" class="fa fa-plus-circle"></i> Advanced Search
 				</a>
 			</span>
 		</ul>
@@ -87,10 +89,10 @@
 				</div>
 				<div class="col-md-12 col-sm-12 checkbox-right">
 					<div class="row">
-						<div class="col-md-8 col-sm-8 col-lg-8">
+						<div class="col-md-12 col-sm-12 col-lg-12">
 							<div class="searchBox" *ngIf="lastClickedTab == 'ALL'">
-								<input type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status" [formControl]="searchText" [(ngModel)]="seachTextModel"
-								 (focus)="IsElasticResult = true" />
+								<input type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status" [formControl]="searchText" [(ngModel)]="searchTextModel"
+								 (ngModelChange)="protocolSearchValueChange()" (focus)="IsElasticResult = true" />
 								<a href="#" class="searchButton" (click)="clearsearchBox($event)">
 									<i [ngClass]="iconClass"></i>
 								</a>
@@ -101,31 +103,6 @@
 										</li>
 									</ul>
 								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-4 col-lg-4" *ngIf="(lastClickedTab !== 'EXEMPT' && lastClickedTab !== 'COMMITTEE' && lastClickedTab !== 'SCHEDULE')">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="sortOrder" [(ngModel)]="sortOrder" (ngModelChange)="sortBy()" id="inlineCheckbox1"
-								 value="-1">
-								<label class="form-check-label radio-label" for="inlineCheckbox1">ASC</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" id="inlineCheckbox2" [(ngModel)]="sortOrder" name="sortOrder" (ngModelChange)="sortBy()"
-								 value="1">
-								<label class="form-check-label radio-label" for="inlineCheckbox2">DSC</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<select class="custom-select mr-sm-2" [(ngModel)]="sortField" (ngModelChange)="sortBy()" id="inlineFormCustomSelect">
-									<!-- <option *ngFor="let keys of arrayOfKeys" value="{{keys}}">{{keys}}</option> -->
-									<option value="UPDATE_TIMESTAMP">UPDATE TIMESTAMP</option>
-									<option value="PROTOCOL_STATUS">PROTOCOL STATUS</option>
-									<option value="PROTOCOL_NUMBER">PROTOCOL NUMBER</option>
-									<option value="TITLE">TITLE</option>
-									<option value="PROTOCOL_TYPE">PROTOCOL TYPE</option>
-									<option value="SUBMISSION_STATUS">SUBMISSION STATUS</option>
-									<option value="LAST_APPROVAL_DATE">LAST APPROVAL DATE</option>
-									<option value="EXPIRATION_DATE">EXPIRATION DATE</option>
-								</select>
 							</div>
 						</div>
 					</div>
@@ -170,6 +147,54 @@
 							<span class="nav-advance-search">
 								<a (click)="openIrb(protocol)">{{piName }}</a>
 							</span>
+						</div>
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 align-view-btn">
+							<a class="pointer">
+								<button type="button" class="btn btn-outline-secondary button-view mb-0 elastic-view-margin" (click)="openIrb(protocol)">
+									<i class="fa fa-eye"></i>View Details
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12 sort-labels">
+					<div class="row">
+						<div class="col-md-12 col-sm-12 col-lg-12" *ngIf="(lastClickedTab !== 'EXEMPT')">
+							<div class="form-check form-check-inline sort-fields">
+								<label>SORT BY:</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_NUMBER'}" (click)="sortField = 'PROTOCOL_NUMBER';updateSortOrder()">PROTOCOL NUMBER
+									<i class="fa" *ngIf="sortField == 'PROTOCOL_NUMBER'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_STATUS'}" (click)="sortField = 'PROTOCOL_STATUS';updateSortOrder()">STATUS
+									<i class="fa" *ngIf="sortField == 'PROTOCOL_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'TITLE'}" (click)="sortField = 'TITLE';updateSortOrder()">TITLE
+									<i class="fa" *ngIf="sortField == 'TITLE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_TYPE'}" (click)="sortField = 'PROTOCOL_TYPE';updateSortOrder()">TYPE
+									<i class="fa" *ngIf="sortField == 'PROTOCOL_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_STATUS'}" (click)="sortField = 'SUBMISSION_STATUS';updateSortOrder()">SUBMISSION STATUS
+									<i class="fa" *ngIf="sortField == 'SUBMISSION_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'LAST_APPROVAL_DATE'}" (click)="sortField = 'LAST_APPROVAL_DATE';updateSortOrder()">APPROVAL DATE
+									<i class="fa" *ngIf="sortField == 'LAST_APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'EXPIRATION_DATE'}" (click)="sortField = 'EXPIRATION_DATE';updateSortOrder()">EXPIRATION DATE
+									<i class="fa" *ngIf="sortField == 'EXPIRATION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'UPDATE_TIMESTAMP'}" (click)="sortField = 'UPDATE_TIMESTAMP';updateSortOrder()">UPDATE TIMESTAMP
+									<i class="fa" *ngIf="sortField == 'UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									 aria-hidden="true"></i>
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -227,21 +252,21 @@
 			<ng-container *ngIf="lastClickedTab != 'EXEMPT' && lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No Irb protocol found for this status</div>
 				<app-card-details *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-				|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
+				|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
 				 [irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
 			</ng-container>
 			<ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
-					<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
-					<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
-					 [irbList]="irbListData"></app-committee-card>
-				</ng-container>
-				<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
-						<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
-						<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI')"
-						 [irbList]="irbListData"></app-schedule-card>
-					</ng-container>
+				<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
+				<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
+				 [irbList]="irbListData"></app-committee-card>
+			</ng-container>
+			<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
+				<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
+				<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
+				 [irbList]="irbListData"></app-schedule-card>
+			</ng-container>
 			<ng-container *ngIf="lastClickedTab == 'EXEMPT'">
 				<div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>
 				<app-exempt-card [exemptList]="exemptListData" [userDTO]="userDTO" [showBtn]="noIrbList"></app-exempt-card>

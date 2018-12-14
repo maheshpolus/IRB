@@ -1,3 +1,4 @@
+
 create or replace procedure GET_IRB_PROTOCOL_DETAILS(
 AV_PROTOCOL_NUMBER  IN MITKC_IRB_PROTOCOL.protocol_number%type,
 CUR_GENERIC         OUT SYS_REFCURSOR

@@ -552,7 +552,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         this.rolodexId = rolodexIdFromService;
     }
 
-    showMembersTab( event: any, personIdFromService, member ) {
+    showMembersTab( event: any, personIdFromService, member ) {debugger;
         event.preventDefault();
         this.isTermDateFilled = true;
         this.rolodexId = null;

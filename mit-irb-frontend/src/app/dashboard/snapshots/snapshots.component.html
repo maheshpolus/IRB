@@ -2,7 +2,7 @@
 <section class="row snapshot-responsive" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
-			<div class="media top-card-outer" (click)="expandedView('AMMEND_RENEW')">
+			<div class="media top-card-outer mt-12" (click)="expandedView('AMMEND_RENEW')">
 				<div class="media-left card-icon1">
 					<a>
 						<i class="fa fa-file-text-o"></i>
@@ -19,7 +19,7 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards revision-req-card">
+		<div class="col-12 top-cards revision-req-card mt-12">
 			<div class="media top-card-outer" (click)="expandedView('REVISION_REQ')">
 				<div class="media-left card-icon1 circle2">
 					<a>
@@ -38,7 +38,7 @@
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
-			<div class="media top-card-outer" (click)="expandedView('AWAITING_RESP')">
+			<div class="media top-card-outer mt-12" (click)="expandedView('AWAITING_RESP')">
 				<div class="media-left card-icon1 circle3">
 					<a>
 						<i class="fa fa-file-text-o"></i>
@@ -55,7 +55,7 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards link-card">
+		<div class="col-12 top-cards link-card mt-12">
 			<ul>
 				<li>
 					<a class="pdf" (click)="goToQuestionaire()">

@@ -92,6 +92,7 @@
 							</div>
 						</div>
 					</div>
+					<div *ngIf="reviewComments?.length == 0 || reviewComments == null">No comments Found</div>
 				</div>
 				<!-- <div class="modal-footer">
 	  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>

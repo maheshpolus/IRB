@@ -14,10 +14,10 @@ const routes: Routes = [
       { path: '', redirectTo: 'irbHome', pathMatch: 'full' },
       { path: '', component: IrbEditComponent },
       { path: 'irbHome', component: IrbEditComponent, resolve: { irb: DashboardResolverService } },
-      { path: 'irbCreateAttachment', component: IrbCreateAttachmentComponent },
+      { path: 'irbCreateAttachment', component: IrbCreateAttachmentComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbHistory', component: IrbCreateHistroyComponent },
       { path: 'irbActions', component: IrbActionsComponent },
-      { path: 'irbProtocol', component: IrbProtocolComponent }
+      { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } }
     ]
   }
 ];

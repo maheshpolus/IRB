@@ -2146,3 +2146,19 @@ input:disabled{
 {
     color: #2c4d13 !important;
 }
+.snap-shot-view-btn 
+{
+    margin-top: 5px;
+    border-color: #a92034;
+    color: #a92034;
+    background-color: #fff
+}
+.btn-outline-secondary:hover i 
+{
+    color: #fff;
+}
+.mt-12
+{
+    margin-top:12px;
+}
+

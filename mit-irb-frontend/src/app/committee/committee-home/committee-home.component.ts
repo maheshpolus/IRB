@@ -355,7 +355,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                         this.mode = 'view';
                         this.initialLoadChild();
                         this.committeeConfigurationService.changeMode( this.mode );
-						// Change the url in view mode
+                        // Change the url in view mode
                         this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
                     }
                 }
@@ -427,7 +427,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.committeeSaveService.saveResearchAreaCommitteeData( this.result.committee.committeeId, Object )
             .takeUntil( this.onDestroy$ )
             .subscribe( data => {
-                this.result = data || [];
+                let temp: any;
+                temp = data;
+                // this.result = data || [];
+                this.result.committee = temp.committee;
+                // this.result.committee.updateTimestamp = data.updateTimestamp;
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
             this.initialLoadChild();
@@ -465,7 +469,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.showPopup = true;
             this.deleteConfirmation = true;
             this.areaOfResearchToDelete = Object;
-            this.deleteMsg = 'Are you sure you want to delete this area of research ..?';
+            this.deleteMsg = 'Are you sure you want to delete this area of research?';
         }
     }
 
@@ -484,7 +488,13 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         if ( this.result.committee.researchAreas.length != null && Object.commResearchAreasId !== undefined ) {
             this.committeeSaveService.deleteAreaOfResearch( Object.commResearchAreasId, this.result.committee.committeeId )
             .takeUntil( this.onDestroy$ ).subscribe( data => {
-                this.result = data || [];
+               // this.result = data || [];
+               let temp: any;
+               temp = data;
+               this.result.committee = temp.committee || [];
+               this.result.message = data.message;
+               this.result.status = data.status;
+               // this.result.committee.updateTimestamp = data.updateTimestamp;
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
         } else if ( Object.commResearchAreasId === undefined || Object.commResearchAreasId == null ) {
@@ -758,7 +768,10 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.isTodelete = false;
         }
         this.committeeSaveService.deleteScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
-            this.result = data || [];
+            let temp: any;
+            temp = data || [];
+            // this.result = data || [];
+            this.result.committee = temp.committee;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         } );
         this.initialLoadChild();
@@ -789,7 +802,12 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         this.sendScheduleRequestData.committeeSchedule = scheduleObject;
         this.sendScheduleRequestData.committeeId = this.result.committee.committeeId;
         this.committeeSaveService.updateScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
-            this.result = data || [];
+            // this.result = data || [];
+            let temp: any;
+            temp = data;
+            this.result.committee = temp.committee;
+            this.result.message = temp.message;
+            this.result.status = temp.status;
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         } );
         this.initialLoadChild();

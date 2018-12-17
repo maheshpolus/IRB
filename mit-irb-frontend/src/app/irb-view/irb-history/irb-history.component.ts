@@ -99,16 +99,16 @@ export class IrbHistoryComponent implements OnInit {
     }
     // Download correspondance letter
     downloadCorrespondanceLetter(actionId, fileName) {
-        this._irbViewService.loadProtocolHistoryCorrespondanceLetter(actionId).subscribe(
-            data => {
-                console.log('test' + JSON.stringify(data));
-                const a = document.createElement('a');
-              //  const attachments = {'fileName': 'Test'};
-               // a.href = URL.createObjectURL(data);
-                  a.download = fileName;
-                a.click();
-            });
-        return false;
+      this._irbViewService.loadProtocolHistoryCorrespondanceLetter( actionId ).subscribe( data => {
+        const a = document.createElement( 'a' );
+        const blob = new Blob( [data], { type: data.type } );
+        a.href = URL.createObjectURL( blob );
+        a.download = fileName;
+        a.click();
+
+    },
+        error => console.log( 'Error downloading the file.'),
+        () => console.log( 'OK' ) );
     }
     // Fetching review comments
     getReviewComments(protocolActionId, protocolActionTypecode) {

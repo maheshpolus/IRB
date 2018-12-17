@@ -310,6 +310,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             const response: any = data;
             if (response.userHasRightToViewProtocol === 1) {
                 this._router.navigate(['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } });
+            } else {
+                document.getElementById('openWarningModalButton').click();
             }
         });
     }

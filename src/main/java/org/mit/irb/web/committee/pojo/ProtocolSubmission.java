@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
 @Table(name="IRB_PROTOCOL_SUBMISSION")
@@ -33,7 +32,7 @@ public class ProtocolSubmission implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name ="IRB_PROTO_SUBMISSION_FK7"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
+	@JoinColumn(foreignKey = @ForeignKey(name ="IRB_PROTO_SUBMISSION_FK8"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
 	@Column(name = "SUBMISSION_NUMBER")
@@ -74,7 +73,7 @@ public class ProtocolSubmission implements Serializable {
 	private String submissionTypeQualifierCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK8"), name = "SUBMISSION_TYPE_QUAL_CODE", referencedColumnName = "SUBMISSION_TYPE_QUAL_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK7"), name = "SUBMISSION_TYPE_QUAL_CODE", referencedColumnName = "SUBMISSION_TYPE_QUAL_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionQualifierType qualifierType;
 
 	@Column(name = "SUBMISSION_STATUS_CODE")
@@ -88,7 +87,7 @@ public class ProtocolSubmission implements Serializable {
 	private String protocolReviewTypeCode;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK9"),name = "PROTOCOL_REVIEW_TYPE_CODE", referencedColumnName = "PROTOCOL_REVIEW_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK4"),name = "PROTOCOL_REVIEW_TYPE_CODE", referencedColumnName = "PROTOCOL_REVIEW_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolReviewType protocolReviewType;
 
 	@Column(name = "SUBMISSION_DATE")

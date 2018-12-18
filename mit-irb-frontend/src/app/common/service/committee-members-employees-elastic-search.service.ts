@@ -1,26 +1,44 @@
 import { Injectable } from '@angular/core';
 import { Client} from 'elasticsearch';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class CommitteeMemberEmployeeElasticService {
     private _client: Client;
+    URL_FOR_ELASTIC: string;
+    PERSON_INDEX: string;
 
-    constructor( ) {
-        if ( !this._client ) {
-            this._connect();
-        }
+
+    constructor( private _http: HttpClient  ) {
+        // this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+        // this.PERSON_INDEX = 'mitperson';
+        // if ( !this._client ) {
+        //     this._connect();
+        // }
+                this.get_elastic_config().subscribe(
+          data => {
+               const elastic_config: any = data;
+               if (elastic_config) {
+                   this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
+                   this.PERSON_INDEX = elastic_config.PERSON_INDEX;
+              if ( !this._client ) {
+                       this._connect();
+                  }
+              }
+           }
+       );
     }
 
     private _connect() {
         this._client = new Client( {
-            host: 'http://192.168.1.76:9200/'
+            host: this.URL_FOR_ELASTIC
         } );
     }
 
     search( value ): any {
         if ( value ) {
             return this._client.search( {
-                index: 'fibiperson',
+                index: this.PERSON_INDEX,
                 size: 20,
                 type: 'person',
                 body: {
@@ -128,5 +146,8 @@ export class CommitteeMemberEmployeeElasticService {
             requestTimeout: Infinity,
             hello: 'elasticsearch!'
         } );
+    }
+    get_elastic_config() {
+        return this._http.get('mit-irb/resources/elastic_config_json');
     }
 }

@@ -18,7 +18,7 @@
 				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="expandMemberToSave()">Ok</button>
 			</div>
 			<div class="modal-footer" *ngIf="IsToDeleteRole">
-				<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="modalFooterClear()">No</button>
+				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="modalFooterClear()">No</button>
 				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="deleteRole()">Yes</button>
 			</div>
 			<div class="modal-footer" *ngIf="IsToDeleteExpertise">
@@ -121,14 +121,14 @@
 				<div *ngIf="memberExist">
 					<div *ngFor="let member of this.resultLoadedById?.committee?.committeeMemberships">
 						<div class="set" *ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && ( member.committeeMemberRoles.length == 0 || member.committeeMemberExpertises.length == 0 )">
-							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
-								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate | date: 'MM/dd/yyyy'}} to {{member.termEndDate | date: 'MM/dd/yyyy'}} )</span>
+							<div class="setHead" *ngIf="!member.nonEmployeeFlag" (click)="showMembersTab($event,member.personId, member)">
+								<span>{{member?.personName}}({{member.active?'Active':'Inactive'}})
+									<span *ngIf="member.updateTimestamp != null">( {{member?.termStartDate | date: 'MM/dd/yyyy'}} to {{member?.termEndDate | date: 'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
 								</span>
-								<a href="#" (click)="showMembersTab($event,member.personId, member)">
+								<a href="#">
 									<i [ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
 								<!-- <span>
@@ -137,14 +137,14 @@
 									</a>
 								</span> -->
 							</div>
-							<div class="setHead" *ngIf="member.nonEmployeeFlag">
-								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate | date: 'MM/dd/yyyy'}} to {{member.termEndDate | date: 'MM/dd/yyyy'}} )</span>
+							<div class="setHead" *ngIf="member.nonEmployeeFlag" (click)="showMembersNonEmployeesTab($event,member.rolodexId, member)">
+								<span>{{member?.personName}}({{member?.active?'Active':'Inactive'}})
+									<span *ngIf="member.updateTimestamp != null">( {{member?.termStartDate | date: 'MM/dd/yyyy'}} to {{member?.termEndDate | date: 'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
 								</span>
-								<a href="#" (click)="showMembersNonEmployeesTab($event,member.rolodexId, member)">
+								<a href="#">
 									<i [ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
 								<!-- <span>
@@ -252,7 +252,7 @@
 																	 class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-floppy-o" aria-hidden="true"></i>
 																	</button>
-																	<button title="Save" *ngIf="editDetails" (click)="cancelEditDetails()" type="button" class="btn btn-primary edit-btn-1">
+																	<button title="Cancel" *ngIf="editDetails" (click)="cancelEditDetails()" type="button" class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-times"></i>
 																	</button>
 
@@ -507,24 +507,24 @@
 																	<div class="row">
 																		<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
 																			<label>
-																				<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.firstName }}
+																				<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.firstName }}
 																				</span>
-																				<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.firstName}}</span>
+																				<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.firstName}}</span>
 																				Primary Title (Primary)
 																				<br>
-																				<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.fullName }}
+																				<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.fullName }}
 																				</span>
-																				<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.fullName}}</span>
+																				<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex.fullName}}</span>
 																				Directory Title (Directory) </label>
 																			<br>
 																			<span>
-																				<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.addressLine1 }}
+																				<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.addressLine1 }}
 																				</span>
-																				<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.addressLine1}}</span>
+																				<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.addressLine1}}</span>
 																				<br> (Ofc)
-																				<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.phoneNumber }}
+																				<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.phoneNumber }}
 																				</span>
-																				<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.phoneNumber}}</span>, (Mob) 9345 7866 2356, (Fax) 321-321-1264 </span>
+																				<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.phoneNumber}}</span>, (Mob) 9345 7866 2356, (Fax) 321-321-1264 </span>
 																		</div>
 																	</div>
 																</div>
@@ -550,14 +550,14 @@
 						 <div class="set" *ngIf="!member.active && inactiveMembers">
 						
 
-							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
+							<div class="setHead" *ngIf="!member.nonEmployeeFlag" (click)="showMembersTab($event,member.personId, member)">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'MM/dd/yyyy'}} to {{member.termEndDate |date:'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
 								</span>
-								<a href="#" (click)="showMembersTab($event,member.personId, member)">
+								<a href="#">
 									<i [ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
 								<!-- <span>
@@ -566,14 +566,14 @@
 									</a>
 								</span> -->
 							</div>
-							<div class="setHead" *ngIf="member.nonEmployeeFlag">
+							<div class="setHead" *ngIf="member.nonEmployeeFlag" (click)="showMembersNonEmployeesTab($event,member.rolodexId, member)">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'MM/dd/yyyy'}} to {{member.termEndDate |date:'MM/dd/yyyy'}} )</span>
 									<a (click)="deleteMember($event,member.commMembershipId)">
 											<i class="fa fa-times"></i>
 										</a>
 								</span>
-								<a href="#" (click)="showMembersNonEmployeesTab($event,member.rolodexId, member)">
+								<a href="#">
 									<i [ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i>
 								</a>
 								<!-- <span>
@@ -971,24 +971,24 @@
 																<div class="row">
 																	<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
 																		<label>
-																			<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.firstName }}
+																			<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.firstName }}
 																			</span>
-																			<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.firstName}}</span>
+																			<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.firstName}}</span>
 																			Primary Title (Primary)
 																			<br>
-																			<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.fullName }}
+																			<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.fullName }}
 																			</span>
-																			<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.fullName}}</span>
+																			<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.fullName}}</span>
 																			Directory Title (Directory) </label>
 																		<br>
 																		<span>
-																			<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.addressLine1 }}
+																			<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails.addressLine1 }}
 																			</span>
-																			<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.addressLine1}}</span>
+																			<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.addressLine1}}</span>
 																			<br> (Ofc)
-																			<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.phoneNumber }}
+																			<span *ngIf="member.nonEmployeeFlag==false">{{member?.personDetails?.phoneNumber }}
 																			</span>
-																			<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.phoneNumber}}</span>, (Mob) 9345 7866 2356, (Fax) 321-321-1264 </span>
+																			<span *ngIf="member.nonEmployeeFlag==true">{{member?.rolodex?.phoneNumber}}</span>, (Mob) 9345 7866 2356, (Fax) 321-321-1264 </span>
 																	</div>
 																</div>
 															</div>

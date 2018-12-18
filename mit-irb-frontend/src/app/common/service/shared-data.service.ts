@@ -12,7 +12,7 @@ export class SharedDataService {
   public commonVo = new BehaviorSubject<any>({});
   CommonVoVariable = this.commonVo.asObservable();
 
-  public currentTab = new BehaviorSubject<any>('ALL');
+  public currentTab = new BehaviorSubject<any>(null);
   currentTabVariable = this.currentTab.asObservable();
 
   getGeneralInfo() {

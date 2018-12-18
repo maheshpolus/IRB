@@ -1471,12 +1471,20 @@ form-check-label {
     background: #f7f7f7;
     border-bottom: solid 1px #ececec;
 }
-.in-progress span
+.in-progress /* span commented for showing different colors for submitted to IRB*/
 {
     background: #e38347!important;
 }
 .in-drafts{
     background: #8e979a!important; 
+}
+.removed-status {
+    background-color: #fd6b80 !important;
+    
+}
+.ammendment-status
+{
+    background-color: #ad94fb !important;
 }
 .pending-action {
     background: #573b88!important; 

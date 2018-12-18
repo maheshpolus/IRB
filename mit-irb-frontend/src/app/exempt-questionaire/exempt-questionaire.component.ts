@@ -122,6 +122,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     personId: string;
     elasticResultTab = false;
 
+    NOFACULTY_WARNING_MESSAGE: string;
     WELCOME_MESSAGE: string;
     ABOUT_MESSAGE: string;
     EXEMPT_MSG: string;
@@ -172,6 +173,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 const property_config: any = data;
                 if (property_config) {
                     this.WELCOME_MESSAGE = property_config.WELCOME_MSG;
+                    this.NOFACULTY_WARNING_MESSAGE = property_config.NOFACULTY_WARNING_MESSAGE;
                     this.ABOUT_MESSAGE = property_config.ABOUT_QUESTIONNAIRE_MSG;
                     this.EXEMPT_MSG = property_config.EXEMPT_MSG;
                     this.NOT_EXEMPT_MSG = property_config.NOT_EXEMPT_MSG;
@@ -674,7 +676,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                             this.errorQuestions = this.result.exemptQuestionList;
                         } else if (this.result.isExemptGranted === 'Y') {
                             this.alertMsg = this.EXEMPT_MSG;
-                            this.showEvaluateWarning = this.NOFACULTY_MESSAGE;
+                            this.showEvaluateWarning = this.NOFACULTY_WARNING_MESSAGE;
                         } else if (this.result.isExemptGranted === 'O') {
                             this.alertMsg = this.OTHER_MSG;
                             this.showEvaluateWarning = this.NOFACULTY_MESSAGE;
@@ -682,14 +684,14 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     } else if (this.requestObject.facultySponsorJobTitle == null && this.requestObject.personJobTitle == null) {
                         if (this.result.isExemptGranted === 'N') {
                             this.alertMsg = this.NOT_EXEMPT_MSG;
-                            this.showEvaluateWarning = this.NOFACULTY_TITILE_MESSAGE;
+                            this.showEvaluateWarning = this.NOFACULTY_WARNING_MESSAGE;
                             this.errorQuestions = this.result.exemptQuestionList;
                         } else if (this.result.isExemptGranted === 'Y') {
                             this.alertMsg = this.EXEMPT_MSG;
-                            this.showEvaluateWarning = this.NOFACULTY_TITILE_MESSAGE;
+                            this.showEvaluateWarning = this.NOFACULTY_WARNING_MESSAGE;
                         } else if (this.result.isExemptGranted === 'O') {
                             this.alertMsg = this.OTHER_MSG;
-                            this.showEvaluateWarning = this.NOFACULTY_TITILE_MESSAGE;
+                            this.showEvaluateWarning = this.NOFACULTY_WARNING_MESSAGE;
                         }
                     } else if (this.result.isExemptGranted === 'N') {
                         this.showEvaluateWarning = '';

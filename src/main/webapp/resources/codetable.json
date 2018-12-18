@@ -1,0 +1,208 @@
+{
+	"groups": ["Award","IRB"],
+	"data_types": ["Integer", "String", "Date","Clob"],
+	"codetables": [{
+			"group": "IRB",
+			"codetable_name": "IRB Committee Type",
+			"description": "Short description on IRB_COMMITTEE_TYPE",
+			"database_table_name": "IRB_COMMITTEE_TYPE",
+			"fields": [{
+					"column_name": "COMMITTEE_TYPE_CODE",
+					"display_name": "Committee Type Code",
+					"data_type": "Integer",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["COMMITTEE_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_COMMITTEE",
+					"column_name": "COMMITTEE_TYPE_CODE",
+					"display_name":"IRB Committee"
+				}
+			]
+		},{
+			"group": "IRB",
+			"codetable_name": "IRB Protocol Action Type",
+			"description": "Short description on IRB_PROTOCOL_ACTION_TYPE",
+			"database_table_name": "IRB_PROTOCOL_ACTION_TYPE",
+			"fields": [{
+					"column_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"display_name": "Protocol Action Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "TRIGGER_SUBMISSION",
+					"display_name": "Trigger Submission",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "TRIGGER_CORRESPONDENCE",
+					"display_name": "Trigger Correspondence",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "FINAL_ACTION_FOR_BATCH_CORRESP",
+					"display_name": "Final Action For Batch Correspodence",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["PROTOCOL_ACTION_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_ACTIONS",
+					"column_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"display_name":"IRB Protocol Actions"
+				},{
+					"table_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"column_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"display_name":"Protocol Action Type Code"
+				}
+			]
+		},{
+			"group": "IRB",
+			"codetable_name": "IRB Protocol Action Type",
+			"description": "Short description on IRB_COMM_MEMBERSHIP_TYPE",
+			"database_table_name": "IRB_COMM_MEMBERSHIP_TYPE",
+			"fields": [{
+					"column_name": "MEMBERSHIP_TYPE_CODE",
+					"display_name": "Membership Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["MEMBERSHIP_TYPE_CODE"],
+			"dependency": []
+		},{
+			"group": "IRB",
+			"codetable_name": "IRB Schedule Status",
+			"description": "Short description on IRB_SCHEDULE_STATUS",
+			"database_table_name": "IRB_SCHEDULE_STATUS",
+			"fields": [{
+					"column_name": "SCHEDULE_STATUS_CODE",
+					"display_name": "Schedule Status Code",
+					"data_type": "Integer",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["SCHEDULE_STATUS_CODE"],
+			"dependency": [{
+					"table_name": "IRB_COMM_SCHEDULE",
+					"column_name": "SCHEDULE_STATUS_CODE",
+					"display_name":"IRB Committee Schedule"
+				}]
+		}
+	]
+}

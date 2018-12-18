@@ -1,8 +1,11 @@
 <section class="row nav_toggle">
 	<div class="navigate">
 		<ul class="navbarmed" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
+			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
+				<a (click)="getIrbListData('ACTIVE')">My Protocols</a>
+			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
-				<a (click)="getIrbListData('ALL')">My Protocols</a>
+				<a (click)="getIrbListData('ALL')">All Protocols</a>
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}">
 				<a (click)="getIrbListData('PENDING')">Pending Action</a>
@@ -12,9 +15,6 @@
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}">
 				<a (click)="getIrbListData('INPROGRESS')">Submitted</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
-				<a (click)="getIrbListData('ACTIVE')">Active</a>
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
 				<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>
@@ -150,8 +150,8 @@
 						</div>
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 align-view-btn">
 							<a class="pointer">
-								<button type="button" class="btn btn-outline-secondary button-view mb-0 elastic-view-margin" (click)="openIrb(protocol)">
-									<i class="fa fa-eye"></i>View Details
+								<button type="button" class="btn btn-outline-secondary button-view mb-0 elastic-view-margin" (click)="openIrb(protocol)" >
+									<i class="fa fa-eye"></i>View
 								</button>
 							</a>
 						</div>
@@ -163,35 +163,35 @@
 							<div class="form-check form-check-inline sort-fields">
 								<label>SORT BY:</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_NUMBER'}" (click)="sortField = 'PROTOCOL_NUMBER';updateSortOrder()">PROTOCOL NUMBER
-									<i class="fa" *ngIf="sortField == 'PROTOCOL_NUMBER'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'PROTOCOL_NUMBER'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_STATUS'}" (click)="sortField = 'PROTOCOL_STATUS';updateSortOrder()">STATUS
-									<i class="fa" *ngIf="sortField == 'PROTOCOL_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'PROTOCOL_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'TITLE'}" (click)="sortField = 'TITLE';updateSortOrder()">TITLE
-									<i class="fa" *ngIf="sortField == 'TITLE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'TITLE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_TYPE'}" (click)="sortField = 'PROTOCOL_TYPE';updateSortOrder()">TYPE
-									<i class="fa" *ngIf="sortField == 'PROTOCOL_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'PROTOCOL_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_STATUS'}" (click)="sortField = 'SUBMISSION_STATUS';updateSortOrder()">SUBMISSION STATUS
-									<i class="fa" *ngIf="sortField == 'SUBMISSION_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'SUBMISSION_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'LAST_APPROVAL_DATE'}" (click)="sortField = 'LAST_APPROVAL_DATE';updateSortOrder()">APPROVAL DATE
-									<i class="fa" *ngIf="sortField == 'LAST_APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'LAST_APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'EXPIRATION_DATE'}" (click)="sortField = 'EXPIRATION_DATE';updateSortOrder()">EXPIRATION DATE
-									<i class="fa" *ngIf="sortField == 'EXPIRATION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'EXPIRATION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'UPDATE_TIMESTAMP'}" (click)="sortField = 'UPDATE_TIMESTAMP';updateSortOrder()">UPDATE TIMESTAMP
-									<i class="fa" *ngIf="sortField == 'UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+									<i class="fa" *ngIf="sortField == 'UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 									 aria-hidden="true"></i>
 								</label>
 							</div>
@@ -274,3 +274,35 @@
 		</div>
 	</div>
 </section>
+
+<div class="modal fade mySkinDialog modalFallBack" id="warningModal" tabindex="-1" role="dialog"
+              aria-labelledby="warningModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content modal-text-color">
+                  <div class="modal-header popup-header">
+                    <h5 class="modal-title modal-text-color">Alert!</h5>
+
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+				  <div class="modal-body modal-popup">
+						<!-- section1 -->
+						<div class="modal-padding">
+							<div class="row">
+								<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+                    	<h4 class=" questionnaire-popups">
+								<p>You do not have the right to view this protocol</p>
+								</h4>
+								</div>
+								</div>
+								</div>
+                  </div>
+                  <div class="modal-footer">
+                
+                  </div>
+                </div>
+              </div>
+			</div>
+			<!--Hidden Button for warning modal-->
+			<button id="openWarningModalButton" [hidden]="true" data-toggle="modal" data-target="#warningModal"></button>

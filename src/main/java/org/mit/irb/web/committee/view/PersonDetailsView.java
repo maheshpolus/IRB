@@ -11,46 +11,45 @@ import org.hibernate.annotations.Immutable;
 
 @Entity
 @Immutable
-@Table(name = "KC_PERSON_MV")
+@Table(name = "WHOSP_PERSON_HISTORY")
 public class PersonDetailsView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	@Id
-	@Column(name = "PRNCPL_ID")
+	@Column(name = "PERSON_ID")
 	private String prncplId;
-
-	@Column(name = "FIRST_NM")
+	
+	@Column(name = "FIRST_NAME")
 	private String firstName;
 
-	@Column(name = "MIDDLE_NM")
+	@Column(name = "MIDDLE_NAME")
 	private String middleName;
 
-	@Column(name = "LAST_NM")
+	@Column(name = "LAST_NAME")
 	private String lastName;
 
 	@Column(name = "FULL_NAME")
 	private String fullName;
 
-	@Column(name = "PRNCPL_NM")
+	@Column(name = "USER_NAME")
 	private String prncplName;
-
-	@Column(name = "EMAIL_ADDR")
+	
+	@Column(name = "EMAIL_ADDRESS")
 	private String emailAddress;
 
-	@Column(name = "PRMRY_DEPT_CD")
-	private String primaryDeptCode;
+/*	@Column(name = "HOME_UNIT")
+	private String primaryDeptCode;*/
 
-	@Column(name = "UNIT_NAME")
-	private String unitName;
+/*	@Column(name = "UNIT_NAME")
+	private String unitName;*/
 
-	@Column(name = "UNIT_NUMBER")
+	@Column(name = "HOME_UNIT")
 	private String unitNumber;
 
-	@Column(name = "PHONE_NBR")
+	@Column(name = "OFFICE_PHONE")
 	private String phoneNumber;
 
-	@Column(name = "ADDR_LINE_1")
+	@Column(name = "ADDRESS_LINE_1")
 	private String addressLine1;
 
 	public String getPrncplId() {
@@ -109,21 +108,21 @@ public class PersonDetailsView implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
-	public String getPrimaryDeptCode() {
+/*	public String getPrimaryDeptCode() {
 		return primaryDeptCode;
 	}
 
 	public void setPrimaryDeptCode(String primaryDeptCode) {
 		this.primaryDeptCode = primaryDeptCode;
-	}
+	}*/
 
-	public String getUnitName() {
+/*	public String getUnitName() {
 		return unitName;
 	}
 
 	public void setUnitName(String unitName) {
 		this.unitName = unitName;
-	}
+	}*/
 
 	public String getUnitNumber() {
 		return unitNumber;

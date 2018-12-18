@@ -12,11 +12,13 @@
 				</div>
 				<div class="col-12 apprve-date mt-0" >
 						<div class="row">
-							<div class="col-9 title-head pl-15" *ngIf="isViewMode || isEditMode">
+							<div class="col-9">
+							<div class="title-head pl-15" *ngIf="isViewMode || isEditMode">
 										<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' " class="in-progress active-en margin-fix">Exempt</span>
 										<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'" class="active-status active-en margin-fix">Not Exempt</span>
 										<span *ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' " class="active-status active-en margin-fix">Not Submitted</span>
 										<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
+							</div>
 							</div>
 							<div class="col-3 width-exempt searchBox display">
 								<a id="returnToDasboardLink" title="Back to Dashboard" (click)="returnToExemptList($event)"> <i class="fa fa-mail-reply">&nbsp;</i>Return to Dashboard</a>
@@ -148,7 +150,7 @@
 						<h4>*Summary:</h4>
 					</div>
 					<div class="col-9 width-exempt searchBox dsp-flex">
-						<textarea [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
+						<textarea class="form-control" [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
 					</div>
 				</div>
 				<div *ngIf="!isViewMode" class="col-12 exempt-id">
@@ -212,12 +214,12 @@
 							<span class="danger">
 								<i class="fa" [ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
 							'fa-warning':isExempt=='N'}" class="fa fa-star"></i>
-							</span>
+							</span >
 							{{alertMsg}}
-							<span *ngIf="showEvaluateWarning!=''">
+							<span *ngIf="showEvaluateWarning!=''" >
 								<br/>
 								<i class="fa" [ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
-								'fa-warning':isExempt=='N'}" class="fa fa-star"></i>{{showEvaluateWarning}}</span>
+								'fa-warning':isExempt=='N'}" class="fa fa-star"></i><span [innerHTML]="showEvaluateWarning"></span></span>
 						</p>
 					</div>
 				</div>
@@ -499,7 +501,7 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-							<h4 class="popup-sub-head questionnaire-popups">{{alertMsg}}</h4>
+							<h4 class="popup-sub-head questionnaire-popups"><p [innerHTML]="alertMsg"></p></h4>
 						</div>
 					</div>
 				</div>

@@ -1,4 +1,4 @@
-<div class="slideMenu" id="myMenu">
+<div class="slideMenu" id="myMenu" (mouseleave)="hideMenu($event)">
 	<p>
 		<a href="#" *ngIf="showMenu" class="expndMenu" (click)="expandMenu($event);">
 			<i class="fa fa-bars" aria-hidden="true"></i>
@@ -10,7 +10,8 @@
 	<ul class="iconMenu">
 		<li class="active">
 			<a href="#" [routerLink]="['/irb/dashboard']">
-				<i class="fa fa-tachometer"></i>
+				<!-- <i class="fa fa-tachometer"></i> -->
+				<i class="fa fa-home"></i>
 				<span>Dashboard</span>
 			</a>
 		</li>
@@ -24,14 +25,14 @@
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<ul class="headerMenu">
 				<li>
-					<a class="logo">
+					<a class="logo" [routerLink]="['/irb/dashboard']">
 						<img class="logo-size" src="/mit-irb/resources/dist/assets/images/logo2.png"/>
 						<!-- <img class="logo-size" src="assets/images/logo2.png" /> -->
 					</a>
 				</li>
 				<li>
 					<a>
-						<span class="userName">Dashboard of {{result?.fullName}}({{result?.role}})
+						<span class="userName">{{result?.fullName}}({{result?.role}})
 						</span>
 						<i class="fa fa-user pdf" (click)="logout()"></i>
 					</a>

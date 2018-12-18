@@ -62,6 +62,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
 
     /** sets requestObject and call function to load attachment details */
     ngOnInit() {
+        this.userDTO = this._activatedRoute.snapshot.data['irb'];
         const reqobj = { protocolNumber: this._activatedRoute.snapshot.queryParamMap.get('protocolNumber') };
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
         this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
@@ -73,7 +74,6 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             this.result = data;
             this.attachmentTypes = this.result.irbAttachementTypes;
         });
-        // this.userDTO = this._activatedRoute.snapshot.data['irb'];
         this.loadIrbAttachmentList(reqobj);
     }
 
@@ -180,7 +180,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.tempEditAttachment.typeCode = this.requestObject.attachmentTypeCode;
                 this.tempEditAttachment.description = this.requestObject.attachmentDescription;
                 this.tempEditAttachment.updateTimestamp = new Date();
-                this.tempEditAttachment.updateUser = localStorage.getItem('userName');
+                this.tempEditAttachment.updateUser = this.userDTO.userName;
                 this._spinner.show();
                 if (!this.isCollaboratorEdit) {
                 this._irbCreateService.addattachment(this.tempEditAttachment, this.uploadedFile).subscribe(
@@ -272,7 +272,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.irbAttachmentProtocol.documentId = 1;
                 this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;
                 this.irbAttachmentProtocol.updateTimestamp = new Date();
-                this.irbAttachmentProtocol.updateUser = localStorage.getItem('userName');
+                this.irbAttachmentProtocol.updateUser = this.userDTO.userName;
                 this.irbAttachmentProtocol.createTimestamp = new Date();
                 this.irbAttachmentProtocol.attachmentVersion = 1;
                 this.irbAttachmentProtocol.protocolGeneralInfo = this.generalInfo;
@@ -288,7 +288,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.irbAttachmentProtocol.protocolAttachment = {
                     sequenceNumber: 1,
                     updateTimestamp: new Date(),
-                    updateUser: localStorage.getItem('userName')
+                    updateUser: this.userDTO.userName
 
                 };
                 this._spinner.show();

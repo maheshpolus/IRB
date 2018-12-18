@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { LoginService } from '../../login/login.service';
+import { SharedDataService } from '../service/shared-data.service';
 
 @Component({
     selector: 'app-header',
@@ -17,7 +18,7 @@ export class HeaderComponent implements OnInit {
     result: any;
     showMenu = true;
 
-    constructor(private _loginService: LoginService, private _router: Router) { }
+    constructor(private _loginService: LoginService, private _router: Router, private _sharedDataService: SharedDataService) { }
 
     ngOnInit() {
         this._loginService.getUserDetail(this.requestObject).subscribe(data => {
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit {
             sessionStorage.removeItem('ActivatedUser');
             if (data === true) {
                 this._router.navigate(['/login']);
+                this._sharedDataService.changeCurrentTab(null);
             } else {
                 this._router.navigate(['/irb/dashboard']);
             }

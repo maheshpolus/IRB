@@ -103,7 +103,8 @@ public class CommitteeMemberships implements Serializable {
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeMemberExpertise> committeeMemberExpertises;
 
-	@Transient
+	@ManyToOne(optional= true)
+	@JoinColumn(foreignKey=@ForeignKey(name="IRB_COMM_MEMBERSHIPS_FK3"),name="PERSON_ID",referencedColumnName="PERSON_ID", insertable = false, updatable = false)
 	private PersonDetailsView personDetails;
 
 	@Column(name = "COMMENTS")

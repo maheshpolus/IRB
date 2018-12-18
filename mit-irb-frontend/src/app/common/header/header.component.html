@@ -1,4 +1,4 @@
-<div class="slideMenu" id="myMenu">
+<div class="slideMenu" id="myMenu" (mouseleave)="hideMenu($event)">
 	<p>
 		<a href="#" *ngIf="showMenu" class="expndMenu" (click)="expandMenu($event);">
 			<i class="fa fa-bars" aria-hidden="true"></i>

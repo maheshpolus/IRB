@@ -2,12 +2,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-
 	<display-name>mit-irb</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-	
 	<!-- context param and listener for logger -->
 	<context-param>
 		<param-name>log4jExposeWebAppRoot</param-name>
@@ -20,7 +18,6 @@
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
-	
 	<!-- dispacher servlet and servlet mapping -->
 	<servlet>
 		<servlet-name>spring-web</servlet-name>

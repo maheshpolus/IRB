@@ -42,9 +42,9 @@ export class ExemptCardComponent implements OnInit {
     }
 
     getStatusCode( role, tabClicked ) {
-        if ( role === 'PI' || role === 'DEPT_ADMIN' && this.userDTO.jobTitle !== null && tabClicked === 'PENDING' ) {
+        if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle !== null && tabClicked === 'PENDING' ) {
             return ['1', '2', '5'];
-        } else if ( role === 'PI' || role === 'DEPT_ADMIN' && this.userDTO.jobTitle !== null && tabClicked === 'STUDIES' ) {
+        } else if (( role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle !== null && tabClicked === 'STUDIES' ) {
             return ['1', '2', '3', '4'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'STUDIES' ) {
             return ['1'];
@@ -52,9 +52,9 @@ export class ExemptCardComponent implements OnInit {
             return ['3', '5'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'SUBMITTED' ) {
             return ['4'];
-        } else if ( role === 'PI' || role === 'DEPT_ADMIN' && this.userDTO.jobTitle == null && tabClicked === 'STUDIES' ) {
+        } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'STUDIES' ) {
             return ['1', '2', '3', '4'];
-        } else if ( role === 'PI' || role === 'DEPT_ADMIN' && this.userDTO.jobTitle == null && tabClicked === 'PENDING' ) {
+        } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'PENDING' ) {
             return ['5'];
         }
     }

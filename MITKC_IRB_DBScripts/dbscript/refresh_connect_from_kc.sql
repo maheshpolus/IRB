@@ -1,3 +1,7 @@
+set heading off;
+set echo off;
+var li_ret number;
+rem
 DELETE FROM IRB_PROTOCOL_CORRESPONDENCE
 /
 DELETE FROM IRB_PROTOCOL_ACTIONS
@@ -1144,3 +1148,5 @@ WHERE ACTION_ID_FK in ( SELECT PROTOCOL_ACTION_ID FROM IRB_PROTOCOL_ACTIONS)
 /
 commit
 /
+spool off;
+exit;

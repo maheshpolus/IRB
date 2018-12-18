@@ -1,8 +1,11 @@
 <section class="row nav_toggle">
 	<div class="navigate">
 		<ul class="navbarmed" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
+			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
+				<a (click)="getIrbListData('ACTIVE')">My Protocols</a>
+			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
-				<a (click)="getIrbListData('ALL')">My Protocols</a>
+				<a (click)="getIrbListData('ALL')">All Protocols</a>
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}">
 				<a (click)="getIrbListData('PENDING')">Pending Action</a>
@@ -12,9 +15,6 @@
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}">
 				<a (click)="getIrbListData('INPROGRESS')">Submitted</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
-				<a (click)="getIrbListData('ACTIVE')">Active</a>
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
 				<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>

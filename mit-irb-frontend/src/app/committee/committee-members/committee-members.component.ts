@@ -164,7 +164,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                                             .map(( hit ) => hit._source );
 
                                         this.hits_source.forEach(( elmnt, j ) => {
-                                            this.prncpl_id = this.hits_source[j].prncpl_id;
+                                            this.prncpl_id = this.hits_source[j].person_id;
                                             this.full_name = this.hits_source[j].full_name;
                                             this.elasticSearchresults.push( {
                                                 label: this.full_name,
@@ -552,7 +552,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         this.rolodexId = rolodexIdFromService;
     }
 
-    showMembersTab( event: any, personIdFromService, member ) {debugger;
+    showMembersTab( event: any, personIdFromService, member ) {
         event.preventDefault();
         this.isTermDateFilled = true;
         this.rolodexId = null;

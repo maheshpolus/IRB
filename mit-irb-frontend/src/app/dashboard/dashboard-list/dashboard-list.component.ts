@@ -87,16 +87,19 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
+        this.roleType = this.userDTO.role;
         this._sharedDataService.currentTab.subscribe(data => {
+            if (data == null) {
+                this.lastClickedTab = (this.roleType === 'ADMIN' || this.roleType === 'CHAIR') ? 'ALL' : 'ACTIVE';
+            } else {
             this.lastClickedTab = data;
+            }
         });
         if (this.lastClickedTab === 'EXEMPT') {
             this.getExemptListData(this.lastClickedTab);
         } else {
             this.getIrbListData(this.lastClickedTab);
         }
-
-        this.roleType = this.userDTO.role;
         this.getIrbProtocolTypes();
     }
 

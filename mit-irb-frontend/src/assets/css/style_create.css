@@ -2010,7 +2010,7 @@ select#inlineFormCustomSelect
 {
     margin-top:0 !important ;
 }
-input:disabled{
+input:disabled,textarea:disabled{
     color: #868e96;
     background-color: #e9ecef !important;
 }

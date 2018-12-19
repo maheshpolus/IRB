@@ -29,8 +29,7 @@ BEGIN
 	WHEN OTHERS THEN
 		ls_user_id := '';
 	END;	
- 
-	 
+ 	 
 	 IF AV_PROTOCOL_NUMBER is not null THEN 
 		ls_filter_condition := ' and t1.protocol_number like '''||replace(AV_PROTOCOL_NUMBER,'*','%')||'%'' ';
 	 END IF;
@@ -62,11 +61,11 @@ BEGIN
 		if AV_PERSON_ROLE_TYPE = 'PI' then
 		
 			ls_join_sql := ' INNER JOIN irb_protocol_persons t4 on t1.protocol_id = t4.protocol_id ';
-			ls_filter_condition :=  'AND t4.person_id = '''||AV_PERSON_ID||''' '||ls_filter_condition;	
+			ls_filter_condition :=  'AND ( t4.person_id = '''||AV_PERSON_ID||''' OR  lower(t1.CREATE_USER) =  '''|| ls_user_id ||''' )'||ls_filter_condition;	
 			
 		else -- DEPT_ADMIN 
-			ls_filter_condition :=  'AND t1.LEAD_UNIT_NUMBER IN ( SELECT UNIT_NUMBER FROM MITKC_USER_RIGHT_MV WHERE PERSON_ID = '''||AV_PERSON_ID||'''
-			AND PERM_NM = ''IRB_Dept_Administrator'' ) '||ls_filter_condition;	
+			ls_filter_condition :=  'AND ( t1.LEAD_UNIT_NUMBER IN ( SELECT UNIT_NUMBER FROM MITKC_USER_RIGHT_MV WHERE PERSON_ID = '''||AV_PERSON_ID||'''
+			AND PERM_NM = ''IRB_Dept_Administrator'' )  OR  lower(t1.CREATE_USER) =  '''||  ls_user_id ||''' )' ||ls_filter_condition;	
 			
 		end if;	
 					
@@ -84,8 +83,7 @@ BEGIN
 		END IF;	
 	 	
 	 END IF;
-	 
-	 ls_filter_condition :=  ls_filter_condition|| ' lower(t1.UPDATE_USER) = '''||  ls_user_id ||'''';
+	 	 
 	 ls_filter_condition :=  ls_filter_condition||' ';
 	
      ls_dyn_sql:= q'[
@@ -97,6 +95,7 @@ BEGIN
                       t1.protocol_id,
                       t1.title,
                       nvl(to_char(t1.last_approval_date,'yyyy-mm-dd'),' ') as last_approval_date,
+					  nvl(to_char(t1.approval_date,'yyyy-mm-dd'),' ') as approval_date,
                       nvl(to_char(t1.expiration_date,'yyyy-mm-dd'),' ') as expiration_date,
                       t1.protocol_status_code,
                       t2.description as protocol_status,
@@ -119,7 +118,7 @@ BEGIN
                                         where s1.protocol_id = s2.protocol_id)
                       )t5 on t5.protocol_id = t1.protocol_id
                       left outer join submission_status t6 on t5.submission_status_code = t6.submission_status_code
-                      WHERE t1.is_latest = 'Y' and t1.protocol_status_code not in (400,401,901) ]'
+                      WHERE t1.is_latest = 'Y' and t1.protocol_status_code not in (300,303,400,401,901) ]'
                       ||ls_filter_condition
                       ||' order by t1.update_timestamp desc
                       ) WHERE rownum < 100';

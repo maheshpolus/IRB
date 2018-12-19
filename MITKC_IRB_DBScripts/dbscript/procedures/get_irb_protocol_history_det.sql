@@ -11,7 +11,10 @@ li_next_group_action_id NUMBER := AV_NEXT_GROUP_ACTION_ID;
 BEGIN
 
 	if li_next_group_action_id	= 0 then
-		li_next_group_action_id := AV_ACTION_ID;
+		select max(ACTION_ID) into li_next_group_action_id
+		from IRB_PROTOCOL_ACTIONS
+		where PROTOCOL_ID = AV_PROTOCOL_ID;    
+		-- li_next_group_action_id := AV_ACTION_ID;
 	else
 		li_next_group_action_id	:= li_next_group_action_id - 1;
 	end if;
@@ -47,26 +50,6 @@ BEGIN
 	AND T1.PROTOCOL_ACTION_TYPE_CODE NOT IN (109,111,112,110)
 	AND T1.ACTION_ID BETWEEN AV_ACTION_ID AND li_next_group_action_id
 	ORDER BY ACTION_ID desc;
-
-	/*	
-	201	Deferred
-	202	Substantive Revisions Required
-	203	Specific Minor Revisions Required
-	204	Approved
-	205	Expedited Approval
-	206	Exemption Granted
-	207	Closed for Enrollment
-	209	IRB Acknowledgement
-	210	IRB review not required
-	211	Data Analysis Only
-	212	Re-open Enrollment
-	300	Closed (Administratively closed)
-	301	Terminated
-	302	Suspended
-	303	Withdrawn
-	304	Disapproved
-	305	Expired
-	*/	
 	
 END;
 /

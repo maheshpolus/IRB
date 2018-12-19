@@ -310,6 +310,8 @@ WHERE T1.COMM_MEMBERSHIP_ID_FK IN ( SELECT COMM_MEMBERSHIP_ID
 															 )
 								  )
 /
+ALTER TABLE IRB_COMM_SCHEDULE_MINUTES disable constraint FK_IRB_COMM_SCH_MINUTES4
+/
 INSERT INTO IRB_COMM_SCHEDULE_MINUTES
 (
 COMM_SCHEDULE_ACT_ITEMS_ID,
@@ -539,6 +541,8 @@ where t1.protocol_id IN  (
 /
 commit
 /
+ALTER TABLE IRB_PROTOCOL_SUBMISSION disable constraint IRB_PROTO_SUBMISSION_FK8
+/
 insert into IRB_PROTOCOL_SUBMISSION(
 SUBMISSION_ID,
 PROTOCOL_NUMBER,
@@ -587,7 +591,8 @@ RECUSED_COUNT,
 IS_BILLABLE,
 COMM_DECISION_MOTION_TYPE_CODE
 from PROTOCOL_SUBMISSION
-WHERE SCHEDULE_ID IN (SELECT SCHEDULE_ID FROM IRB_COMM_SCHEDULE)
+/
+commit
 /
 ALTER TABLE IRB_PROTOCOL_PERSONS ADD rolodex_id NUMBER(6)
 /
@@ -1024,7 +1029,6 @@ FOLLOWUP_ACTION_CODE,
 CREATE_USER,
 CREATE_TIMESTAMP
 FROM PROTOCOL_ACTIONS
-WHERE SUBMISSION_ID_FK IN (SELECT SUBMISSION_ID FROM IRB_PROTOCOL_SUBMISSION)
 /
 commit
 /
@@ -1077,7 +1081,6 @@ SELECT
   UPDATE_USER,
   FINAL_FLAG_TIMESTAMP
 FROM PROTOCOL_CORRESPONDENCE
-WHERE ACTION_ID_FK in ( SELECT PROTOCOL_ACTION_ID FROM IRB_PROTOCOL_ACTIONS)
 /
 insert into IRB_PERSON_ROLES(
 PROTOCOL_PERSON_ROLE_ID,
@@ -1101,6 +1104,36 @@ TRAINING_DETAILS_REQUIRED,
 COMMENTS_DETAILS_REQUIRED,
 ACTIVE_FLAG
 from PROTOCOL_PERSON_ROLES
+/
+commit
+/
+declare
+
+ cursor c_data is
+  SELECT PROTOCOL_NUMBER, UNIT_NUMBER,SEQUENCE_NUMBER
+  FROM IRB_PROTOCOL_UNITS t1
+  WHERE  t1.LEAD_UNIT_FLAG = 'Y'
+  and t1.protocol_units_id  = ( select max(t2.protocol_units_id)
+                                FROM IRB_PROTOCOL_UNITS t2
+                                WHERE t1.PROTOCOL_NUMBER = t2.PROTOCOL_NUMBER 
+                                and t1.SEQUENCE_NUMBER = t2.SEQUENCE_NUMBER
+                                and t2.LEAD_UNIT_FLAG = 'Y'                                                            
+                                );
+  r_data c_data%rowtype;
+begin
+  open c_data;
+  loop
+  fetch c_data into r_data;
+  exit when c_data%notfound;
+  
+    UPDATE IRB_PROTOCOL t1
+    SET t1.LEAD_UNIT_NUMBER = r_data.UNIT_NUMBER
+    WHERE t1.PROTOCOL_NUMBER = r_data.PROTOCOL_NUMBER 
+    and t1.SEQUENCE_NUMBER = r_data.SEQUENCE_NUMBER;
+  
+  end loop;
+  close c_data;
+end;
 /
 commit
 /

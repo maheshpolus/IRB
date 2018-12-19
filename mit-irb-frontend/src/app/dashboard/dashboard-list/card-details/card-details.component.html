@@ -1,4 +1,4 @@
-<div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
+<div id="top-card" class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}" (scroll)="scrollEvent()">
 	<div class="row list-rows" *ngFor="let irb of irbList">
 		<div class="col-md-3 col-sm-12 col-12 list-view">
 			<span
@@ -44,7 +44,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<span>Approval Date : </span>{{(irb.LAST_APPROVAL_DATE === ' ' || irb.LAST_APPROVAL_DATE === null ) ? ' ':(irb.LAST_APPROVAL_DATE | date: 'MM/dd/yyyy')}}
+					<span>Approval Date : </span>{{(irb.APPROVAL_DATE === ' ' || irb.APPROVAL_DATE === null ) ? ' ':(irb.APPROVAL_DATE | date: 'MM/dd/yyyy')}}
 				</div>
 				<div class="col-md-6">
 					<span>Expiration Date : </span>{{(irb.EXPIRATION_DATE === ' ' || irb.EXPIRATION_DATE === null ) ?  ' ':(irb.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}
@@ -76,6 +76,7 @@
 		</a>
 		</div>
 	</div>
+	<button (click)="scrollToTop()" id="myBtn" title="Go to top"><i class="fa fa-angle-double-up top-arrow" aria-hidden="true"></i></button>
 </div>
 <!-- 
 <div class="col-sm-12" *ngIf="irbList.length==0"> No Irb protocol found for this status</div> -->

@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <div class="row">
+    <!--General-s-->
+    <div class="col-12">
+      <div class="card history-card border-radius-1">
+        <div class="card-header history-header">
+          <nav class="nav navbar-pg3">
+            <h5>Questionnaires</h5>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </nav>
+        </div>
+        <div class="card-body card-paddng">
+
+
+            <div class="col-md-12 users-list-tbl">
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table table-striped tbl-p-clr">
+                        <thead class="tbl-head-clr thead-font-size">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Completed</th>
+                                <th scope="col">Last Updated</th>
+                                <th scope="col">Action</th>
+                              </tr>
+                          </thead>
+                          <tbody class="tbody-font-size">
+                              <tr *ngFor = "let questionnaire of applicableQuestionnaire">
+                                  <td scope="row">{{questionnaire.QUESTIONNAIRE}}</td>
+                                  <td>
+                                    <span>No</span>
+                                    <!-- <span></span> -->
+                                  </td>
+                                  <td>Saxe, Rebecca On 12/01/2018</td>
+                                  <td>
+
+                                      <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
+                                                                                                                     protocolId: protocolId,
+                                                                                                                     ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
+                                                                                                                    qnrId: questionnaire.QUESTIONNAIRE_ID}">
+                                          <button type="button" class="btn btn-outline-secondary" >
+                                            <i class="fa fa-pencil"></i>
+                                          </button>
+                                        </a>
+
+                                    <!-- <a [routerLink]="['../irbQuestionnaireView']" 
+                                      [queryParams]="{ protocolNumber: protocolNumber,
+                                                       protocolId: protocolId,
+                                                       ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
+                                                       qnrId: questionnaire.QUESTIONNAIRE_ID}"> dfsdfsd
+                                    </a> -->
+                                  </td>
+                                </tr>
+                          </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,205 @@
+<div class="borderBox" *ngIf="codeTableProperty.codetable_name">
+  <section class="row">
+    <div class="col-md-12 r-mainhead">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="row">
+            <h4 class="col-12">{{codeTableProperty.codetable_name}}</h4>
+            <h4 class="col-12"><span class="header-color">Table Name:</span> {{codeTableProperty.database_table_name}}</h4>
+          </div>
+         
+        </div>
+        <div class="col-lg-6 content-center">
+          <div _ngcontent-c5="" class="searchBox">
+            <input _ngcontent-c5="" type="text" placeholder={{placeHolder}} class="ng-pristine ng-valid ng-touched"
+              [(ngModel)]="searchText">
+            <a _ngcontent-c5="" class="searchButton" href="#"><i _ngcontent-c5="" class="fa fa-search"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-3 text-right content-center">
+          <div class="col-md-12 advanced-search marginbottom10">
+            <span aria-hidden="true" data-toggle="modal" data-target=".create-modal" (click)="setNewCreation()" title="Create New"><i
+                class="fa fa-plus padding-right-10" aria-hidden="true" ></i>Create New</span>
+          </div>
+        </div>
+      </div>
+      <hr class="hrmargin">
+      <p>{{codeTableProperty.description}}</p>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="col-12">
+      <div class="result-list">
+        <table class="table tableSkin mb-0 tablealign tbl-padding table-striped table-type-head">
+          <thead >
+            <ng-container *ngFor="let tableField of tableFieldList">
+              <th class="headeralign  irb-table-hdcolor"  id="code-table">{{tableField.display_name}}</th>
+            </ng-container>
+            <th class="headeralign  irb-table-hdcolor" width="10%">Actions</th>
+          </thead>
+          <tbody class="irb-tbody-font-size">
+            <tr *ngFor="let values of codeTableValues | filter : searchText;let index=index">
+              <ng-container *ngFor="let tableField of tableFieldList;let i=index">
+                <td>
+                  <input *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&tableField.length<=60||!isEditEnable[index]&&tableField.is_editable=='true'&&tableField.length==null"
+                    type="{{dataType[i].type}}" maxlength="{{tableField.length}}" [(ngModel)]="updatedCodeTableData[tableField.column_name]" class="form-control"
+                    (keyup)='setValidation($event, tableField.length, tableField.data_type, i,tableField.can_empty, tableField.column_name )' (ngModelChange)="setCodeTableField(tableField.column_name, index,dataType[i].type, 1)" (click)="emptyId = i" />
+                  <textarea *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&tableField.length>60" maxlength="{{tableField.length}}" required class="form-control" [(ngModel)]="updatedCodeTableData[tableField.column_name]"
+                    (keyup)='setValidation($event, tableField.length, tableField.data_type, i,tableField.can_empty, tableField.column_name )' (ngModelChange)="setCodeTableField(tableField.column_name, index,dataType[i].type, 1)" (click)="emptyId = i">
+                  </textarea>
+                  <span *ngIf="isEditEnable[index]||tableField.is_editable!='true'" class="spanwidth">{{values[tableField.column_name]}}</span>
+                  <span *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&i==emptyId&&tableField.data_type!='Date'" class="modal-title" [ngClass]="(emptyId == i)?'':'span-padding'">
+                    *Maximum {{tableField.length}} {{dataType[i].display_type}}
+                  </span>
+                  <br *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&isLength&&id==i&&tableField.data_type!='Date'" [ngClass]="(emptyId == i)?'':'span-padding'">
+                  <span *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&isLength&&id==i&&tableField.data_type!='Date'" class="red" [ngClass]="(emptyId == i)?'':'span-padding'">
+                    *The maximum length is {{tableField.length}}
+                  </span>          
+                  <br *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&isType&&id==i" [ngClass]="(emptyId == i)?'':'span-padding'">
+                  <span *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&isType&&id==i" class="red" [ngClass]="(emptyId == i)?'':'span-padding'">
+                    *Please Enter numbers
+                  </span>
+                  <span *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&isEmpty&&!isValueEmpty[i]" class="red" [ngClass]="(emptyId == i)?'':'span-padding'">
+                    *This field is missing please check
+                  </span>
+                </td>
+              </ng-container>
+              <td class="action-icon">
+                <i *ngIf="isEditEnable[index]" class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#Modal"
+                  (click)="editCodeTable(index,values)" title="Click to edit"></i>
+                <i *ngIf="!isEditEnable[index]" class="fa fa-save" (click)="updateCodetable(index)" data-toggle="tooltip"
+                  title="Click to save" (click)="emptyId = -1"></i>
+                <i *ngIf="!isEditEnable[index]" class="fa fa-close" (click)="cancelChanges(index)" data-toggle="tooltip"
+                  title="Click to cancel" (click)="emptyId = -1"></i>
+                <i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#myModal" (click)="codeTableDataIndex(index)"
+                  title="Click to delete" (click)="emptyId = -1"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="not-available modal-title" *ngIf="isNoData">No data available</div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+
+
+<!--create-modal-->
+
+<!-- Large modal -->
+
+
+<div *ngIf="isSavedFlag.isSaved == true||isSavedFlag.isSaved==null" id ="createModal"  class="modal fade create-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" [ngClass]="{'widthmodal':totalColumnNo>3}">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add New {{codeTableProperty.codetable_name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="row">
+        <div class="col-md-12 padding-15-30">
+          <div>
+            <table _ngcontent-c4="" class="table tableSkin mb-0 tablealign">
+              <thead _ngcontent-c4="">
+                <ng-container *ngFor="let tableField of tableFieldList;let in=index">
+                  <!-- <tr _ngcontent-c4=""> -->
+                  <th *ngIf="isPrimary[in]!=true&&tableField.is_editable=='true'" class="headeralign" [ngClass]="{'widthnew':length<=2&&tableField.length<=3}">{{tableField.display_name}}</th>
+                  <!-- <th></th> -->
+                  <!-- </tr> -->
+                </ng-container>
+              </thead>
+              <tbody class="irb-tbody-font-size">
+                <tr>
+                  <ng-container *ngFor="let tableField of tableFieldList; let i=index">
+                    <td *ngIf="isPrimary[i]==false&&tableField.is_editable=='true'">
+                      <input *ngIf="tableField.length<=60||tableField.length==null" type="{{dataType[i].type}}" maxlength="{{tableField.length}}" max="999" required class="form-control" (click)="emptyId = i"
+                        [(ngModel)]="newCodeTableData[tableField.column_name]" (keyup)='setValidation($event, tableField.length, tableField.data_type, i, tableField.can_empty,tableField.column_name)'
+                        (ngModelChange)="setCodeTableField(tableField.column_name,i,dataType[i].type)">
+                      <textarea *ngIf="tableField.length>60" maxlength="{{tableField.length}}" max="999" required class="form-control" (click)="emptyId = i" [(ngModel)]="newCodeTableData[tableField.column_name]"
+                        (keyup)='setValidation($event, tableField.length, tableField.data_type, i, tableField.can_empty,tableField.column_name)'
+                        (ngModelChange)="setCodeTableField(tableField.column_name,i,dataType[i].type)">
+                      </textarea>
+                      <span *ngIf="i==emptyId&&tableField.data_type!='Date'" class="modal-title">
+                        *Maximum {{tableField.length}} {{dataType[i].display_type}}
+                      </span>
+                      <span *ngIf="isLength&&id==i&&tableField.data_type!='Date'" class="red"><br>*
+                        The maximum length is {{tableField.length}}</span>
+                      <span *ngIf="tableField.is_editable=='true'&&isType&&id==i" class="red"><br>*
+                        please enter numbers</span>
+                      <span *ngIf="isEmpty&&!isValueEmpty[i]" class="red"><br>*
+                        This field is missing please check</span>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btnSkin btnSkinSecondary"  data-dismiss="modal" type="button" (click)="emptyId = -1">Cancel</button>
+        <button  style = "display: none" id = "closeModal" class="btnSkin btnSkinSecondary" data-dismiss="modal" type="button"></button>
+        <button class="btnSkin btnSkinPrimary"  type="button" (click)="addNewCodeTableData()" (click)="emptyId = -1">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--modal-end-->
+
+<!-- delete Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header footer-padding">
+        <h4 class="modal-title">Remove {{codeTableProperty.codetable_name}}</h4>
+      </div>
+      <div class="modal-body modal-padding">
+        <p *ngIf="isDependency"><b *ngIf="codeTableProperty.dependency.length>1">It has dependency with following tables:</b>
+          <b *ngIf="codeTableProperty.dependency.length==1">It has dependency with following table:</b>
+          <span *ngFor="let dependency of codeTableProperty.dependency">
+            <li>
+              {{dependency.display_name}} 
+            </li>
+          </span>
+        </p>
+        <p>Do you want to delete?</p>
+      </div>
+      <div class="modal-footer footer-padding">
+        <button type="button" class="btnSkin btnSkinSecondary" data-dismiss="modal">No</button>
+        <button (click)="deleteCodeTableData()" type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- save Modal -->
+<div *ngIf="isSavedFlag.isSaved==false" class="modal fade" id="Modal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header footer-padding">
+        <h4 class="modal-title">Save changes</h4>
+      </div>
+      <div class="modal-body">
+        Do you want to save the changes
+      </div>
+      <div class="modal-footer footer-padding">
+        <button type="button" class="btnSkin btn-secondary" (click)="cancelChanges(tempId)" data-dismiss="modal">Cancel</button>
+        <button (click)="updateCodetable(tempId)" type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-success">{{toastMessage}}</div>
+<div id="toast-warning">{{toastMessage}}</div>

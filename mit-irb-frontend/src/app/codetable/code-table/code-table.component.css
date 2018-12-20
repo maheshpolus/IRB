@@ -1,0 +1,46 @@
+
+  .red{
+    color: red;
+    /* position: absolute; */
+  }
+  .spanwidth{
+  word-break: break-all;
+  }
+.disable{
+  pointer-events: none;
+  background-color: beige;
+}
+.table thead th {
+  vertical-align: initial !important;
+  border-bottom: 2px solid #dee2e6;
+}
+.rowcombine{
+  border-bottom: solid 1px #dadad6 !important;
+  padding-top: 10px;
+}
+.widthmodal{
+  max-width: 1252px;
+}
+.widthnew{
+  width: 30% !important;
+}
+.hrmargin{
+  margin-top: 0px !important;
+}
+.not-available {
+  text-align: center;
+  font-weight: bold;
+  padding-top: 7px;
+}
+.header-color{
+  color: #616161 !important;
+  font-weight: 500 !important;
+}
+.modal-padding{
+  padding-bottom: 0 !important;
+  padding-top: 5px !important;
+}
+.footer-padding{
+  padding-bottom: 8px !important;
+  padding-top: 8px !important;
+}

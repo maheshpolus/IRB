@@ -70,4 +70,8 @@ export class IrbCreateService {
   loadSponsorTypes(params) {
     return this._http.post('/mit-irb/loadSponsorTypes', params);
   }
+  getApplicableQuestionnaire(params) {
+    // return this._http.post('/mit-irb/getApplicableQuestionnaire', params);
+    return this._http.post('/mit-irb/getApplicableQuestionnaire', params);
+  }
 }

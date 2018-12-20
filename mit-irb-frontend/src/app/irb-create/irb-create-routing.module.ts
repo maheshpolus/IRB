@@ -8,7 +8,6 @@ import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histr
 import { IrbActionsComponent } from './irb-actions/irb-actions.component';
 import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
-import { IrbQuestionnaireViewComponent } from './irb-questionnaire-view/irb-questionnaire-view.component';
 const routes: Routes = [
   {
     path: '', component: IrbCreateHeaderComponent,

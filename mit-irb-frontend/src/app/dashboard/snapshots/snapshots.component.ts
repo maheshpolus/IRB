@@ -61,4 +61,7 @@ export class SnapshotsComponent implements OnInit {
    goToCreateProtocol() {
     this._router.navigate(['/irb/irb-create']);
 }
+goToCommittee() {
+    this._router.navigate(['/irb/committee'], {queryParams: {mode: 'create'}});
+}
 }

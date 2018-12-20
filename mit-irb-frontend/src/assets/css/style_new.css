@@ -1237,7 +1237,13 @@ cursor: pointer;
 {
     list-style: none;
     text-decoration: underline;
-    color:#a91f34;
+    color:#fd4a49;
+    font-size: 14px;
+    font-weight: bold;
+}
+.top-cards li:hover
+{
+    color:  #999
 }
 .top-cards li i
 {

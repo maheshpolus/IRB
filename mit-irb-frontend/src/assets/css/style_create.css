@@ -2161,4 +2161,35 @@ input:disabled,textarea:disabled{
 {
     margin-top:12px;
 }
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 51px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: #6bd8fc;
+    color: white;
+    cursor: pointer;
+    padding: 22px;
+    border-radius: 4px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+  
+  #myBtn:hover {
+    background-color: #555;
+  }
+ .top-arrow{
+    position: relative;
+    right: 7px;
+    bottom: 12px;
+    font-weight: bold;
+    font-size: 25px;
+
+  }
+
 

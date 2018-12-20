@@ -140,9 +140,14 @@
 						<i class="fa fa-check-square-o"></i>COUHES</a>
 				</li>
 				<li>
-					<a title="Create Committe" routerLink='/irb/committee' [queryParams]="{mode:'create'}">
-						<i class="fa fa-plus"></i>Create Committee</a>
+						<a class="pdf" (click)="goToCommittee()">
+							<i class="fa fa-plus"></i>Create Committee</a>
 				</li>
+				
+				<!-- <li>
+					<a class="pdf" routerLink='/irb/committee' [queryParams]="{mode:'create'}">
+						<i class="fa fa-plus"></i>Create Committee</a>
+				</li> -->
 			</ul>
 		</div>
 	</div>

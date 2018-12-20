@@ -25,14 +25,22 @@
 							<td>{{result.TITLE}}</td>
 							<td>{{result.PROTOCOL_TYPE}}</td>
 							<td>{{result.PROTOCOL_STATUS}}</td>
-							<td>{{(result.LAST_APPROVAL_DATE === ' ' || result.LAST_APPROVAL_DATE === null ) ? ' ':(result.LAST_APPROVAL_DATE | date: 'MM/dd/yyyy')}}</td>
+							<td>{{(result.APPROVAL_DATE === ' ' || result.APPROVAL_DATE === null ) ? ' ':(result.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</td>
 							<td>{{(result.EXPIRATION_DATE === ' ' || result.EXPIRATION_DATE === null ) ? ' ':(result.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</td>
 							<td>
-								<ul class="actionButtonGroup">
-									<li><a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
+								<!-- <ul class="actionButtonGroup">
+									<li> -->
+										<!-- <a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
 										(click)="openIrbView(result.PROTOCOL_NUMBER)"><i
-											class="fa fa-eye"></i> </a></li>
-								</ul>
+											class="fa fa-eye"></i> </a> -->
+											<a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
+										(click)="openIrbView(result.PROTOCOL_NUMBER)">
+											<button type="button" class="btn btn-outline-secondary button-view mb-0 snap-shot-view-btn" (click)="openIrb(protocol)">
+													<i class="fa fa-eye"></i>View
+												</button>
+												</a>
+										<!-- </li>
+								</ul> -->
 							</td>
 						</tr>
 					</tbody>

@@ -81,8 +81,9 @@
 			<button class="btn btn-primary tab_btn" [routerLink]="['irbHome']" (click)="show_current_tab('irbHome')" routerLinkActive="btnactive">
 				<i class="fa fa-home" aria-hidden="true"></i>General
 			</button>
-			<button class="btn btn-primary" type="submit" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol">
-				<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
+			<button class="btn btn-primary" type="submit" [routerLink]="['irbQuestionnaireList']" routerLinkActive="btnactive" (click)="show_current_tab('irbQuestionnaireList')" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
+			[disabled]="isCreateNewProtocol" >
+				<i class="fa fa-question-circle-o" aria-hidden="true"></i>Additional Forms
 			</button>
 			<button class="btn btn-primary" type="submit" [routerLink]="['irbProtocol']" routerLinkActive="btnactive" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
 			 [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbProtocol')">

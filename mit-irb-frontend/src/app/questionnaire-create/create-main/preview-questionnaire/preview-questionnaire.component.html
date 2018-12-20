@@ -1,0 +1,72 @@
+<div class = "row">
+    <div class ="offset-2 col-9 form-outer">
+    <div>
+      <div class="row">
+        <!--collapse-->
+        <div class="col-12">
+          <div >
+            <div>
+              <div class="quest-no"
+                *ngFor=' let question of questionnaire.questions; let indexQuestion = index'>
+                <ul [ngSwitch]="true" class="list"  style ="list-style: none !important;">
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Text'" class="list">
+                    <div *ngIf= "question.SHOW_QUESTION == true">
+                      <p class="questionfont">{{question.QUESTION}}</p>
+                      <div  *ngFor =" let number of  getArray(question.NO_OF_ANSWERS); let i = index">
+                        <input type="text"  [(ngModel)]="question.ANSWERS[i+1]" (ngModelChange) = "showChildQuestions(question)" 
+                          name="name" />
+                      </div> 
+                    </div>
+                  </li> 
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Radio' || question.ANSWER_TYPE == 'Y/N'|| question.ANSWER_TYPE == 'Y/N/NA'"  class="list">
+                    <div *ngIf= "question.SHOW_QUESTION == true">
+                      <p class="questionfont">{{question.QUESTION}}</p>
+                      <div *ngFor = " let option of questionnaire.options"  class="radio-inline ">
+                        <span *ngIf = "question.QUESTION_ID == option.QUESTION_ID">
+                        <input type="radio"  name="{{option.QUESTION_ID}}" [value] = "option.OPTION_LABEL" 
+                           [(ngModel)] ="question.ANSWERS[1]"  (ngModelChange) = "showChildQuestions(question)"required/>
+                        {{option.OPTION_LABEL}}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                  <li *ngSwitchCase ="question.ANSWER_TYPE == 'Checkbox'"  class="list">
+                    <div *ngIf= "question.SHOW_QUESTION == true">
+                      <p class="questionfont">{{question.QUESTION}}</p>
+                      <div class="checkbox-inline" *ngFor = " let option of questionnaire.options">
+                      <span *ngIf = "question.QUESTION_ID == option.QUESTION_ID">
+                      <input type="checkbox" required  [(ngModel)] ="question.ANSWERS[option.OPTION_LABEL]" (change) = "showChildQuestions(question)"/>
+                        {{option.OPTION_LABEL}}
+                      </span>
+                      </div>
+                    </div>
+                  </li>
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Attachment'"  class="list">
+                    <div *ngIf= "question.SHOW_QUESTION == true">
+                      <p class="questionfont"><b>Attachment Question</b></p>
+                    </div>  
+                  </li>
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Textarea'"  class="list">
+                    <div *ngIf= "question.SHOW_QUESTION == true">
+                      <p class="questionfont">{{question.QUESTION}}</p>
+                      <textarea  name="name"  [(ngModel)]="question.ANSWERS[1]" (ngModelChange) = "showChildQuestions(question)" > </textarea>
+                    </div>
+                  </li>
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Date'"  class="list">
+                    <div *ngIf= "question.SHOW_QUESTION == true">
+                        <p class="questionfont"><b>Date Question</b></p>
+                        <!-- <input type="date"  [(ngModel)]="question.ANSWERS[1]" (ngModelChange) = "showChildQuestions(question)" 
+                        name="name" maxlength="{{question.NO_OF_ANSWERS}}" /> -->
+                    </div>  
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    
+    

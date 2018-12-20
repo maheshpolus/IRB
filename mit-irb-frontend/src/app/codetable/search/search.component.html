@@ -1,0 +1,80 @@
+
+	
+	
+			<div class="container-fluid">	
+		<div class="headerPush"></div>
+		<div _ngcontent-c12="" class="borderBox irb-margin-top irb-background-tablemaintenance">
+				<h4 _ngcontent-c12="" class="borderBoxHeading irb-head-back">Table Maintenance</h4>
+		<section class="row"class="outerpadding">
+			<div class="col-12">
+				<!-- tabs of fibi 3.0 dashboard-->
+				<div  class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<div  class="row">
+							<div class="input-group col-12">
+								<div class="input-group">
+					
+									<div class="col-lg-6 offset-md-3">
+											<div  class="searchBox">
+													<ng2-completer [datasource]="dataService" [minSearchLength]="0" [placeholder]="'Search table name . . .'" [openOnFocus]="true"
+													[inputClass]="'ng-pristine ng-valid ng-touched'"  [(ngModel)]="SearchTableName" (selected)="getSearchedTable($event)">
+												   </ng2-completer> 
+												<a class="searchButton" href="#"><i _ngcontent-c5="" class="fa fa-search"></i></a>
+										  </div>
+										  </div>
+
+								</div>
+								<div class="col-md-12 advanced-list advance">
+									<div *ngFor="let groupName of groupNames;let index=index" class="modulelist irb-modulelist">
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox1" [(ngModel)]="checkedList[groupName]"
+										 value="option1" (ngModelChange)="setCodeTableListBox()">
+										<label class="form-check-label" for="inlineCheckbox1">{{groupName}}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="row" class="accordion row">
+			<div class="collapse show" class="col-md-12 advanced-list" id="collapseOne" aria-labelledby="headingOne"
+				 data-parent="#accordionExample">
+					<div class="col-12 divpad">
+						<div *ngIf="isCodeTableList" class="result-list">
+							<div class="result-outer" *ngFor="let groupName of groupNames;let index=index">
+								<div class="list-outer-1" *ngIf="checkedList[groupName] == true">
+									<h4 class="list-header">{{groupName}}</h4>
+									<div class="container-fluid">
+										<div class="row">
+											<ng-container *ngIf="isViewEnable[index]">
+												<div class="col-lg-3" *ngFor="let codetable of getCodeTableList(groupName); let i=index" (click)="getSelectedId(i, groupName)">
+													<a [ngClass]="{'modulename-color irb-modulename-color':selectedId==i&&groupName==groupNameSelected}" (click)="getSelectedTable(codetable.group,codetable.codetable_name)"
+													 class="pointer" data-toggle="tooltip" title="{{codetable.codetable_name}}" data-toggle="modal" data-target="#Modal">{{codetable.codetable_name}}
+													</a>
+												</div>
+												<a *ngIf="codeTableLength>10" class="viewmorea pointer" (click)="setViewEnable(index)" data-toggle="tooltip" title="Click to view more">View more</a>
+											</ng-container>
+											<ng-container *ngIf="!isViewEnable[index]">
+												<div class="col-lg-3" *ngFor="let codetable of getFullCodeTableList(groupName); let i=index" (click)="getSelectedId(i, groupName)">
+													<a [ngClass]="{'modulename-color irb-modulename-color':selectedId==i&&groupName==groupNameSelected}" (click)="getSelectedTable(codetable.group,codetable.codetable_name)"
+													 class="pointer" data-toggle="tooltip" title="{{codetable.codetable_name}}" data-toggle="modal" data-target="#Modal">{{codetable.codetable_name}}
+													</a>
+												</div>
+												<a class="viewmorea pointer" (click)="setViewEnable(index)" data-toggle="tooltip" title="Click to view more">View less </a>
+											</ng-container>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		</section>
+		<app-code-table *ngIf="isVisible" [codeTableProperty]="codeTableProperty" [isSavedFlag]="isSavedFlag"></app-code-table>
+	</div>
+		<div _ngcontent-c4="" class="footerPush"></div>
+		</div>
+		
+	

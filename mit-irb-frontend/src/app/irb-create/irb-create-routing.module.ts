@@ -7,6 +7,8 @@ import { IrbCreateAttachmentComponent } from './irb-create-attachment/irb-create
 import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histroy.component';
 import { IrbActionsComponent } from './irb-actions/irb-actions.component';
 import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
+import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
+import { IrbQuestionnaireViewComponent } from './irb-questionnaire-view/irb-questionnaire-view.component';
 const routes: Routes = [
   {
     path: '', component: IrbCreateHeaderComponent,
@@ -17,7 +19,9 @@ const routes: Routes = [
       { path: 'irbCreateAttachment', component: IrbCreateAttachmentComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbHistory', component: IrbCreateHistroyComponent },
       { path: 'irbActions', component: IrbActionsComponent },
-      { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } }
+      { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } },
+      { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },
+      { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }
     ]
   }
 ];

@@ -19,6 +19,8 @@ import { FundingSourceComponent } from './irb-edit/funding-source/funding-source
 import { PersonnelInfoComponent } from './irb-edit/personnel-info/personnel-info.component';
 import { GeneralDetailsComponent } from './irb-edit/general-details/general-details.component';
 import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
+import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
+import { IrbQuestionnaireViewComponent } from './irb-questionnaire-view/irb-questionnaire-view.component';
 
 @NgModule({
   imports: [
@@ -36,6 +38,7 @@ import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
   ],
   declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent,
     IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent,
-    FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent]
+    FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
+    IrbQuestionnaireListComponent, IrbQuestionnaireViewComponent]
 })
 export class IrbCreateModule { }

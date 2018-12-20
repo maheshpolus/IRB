@@ -5,6 +5,11 @@
 		<div class="col-12 top-aprv-details">
 			<div class="row">
 				<div class="col-12">
+						<div class="Welcome-alert alert alert-warning">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>
+								<strong>Key elements of Exempt Evaluation.</strong> 
+								<span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
+							</div>
 					<div class="Welcome-msg">
 						<p [innerHTML]="ABOUT_MESSAGE">
 						</p>
@@ -170,7 +175,7 @@
 			<div class="card coll-card-q">
 				<h5 class="card-header collapse_hd">
 					Exempt Form
-					<i class="fa fa-info-circle pdf" aria-hidden="true" data-toggle="modal" data-target="#welcomeModal"></i>
+					<i class="fa fa-info-circle pdf" aria-hidden="true" (click)="isStayOnSamePage = true" data-toggle="modal" data-target="#welcomeModal"></i>
 				</h5>
 				<div class="card-body collapse-card-body">
 					<div class="quest-no" *ngFor=' let questionIndex of questionaire.questionnaireQuestions; let indexQuestion = index'>
@@ -310,12 +315,12 @@
 </div>
 <!-- confirmation modal end-->
 <!--welcome message modal-->
-<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog modal-full" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
 				<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-					<h5 class="align" id="welcomeModalLongTitle">Welcome to the COUHES Exempt Questionnaire</h5>
+					<h5 class="align" id="welcomeModalLongTitle">Exempt Evaluation Overview</h5>
 				</div>
 			</div>
 			<div class="modal-body modal-popup pb-0">
@@ -324,7 +329,47 @@
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
 							<h4 class="popup-sub-head questionnaire-popups">
-								<p class="welcome-text" [innerHTML]="WELCOME_MESSAGE"></p>
+								<div class="welcome-text">
+									
+										The Exempt Evaluation will guide you in determining if your research is exempt from regulations listed in the Common Rule 
+										<a href="https://www.hhs.gov/ohrp/regulations-and-policy/index.html" target="_blank">https://www.hhs.gov/ohrp/regulations-and-policy/index.html</a>
+										<br><br>
+										Key elements:
+										<table class="welcome-table">
+												<tbody class="welcome-table-border">
+												<tr>
+													<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
+													<td>Investigators are required to follow responsibilities and guidance as outlined in the Investigator Responsibility Guidelines.
+														Visit <a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a> for more informations.
+													</td>
+												</tr>
+												<tr>
+														<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
+														<td>Principal Investigators and Faculty Sponsors must ensure all members of the research team comply with the Investigator Responsibilities for Exempt Research.</td>
+													</tr>
+													<tr>
+															<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
+															<td>Completion of the Exempt Evaluation prior to the start of the research is mandatory.</td>
+														</tr>
+													</tbody>
+											</table>
+											Any human subject research conducted under the auspices of MIT is subject to audit.
+											<br><br>
+											Please review each question carefully and respond truthfully. If you are unsure, you can save your progress and return to the question later. Incomplete evaluations cannot be submitted.
+											<br><br>
+											Guidance is available throughout the evaluation and with more detail available on the COUHES website <a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a>. For questions or clarification, please contact the COUHES office:
+											<br><br>
+											<div class="row">
+													<div class="col-2"></div>
+													<div class="col-5">
+														<i class="fa fa-phone-square" aria-hidden="true"></i> 617-253-6787
+													</div>
+													<div class="col-5">
+															<i class="fa fa-envelope" aria-hidden="true"></i>
+															<a href="mailto:couhes@mit.edu" target="_top">couhes@mit.edu</a>
+													</div>
+											</div>
+								</div>
 							</h4>
 						</div>
 					</div>
@@ -332,6 +377,8 @@
 			</div>
 			<section class="row btn-row-med sect-confirm-padding proceed-btn-align">
 				<button class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" aria-label="Close" (click)="closeWelcome()">Proceed</button>
+				<button class="btn tab_btn proceed-btn" *ngIf="!isStayOnSamePage" data-dismiss="modal" aria-label="Close" (click)="returnToExemptList($event)">Cancel</button>
+				<button class="btn tab_btn proceed-btn" *ngIf="isStayOnSamePage" data-dismiss="modal" aria-label="Close">Cancel</button>
 			</section>
 		</div>
 	</div>

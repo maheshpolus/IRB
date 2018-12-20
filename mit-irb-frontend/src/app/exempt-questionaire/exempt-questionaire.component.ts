@@ -160,6 +160,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         invalidEndDate: false,
         invalidExemptData: false
     };
+    isStayOnSamePage = false;
 
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,

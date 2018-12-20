@@ -20,7 +20,6 @@ import { PersonnelInfoComponent } from './irb-edit/personnel-info/personnel-info
 import { GeneralDetailsComponent } from './irb-edit/general-details/general-details.component';
 import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
-import { IrbQuestionnaireViewComponent } from './irb-questionnaire-view/irb-questionnaire-view.component';
 
 @NgModule({
   imports: [
@@ -39,6 +38,6 @@ import { IrbQuestionnaireViewComponent } from './irb-questionnaire-view/irb-ques
   declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent,
     IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent,
     FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
-    IrbQuestionnaireListComponent, IrbQuestionnaireViewComponent]
+    IrbQuestionnaireListComponent]
 })
 export class IrbCreateModule { }

@@ -159,6 +159,7 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 		}		
 		if ("I".equals(acType)) {
 			insertAnswer(answerHeaderId,question, answer, answerNumber, updateUser);
+			question.put("AC_TYPE","U");
 		} else if ("U".equals(acType)) {
 			updateAnswer(answerHeaderId,question, answer, answerNumber, updateUser);
 		} else if ("D".equals(acType)) {
@@ -195,18 +196,16 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 		try {
 
 			ArrayList<Parameter> inParam = new ArrayList<>();
-			inParam.add(new Parameter("<<QUESTIONNAIRE_ANS_HEADER_ID>>", DBEngineConstants.TYPE_INTEGER,
-					answerHeaderId));
-			inParam.add(new Parameter("<<QUESTION_ID>>", DBEngineConstants.TYPE_INTEGER, question.get("QUESTION_ID")));
-			inParam.add(new Parameter("<<ANSWER_NUMBER>>", DBEngineConstants.TYPE_INTEGER, answerNumber));
+//			inParam.add(new Parameter("<<QUESTIONNAIRE_ANS_HEADER_ID>>", DBEngineConstants.TYPE_INTEGER,
+//					answerHeaderId));	
 			inParam.add(new Parameter("<<ANSWER>>", DBEngineConstants.TYPE_STRING, answer));
 			inParam.add(new Parameter("<<ANSWER_LOOKUP_CODE>>", DBEngineConstants.TYPE_STRING,
 					question.get("ANSWER_LOOKUP_CODE")));
 			inParam.add(new Parameter("<<EXPLANATION>>", DBEngineConstants.TYPE_STRING, question.get("EXPLANATION")));
 			inParam.add(new Parameter("<<UPDATE_TIMESTAMP>>", DBEngineConstants.TYPE_DATE, getCurrentDate()));
 			inParam.add(new Parameter("<<UPDATE_USER>>", DBEngineConstants.TYPE_STRING, updateUser));
-			inParam.add(new Parameter("<<QUESTIONNAIRE_ANSWER_ID>>", DBEngineConstants.TYPE_INTEGER,
-					question.get("QUESTIONNAIRE_ANSWER_ID")));
+			inParam.add(new Parameter("<<QUESTION_ID>>", DBEngineConstants.TYPE_INTEGER,question.get("QUESTION_ID")));
+			inParam.add(new Parameter("<<ANSWER_NUMBER>>", DBEngineConstants.TYPE_INTEGER,answerNumber));
 			dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_ANSWER");
 		} catch (Exception e) {
 			logger.error("Exception in updateQnrAnswer " + e.getMessage());
@@ -218,8 +217,8 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 		Integer isUpdated = 0;
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
-			inParam.add(new Parameter("<<QUESTIONNAIRE_ANSWER_ID>>", DBEngineConstants.TYPE_INTEGER,
-					question.get("QUESTIONNAIRE_ANSWER_ID")));
+			inParam.add(new Parameter("<<QUESTION_ID>>", DBEngineConstants.TYPE_INTEGER,
+					question.get("QUESTION_ID")));
 			isUpdated = dbEngine.executeUpdate(inParam, "DELETE_QUESTIONNAIRE_ANSWER");
 		} catch (Exception e) {
 			logger.error("Exception in deleteQuestionnaireAnswer " + e.getMessage());
@@ -443,9 +442,9 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 		ArrayList<HashMap<String, Object>> questions = questionnaireDataBus.getQuestionnaire().getQuestions();
 		Integer sortOrder = 0;
 		Integer maxGroupNumber = 0;
-		if (!"I".equals(questionnaireDataBus.getAcType())) {
+		/*if (!"I".equals(questionnaireDataBus.getAcType())) {
 			sortOrder = (questions == null ? 0 : questions.size());
-		}
+		}*/
 		for (HashMap<String, Object> hmQuestion : questions) {
 			if ("I".equals(hmQuestion.get("AC_TYPE"))) {
 				Integer questionId = questionnaireDAO.getNextQuestionId();
@@ -469,6 +468,8 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 					++questionVersionNumber;
 					hmQuestion.put("QUESTION_VERSION_NUMBER", questionVersionNumber);
 				}
+				hmQuestion.put("SORT_ORDER", ++sortOrder);
+				hmQuestion.put("AC_TYPE", "U");
 				questionnaireDAO.updateQuestion(hmQuestion);
 			}
 
@@ -505,6 +506,16 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 		return hmQuestion;
 	}
 
+	private Integer getQuestionId(HashMap<String, Object> hmQuestion,
+			HashMap<Integer, Integer> hmQuestionMapping) {
+		// Temporary questionId generated from Front End will be less than 1000
+		Integer questionId = (Integer) hmQuestion.get("QUESTION_ID");		
+		if (hmQuestion.get("QUESTION_ID") != null && (Integer) hmQuestion.get("QUESTION_ID") <= 1000) {
+			questionId =  hmQuestionMapping.get((Integer) hmQuestion.get("QUESTION_ID"));
+		}
+
+		return questionId;
+	}
 	private QuestionnaireModuleDataBus saveOptions(QuestionnaireModuleDataBus questionnaireDataBus,
 			HashMap<Integer, Integer> hmQuestionMapping) {
 		ArrayList<HashMap<String, Object>> options = questionnaireDataBus.getQuestionnaire().getOptions();
@@ -513,8 +524,7 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 			if ("I".equals((String) hmOption.get("AC_TYPE"))) {
 				Integer questionnaireOptionId = questionnaireDAO.getNextQuestionOptionId();
 				hmOption.put("QUESTION_OPTION_ID", questionnaireOptionId);
-				hmOption.put("QUESTION_ID", (hmQuestionMapping.isEmpty() ? (Integer) hmOption.get("QUESTION_ID")
-						: hmQuestionMapping.get((Integer) hmOption.get("QUESTION_ID"))));
+				hmOption.put("QUESTION_ID", getQuestionId(hmOption,hmQuestionMapping));
 				questionnaireDAO.insertOption(hmOption);
 				hmOption.put("AC_TYPE", "U");
 			} else {
@@ -540,8 +550,7 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 			if ("I".equals((String) hmCondition.get("AC_TYPE"))) {
 				Integer questionnaireConditionId = questionnaireDAO.getNextQuestionConditionId();
 				hmCondition.put("QUESTION_CONDITION_ID", questionnaireConditionId);
-				hmCondition.put("QUESTION_ID", (hmQuestionMapping.isEmpty() ? (Integer) hmCondition.get("QUESTION_ID")
-						: hmQuestionMapping.get((Integer) hmCondition.get("QUESTION_ID"))));
+				hmCondition.put("QUESTION_ID", getQuestionId(hmCondition,hmQuestionMapping));				
 				questionnaireDAO.insertCondition(hmCondition);
 				hmCondition.put("AC_TYPE", "U");
 			} else {

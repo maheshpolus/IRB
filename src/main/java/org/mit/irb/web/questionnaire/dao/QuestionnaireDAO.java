@@ -225,7 +225,7 @@ public class QuestionnaireDAO {
 			inParam.add(new Parameter("<<UPDATE_USER>>", DBEngineConstants.TYPE_STRING, hmHeader.get("UPDATE_USER")));
 			inParam.add(new Parameter("<<QUEST_GROUP_TYPE_CODE>>", DBEngineConstants.TYPE_STRING,
 					hmHeader.get("QUEST_GROUP_TYPE_CODE")));
-			inParam.add(new Parameter("<<IS_FINAL>>", DBEngineConstants.TYPE_STRING, hmHeader.get("IS_FINAL")));
+			inParam.add(new Parameter("<<IS_FINAL>>", DBEngineConstants.TYPE_STRING, (hmHeader.get("IS_FINAL") == null ? "N" : ((Boolean)hmHeader.get("IS_FINAL") == true ? "Y": "N"))));
 			Integer isInserted = dbEngine.executeUpdate(inParam, "INSERT_QUESTIONNAIRE_HEADER");
 		} catch (Exception e) {
 			logger.error("Exception in insertQuestionnaireAnswer" + e.getMessage());
@@ -244,7 +244,7 @@ public class QuestionnaireDAO {
 			inParam.add(new Parameter("<<UPDATE_USER>>", DBEngineConstants.TYPE_STRING, hmHeader.get("UPDATE_USER")));
 			inParam.add(new Parameter("<<QUEST_GROUP_TYPE_CODE>>", DBEngineConstants.TYPE_STRING,
 					hmHeader.get("QUEST_GROUP_TYPE_CODE")));
-			inParam.add(new Parameter("<<IS_FINAL>>", DBEngineConstants.TYPE_STRING, hmHeader.get("IS_FINAL")));
+			inParam.add(new Parameter("<<IS_FINAL>>", DBEngineConstants.TYPE_STRING, (hmHeader.get("IS_FINAL") == null ? "N" : ((Boolean)hmHeader.get("IS_FINAL") == true ? "Y": "N"))));
 			inParam.add(new Parameter("<<QUESTIONNAIRE_ID>>", DBEngineConstants.TYPE_INTEGER,
 					hmHeader.get("QUESTIONNAIRE_ID")));
 			Integer isUpdated = dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_HEADER");
@@ -346,7 +346,7 @@ public class QuestionnaireDAO {
 					new Parameter("<<UPDATE_USER>>", DBEngineConstants.TYPE_STRING, hmCondition.get("UPDATE_USER")));
 			Integer isInserted = dbEngine.executeUpdate(inParam, "INSERT_QUESTION_CONDITION");
 		} catch (Exception e) {
-			logger.error("Exception in insertQuestionnaireAnswer" + e.getMessage());
+			logger.error("Exception in insertQuestionnaireAnswer" + e.getMessage() + hmCondition.get("QUESTION_ID"));
 		}
 
 	}
@@ -407,7 +407,7 @@ public class QuestionnaireDAO {
 			inParam.add(new Parameter("<<UPDATE_USER>>", DBEngineConstants.TYPE_STRING, hmOption.get("UPDATE_USER")));
 			dbEngine.executeUpdate(inParam, "INSERT_QUESTION_OPTION");
 		} catch (Exception e) {
-			logger.error("Exception in insertQuestionnaireAnswer" + e.getMessage());
+			logger.error("Exception in insertQuestionnaireAnswer" + e.getMessage() + hmOption.get("QUESTION_ID"));
 		}
 
 	}
@@ -564,6 +564,17 @@ public class QuestionnaireDAO {
 		inParam.add(new Parameter("<<QUESTIONNAIRE_ID>>", DBEngineConstants.TYPE_INTEGER, questionnaireId));
 		try {
 			output = dbEngine.executeQuery(inParam, "GET_QUESTIONNAIRE_HEADER_INFO");
+			if (output != null && !output.isEmpty()) {
+				output.forEach(hmResult -> {	
+					hmResult.put("AC_TYPE", "U");
+					if ("Y".equals(hmResult.get("IS_FINAL"))) {
+						hmResult.put("IS_FINAL", true);
+					} else {
+						hmResult.put("IS_FINAL", false);
+					}
+				});
+			}
+			
 		} catch (Exception e) {
 			logger.error("Exception in getQuestionnaireHeader " + e.getMessage());
 		}

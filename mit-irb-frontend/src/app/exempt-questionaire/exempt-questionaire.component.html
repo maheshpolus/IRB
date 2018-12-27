@@ -47,8 +47,8 @@
 				</div>
 				<div class="col-12 apprve-date mt-0">
 					<div class="row">
-					<div class="col-2 title-head pl-15">
-						<h4>*Title:</h4>
+					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.exemptTitle == null}">
+						<h4>* Title:</h4>
 					</div>
 					<div class="col-9 width-exempt searchBox display">
 						<input class="form-control" type="text" [disabled]="isViewMode" maxlength="250" [(ngModel)]="requestObject.irbExemptForm.exemptTitle"
@@ -58,8 +58,8 @@
 				</div>
 				<div class="col-12 apprve-date mt-0">
 						<div class="row">
-					<div class="col-2 title-head pl-15">
-						<h4>*Principal Investigator:</h4>
+					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.personId == null}">
+						<h4>* Principal Investigator:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
 						<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
@@ -91,10 +91,11 @@
 
 				<div class="col-12 apprve-date mt-0">
 						<div class="row">
-					<div class="col-2 title-head pl-15">
-						<h4>*Start Date:</h4>
+					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolStartDate == null || requestObject.exemptProtocolStartDate == '')}">
+						<h4>* Start Date:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
+						<div class="input-group">
 						<input [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt4" placeholder="mm/dd/yyyy"
 						 [(ngModel)]="requestObject.exemptProtocolStartDate" (ngModelChange)="validateStartDate()">
 						<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
@@ -104,17 +105,20 @@
 						
 						<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
 					</div>
-					<div class="col-1 title-head ">
-						<h4>*End Date:</h4>
+					</div>
+					<div class="col-1 title-head " [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolEndDate == null || requestObject.exemptProtocolEndDate == '')}">
+						<h4>* End Date:</h4>
 					</div>
 					<div class="col-4 width-exempt searchBox display">
+						<div class="input-group">
 						<input [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
 						 [(ngModel)]="requestObject.exemptProtocolEndDate"(ngModelChange)="validateEndDate()">
 						<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
 						<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">
 							<i class="fa fa-calendar" aria-hidden="true"></i>
 						</span>
-						<span *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</span>
+						<div *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</div>
+					</div>
 					</div>
 					</div>
 				</div>
@@ -151,8 +155,8 @@
 				</div>
 				<div class="col-12 apprve-date mt-0">
 						<div class="row">
-					<div class="col-2 title-head pl-15">
-						<h4>*Summary:</h4>
+					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.irbExemptForm.summary == null || requestObject.irbExemptForm.summary == '')}">
+						<h4>* Summary:</h4>
 					</div>
 					<div class="col-9 width-exempt searchBox dsp-flex">
 						<textarea class="form-control" [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>

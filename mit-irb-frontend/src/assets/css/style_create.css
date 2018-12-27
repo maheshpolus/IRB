@@ -2207,5 +2207,15 @@ input:disabled,textarea:disabled{
     font-size: 25px;
 
   }
+  .selected {
+      background:#e0eaff 
+   }
+    .invalid h4
+    {
+        background: #FBD7DA;
+        border-radius: 10px;
+        border: 1px solid#f5c6cb;
+
+    }
 
 

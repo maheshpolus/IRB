@@ -12,8 +12,9 @@ import 'rxjs/add/operator/catch';
 import { ElasticService } from '../../common/service/elastic.service';
 import { DashboardService } from '../dashboard.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
+import { KeyPressEvent } from '../../common/directives/keyPressEvent.component';
 
-
+declare var $: any;
 @Component({
     selector: 'app-dashboard-list',
     templateUrl: './dashboard-list.component.html',
@@ -83,7 +84,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         private _ngZone: NgZone,
         private _elasticsearchService: ElasticService,
         private _router: Router,
-        private _sharedDataService: SharedDataService) { }
+        private _sharedDataService: SharedDataService,
+        public keyPressEvent: KeyPressEvent) { }
 
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
@@ -212,6 +214,14 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         e.preventDefault();
         this.searchTextModel = '';
     }
+
+    /**
+     * @param  {} id
+     */
+    onKeyEnterElastic(id) {
+        $('#' + id + ' li.selected').trigger('click');
+    }
+
 
     /**get advance search results
      * @param currentTab - value of current tab

@@ -92,13 +92,14 @@
 						<div class="col-md-12 col-sm-12 col-lg-12">
 							<div class="searchBox" *ngIf="lastClickedTab == 'ALL'">
 								<input type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status" [formControl]="searchText" [(ngModel)]="searchTextModel"
-								 (ngModelChange)="protocolSearchValueChange()" (focus)="IsElasticResult = true" />
+								 (ngModelChange)="protocolSearchValueChange()" (focus)="IsElasticResult = true" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'protocolDropDown')"
+								 (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'protocolDropDown')" (keydown.Enter) ="onKeyEnterElastic('protocolDropDown')" />
 								<a href="#" class="searchButton" (click)="clearsearchBox($event)">
 									<i [ngClass]="iconClass"></i>
 								</a>
-								<div class="sb-seachresults">
+								<div class="sb-seachresults" id="protocolDropDown">
 									<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResult">
-										<li *ngFor="let result of _results | async" (mousedown)="selectedResult(result)">
+										<li *ngFor="let result of _results | async" (mousedown)="selectedResult(result)" (click)="selectedResult(result)">
 											<span [innerHTML]="result.label"></span>
 										</li>
 									</ul>

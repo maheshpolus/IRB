@@ -1,34 +1,37 @@
 <div id="top-card" class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}" (scroll)="scrollEvent()">
-	<div class="row list-rows" *ngFor="let irb of irbList">
+	<div class="row list-rows" *ngFor="let irb of irbList let i=index">
 		<div class="col-md-3 col-sm-12 col-12 list-view">
 			<span
-				[ngClass]="{'in-progress': irb.PROTOCOL_STATUS_CODE=='101',
-						'in-drafts': (irb.PROTOCOL_STATUS_CODE=='100'||
-									irb.PROTOCOL_STATUS_CODE=='105'||
-									irb.PROTOCOL_STATUS_CODE=='106'),
-						'pending-action': (irb.PROTOCOL_STATUS_CODE=='102'||
-									irb.PROTOCOL_STATUS_CODE== '104'||
-									irb.PROTOCOL_STATUS_CODE=='107'),
-						'active-status': (irb.PROTOCOL_STATUS_CODE=='200'||
-									irb.PROTOCOL_STATUS_CODE== '201'||
-									irb.PROTOCOL_STATUS_CODE== '202'),
-						'removed-status': (irb.PROTOCOL_STATUS_CODE=='103'||
+				[ngClass]="{
+					'active-status': (irb.PROTOCOL_STATUS_CODE=='200'||
+									 irb.PROTOCOL_STATUS_CODE== '201'||
+									 irb.PROTOCOL_STATUS_CODE== '202'||
+									 irb.PROTOCOL_STATUS_CODE== '901'||
+									 irb.PROTOCOL_STATUS_CODE== '400'||
+									 irb.PROTOCOL_STATUS_CODE== '401'||
+									 irb.PROTOCOL_STATUS_CODE== '203'),
+					'in-drafts': (irb.PROTOCOL_STATUS_CODE=='309'||
+									 irb.PROTOCOL_STATUS_CODE=='310'),
+					'pending-action': (irb.PROTOCOL_STATUS_CODE=='100'||
+									 irb.PROTOCOL_STATUS_CODE== '103'||
+									 irb.PROTOCOL_STATUS_CODE=='105'||
+									 irb.PROTOCOL_STATUS_CODE=='106'||
+									 irb.PROTOCOL_STATUS_CODE=='107'||
+									 irb.PROTOCOL_STATUS_CODE=='900'),
+					'revision-required': (irb.PROTOCOL_STATUS_CODE=='102'||
+									 irb.PROTOCOL_STATUS_CODE== '104'),
+					'submitted' :   irb.PROTOCOL_STATUS_CODE=='101',
+					'completed-closed': (irb.PROTOCOL_STATUS_CODE=='103'||
 									irb.PROTOCOL_STATUS_CODE== '300'||
-									irb.PROTOCOL_STATUS_CODE== '301'|| 
-									irb.PROTOCOL_STATUS_CODE== '302'||
-									irb.PROTOCOL_STATUS_CODE== '303'||
+									irb.PROTOCOL_STATUS_CODE== '301'||
 									irb.PROTOCOL_STATUS_CODE== '304'||
 									irb.PROTOCOL_STATUS_CODE== '305'||
 									irb.PROTOCOL_STATUS_CODE== '306'||
 									irb.PROTOCOL_STATUS_CODE== '307'||
-									irb.PROTOCOL_STATUS_CODE== '308'||
-									irb.PROTOCOL_STATUS_CODE== '311'||
 									irb.PROTOCOL_STATUS_CODE== '313'),
-						'ammendment-status': (irb.PROTOCOL_STATUS_CODE=='400'||
-									irb.PROTOCOL_STATUS_CODE== '401'||
-									irb.PROTOCOL_STATUS_CODE== '309'||
-									irb.PROTOCOL_STATUS_CODE== '310'),
-						'exempt-status': irb.PROTOCOL_STATUS_CODE=='203'}"><p>{{irb.PROTOCOL_STATUS}}</p></span>
+				'suspended': (irb.PROTOCOL_STATUS_CODE=='302'||
+									irb.PROTOCOL_STATUS_CODE== '308'||
+									irb.PROTOCOL_STATUS_CODE== '311')}"><p>{{irb.PROTOCOL_STATUS}}</p></span>
 		</div>
 		<div class="col-md-7 col-sm-12 col-12 list-des">
 			<h5>{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}</h5>
@@ -68,15 +71,16 @@
 				<i class="fa fa-eye"></i>View
 			</button>
 		</a>
-		<a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105">
+		<!-- <a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105">
 			<button type="button" class="btn btn-outline-secondary button-view"
 				(click)="EditIrb(irb.PROTOCOL_NUMBER,irb.PROTOCOL_ID)">
 				<i class="fa fa-pencil"></i>Edit
 			</button>
-		</a>
+		</a> -->
 		</div>
 	</div>
 	<button (click)="scrollToTop()" id="myBtn" title="Go to top"><i class="fa fa-angle-double-up top-arrow" aria-hidden="true"></i></button>
+	<!-- <a *ngIf="irbList?.length >1" href="#"(click)="scrollToTop()">scroll to top</a> -->
 </div>
 <!-- 
 <div class="col-sm-12" *ngIf="irbList.length==0"> No Irb protocol found for this status</div> -->

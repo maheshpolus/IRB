@@ -18,12 +18,18 @@
 				<div class="col-12 apprve-date mt-0" >
 						<div class="row">
 							<div class="col-9">
-							<div class="title-head pl-15" *ngIf="isViewMode || isEditMode">
-										<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' " class="in-progress active-en margin-fix">Exempt</span>
-										<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'" class="active-status active-en margin-fix">Not Exempt</span>
-										<span *ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' " class="active-status active-en margin-fix">Not Submitted</span>
-										<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
-							</div>
+								<div class="title-head pl-15" *ngIf="isViewMode || isEditMode">
+									<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' " class="active-status active-en margin-fix">Exempt</span>
+									<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'" class="completed-closed active-en margin-fix">Not Exempt</span>
+									<span *ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' " class="pending-action active-en margin-fix">Not Submitted</span>
+									<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
+									<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
+									 class="in-drafts active-en margin-fix">Not Exempt-Pending Review</span>
+									<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
+									 class="pending-action active-en margin-fix">Exempt-Pending Review</span>
+									<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
+									 class="pending-action active-en margin-fix">Not Exempt-Pending Review</span>
+								</div>
 							</div>
 							<div class="col-3 width-exempt searchBox display">
 								<a id="returnToDasboardLink" title="Back to Dashboard" (click)="returnToExemptList($event)"> <i class="fa fa-mail-reply">&nbsp;</i>Return to Dashboard</a>
@@ -289,7 +295,7 @@
 </div>
 <!-- message-modal-end -->
 <!--confirmation modal-->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
@@ -302,17 +308,31 @@
 				<!-- section1 -->
 				<div class="modal-padding">
 					<div class="row">
-						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12 font-size-15">
 							<p class="confirm-text">
-								<input type="checkbox" #agreeCheckbox="ngModel" [(ngModel)]="isChecked" (change)="0">
-								<span class="col-12 confirm-text-padding" [innerHTML]="alertMsg"></span>
+								<!-- <input type="checkbox" #agreeCheckbox="ngModel" [(ngModel)]="isChecked" (change)="0"> -->
+								<input type="checkbox" [(ngModel)]="piDeclaration.isConfirmationChecked">
+								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_COMPLETE"></span>
+							</p>
+							<p class="confirm-text">
+								<input type="checkbox" [(ngModel)]="piDeclaration.isAgreePoliciesChecked">
+								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_AGREE_POLICIES"></span>
+							</p>
+							<p class="confirm-text">
+								<input type="checkbox" [(ngModel)]="piDeclaration.isMemberResponsibilityChecked">
+								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_MEMBER_RESPONSIBILITY"></span>
+							</p>
+							<p class="confirm-text">
+								<input type="checkbox" [(ngModel)]="piDeclaration.isComprehensiveReviewChecked">
+								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_COMPREHENSIVE_REVIEW"></span>
 							</p>
 						</div>
 					</div>
 				</div>
 			</div>
 			<section class="row btn-row-med sect-confirm-padding">
-				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="isChecked">Agree</button>
+				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true">Agree</button>
+				<button class="btn tab_btn"  data-dismiss="modal" aria-label="Close" (click)="closeConfirmation()">Cancel</button>
 			</section>
 		</div>
 	</div>

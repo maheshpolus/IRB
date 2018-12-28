@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -45,17 +45,30 @@ export class ExemptCardComponent implements OnInit {
         if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle !== null && tabClicked === 'PENDING' ) {
             return ['1', '2', '5'];
         } else if (( role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle !== null && tabClicked === 'STUDIES' ) {
-            return ['1', '2', '3', '4'];
+            return ['1', '2', '3', '4', '5'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'STUDIES' ) {
             return ['1'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'PENDING' ) {
-            return ['3', '5'];
+            return ['3', '5', '2'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'SUBMITTED' ) {
             return ['4'];
         } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'STUDIES' ) {
-            return ['1', '2', '3', '4'];
+            return ['1', '2', '3', '4', '5'];
         } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'PENDING' ) {
             return ['5'];
         }
+    }
+    @HostListener('scroll', ['$event'])
+    scrollEvent() {
+      const scrollHeight = document.getElementById('top-exempt-card').scrollTop;
+      if (scrollHeight > 500) {
+        document.getElementById('myBtn').style.display = 'block';
+      } else {
+        document.getElementById('myBtn').style.display = 'none';
+      }
+    }
+
+    scrollToTop() {
+     document.getElementById('top-exempt-card').scrollTop = 0;
     }
 }

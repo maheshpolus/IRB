@@ -2217,5 +2217,9 @@ input:disabled,textarea:disabled{
         border: 1px solid#f5c6cb;
 
     }
+.font-size-15
+{
+    font-size: 15px;
+}
 
 

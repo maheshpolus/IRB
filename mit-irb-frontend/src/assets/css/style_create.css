@@ -2237,5 +2237,19 @@ input:disabled,textarea:disabled{
     margin: 8px;
 
 }
+.exempt-description
+{
+    margin-top: 10px;
+    color: #a92034;
+}
+.exempt-description hr
+{
+    border-top-color: #a92034;
+}
+.submit-alert
+{
+    margin-left: 15px !important;
+}
+
 
 

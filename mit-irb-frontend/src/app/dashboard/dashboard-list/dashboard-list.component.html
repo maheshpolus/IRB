@@ -1,31 +1,31 @@
 <section class="row nav_toggle">
 	<div class="navigate">
 		<ul class="navbarmed" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
-			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
-				<a (click)="getIrbListData('ACTIVE')">My Protocols</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
-				<a (click)="getIrbListData('ALL')">All Protocols</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}">
-				<a (click)="getIrbListData('PENDING')">Pending Action</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'DRAFT')}">
-				<a (click)="getIrbListData('DRAFT')">In Progress</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}">
-				<a (click)="getIrbListData('INPROGRESS')">Submitted</a>
-			</li>
-			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
-				<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>
-			</li>
-			<span>
-				<a (click)="showAdvanceSearch()">
-					<i *ngIf="isAdvancesearch" class="fa fa-minus-circle"></i>
-					<i *ngIf="!isAdvancesearch" class="fa fa-plus-circle"></i> Advanced Search
-				</a>
-			</span>
-		</ul>
+					<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
+								<a (click)="getIrbListData('ACTIVE')">Active Protocols</a>
+					</li>
+					<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}">
+						<a (click)="getIrbListData('INPROGRESS')">In Progress</a>
+					</li>
+					 <li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
+						<a (click)="getIrbListData('ALL')">All Protocols</a>
+					</li>
+					<!--<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}">
+						<a (click)="getIrbListData('PENDING')">Pending Action</a>
+					</li>
+					<li [ngClass]="{activenav:(lastClickedTab == 'DRAFT')}">
+						<a (click)="getIrbListData('DRAFT')">In Progress</a>
+					</li> -->
+					<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
+						<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>
+					</li>
+					<span>
+						<a (click)="showAdvanceSearch()">
+							<i *ngIf="isAdvancesearch" class="fa fa-minus-circle"></i>
+							<i *ngIf="!isAdvancesearch" class="fa fa-plus-circle"></i>  Advanced Search
+						</a>
+					</span>
+				</ul>
 		<ul class="navbarmed" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
 			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
 				<a (click)="getIrbListData('ALL')">My Protocols</a>

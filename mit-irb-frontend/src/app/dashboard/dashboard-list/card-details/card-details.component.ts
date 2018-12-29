@@ -1,4 +1,4 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,19 +22,6 @@ export class CardDetailsComponent  {
 
   EditIrb (protocolNumber, protocolId) {
     this._router.navigate( ['/irb/irb-create'], {queryParams: {protocolNumber: protocolNumber, protocolId: protocolId}});
-  }
-  @HostListener('scroll', ['$event'])
-  scrollEvent() {
-    const scrollHeight = document.getElementById('top-card').scrollTop;
-    if (scrollHeight > 500) {
-      document.getElementById('myBtn').style.display = 'block';
-    } else {
-      document.getElementById('myBtn').style.display = 'none';
-    }
-  }
-
-  scrollToTop() {
-   document.getElementById('top-card').scrollTop = 0;
   }
 }
 

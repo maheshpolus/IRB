@@ -1,4 +1,4 @@
-<div id="top-card" class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}" (scroll)="scrollEvent()">
+<div id="top-card" class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
 	<div class="row list-rows" *ngFor="let irb of irbList let i=index">
 		<div class="col-md-3 col-sm-12 col-12 list-view">
 			<span
@@ -79,7 +79,6 @@
 		</a> -->
 		</div>
 	</div>
-	<button (click)="scrollToTop()" id="myBtn" title="Go to top"><i class="fa fa-angle-double-up top-arrow" aria-hidden="true"></i></button>
 	<!-- <a *ngIf="irbList?.length >1" href="#"(click)="scrollToTop()">scroll to top</a> -->
 </div>
 <!-- 

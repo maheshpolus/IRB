@@ -2221,5 +2221,21 @@ input:disabled,textarea:disabled{
 {
     font-size: 15px;
 }
+.pagination li{
+    padding: 0;
+}
+.page-link
+{
+    color:#a92034;
+}
+.page-item.active .page-link {
+    background-color: #a92034;
+    border-color: #a92034;
+}
+.margin8
+{
+    margin: 8px;
+
+}
 
 

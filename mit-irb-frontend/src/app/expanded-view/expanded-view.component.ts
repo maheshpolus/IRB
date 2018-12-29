@@ -15,6 +15,7 @@ export class ExpandedViewComponent implements OnInit {
 
     pageHeader: string;
     expandedList: any;
+    exemptCardDetails: any;
     result: any;
     lastClickedTab = '';
 
@@ -35,7 +36,7 @@ export class ExpandedViewComponent implements OnInit {
             this.pageHeader = 'Ammend/Renewals in Progress';
         } else if ( this.requestObject.avSummaryType === 'REVISION_REQ') {
             if ( this.requestObject.personRoleType === 'PI') {
-                this.pageHeader = 'Revision Requested';
+                this.pageHeader = 'Pending Protocols';
             } else {
                 this.pageHeader = 'Pending Responses';
             }
@@ -55,6 +56,8 @@ export class ExpandedViewComponent implements OnInit {
                 } else {
                     this.expandedList = this.result.dashBoardDetailMap;
                 }
+            }  if (this.result.dashboardExemptCardDetails != null && this.result.dashboardExemptCardDetails.length !== 0) {
+                this.exemptCardDetails = this.result.dashboardExemptCardDetails;
             }
 
         },
@@ -69,5 +72,9 @@ export class ExpandedViewComponent implements OnInit {
     */
     openIrbView( protocolNumber ) {
         this._router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } } );
+    }
+    openExempt( exemptId, mode, exemptTitle, exemptFormID ) {
+        this._router.navigate( ['/irb/exempt-questionaire'],
+            { queryParams: { exempHeaderId: exemptId, mode: mode, title: exemptTitle, exemptFormID: exemptFormID } } );
     }
 }

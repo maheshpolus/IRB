@@ -48,7 +48,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     showAlert = true;
     ApproveRejectHeader = '';
     isApprovedAlert = false;
+    isQuestionaireSubmitted = false;
     isActionByPi = false;
+    showConfirmationDetails = true;
     isRejectedAlert = false;
     isReturnAlert = false;
     actionLogResult: any = [];
@@ -483,6 +485,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                             (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN'))) {
                         this.isPendingActionRequired = true;
                     }
+                    if (this.result.irbExemptForm.statusCode === '2' || this.result.irbExemptForm.statusCode === '3' ||
+                     this.result.irbExemptForm.statusCode === '3' || this.result.irbExemptForm.statusCode === '4' ||
+                      this.result.irbExemptForm.statusCode === '5') {
+                        this.isQuestionaireSubmitted = true;
+                    } else {
+                        this.isQuestionaireSubmitted = false;
+                    }
 
                     if (this.isActionByPi && this.result.irbExemptForm.loggedInUserPI === true) {
                         this.isActionByPi = true;
@@ -767,6 +776,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     /** submit questionaire after completing and agreeing*/
     submitQuestionaire() {
         this.isEvaluate = false;
+        this.isQuestionaireSubmitted = true;
+        // this.piDeclaration.isAgreePoliciesChecked = false;
+        // this.piDeclaration.isComprehensiveReviewChecked = false;
+        // this.piDeclaration.isConfirmationChecked = false;
+        // this.piDeclaration.isMemberResponsibilityChecked = false;
         this.errorQuestions = [];
         this.modalHeading = 'Alert';
         this.alertMsg = '';

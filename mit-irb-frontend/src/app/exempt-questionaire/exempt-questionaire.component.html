@@ -5,43 +5,76 @@
 		<div class="col-12 top-aprv-details">
 			<div class="row">
 				<div class="col-12">
-						<div class="Welcome-alert alert alert-warning">
-								<i class="fa fa-info-circle" aria-hidden="true"></i>
-								<strong>Key elements of Exempt Evaluation.</strong> 
-								<span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
+					<div class="Welcome-alert alert alert-warning" *ngIf="!isQuestionaireSubmitted">
+						<i class="fa fa-info-circle" aria-hidden="true"></i>
+						<strong>Key elements of Exempt Evaluation.</strong>
+						<span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
+					</div>
+					<div *ngIf="isQuestionaireSubmitted">
+							<div class="col-12 exempt-description">
+								<h6>Heading</h6>
+								Exempt Decription Exempt Decription Exempt Decription Exempt Decription Exempt Decription Exempt DecriptionExempt Decription
+								<hr>
 							</div>
+							<div class="col-12">
+								<div class="row">
+										<div class="col-4 Welcome-alert alert alert-warning submit-alert pdf"  data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">
+												
+												<i class="fa fa-info-circle" aria-hidden="true"></i>
+												 <strong>Key elements of Exempt Evaluation</strong>
+												
+												<!-- <span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span> -->
+											</div>
+											<div class="col-3 Welcome-alert alert alert-warning pdf" data-toggle="modal" data-target="#confirmModal" (click)="showConfirmationDetails = false">
+													
+													<i class="fa fa-info-circle" aria-hidden="true">
+														 </i><strong>View Confirmation</strong>
+													<!-- <span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span> -->
+												</div>
+												<div class="col-4 Welcome-alert alert alert-warning pdf">
+														
+														<i class="fa fa-download" aria-hidden="true"></i>
+														<strong>Generate Determination</strong>
+														<!-- <span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span> -->
+													</div>
+									</div>
+								</div>
+								</div>
 					<div class="Welcome-msg">
 						<p [innerHTML]="ABOUT_MESSAGE">
 						</p>
 					</div>
 				</div>
-				<div class="col-12 apprve-date mt-0" >
-						<div class="row">
-							<div class="col-9">
-								<div class="title-head pl-15" *ngIf="isViewMode || isEditMode">
-									<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' " class="active-status active-en margin-fix">Exempt</span>
-									<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'" class="completed-closed active-en margin-fix">Not Exempt</span>
-									<span *ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' " class="pending-action active-en margin-fix">Not Submitted</span>
-									<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
-									<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
-									 class="in-drafts active-en margin-fix">Not Exempt-Pending Review</span>
-									<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
-									 class="pending-action active-en margin-fix">Exempt-Pending Review</span>
-									<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
-									 class="pending-action active-en margin-fix">Not Exempt-Pending Review</span>
-								</div>
-							</div>
-							<div class="col-3 width-exempt searchBox display">
-								<a id="returnToDasboardLink" title="Back to Dashboard" (click)="returnToExemptList($event)"> <i class="fa fa-mail-reply">&nbsp;</i>Return to Dashboard</a>
+				<div class="col-12 apprve-date mt-0">
+					<div class="row">
+						<div class="col-9">
+							<div class="title-head pl-15" *ngIf="isViewMode || isEditMode">
+								<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' " class="active-status active-en margin-fix">Exempt</span>
+								<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'" class="completed-closed active-en margin-fix">Not Exempt</span>
+								<span *ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' " class="pending-action active-en margin-fix">Not Submitted</span>
+								<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
+								<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
+								 class="in-drafts active-en margin-fix">Not Exempt-Pending Review</span>
+								<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
+								 class="pending-action active-en margin-fix">Exempt-Pending Review</span>
+								<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
+								 class="pending-action active-en margin-fix">Not Exempt-Pending Review</span>
 							</div>
 						</div>
+						<div class="col-3 width-exempt searchBox display">
+							<a id="returnToDasboardLink" title="Back to Dashboard" (click)="returnToExemptList($event)">
+								<i class="fa fa-mail-reply">&nbsp;</i>Return to Dashboard</a>
+						</div>
+					</div>
 				</div>
+				
+					
 				<div class="col-12  search-eidted-p padding-15">
-						<div class="alert alert-danger " *ngIf="invalidData.invalidExemptData">
-								Please fill all mandatory fields marked
-								<strong>*</strong>
-						</div>
-					  </div>
+					<div class="alert alert-danger " *ngIf="invalidData.invalidExemptData">
+						Please fill all mandatory fields marked
+						<strong>*</strong>
+					</div>
+				</div>
 				<div class="col-12 apprve-date display mt-0" *ngIf="showQuestionaire">
 					<div class="title-head">
 						<h4 class="pl0">
@@ -53,79 +86,79 @@
 				</div>
 				<div class="col-12 apprve-date mt-0">
 					<div class="row">
-					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.exemptTitle == null}">
-						<h4>* Title:</h4>
-					</div>
-					<div class="col-9 width-exempt searchBox display">
-						<input class="form-control" type="text" [disabled]="isViewMode" maxlength="250" [(ngModel)]="requestObject.irbExemptForm.exemptTitle"
-						 placeholder="Enter Exempt Title">
-					</div>
+						<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.exemptTitle == null}">
+							<h4>* Title:</h4>
+						</div>
+						<div class="col-9 width-exempt searchBox display">
+							<input class="form-control" type="text" [disabled]="isViewMode" maxlength="250" [(ngModel)]="requestObject.irbExemptForm.exemptTitle"
+							 placeholder="Enter Exempt Title">
+						</div>
 					</div>
 				</div>
 				<div class="col-12 apprve-date mt-0">
-						<div class="row">
-					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.personId == null}">
-						<h4>* Principal Investigator:</h4>
-					</div>
-					<div class="col-4 width-exempt searchBox display">
-						<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
-						 placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"
-						/>
-						<input class="form-control" type="text" [disabled]="continueBtnClicked" [(ngModel)]="requestObject.irbExemptForm.personName" *ngIf="continueBtnClicked"
-						/>
-						<div class="sb-seachresults results-margin">
-							<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultPI">
-								<li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
-									<span [innerHTML]="result.label"></span>
-								</li>
-							</ul>
+					<div class="row">
+						<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.personId == null}">
+							<h4>* Principal Investigator:</h4>
 						</div>
-					</div>
-					<div class="col-1 title-head">
-						<h4>Unit:</h4>
-					</div>
-					<div class="col-4 width-exempt searchBox display">
-						<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
-						 *ngIf="!isViewMode" [datasource]="unitName" [minSearchLength]="0" (ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
-						 (selected)="onUnitSelect()"></ng2-completer>
-						<input class="form-control unit-margin" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"
-						 *ngIf="isViewMode" />
-					</div>
+						<div class="col-4 width-exempt searchBox display">
+							<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
+							 placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"
+							/>
+							<input class="form-control" type="text" [disabled]="continueBtnClicked" [(ngModel)]="requestObject.irbExemptForm.personName"
+							 *ngIf="continueBtnClicked" />
+							<div class="sb-seachresults results-margin">
+								<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultPI">
+									<li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
+										<span [innerHTML]="result.label"></span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-1 title-head">
+							<h4>Unit:</h4>
+						</div>
+						<div class="col-4 width-exempt searchBox display">
+							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
+							 *ngIf="!isViewMode" [datasource]="unitName" [minSearchLength]="0" (ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
+							 (selected)="onUnitSelect()"></ng2-completer>
+							<input class="form-control unit-margin" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"
+							 *ngIf="isViewMode" />
+						</div>
 					</div>
 				</div>
 				<!--Text change Ends-->
 
 				<div class="col-12 apprve-date mt-0">
-						<div class="row">
-					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolStartDate == null || requestObject.exemptProtocolStartDate == '')}">
-						<h4>* Start Date:</h4>
-					</div>
-					<div class="col-4 width-exempt searchBox display">
-						<div class="input-group">
-						<input [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt4" placeholder="mm/dd/yyyy"
-						 [(ngModel)]="requestObject.exemptProtocolStartDate" (ngModelChange)="validateStartDate()">
-						<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
-						<span title="Choose Start Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt4">
-							<i class="fa fa-calendar" aria-hidden="true"></i>
-						</span>
-						
-						<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
-					</div>
-					</div>
-					<div class="col-1 title-head " [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolEndDate == null || requestObject.exemptProtocolEndDate == '')}">
-						<h4>* End Date:</h4>
-					</div>
-					<div class="col-4 width-exempt searchBox display">
-						<div class="input-group">
-						<input [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
-						 [(ngModel)]="requestObject.exemptProtocolEndDate"(ngModelChange)="validateEndDate()">
-						<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
-						<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">
-							<i class="fa fa-calendar" aria-hidden="true"></i>
-						</span>
-						<div *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</div>
-					</div>
-					</div>
+					<div class="row">
+						<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolStartDate == null || requestObject.exemptProtocolStartDate == '')}">
+							<h4>* Start Date:</h4>
+						</div>
+						<div class="col-4 width-exempt searchBox display">
+							<div class="input-group">
+								<input [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt4" placeholder="mm/dd/yyyy"
+								 [(ngModel)]="requestObject.exemptProtocolStartDate" (ngModelChange)="validateStartDate()">
+								<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+								<span title="Choose Start Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt4">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+								</span>
+
+								<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
+							</div>
+						</div>
+						<div class="col-1 title-head " [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolEndDate == null || requestObject.exemptProtocolEndDate == '')}">
+							<h4>* End Date:</h4>
+						</div>
+						<div class="col-4 width-exempt searchBox display">
+							<div class="input-group">
+								<input [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
+								 [(ngModel)]="requestObject.exemptProtocolEndDate" (ngModelChange)="validateEndDate()">
+								<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+								<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+								</span>
+								<div *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- <div class="col-12">
@@ -139,39 +172,40 @@
 				</div>
 				</div> -->
 				<div class="col-12 apprve-date mt-0">
-						<div class="row">
-					<div class="col-2 title-head pl-15">
-						<h4 class="sponsorFont">Faculty Sponsor:</h4>
-					</div>
-					<div class="col-4  width-exempt searchBox display">
-						<input class="form-control" type="text" *ngIf="!isViewMode" (input)="clearSelectedFacultydata()" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
-						 placeholder="Search: Faculty Sponsor Name" [formControl]="facultySearchText" (focus)="IsElasticResultFaculty = true"
-						 (focusout)="IsElasticResultFaculty = false" />
-						<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
-						 *ngIf="isViewMode" />
-						<div class="sb-seachresults results-margin">
-							<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultFaculty">
-								<li *ngFor="let result of _results | async" (mousedown)="selectedFacultyResult(result)">
-									<span [innerHTML]="result.label"></span>
-								</li>
-							</ul>
+					<div class="row">
+						<div class="col-2 title-head pl-15">
+							<h4 class="sponsorFont">Faculty Sponsor:</h4>
+						</div>
+						<div class="col-4  width-exempt searchBox display">
+							<input class="form-control" type="text" *ngIf="!isViewMode" (input)="clearSelectedFacultydata()" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+							 placeholder="Search: Faculty Sponsor Name" [formControl]="facultySearchText" (focus)="IsElasticResultFaculty = true"
+							 (focusout)="IsElasticResultFaculty = false" />
+							<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+							 *ngIf="isViewMode" />
+							<div class="sb-seachresults results-margin">
+								<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultFaculty">
+									<li *ngFor="let result of _results | async" (mousedown)="selectedFacultyResult(result)">
+										<span [innerHTML]="result.label"></span>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
-				</div>
 				<div class="col-12 apprve-date mt-0">
-						<div class="row">
-					<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.irbExemptForm.summary == null || requestObject.irbExemptForm.summary == '')}">
-						<h4>* Summary:</h4>
+					<div class="row">
+						<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.irbExemptForm.summary == null || requestObject.irbExemptForm.summary == '')}">
+							<h4>* Summary:</h4>
+						</div>
+						<div class="col-9 width-exempt searchBox dsp-flex">
+							<textarea class="form-control" [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary"
+							 placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
+						</div>
 					</div>
-					<div class="col-9 width-exempt searchBox dsp-flex">
-						<textarea class="form-control" [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
+					<div *ngIf="!isViewMode" class="col-12 exempt-id">
+						<button [hidden]="showQuestionaire" id="#continueBtn" class="btn mb-3 btn-primary tab_btn center-button" (click)="loadQuestionaire()"
+						 data-toggle="modal" data-target="#alertModal" [disabled]="disableButton">Continue</button>
 					</div>
-				</div>
-				<div *ngIf="!isViewMode" class="col-12 exempt-id">
-					<button [hidden]="showQuestionaire" id="#continueBtn" class="btn mb-3 btn-primary tab_btn center-button" (click)="loadQuestionaire()"
-					 data-toggle="modal" data-target="#alertModal" [disabled]="disableButton">Continue</button>
-				</div>
 				</div>
 				<!--new end-->
 			</div>
@@ -229,12 +263,14 @@
 							<span class="danger">
 								<i class="fa" [ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
 							'fa-warning':isExempt=='N'}" class="fa fa-star"></i>
-							</span >
+							</span>
 							{{alertMsg}}
-							<span *ngIf="showEvaluateWarning!=''" >
+							<span *ngIf="showEvaluateWarning!=''">
 								<br/>
 								<i class="fa" [ngClass]="{'fa-star':isExempt=='Y' || isExempt=='O',
-								'fa-warning':isExempt=='N'}" class="fa fa-star"></i><span [innerHTML]="showEvaluateWarning"></span></span>
+								'fa-warning':isExempt=='N'}" class="fa fa-star"></i>
+								<span [innerHTML]="showEvaluateWarning"></span>
+							</span>
 						</p>
 					</div>
 				</div>
@@ -295,7 +331,8 @@
 </div>
 <!-- message-modal-end -->
 <!--confirmation modal-->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"
+ data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
@@ -311,19 +348,19 @@
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12 font-size-15">
 							<p class="confirm-text">
 								<!-- <input type="checkbox" #agreeCheckbox="ngModel" [(ngModel)]="isChecked" (change)="0"> -->
-								<input type="checkbox" [(ngModel)]="piDeclaration.isConfirmationChecked">
+								<input *ngIf="showConfirmationDetails" type="checkbox" [(ngModel)]="piDeclaration.isConfirmationChecked">
 								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_COMPLETE"></span>
 							</p>
 							<p class="confirm-text">
-								<input type="checkbox" [(ngModel)]="piDeclaration.isAgreePoliciesChecked">
+								<input *ngIf="showConfirmationDetails" type="checkbox" [(ngModel)]="piDeclaration.isAgreePoliciesChecked">
 								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_AGREE_POLICIES"></span>
 							</p>
 							<p class="confirm-text">
-								<input type="checkbox" [(ngModel)]="piDeclaration.isMemberResponsibilityChecked">
+								<input *ngIf="showConfirmationDetails" type="checkbox" [(ngModel)]="piDeclaration.isMemberResponsibilityChecked">
 								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_MEMBER_RESPONSIBILITY"></span>
 							</p>
 							<p class="confirm-text">
-								<input type="checkbox" [(ngModel)]="piDeclaration.isComprehensiveReviewChecked">
+								<input *ngIf="showConfirmationDetails" type="checkbox" [(ngModel)]="piDeclaration.isComprehensiveReviewChecked">
 								<span class="col-12 confirm-text-padding" [innerHTML]="PI_DECLARATION_COMPREHENSIVE_REVIEW"></span>
 							</p>
 						</div>
@@ -331,15 +368,16 @@
 				</div>
 			</div>
 			<section class="row btn-row-med sect-confirm-padding">
-				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true">Agree</button>
-				<button class="btn tab_btn"  data-dismiss="modal" aria-label="Close" (click)="closeConfirmation()">Cancel</button>
+				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true && showConfirmationDetails == true">Agree</button>
+				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="closeConfirmation()">Cancel</button>
 			</section>
 		</div>
 	</div>
 </div>
 <!-- confirmation modal end-->
 <!--welcome message modal-->
-<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"
+ data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog modal-full" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
@@ -354,45 +392,56 @@
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
 							<h4 class="popup-sub-head questionnaire-popups">
 								<div class="welcome-text">
-									
-										The Exempt Evaluation will guide you in determining if your research is exempt from regulations listed in the Common Rule 
-										<a href="https://www.hhs.gov/ohrp/regulations-and-policy/index.html" target="_blank">https://www.hhs.gov/ohrp/regulations-and-policy/index.html</a>
-										<br><br>
-										Key elements:
-										<table class="welcome-table">
-												<tbody class="welcome-table-border">
-												<tr>
-													<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
-													<td>Investigators are required to follow responsibilities and guidance as outlined in the Investigator Responsibility Guidelines.
-														Visit <a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a> for more informations.
-													</td>
-												</tr>
-												<tr>
-														<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
-														<td>Principal Investigators and Faculty Sponsors must ensure all members of the research team comply with the Investigator Responsibilities for Exempt Research.</td>
-													</tr>
-													<tr>
-															<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
-															<td>Completion of the Exempt Evaluation prior to the start of the research is mandatory.</td>
-														</tr>
-													</tbody>
-											</table>
-											Any human subject research conducted under the auspices of MIT is subject to audit.
-											<br><br>
-											Please review each question carefully and respond truthfully. If you are unsure, you can save your progress and return to the question later. Incomplete evaluations cannot be submitted.
-											<br><br>
-											Guidance is available throughout the evaluation and with more detail available on the COUHES website <a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a>. For questions or clarification, please contact the COUHES office:
-											<br><br>
-											<div class="row">
-													<div class="col-2"></div>
-													<div class="col-5">
-														<i class="fa fa-phone-square" aria-hidden="true"></i> 617-253-6787
-													</div>
-													<div class="col-5">
-															<i class="fa fa-envelope" aria-hidden="true"></i>
-															<a href="mailto:couhes@mit.edu" target="_top">couhes@mit.edu</a>
-													</div>
-											</div>
+
+									The Exempt Evaluation will guide you in determining if your research is exempt from regulations listed in the Common Rule
+									<a href="https://www.hhs.gov/ohrp/regulations-and-policy/index.html" target="_blank">https://www.hhs.gov/ohrp/regulations-and-policy/index.html</a>
+									<br>
+									<br> Key elements:
+									<table class="welcome-table">
+										<tbody class="welcome-table-border">
+											<tr>
+												<td>
+													<i class="fa fa-info-circle" aria-hidden="true"></i>
+												</td>
+												<td>Investigators are required to follow responsibilities and guidance as outlined in the Investigator Responsibility
+													Guidelines. Visit
+													<a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a> for more informations.
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<i class="fa fa-info-circle" aria-hidden="true"></i>
+												</td>
+												<td>Principal Investigators and Faculty Sponsors must ensure all members of the research team comply with the Investigator
+													Responsibilities for Exempt Research.</td>
+											</tr>
+											<tr>
+												<td>
+													<i class="fa fa-info-circle" aria-hidden="true"></i>
+												</td>
+												<td>Completion of the Exempt Evaluation prior to the start of the research is mandatory.</td>
+											</tr>
+										</tbody>
+									</table>
+									Any human subject research conducted under the auspices of MIT is subject to audit.
+									<br>
+									<br> Please review each question carefully and respond truthfully. If you are unsure, you can save your progress and
+									return to the question later. Incomplete evaluations cannot be submitted.
+									<br>
+									<br> Guidance is available throughout the evaluation and with more detail available on the COUHES website
+									<a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a>. For questions or clarification, please contact the COUHES office:
+									<br>
+									<br>
+									<div class="row">
+										<div class="col-2"></div>
+										<div class="col-5">
+											<i class="fa fa-phone-square" aria-hidden="true"></i> 617-253-6787
+										</div>
+										<div class="col-5">
+											<i class="fa fa-envelope" aria-hidden="true"></i>
+											<a href="mailto:couhes@mit.edu" target="_top">couhes@mit.edu</a>
+										</div>
+									</div>
 								</div>
 							</h4>
 						</div>
@@ -572,7 +621,9 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-							<h4 class="popup-sub-head questionnaire-popups"><p [innerHTML]="alertMsg"></p></h4>
+							<h4 class="popup-sub-head questionnaire-popups">
+								<p [innerHTML]="alertMsg"></p>
+							</h4>
 						</div>
 					</div>
 				</div>

@@ -26,17 +26,36 @@
 
 						<div class="col-md-2 col-sm-6 col-12">
 							<span class="active-en"
-								[ngClass]="{'in-progress': irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
-						'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE=='106'),
-						'pending-action': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='102'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE== '104'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE=='107'),
-						'active-status': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='200'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE== '201'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE== '202'||
-									irbHeaderDetails.PROTOCOL_STATUS_CODE=='203')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
+								[ngClass]="{
+									'active-status': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='200'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '201'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '202'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '901'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '400'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '401'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '203'),
+									'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='309'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='310'),
+									'pending-action': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '103'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='106'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='107'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='900'),
+									'revision-required': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='102'||
+													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '104'),
+									'submitted' :   irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
+									'completed-closed': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='103'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '300'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '301'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '304'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '305'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '306'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '307'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '313'),
+								'suspended': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='302'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '308'||
+													irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
 						</div>
 
 						<div class="i-icon-top">

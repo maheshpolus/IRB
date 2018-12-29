@@ -40,7 +40,7 @@
 										: <span>{{irbPersons.OFFICE_PHONE}}</span>
 									</p>
 								</div>
-								<div class="col-md-4 col-sm-6 co-12 card-desc">
+								<div class="col-md-5 col-sm-6 co-12 card-desc">
 									<h6>&nbsp;</h6>
 									<p>
 										Primary Title : <span>{{irbPersons.PRIMARY_TITLE}}</span>
@@ -50,6 +50,17 @@
 										Unit : <span>{{irbPersons.UNIT_NAME}}</span>
 									</p>
 								</div>
+								<div class="col-md-1 col-sm-6 co-12 list-des button-responsive">
+										
+									<a>
+										<button type="button" class="btn btn-outline-secondary button-view"
+										data-toggle="modal"
+										data-target="#personModal"
+										(click)="showpersonData(irbPersons.PERSON_ID)">
+											<i class="fa fa-eye"></i>View
+										</button>
+									</a>
+							</div>
 								<!-- <div class="col-md-2 col-sm-6 co-12 cmp-b">
 									<p *ngIf="irbPersons.IS_COMPLETED=='Y'">Completed</p>
 									<p *ngIf="irbPersons.IS_COMPLETED=='N'">Pending</p>

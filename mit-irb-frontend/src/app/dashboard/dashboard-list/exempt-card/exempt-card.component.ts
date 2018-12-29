@@ -15,7 +15,7 @@ export class ExemptCardComponent implements  OnChanges  {
     @Input() showBtn: boolean;
 
     statusCode: string[];
-    tabSelected = 'STUDIES';
+    tabSelected = 'PENDING';
     filteredExemptList: any = []; // List of exempt protocols filtered based on statuses
     paginatedExemptList: any = []; // List of exempt protocols paginated from 'filteredExemptList'
     paginationData = {
@@ -53,22 +53,21 @@ export class ExemptCardComponent implements  OnChanges  {
         this.paginatedExemptList = this.filteredExemptList.slice(0, this.paginationData.limit);
         this.protocolCount = this.filteredExemptList.length;
     }
-
     getStatusCode( role, tabClicked ) {
         if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle !== null && tabClicked === 'PENDING' ) {
-            return ['1', '2', '5'];
+            return ['1', '2', '3', '5'];
         } else if (( role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle !== null && tabClicked === 'STUDIES' ) {
-            return ['1', '2', '3', '4', '5'];
+            return ['4'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'STUDIES' ) {
-            return ['1'];
+            return ['4'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'PENDING' ) {
-            return ['3', '5', '2'];
+            return ['1', '2', '3', '5'];
         } else if ( ( role === 'ADMIN' || role === 'CHAIR' ) && tabClicked === 'SUBMITTED' ) {
             return ['4'];
         } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'STUDIES' ) {
-            return ['1', '2', '3', '4', '5'];
+            return ['4'];
         } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'PENDING' ) {
-            return ['5'];
+            return ['1', '2', '3', '5'];
         }
     }
 
@@ -88,25 +87,33 @@ export class ExemptCardComponent implements  OnChanges  {
             filteredArray = this.exemptList.filter((value) => {
                 for (let i = 0; i < statusCodes.length; i++) {
                     if (value.statusCode === statusCodes[i]) {
-                        if ((value.statusCode === '2' || value.statusCode === '5' || value.statusCode === '1')
-                            && tabSelected === 'PENDING') {
-                            if (value.statusCode === '2' && value.facultySponsorPersonId === personID) {
+                        if ((value.statusCode === '2' || value.statusCode === '5' || value.statusCode === '1' || value.statusCode === '3')
+                        && tabSelected === 'PENDING') {
+                            if (value.statusCode === '2' && (value.facultySponsorPersonId === personID
+                                 || value.personId === personID || value.createdUser === personID)) {
                                 return value;
                             }
-                            if (value.statusCode === '5' && value.personId === personID) {
+                            if (value.statusCode === '5' && (value.personId === personID
+                                || value.createdUser === personID)) { // Add 'OR' condition for logged in user
                                 return value;
                             }
-                            if (value.statusCode === '1' && value.submittedOnce === 1 && value.personId === personID) {
+                            if (value.statusCode === '1' && (value.personId === personID
+                                || value.createdUser === personID)) { // Add 'OR' condition for logged in user
                                 return value;
                             }
-                        } else if (tabSelected === 'STUDIES' && (value.statusCode === '1' || value.statusCode === '5')) {
-                            if (value.personId === personID && value.statusCode === '1') {
+                            if (value.statusCode === '3') {
                                 return value;
                             }
-                            if (value.personId === personID && value.statusCode === '5') {
+                        } else if (tabSelected === 'STUDIES') {
+                            if (value.statusCode === '4' && ( this.userDTO.role === 'ADMIN' || this.userDTO.role === 'CHAIR' )) {
+                                if ((value.facultySponsorPersonId === personID
+                                     || value.personId === personID || value.createdUser === personID)) {
+                                return value;
+                                }
+                            } else {
                                 return value;
                             }
-                        } else {
+                        } else { // works for submitted tab for 'IRB ADMIN's
                             return value;
                         }
                     }

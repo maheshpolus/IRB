@@ -106,6 +106,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     alertMsg: string;
     showEvaluateWarning: string;
     modalHeading: string;
+    exemptQuestionList: any = {};
     userDTO: any = {};
     isViewMode: any;
     isPendingActionRequired = false;
@@ -507,6 +508,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     } else {
                         this.isActionByPi = false;
                     }
+                    if ( this.result.exemptQuestionList != null) {
+                        this.exemptQuestionList = this.result.exemptQuestionList;
+                    }
                     this.questionaire = this.result.questionnaireDto;
                     this.requestObject.personJobTitle = this.result.irbExemptForm.pijobTitle;
                     this.requestObject.facultySponsorJobTitle = this.result.irbExemptForm.facultySponsorJobTitle;
@@ -786,10 +790,6 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     submitQuestionaire() {
         this.isEvaluate = false;
         this.isQuestionaireSubmitted = true;
-        // this.piDeclaration.isAgreePoliciesChecked = false;
-        // this.piDeclaration.isComprehensiveReviewChecked = false;
-        // this.piDeclaration.isConfirmationChecked = false;
-        // this.piDeclaration.isMemberResponsibilityChecked = false;
         this.errorQuestions = [];
         this.modalHeading = 'Alert';
         this.alertMsg = '';
@@ -866,6 +866,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                                 this.alertMsg = this.OTHER_MSG;
                             }
                             this.requestObject.irbExemptForm = this.result.irbExemptForm;
+                               if ( this.result.irbExemptForm.exemptQuestionList != null) {
+                        			this.exemptQuestionList = this.result.irbExemptForm.exemptQuestionList;
+                    }
                             this.isViewMode = true;
                         }
                     },
@@ -1230,6 +1233,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         reqObjectVal.irbExemptForm.updateUser = this.userDTO.userName;
         this._exemptQuestionaireService.approveOrDisapproveAction(reqObjectVal).subscribe(
             data => {
+                this.result = data;
+                this.requestObject.irbExemptForm.status = this.result.irbExemptForm.status;
                 this.isApprovedAlert = false;
                 this.isRejectedAlert = false;
             },

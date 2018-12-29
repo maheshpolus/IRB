@@ -1,13 +1,15 @@
 <div *ngIf="!showBtn">
 	<div class="col-sm-12 p15">
-		<button type="button" name="myStudies" (click)="showData(userDTO.role,'STUDIES')" class="btn btn-secondary inner-tab-btn"
-		 [ngClass]="{tabActive:(tabSelected=='STUDIES')}">
-			<i class="fa fa-book pr5" aria-hidden="true"></i>My Studies
-		</button>
-		<span>
-			<button type="button" name="pending" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'PENDING')" [ngClass]="{tabActive:(tabSelected=='PENDING')}">
+		
+
+		<button type="button" name="pending" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'PENDING')" [ngClass]="{tabActive:(tabSelected=='PENDING')}">
 				<i class="fa fa-spinner pr5" aria-hidden="true"></i> Pending
 			</button>
+		<span>
+				<button type="button" name="myStudies" (click)="showData(userDTO.role,'STUDIES')" class="btn btn-secondary inner-tab-btn"
+				[ngClass]="{tabActive:(tabSelected=='STUDIES')}">
+				   <i class="fa fa-book pr5" aria-hidden="true"></i>My Studies
+			   </button>
 		</span>
 		<span *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
 			<button type="button" name="submitted" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'SUBMITTED')"

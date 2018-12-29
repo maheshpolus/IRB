@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
+import { KeyPressEvent } from '../common/directives/keyPressEvent.component';
 
 
 import 'rxjs/add/operator/debounceTime';
@@ -177,7 +178,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
         private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
-        private _router: Router, private _sharedDataService: SharedDataService) { }
+        private _router: Router, private _sharedDataService: SharedDataService, public keyPressEvent: KeyPressEvent) { }
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
@@ -323,6 +324,14 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     handleError(): any {
         this.message = 'something went wrong';
     }
+    
+    
+    /**
+     * @param  {} id
+     */
+    onKeyEnterElastic(id) {
+        $('#' + id + ' li.selected').trigger('click');
+    }
 
     /** calls service to fetch Units of PI */
     getPiUnits() {
@@ -355,8 +364,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
 
     clearSelectedPIdata() {
-        this.requestObject.irbExemptForm.personId = '';
-        this.requestObject.personJobTitle = '';
+        this.requestObject.irbExemptForm.personId = null;
+        this.requestObject.personJobTitle = null;
     }
 
     /** assign values to requestObject on selecting a particular PI from elastic search */
@@ -370,8 +379,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
 
     clearSelectedFacultydata() {
-        this.requestObject.irbExemptForm.facultySponsorPersonId = '';
-        this.requestObject.facultySponsorJobTitle = '';
+        this.requestObject.irbExemptForm.facultySponsorPersonId = null;
+        this.requestObject.facultySponsorJobTitle = null;
 
     }
 

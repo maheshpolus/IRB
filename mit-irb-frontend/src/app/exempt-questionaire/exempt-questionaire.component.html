@@ -98,21 +98,23 @@
 				<div class="col-12 apprve-date mt-0">
 					<div class="row">
 						<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.personId == null}">
-							<h4>* Principal Investigator:</h4>
+							<h4 style="display: inline-block;">* Principal Investigator:</h4>
+							<i title="No PI Status for {{requestObject.irbExemptForm.personName}}" *ngIf="(requestObject.personJobTitle == null || requestObject.personJobTitle == '') && (requestObject.irbExemptForm.personId != null && requestObject.irbExemptForm.personId != '')" class="fa fa-exclamation-circle" aria-hidden="true"></i>
 						</div>
 						<div class="col-4 width-exempt searchBox display">
-							<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
-							 placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"
-							/>
-							<input class="form-control" type="text" [disabled]="continueBtnClicked" [(ngModel)]="requestObject.irbExemptForm.personName"
-							 *ngIf="continueBtnClicked" />
-							<div class="sb-seachresults results-margin">
-								<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultPI">
-									<li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
-										<span [innerHTML]="result.label"></span>
-									</li>
-								</ul>
-							</div>
+						<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
+						(keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter) ="onKeyEnterElastic('pIDropDown')" 
+						placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"
+						/>
+						<input class="form-control" type="text" [disabled]="continueBtnClicked" [(ngModel)]="requestObject.irbExemptForm.personName" *ngIf="continueBtnClicked"
+						/>
+						<div class="sb-seachresults results-margin" id="pIDropDown">
+							<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultPI">
+								<li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
+									<span [innerHTML]="result.label"></span>
+								</li>
+							</ul>
+						</div>
 						</div>
 						<div class="col-1 title-head">
 							<h4>Unit:</h4>
@@ -141,9 +143,8 @@
 								<span title="Choose Start Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt4">
 									<i class="fa fa-calendar" aria-hidden="true"></i>
 								</span>
-
-								<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
 							</div>
+							<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
 						</div>
 						<div class="col-1 title-head " [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolEndDate == null || requestObject.exemptProtocolEndDate == '')}">
 							<h4>* End Date:</h4>
@@ -156,8 +157,8 @@
 								<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">
 									<i class="fa fa-calendar" aria-hidden="true"></i>
 								</span>
-								<div *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</div>
 							</div>
+							<span *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</span>
 						</div>
 					</div>
 				</div>
@@ -174,22 +175,24 @@
 				<div class="col-12 apprve-date mt-0">
 					<div class="row">
 						<div class="col-2 title-head pl-15">
-							<h4 class="sponsorFont">Faculty Sponsor:</h4>
+							<h4 style="display: inline-block;" class="sponsorFont">Faculty Sponsor:</h4>
+							<i title="No PI Status for {{requestObject.irbExemptForm.facultySponsorPerson}}" *ngIf="(requestObject.facultySponsorJobTitle == null || requestObject.facultySponsorJobTitle == '') && (requestObject.irbExemptForm.facultySponsorPersonId != null && requestObject.irbExemptForm.facultySponsorPersonId != '')" class="fa fa-exclamation-circle" aria-hidden="true"></i>
 						</div>
 						<div class="col-4  width-exempt searchBox display">
-							<input class="form-control" type="text" *ngIf="!isViewMode" (input)="clearSelectedFacultydata()" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
-							 placeholder="Search: Faculty Sponsor Name" [formControl]="facultySearchText" (focus)="IsElasticResultFaculty = true"
-							 (focusout)="IsElasticResultFaculty = false" />
-							<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
-							 *ngIf="isViewMode" />
-							<div class="sb-seachresults results-margin">
-								<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultFaculty">
-									<li *ngFor="let result of _results | async" (mousedown)="selectedFacultyResult(result)">
-										<span [innerHTML]="result.label"></span>
-									</li>
-								</ul>
-							</div>
+						<input class="form-control" type="text" *ngIf="!isViewMode" (input)="clearSelectedFacultydata()" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+						(keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'facultySponsorDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'facultySponsorDropDown')" (keydown.Enter) ="onKeyEnterElastic('facultySponsorDropDown')"
+						placeholder="Search: Faculty Sponsor Name" [formControl]="facultySearchText" (focus)="IsElasticResultFaculty = true"
+						 (focusout)="IsElasticResultFaculty = false" />
+						<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"
+						 *ngIf="isViewMode" />
+						<div class="sb-seachresults results-margin" id="facultySponsorDropDown">
+							<ul class="sb-results-dropdown-menu test" *ngIf="IsElasticResultFaculty">
+								<li *ngFor="let result of _results | async" (mousedown)="selectedFacultyResult(result)" (click)="selectedFacultyResult(result)">
+									<span [innerHTML]="result.label"></span>
+								</li>
+							</ul>
 						</div>
+					</div>
 					</div>
 				</div>
 				<div class="col-12 apprve-date mt-0">

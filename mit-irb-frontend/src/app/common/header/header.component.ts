@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
             if (data === true) {
                 this._router.navigate(['/login']);
                 this._sharedDataService.changeCurrentTab(null);
+                this._sharedDataService.searchData = null;
             } else {
                 this._router.navigate(['/irb/dashboard']);
             }

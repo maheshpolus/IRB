@@ -250,28 +250,54 @@
 					</div>
 				</div>
 			</div>
+
 			<ng-container *ngIf="lastClickedTab != 'EXEMPT' && lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
-				<div class="col-sm-12" *ngIf="noIrbList">No Irb protocol found for this status</div>
-				<app-card-details *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-				|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-				 [irbList]="irbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
+				<div class="col-sm-12" *ngIf="noIrbList">No IRB protocol found for this status</div>
+				<div *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+								|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')">
+					<app-card-details [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
+					<!-- PAGINATION - START -->
+					<div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+						<nav class="paginationSkin text-right pagination">
+								<div class="margin8"><b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number * paginationData.limit - paginationData.limit  + paginatedIrbListData.length}} of {{protocolCount}} Records</b></div>
+							<ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="protocolCount" [(page)]="paginationData.page_number"
+							paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="protocolListPerPage(paginationData.page_number)">
+							</ngb-pagination>
+						</nav>
+					</div>
+					<!-- PAGINATION - END -->
+				</div>
 			</ng-container>
+
 			<ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
 				<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
 				 [irbList]="irbListData"></app-committee-card>
 			</ng-container>
+
 			<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
 				<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
 				 [irbList]="irbListData"></app-schedule-card>
 			</ng-container>
+
 			<ng-container *ngIf="lastClickedTab == 'EXEMPT'">
 				<div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>
-				<app-exempt-card [exemptList]="exemptListData" [userDTO]="userDTO" [showBtn]="noIrbList"></app-exempt-card>
+				<app-exempt-card #childExempt [exemptList]="exemptListData" [userDTO]="userDTO" [showBtn]="noIrbList"></app-exempt-card>
+				<!-- PAGINATION - EXEMPT - START -->
+				<div class="text-right pagiSkin margin8" style="float:right" *ngIf="childExempt.paginatedExemptList.length > 0">
+						<nav class="paginationSkin text-right pagination">
+								<div class="margin8"><b>{{childExempt.paginationData.page_number * childExempt.paginationData.limit - childExempt.paginationData.limit + 1}} - {{childExempt.paginationData.page_number * childExempt.paginationData.limit - childExempt.paginationData.limit  + childExempt.paginatedExemptList.length}} of {{childExempt.protocolCount}} Records</b></div>
+							<ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="childExempt.protocolCount" [(page)]="childExempt.paginationData.page_number"
+							childExempt.paginationData.page_number=page [pageSize]="childExempt.paginationData.limit" [rotate]="true" (pageChange)="childExempt.paginateExempList(childExempt.paginationData.page_number)">
+							</ngb-pagination>
+						</nav>
+					</div>
+					<!-- PAGINATION - EXEMPT - END -->
 			</ng-container>
+
 		</div>
 	</div>
 </section>

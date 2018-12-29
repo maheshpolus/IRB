@@ -128,6 +128,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     EXEMPT_MSG: string;
     NOT_EXEMPT_MSG: string;
     PI_DECLARATION: string;
+    PI_DECLARATION_COMPLETE: string;
+    PI_DECLARATION_AGREE_POLICIES: string;
+    PI_DECLARATION_MEMBER_RESPONSIBILITY: string;
+    PI_DECLARATION_COMPREHENSIVE_REVIEW: string;
     OTHER_MSG: string;
     NOT_EXEMPT_MSG_SUBMIT: string;
     EXEMPT_MSG_SUBMIT: string;
@@ -160,6 +164,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         invalidEndDate: false,
         invalidExemptData: false
     };
+    piDeclaration = {
+        isConfirmationChecked : false,
+        isAgreePoliciesChecked : false,
+        isMemberResponsibilityChecked : false,
+        isComprehensiveReviewChecked : false
+    };
     isStayOnSamePage = false;
 
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
@@ -169,7 +179,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
-        this._http.get('/mit-irb/resources/string_config_json').subscribe(
+        this._http.get('/connect-stg/resources/string_config_json').subscribe(
             data => {
                 const property_config: any = data;
                 if (property_config) {
@@ -184,6 +194,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.OTHER_MSG = property_config.OTHER_MSG;
                     this.NOFACULTY_MESSAGE = property_config.NOFACULTY_MESSAGE;
                     this.NOFACULTY_TITILE_MESSAGE = property_config.NOFACULTY_TITILE_MESSAGE;
+                    this.PI_DECLARATION_COMPLETE = property_config.PI_DECLARATION_COMPLETE;
+                    this.PI_DECLARATION_AGREE_POLICIES = property_config.PI_DECLARATION_AGREE_POLICIES;
+                    this.PI_DECLARATION_MEMBER_RESPONSIBILITY = property_config.PI_DECLARATION_MEMBER_RESPONSIBILITY;
+                    this.PI_DECLARATION_COMPREHENSIVE_REVIEW = property_config.PI_DECLARATION_COMPREHENSIVE_REVIEW;
                 }
             }
         );
@@ -744,7 +758,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** sets the value of checkbox to false if the certify message is closed without agreeing*/
     closeConfirmation() {
-        this.isChecked = false;
+        this.piDeclaration.isAgreePoliciesChecked = false;
+        this.piDeclaration.isComprehensiveReviewChecked = false;
+        this.piDeclaration.isConfirmationChecked = false;
+        this.piDeclaration.isMemberResponsibilityChecked = false;
     }
 
     /** submit questionaire after completing and agreeing*/

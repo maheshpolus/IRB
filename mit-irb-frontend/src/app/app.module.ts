@@ -10,6 +10,7 @@ import { FileDropModule } from 'ngx-file-drop';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'ng2-toastr';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -76,7 +77,8 @@ enableProdMode();
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
         BrowserAnimationsModule,
-        ToastModule.forRoot()
+        ToastModule.forRoot(),
+        NgbModule.forRoot()
     ],
     providers: [AuthGuard, DashboardService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },

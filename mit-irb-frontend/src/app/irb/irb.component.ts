@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-irb',
@@ -8,5 +8,18 @@ import { Component, OnInit } from '@angular/core';
 export class IrbComponent {
 
   constructor() { }
+  @HostListener('scroll', ['$event'])
+  scrollEvent() {
+    const scrollHeight = document.getElementById('scrollToTop').scrollTop;
+    if (scrollHeight > 100) {
+      document.getElementById('myBtn').style.display = 'block';
+    } else {
+      document.getElementById('myBtn').style.display = 'none';
+    }
+  }
+
+  scrollToTop() {
+   document.getElementById('scrollToTop').scrollTop = 0;
+  }
 
 }

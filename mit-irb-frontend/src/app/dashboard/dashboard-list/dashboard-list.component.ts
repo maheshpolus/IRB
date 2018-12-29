@@ -43,9 +43,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         exemptFormEndDate: '',
         exemptFormfacultySponsorName: ''
     };
+    paginationData = {
+        limit       : 10,
+        page_number : 1,
+      };
+    protocolCount: number;
     protocolTypeList = [];
     result: any;
     irbListData: any = [];
+    paginatedIrbListData: any = [];
     exemptListData: any = [];
     roleType: string;
     direction: number;
@@ -235,7 +241,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
      * @param currentTab - value of current tab
      */
     getIrbListData(currentTab) {
+        this.paginationData.page_number = 1;
         this.irbListData = [];
+        this.paginatedIrbListData = [];
+        this.protocolCount = 0;
         this.noIrbList = false;
         this.searchTextModel = '';
         this.lastClickedTab = currentTab;
@@ -253,6 +262,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                     this.noIrbList = true;
                 } else {
                     this.irbListData = this.result.dashBoardDetailMap;
+                    this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                    this.protocolCount = this.irbListData.length;
                     this.sortBy();
                 }
             }
@@ -263,16 +274,37 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         );
     }
 
-    /** sets value of direction to implement sorting */
+    /** sets value of direction to implement sorting in tabs other than EXEMPT, COMMITEE, SCHEDULE*/
     updateSortOrder() {
         this.sortOrder = this.sortOrder === '1' ? '-1' : '1';
         this.sortBy();
+    }
+
+    /**
+     * @param  {} array
+     * @param  {} column
+     * @param  {} direction
+     * Sorts an input array with specified column in specified direction
+     */
+    sortAnArray(array, column, direction) {
+        const sortedArray = array.sort(function(a, b) {
+            if (a[column].toLowerCase() < b[column].toLowerCase()) {
+                return 1 * direction;
+            } else if ( a[column].toLowerCase() > b[column].toLowerCase()) {
+                return -1 * direction;
+            } else {
+                return 0;
+            }
+        });
+        return sortedArray;
     }
 
     /** sets value of column and direction to implement sorting */
     sortBy() {
         this.column = this.sortField;
         this.direction = parseInt(this.sortOrder, 10);
+        this.irbListData = this.sortAnArray(this.irbListData, this.column, this.direction);
+        this.protocolListPerPage(this.paginationData.page_number); // Paginate after sorting entire list
     }
 
     /*show or hide advance search fields*/
@@ -459,10 +491,26 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptParams.exemptFormEndDate = null;
         this.getExemptListData('EXEMPT');
     }
+
+
+    /**
+     * @param  {} currentDate
+     * Formats date in mm-dd-yyy format
+     */
     GetFormattedDate(currentDate) {
         const month = currentDate.getMonth() + 1;
         const day = currentDate.getDate();
         const year = currentDate.getFullYear();
         return month + '-' + day + '-' + year;
+    }
+
+    /**
+     * @param  {} pageNumber
+     * paginate an array
+     */
+    protocolListPerPage(pageNumber) {
+        this.paginatedIrbListData = this.irbListData.slice(pageNumber * this.paginationData.limit - this.paginationData.limit,
+            pageNumber * this.paginationData.limit);
+        document.getElementById('scrollToTop').scrollTop = 0;
     }
 }

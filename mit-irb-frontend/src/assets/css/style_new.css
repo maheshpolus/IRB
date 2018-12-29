@@ -1484,16 +1484,16 @@ form-check-label {
 .in-drafts{
     background: #8e979a!important; 
 }
-.removed-status {
+.pending-action {
+    background: #e9844e!important; 
+}
+.completed-closed {
     background-color: #fd6b80 !important;
     
 }
-.ammendment-status
+.revision-required
 {
-    background-color: #ad94fb !important;
-}
-.pending-action {
-    background: #573b88!important; 
+    background-color: #e8b69d !important;
 }
 .active-status {
     background: #009688!important; 
@@ -1501,6 +1501,10 @@ form-check-label {
 .exempt-status
 {
     background: lightskyblue!important; 
+}
+.submitted 
+{
+    background: #808120 !important;
 }
 
 /*for modal*/
@@ -1552,11 +1556,11 @@ form-check-label {
     height: 95px;
     top: 12px;
 }
-.main-list
+/* .main-list
 {
     height:500px;
     overflow-y:scroll; 
-}
+} */
 .button-view
 {
     top:25px;

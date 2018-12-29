@@ -324,8 +324,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     handleError(): any {
         this.message = 'something went wrong';
     }
-    
-    
+
+
     /**
      * @param  {} id
      */

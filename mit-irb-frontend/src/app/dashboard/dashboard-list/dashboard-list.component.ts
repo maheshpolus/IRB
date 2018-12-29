@@ -103,6 +103,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.lastClickedTab = data;
             }
         });
+        if (this._sharedDataService.searchData != null) {
+            this.requestObject = this._sharedDataService.searchData;
+            this.isAdvancesearch = true;
+        }
         if (this.lastClickedTab === 'EXEMPT') {
             this.getExemptListData(this.lastClickedTab);
         } else {
@@ -255,6 +259,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.personId = this.userDTO.personID;
         this.requestObject.personRoleType = this.userDTO.role;
         this.requestObject.dashboardType = currentTab;
+        this._sharedDataService.searchData = this.requestObject;
         this._dashboardService.getIrbList(this.requestObject).subscribe(data => {
             this.result = data || [];
             if (this.result != null) {
@@ -391,6 +396,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.exemptParams = {};
         }
         this._sharedDataService.changeCurrentTab(currentTab);
+        this._sharedDataService.searchData = this.requestObject;
         this.exemptParams.personId = this.userDTO.personID;
         this.exemptParams.personRoleType =
             (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN') ? 'IRB_ADMIN' : this.userDTO.role;

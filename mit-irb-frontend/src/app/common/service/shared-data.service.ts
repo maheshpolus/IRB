@@ -15,6 +15,8 @@ export class SharedDataService {
   public currentTab = new BehaviorSubject<any>(null);
   currentTabVariable = this.currentTab.asObservable();
 
+  public searchData: any = null;
+
   getGeneralInfo() {
     return this.generalInfo;
   }

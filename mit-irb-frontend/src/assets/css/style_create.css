@@ -2263,6 +2263,9 @@ input:disabled,textarea:disabled{
 {
     color:#007bff;
 }
+.logout {
+    margin: 200px;
+}
 
 
 

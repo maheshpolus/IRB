@@ -1,21 +1,19 @@
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { IrbComponent } from './irb/irb.component';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
-import { AuthGuard } from './common/service/auth-guard.service';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
-
 import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
-import { ElasticService } from './common/service/elastic.service';
-import { AppModule } from './app.module';
+import { LogoutComponent } from './login/logout.component';
 
 const appRoutes = [
    { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
     // { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
+    { path: 'logout', component: LogoutComponent },
     {
         path: 'irb', component: IrbComponent, // canActivate: [AuthGuard],
         children: [

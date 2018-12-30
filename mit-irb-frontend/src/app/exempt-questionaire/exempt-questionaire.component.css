@@ -6,12 +6,18 @@
    margin-left: 36px; 
 }
 .welcome-table-border {
-    border:1px solid #a92034;
+    /* border:1px solid #a92034; */
 }
-.welcome-table-border tr {
+.bd-bottom {
     border-bottom:1px solid #a92034;
 }
 .welcome-table-border td {
     border-right:1px solid #a92034;
     padding: 10px;
+}
+.no-bd-right{
+    border:none !important;
+}
+.mg-top{
+    margin-top:15px;
 }

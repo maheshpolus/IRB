@@ -316,6 +316,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     showAdvanceSearch() {
         this.isAdvancesearch = !this.isAdvancesearch;
         this.isAdvancsearchPerformed = false;
+        this._sharedDataService.searchData = null;
     }
 
     /** assigns values of selected result from elastic search results

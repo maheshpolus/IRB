@@ -1058,12 +1058,16 @@ ul.sb-results-dropdown-menu > li:last-child {
     right: 20px!important;
 }
 .welcome-text {
+    color:#040404;
     text-align: justify;
     line-height: 25px;
     font-weight: 500;
     font-style: normal!important;
-    font-size: 18px;
+    font-size: 16px;
 
+}
+.welcome-text-color{
+    color:#040404;
 }
 .proceed-btn-align {
     text-align: center;

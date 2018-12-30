@@ -82,5 +82,10 @@
 				</div>
 			</div>
 		</div>
+		</div>
 	</div>
+	<div class="col-sm-12" *ngIf="paginatedExemptList?.length == 0 || paginatedExemptList == undefined">
+			<span>No Exempt Studies</span>
+	</div>
+
 </div>

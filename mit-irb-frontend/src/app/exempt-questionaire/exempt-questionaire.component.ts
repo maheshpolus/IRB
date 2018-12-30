@@ -50,6 +50,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     ApproveRejectHeader = '';
     isApprovedAlert = false;
     isQuestionaireSubmitted = false;
+    showMore = false;
     isActionByPi = false;
     showConfirmationDetails = true;
     isRejectedAlert = false;
@@ -867,7 +868,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                             }
                             this.requestObject.irbExemptForm = this.result.irbExemptForm;
                                if ( this.result.irbExemptForm.exemptQuestionList != null) {
-                        			this.exemptQuestionList = this.result.irbExemptForm.exemptQuestionList;
+                                   this.exemptQuestionList = this.result.irbExemptForm.exemptQuestionList;
                     }
                             this.isViewMode = true;
                         }

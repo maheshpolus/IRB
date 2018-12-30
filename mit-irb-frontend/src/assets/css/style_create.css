@@ -2254,6 +2254,15 @@ input:disabled,textarea:disabled{
 {
     margin-left: 15px !important;
 }
+.submit-alert
+{
+    margin-left: 15px !important;
+    text-align: center;
+}
+.read-more span
+{
+    color:#007bff;
+}
 
 
 

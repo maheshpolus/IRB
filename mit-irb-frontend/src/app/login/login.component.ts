@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Idle } from '@ng-idle/core';
 import { LoginService } from './login.service';
 
 @Component( {
@@ -15,10 +16,11 @@ export class LoginComponent{
     username: String;
     password: String;
 
-    constructor( private _loginService: LoginService, private _router: Router ) {
+    constructor(  private idle: Idle, private _loginService: LoginService, private _router: Router ) {
         if (sessionStorage.getItem('ActivatedUser') != null) {
             this._router.navigate( ['/irb/dashboard'] );
         }
+        this.idle.stop();
     }
 
     login() {
@@ -32,6 +34,7 @@ export class LoginComponent{
                 /**update ActivatedUser with logged in user once login service completed */
                 sessionStorage.setItem('ActivatedUser', this.result.userName);
                 if ( this.result != null ) {
+                    this.idle.watch();
                     this._router.navigate( ['/irb/dashboard'] );
                 }
             },

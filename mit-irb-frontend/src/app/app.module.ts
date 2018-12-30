@@ -11,6 +11,9 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'ng2-toastr';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppRoutingModule } from './app-routing.module';
+import { AppCommonModule } from './common/common/common.module';
+import { NgIdleKeepaliveModule } from "@ng-idle/keepalive";
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -24,6 +27,7 @@ import { IrbComponent } from './irb/irb.component';
 import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
 import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
 import { ExemptCardComponent } from './dashboard/dashboard-list/exempt-card/exempt-card.component';
+import { LogoutComponent } from "./login/logout.component";
 
 import { AuthGuard } from './common/service/auth-guard.service';
 import { ElasticService } from './common/service/elastic.service';
@@ -34,10 +38,9 @@ import { DashboardResolverService } from './common/service/dashboard-resolver.se
 import { IrbViewService } from './irb-view/irb-view.service';
 import { PiElasticService } from './common/service/pi-elastic.service';
 import { SharedDataService } from './common/service/shared-data.service';
+import { HeaderService } from './common/service/header.service';
 import { FilterPipe } from './common/directives/filter.pipe';
 import { KeyPressEvent } from './common/directives/keyPressEvent.component';
-import { AppRoutingModule } from './app-routing.module';
-import { AppCommonModule } from './common/common/common.module';
 import { CommitteeCardComponent } from './dashboard/dashboard-list/committee-card/committee-card.component';
 import { ScheduleCardComponent } from './dashboard/dashboard-list/schedule-card/schedule-card.component';
 
@@ -62,6 +65,7 @@ enableProdMode();
         FilterPipe,
         CommitteeCardComponent,
         ScheduleCardComponent,
+        LogoutComponent
 
     ],
     imports: [
@@ -77,6 +81,7 @@ enableProdMode();
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
         BrowserAnimationsModule,
+        NgIdleKeepaliveModule.forRoot(),
         ToastModule.forRoot(),
         NgbModule.forRoot()
     ],
@@ -84,7 +89,7 @@ enableProdMode();
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
         SharedDataService,
-        KeyPressEvent],
+        KeyPressEvent, HeaderService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1433,6 +1433,7 @@ form-check-label {
     display: block;
     margin-top: 12px !important;
     margin: auto;
+    display: inline-block;
 }
 .list-view
 {
@@ -1637,8 +1638,8 @@ div
     font-size: 14px;
     /*! text-align: left; */
     padding: 14px 0 14px;
-    display: block;
-    margin-top: 0px !important;
+    display: inline-block;
+    margin-top: 2px !important;
     margin: auto;
     text-align: center;
 }

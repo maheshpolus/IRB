@@ -56,6 +56,8 @@
 								'suspended': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='302'||
 													irbHeaderDetails.PROTOCOL_STATUS_CODE== '308'||
 													irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
+													<i class="fa fa-exclamation-triangle ml-10" *ngIf="irb.IS_NEW_RULE=='N'" 
+									title="Follows OLD-RULE" aria-hidden="true"></i>
 						</div>
 
 						<div class="i-icon-top">

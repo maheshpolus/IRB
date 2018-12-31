@@ -20,7 +20,8 @@ public class ReadPropertyFile {
 	    public static String getProperty(String key,String propertyFile) throws IOException {
 	        if (props == null || (!propertyFile.equalsIgnoreCase(propertyFileName)) ) {
 	            synchronized (ReadPropertyFile.class) {
-	                if (props == null || (!propertyFile.equalsIgnoreCase(propertyFileName))) {
+	                if (props == null || (!propertyFile.equalsIgnoreCase("/"+propertyFileName))) 
+	                { 
 	                    props = loadProperties(propertyFile);
 	                    propertyFileName = propertyFile; 
 	                }
@@ -37,16 +38,17 @@ public class ReadPropertyFile {
 	     */
 	    private static Properties loadProperties(String propertyFile) throws IOException {	 
 	        InputStream stream = null;
-	        try {
+	        try {   System.out.println("in loadProperties method");
 	                props = new Properties();
-	                stream = new ReadPropertyFile().getClass().getResourceAsStream(propertyFile);
+	                stream = new ReadPropertyFile().getClass().getResourceAsStream("/genericSQL.properties");
 	                props.load( stream );
+	                System.out.println(stream);
 	            
 	        } finally {
 	            try {
 	                stream.close();
 	            } catch (Exception ex) {	                
-	                         
+	            	 System.out.println(ex);        
 	            }
 	        }
 	        return props;

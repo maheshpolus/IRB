@@ -15,11 +15,17 @@
 	<!-- Scans the classpath for annotated components -->
 	<context:component-scan base-package="org.mit.irb.*" />
 	<context:property-placeholder location="classpath:mit-irb.properties" />
+	<context:property-placeholder location="classpath:genericSQL.properties" />
+	<context:property-placeholder location="classpath:mysqlSQL.properties" />
+	<context:property-placeholder location="classpath:oracleSQL.properties" />
 	<bean id="dbProperties"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
+				<value>classpath:genericSQL.properties</value>
 				<value>classpath:mit-irb.properties</value>
+				<value>classpath:mysqlSQL.properties</value>
+				<value>classpath:oracleSQL.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -156,5 +162,4 @@
 	
 	<!-- Configure bean to convert JSON to POJO and vice versa -->
 	<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-	</bean>
-</beans>
+	</bean></beans>

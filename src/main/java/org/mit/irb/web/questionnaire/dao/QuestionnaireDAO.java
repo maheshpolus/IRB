@@ -585,7 +585,6 @@ public class QuestionnaireDAO {
 		ArrayList<HashMap<String, Object>> output = new ArrayList<HashMap<String, Object>>();
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
-
 			output = dbEngine.executeQuery(inParam, "GET_ALL_QUESTIONNAIRE");	
 		} catch (Exception e) {
 			logger.error("Exception in getAllQuestionnaire " + e.getMessage());

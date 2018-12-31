@@ -12,11 +12,12 @@
 					</div>
 					<div *ngIf="isQuestionaireSubmitted">
 						<div *ngFor="let exemptQuestion of exemptQuestionList let i=index" class="col-12 exempt-description">
-								<div *ngIf="i==1 || showMore == true">
-								<h6>{{exemptQuestion.CATEGORY}}</h6>
-								{{exemptQuestion.CATEGORY_DESC}}
-								<hr>
-								<div class="pdf read-more" *ngIf="exemptQuestionList?.length > 1"> <span *ngIf="showMore==false"(click)="showMore=true">Read More...</span><span *ngIf="showMore==true && i==exemptQuestionList?.length-1"(click)="showMore=false">Read Less</span></div>
+							<div *ngIf="i==1 || showMore == true">
+							<h6>{{exemptQuestion.CATEGORY}}</h6>
+							{{exemptQuestion.CATEGORY_DESC}}
+							
+							<div class="pdf read-more" *ngIf="exemptQuestionList?.length > 1"> <span *ngIf="showMore==false"(click)="showMore=true">Read More...</span><span *ngIf="showMore==true && i==exemptQuestionList?.length-1" (click)="showMore=false">Read Less</span></div>
+							<hr *ngIf="showMore==true && i!=exemptQuestionList?.length-1" >
 						</div>
 						</div>
 						<div class="col-12">

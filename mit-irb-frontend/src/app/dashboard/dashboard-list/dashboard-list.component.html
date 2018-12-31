@@ -5,7 +5,7 @@
 								<a (click)="getIrbListData('ACTIVE')">Active Protocols</a>
 					</li>
 					<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}">
-						<a (click)="getIrbListData('INPROGRESS')">In Progress</a>
+						<a (click)="getIrbListData('INPROGRESS')">In Progress Protocols</a>
 					</li>
 					 <li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
 						<a (click)="getIrbListData('ALL')">All Protocols</a>
@@ -17,7 +17,7 @@
 						<a (click)="getIrbListData('DRAFT')">In Progress</a>
 					</li> -->
 					<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
-						<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>
+						<a (click)="getExemptListData('EXEMPT')">Exempt Evaluations</a>
 					</li>
 					<span>
 						<a (click)="showAdvanceSearch()">
@@ -43,7 +43,7 @@
 				<a (click)="getIrbListData('REVIEWER')">Reviewer</a>
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
-				<a (click)="getExemptListData('EXEMPT')">Exempt Determinations</a>
+				<a (click)="getExemptListData('EXEMPT')">Exempt Evaluations</a>
 			</li>
 			<li [ngClass]="{activenav:(lastClickedTab == 'COMMITTEE')}">
 				<a (click)="getCommitteeScheduleListData('COMMITTEE')">Committees</a>

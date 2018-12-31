@@ -67,20 +67,41 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 	@Override
 	public CommonVO getEvaluateMessage(IRBExemptForm exemptForm) {
 		CommonVO vo= new CommonVO();
+		boolean checkIsExempt = true;
+		boolean checkOther = false;
 		ArrayList<HashMap<String, Object>> questionList = new ArrayList<>();
+		ArrayList<HashMap<String, Object>> nonExemptCategoryList = new ArrayList<>();
+		ArrayList<HashMap<String, Object>> exemptCategoryList = new ArrayList<>();
+		ArrayList<HashMap<String, Object>> otherCategoryList = new ArrayList<>();
 		questionList = irbExemptProtocolDao.getExemptMsg(exemptForm);
-		vo.setExemptQuestionList(questionList);
-		if(!questionList.isEmpty()){
-			int questId =Integer.parseInt(questionList.get(0).get("QUESTION_ID").toString());
-			int questIdFromDB= 0;
-			if(questId== questIdFromDB){
-				vo.setIsExemptGranted("O");
-			} else {
-				vo.setIsExemptGranted("N");
+		for(HashMap<String, Object> answerDetails: questionList){
+			if(answerDetails.get("IS_EXEMPT_FLAG").equals("N")){
+				checkIsExempt = false;
+				nonExemptCategoryList.add(answerDetails);
+			} else if(answerDetails.get("IS_EXEMPT_FLAG").equals("Y")){
+				exemptCategoryList.add(answerDetails);
+			} /*else{
+					if(answerDetails.get("QUESTION_ID").toString().equals("0")){
+						vo.setIsExemptGranted("O");
+						break;
+					}
+			}*/else if (answerDetails.get("IS_EXEMPT_FLAG").equals("O")){
+				checkOther =true;
+				otherCategoryList.add(answerDetails);
 			}
-		} else {
+		}
+		if(checkOther) {
+			vo.setIsExemptGranted("O");
+			vo.setExemptQuestionList(otherCategoryList);
+			return vo;
+		}
+		if(checkIsExempt == true){
 			vo.setIsExemptGranted("Y");
-		} 
+			vo.setExemptQuestionList(exemptCategoryList);			
+		} else{
+			vo.setIsExemptGranted("N");
+			vo.setExemptQuestionList(nonExemptCategoryList);
+		}
 		return vo;
 	}
 
@@ -191,6 +212,10 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 		irbExemptForm.setExemptQuestionnaireAnswerHeaderId(questionnaireHeaderId);
 		ArrayList<HashMap<String, Object>> questionArrayList = new ArrayList<>();
 		boolean isSubmit = isSubmit(questionnaireInfobean); 
+		CommonVO commonVO = new CommonVO();
+		boolean checkIsExempt = true;
+		ArrayList<HashMap<String, Object>> nonExemptCategoryList = new ArrayList<>();
+		ArrayList<HashMap<String, Object>> exemptCategoryList = new ArrayList<>();
 		if(isQuestionnaireComplete(questionnaireInfobean) && isSubmit){
 			irbExemptProtocolDao.irbExemptFormActionLog(irbExemptForm.getExemptFormID(), irbExemptForm.getActionTypesCode(), irbExemptForm.getComment(), irbExemptForm.getStatusCode(), irbExemptForm.getUpdateUser(),irbExemptForm.getNotificationNumber(),personDTO);
 		}
@@ -201,24 +226,34 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 		questionArrayList = getExemptMsg(irbExemptForm);	
 		irbExemptForm.setStatusCode(irbExemptForm.getStatusCode());
 		if(!questionArrayList.isEmpty()){
-			int questId =Integer.parseInt(questionArrayList.get(0).get("QUESTION_ID").toString());
-			int questIdFromDB= 0;
-				if(questId== questIdFromDB){
-					irbExemptForm.setIsExempt("O");
-				} else {
-					irbExemptForm.setIsExempt("N");
+			for(HashMap<String, Object> answerDetails: questionArrayList){
+				if(answerDetails.get("IS_EXEMPT_FLAG").equals("N")){
+					checkIsExempt = false;
+					nonExemptCategoryList.add(answerDetails);
+				} else if(answerDetails.get("IS_EXEMPT_FLAG").equals("Y")){
+					exemptCategoryList.add(answerDetails);
+				} else{
+						if(answerDetails.get("QUESTION_ID").toString().equals("0")){
+							irbExemptForm.setIsExempt("O");
+							break;
+						}
 				}
-		}else{
-			irbExemptForm.setIsExempt("Y");
-		} 
+			}
+			if(checkIsExempt == true){
+				irbExemptForm.setIsExempt("Y");
+				commonVO.setExemptQuestionList(exemptCategoryList);
+			} else{
+				irbExemptForm.setIsExempt("N");
+				commonVO.setExemptQuestionList(nonExemptCategoryList);
+			}
+		}
 		savePersonExemptForm(irbExemptForm,"U");
-		CommonVO commonVO = new CommonVO();
 		String moduleItemsId = getModuleItemId(irbExemptForm.getPersonId(), irbExemptForm);
 		QuestionnaireDto questionnairesDto =  questionnaireService.getQuestionnaireDetails(KeyConstants.COEUS_MODULE_PERSON, moduleItemsId,irbExemptForm.getExemptQuestionnaireAnswerHeaderId());
 		IRBViewProfile irbViewProfile = irbExemptProtocolDao.getPersonExemptForm(irbExemptForm.getExemptFormID(),personDTO.getPersonID());
 		if(irbViewProfile != null && irbViewProfile.getIrbExemptFormList() != null){
 			irbExemptForm = irbViewProfile.getIrbExemptFormList().get(0);
-		}	
+		}
 		commonVO.setQuestionnaireDto(questionnairesDto);
 		commonVO.setIrbExemptForm(irbExemptForm);
 		return commonVO;

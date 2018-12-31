@@ -1,5 +1,8 @@
 package org.mit.irb.web.common.pojo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class IRBExemptForm {
 
 	private Integer exemptFormID;
@@ -31,6 +34,24 @@ public class IRBExemptForm {
 	private boolean loggedInUserPI;
 	private Integer notificationNumber;
 	private Integer submittedOnce;
+	private String createdUser;
+	private ArrayList<HashMap<String, Object>> exemptQuestionList;
+	
+	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
+		return exemptQuestionList;
+	}
+
+	public void setExemptQuestionList(ArrayList<HashMap<String, Object>> exemptQuestionList) {
+		this.exemptQuestionList = exemptQuestionList;
+	}
+
+	public String getCreatedUser() {
+		return createdUser;
+	}
+
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
 
 	public String getCheckListAcType() {
 		return checkListAcType;

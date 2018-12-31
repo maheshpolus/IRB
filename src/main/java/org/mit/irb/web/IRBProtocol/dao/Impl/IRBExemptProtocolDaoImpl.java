@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.dao.IRBExemptProtocolDao;
+import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
+import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -22,6 +24,7 @@ import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.notification.ExemptProtocolEmailNotification;
+import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,6 +40,10 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 	
 	@Autowired
 	ExemptProtocolEmailNotification exemptProtocolEmailNotification;
+	
+	@Autowired
+	IRBExemptProtocolService irbExemptProtocolService;
+	
 	
 	DBEngine dbEngine;
 	Logger logger = Logger.getLogger(IRBExemptProtocolDaoImpl.class.getName());
@@ -247,6 +254,9 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				if (hmap.get("PERSON_NAME") != null) {
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
 				}
+				if(hmap.get("CREATE_PERSON_ID") != null){
+					exemptForm.setCreatedUser((String) hmap.get("CREATE_PERSON_ID"));
+				}
 				if (hmap.get("IS_SUBMITTED_ONCE") != null) {
 					exemptForm.setSubmittedOnce(Integer.parseInt(hmap.get("IS_SUBMITTED_ONCE").toString()));
 				}
@@ -358,6 +368,9 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				if (hmap.get("PERSON_NAME") != null) {
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
 				}
+				if(hmap.get("CREATE_PERSON_ID") != null){
+					exemptForm.setCreatedUser((String) hmap.get("CREATE_PERSON_ID"));
+				}
 				if (hmap.get("EXEMPT_TITLE") != null) {
 					exemptForm.setExemptTitle((String) hmap.get("EXEMPT_TITLE"));
 				}
@@ -392,7 +405,13 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 					exemptForm.setStatus((String) hmap.get("EXEMPT_STATUS"));
 				}
 				if (hmap.get("EXEMPT_STATUS_CODE") != null) {
-					exemptForm.setStatusCode((String) hmap.get("EXEMPT_STATUS_CODE"));
+					String exemptStatusCode = (String) hmap.get("EXEMPT_STATUS_CODE");
+					CommonVO commonVO = new CommonVO();
+					exemptForm.setStatusCode(exemptStatusCode);
+					if(!exemptStatusCode.equals("1")){
+						commonVO = irbExemptProtocolService.getEvaluateMessage(exemptForm);
+						exemptForm.setExemptQuestionList(commonVO.getExemptQuestionList());
+					}
 				}
 				if (hmap.get("IS_EXEMPT_GRANTED") != null) {
 					exemptForm.setIsExempt((String) hmap.get("IS_EXEMPT_GRANTED"));
@@ -550,7 +569,9 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 			if (notificationNumber != null) {
 				logger.info("Sending Email Notification with status code: " + notificationNumber);
 				sendingExemptNotifications(formId, comment, personDTO.getPersonID(), notificationNumber);
-				sendingExemptNotifications(formId, null, personDTO.getPersonID(), adminNotificationNumber);
+				if(notificationNumber ==702){
+					sendingExemptNotifications(formId, null, personDTO.getPersonID(), adminNotificationNumber);
+				}
 			}
 		} catch (Exception e) {
 			logger.error("Error in methord action log exempt questionnaire", e);

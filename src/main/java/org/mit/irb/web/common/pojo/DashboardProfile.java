@@ -15,6 +15,15 @@ public class DashboardProfile {
 	private List<IRBViews> irbViews;
 	private SnapshotData snapshotData;
 	private ArrayList<HashMap<String, Object>> dashBoardDetailMap;
+	private ArrayList<HashMap<String, Object>> dashboardExemptCardDetails;
+	
+	public ArrayList<HashMap<String, Object>> getDashboardExemptCardDetails() {
+		return dashboardExemptCardDetails;
+	}
+
+	public void setDashboardExemptCardDetails(ArrayList<HashMap<String, Object>> dashboardExemptCardDetails) {
+		this.dashboardExemptCardDetails = dashboardExemptCardDetails;
+	}
 
 	public List<IRBViews> getIrbViews() {
 		return irbViews;

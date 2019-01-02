@@ -149,8 +149,14 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("AV_SUMMARY_TYPE ", DBEngineConstants.TYPE_STRING, av_summary_type));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
+		ArrayList<HashMap<String, Object>> exemptCardResult = null;
 		try {
 			result = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
+			if(av_summary_type.equals("REVISION_REQ")){
+				inputParam.remove(2);
+				inputParam.add(new InParameter("AV_SUMMARY_TYPE ", DBEngineConstants.TYPE_STRING, "EXEMPT_REQ"));
+				exemptCardResult = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
+			}	
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getExpandedSnapShotView"+ e);
@@ -163,6 +169,8 @@ public class DashboardDaoImpl implements DashboardDao{
 		}
 		if (result != null && !result.isEmpty()) {
 			profile.setDashBoardDetailMap(result);
+		} if (exemptCardResult != null && !exemptCardResult.isEmpty()) {
+			profile.setDashboardExemptCardDetails(exemptCardResult);
 		}
 		return profile;
 	}

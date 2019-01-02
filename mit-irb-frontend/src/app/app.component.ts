@@ -73,10 +73,12 @@ export class AppComponent {
             if (data === true) {
                 this._sharedDataService.changeCurrentTab(null);
                 this._sharedDataService.searchData = null;
+                sessionStorage.removeItem('ActivatedUser');
                 this.idle.stop();
-                this._router.navigate(['/logout']);
+                this._router.navigate(['/login']);
             } else {
-                this._router.navigate(['/irb/dashboard']);
+               // this._router.navigate(['/irb/dashboard']);
+                this._router.navigate(['/logout']);
             }
         });
     }

@@ -234,7 +234,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             this.continueBtnClicked = true;
         }
         if (this.isViewMode == null || this.isViewMode === undefined || this.isViewMode === '1' || this.isViewMode === '5') {
-            this.isViewMode = false;
+             if (this.isViewMode === '5' && this.userDTO.personID === this.requestObject.irbExemptForm.createdUser) {
+                this.isViewMode = true;
+            } else {
+                this.isViewMode = false;
+            }
         } else {
             this.isViewMode = true;
             this.continueBtnClicked = true;
@@ -527,6 +531,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                             = this.GetFormattedDateFromString(this.requestObject.irbExemptForm.exemptProtocolEndDate);
                     }
                     if (this.requestObject.irbExemptForm.statusCode === '2' || this.requestObject.irbExemptForm.statusCode === '3') {
+                        this.isViewMode = true;
+                    }
+                      if (this.requestObject.irbExemptForm.statusCode === '5'
+                        && this.userDTO.personID === this.requestObject.irbExemptForm.createdUser) {
                         this.isViewMode = true;
                     }
                     this.updateExemptQuestionnaire();
@@ -1190,7 +1198,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     approveConfirmClick() {
         this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-        if (this.requestObject.personDTO.role === 'PI') {
+               if (this.requestObject.personDTO.role === 'PI' ||this.requestObject.personDTO.role === 'DEPT_ADMIN') {
             if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                 this.requestObject.irbExemptForm.notificationNumber = 706;
             }
@@ -1214,7 +1222,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     rejectConfirmClick() {
         this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
-        if (this.requestObject.personDTO.role === 'PI') {
+        if (this.requestObject.personDTO.role === 'PI' ||this.requestObject.personDTO.role === 'DEPT_ADMIN') {
             if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                 this.requestObject.irbExemptForm.notificationNumber = 704;
             }

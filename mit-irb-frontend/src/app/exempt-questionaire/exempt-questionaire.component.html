@@ -11,35 +11,35 @@
 						<span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
 					</div>
 					<div *ngIf="isQuestionaireSubmitted">
-						<div *ngFor="let exemptQuestion of exemptQuestionList let i=index" class="col-12 exempt-description">
-							<div *ngIf="i==1 || showMore == true">
-							<h6>{{exemptQuestion.CATEGORY}}</h6>
-							{{exemptQuestion.CATEGORY_DESC}}
-							
-							<div class="pdf read-more" *ngIf="exemptQuestionList?.length > 1"> <span *ngIf="showMore==false"(click)="showMore=true">Read More...</span><span *ngIf="showMore==true && i==exemptQuestionList?.length-1" (click)="showMore=false">Read Less</span></div>
-							<hr *ngIf="showMore==true && i!=exemptQuestionList?.length-1" >
-						</div>
-						</div>
-						<div class="col-12">
-							<div class="row">
-									<div class="col-4 Welcome-alert alert alert-warning submit-alert pdf"  data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">
-											
-											<i class="fa fa-info-circle" aria-hidden="true"></i>
-											 <strong>Key elements of Exempt Evaluation</strong>
-										</div>
-										<div class="col-3 Welcome-alert alert alert-warning pdf" data-toggle="modal" data-target="#confirmModal" (click)="showConfirmationDetails = false">
+							<div *ngFor="let exemptQuestion of exemptQuestionList let i=index" class="col-12 exempt-description">
+								<div *ngIf="i==0 || showMore == true">
+								<h6>{{exemptQuestion.CATEGORY}}</h6>
+								{{exemptQuestion.CATEGORY_DESC}}
+								
+								<div class="pdf read-more" *ngIf="exemptQuestionList?.length > 1"> <span *ngIf="showMore==false"(click)="showMore=true">Read More...</span><span *ngIf="showMore==true && i==exemptQuestionList?.length-1" (click)="showMore=false">Read Less</span></div>
+								<hr *ngIf="showMore==true && i!=exemptQuestionList?.length-1" >
+							</div>
+							</div>
+							<div class="col-12">
+								<div class="row">
+										<div class="col-4 Welcome-alert alert alert-warning submit-alert pdf"  data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">
 												
-												<i class="fa fa-info-circle" aria-hidden="true">
-													 </i><strong>View Confirmation</strong>
+												<i class="fa fa-info-circle" aria-hidden="true"></i>
+												 <strong>Key elements of Exempt Evaluation</strong>
 											</div>
-											<div class="col-4 Welcome-alert alert alert-warning pdf">
+											<div class="col-3 Welcome-alert alert submit-alert alert-warning pdf" data-toggle="modal" data-target="#confirmModal" (click)="showConfirmationDetails = false">
 													
-													<i class="fa fa-download" aria-hidden="true"></i>
-													<strong>Generate Determination</strong>
+													<i class="fa fa-info-circle" aria-hidden="true">
+														 </i><strong> View Confirmation</strong>
 												</div>
+												<div class="col-4 Welcome-alert submit-alert alert alert-warning pdf">
+														
+														<i class="fa fa-download" aria-hidden="true"></i>
+														<strong>Generate Determination</strong>
+													</div>
+									</div>
 								</div>
-							</div>
-							</div>
+								</div>
 					<div class="Welcome-msg">
 						<p [innerHTML]="ABOUT_MESSAGE">
 						</p>

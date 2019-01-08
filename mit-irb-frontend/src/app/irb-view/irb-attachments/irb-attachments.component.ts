@@ -61,6 +61,7 @@ export class IrbAttachmentsComponent implements OnInit {
             const blob = new Blob( [data], { type: data.type } );
             a.href = URL.createObjectURL( blob );
             a.download = attachment.FILE_NAME;
+            document.body.appendChild(a);
             a.click();
 
         },

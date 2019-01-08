@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone, AfterViewInit, ChangeDetectionStrategy, Chan
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { ActivatedRoute, Router } from '@angular/router';
+import {Location} from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -181,7 +182,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     };
     isStayOnSamePage = false;
 
-    constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
+    constructor(private _location: Location,
+            private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
         private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
         private _router: Router, private _sharedDataService: SharedDataService, public keyPressEvent: KeyPressEvent,
@@ -1296,8 +1298,24 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
 
     returnToExemptList(event) {
-        event.preventDefault();
-        this._sharedDataService.changeCurrentTab('EXEMPT');
-        this._router.navigate(['/irb/dashboard']);
+        // event.preventDefault();
+        // this._sharedDataService.changeCurrentTab('EXEMPT');
+        // this._router.navigate(['/irb/dashboard']);
+        this._location.back();
+    }
+
+    generateCorrespondence() {
+        const obj = {irbExemptForm: this.requestObject.irbExemptForm};
+        this._exemptQuestionaireService.generateCorrespondence(obj).subscribe( data => {
+            const a = document.createElement( 'a' );
+            const blob = new Blob( [data], { type: data.type} );
+            a.href = URL.createObjectURL( blob );
+            a.download = 'Exempt Determination - ' + this.requestObject.irbExemptForm.exemptFormID;
+            document.body.appendChild(a);
+            a.click();
+
+        },
+            error => console.log( 'Error downloading the file.'),
+            () => console.log( 'OK' ) );
     }
 }

@@ -115,9 +115,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.lastClickedTab = data;
             }
         });
-        if (this._sharedDataService.searchData != null) {
+        if (this._sharedDataService.isAdvancesearch != null) {
             this.requestObject = this._sharedDataService.searchData;
             this.isAdvancesearch = true;
+            this.isAdvancsearchPerformed = true;
         }
         if (this.lastClickedTab === 'EXEMPT') {
             this.getExemptListData(this.lastClickedTab);
@@ -328,8 +329,9 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /*show or hide advance search fields*/
     showAdvanceSearch() {
         this.isAdvancesearch = !this.isAdvancesearch;
+        this._sharedDataService.isAdvancesearch = this.isAdvancesearch;
         this.isAdvancsearchPerformed = false;
-        this._sharedDataService.searchData = null;
+       // this._sharedDataService.searchData = null;
     }
 
     /** assigns values of selected result from elastic search results
@@ -515,6 +517,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptParams.exemptFormStartDate = null;
         this.exemptParams.exemptFormEndDate = null;
         this.getExemptListData('EXEMPT');
+        this._sharedDataService.searchData = null;
     }
 
 

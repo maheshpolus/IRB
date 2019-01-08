@@ -48,4 +48,15 @@ downloadExemptProtocolChecklist(checklistId) {
   approveOrDisapproveAction(params) {
     return this._http.post('/mit-irb/approveOrDisapproveExemptProtocols', params);
   }
+  generateCorrespondence(params) {
+      const jsonObject = {
+          'commonVo': params,
+          'exemptFormId': null,
+          'personId': null
+        };
+      return this._http.get('/connect-stg/generateCorrespondence', {
+          headers: new HttpHeaders().set('jsonObject', JSON.stringify(jsonObject)),
+          responseType: 'blob'
+      });
+    }
 }

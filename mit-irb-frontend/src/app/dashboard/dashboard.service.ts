@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 
 @Injectable()
 export class DashboardService {
@@ -30,4 +30,15 @@ checkingPersonsRightToViewProtocol(params) {
   getProtocolStatusList(params) {
     return this._http.post('/connect-stg/getDashboardProtocolStatus', params);
   }
+  generateCorrespondence(exemptFormId, personID) {
+      const jsonObject = {
+        'commonVo': null,
+        'exemptFormId': exemptFormId,
+        'personId': personID
+      };
+      return this._http.get('/connect-stg/generateCorrespondence', {
+          headers: new HttpHeaders().set('jsonObject', JSON.stringify(jsonObject)),
+          responseType: 'blob'
+      });
+    }
 }

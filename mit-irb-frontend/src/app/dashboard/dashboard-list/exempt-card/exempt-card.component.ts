@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { DashboardService } from '../../dashboard.service';
+
 
 @Component( {
     selector: 'app-exempt-card',
@@ -25,7 +27,7 @@ export class ExemptCardComponent implements  OnChanges  {
       protocolCount = 10;
 
 
-    constructor( private _router: Router ) { }
+    constructor( private _router: Router, private _dashboardService: DashboardService ) { }
 
 
     ngOnChanges(changes) {
@@ -132,5 +134,20 @@ export class ExemptCardComponent implements  OnChanges  {
         this.paginatedExemptList = this.filteredExemptList.slice(pageNumber * this.paginationData.limit - this.paginationData.limit,
             pageNumber * this.paginationData.limit);
         document.getElementById('scrollToTop').scrollTop = 0;
+    }
+    
+    generateDetermination(exemptFormID) {
+        this._dashboardService.generateCorrespondence(exemptFormID, this.userDTO.personID).subscribe(data => {
+            const a = document.createElement( 'a' );
+            const blob = new Blob( [data], { type: data.type} );
+            a.href = URL.createObjectURL( blob );
+            a.download = 'Exempt Determination - ' + exemptFormID;
+            document.body.appendChild(a);
+            a.click();
+        },
+            error => {
+                console.log('Error in method getIrbListData()', error);
+            },
+        );
     }
 }

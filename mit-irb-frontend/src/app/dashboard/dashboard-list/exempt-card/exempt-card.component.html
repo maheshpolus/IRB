@@ -45,7 +45,7 @@
 						<p>Not Exempt-Pending Review</p>
 					</span>
 				</div>
-				<div class="col-md-7 col-sm-12 col-12 list-des">
+				<div class="col-md-6 col-sm-12 col-12 list-des">
 					<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
 					<div>
 						<div class="row">
@@ -73,10 +73,15 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+				<div class="col-md-3 col-sm-12 col-12 list-des button-responsive">
 					<a>
 						<button type="button" class="btn btn-outline-secondary button-view" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
 							<i class="fa fa-eye"></i>View
+						</button>
+					</a>
+					<a>
+						<button type="button" class="btn btn-outline-secondary button-view" (click)="generateDetermination(irb.exemptFormID)">
+							<i class="fa fa-download"></i>Determination
 						</button>
 					</a>
 				</div>

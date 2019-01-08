@@ -16,6 +16,7 @@ export class SharedDataService {
   currentTabVariable = this.currentTab.asObservable();
 
   public searchData: any = null;
+  public isAdvancesearch = false;
 
   getGeneralInfo() {
     return this.generalInfo;

@@ -27,4 +27,7 @@ loadCommitteeScheduleList() {
 checkingPersonsRightToViewProtocol(params) {
     return this._http.post('/mit-irb/checkingPersonsRightToViewProtocol', params);
   }
+  getProtocolStatusList(params) {
+    return this._http.post('/connect-stg/getDashboardProtocolStatus', params);
+  }
 }

@@ -37,6 +37,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         title: '',
         piName: '',
         protocolTypeCode: '',
+        protocolStatusCode: '',
         dashboardType: '',
         determination: '',
         exemptFormStartDate: '',
@@ -54,10 +55,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     paginatedIrbListData: any = [];
     exemptListData: any = [];
     roleType: string;
+    protocolStatus: string;
     direction: number;
     column: any;
     sortOrder = '1';
     sortField = 'UPDATE_TIMESTAMP';
+    protocolStatuses: any = [];
+    protocolStatusesCopy: any = [];
 
     /**elastic search variables */
     message = '';
@@ -71,6 +75,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     title: string;
     leadUnit: string;
     status: string;
+    statusSearchText = '';
     piName: string;
     expiry_date: string;
     elasticResultTab = false;
@@ -96,6 +101,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
         this.roleType = this.userDTO.role;
+        this._dashboardService.getProtocolStatusList(null).subscribe(data => {
+            this.result = data;
+            if (this.result.dashBoardDetailMap != null || this.result.dashBoardDetailMap !== undefined ) {
+            this.protocolStatuses = this.result.dashBoardDetailMap;
+            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+            }
+        });
         this._sharedDataService.currentTab.subscribe(data => {
             if (data == null) {
                 this.lastClickedTab = (this.roleType === 'ADMIN' || this.roleType === 'CHAIR') ? 'ALL' : 'ACTIVE';
@@ -253,7 +265,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.searchTextModel = '';
         this.lastClickedTab = currentTab;
         if (!this.isAdvancesearch) {
-            this.requestObject = { protocolTypeCode: '' };
+            this.requestObject = { protocolTypeCode: '' ,
+                                   determination: ''};
         }
         this._sharedDataService.changeCurrentTab(currentTab);
         this.requestObject.personId = this.userDTO.personID;
@@ -342,14 +355,18 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /** clear all fields in advance search and load orginal irb protocol list if none of the fields where empty*/
     clear() {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
-            this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '') {
-            this.requestObject.protocolNumber = '';
-            this.requestObject.title = '';
-            this.requestObject.piName = '';
-            this.requestObject.protocolTypeCode = '';
-            this.getIrbListData(this.lastClickedTab);
-            this.isAdvancsearchPerformed = false;
-        }
+        this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ||
+        this.requestObject.protocolStatusCode !== '') {
+        this.requestObject.protocolNumber = '';
+        this.requestObject.title = '';
+        this.requestObject.piName = '';
+        this.requestObject.protocolTypeCode = '';
+        this.requestObject.protocolStatusCode = '';
+        this.protocolStatus = '';
+        this.getIrbListData(this.lastClickedTab);
+        this.isAdvancsearchPerformed = false;
+        this._sharedDataService.searchData = null;
+    }
     }
 
     /**opens irb view module of a selected protocol
@@ -393,7 +410,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.noIrbList = false;
         this.lastClickedTab = currentTab;
         if (!this.isAdvancesearch) {
-            this.requestObject = { protocolTypeCode: '' };
+            this.requestObject = { protocolTypeCode: '',
+                                   determination: '' };
             this.exemptParams = {};
         }
         this._sharedDataService.changeCurrentTab(currentTab);
@@ -519,5 +537,28 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.paginatedIrbListData = this.irbListData.slice(pageNumber * this.paginationData.limit - this.paginationData.limit,
             pageNumber * this.paginationData.limit);
         document.getElementById('scrollToTop').scrollTop = 0;
+    }
+    openStatusModal() {
+        document.getElementById('openStatusModalButton').click();
+    }
+    statusSearchChange() {
+        if (!this.statusSearchText) {
+            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+        }
+        this.statusSearchText = this.statusSearchText.toLowerCase();
+        this.protocolStatusesCopy = this.protocolStatuses.filter( status => {
+            return status.PROTOCOL_STATUS.toLowerCase().includes(this.statusSearchText);
+          });
+    }
+    setProtocolStatus(protocolStatus) {
+        this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+        this.requestObject.protocolStatusCode = protocolStatus.PROTOCOL_STATUS_CODE;
+        this.protocolStatus = protocolStatus.PROTOCOL_STATUS;
+        this.statusSearchText = '';
+    }
+    clearStatusSearch(event) {
+        event.preventDefault();
+        this.statusSearchText = '';
+        this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
     }
 }

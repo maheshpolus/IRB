@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { IrbViewService } from '../irb-view.service';
 
@@ -20,7 +21,8 @@ export class IrbHeaderDetailComponent implements OnInit {
           protocolNumber: ''
   };
 
-  constructor(private router: Router, private _activatedRoute: ActivatedRoute, private _irbViewService: IrbViewService) {}
+  constructor(private location: Location,
+          private router: Router, private _activatedRoute: ActivatedRoute, private _irbViewService: IrbViewService) {}
 
   /** sets requestObject and call function to load header details */
   ngOnInit() {
@@ -53,5 +55,11 @@ export class IrbHeaderDetailComponent implements OnInit {
   /**sets expand and collapse boolean for header details */
   toggle() {
       this.isExpanded = !this.isExpanded;
+  }
+  
+  backClick(event) {
+      event.preventDefault();
+      // this.router.navigate(['/irb/dashboard']);
+      this.location.back();
   }
 }

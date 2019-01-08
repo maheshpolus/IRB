@@ -1,4 +1,11 @@
 <div class="headerPush"></div>
+<div class="row">
+		<div class="col-10"></div>
+		<div class="col-2 offset-md-4 exit-button">
+			<button type="button" class="btn btn-warning" (click)="returnToExemptList($event)" title="Close">
+				<i class="fa fa-times">&nbsp;</i>Exit</button>
+		</div>
+	</div>
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="container-fluid">
 	<section class="row sect-padding">
@@ -32,7 +39,7 @@
 													<i class="fa fa-info-circle" aria-hidden="true">
 														 </i><strong> View Confirmation</strong>
 												</div>
-												<div class="col-4 Welcome-alert submit-alert alert alert-warning pdf">
+												<div class="col-4 Welcome-alert submit-alert alert alert-warning pdf" (click)="generateCorrespondence()">
 														
 														<i class="fa fa-download" aria-hidden="true"></i>
 														<strong>Generate Determination</strong>
@@ -61,10 +68,10 @@
 								 class="pending-action active-en margin-fix">Not Exempt-Pending Review</span>
 							</div>
 						</div>
-						<div class="col-3 width-exempt searchBox display">
+						<!-- <div class="col-3 width-exempt searchBox display">
 							<a id="returnToDasboardLink" title="Back to Dashboard" (click)="returnToExemptList($event)">
 								<i class="fa fa-mail-reply">&nbsp;</i>Return to Dashboard</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				
@@ -301,7 +308,11 @@
 					 data-toggle="modal" data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="reject">Reject</button>
 					 <button *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'" class="btn btn-primary tab_btn" data-toggle="modal" data-target="#checklistModal"
 					 type="submit" (click)="showAddAttachmentPopUp($event)">Add/View Checklist</button>
-			
+					<div class="exit-button mg-left" style="display: inline;margin-left: 0">
+						<button type="button" style="margin-left: 0" class="btn btn-warning" (click)="returnToExemptList($event)" title="Close">
+							<i class="fa fa-times">&nbsp;</i>Exit</button>
+					</div>
+					
 				</section>
 			</div>
 		</div>

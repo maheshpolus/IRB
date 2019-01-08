@@ -33,14 +33,13 @@ export class HeaderComponent implements OnInit {
 
     logout() {
         this._loginService.logout().subscribe(data => {
-           // sessionStorage.removeItem('ActivatedUser');
+           this._sharedDataService.changeCurrentTab(null);
+           this._sharedDataService.searchData = null;
+           this._sharedDataService.isAdvancesearch = false;
             if (data === true) {
-                this._sharedDataService.changeCurrentTab(null);
-                this._sharedDataService.searchData = null;
                 sessionStorage.removeItem('ActivatedUser');
                 this._router.navigate(['/login']);
             } else {
-                // this._router.navigate(['/irb/dashboard']);
                 this._router.navigate(['/logout']);
             }
         });

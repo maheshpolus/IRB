@@ -108,7 +108,7 @@ public class DashboardDaoImpl implements DashboardDao{
 
 	@Override
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
-			String pi_name, String protocol_number,String protocol_type_code, String title) {
+			String pi_name, String protocol_number,String protocol_type_code, String title, String prtocolStatusCode) {
 		DashboardProfile profile = new DashboardProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -119,6 +119,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("TITLE", DBEngineConstants.TYPE_STRING, title));
 		inputParam.add(new InParameter("PI_NAME", DBEngineConstants.TYPE_STRING, pi_name));
 		inputParam.add(new InParameter("PROTOCOL_TYPE_CODE", DBEngineConstants.TYPE_STRING, protocol_type_code));
+		inputParam.add(new InParameter("AV_PROTOCOL_STATUS_CODE", DBEngineConstants.TYPE_STRING, prtocolStatusCode));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
@@ -192,6 +193,30 @@ public class DashboardDaoImpl implements DashboardDao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.info("SQLException in getDashboardProtocolType"+ e);
+		}
+		if (result != null && !result.isEmpty()) {
+			profile.setDashBoardDetailMap(result);
+		}
+		return profile;
+	}
+
+	@Override
+	public DashboardProfile getDashboardProtocolStatus() {
+		DashboardProfile profile = new DashboardProfile();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dBEngine.executeProcedure("GET_IRB_PROTOCOL_STATUS", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in getDashboardProtocolStatus"+ e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in getDashboardProtocolStatus"+ e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in getDashboardProtocolStatus"+ e);
 		}
 		if (result != null && !result.isEmpty()) {
 			profile.setDashBoardDetailMap(result);

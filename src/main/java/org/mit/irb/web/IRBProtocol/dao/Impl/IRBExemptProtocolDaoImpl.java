@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -411,6 +412,7 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 					if(!exemptStatusCode.equals("1")){
 						commonVO = irbExemptProtocolService.getEvaluateMessage(exemptForm);
 						exemptForm.setExemptQuestionList(commonVO.getExemptQuestionList());
+						exemptForm.setSubmissionDate(getExemptFormSubmissionDate(Integer.parseInt(hmap.get("IRB_PERSON_EXEMPT_FORM_ID").toString())));
 					}
 				}
 				if (hmap.get("IS_EXEMPT_GRANTED") != null) {
@@ -586,5 +588,24 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getExemptFormSubmissionDate(Integer exemptFormId) {
+		String exemptFormSubmissionDate = null;
+		try {
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			ArrayList<InParameter> inputParam = new ArrayList<>();
+			inputParam.add(new InParameter("AV_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER, exemptFormId));
+			outParam.add(new OutParameter("exemptFormSubmissionDate", DBEngineConstants.TYPE_STRING));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction(inputParam,"fn_irb_exemptform_submisn_date",
+					outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				exemptFormSubmissionDate = (String) hmResult.get("exemptFormSubmissionDate");
+			}
+		} catch (Exception e) {
+			logger.error("Exception in methord getExemptFormSubmissionDate", e);
+		}
+		return exemptFormSubmissionDate;
 	}
 }

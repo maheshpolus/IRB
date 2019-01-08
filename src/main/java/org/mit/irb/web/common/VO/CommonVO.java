@@ -81,6 +81,8 @@ public class CommonVO {
 	
 	private String protocolActionTypecode;
 	
+	private String protocolStatusCode;
+	
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -351,5 +353,13 @@ public class CommonVO {
 
 	public void setProtocolActionTypecode(String protocolActionTypecode) {
 		this.protocolActionTypecode = protocolActionTypecode;
+	}
+
+	public String getProtocolStatusCode() {
+		return protocolStatusCode;
+	}
+
+	public void setProtocolStatusCode(String protocolStatusCode) {
+		this.protocolStatusCode = protocolStatusCode;
 	}
 }

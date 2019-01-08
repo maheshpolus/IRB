@@ -29,6 +29,7 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbProtocolTitleMap;		
 	private ArrayList<HashMap<String, Object>> irbProtocolHistoryActionComments;		
 	private Integer userHasRightToViewProtocol;
+	private String trainingStatus;
 	
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
@@ -191,5 +192,13 @@ public class IRBViewProfile {
 
 	public void setUserHasRightToViewProtocol(Integer userHasRightToViewProtocol) {
 		this.userHasRightToViewProtocol = userHasRightToViewProtocol;
+	}
+
+	public String getTrainingStatus() {
+		return trainingStatus;
+	}
+
+	public void setTrainingStatus(String trainingStatus) {
+		this.trainingStatus = trainingStatus;
 	}	
 }

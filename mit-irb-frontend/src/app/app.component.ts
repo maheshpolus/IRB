@@ -15,11 +15,12 @@ import { SharedDataService } from './common/service/shared-data.service';
 export class AppComponent {
     message1: string;
     message: string;
+    header: string;
     timeout = false;
      expire = false;
     lastPing?: Date = null;
     idleState = 'Not started.';
-    SESSION_TIMEOUT_DEFAULT = 300; // in seconds
+    SESSION_TIMEOUT_DEFAULT = 5400; // in seconds
     SESSION_TIMEOUT_WARNING = 10; // in seconds
 
    constructor(private idle: Idle,
@@ -35,6 +36,7 @@ export class AppComponent {
         idle.onTimeout.subscribe(() => {
             this.timeout = true;
             this.expire = true;
+            this.header = 'Session Expired!';
             this.message = 'You have been logged out of the application due to extended period of inactivity.';
             // this._headerService.sessionExpired().subscribe(
             //         data => {
@@ -48,6 +50,7 @@ export class AppComponent {
         idle.onIdleStart.subscribe(() => {
              this.timeout = true;
              this.expire = false;
+             this.header = 'Session about to Expire';
              this.message = 'Your session is about to expire. Please click ok to continue working.';
        });
         // Regain session
@@ -68,17 +71,23 @@ export class AppComponent {
 
     logout() {
         this.timeout = false;
-        this._loginService.logout().subscribe(data => {
-            this._sharedDataService.changeCurrentTab(null);
-            this._sharedDataService.searchData = null;
-            this._sharedDataService.isAdvancesearch = false;
-            if (data === true) {
-                sessionStorage.removeItem('ActivatedUser');
-                this.idle.stop();
-                this._router.navigate(['/login']);
-            } else {
-                this._router.navigate(['/logout']);
-            }
-        });
+
+        this._sharedDataService.changeCurrentTab(null);
+        this._sharedDataService.searchData = null;
+        this._sharedDataService.isAdvancesearch = false;
+        this.idle.stop();
+        this._router.navigate(['/logout']);
+        // this._loginService.logout().subscribe(data => {
+        //     this._sharedDataService.changeCurrentTab(null);
+        //     this._sharedDataService.searchData = null;
+        //     this._sharedDataService.isAdvancesearch = false;
+        //     if (data === true) {
+        //         sessionStorage.removeItem('ActivatedUser');
+        //         this.idle.stop();
+        //         this._router.navigate(['/login']);
+        //     } else {
+        //         this._router.navigate(['/logout']);
+        //     }
+        // });
     }
 }

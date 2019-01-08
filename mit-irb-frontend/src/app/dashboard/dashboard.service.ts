@@ -28,7 +28,7 @@ checkingPersonsRightToViewProtocol(params) {
     return this._http.post('/mit-irb/checkingPersonsRightToViewProtocol', params);
   }
   getProtocolStatusList(params) {
-    return this._http.post('/connect-stg/getDashboardProtocolStatus', params);
+    return this._http.post('/mit-irb/getDashboardProtocolStatus', params);
   }
   generateCorrespondence(exemptFormId, personID) {
       const jsonObject = {
@@ -36,7 +36,7 @@ checkingPersonsRightToViewProtocol(params) {
         'exemptFormId': exemptFormId,
         'personId': personID
       };
-      return this._http.get('/connect-stg/generateCorrespondence', {
+      return this._http.get('/mit-irb/generateCorrespondence', {
           headers: new HttpHeaders().set('jsonObject', JSON.stringify(jsonObject)),
           responseType: 'blob'
       });

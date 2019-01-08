@@ -193,7 +193,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
-        this._http.get('/connect-stg/resources/string_config_json').subscribe(
+        this._http.get('/mit-irb/resources/string_config_json').subscribe(
             data => {
                 const property_config: any = data;
                 if (property_config) {

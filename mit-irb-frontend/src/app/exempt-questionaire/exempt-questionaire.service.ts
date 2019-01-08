@@ -54,7 +54,7 @@ downloadExemptProtocolChecklist(checklistId) {
           'exemptFormId': null,
           'personId': null
         };
-      return this._http.get('/connect-stg/generateCorrespondence', {
+      return this._http.get('/mit-irb/generateCorrespondence', {
           headers: new HttpHeaders().set('jsonObject', JSON.stringify(jsonObject)),
           responseType: 'blob'
       });

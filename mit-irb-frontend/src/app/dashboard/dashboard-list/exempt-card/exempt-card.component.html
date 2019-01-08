@@ -80,7 +80,7 @@
 						</button>
 					</a>
 					<a>
-						<button type="button" class="btn btn-outline-secondary button-view" (click)="generateDetermination(irb.exemptFormID)">
+						<button *ngIf="tabSelected=='STUDIES' || tabSelected=='SUBMITTED'" type="button" class="btn btn-outline-secondary button-view" (click)="generateDetermination(irb.exemptFormID)">
 							<i class="fa fa-download"></i>Determination
 						</button>
 					</a>

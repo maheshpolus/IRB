@@ -32,17 +32,23 @@ export class HeaderComponent implements OnInit {
     }
 
     logout() {
-        this._loginService.logout().subscribe(data => {
-           this._sharedDataService.changeCurrentTab(null);
-           this._sharedDataService.searchData = null;
-           this._sharedDataService.isAdvancesearch = false;
-            if (data === true) {
-                sessionStorage.removeItem('ActivatedUser');
-                this._router.navigate(['/login']);
-            } else {
-                this._router.navigate(['/logout']);
-            }
-        });
+
+        this._sharedDataService.changeCurrentTab(null);
+        this._sharedDataService.searchData = null;
+        this._sharedDataService.isAdvancesearch = false;
+        this._router.navigate(['/logout']);
+
+        // this._loginService.logout().subscribe(data => {
+        //     this._sharedDataService.changeCurrentTab(null);
+        //     this._sharedDataService.searchData = null;
+        //     this._sharedDataService.isAdvancesearch = false;
+        //     if (data === true) {
+        //         sessionStorage.removeItem('ActivatedUser');
+        //         this._router.navigate(['/login']);
+        //     } else {
+        //         this._router.navigate(['/logout']);
+        //     }
+        // });
     }
     expandMenu(e: any) {
         e.preventDefault();

@@ -125,6 +125,29 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			logger.info("SQLException in getIRBprotocolPersons:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
+			for(HashMap<String, Object> personInfo: result){
+				ArrayList<InParameter> inParam = new ArrayList<>();
+				ArrayList<OutParameter> outParam = new ArrayList<>();
+				outParam.add(new OutParameter("trainingStatus", DBEngineConstants.TYPE_INTEGER));
+				if(personInfo!=null){
+					inParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, personInfo.get("PERSON_ID")));
+					try {
+						ArrayList<HashMap<String, Object>> trainingStatus = dbEngine.executeFunction(inParam,"fn_irb_per_training_completed", outParam);
+						String trainingInfo = (String) trainingStatus.get(0).get("trainingStatus");
+						if(trainingInfo.equals("1")){
+							personInfo.put("IS_TRAINING_COMPLETED", "COMPLETED");
+						} else{
+							personInfo.put("IS_TRAINING_COMPLETED", "INCOMPLETE");
+						}
+					} catch (DBException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			irbViewProfile.setIrbViewProtocolPersons(result);
 		}
 		return irbViewProfile;
@@ -252,6 +275,15 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			if (resultTraing != null && !resultTraing.isEmpty()) {
 				irbViewProfile.setIrbViewProtocolMITKCPersonTrainingInfo(resultTraing);
 			}
+			outputParam.remove(0);
+			outputParam.add(new OutParameter("trainingStatus", DBEngineConstants.TYPE_INTEGER));
+					ArrayList<HashMap<String, Object>> trainingStatus = dbEngine.executeFunction(inputParam,"fn_irb_per_training_completed", outputParam);
+					String trainingInfo = (String) trainingStatus.get(0).get("trainingStatus");
+					if(trainingInfo.equals("1")){
+						irbViewProfile.setTrainingStatus("COMPLETED");
+					} else{
+						irbViewProfile.setTrainingStatus("INCOMPLETE");
+					}
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getMITKCPersonInfo:" + e);

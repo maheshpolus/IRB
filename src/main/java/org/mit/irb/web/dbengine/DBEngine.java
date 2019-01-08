@@ -26,10 +26,8 @@ public class DBEngine {
 	private Connection getConnection() throws Exception, IOException {
 		Connection conn = null;
 		try {
-			System.out.println("in getConnection()"+dbConnectionManager);
 			conn = dbConnectionManager.getConnection();
 		} catch (SQLException sqlEx) {
-			System.out.println("catch getConnection()"+sqlEx);
 			// throwDBException(sqlEx);
 		}
 		return conn;
@@ -39,11 +37,8 @@ public class DBEngine {
 		Connection conn = null;
 		try {
 			conn = getConnection();
-			System.out.println("cnctn"+conn);
-			
 			conn.setAutoCommit(false);
 		} catch (SQLException sqlEx) {
-			System.out.println("in beginTxn "+sqlEx);
 			// throwDBException(sqlEx);
 		}
 		return conn;
@@ -96,14 +91,11 @@ public class DBEngine {
 
 	public ArrayList<HashMap<String, Object>> executeQuery(ArrayList<Parameter> inParam, String sqlId)
 			throws Exception {
-		System.out.println("in executeQuery"+inParam+"-"+sqlId);
 		ArrayList<HashMap<String, Object>> result = new ArrayList<>();
 		Connection conn = null;
 		try {
 			conn = beginTxn();
 			String sql = TransactionStatement.getSQL(sqlId, getDatabaseName(conn));
-			System.out.println("SQL:");
-			System.out.println(sql);
 			result = executeQuery(inParam, sql, conn);
 		} catch (DBException ex) {
 			rollback(conn);

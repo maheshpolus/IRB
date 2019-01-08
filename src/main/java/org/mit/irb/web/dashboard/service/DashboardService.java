@@ -26,11 +26,12 @@ public interface DashboardService {
 	 * @param protocolNumber
 	 * @param protocolTypeCode
 	 * @param title
+	 * @param prtocolStatusCode 
 	 * @return load all the IRB protocols in the dashboard
 	 */
 	
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
-			String piName, String protocolNumber,String protocolTypeCode, String title);
+			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode);
 
 	/**
 	 * @param personId
@@ -44,4 +45,6 @@ public interface DashboardService {
 	 * @return load the available protocolTypes to the dropdown for advance searching
 	 */
 	public DashboardProfile getDashboardProtocolType();
+
+	public DashboardProfile getDashboardProtocolStatus();
 }

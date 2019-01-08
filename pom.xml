@@ -11,7 +11,7 @@
 		<spring.version>4.3.11.RELEASE</spring.version>
 		<jstl.version>1.2</jstl.version>
 	</properties>
-	<dependencies>
+<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -46,6 +46,85 @@
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		
+				<!-- ****************Space for adding dependency start***********************-->
+		
+		<!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/xdocreport -->
+		<dependency>
+    		<groupId>fr.opensagres.xdocreport</groupId>
+    		<artifactId>xdocreport</artifactId>
+    		<version>2.0.1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.template.freemarker -->
+		<dependency>
+    		<groupId>fr.opensagres.xdocreport</groupId>
+    		<artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
+    		<version>2.0.1</version>
+		</dependency>
+		
+		
+		<dependency>
+ 			<groupId>fr.opensagres.xdocreport</groupId>
+ 			<artifactId>fr.opensagres.xdocreport.template.velocity</artifactId>
+  			<version>2.0.1</version>
+		</dependency>
+
+<!-- ********** added jars start -->
+
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j</artifactId>
+			<version>2.8.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.lowagie</groupId>
+					<artifactId>itext</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>xhtmlrenderer</artifactId>
+			<version>1.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.lowagie</groupId>
+					<artifactId>itext</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.2</version>
+		</dependency>
+ 
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-util</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-1.5-fop</artifactId>
+			<version>0.20-5</version>
+		</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>3.7</version>
+</dependency>
+
+<!-- ********** added jars end -->
+		
+		
+		
+		<!-- ****************Space for adding dependency end***********************-->
+		
+		
 		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -160,7 +239,7 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.7.4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-hibernate5 -->
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-hibernate5 -->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.datatype</groupId>
 		    <artifactId>jackson-datatype-hibernate5</artifactId>

@@ -13,6 +13,7 @@ public class IRBExemptForm {
 	private Integer exemptQuestionnaireAnswerHeaderId;
 	private String updateUser;
 	private String updateTimestamp;
+	private String submissionDate;
 	private String isExempt;
 	private String status;
 	private String statusCode;
@@ -283,5 +284,13 @@ public class IRBExemptForm {
 
 	public void setSubmittedOnce(Integer submittedOnce) {
 		this.submittedOnce = submittedOnce;
+	}
+
+	public String getSubmissionDate() {
+		return submissionDate;
+	}
+
+	public void setSubmissionDate(String submissionDate) {
+		this.submissionDate = submissionDate;
 	}
 }

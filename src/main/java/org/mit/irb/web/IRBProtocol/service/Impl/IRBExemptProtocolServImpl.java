@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.mit.irb.web.IRBProtocol.dao.IRBExemptProtocolDao;
@@ -80,12 +79,7 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 				nonExemptCategoryList.add(answerDetails);
 			} else if(answerDetails.get("IS_EXEMPT_FLAG").equals("Y")){
 				exemptCategoryList.add(answerDetails);
-			} /*else{
-					if(answerDetails.get("QUESTION_ID").toString().equals("0")){
-						vo.setIsExemptGranted("O");
-						break;
-					}
-			}*/else if (answerDetails.get("IS_EXEMPT_FLAG").equals("O")){
+			}else if (answerDetails.get("IS_EXEMPT_FLAG").equals("O")){
 				checkOther =true;
 				otherCategoryList.add(answerDetails);
 			}
@@ -214,8 +208,10 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 		boolean isSubmit = isSubmit(questionnaireInfobean); 
 		CommonVO commonVO = new CommonVO();
 		boolean checkIsExempt = true;
+		boolean checkOther = false;
 		ArrayList<HashMap<String, Object>> nonExemptCategoryList = new ArrayList<>();
 		ArrayList<HashMap<String, Object>> exemptCategoryList = new ArrayList<>();
+		ArrayList<HashMap<String, Object>> otherCategoryList = new ArrayList<>();
 		if(isQuestionnaireComplete(questionnaireInfobean) && isSubmit){
 			irbExemptProtocolDao.irbExemptFormActionLog(irbExemptForm.getExemptFormID(), irbExemptForm.getActionTypesCode(), irbExemptForm.getComment(), irbExemptForm.getStatusCode(), irbExemptForm.getUpdateUser(),irbExemptForm.getNotificationNumber(),personDTO);
 		}
@@ -232,19 +228,23 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 					nonExemptCategoryList.add(answerDetails);
 				} else if(answerDetails.get("IS_EXEMPT_FLAG").equals("Y")){
 					exemptCategoryList.add(answerDetails);
-				} else{
-						if(answerDetails.get("QUESTION_ID").toString().equals("0")){
-							irbExemptForm.setIsExempt("O");
-							break;
-						}
+				}else if (answerDetails.get("IS_EXEMPT_FLAG").equals("O")){
+					otherCategoryList.add(answerDetails);
+					irbExemptForm.setIsExempt("O");
+					checkOther= true;
+					commonVO.setExemptQuestionList(otherCategoryList);
+					break;
 				}
+
 			}
-			if(checkIsExempt == true){
-				irbExemptForm.setIsExempt("Y");
-				commonVO.setExemptQuestionList(exemptCategoryList);
-			} else{
-				irbExemptForm.setIsExempt("N");
-				commonVO.setExemptQuestionList(nonExemptCategoryList);
+			if(!checkOther){
+				if(checkIsExempt == true){
+					irbExemptForm.setIsExempt("Y");
+					commonVO.setExemptQuestionList(exemptCategoryList);
+				} else{
+					irbExemptForm.setIsExempt("N");
+					commonVO.setExemptQuestionList(nonExemptCategoryList);
+				}
 			}
 		}
 		savePersonExemptForm(irbExemptForm,"U");

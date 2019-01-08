@@ -27,8 +27,8 @@ public class DashboardServiceImpl implements DashboardService {
 
 	@Override
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
-			String piName, String protocolNumber,String protocolTypeCode, String title) {
-		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboardType, piName, protocolNumber, protocolTypeCode, title);
+			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode) {
+		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboardType, piName, protocolNumber, protocolTypeCode, title, prtocolStatusCode);
 		return profile;
 	}
 
@@ -41,6 +41,12 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public DashboardProfile getDashboardProtocolType() {
 		DashboardProfile profile = dashboardDao.getDashboardProtocolType();
+		return profile;
+	}
+
+	@Override
+	public DashboardProfile getDashboardProtocolStatus() {
+		DashboardProfile profile = dashboardDao.getDashboardProtocolStatus();
 		return profile;
 	}
 }

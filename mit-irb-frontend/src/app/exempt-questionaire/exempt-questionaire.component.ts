@@ -1,11 +1,13 @@
-import { Component, OnInit, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { KeyPressEvent } from '../common/directives/keyPressEvent.component';
+
 
 
 import 'rxjs/add/operator/debounceTime';
@@ -50,6 +52,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     ApproveRejectHeader = '';
     isApprovedAlert = false;
     isQuestionaireSubmitted = false;
+    isQuestionnaireContinueClicked = false;
     showMore = false;
     isActionByPi = false;
     showConfirmationDetails = true;
@@ -107,7 +110,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     alertMsg: string;
     showEvaluateWarning: string;
     modalHeading: string;
-    exemptQuestionList: any = {};
+    exemptQuestionList: any = [];
     userDTO: any = {};
     isViewMode: any;
     isPendingActionRequired = false;
@@ -142,6 +145,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     EXEMPT_MSG_SUBMIT: string;
     NOFACULTY_MESSAGE: string;
     NOFACULTY_TITILE_MESSAGE: string;
+    QUESTIONNAIRE_COMPLETE_MESSAGE: string;
     isExempt: string;
 
     /*checklist variables*/
@@ -180,7 +184,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     constructor(private _exemptQuestionaireService: ExemptQuestionaireService, private _activatedRoute: ActivatedRoute,
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
         private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
-        private _router: Router, private _sharedDataService: SharedDataService, public keyPressEvent: KeyPressEvent) { }
+        private _router: Router, private _sharedDataService: SharedDataService, public keyPressEvent: KeyPressEvent,
+        public toastr: ToastsManager, vcr: ViewContainerRef) {
+            this.toastr.setRootViewContainerRef(vcr);
+        }
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
@@ -203,6 +210,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.PI_DECLARATION_AGREE_POLICIES = property_config.PI_DECLARATION_AGREE_POLICIES;
                     this.PI_DECLARATION_MEMBER_RESPONSIBILITY = property_config.PI_DECLARATION_MEMBER_RESPONSIBILITY;
                     this.PI_DECLARATION_COMPREHENSIVE_REVIEW = property_config.PI_DECLARATION_COMPREHENSIVE_REVIEW;
+                    this.QUESTIONNAIRE_COMPLETE_MESSAGE = property_config.QUESTIONNAIRE_COMPLETE_MESSAGE;
                 }
             }
         );
@@ -635,6 +643,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.questionaire.questionnaireQuestions.forEach(question => {
             if (question.selectedAnswer === null && question.showQuestion === true) {
                 this.QuestionnaireCompletionFlag = 'N';
+                this.isQuestionnaireContinueClicked = false; // this flag is used to hide Submit Button if qstnr is not completed
             }
         });
     }
@@ -666,16 +675,17 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.result = data;
                     if (this.result != null) {
                         this.requestObject.irbExemptForm = this.result.irbExemptForm;
-                        if (this.QuestionnaireCompletionFlag === 'Y') {
-                            this.modalHeading = 'Questionnaire Complete';
-                            this.alertMsg = 'You have completed the exempt questionnaire. Please click on' +
-                                ' Preview to assess your exempt determination status. Once you are ready to' +
-                                ' proceed, click Submit to continue.';
-                        } else {
-                            this.showContinueButton = true;
-                            this.modalHeading = 'Questionnaire Complete';
-                            this.alertMsg = 'Questionnaire saved successfully!';
-                        }
+                        // if (this.QuestionnaireCompletionFlag === 'Y') {
+                        //     this.modalHeading = 'Questionnaire Complete';
+                        //     this.alertMsg = 'You have completed the exempt questionnaire. Please click on' +
+                        //         ' Preview to assess your exempt determination status. Once you are ready to' +
+                        //         ' proceed, click Submit to continue.';
+                        // } else {
+                        //     this.showContinueButton = true;
+                        //     this.modalHeading = 'Questionnaire Complete';
+                        //     this.alertMsg = 'Questionnaire saved successfully!';
+                        // }
+                        this.toastr.success('Questionnaire saved successfully!', null, { toastLife: 2000 });
                         if (this.result.hasOwnProperty('questionnaireDto')) {
                             this.questionaire.questionnaireQuestions = this.result.questionnaireDto.questionnaireQuestions;
                         }
@@ -683,12 +693,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 },
                 error => {
                     console.log('Error in saveQuestionaire', error);
-                    this.modalHeading = 'Alert';
-                    this.alertMsg = 'Failed to save questionaire';
+                    this.toastr.error('Failed to save questionaire', null, { toastLife: 2000 });
+                    // this.modalHeading = 'Alert';
+                    // this.alertMsg = 'Failed to save questionaire';
                 },
                 () => {
                     this._spinner.hide();
-                    this.openSaveModal();
+                    //  this.openSaveModal();
                     this.updateExemptQuestionnaire();
                 }
             );
@@ -699,6 +710,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** calls service to evaluate exempt questioanire */
     evaluateExemptQuestionnaire() {
+        this.isQuestionnaireContinueClicked = true;
         this.errorQuestions = [];
         this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
         if (this.requestObject.irbExemptForm.personId !== '' &&
@@ -1198,7 +1210,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     approveConfirmClick() {
         this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-               if (this.requestObject.personDTO.role === 'PI' ||this.requestObject.personDTO.role === 'DEPT_ADMIN') {
+               if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
             if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                 this.requestObject.irbExemptForm.notificationNumber = 706;
             }
@@ -1222,7 +1234,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     rejectConfirmClick() {
         this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
-        if (this.requestObject.personDTO.role === 'PI' ||this.requestObject.personDTO.role === 'DEPT_ADMIN') {
+        if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
             if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                 this.requestObject.irbExemptForm.notificationNumber = 704;
             }

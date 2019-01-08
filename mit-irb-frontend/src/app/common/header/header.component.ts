@@ -37,9 +37,11 @@ export class HeaderComponent implements OnInit {
             if (data === true) {
                 this._sharedDataService.changeCurrentTab(null);
                 this._sharedDataService.searchData = null;
-                this._router.navigate(['/logout']);
+                sessionStorage.removeItem('ActivatedUser');
+                this._router.navigate(['/login']);
             } else {
-                this._router.navigate(['/irb/dashboard']);
+                // this._router.navigate(['/irb/dashboard']);
+                this._router.navigate(['/logout']);
             }
         });
     }

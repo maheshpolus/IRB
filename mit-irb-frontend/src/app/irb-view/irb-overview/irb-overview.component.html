@@ -33,34 +33,37 @@
 								<div class="col-md-4 col-sm-6 co-12 card-desc">
 									<h6>{{irbPersons.PERSON_NAME}}</h6>
 									<p>
-										Person Role : <span>{{irbPersons.PROTOCOL_PERSON_ROLE}}</span>
+										Person Role: <span>{{irbPersons.PROTOCOL_PERSON_ROLE}}</span>
 									</p>
 									<p>
-										Email Id : <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office
-										: <span>{{irbPersons.OFFICE_PHONE}}</span>
+										Email: <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office: <span>{{irbPersons.OFFICE_PHONE}}</span>
 									</p>
 								</div>
 								<div class="col-md-5 col-sm-6 co-12 card-desc">
-									<h6>&nbsp;</h6>
+									<p>Training Status: <span>
+										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'" class="training-complete-color fa fa-check" aria-hidden="true"></i>
+										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'" class="training-incomplete-color fa fa-times" aria-hidden="true"></i>
+									</span>
 									<p>
-										Primary Title : <span>{{irbPersons.PRIMARY_TITLE}}</span>
+										Title: <span>{{irbPersons.PRIMARY_TITLE}}</span>
 									</p>
 									<p>
-										Affiliation : <span>{{irbPersons.AFFILIATION_TYPE}}</span> |
-										Unit : <span>{{irbPersons.UNIT_NAME}}</span>
+										Affiliation: <span>{{irbPersons.AFFILIATION_TYPE}}</span> |
+										Unit: <span>{{irbPersons.UNIT_NAME}}</span>
 									</p>
 								</div>
 								<div class="col-md-1 col-sm-6 co-12 list-des button-responsive">
 										
-									<a>
-										<button type="button" class="btn btn-outline-secondary button-view"
-										data-toggle="modal"
-										data-target="#personModal"
-										(click)="showpersonData(irbPersons.PERSON_ID)">
-											<i class="fa fa-eye"></i>View
-										</button>
-									</a>
-							</div>
+										<a>
+											<button type="button" class="btn btn-outline-secondary button-view"
+											data-toggle="modal"
+											data-target="#personModal"
+											(click)="showpersonData(irbPersons.PERSON_ID)">
+												<i class="fa fa-eye"></i>View
+											</button>
+										</a>
+								</div>
+
 								<!-- <div class="col-md-2 col-sm-6 co-12 cmp-b">
 									<p *ngIf="irbPersons.IS_COMPLETED=='Y'">Completed</p>
 									<p *ngIf="irbPersons.IS_COMPLETED=='N'">Pending</p>
@@ -104,18 +107,18 @@
 										</div>
 										<div class="col-5" *ngIf="fund.FUNDING_SOURCE_TYPE == 'Award'">
 											<h6>
-												<b>Account# : </b><span>{{fund.ACCOUNT_NUMBER}}</span>
+												<b>Account#: </b><span>{{fund.ACCOUNT_NUMBER}}</span>
 											</h6>
 										</div>
 										<div
 											[ngClass]="fund.FUNDING_SOURCE_TYPE == 'Award'? 'col-7':'col-6'">
 											<h6>
-												<b>Name : </b><span>{{fund.FUNDING_SOURCE_NAME}}</span>
+												<b>Name: </b><span>{{fund.FUNDING_SOURCE_NAME}}</span>
 											</h6>
 										</div>
 										<div class="col-6">
 											<p>
-												<b>Title : </b><span>{{fund.FUNDING_SOURCE_TYPE}}</span>
+												<b>Title: </b><span>{{fund.FUNDING_SOURCE_TYPE}}</span>
 											</p>
 										</div>
 
@@ -151,10 +154,10 @@
 								</div>
 								<div class="col-7 card-desc">
 									<h6 class="sub-head">
-										Type : <span>{{sub.VULNERABLE_SUBJECT}}</span>
+										Type: <span>{{sub.VULNERABLE_SUBJECT}}</span>
 									</h6>
 									<h6 class="sub-head">
-										Count : <span>{{sub.SUBJECT_COUNT}}</span>
+										Count: <span>{{sub.SUBJECT_COUNT}}</span>
 									</h6>
 								</div>
 							</div>
@@ -193,16 +196,18 @@
 												<span>{{irbCollab.ROLODEX_NAME}}</span>
 											</p>
 											<p>
-												Email Id : <span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
-												|Phone Number : <span>{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
+												Email: <span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
+												|Office: <span>{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
+											</p>
+											<p>Human Sub Assurance number: </p>
 										</div>
 										<div class="col-6 row-padng">
 											<p>&nbsp;</p>
 											<p>
-												Expiration date : <span>{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</span>
+												Expiration date: <span>{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</span>
 											</p>
 											<p>
-												Approval Date : <span>{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span>
+												Approval Date: <span>{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span>
 											</p>
 										</div>
 									</div>
@@ -241,44 +246,53 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Name : </label>
+							<label class="modal-label" for=""> Name: </label>
 							{{irbPersonDetailedList?.FULL_NAME}}
 						</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for="">Email : </label>
+							<label class="modal-label" for="">Email: </label>
 							{{irbPersonDetailedList?.EMAIL_ADDRESS}}
 						</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Primary Title : </label>
+							<label class="modal-label" for="">Title: </label>
 							{{irbPersonDetailedList?.PRIMARY_TITLE}}
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
+							<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+									<label class="modal-label" for=""> Unit: </label>
+									{{irbPersonDetailedList?.UNIT_NAME}}
 						</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> City : </label>
+							<label class="modal-label" for=""> Address: </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
+						</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> City: </label>
 							{{irbPersonDetailedList?.CITY}}
 						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Country : </label>
-							{{irbPersonDetailedList?.COUNTRY_CODE}}
-						</div>
+						
 					</div>
 					<div class="row">
+					 <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+									<label class="modal-label" for=""> Country: </label>
+									{{irbPersonDetailedList?.COUNTRY_CODE}}
+								</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Office Location : </label>
+							<label class="modal-label" for=""> Office Location: </label>
 							{{irbPersonDetailedList?.OFFICE_LOCATION}}
 						</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Office Phone Number : </label>
+							<label class="modal-label" for=""> Office Phone Number: </label>
 							{{irbPersonDetailedList?.OFFICE_PHONE }}
 						</div>
-						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-							<label class="modal-label" for=""> Postal Code : </label>
-							{{irbPersonDetailedList?.POSTAL_CODE}}
-						</div>
+						
+					</div>
+					<div class="row">
+							<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+									<label class="modal-label" for=""> Postal Code: </label>
+									{{irbPersonDetailedList?.POSTAL_CODE}}
+							</div>
+
 					</div>
 				</div>
 				<!-- section2 -->
@@ -290,18 +304,18 @@
 						<table class="table table-striped">
 							<thead class="popup-sub-header">
 								<tr>
-									<th class="table-align-head" scope="col">Description</th>
-									<th scope="col">Score</th>
-									<th scope="col">Followup Date</th>
-									<th scope="col" class="submitted-header">Submitted Date</th>
+									<th  scope="col">Description</th>
+									<!-- <th scope="col">Score</th> -->
+									<th scope="col">Expiration Date</th>
+									<!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
 								</tr>
 							</thead>
 							<tbody>
 								<tr *ngFor="let info of irbPersonDetailedTraining">
-									<td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}</td>
-									<td>{{info.SCORE}}</td>
+									<td  scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+									<!-- <td>{{info.SCORE}}</td> -->
 									<td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
-									<td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td>
+									<!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
 								</tr>
 							</tbody>
 						</table>

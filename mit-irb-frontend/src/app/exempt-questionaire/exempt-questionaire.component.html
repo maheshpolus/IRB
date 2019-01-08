@@ -260,6 +260,12 @@
 							</li>
 						</ul>
 					</div>
+					
+					<div class="col-12" *ngIf="QuestionnaireCompletionFlag=='Y' && isQuestionnaireContinueClicked == false && isViewMode == false">
+						<div class="alert alert-info continue-click-alert">
+							{{QUESTIONNAIRE_COMPLETE_MESSAGE}}
+						</div>
+						</div>
 					<div *ngIf="isEvaluate" class="col-12 eval-msg">
 						<p class="alignLeft" [ngClass]="{'is-exempt-message':isExempt=='Y' || isExempt=='O',
 							'not-exempt-message':isExempt=='N'}">
@@ -280,23 +286,22 @@
 			</div>
 			<div class="container-fluid">
 				<section class="row btn-row-med sect-padding">
-					<button *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'" class="btn btn-primary tab_btn" data-toggle="modal" data-target="#checklistModal"
-					 type="submit" (click)="showAddAttachmentPopUp($event)">Add/View Checklist</button>
-					<button class="btn btn-primary tab_btn" (click)="openActionLogModal()" type="submit" data-toggle="modal" data-target="#routeActionLogModal"
+					<button class="btn btn-primary " type="submit" *ngIf="isViewMode == false && isQuestionnaireContinueClicked == false" (click)="evaluateExemptQuestionnaire()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'tab_btn'"
+						[disabled]="QuestionnaireCompletionFlag=='N'">Continue</button>
+						<button class="btn submit-btn" data-toggle="modal" data-target="#confirmModal" type="submit" *ngIf="isViewMode == false && isQuestionnaireContinueClicked == true"
+					 (click)="submitConfirmation()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'submit_btn'" [disabled]="QuestionnaireCompletionFlag=='N'">Submit</button>
+					 <button class="btn btn-primary tab_btn" (click)="openActionLogModal()" type="submit" data-toggle="modal" data-target="#routeActionLogModal"
 					 id="actionLog">Action Log</button>
-
-					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired" (click)="approveQuestionnireClick()"
+					 <button class="btn btn-primary tab_btn" *ngIf="isViewMode == false" (click)="saveQuestionaire()" id="save">Save</button>
+					 <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#approveRejectActionConfirmModal" type="submit"
+					 *ngIf="isViewMode == false && isActionByPi == true" (click)="returnQuestionnaireClick()" [disabled]="QuestionnaireCompletionFlag=='N'">Return</button>
+					 <button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired" (click)="approveQuestionnireClick()"
 					 data-toggle="modal" data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="approve">Approve</button>
 					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired" (click)="rejectQuestionnireClick()"
 					 data-toggle="modal" data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="reject">Reject</button>
-
-					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == false" (click)="saveQuestionaire()" id="save">Save</button>
-					<button class="btn btn-primary " type="submit" *ngIf="isViewMode == false" (click)="evaluateExemptQuestionnaire()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'tab_btn'"
-					 [disabled]="QuestionnaireCompletionFlag=='N'">Preview</button>
-					<button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#approveRejectActionConfirmModal" type="submit"
-					 *ngIf="isViewMode == false && isActionByPi == true" (click)="returnQuestionnaireClick()" [disabled]="QuestionnaireCompletionFlag=='N'">Return</button>
-					<button class="btn submit-btn" data-toggle="modal" data-target="#confirmModal" type="submit" *ngIf="isViewMode == false"
-					 (click)="submitConfirmation()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'submit_btn'" [disabled]="QuestionnaireCompletionFlag=='N'">Submit</button>
+					 <button *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'" class="btn btn-primary tab_btn" data-toggle="modal" data-target="#checklistModal"
+					 type="submit" (click)="showAddAttachmentPopUp($event)">Add/View Checklist</button>
+			
 				</section>
 			</div>
 		</div>

@@ -1507,6 +1507,9 @@ form-check-label {
 {
     background: #808120 !important;
 }
+.suspended {
+    background: #f7c041  !important;
+}
 
 /*for modal*/
 .modal-content{

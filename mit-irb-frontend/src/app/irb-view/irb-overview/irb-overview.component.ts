@@ -29,6 +29,8 @@ export class IrbOverviewComponent implements OnInit {
     irbPersonDetailedList: any;
     result: any;
 
+	trainingCompleted: string;
+
     requestObject = {
             protocolNumber: '',
             avPersonId: ''
@@ -150,6 +152,7 @@ export class IrbOverviewComponent implements OnInit {
         if ( this.result != null ) {
             this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
             this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
+            this.trainingCompleted = this.result.trainingStatus;
         }
     },
         error => {

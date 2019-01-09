@@ -2355,6 +2355,10 @@ input:disabled,textarea:disabled{
 .mg-left button, .mg-left button:hover {
     margin-left: 108px;
 }
+.font-size-23
+{
+    font-size: 23px !important;
+}
 
 
 

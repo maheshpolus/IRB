@@ -40,9 +40,9 @@
 									</p>
 								</div>
 								<div class="col-md-5 col-sm-6 co-12 card-desc">
-									<p>Training Status: <span>
-										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'" class="training-complete-color fa fa-check" aria-hidden="true"></i>
-										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'" class="training-incomplete-color fa fa-times" aria-hidden="true"></i>
+									<p>Training Status: <span class="font-size-23">
+										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
+										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
 									</span>
 									<p>
 										Title: <span>{{irbPersons.PRIMARY_TITLE}}</span>
@@ -297,7 +297,8 @@
 				</div>
 				<!-- section2 -->
 				<div>
-					<h4 class="popup-sub-head">Training</h4>
+					<h4 class="popup-sub-head">Training-<span *ngIf="trainingCompleted=='COMPLETED'"> Completed</span>
+					<span *ngIf="trainingCompleted=='INCOMPLETE'">Not Completed</span></h4>
 				</div>
 				<div class="modal-padding">
 					<div class="popup-div">

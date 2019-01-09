@@ -343,6 +343,9 @@
 					<button class="btn btn-primary tab_btn" (click)="continueWithQstnr()" aria-label="Close">Continue</button>
 					<button class="btn btn-primary tab_btn" (click)="continueWithDashboard()" aria-label="Close">Exit to Dashboard</button>
 				</section>
+				<section class="row btn-row-med sect-confirm-padding proceed-btn-align" *ngIf="!showContinueButton">
+					<button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Close</button>
+				</section>
 			</div>
 		</div>
 	</div>
@@ -388,7 +391,7 @@
 			</div>
 			<section class="row btn-row-med sect-confirm-padding">
 				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true && showConfirmationDetails == true">Agree</button>
-				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="closeConfirmation()">Cancel</button>
+				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="closeConfirmation()">Close</button>
 			</section>
 		</div>
 	</div>
@@ -401,7 +404,13 @@
 		<div class="modal-content">
 			<div class="modal-header popup-header">
 				<div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-					<h5 class="align" id="welcomeModalLongTitle">Exempt Evaluation Overview</h5>
+					<h5 class="align modal-title" id="welcomeModalLongTitle">Exempt Evaluation Overview
+					<button type="button" *ngIf="!isStayOnSamePage" class="close modal-close" data-dismiss="modal" (click)="returnToExemptList($event)" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+					</button>
+					<button type="button" *ngIf="isStayOnSamePage" class="close modal-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+					</button></h5>
 				</div>
 			</div>
 			<div class="modal-body modal-popup pb-0">
@@ -650,6 +659,9 @@
 				<button class="btn mb-3 btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="proceedWithWarning()">Proceed</button>
 				<button class="btn mb-3 btn-primary tab_btn" data-dismiss="modal" aria-label="Close">Close</button>
 			</section>
+			<section class="row btn-row-med sect-confirm-padding proceed-btn-align" *ngIf="!showContinueButton">
+				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Close</button>
+			</section>
 		</div>
 	</div>
 	<!-- alert modals end-->
@@ -726,6 +738,9 @@
 						</tr>
 					</table>
 				</div>
+				<section class="row btn-row-med sect-warning-padding proceed-btn-align">
+						<button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Close</button>
+				</section>
 			</div>
 		</div>
 	</div>

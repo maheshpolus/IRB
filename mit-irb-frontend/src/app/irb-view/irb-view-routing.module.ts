@@ -5,9 +5,10 @@ import { IrbQuestionaireComponent } from './irb-questionaire/irb-questionaire.co
 import { IrbHeaderDetailComponent } from './irb-header-detail/irb-header-detail.component';
 import { IrbAttachmentsComponent } from './irb-attachments/irb-attachments.component';
 import { IrbHistoryComponent } from './irb-history/irb-history.component';
+import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
 
 const routes: Routes = [
-                        {path: '', component: IrbHeaderDetailComponent,
+                        {path: '', component: IrbHeaderDetailComponent, resolve: { irb: DashboardResolverService },
                         children: [
                           {path: '', redirectTo: 'IrbOverviewComponent', pathMatch: 'full'},
                           {path: 'irbOverview', component: IrbOverviewComponent},

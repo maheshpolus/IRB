@@ -1,14 +1,17 @@
 
 <div class="headerPush"></div>
-<div class="row">
+<!-- <div class="row">
 	<div class="col-10"></div>
 	<div class="col-2 offset-md-4 exit-button">
 		<button type="button" class="btn btn-warning" (click)="backClick($event)" title="Close">
 			<i class="fa fa-times">&nbsp;</i>Exit</button>
 	</div>
-</div>
-<div class="container-fluid"
+</div> -->
+<div class="container-fluid position-relative"
 	*ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
+	<div class="exit-button" (click)="backClick($event)" title="Close">
+			<i class="fa fa-times mg-6">&nbsp;</i>
+		</div>
 	<section class="row sect-padding">
 		<div class="col-12 top-aprv-details">
 			<div class="row">
@@ -139,12 +142,12 @@
 </div>
 <div>
 	<router-outlet></router-outlet>
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col-10"></div>
 		<div class="col-2 offset-md-4 exit-button">
 			<button type="button" class="btn btn-warning" (click)="backClick($event)" title="Close">
 				<i class="fa fa-times">&nbsp;</i>Exit</button>
 		</div>
-	</div>
+	</div> -->
 </div>
 

@@ -2323,15 +2323,33 @@ input:disabled,textarea:disabled{
 {
     color: red;
 }
-.exit-button {
-    margin-top:10px;
+.training-tbl-header {
+    color:#a92034;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
-.exit-button button {
-    /* margin-left: 135px;  */
-    margin-left: 71px;
-    color: #fff !important;
-    width: 100px;
-    border:1px solid #FF2212;-webkit-box-shadow: #f16c6c 0px 1px 0px inset;-moz-box-shadow: #f16c6c 0px 1px 0px inset; box-shadow: #f16c6c 0px 1px 0px inset; -webkit-border-radius: 5px; -moz-border-radius: 5px;border-radius: 5px;font-size:15px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
+/* .exit-button {
+    margin-top:10px;
+} */
+.position-relative {
+    position: relative;
+}
+.exit-button {
+    position: absolute;
+    right: 13px;
+    z-index: 99;
+    border-radius: 50%;
+    width: 25px;
+    -webkit-box-shadow: #f16c6c 0px 1px 0px inset;
+    -moz-box-shadow: #f16c6c 0px 1px 0px inset;
+    box-shadow: #f16c6c 0px 1px 0px inset;
+    font-size:15px;
+    font-family:arial, helvetica, sans-serif;
+    text-decoration:none; 
+    display:inline-block;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    font-weight:bold;
+    color: #FFFFFF;
     background-color: #f62b2b; background-image: -webkit-gradient(linear, left top, left bottom, from(#d62740), to(#a92034));
     background-image: -webkit-linear-gradient(top, #d62740, #a92034);
     background-image: -moz-linear-gradient(top, #d62740, #a92034);
@@ -2339,8 +2357,7 @@ input:disabled,textarea:disabled{
     background-image: -o-linear-gradient(top, #d62740, #a92034);
     background-image: linear-gradient(to bottom, #d62740, #a92034);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d62740, endColorstr=#a92034);
 }
-.exit-button button:hover {
-    /* margin-left: 135px;  */
+/* .exit-button {
     margin-left: 71px;
     color: #fff !important;
     width: 100px;
@@ -2351,9 +2368,12 @@ input:disabled,textarea:disabled{
     background-image: -ms-linear-gradient(top, #a92034, #d62740);
     background-image: -o-linear-gradient(top, #a92034, #d62740);
     background-image: linear-gradient(to bottom, #a92034, #d62740);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a92034, endColorstr=#d62740);
-}
-.mg-left button, .mg-left button:hover {
+} */
+/* .mg-left button, .mg-left button:hover {
     margin-left: 108px;
+} */
+.mg-6 {
+    margin-left: 6px;
 }
 .font-size-23
 {

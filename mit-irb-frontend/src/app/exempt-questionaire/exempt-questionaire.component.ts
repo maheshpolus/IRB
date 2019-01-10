@@ -1303,6 +1303,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         // this._router.navigate(['/irb/dashboard']);
         this._location.back();
     }
+    returnToExemptList2(event) {
+        // event.preventDefault();
+        // this._sharedDataService.changeCurrentTab('EXEMPT');
+        // this._router.navigate(['/irb/dashboard']);
+        this.saveQuestionaire();
+        this._location.back();
+    }
 
     generateCorrespondence() {
         const obj = {irbExemptForm: this.requestObject.irbExemptForm};

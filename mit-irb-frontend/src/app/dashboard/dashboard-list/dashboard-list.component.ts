@@ -2,6 +2,8 @@ import { Component, OnInit, Input, NgZone, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
@@ -96,7 +98,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         private _elasticsearchService: ElasticService,
         private _router: Router,
         private _sharedDataService: SharedDataService,
-        public keyPressEvent: KeyPressEvent) { }
+        public keyPressEvent: KeyPressEvent,
+        private _spinner: NgxSpinnerService) { }
 
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {
@@ -274,8 +277,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.personRoleType = this.userDTO.role;
         this.requestObject.dashboardType = currentTab;
         this._sharedDataService.searchData = this.requestObject;
+        this._spinner.show();
         this._dashboardService.getIrbList(this.requestObject).subscribe(data => {
             this.result = data || [];
+            this._spinner.hide();
             if (this.result != null) {
                 if (this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0) {
                     this.noIrbList = true;
@@ -434,8 +439,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.exemptParams.exemptFormEndDate = this.GetFormattedDate(this.requestObject.exemptFormEndDate);
         }
         this.exemptParams.exemptFormfacultySponsorName = this.requestObject.exemptFormfacultySponsorName;
+        this._spinner.show();
         this._dashboardService.getExemptProtocols(this.exemptParams).subscribe(data => {
             this.result = data || [];
+            this._spinner.hide();
             if (this.result != null) {
                 if (this.result.irbExemptFormList == null || this.result.irbExemptFormList.length === 0) {
                     this.noIrbList = true;

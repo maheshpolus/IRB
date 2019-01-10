@@ -71,10 +71,12 @@ export class ExpandedViewComponent implements OnInit {
      * @param protocolNumber - unique identifier of a protocol
     */
     openIrbView( protocolNumber ) {
-        this._router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } } );
+        this._router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber,
+                                                                from: this.requestObject.avSummaryType } } );
     }
     openExempt( exemptId, mode, exemptTitle, exemptFormID ) {
         this._router.navigate( ['/irb/exempt-questionaire'],
-            { queryParams: { exempHeaderId: exemptId, mode: mode, title: exemptTitle, exemptFormID: exemptFormID } } );
+            { queryParams: { exempHeaderId: exemptId, mode: mode, title: exemptTitle, exemptFormID: exemptFormID,
+                             from: this.requestObject.avSummaryType } } );
     }
 }

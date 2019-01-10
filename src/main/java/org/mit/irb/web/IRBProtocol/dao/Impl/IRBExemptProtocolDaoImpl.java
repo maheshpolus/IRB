@@ -250,7 +250,14 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				}
 				if (hmap.get("PERSON_ID") != null) {
 					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
-					exemptForm.setPIJobTitle(getJobTitle((String) hmap.get("PERSON_ID")));
+					String jobTitle= null;
+					jobTitle = getJobTitle((String) hmap.get("PERSON_ID"));
+					if(jobTitle.equals("1")){
+						jobTitle = jobTitle;
+					}else if(jobTitle.equals("0")){
+						jobTitle = null;
+					}
+					exemptForm.setPIJobTitle(jobTitle);
 				}
 				if (hmap.get("PERSON_NAME") != null) {
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
@@ -285,7 +292,14 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				}
 				if (hmap.get("FACULTY_SPONSOR_PERSON_ID") != null) {
 					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
-					exemptForm.setFacultySponsorJobTitle(getJobTitle((String) hmap.get("FACULTY_SPONSOR_PERSON_ID")));
+					String jobTitle= null;
+					jobTitle = getJobTitle((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
+					if(jobTitle.equals("1")){
+						jobTitle = jobTitle;
+					} else if(jobTitle.equals("0")){
+						jobTitle = null;
+					}
+					exemptForm.setFacultySponsorJobTitle(jobTitle);
 				}
 				if (hmap.get("FACULTY_SPONSOR_PERSON") != null) {
 					exemptForm.setFacultySponsorPerson((String) hmap.get("FACULTY_SPONSOR_PERSON"));
@@ -324,7 +338,7 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, personId));
 			outParam.add(new OutParameter("jobsTitle", DBEngineConstants.TYPE_STRING));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeFunction(inputParam,
-					"FN_MITKC_GET_PER_JOB_TITLE", outParam);
+					"FN_MITKC_HAS_PI_STATUS_JOB_TLE", outParam);
 			if (result != null && !result.isEmpty()) {
 				HashMap<String, Object> hmResult = result.get(0);
 				jobTitle = (String) hmResult.get("jobsTitle");
@@ -364,7 +378,14 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				}
 				if (hmap.get("PERSON_ID") != null) {
 					exemptForm.setPersonId((String) hmap.get("PERSON_ID"));
-					exemptForm.setPIJobTitle(getJobTitle((String) hmap.get("PERSON_ID")));
+					String jobTitle= null;
+					jobTitle = getJobTitle((String) hmap.get("PERSON_ID"));
+					if(jobTitle.equals("1")){
+						jobTitle = jobTitle;
+					}else if(jobTitle.equals("0")){
+						jobTitle = null;
+					}
+					exemptForm.setPIJobTitle(jobTitle);
 				}
 				if (hmap.get("PERSON_NAME") != null) {
 					exemptForm.setPersonName((String) hmap.get("PERSON_NAME"));
@@ -384,7 +405,14 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				}
 				if (hmap.get("FACULTY_SPONSOR_PERSON_ID") != null) {
 					exemptForm.setFacultySponsorPersonId((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
-					exemptForm.setFacultySponsorJobTitle(getJobTitle((String) hmap.get("FACULTY_SPONSOR_PERSON_ID")));
+					String jobTitle= null;
+					jobTitle = getJobTitle((String) hmap.get("FACULTY_SPONSOR_PERSON_ID"));
+					if(jobTitle.equals("1")){
+						jobTitle = jobTitle;
+					} else if(jobTitle.equals("0")){
+						jobTitle = null;
+					}
+					exemptForm.setFacultySponsorJobTitle(jobTitle);
 				}
 				if (hmap.get("SUMMARY") != null) {
 					exemptForm.setSummary((String) hmap.get("SUMMARY"));

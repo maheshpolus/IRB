@@ -23,7 +23,8 @@
 						<strong>Key elements of Exempt Evaluation.</strong>
 						<span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
 					</div>
-					<div *ngIf="isQuestionaireSubmitted">
+					<div *ngIf="isQuestionaireSubmitted"  class=" exempt-description">
+						<h5>Exempt Determinations:</h5>
 							<div *ngFor="let exemptQuestion of exemptQuestionList let i=index" class="col-12 exempt-description">
 								<div *ngIf="i==0 || showMore == true">
 								<h6>{{exemptQuestion.CATEGORY}}</h6>
@@ -112,7 +113,7 @@
 					<div class="row">
 						<div class="col-2 title-head pl-15" [ngClass]="{'invalid':invalidData.invalidExemptData && requestObject.irbExemptForm.personId == null}">
 							<h4 style="display: inline-block;">* Principal Investigator:</h4>
-							<i title="No PI Status for {{requestObject.irbExemptForm.personName}}" *ngIf="(requestObject.personJobTitle == null || requestObject.personJobTitle == '') && (requestObject.irbExemptForm.personId != null && requestObject.irbExemptForm.personId != '')" class="fa fa-exclamation-circle" aria-hidden="true"></i>
+							<i title="{{requestObject.irbExemptForm.personName}} may not have PI Status." *ngIf="(requestObject.personJobTitle == null || requestObject.personJobTitle == '') && (requestObject.irbExemptForm.personId != null && requestObject.irbExemptForm.personId != '')" class="fa fa-exclamation-circle" aria-hidden="true"></i>
 						</div>
 						<div class="col-4 width-exempt searchBox display">
 						<input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
@@ -150,7 +151,7 @@
 						</div>
 						<div class="col-4 width-exempt searchBox display">
 							<div class="input-group">
-								<input [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt4" placeholder="mm/dd/yyyy"
+								<input [min]="todayDate" [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt4" placeholder="mm/dd/yyyy"
 								 [(ngModel)]="requestObject.exemptProtocolStartDate" (ngModelChange)="validateStartDate()">
 								<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
 								<span title="Choose Start Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt4">
@@ -164,7 +165,7 @@
 						</div>
 						<div class="col-4 width-exempt searchBox display">
 							<div class="input-group">
-								<input [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
+								<input [min]="todayDate" [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
 								 [(ngModel)]="requestObject.exemptProtocolEndDate" (ngModelChange)="validateEndDate()">
 								<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
 								<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">
@@ -189,7 +190,7 @@
 					<div class="row">
 						<div class="col-2 title-head pl-15">
 							<h4 style="display: inline-block;" class="sponsorFont">Faculty Sponsor:</h4>
-							<i title="No PI Status for {{requestObject.irbExemptForm.facultySponsorPerson}}" *ngIf="(requestObject.facultySponsorJobTitle == null || requestObject.facultySponsorJobTitle == '') && (requestObject.irbExemptForm.facultySponsorPersonId != null && requestObject.irbExemptForm.facultySponsorPersonId != '')" class="fa fa-exclamation-circle" aria-hidden="true"></i>
+							<i title="{{requestObject.irbExemptForm.facultySponsorPerson}} may not have PI Status." *ngIf="(requestObject.facultySponsorJobTitle == null || requestObject.facultySponsorJobTitle == '') && (requestObject.irbExemptForm.facultySponsorPersonId != null && requestObject.irbExemptForm.facultySponsorPersonId != '')" class="fa fa-exclamation-circle" aria-hidden="true"></i>
 						</div>
 						<div class="col-4  width-exempt searchBox display">
 						<input class="form-control" type="text" *ngIf="!isViewMode" (input)="clearSelectedFacultydata()" [(ngModel)]="requestObject.irbExemptForm.facultySponsorPerson"

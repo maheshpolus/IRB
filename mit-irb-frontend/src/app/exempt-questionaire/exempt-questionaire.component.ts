@@ -47,6 +47,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     readonly strReturnedByPIActionType = '7';
     readonly strApprovedByPIActionType = '8';
 
+    todayDate = new Date();
     continueBtnClicked = false;
     showQuestionaire = false;
     showAlert = true;
@@ -188,6 +189,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
         private _router: Router, private _sharedDataService: SharedDataService, public keyPressEvent: KeyPressEvent,
         public toastr: ToastsManager, vcr: ViewContainerRef) {
+            this.todayDate.setDate(this.todayDate.getDate() - 1);
             this.toastr.setRootViewContainerRef(vcr);
         }
 
@@ -389,8 +391,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.irbExemptForm.personName = '';
         this.requestObject.irbExemptForm.personName = result.obj.full_name;
         this.requestObject.irbExemptForm.personId = result.obj.person_id;
-
-        this.requestObject.personJobTitle = result.obj.job_title;
+        if (result.obj.haspistatus === 0) {
+            this.requestObject.personJobTitle = null;
+        } else {
+            this.requestObject.personJobTitle = result.obj.job_title;
+        }
+       // this.requestObject.personJobTitle = result.obj.job_title;
         this.IsElasticResultPI = false;
     }
 
@@ -405,7 +411,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.irbExemptForm.facultySponsorPerson = '';
         this.requestObject.irbExemptForm.facultySponsorPerson = result.obj.full_name;
         this.requestObject.irbExemptForm.facultySponsorPersonId = result.obj.person_id;
-        this.requestObject.facultySponsorJobTitle = result.obj.job_title;
+        if (result.obj.haspistatus === 0) {
+            this.requestObject.facultySponsorJobTitle = null;
+        } else {
+            this.requestObject.facultySponsorJobTitle = result.obj.job_title;
+        }
+      //  this.requestObject.facultySponsorJobTitle = result.obj.job_title;
         this.IsElasticResultFaculty = false;
     }
 

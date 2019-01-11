@@ -13,5 +13,5 @@
 "NOFACULTY_MESSAGE" : "Your study need to be reviewed by a faculty sponsor, please add a faculty sponsor",
 "NOFACULTY_TITILE_MESSAGE":"The Faculty Sponsor you have selected may not have <a href=\"http:\/\/couhes.mit.edu\/definitions#Principal%20investigatorCurrent\" target=\"_blank\">PI Status<\/a> as determined by MIT, would you like to continue?",
 "NOFACULTY_WARNING_MESSAGE":"The Faculty Sponsor you have selected may not have <a href=\"http:\/\/couhes.mit.edu\/definitions#Principal%20investigatorCurrent\" target=\"_blank\">PI Status<\/a> as determined by MIT.",
-"QUESTIONNAIRE_COMPLETE_MESSAGE":"You have completed the exempt questionnaire. Please click on Continue to assess your exempt determination status."
+"QUESTIONNAIRE_COMPLETE_MESSAGE":"You have completed your Exempt Evaluation. Please click on Continue to assess your responses."
 }

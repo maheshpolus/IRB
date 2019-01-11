@@ -277,25 +277,31 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.personRoleType = this.userDTO.role;
         this.requestObject.dashboardType = currentTab;
         this._sharedDataService.searchData = this.requestObject;
-        this._spinner.show();
-        this._dashboardService.getIrbList(this.requestObject).subscribe(data => {
-            this.result = data || [];
-            this._spinner.hide();
-            if (this.result != null) {
-                if (this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0) {
-                    this.noIrbList = true;
-                } else {
-                    this.irbListData = this.result.dashBoardDetailMap;
-                    this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
-                    this.protocolCount = this.irbListData.length;
-                    this.sortBy();
+        if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && !this.isAdvancsearchPerformed && currentTab === 'ALL') {
+            // No need to call service since no data will be shown for admin users by default
+            // (only if advance serach is performed data will be shown in admin 'ALL' tab
+        } else{
+            this._spinner.show();
+            this._dashboardService.getIrbList(this.requestObject).subscribe(data => {
+                this.result = data || [];
+                this._spinner.hide();
+                if (this.result != null) {
+                    if (this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0) {
+                        this.noIrbList = true;
+                    } else {
+                        this.irbListData = this.result.dashBoardDetailMap;
+                        this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                        this.protocolCount = this.irbListData.length;
+                        this.sortBy();
+                    }
                 }
-            }
-        },
-            error => {
-                console.log('Error in method getIrbListData()', error);
             },
-        );
+                error => {
+                    console.log('Error in method getIrbListData()', error);
+                },
+            );
+        }
+        
     }
 
     /** sets value of direction to implement sorting in tabs other than EXEMPT, COMMITEE, SCHEDULE*/

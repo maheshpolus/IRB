@@ -932,7 +932,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 .confirm-text {
     color: black;
     text-align: justify;
-    font-style: italic;
+    /* font-style: italic; */
 }
 .sect-confirm-padding {
     padding-right: 28px;

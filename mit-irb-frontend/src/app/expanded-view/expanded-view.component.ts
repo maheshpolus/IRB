@@ -33,7 +33,7 @@ export class ExpandedViewComponent implements OnInit {
         this.requestObject.personRoleType = this._activatedRoute.snapshot.queryParamMap.get( 'personRole' );
         this.requestObject.avSummaryType = this._activatedRoute.snapshot.queryParamMap.get( 'summaryType' );
         if ( this.requestObject.avSummaryType === 'AMMEND_RENEW') {
-            this.pageHeader = 'Ammend/Renewals in Progress';
+            this.pageHeader = 'Amendments/Renewals in Progress';
         } else if ( this.requestObject.avSummaryType === 'REVISION_REQ') {
             if ( this.requestObject.personRoleType === 'PI') {
                 this.pageHeader = 'Pending Protocols';

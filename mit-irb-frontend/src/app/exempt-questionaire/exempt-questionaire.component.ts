@@ -115,6 +115,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     exemptQuestionList: any = [];
     userDTO: any = {};
     isViewMode: any;
+    showApprovePopup = false;
     isPendingActionRequired = false;
     isEditMode = false;
     isEvaluate = false;
@@ -142,6 +143,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     PI_DECLARATION_AGREE_POLICIES: string;
     PI_DECLARATION_MEMBER_RESPONSIBILITY: string;
     PI_DECLARATION_COMPREHENSIVE_REVIEW: string;
+    PI_DECLARATION_INTRODUCTION: string;
     OTHER_MSG: string;
     NOT_EXEMPT_MSG_SUBMIT: string;
     EXEMPT_MSG_SUBMIT: string;
@@ -209,6 +211,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.NOT_EXEMPT_MSG_SUBMIT = property_config.NOT_EXEMPT_MSG_SUBMIT;
                     this.OTHER_MSG = property_config.OTHER_MSG;
                     this.NOFACULTY_MESSAGE = property_config.NOFACULTY_MESSAGE;
+                    this.PI_DECLARATION_INTRODUCTION = property_config.PI_DECLARATION_INTRODUCTION;
                     this.NOFACULTY_TITILE_MESSAGE = property_config.NOFACULTY_TITILE_MESSAGE;
                     this.PI_DECLARATION_COMPLETE = property_config.PI_DECLARATION_COMPLETE;
                     this.PI_DECLARATION_AGREE_POLICIES = property_config.PI_DECLARATION_AGREE_POLICIES;
@@ -513,11 +516,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             data => {
                 this.result = data || [];
                 if (this.result != null) {
-                    if ((this.result.irbExemptForm.loggedInUserFacultySponsor === true
-                        && this.result.irbExemptForm.facultySponsorJobTitle != null && this.result.irbExemptForm.statusCode !== '4') ||
-                        (this.result.irbExemptForm.loggedInUserPI === true && this.result.irbExemptForm.pijobTitle != null
-                            && this.result.irbExemptForm.statusCode === '5') ||
-                        (this.result.irbExemptForm.statusCode === '3' &&
+
+                    // Removed checking of faculty sponsor job titlein 1st if condition
+                    // Removed (this.result.irbExemptForm.loggedInUserPI === true && this.result.irbExemptForm.pijobTitle != null
+                    // && this.result.irbExemptForm.statusCode === '5')
+                    if ((this.result.irbExemptForm.loggedInUserFacultySponsor === true && this.result.irbExemptForm.statusCode === '2') ||
+                         (this.result.irbExemptForm.statusCode === '3' &&
                             (this.userDTO.role === 'CHAIR' || this.userDTO.role === 'ADMIN'))) {
                         this.isPendingActionRequired = true;
                     }
@@ -534,8 +538,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     } else {
                         this.isActionByPi = false;
                     }
-                    if ( this.result.exemptQuestionList != null) {
-                        this.exemptQuestionList = this.result.exemptQuestionList;
+                    if ( this.result.irbExemptForm.exemptQuestionList != null) {
+                        this.exemptQuestionList = this.result.irbExemptForm.exemptQuestionList;
                     }
                     this.questionaire = this.result.questionnaireDto;
                     this.requestObject.personJobTitle = this.result.irbExemptForm.pijobTitle;
@@ -554,11 +558,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     if (this.requestObject.irbExemptForm.statusCode === '2' || this.requestObject.irbExemptForm.statusCode === '3') {
                         this.isViewMode = true;
                     }
-                      if (this.requestObject.irbExemptForm.statusCode === '5'
+                    if (this.requestObject.irbExemptForm.statusCode === '5'
                         && this.userDTO.personID === this.requestObject.irbExemptForm.createdUser) {
                         this.isViewMode = true;
                     }
-                    this.updateExemptQuestionnaire();
+                   this.updateExemptQuestionnaire();
                     this.QuestionnaireCompletionFlag = 'Y';
                     this.checkQuestionaireCompletion();
                 }
@@ -813,11 +817,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
 
     /** sets the value of checkbox to false if the certify message is closed without agreeing*/
-    closeConfirmation() {
+      closeConfirmation() {
         this.piDeclaration.isAgreePoliciesChecked = false;
         this.piDeclaration.isComprehensiveReviewChecked = false;
         this.piDeclaration.isConfirmationChecked = false;
         this.piDeclaration.isMemberResponsibilityChecked = false;
+        this.showConfirmationDetails = true;
     }
 
     /** submit questionaire after completing and agreeing*/
@@ -833,8 +838,18 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             this.requestObject.irbExemptForm.personId !== '' && this.userDTO.personID !== this.requestObject.irbExemptForm.personId) {
             this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
             this.requestObject.irbExemptForm.statusCode = this.strEnrouteToPiStatusCode;
-        } else if ((this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '')) {
-            if (this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '') {
+        } else if ((this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '')) {   // PI - NO PI Status
+
+
+            // if (this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '') {
+            //     this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
+            //     this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
+            // }
+
+
+
+            if (this.requestObject.irbExemptForm.facultySponsorPersonId == null ||
+                this.requestObject.irbExemptForm.facultySponsorPersonId === '') {
                 this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
             } else {
@@ -846,8 +861,14 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strEnroutedToFacultyStatusCode;
             }
-        } else if ((this.requestObject.personJobTitle !== null || this.requestObject.personJobTitle !== '')) {
-            if ((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '')) {
+        } else if ((this.requestObject.personJobTitle !== null || this.requestObject.personJobTitle !== '')) { // PI has - PI STATUS
+
+
+            // if ((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '')) {
+
+            if ((this.requestObject.irbExemptForm.facultySponsorPersonId == null ||
+                this.requestObject.irbExemptForm.facultySponsorPersonId === '')) {
+
                 if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                     this.requestObject.irbExemptForm.notificationNumber = 701;
                 } else if (this.requestObject.irbExemptForm.isExempt === 'N') {
@@ -855,7 +876,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 }
                 this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-            } else if ((this.requestObject.facultySponsorJobTitle !== null || this.requestObject.facultySponsorJobTitle !== '')) {
+            } else
+            // if ((this.requestObject.facultySponsorJobTitle !== null || this.requestObject.facultySponsorJobTitle !== ''))
+            {
                 if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                     this.requestObject.irbExemptForm.notificationNumber = 705;
                 } else if (this.requestObject.irbExemptForm.isExempt === 'N') {
@@ -1213,29 +1236,56 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.approveRejectAction(this.requestObject);
     }
 
-    approveQuestionnireClick() {
+    approveQuestionnireClick() {// condition added for showing confirmation popup for faculty sponsor
+        if (this.userDTO.personID === this.requestObject.irbExemptForm.facultySponsorPersonId
+            && this.requestObject.irbExemptForm.statusCode === '2') {
+            document.getElementById('openConfirmModalButton').click();
+        } else {
+            document.getElementById('openApproveModalButton').click();
+
+        }
         this.ApproveRejectHeader = 'Approve Exempt Study';
         this.requestObject.irbExemptForm.comment = '';
         this.isApprovedAlert = true;
         this.isRejectedAlert = false;
         this.isReturnAlert = false;
+        this.showApprovePopup = true;
     }
 
     approveConfirmClick() {
-        this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-               if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
-            if (this.requestObject.irbExemptForm.isExempt === 'Y') {
-                this.requestObject.irbExemptForm.notificationNumber = 706;
-            }
-            if (this.requestObject.irbExemptForm.isExempt === 'N') {
-                this.requestObject.irbExemptForm.notificationNumber = 707;
-            }
-            this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
-        } else if (this.requestObject.personDTO.role === 'CHAIR' || this.requestObject.personDTO.role === 'ADMIN') {
-            this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedIrbOfficeActionType;
-        }
-        this.approveRejectAction(this.requestObject);
-    }
+        // this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+          if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
+              if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                  this.requestObject.irbExemptForm.notificationNumber = 706;
+              }
+              if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                  this.requestObject.irbExemptForm.notificationNumber = 707;
+              }
+
+
+              if (this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '') {
+                  if ((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '')) {
+                      this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
+                  } else {
+                      this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+                  }
+              } else {
+                  this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+              }
+
+
+              this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
+          } else if (this.requestObject.personDTO.role === 'CHAIR' || this.requestObject.personDTO.role === 'ADMIN') {
+
+
+              this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+
+
+
+              this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedIrbOfficeActionType;
+          }
+          this.approveRejectAction(this.requestObject);
+      }
 
     rejectQuestionnireClick() {
         this.ApproveRejectHeader = 'Reject Exempt Study';
@@ -1335,5 +1385,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         },
             error => console.log( 'Error downloading the file.'),
             () => console.log( 'OK' ) );
+    }
+      openApprovePopup() {
+        $('#confirmModal').modal('hide');
+        document.getElementById('openApproveModalButton').click();
+        this.showApprovePopup = false;
     }
 }

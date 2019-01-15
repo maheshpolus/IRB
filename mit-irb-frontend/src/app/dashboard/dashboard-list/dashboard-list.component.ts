@@ -301,7 +301,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 },
             );
         }
-        
+
     }
 
     /** sets value of direction to implement sorting in tabs other than EXEMPT, COMMITEE, SCHEDULE*/

@@ -23,37 +23,37 @@
 						<strong>Key elements of Exempt Evaluation.</strong>
 						<span class="welcome-popup" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
 					</div>
-					<div *ngIf="isQuestionaireSubmitted"  class=" exempt-description">
-						<h5>Exempt Determinations:</h5>
-							<div *ngFor="let exemptQuestion of exemptQuestionList let i=index" class="col-12 exempt-description">
-								<div *ngIf="i==0 || showMore == true">
-								<h6>{{exemptQuestion.CATEGORY}}</h6>
-								{{exemptQuestion.CATEGORY_DESC}}
-								
-								<div class="pdf read-more" *ngIf="exemptQuestionList?.length > 1"> <span *ngIf="showMore==false"(click)="showMore=true">Read More...</span><span *ngIf="showMore==true && i==exemptQuestionList?.length-1" (click)="showMore=false">Read Less</span></div>
-								<hr *ngIf="showMore==true && i!=exemptQuestionList?.length-1" >
-							</div>
-							</div>
-							<div class="col-12">
-								<div class="row">
-										<div class="col-4 Welcome-alert alert alert-warning submit-alert pdf"  data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">
+					<div *ngIf="isQuestionaireSubmitted" class=" exempt-description">
+						<h5 class="determination-heading">Exempt Determination:</h5>
+						<div *ngFor="let exemptQuestion of exemptQuestionList let i=index" class="col-12 exempt-description">
+							<div *ngIf="i==0 || showMore == true">
+							<h6>{{exemptQuestion.CATEGORY}}</h6>
+							{{exemptQuestion.CATEGORY_DESC}}
+							
+							<div class="pdf read-more" *ngIf="exemptQuestionList?.length > 1"> <span *ngIf="showMore==false"(click)="showMore=true">Read More...</span><span *ngIf="showMore==true && i==exemptQuestionList?.length-1" (click)="showMore=false">Read Less</span></div>
+							<hr *ngIf="showMore==true && i!=exemptQuestionList?.length-1" >
+						</div>
+						</div>
+						<div class="col-12">
+							<div class="row">
+									<div [ngClass]="{'col-6':requestObject?.irbExemptForm?.statusCode != '4'}" class="col-4 Welcome-alert alert alert-warning submit-alert pdf"  data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">
+											
+											<i class="fa fa-info-circle" aria-hidden="true"></i>
+											 <strong>Key elements of Exempt Evaluation</strong>
+										</div>
+										<div [ngClass]="{'col-5':requestObject?.irbExemptForm?.statusCode != '4'}" class="col-3 Welcome-alert alert submit-alert alert-warning pdf" data-toggle="modal" data-target="#confirmModal" (click)="showConfirmationDetails = false">
 												
-												<i class="fa fa-info-circle" aria-hidden="true"></i>
-												 <strong>Key elements of Exempt Evaluation</strong>
+												<i class="fa fa-info-circle" aria-hidden="true">
+													 </i><strong> View Confirmation</strong>
 											</div>
-											<div class="col-3 Welcome-alert alert submit-alert alert-warning pdf" data-toggle="modal" data-target="#confirmModal" (click)="showConfirmationDetails = false">
+											<div *ngIf="requestObject?.irbExemptForm?.statusCode === '4'" class="col-4 Welcome-alert submit-alert alert alert-warning pdf" (click)="generateCorrespondence()">
 													
-													<i class="fa fa-info-circle" aria-hidden="true">
-														 </i><strong> View Confirmation</strong>
+													<i class="fa fa-download" aria-hidden="true"></i>
+													<strong>Generate Determination</strong>
 												</div>
-												<div class="col-4 Welcome-alert submit-alert alert alert-warning pdf" (click)="generateCorrespondence()">
-														
-														<i class="fa fa-download" aria-hidden="true"></i>
-														<strong>Generate Determination</strong>
-													</div>
-									</div>
 								</div>
-								</div>
+							</div>
+							</div>
 					<div class="Welcome-msg">
 						<p [innerHTML]="ABOUT_MESSAGE">
 						</p>
@@ -309,18 +309,17 @@
 					 <button class="btn btn-primary tab_btn" *ngIf="isViewMode == false" (click)="saveQuestionaire()" id="save">Save</button>
 					 <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#approveRejectActionConfirmModal" type="submit"
 					 *ngIf="isViewMode == false && isActionByPi == true" (click)="returnQuestionnaireClick()" [disabled]="QuestionnaireCompletionFlag=='N'">Return</button>
-					 <button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired" (click)="approveQuestionnireClick()"
-					 data-toggle="modal" data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="approve">Approve</button>
+					 <button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired" (click)="approveQuestionnireClick()" id="approve">Approve</button>
 					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == true && isPendingActionRequired" (click)="rejectQuestionnireClick()"
 					 data-toggle="modal" data-dismiss="modal" data-target="#approveRejectActionConfirmModal" id="reject">Reject</button>
 					 <button *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'" class="btn btn-primary tab_btn" data-toggle="modal" data-target="#checklistModal"
 					 type="submit" (click)="showAddAttachmentPopUp($event)">Add/View Checklist</button>
-					<!-- <div class="exit-button mg-left" style="display: inline;margin-left: 0">
+					 <!-- <div class="exit-button mg-left" style="display: inline;margin-left: 0">
 						<button type="button" style="margin-left: 0" class="btn btn-warning" (click)="returnToExemptList($event)" title="Close">
-							<i class="fa fa-times">&nbsp;</i>Exit</button>
+							<i class="fa fa-times mg-6">&nbsp;</i>Exit</button>
 					</div> -->
 					<button class="btn btn-primary tab_btn" *ngIf="isViewMode == false" (click)="returnToExemptList2($event)" title="Save and Close">Exit</button>
-					
+			
 				</section>
 			</div>
 		</div>
@@ -376,6 +375,7 @@
 				<div class="modal-padding">
 					<div class="row">
 						<div class="col-md-12 col-12 lg-12 col-sm-12 col-12 font-size-15">
+							<p class="confirm-text" [innerHTML]="PI_DECLARATION_INTRODUCTION"></p>
 							<p class="confirm-text">
 								<!-- <input type="checkbox" #agreeCheckbox="ngModel" [(ngModel)]="isChecked" (change)="0"> -->
 								<input *ngIf="showConfirmationDetails" type="checkbox" [(ngModel)]="piDeclaration.isConfirmationChecked">
@@ -398,7 +398,8 @@
 				</div>
 			</div>
 			<section class="row btn-row-med sect-confirm-padding">
-				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true && showConfirmationDetails == true">Agree</button>
+				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="submitQuestionaire()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true && showConfirmationDetails == true && showApprovePopup == false">Agree</button>
+				<button class="btn btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="openApprovePopup()" *ngIf="piDeclaration.isConfirmationChecked == true && piDeclaration.isAgreePoliciesChecked == true && piDeclaration.isMemberResponsibilityChecked && piDeclaration.isComprehensiveReviewChecked == true && showConfirmationDetails == true && showApprovePopup == true">Agree</button><!--Added to distinguish the agree clicked by PI and admin-->
 				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="closeConfirmation()">Close</button>
 			</section>
 		</div>
@@ -634,10 +635,15 @@
 <!-- modal butoon hidden for welcome message -->
 <button id="openWelocomeModalButton" [hidden]="true" data-toggle="modal" data-target="#welcomeModal"></button>
 <!-- end -->
-
+<!-- modal butoon hidden for Approve popup -->
+<button id="openApproveModalButton" [hidden]="true" data-toggle="modal" data-target="#approveRejectActionConfirmModal"></button>
+<!-- end -->
 <!-- stk -->
 <!-- modal butoon hidden dont change -->
 <button id="openWarningModalButton" [hidden]="true" data-toggle="modal" data-target="#alertWarningModal"></button>
+<!-- end -->
+<!-- modal butoon hidden dont change -->
+<button id="openConfirmModalButton" [hidden]="true" data-toggle="modal" data-target="#confirmModal"></button>
 <!-- end -->
 <!-- message-modal -->
 <div class="modal fade" id="alertWarningModal" tabindex="-1" role="dialog" aria-labelledby="alertModalCenterTitle" aria-hidden="true"
@@ -666,9 +672,6 @@
 			<section class="row btn-row-med sect-warning-padding proceed-btn-align">
 				<button class="btn mb-3 btn-primary tab_btn" data-dismiss="modal" aria-label="Close" (click)="proceedWithWarning()">Proceed</button>
 				<button class="btn mb-3 btn-primary tab_btn" data-dismiss="modal" aria-label="Close">Close</button>
-			</section>
-			<section class="row btn-row-med sect-confirm-padding proceed-btn-align" *ngIf="!showContinueButton">
-				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Close</button>
 			</section>
 		</div>
 	</div>

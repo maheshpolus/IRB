@@ -376,7 +376,16 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.protocolTypeCode = '';
         this.requestObject.protocolStatusCode = '';
         this.protocolStatus = '';
-        this.getIrbListData(this.lastClickedTab);
+        // No need for backend call to clear data in ALL PROTOCOLS for Admins
+        if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && this.lastClickedTab === 'ALL') {
+                    this.irbListData = [];
+                    this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                    this.protocolCount = this.irbListData.length;
+                    this.sortBy();
+        } else {
+            this.getIrbListData(this.lastClickedTab);
+        }
+        // this.getIrbListData(this.lastClickedTab);
         this.isAdvancsearchPerformed = false;
         this._sharedDataService.searchData = null;
     }

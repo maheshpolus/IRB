@@ -15,7 +15,8 @@ export class LogoutComponent {
 
    login() {
       this.reset();
-      this._router.navigate(['/irb/dashboard']);
+     // this._router.navigate(['/irb/dashboard']);
+      window.location.href = '/';
    }
    reset() {
        this.idle.watch();

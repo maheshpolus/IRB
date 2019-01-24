@@ -359,6 +359,16 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     onKeyEnterElastic(id) {
         $('#' + id + ' li.selected').trigger('click');
     }
+    
+    /**
+     * @param  {} event
+     * @param  {} id
+     */
+    onKeyArrowElastic(event, id) {
+        this.keyPressEvent.onKeyDown(event, id);
+        $('#' + id + ' li.selected span').trigger('click');
+      //  this.IsElasticResultPI = true;
+    }
 
     /** calls service to fetch Units of PI */
     getPiUnits() {
@@ -394,6 +404,11 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.irbExemptForm.personId = null;
         this.requestObject.personJobTitle = null;
     }
+    
+ // clickPiDropDown(result) {
+    //     this.selectedPiResult(result); // Setting the data of selected PI
+    //     this.IsElasticResultPI = false; // closing the elastic dropdown on selecting a PI from drop down
+    // }
 
     /** assign values to requestObject on selecting a particular PI from elastic search */
     selectedPiResult(result) {
@@ -414,6 +429,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.facultySponsorJobTitle = null;
 
     }
+    
+    
+ // clickFacultySponsorDropDown(result) {
+    //     this.selectedFacultyResult(result);
+    //     this.IsElasticResultFaculty = false;
+    // }
 
     /** assign values to requestObject on selecting a particular Faculty from elastic search */
     selectedFacultyResult(result) {
@@ -453,9 +474,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** function to load exempt questionaire once the title and pi and exempt is created */
     loadQuestionaire() {
+        // const test = (<HTMLInputElement>document.getElementById("test")).value.split('/');
+        // const test2 = (<HTMLInputElement>document.getElementById("test2")).value.split('/');
+        // this.requestObject.exemptProtocolStartDate = new Date(parseInt(test[2], 10), parseInt(test[1], 10), parseInt(test[0], 10));
+        // this.requestObject.exemptProtocolEndDate = new Date(parseInt(test2[2], 10), parseInt(test2[1], 10), parseInt(test2[0], 10));
         this.requestObject.questionnaireInfobean = JSON.stringify(this.requestObject.questionnaireInfobean);
         this.showAlert = false;
-        if (this.requestObject.irbExemptForm.personId !== '' &&
+        if ((this.requestObject.irbExemptForm.personId !== '' && this.requestObject.irbExemptForm.personId !== null) &&
             (this.requestObject.irbExemptForm.exemptTitle !== '' && this.requestObject.irbExemptForm.personName !== '') &&
             (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
             (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null) &&
@@ -468,6 +493,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             } else if (!this.ignoreWarning && (this.requestObject.irbExemptForm.facultySponsorPersonId === ''
                 || this.requestObject.irbExemptForm.facultySponsorPersonId == null) && this.requestObject.personJobTitle == null) {
                 this.modalHeading = 'Alert';
+                this.requestObject.irbExemptForm.facultySponsorPersonId = null;
+                this.requestObject.irbExemptForm.facultySponsorPerson = null;
                 this.alertMsg = this.NOFACULTY_MESSAGE;
                 this.openWarningModal();
             } else if (!this.ignoreWarning && this.requestObject.facultySponsorJobTitle == null
@@ -504,11 +531,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     }
                 );
             }
-        } else if (this.requestObject.irbExemptForm.personId === ''
+        } else if (this.requestObject.irbExemptForm.personId === null || this.requestObject.irbExemptForm.personId === ''
             && this.requestObject.irbExemptForm.personName !== '' && this.requestObject.irbExemptForm.personName !== null) {
                 this.showAlert = true;
-            this.modalHeading = 'Alert';
-            this.alertMsg = 'Please enter valid data';
+                this.requestObject.irbExemptForm.personId = null;
+                this.requestObject.irbExemptForm.personName = null;
+                this.modalHeading = 'Alert';
+                this.alertMsg = 'Please choose a valid Principal Investigator';
         } else {
             this.invalidData.invalidExemptData = true;
         }
@@ -691,7 +720,10 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '') &&
             (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
             (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
-            this.invalidData.invalidExemptData = false;
+            
+         this.requestObject.irbExemptForm.exemptProtocolStartDate = this.GetFormattedDate(this.requestObject.exemptProtocolStartDate);
+            this.requestObject.irbExemptForm.exemptProtocolEndDate = this.GetFormattedDate(this.requestObject.exemptProtocolEndDate);
+                this.invalidData.invalidExemptData = false;
                 this._spinner.show();
             this._exemptQuestionaireService.saveQuestionaire(this.requestObject).subscribe(
                 data => {

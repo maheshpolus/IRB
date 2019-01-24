@@ -2399,5 +2399,11 @@ input:disabled,textarea:disabled{
 {
     margin-left: 0px !important;
 }
+@media (min-width: 576px)
+{
+    .confirm-modal-width {
+        max-width: 670px !important;
+    }
+}
 
 

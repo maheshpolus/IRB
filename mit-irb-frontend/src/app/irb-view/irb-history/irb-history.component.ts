@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
 
@@ -29,10 +30,19 @@ export class IrbHistoryComponent implements OnInit {
         previousGroupActionId: ''
     };
 
-    constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute) { }
+    PROTOCOL_HISTORY_INFO: string;
+
+    constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, private _http: HttpClient ) { }
 
     /** sets requestObject and calls functions to load history list */
     ngOnInit() {
+        this._http.get('/mit-irb/resources/string_config_json').subscribe(
+            data => {
+                const property_config: any = data;
+                if (property_config) {
+                    this.PROTOCOL_HISTORY_INFO = property_config.PROTOCOL_HISTORY_INFO;
+                }
+            });
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
         this.loadHistoryList();
     }

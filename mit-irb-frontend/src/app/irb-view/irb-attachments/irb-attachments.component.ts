@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
 
@@ -24,10 +25,18 @@ export class IrbAttachmentsComponent implements OnInit {
             attachmentId: ''
     };
 
-    constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, ) { }
+   PROTOCOL_ATTACHMENTS_INFO: string;
 
+    constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, private _http: HttpClient ) { }
     /** sets requestObject and call function to load attachment details */
     ngOnInit() {
+    	 this._http.get('/mit-irb/resources/string_config_json').subscribe(
+            data => {
+                const property_config: any = data;
+                if (property_config) {
+                    this.PROTOCOL_ATTACHMENTS_INFO = property_config.PROTOCOL_ATTACHMENTS_INFO;
+                }
+            });
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get( 'protocolNumber' );
         this.loadIrbAttachmentList();
     }

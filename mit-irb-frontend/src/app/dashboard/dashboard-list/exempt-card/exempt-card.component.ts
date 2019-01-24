@@ -135,13 +135,13 @@ export class ExemptCardComponent implements  OnChanges  {
             pageNumber * this.paginationData.limit);
         document.getElementById('scrollToTop').scrollTop = 0;
     }
-    
+
     generateDetermination(exemptFormID) {
         this._dashboardService.generateCorrespondence(exemptFormID, this.userDTO.personID).subscribe(data => {
             const a = document.createElement( 'a' );
             const blob = new Blob( [data], { type: data.type} );
             a.href = URL.createObjectURL( blob );
-            a.download = 'Exempt Determination - ' + exemptFormID;
+            a.download = 'Exempt Determination - ' + exemptFormID + '.pdf';
             document.body.appendChild(a);
             a.click();
         },

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
 
@@ -29,7 +30,14 @@ export class IrbOverviewComponent implements OnInit {
     irbPersonDetailedList: any;
     result: any;
 
-	trainingCompleted: string;
+    trainingCompleted: string;
+    PROTOCOL_PERSONNEL_INFO: string;
+    PROTOCOL_FUNDING_SOURCE_INFO: string;
+    PROTOCOL_SUBJECT_INFO: string;
+    PROTOCOL_ENGAGED_INSTITUTIONS_INFO: string;
+    PROTOCOL_SPECIAL_REVIEW_INFO: string;
+
+
 
     requestObject = {
             protocolNumber: '',
@@ -37,10 +45,21 @@ export class IrbOverviewComponent implements OnInit {
     };
 
   constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute,
-                private _spinner: NgxSpinnerService) { }
+                private _spinner: NgxSpinnerService, private _http: HttpClient) { }
 
   /** sets requestObject and calls all the functions */
   ngOnInit() {
+    this._http.get('/mit-irb/resources/string_config_json').subscribe(
+        data => {
+            const property_config: any = data;
+            if (property_config) {
+                this.PROTOCOL_PERSONNEL_INFO = property_config.PROTOCOL_PERSONNEL_INFO;
+                this.PROTOCOL_FUNDING_SOURCE_INFO = property_config.PROTOCOL_FUNDING_SOURCE_INFO;
+                this.PROTOCOL_SUBJECT_INFO = property_config.PROTOCOL_SUBJECT_INFO;
+                this.PROTOCOL_ENGAGED_INSTITUTIONS_INFO = property_config.PROTOCOL_ENGAGED_INSTITUTIONS_INFO;
+                this.PROTOCOL_SPECIAL_REVIEW_INFO = property_config.PROTOCOL_SPECIAL_REVIEW_INFO;
+            }
+        });
       this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
       this.loadPersonalDetails();
       this.loadFundingDetails();

@@ -236,7 +236,8 @@
 			<div class="card coll-card-q">
 				<h5 class="card-header collapse_hd">
 					Exempt Form
-					<i class="fa fa-info-circle pdf" aria-hidden="true" (click)="isStayOnSamePage = true" data-toggle="modal" data-target="#welcomeModal"></i>
+					<i class=" fa fa-info-circle" tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" data-html="true" data-content="The following questions help determine the proper exempt status.Click on the for additional help <i class='yellow-bulb-popper fa fa-lightbulb-o'></i> or visit <a href='https://couhes.mit.edu/' target='_blank'>COUHES.mit.edu.</a>"></i>
+					<!-- <i class="fa fa-info-circle pdf" aria-hidden="true" (click)="isStayOnSamePage = true" data-toggle="modal" data-target="#welcomeModal"></i> -->
 				</h5>
 				<div class="card-body collapse-card-body">
 					<div class="quest-no" *ngFor=' let questionIndex of questionaire.questionnaireQuestions; let indexQuestion = index'>
@@ -438,9 +439,8 @@
 												<td>
 													<i class="fa fa-info-circle" aria-hidden="true"></i>
 												</td>
-												<td >Investigators are required to follow responsibilities and guidance as outlined in the Investigator Responsibility
-													Guidelines. Visit
-													<a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a> for more information.
+												<td >Investigators are required to follow responsibilities and guidance as outlined in the Investigator Responsibilities for Exempt Research. Visit
+													<a href="http://couhes.mit.edu/couhes-connect-resources/couhes-connect-guidance" target="_blank">http://couhes.mit.edu/couhes-connect-resources/couhes-connect-guidance</a> for more information.
 												</td>
 											</tr>
 											<tr>
@@ -464,10 +464,11 @@
 									<br> Please review each question carefully and respond truthfully. If you are unsure, you can save your progress and
 									return to the question later. Incomplete evaluations cannot be submitted.
 									<br>
-									<br> Guidance is available throughout the evaluation and with more detail available on the COUHES website
-									<a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a>. For questions or clarification, please contact the COUHES office:
 									<br>
-									<br>
+									<p>Guidance is available throughout the evaluation and with more detail available on the COUHES website
+									<a href="http://couhes.mit.edu/" target="_blank">http://couhes.mit.edu/</a>.	
+									<br> For questions or clarification, please contact the COUHES office:</p>
+									
 									<div class="row">
 										<div class="col-4"></div>
 										<div class="col-2 welcome-text-color">

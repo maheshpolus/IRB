@@ -220,6 +220,7 @@
 								<option value="" hidden>Determination</option>
 								<option value="Y">Exempt</option>
 								<option value="N">Not Exempt</option>
+								<option value="O">Review Not Required</option>
 							</select>
 						</div>
 
@@ -335,42 +336,48 @@
               </div>
 			</div>
 			<!-- Status search modal -->
-	<div class="modal fade bd-example-modal-lg" id="statusSearchModal"
-	tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-	aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Select the Status to be Searched</h5>
-				<button type="button" class="close modal-close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body modal-popup">
-				<div class="modal-header-label">
-					<div class="status-input-search searchBox">
-						<input type="text" placeholder="Search Status of Protocols here"  [(ngModel)]="statusSearchText" (ngModelChange)="statusSearchChange()"/>
-						<a href="#" class="searchButton" (click)="clearStatusSearch($event)">
-								<i [ngClass]="statusSearchText?'fa fa-times fa-med':'fa fa-search fa-med'"></i>
-							</a>
+			<div class="modal fade bd-example-modal-lg" id="statusSearchModal"
+			tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+			aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header popup-header">
+						<h5 class="modal-title" id="exampleModalLongTitle">Select the Status to be Searched</h5>
+						<button type="button" class="close modal-close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body modal-popup">
+						<div class="modal-header-label">
+							<div class="status-input-search searchBox">
+								<input type="text" placeholder="Search Status of Protocols here"  [(ngModel)]="statusSearchText" (ngModelChange)="statusSearchChange()"/>
+								<a href="#" class="searchButton" (click)="clearStatusSearch($event)">
+										<i [ngClass]="statusSearchText?'fa fa-times fa-med':'fa fa-search fa-med'"></i>
+									</a>
+								</div>
+							<h4 class="popup-sub-head">Status</h4>
 						</div>
-					<h4 class="popup-sub-head">Status</h4>
-				</div>
-				<!-- section1 -->
-				<div class="modal-padding">
-				<div class="row">
-				<div class="col-lg-4 status-links pdf" *ngFor="let protocolStatus of protocolStatusesCopy">
-					<a (click)="setProtocolStatus(protocolStatus)" data-dismiss="modal"><span>{{protocolStatus.PROTOCOL_STATUS}}</span></a>
-				</div>
-				</div>
+						<!-- section1 -->
+						<div class="modal-padding">
+						<div class="row">
+						<div class="col-lg-4 status-links pdf" *ngFor="let protocolStatus of protocolStatusesCopy">
+								<input type="checkbox" [(ngModel)]="isCheckBoxChecked[protocolStatus?.PROTOCOL_STATUS]"/>
+							<a><span>{{protocolStatus?.PROTOCOL_STATUS}}</span></a>
+						</div>
+						</div>
+						
 				
-		
+					</div>
+					<div class="modal-footer">
+						<section class="row btn-row-med sect-padding">
+								<button class="btn btn-primary tab_btn" (click)="setProtocolStatus()" data-dismiss="modal">Search</button>
+								<button class="btn btn-default btn-close ml-0" (click)="clearStatus()">Clear</button>
+							</section>
+					</div>
+				</div>
 			</div>
-			<div class="modal-footer"></div>
 		</div>
-	</div>
-</div>
 			<!--Hidden Button for warning modal-->
 			<button id="openWarningModalButton" [hidden]="true" data-toggle="modal" data-target="#warningModal"></button>
 			<button id="openStatusModalButton" [hidden]="true" data-toggle="modal" data-target="#statusSearchModal"></button>

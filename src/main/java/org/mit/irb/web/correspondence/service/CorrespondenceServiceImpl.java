@@ -43,12 +43,7 @@ public class CorrespondenceServiceImpl implements CorrespondenceService{
 			headers.setContentLength(mergedOutput.length);
 			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 			headers.setPragma("public");
-			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);
-			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-			response.setContentType("application/pdf");
-			response.setContentLength(mergedOutput.length);
-			response.setHeader("Content-Disposition", "attachment; filename=\""+generatedFileName+"\"");
-			FileCopyUtils.copy(mergedOutput, response.getOutputStream());				
+			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);				
 		}catch (Exception e) {
 			logger.error("Exception in generateCorrespondence"+ e.getMessage());
 		}

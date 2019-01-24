@@ -48,7 +48,7 @@
 					<a>
 						<span class="userName">{{result?.fullName}}({{result?.role}})
 						</span>
-						<i class="fa fa-user pdf" (click)="logout()"></i>
+						<i class="fa fa-user pdf" title="Logout" (click)="logout()"></i>
 					</a>
 				</li>
 				<li class="active">
@@ -57,8 +57,12 @@
 					</a>
 				</li>
 				<li>
-					<a>
-						<i class="fa fa-question"></i>
+					<a class="dropdown">
+						<i class="fa fa-question pdf" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								<a class="dropdown-item  nav-dropdown" href="{{FAQ_URL}}" target="_blank">FAQ</a>
+								<a class="dropdown-item  nav-dropdown" href="{{GUIDELINES_URL}}" target="_blank">Guidelines</a>
+						</div>
 					</a>
 				</li>
 				<li class="d-md-none d-lg-none d-xl-none">

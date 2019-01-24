@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
 
@@ -18,14 +19,25 @@ export class IrbHeaderDetailComponent implements OnInit {
   userDTO: any = {};
   previousUrl: string;
 
+  PROTOCOL_BASIC_INFO: string;
+
   requestObject = {
           protocolNumber: ''
   };
 
-  constructor(private router: Router, private _activatedRoute: ActivatedRoute, private _irbViewService: IrbViewService) {}
+  constructor(private router: Router, private _activatedRoute: ActivatedRoute,
+    private _irbViewService: IrbViewService, private _http: HttpClient) {}
+
 
   /** sets requestObject and call function to load header details */
   ngOnInit() {
+  	  this._http.get('/mit-irb/resources/string_config_json').subscribe(
+        data => {
+            const property_config: any = data;
+            if (property_config) {
+                this.PROTOCOL_BASIC_INFO = property_config.PROTOCOL_BASIC_INFO;
+            }
+        });
       this.userDTO = this._activatedRoute.snapshot.data['irb'];
       this.isExpanded = false;
       this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');

@@ -17,6 +17,7 @@ export class SharedDataService {
 
   public searchData: any = null;
   public isAdvancesearch = false;
+  public searchedStatus = null;
 
   getGeneralInfo() {
     return this.generalInfo;

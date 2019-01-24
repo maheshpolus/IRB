@@ -2298,11 +2298,11 @@ input:disabled,textarea:disabled{
     color: #a92034 !important;
     /* padding-bottom: 5px !important; */
 }
-.status-links a:hover
+/* .status-links a:hover
 {
     text-decoration: underline !important;
     color: #757575 !important;
-}
+} */
 .status-links
 {
     margin-bottom:5px;
@@ -2385,6 +2385,19 @@ input:disabled,textarea:disabled{
     font-weight: bold;
     font-size: 1.2rem;
 }
-
+.nav-dropdown:hover
+{
+    color: #a92034;
+    background-color: #f5dede;
+}
+.yellow-bulb-popper
+{
+    color:#FF9800;
+    font-size: 18px;
+}
+.ml-0
+{
+    margin-left: 0px !important;
+}
 
 

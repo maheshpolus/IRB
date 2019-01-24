@@ -64,6 +64,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     sortField = 'UPDATE_TIMESTAMP';
     protocolStatuses: any = [];
     protocolStatusesCopy: any = [];
+    isCheckBoxChecked = {};
 
     /**elastic search variables */
     message = '';
@@ -118,8 +119,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.lastClickedTab = data;
             }
         });
-        if (this._sharedDataService.isAdvancesearch != null) {
-            this.requestObject = this._sharedDataService.searchData;
+        if (this._sharedDataService.isAdvancesearch) {
+            this.requestObject = this._sharedDataService.searchData !== null ?  this._sharedDataService.searchData : this.requestObject;
+            if (this.requestObject !== null && this.requestObject.protocolStatusCode !== ''
+                && this.requestObject.protocolStatusCode !== undefined) {
+                this.protocolStatus =  this._sharedDataService.searchedStatus;
+            }
             this.isAdvancesearch = true;
             this.isAdvancsearchPerformed = true;
         }
@@ -564,7 +569,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         document.getElementById('scrollToTop').scrollTop = 0;
     }
     openStatusModal() {
-        document.getElementById('openStatusModalButton').click();
+        const statuses = this.protocolStatus.split(',');
+        statuses.forEach(status => {
+            this.isCheckBoxChecked[status] = true;
+        });
     }
     statusSearchChange() {
         if (!this.statusSearchText) {
@@ -575,15 +583,33 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             return status.PROTOCOL_STATUS.toLowerCase().includes(this.statusSearchText);
           });
     }
-    setProtocolStatus(protocolStatus) {
+    setProtocolStatus() {
+        this.protocolStatus = '';
+        this.requestObject.protocolStatusCode = '';
         this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
-        this.requestObject.protocolStatusCode = protocolStatus.PROTOCOL_STATUS_CODE;
-        this.protocolStatus = protocolStatus.PROTOCOL_STATUS;
+        this.protocolStatuses.forEach(protocolStatus => {
+            if (this.isCheckBoxChecked[protocolStatus.PROTOCOL_STATUS] === true) {
+                this.protocolStatus = this.protocolStatus === '' ?
+                protocolStatus.PROTOCOL_STATUS : this.protocolStatus + ',' + protocolStatus.PROTOCOL_STATUS;
+                this._sharedDataService.searchedStatus = this.protocolStatus;
+                this.requestObject.protocolStatusCode = this.requestObject.protocolStatusCode === '' ?
+                protocolStatus.PROTOCOL_STATUS_CODE : this.requestObject.protocolStatusCode + ',' + protocolStatus.PROTOCOL_STATUS_CODE;
+            }
+        });
+        this.getAdvanceSearch(this.lastClickedTab);
         this.statusSearchText = '';
     }
     clearStatusSearch(event) {
         event.preventDefault();
         this.statusSearchText = '';
         this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+    }
+    clearStatus() {
+        this.isCheckBoxChecked = {};
+        this.protocolStatus = '';
+        this._sharedDataService.searchedStatus = '';
+        this.requestObject.protocolStatusCode = '';
+        this._sharedDataService.searchData = this.requestObject;
+
     }
 }

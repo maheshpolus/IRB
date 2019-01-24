@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -18,9 +19,21 @@ export class HeaderComponent implements OnInit {
     result: any;
     showMenu = true;
 
-    constructor(private _loginService: LoginService, private _router: Router, private _sharedDataService: SharedDataService) { }
+    FAQ_URL: string;
+    GUIDELINES_URL: string;
+
+    constructor(private _loginService: LoginService, private _router: Router,
+        private _sharedDataService: SharedDataService, private _http: HttpClient) { }
 
     ngOnInit() {
+        this._http.get('/connect-stg/resources/string_config_json').subscribe(
+            data => {
+                const property_config: any = data;
+                if (property_config) {
+                    this.FAQ_URL = property_config.FAQ_URL;
+                    this.GUIDELINES_URL = property_config.GUIDELINES_URL;
+                }
+            });
         this._loginService.getUserDetail(this.requestObject).subscribe(data => {
             this.result = data || [];
             localStorage.setItem('userName', this.result.userName);

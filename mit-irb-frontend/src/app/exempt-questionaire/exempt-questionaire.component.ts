@@ -1441,7 +1441,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     generateCorrespondence() {
         const obj = {irbExemptForm: this.requestObject.irbExemptForm};
-        this._exemptQuestionaireService.generateCorrespondence(obj).subscribe( data => {
+        this._exemptQuestionaireService.generateCorrespondence(this.requestObject.irbExemptForm.exemptFormID, this.userDTO.personID)
+        .subscribe( data => {
             const a = document.createElement( 'a' );
             const blob = new Blob( [data], { type: data.type} );
             a.href = URL.createObjectURL( blob );

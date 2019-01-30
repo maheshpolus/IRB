@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { DashboardService } from '../../dashboard.service';
 
@@ -27,7 +28,7 @@ export class ExemptCardComponent implements  OnChanges  {
       protocolCount = 10;
 
 
-    constructor( private _router: Router, private _dashboardService: DashboardService ) { }
+    constructor( private _router: Router, private _dashboardService: DashboardService, private _spinner: NgxSpinnerService ) { }
 
 
     ngOnChanges(changes) {
@@ -137,7 +138,9 @@ export class ExemptCardComponent implements  OnChanges  {
     }
 
     generateDetermination(exemptFormID) {
+        this._spinner.show();
         this._dashboardService.generateCorrespondence(exemptFormID, this.userDTO.personID).subscribe(data => {
+            this._spinner.hide();
             const a = document.createElement( 'a' );
             const blob = new Blob( [data], { type: data.type} );
             a.href = URL.createObjectURL( blob );

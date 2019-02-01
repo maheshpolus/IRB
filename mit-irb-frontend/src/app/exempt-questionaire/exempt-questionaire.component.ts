@@ -197,7 +197,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
-    	   $(function () {
+            $(function () {
             $('[data-toggle="popover"]').popover();
             $('.popover-dismiss').popover({
                 trigger: 'focus'
@@ -359,7 +359,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     onKeyEnterElastic(id) {
         $('#' + id + ' li.selected').trigger('click');
     }
-    
+
     /**
      * @param  {} event
      * @param  {} id
@@ -404,7 +404,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.irbExemptForm.personId = null;
         this.requestObject.personJobTitle = null;
     }
-    
+
  // clickPiDropDown(result) {
     //     this.selectedPiResult(result); // Setting the data of selected PI
     //     this.IsElasticResultPI = false; // closing the elastic dropdown on selecting a PI from drop down
@@ -429,8 +429,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.facultySponsorJobTitle = null;
 
     }
-    
-    
+
+
  // clickFacultySponsorDropDown(result) {
     //     this.selectedFacultyResult(result);
     //     this.IsElasticResultFaculty = false;
@@ -720,7 +720,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== '') &&
             (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
             (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
-            
+
          this.requestObject.irbExemptForm.exemptProtocolStartDate = this.GetFormattedDate(this.requestObject.exemptProtocolStartDate);
             this.requestObject.irbExemptForm.exemptProtocolEndDate = this.GetFormattedDate(this.requestObject.exemptProtocolEndDate);
                 this.invalidData.invalidExemptData = false;
@@ -873,9 +873,21 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.setCommonReqObject();
 
         if (this.requestObject.irbExemptForm.personId != null &&
-            this.requestObject.irbExemptForm.personId !== '' && this.userDTO.personID !== this.requestObject.irbExemptForm.personId) {
+            this.requestObject.irbExemptForm.personId !== '' &&
+            this.userDTO.personID !== this.requestObject.irbExemptForm.personId) { // En-route to PI case
+
             this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
             this.requestObject.irbExemptForm.statusCode = this.strEnrouteToPiStatusCode;
+            // notification new
+            if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                this.requestObject.irbExemptForm.notificationNumber = 711;
+            }
+            if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                this.requestObject.irbExemptForm.notificationNumber = 712;
+            }
+            if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                this.requestObject.irbExemptForm.notificationNumber = 713;
+            }
         } else if ((this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '')) {   // PI - NO PI Status
 
 
@@ -886,20 +898,29 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
 
 
-            if (this.requestObject.irbExemptForm.facultySponsorPersonId == null ||
-                this.requestObject.irbExemptForm.facultySponsorPersonId === '') {
+    if (this.requestObject.irbExemptForm.facultySponsorPersonId == null || this.requestObject.irbExemptForm.facultySponsorPersonId === '') {
                 this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
+                // new notification
+                if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                    this.requestObject.irbExemptForm.notificationNumber = 714;
+                }
+                if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                    this.requestObject.irbExemptForm.notificationNumber = 715;
+                }
+                if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                    this.requestObject.irbExemptForm.notificationNumber = 716;
+                }
             } else {
-                if (this.requestObject.facultySponsorJobTitle !== null && this.requestObject.facultySponsorJobTitle !== '') {
+               // if (this.requestObject.facultySponsorJobTitle !== null && this.requestObject.facultySponsorJobTitle !== '') { // REMOVE
                 if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                     this.requestObject.irbExemptForm.notificationNumber = 705;
                 } else if (this.requestObject.irbExemptForm.isExempt === 'N') {
                     this.requestObject.irbExemptForm.notificationNumber = 709;
                 } else if (this.requestObject.irbExemptForm.isExempt === 'O') {
-                    this.requestObject.irbExemptForm.notificationNumber = 710;
+                    this.requestObject.irbExemptForm.notificationNumber = 723;
                 }
-            }
+           // }
                 this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strEnroutedToFacultyStatusCode;
             }
@@ -928,7 +949,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 } else if (this.requestObject.irbExemptForm.isExempt === 'N') {
                     this.requestObject.irbExemptForm.notificationNumber = 709;
                 } else if (this.requestObject.irbExemptForm.isExempt === 'O') {
-                    this.requestObject.irbExemptForm.notificationNumber = 710;
+                    this.requestObject.irbExemptForm.notificationNumber = 723;
                 }
                 this.requestObject.irbExemptForm.actionTypesCode = this.strSubmitActionType;
                 this.requestObject.irbExemptForm.statusCode = this.strEnroutedToFacultyStatusCode;
@@ -1276,6 +1297,16 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     returnConfirmClick() {
         this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
         this.requestObject.irbExemptForm.actionTypesCode = this.strReturnedByPIActionType;
+        // new notifications to Creator
+        if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+            this.requestObject.irbExemptForm.notificationNumber = 717;
+        }
+        if (this.requestObject.irbExemptForm.isExempt === 'N') {
+            this.requestObject.irbExemptForm.notificationNumber = 718;
+        }
+        if (this.requestObject.irbExemptForm.isExempt === 'O') {
+            this.requestObject.irbExemptForm.notificationNumber = 719;
+        }
         this.isViewMode = true;
         this.approveRejectAction(this.requestObject);
     }
@@ -1297,48 +1328,114 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
 
     approveConfirmClick() {
-      // this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-        if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
-            if (this.requestObject.irbExemptForm.isExempt === 'Y') {
-                this.requestObject.irbExemptForm.notificationNumber = 706;
-            }
-            if (this.requestObject.irbExemptForm.isExempt === 'N') {
-                this.requestObject.irbExemptForm.notificationNumber = 707;
-            }
-            if (this.requestObject.irbExemptForm.isExempt === 'O') {
-                this.requestObject.irbExemptForm.notificationNumber = 710;
-            }
+        // this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+          if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
 
+              if (this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '') {
+                  if ((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '')) {
+                      this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
+                      // New notification to IRB office
+                      if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                          this.requestObject.irbExemptForm.notificationNumber = 714;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                          this.requestObject.irbExemptForm.notificationNumber = 715;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                          this.requestObject.irbExemptForm.notificationNumber = 716;
+                      }
+                  } else {
+                      this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+                     // notifications 706,707,710
+                     if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                      this.requestObject.irbExemptForm.notificationNumber = 706;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                          this.requestObject.irbExemptForm.notificationNumber = 707;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                          this.requestObject.irbExemptForm.notificationNumber = 724;
+                      }
+                  }
+              } else {
+                  this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+                   // notifications 706,707,710
+                   if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                      this.requestObject.irbExemptForm.notificationNumber = 706;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                          this.requestObject.irbExemptForm.notificationNumber = 707;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                          this.requestObject.irbExemptForm.notificationNumber = 724;
+                      }
+              }
+              this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
 
-            if (this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '') {
-                if ((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '')) {
-                    this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
-                } else {
-                    this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-                }
-            } else {
-                this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-            }
+          } else if (this.requestObject.personDTO.role === 'CHAIR' || this.requestObject.personDTO.role === 'ADMIN') {
+          if (this.requestObject.irbExemptForm.loggedInUserFacultySponsor === true && this.requestObject.irbExemptForm.statusCode !== '3') {
 
+                  if (this.requestObject.personJobTitle == null || this.requestObject.personJobTitle === '') {
+                      if ((this.requestObject.facultySponsorJobTitle == null || this.requestObject.facultySponsorJobTitle === '')) {
+                          this.requestObject.irbExemptForm.statusCode = this.strEnroutedIrbOfficeStatusCode;
+                          this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
+                          // New notification to IRB office
+                          if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                              this.requestObject.irbExemptForm.notificationNumber = 714;
+                          }
+                          if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                              this.requestObject.irbExemptForm.notificationNumber = 715;
+                          }
+                          if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                              this.requestObject.irbExemptForm.notificationNumber = 716;
+                          }
+                      } else {
+                          this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+                          this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
+                          // notifications 706,707,710
+                          if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                              this.requestObject.irbExemptForm.notificationNumber = 706;
+                          }
+                          if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                              this.requestObject.irbExemptForm.notificationNumber = 707;
+                          }
+                          if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                              this.requestObject.irbExemptForm.notificationNumber = 724;
+                          }
+                      }
+                  } else {
+                      this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+                      this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
+                      // notifications 706,707,710
+                      if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                          this.requestObject.irbExemptForm.notificationNumber = 706;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                          this.requestObject.irbExemptForm.notificationNumber = 707;
+                      }
+                      if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                          this.requestObject.irbExemptForm.notificationNumber = 724;
+                      }
+                  }
 
-            this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedFacultyActionType;
-        } else if (this.requestObject.personDTO.role === 'CHAIR' || this.requestObject.personDTO.role === 'ADMIN') {
-            if (this.requestObject.irbExemptForm.loggedInUserFacultySponsor === true) {
-                if (this.requestObject.irbExemptForm.isExempt === 'Y') {
-                    this.requestObject.irbExemptForm.notificationNumber = 706;
-                }
-                if (this.requestObject.irbExemptForm.isExempt === 'N') {
-                    this.requestObject.irbExemptForm.notificationNumber = 707;
-                }
-                if (this.requestObject.irbExemptForm.isExempt === 'O') {
-                    this.requestObject.irbExemptForm.notificationNumber = 710;
-                }
-            }
-            this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
-            this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedIrbOfficeActionType;
-        }
-        this.approveRejectAction(this.requestObject);
-    }
+              } else {
+                  this.requestObject.irbExemptForm.statusCode = this.strSubmittedStatusCode;
+                  this.requestObject.irbExemptForm.actionTypesCode = this.strApprovedIrbOfficeActionType;
+                  // notifications 706,707,710
+                  if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                      this.requestObject.irbExemptForm.notificationNumber = 706;
+                  }
+                  if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                      this.requestObject.irbExemptForm.notificationNumber = 707;
+                  }
+                  if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                      this.requestObject.irbExemptForm.notificationNumber = 724;
+                  }
+              }
+
+          }
+          this.approveRejectAction(this.requestObject);
+      }
 
     rejectQuestionnireClick() {
         this.ApproveRejectHeader = 'Reject Exempt Study';
@@ -1349,7 +1446,6 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     }
 
     rejectConfirmClick() {
-        this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
         if (this.requestObject.personDTO.role === 'PI' || this.requestObject.personDTO.role === 'DEPT_ADMIN') {
             if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                 this.requestObject.irbExemptForm.notificationNumber = 704;
@@ -1358,12 +1454,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 this.requestObject.irbExemptForm.notificationNumber = 708;
             }
             if (this.requestObject.irbExemptForm.isExempt === 'O') {
-                this.requestObject.irbExemptForm.notificationNumber = 710;
+                this.requestObject.irbExemptForm.notificationNumber = 725;
             }
 
             this.requestObject.irbExemptForm.actionTypesCode = this.strReturnedFacultyActionType;
         } else if (this.requestObject.personDTO.role === 'CHAIR' || this.requestObject.personDTO.role === 'ADMIN') {
-            if (this.requestObject.irbExemptForm.loggedInUserFacultySponsor === true) {
+        if (this.requestObject.irbExemptForm.loggedInUserFacultySponsor === true && this.requestObject.irbExemptForm.statusCode !== '3') {
+                this.requestObject.irbExemptForm.actionTypesCode = this.strReturnedFacultyActionType;
                 if (this.requestObject.irbExemptForm.isExempt === 'Y') {
                     this.requestObject.irbExemptForm.notificationNumber = 704;
                 }
@@ -1371,10 +1468,22 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.requestObject.irbExemptForm.notificationNumber = 708;
                 }
                 if (this.requestObject.irbExemptForm.isExempt === 'O') {
-                    this.requestObject.irbExemptForm.notificationNumber = 710;
+                    this.requestObject.irbExemptForm.notificationNumber = 725;
+                }
+            } else {
+                this.requestObject.irbExemptForm.actionTypesCode = this.strReturnedIrbOfficeActionType;
+                // new notifications
+                if (this.requestObject.irbExemptForm.isExempt === 'Y') {
+                    this.requestObject.irbExemptForm.notificationNumber = 720;
+                }
+                if (this.requestObject.irbExemptForm.isExempt === 'N') {
+                    this.requestObject.irbExemptForm.notificationNumber = 721;
+                }
+                if (this.requestObject.irbExemptForm.isExempt === 'O') {
+                    this.requestObject.irbExemptForm.notificationNumber = 722;
                 }
             }
-            this.requestObject.irbExemptForm.actionTypesCode = this.strReturnedIrbOfficeActionType;
+            this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
         }
         this.approveRejectAction(this.requestObject);
     }

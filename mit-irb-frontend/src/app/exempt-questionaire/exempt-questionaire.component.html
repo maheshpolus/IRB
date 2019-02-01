@@ -68,7 +68,7 @@
 								<span *ngIf="requestObject.irbExemptForm?.isExempt==null || requestObject.irbExemptForm?.status=='In Progress' " class="pending-action active-en margin-fix">Not Submitted</span>
 								<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && requestObject.irbExemptForm?.status=='Submitted'" class="in-drafts active-en margin-fix">Review Not Required</span>
 								<span *ngIf="requestObject.irbExemptForm?.isExempt=='O' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
-								 class="in-drafts active-en margin-fix">Not Exempt-Pending Review</span>
+								 class="in-drafts active-en margin-fix">Review Not Required-Pending</span>
 								<span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"
 								 class="pending-action active-en margin-fix">Exempt-Pending Review</span>
 								<span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && (requestObject.irbExemptForm?.statusCode=='3' || requestObject.irbExemptForm?.statusCode=='2' || requestObject.irbExemptForm?.statusCode=='5')"

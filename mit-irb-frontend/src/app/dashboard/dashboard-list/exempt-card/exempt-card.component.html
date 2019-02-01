@@ -36,7 +36,7 @@
 						<p>Not Submitted</p>
 					</span>
 					<span *ngIf="irb.isExempt=='O' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="in-drafts">
-						<p>Not Exempt-Pending Review</p>
+						<p>Review Not Required-Pending</p>
 					</span>
 					<span *ngIf="irb.isExempt=='Y' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="pending-action">
 						<p>Exempt-Pending Review</p>

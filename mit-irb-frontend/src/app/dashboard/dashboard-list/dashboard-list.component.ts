@@ -57,7 +57,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     paginatedIrbListData: any = [];
     exemptListData: any = [];
     roleType: string;
-    protocolStatus: string;
+    protocolStatus = '';
     direction: number;
     column: any;
     sortOrder = '1';
@@ -381,6 +381,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.requestObject.protocolTypeCode = '';
         this.requestObject.protocolStatusCode = '';
         this.protocolStatus = '';
+        this.isCheckBoxChecked = {};
         // No need for backend call to clear data in ALL PROTOCOLS for Admins
         if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && this.lastClickedTab === 'ALL') {
                     this.irbListData = [];
@@ -573,6 +574,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         statuses.forEach(status => {
             this.isCheckBoxChecked[status] = true;
         });
+        document.getElementById('openStatusModalButton').click();
     }
     statusSearchChange() {
         if (!this.statusSearchText) {

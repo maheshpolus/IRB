@@ -20,16 +20,18 @@ export class AppComponent {
      expire = false;
     lastPing?: Date = null;
     idleState = 'Not started.';
-    SESSION_TIMEOUT_DEFAULT : any; // in seconds
-    SESSION_TIMEOUT_WARNING : any; // in seconds
+    SESSION_TIMEOUT_DEFAULT: any; // in seconds
+    SESSION_TIMEOUT_WARNING: any; // in seconds
 
    constructor(private idle: Idle,
     private keepalive: Keepalive,
     private _router: Router,
     private _sharedDataService: SharedDataService, private _http: HttpClient  ) {
-       this._http.get('/connect-stg/resources/string_config_json').subscribe( data => {
+       this._http.get('/mit-irb/resources/string_config_json').subscribe( data => {
            const property_config: any = data;
            if (property_config) {
+            this.SESSION_TIMEOUT_DEFAULT = property_config.SESSION_TIMEOUT_DEFAULT;
+            this.SESSION_TIMEOUT_WARNING = property_config.SESSION_TIMEOUT_WARNING;
                idle.setIdle(this.SESSION_TIMEOUT_DEFAULT);
                idle.setTimeout(this.SESSION_TIMEOUT_WARNING);
                idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
@@ -62,7 +64,7 @@ export class AppComponent {
                this.reset();
            }
            });
-        
+
     }
 
     reset() {

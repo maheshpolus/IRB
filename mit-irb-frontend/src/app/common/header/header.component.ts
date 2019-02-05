@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
         private _sharedDataService: SharedDataService, private _http: HttpClient) { }
 
     ngOnInit() {
-        this._http.get('/connect-stg/resources/string_config_json').subscribe(
+        this._http.get('/mit-irb/resources/string_config_json').subscribe(
             data => {
                 const property_config: any = data;
                 if (property_config) {

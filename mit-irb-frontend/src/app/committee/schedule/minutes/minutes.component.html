@@ -31,14 +31,28 @@
 														</td>
 														<td><i [ngClass]=" (minute?.privateCommentFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
 														<td><i [ngClass]=" (minute?.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
-														<td>
+														<td class="action-btn-list">
+																<button title="Edit" type="button" class="btn btn-primary edit-btn-1" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)">
+																	<i class="fa fa-pencil" aria-hidden="true"></i>
+																</button>
+																<button title="Save" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+																		<i class="fa fa-floppy-o" aria-hidden="true"></i>
+																	</button>
+																	<button title="Cancel" *ngIf="!isEditMinuteItem[i] == false" (click)="cancelEditMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+																		<i class="fa fa-times"></i>
+																	</button>
+																<button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="showDeleteModal($event, i, minute, result.committeeSchedule.committeeId, result.committeeSchedule.scheduleId)" data-toggle="modal" data-target="#deleteModal">
+																	<i class="fa fa-trash" aria-hidden="true"></i>
+																</button>
+															</td>
+														<!-- <td>
 															<ul class="actionButtonGroup">
 																<li title="edit"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 																<li title="delete"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="showDeleteModal($event, i, minute, result.committeeSchedule.committeeId, result.committeeSchedule.scheduleId)" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
 																<li title="save"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem($event, i, minute)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
 																<li title="cancel"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="cancelEditMinuteItem($event, i, minute)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
 															</ul>
-														</td>
+														</td> -->
 													</tr>
 										</tbody>
 								
@@ -559,9 +573,9 @@
 			<div class="modal-body">
 			  <p>Are you sure you want to delete this item?</p>
 			</div>
-			<div class="modal-footer">
-			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="isToDelete = false">No</button>
-			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteMinuteItem($event)" data-dismiss="modal">Yes</button>
+			<div class="modal-footer btn-row-med">
+			  <button type="button" class="btn tab_btn" data-dismiss="modal" data-toggle="modal" (click)="isToDelete = false">No</button>
+			  <button type="button" class="btn btn-primary tab_btn" (click)="deleteMinuteItem($event)" data-dismiss="modal">Yes</button>
 			</div>
 		  </div>
 		</div>

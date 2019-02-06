@@ -395,6 +395,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       const blob = new Blob([data], { type: data.type });
       a.href = URL.createObjectURL(blob);
       a.download = attachment.protocolAttachments.fileName;
+      document.body.appendChild(a);
       a.click();
 
     },

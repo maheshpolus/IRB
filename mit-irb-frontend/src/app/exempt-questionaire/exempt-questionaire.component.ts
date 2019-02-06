@@ -1216,6 +1216,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                 const blob = new Blob([data], { type: data.type });
                 a.href = URL.createObjectURL(blob);
                 a.download = attachments.FILENAME;
+                document.body.appendChild(a);
                 a.click();
             });
         return false;

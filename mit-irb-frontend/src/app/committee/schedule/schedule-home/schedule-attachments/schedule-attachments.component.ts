@@ -179,6 +179,7 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
                 const a = document.createElement( 'a' );
                 a.href = URL.createObjectURL( data );
                 a.download = attachments.fileName;
+                document.body.appendChild(a);
                 a.click();
             } );
         return false;

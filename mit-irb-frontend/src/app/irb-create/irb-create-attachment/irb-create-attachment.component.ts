@@ -128,6 +128,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             const blob = new Blob([data], { type: data.type });
             a.href = URL.createObjectURL(blob);
             a.download = attachment.fileName;
+            document.body.appendChild(a);
             a.click();
 
         },

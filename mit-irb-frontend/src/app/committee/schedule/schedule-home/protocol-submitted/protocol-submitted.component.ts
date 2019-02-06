@@ -1,4 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Router } from '@angular/router';
+
 import { ScheduleConfigurationService } from '../../schedule-configuration.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -11,7 +13,7 @@ export class ProtocolSubmittedComponent implements OnInit, OnDestroy {
     outputPath: string;
     userName: string;
     public subscription: Subscription;
-    constructor( private scheduleConf: ScheduleConfigurationService) { }
+    constructor( private scheduleConf: ScheduleConfigurationService,  private _router: Router) { }
 
     ngOnInit() {
        this.subscription = this.scheduleConf.currentScheduleData.subscribe( data => {
@@ -23,5 +25,8 @@ export class ProtocolSubmittedComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+    openProtocolView( protocolNumber ) {
+        this._router.navigate( ['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber} } );
     }
 }

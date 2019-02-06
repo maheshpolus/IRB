@@ -4,26 +4,26 @@
 				<div class="modal-content modal-text-color">
 				  <div class="modal-header popup-header">
 					<h5 class="modal-title modal-text-color">{{modalTitle}}</h5>
-					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="modalFooterClear()">
 							<span aria-hidden="true">&times;</span>
 						  </button>
 			</div>
 			<div class="modal-body">
 				<p>{{modalMessage}}</p>
 			</div>
-			<div class="modal-footer" *ngIf="!memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
-				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="showPopup=false">Ok</button>
+			<div class="modal-footer btn-row-med" *ngIf="!memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
+				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="showPopup=false">Ok</button>
 			</div>
-			<div class="modal-footer" *ngIf="memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
-				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="expandMemberToSave()">Ok</button>
+			<div class="modal-footer btn-row-med" *ngIf="memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
+				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="expandMemberToSave()">Ok</button>
 			</div>
-			<div class="modal-footer" *ngIf="IsToDeleteRole">
-				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="modalFooterClear()">No</button>
-				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="deleteRole()">Yes</button>
+			<div class="modal-footer btn-row-med" *ngIf="IsToDeleteRole">
+				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="modalFooterClear()">No</button>
+				<button type="button" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="deleteRole()">Yes</button>
 			</div>
-			<div class="modal-footer" *ngIf="IsToDeleteExpertise">
-				<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="modalFooterClear()">No</button>
-				<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="deleteExpertise()">Yes</button>
+			<div class="modal-footer btn-row-med" *ngIf="IsToDeleteExpertise">
+				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="modalFooterClear()">No</button>
+				<button type="button" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="deleteExpertise()">Yes</button>
 			</div>
 		</div>
 	</div>
@@ -835,8 +835,8 @@
 																			<i class="fa fa-floppy-o" aria-hidden="true"></i>
 																		</button>
 
-																		<button title="Delete" (click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)" type="button" class="btn btn-primary delete-btn-1"
-																		 data-toggle="modal" data-target="#deletePersonnelInfoDetails">
+																		<button title="Delete" (click)="showWarning($event,role.commMemberRolesId,member.commMembershipId)" type="button" class="btn btn-primary delete-btn-1"
+																		 data-toggle="modal" data-target="#modalWarning">
 																			<i class="fa fa-trash" aria-hidden="true"></i>
 																		</button>
 																	</td>

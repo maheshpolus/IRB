@@ -736,14 +736,15 @@ aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
 					{{ this.alertMsg }}</p>
 			</div>
 			<div class="modal-footer btn-row-med" *ngIf="deleteConfirmation">
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button>
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" (click)="deleteAreaOfResearch(areaOfResearchToDelete)" data-dismiss="modal">Yes</button>
+				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="cancelDelete()">No</button>
+				<!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button> -->
+				<button type="button margin-class"  class="btn btn-primary tab_btn" (click)="deleteAreaOfResearch(areaOfResearchToDelete)" data-dismiss="modal">Yes</button>
 			</div>
 			<div class="modal-footer btn-row-med" *ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch">
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" (click)="duplicateId()" data-dismiss="modal">Ok</button>
+				<button type="button margin-class"  class="btn tab_btn proceed-btn" (click)="duplicateId()" data-dismiss="modal">Ok</button>
 			</div>
 			<div class="modal-footer btn-row-med" *ngIf="isScheduleEditWarningModalOpen">
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" (click)="cancelEditScheduleItem()" data-dismiss="modal">Ok</button>
+				<button type="button margin-class"  class="btn tab_btn" (click)="cancelEditScheduleItem()" data-dismiss="modal">Ok</button>
 			</div>
 		</div>
 	</div>
@@ -763,7 +764,7 @@ aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
 				<p class="forSkipSchedule">You are in the middle of editing/creating Committee Details, please save/cancel to proceed on Committee Details</p>
 			</div>
 			<div class="modal-footer btn-row-med">
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="closeEditDetailsModalOpen()">Close</button>
+				<button type="button margin-class"  class="btn tab_btn proceed-btn" data-dismiss="modal" (click)="closeEditDetailsModalOpen()">Close</button>
 			</div>
 		</div>
 	</div>
@@ -789,8 +790,8 @@ aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
 
 			</div>
 			<div class="modal-footer btn-row-med">
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal">No</button>
-				<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" (click)="deleteScheduleData()" data-dismiss="modal">Yes</button>
+				<button type="button margin-class"  class="btn tab_btn" data-dismiss="modal">No</button>
+				<button type="button margin-class"  class="btn btn-primary tab_btn " (click)="deleteScheduleData()" data-dismiss="modal">Yes</button>
 			</div>
 		</div>
 	</div>

@@ -168,9 +168,9 @@
 					<div class="modal-footer" *ngIf="alertMsgNotSaved">
 						<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal">Ok</button>
 					</div>
-					<div class="modal-footer" *ngIf="isOnEditMembers">
-						<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="saveMemberAndContinue(memberData)">Cancel and Exit</button>
-						<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="stayOnPage()">Yes</button>
+					<div class="modal-footer btn-row-med" *ngIf="isOnEditMembers">
+						<button type="button" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="saveMemberAndContinue(memberData)">Cancel and Exit</button>
+						<button type="button" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="stayOnPage()">Yes</button>
 					</div>
 				</div>
 			</div>

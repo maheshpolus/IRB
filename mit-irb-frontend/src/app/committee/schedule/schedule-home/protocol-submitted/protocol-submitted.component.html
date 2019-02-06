@@ -25,11 +25,17 @@
                                         <td>{{protocolsubm.qualifierType.description}}</td>
                                         <td>{{protocolsubm.protocolReviewType.description}}</td>
                                         <td>{{protocolsubm.submissionStatus.description}}</td>
-                                        <td>{{protocolsubm.submissionDate}}</td>
+                                        <td>{{protocolsubm.submissionDate | date :'MM/dd/yyyy'}}</td>
                                         <td>
-                                        <ul class="actionButtonGroup"><li>
+                                                <a title="Open {{protocolsubm.protocolNumber}}"
+                                                (click)="openProtocolView(protocolsubm.protocolNumber)">
+                                                    <button type="button" class="btn btn-outline-secondary button-view mb-0 mt-0 pointer" (click)="openProtocolView(protocolsubm.protocolNumber)">
+                                                            <i class="fa fa-eye"></i>View
+                                                        </button>
+                                                        </a>
+                                        <!-- <ul class="actionButtonGroup"><li>
                                         &nbsp;&nbsp;<a title="Open {{protocolsubm.protocolNumber}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+protocolsubm.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
-                                        </li></ul>
+                                        </li></ul> -->
                                         </td>
                                     </tr>
                                     <!-- <tr>

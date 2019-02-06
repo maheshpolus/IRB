@@ -488,6 +488,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         this.showPopup = true;
         this.modalTitle = 'Delete Role ?';
         this.modalMessage = 'Do you want to remove the current role ?';
+        this.IsToDeleteExpertise = false;
         this.IsToDeleteRole = true;
     }
 
@@ -509,6 +510,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         this.showPopup = true;
         this.modalTitle = 'Delete Expertise ?';
         this.modalMessage = 'Do you want to remove the current expertise ?';
+        this.IsToDeleteRole = false;
         this.IsToDeleteExpertise = true;
     }
 

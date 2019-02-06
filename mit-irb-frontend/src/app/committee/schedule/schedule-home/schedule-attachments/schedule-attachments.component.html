@@ -18,9 +18,9 @@
 			<div class="modal-body">
 			  <p>Are you sure you want to delete this item?</p>
 			</div>
-			<div class="modal-footer">
-			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
-			  <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
+			<div class="modal-footer btn-row-med">
+			  <button type="button" class="btn tab_btn" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
+			  <button type="button" class="btn btn-primary tab_btn" (click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
 			</div>
 		  </div>
 		</div>
@@ -206,7 +206,7 @@
 									<td> <input type="text"  class="form-control input-field-size" [ngClass]="(!editScheduleattachment[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" 
 										[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
 									<td>{{attachments.fileName}}</td>
-									<td><ul class="actionButtonGroup">
+									<!-- <td><ul class="actionButtonGroup">
 											<li><a (click)="tempSave($event,attachments)"
 												data-toggle="modal" data-target="#deleteAttachment"><i
 													class="fa fa-trash-o"></i></a></li>
@@ -220,7 +220,25 @@
 											<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="saveEditedattachments($event,i, attachments)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
 											<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
 										</ul>
-									</td>
+									</td> -->
+									<td class="action-btn-list">
+											<button title="Edit" type="button" class="btn btn-primary edit-btn-1" *ngIf="!editScheduleattachment[i] == true" (click)="editAttachments($event,i, attachments)">
+												<i class="fa fa-pencil" aria-hidden="true"></i>
+											</button>
+											<button title="Save" *ngIf="!editScheduleattachment[i] == false" (click)="saveEditedattachments($event,i, attachments)" class="btn btn-primary edit-btn-1">
+													<i class="fa fa-floppy-o" aria-hidden="true"></i>
+												</button>
+												<button title="Cancel" *ngIf="!editScheduleattachment[i] == false" (click)="cancelEditedattachments($event,i, attachments)" type="button" class="btn btn-primary edit-btn-1">
+													<i class="fa fa-times"></i>
+												</button>
+											<button title="Download" type="button" class="btn btn-primary view-btn-1" (click)="downloadAttachements($event, attachments)">
+												<i class="fa fa-download" aria-hidden="true"></i>
+											</button>
+											<button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="tempSave($event,attachments)"
+											data-toggle="modal" data-target="#deleteAttachment">
+												<i class="fa fa-trash" aria-hidden="true"></i>
+											</button>
+										</td>
 								</tr>
 							</tbody>
 							</table>

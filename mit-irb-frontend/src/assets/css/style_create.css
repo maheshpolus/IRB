@@ -2405,5 +2405,9 @@ input:disabled,textarea:disabled{
         max-width: 670px !important;
     }
 }
+.select-font-size
+{
+    font-size: 13px !important;
+}
 
 

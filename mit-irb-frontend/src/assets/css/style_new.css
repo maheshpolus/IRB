@@ -1151,7 +1151,16 @@ cursor: pointer;
 .statusIndicator.actionButtonGroup>li>a.present.current {
     color: #7CB342;
 }
-
+.attendence-present
+ {
+     background-color: #7CB342;
+     border-color: #7CB342;
+ }
+ .attendence-present:hover
+ {
+     background-color: #a0d26b;
+     border-color: #a0d26b;
+ }
 .statusIndicator.actionButtonGroup>li>a.absent.current {
     color: #F4511E;
 }

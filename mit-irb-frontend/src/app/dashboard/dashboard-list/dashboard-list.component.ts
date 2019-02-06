@@ -481,15 +481,21 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     getCommitteeScheduleListData(tab) {
         this.noIrbList = false;
         this.irbListData = [];
+        this.paginatedIrbListData = [];
+        this.protocolCount = null;
         this.lastClickedTab = tab;
         if (tab === 'COMMITTEE') {
+            this._spinner.show();
             this._dashboardService.loadCommitteeList().subscribe(data => {
                 this.result = data || [];
+                this._spinner.hide();
                 if (this.result != null) {
                     if (this.result.committeList == null || this.result.committeList.length === 0) {
                         this.noIrbList = true;
                     } else {
                         this.irbListData = this.result.committeList;
+                        this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                        this.protocolCount = this.irbListData.length;
                         this.column = 'committeeId';
                         this.direction = parseInt(this.sortOrder, 10);
                     }
@@ -500,8 +506,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 },
             );
         } else if (tab === 'SCHEDULE') {
+            this._spinner.show();
             this._dashboardService.loadCommitteeScheduleList().subscribe(data => {
                 this.result = data || [];
+                this._spinner.hide();
                 if (this.result != null) {
                     if (this.result.committeSchedulList == null || this.result.committeSchedulList.length === 0) {
                         this.noIrbList = true;
@@ -509,6 +517,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                         const currentDate = new Date();
                         currentDate.setHours(0, 0, 0, 0);
                         this.irbListData = this.result.committeSchedulList;
+                        this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                        this.protocolCount = this.irbListData.length;
                         this.irbListData.forEach(element => {
                             element.scheduledDate = new Date(element.scheduledDate);
                             element.scheduledDate.setHours(0, 0, 0, 0);

@@ -163,7 +163,7 @@
 				</div>
 				<div class="col-md-12 col-sm-12 sort-labels">
 					<div class="row">
-						<div class="col-md-12 col-sm-12 col-lg-12" *ngIf="(lastClickedTab !== 'EXEMPT')">
+						<div class="col-md-12 col-sm-12 col-lg-12" *ngIf="(lastClickedTab !== 'EXEMPT' && lastClickedTab !== 'COMMITTEE' && lastClickedTab !== 'SCHEDULE')">
 							<div class="form-check form-check-inline sort-fields">
 								<label>SORT BY:</label>
 								<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_NUMBER'}" (click)="sortField = 'PROTOCOL_NUMBER';updateSortOrder()">PROTOCOL NUMBER
@@ -277,14 +277,34 @@
 				<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
 				<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-				 [irbList]="irbListData"></app-committee-card>
+				 [irbList]="paginatedIrbListData"></app-committee-card>
+				 <!-- PAGINATION - START -->
+				 <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+					<nav class="paginationSkin text-right pagination">
+							<div class="margin8"><b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number * paginationData.limit - paginationData.limit  + paginatedIrbListData.length}} of {{protocolCount}} Records</b></div>
+						<ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="protocolCount" [(page)]="paginationData.page_number"
+						paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="protocolListPerPage(paginationData.page_number)">
+						</ngb-pagination>
+					</nav>
+				</div>
+				<!-- PAGINATION - END -->
 			</ng-container>
 
 			<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
 				<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-				 [irbList]="irbListData"></app-schedule-card>
+				 [irbList]="paginatedIrbListData"></app-schedule-card>
+				 <!-- PAGINATION - START -->
+				 <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+					<nav class="paginationSkin text-right pagination">
+							<div class="margin8"><b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number * paginationData.limit - paginationData.limit  + paginatedIrbListData.length}} of {{protocolCount}} Records</b></div>
+						<ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="protocolCount" [(page)]="paginationData.page_number"
+						paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="protocolListPerPage(paginationData.page_number)">
+						</ngb-pagination>
+					</nav>
+				</div>
+				<!-- PAGINATION - END -->
 			</ng-container>
 
 			<ng-container *ngIf="lastClickedTab == 'EXEMPT'">

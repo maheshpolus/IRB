@@ -16,7 +16,7 @@ export class LogoutComponent {
    login() {
       this.reset();
      // this._router.navigate(['/irb/dashboard']);
-      window.location.href = '/';
+      window.location.href = '/mit-irb';
    }
    reset() {
        this.idle.watch();

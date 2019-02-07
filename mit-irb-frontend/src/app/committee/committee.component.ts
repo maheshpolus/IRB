@@ -16,6 +16,8 @@ import { CommitteeConfigurationService } from '../common/service/committee-confi
 } )
 
 export class CommitteeComponent implements OnInit, OnDestroy {
+
+    userDTO: any = {};
     currentTab = 'committee_home';
     schedule = false;
     mode: string;
@@ -70,6 +72,8 @@ export class CommitteeComponent implements OnInit, OnDestroy {
 
 
     ngOnInit() {
+        this.userDTO = this.route.snapshot.data['irb'];
+        localStorage.setItem('currentUser', this.userDTO.userName);
         this.initLoadParent();
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;
@@ -115,7 +119,8 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                         const year = String( ts.getFullYear() );
                         if ( month.length < 2 ) {month = '0' + month; }
                         if ( day.length < 2 ) {day = '0' + day; }
-                        this.lastUpdated = `${day}/${month}/${year}` + ' by ' + this.result.committee.updateUser;
+                     //   this.lastUpdated = `${day}/${month}/${year}` + ' by ' + this.result.committee.updateUser;
+                        this.lastUpdated = this.result.committee.updateUser;
                         this.homeUnits = this.result.homeUnits;
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         this.homeUnitInput.unitName = this.result.committee.homeUnitName;

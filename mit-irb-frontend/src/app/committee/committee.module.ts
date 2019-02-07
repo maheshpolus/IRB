@@ -28,10 +28,11 @@ import { ScheduleConfigurationService } from './schedule/schedule-configuration.
 import { CommitteeConfigurationService } from '../common/service/committee-configuration.service';
 import { CommitteeMemberEmployeeElasticService } from '../common/service/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from '../common/service/committee-members-nonEmployee-elastic-search.service';
+import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
 
 const routes = [
     {
-        path: '', component: CommitteeComponent,
+        path: '', component: CommitteeComponent, resolve: { irb: DashboardResolverService },
         children: [{ path: '', redirectTo: 'committeeHome', pathMatch: 'full' },
         { path: 'committeeHome', component: CommitteeHomeComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent }]

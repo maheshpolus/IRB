@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ContentChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import { CommitteeHomeComponent } from './committee-home/committee-home.component';
 
 import { CommitteCreateEditService } from './committee-create-edit.service';
@@ -53,6 +55,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     private committeeHomeObj: CommitteeHomeComponent;
 
     constructor( public route: ActivatedRoute,
+        private _spinner: NgxSpinnerService,
         public router: Router,
         public committeCreateService: CommitteCreateEditService,
         private completerService: CompleterService,
@@ -86,10 +89,12 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     }
 
     initLoadParent() {
+        this._spinner.show();
         if ( this.mode === 'create' ) {
             this.editFlag = true;
             this.committeCreateService.getCommitteeData( '1' )
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
+                    this._spinner.hide();
                     this.result = data || [];
                     if ( this.result != null ) {
                         this.homeUnits = this.result.homeUnits;
@@ -111,6 +116,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
             this.committeCreateService.loadCommittee( this.id )
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     this.result = data || [];
+                    this._spinner.hide();
                     if ( this.result != null ) {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         const ts = new Date( this.result.committee.updateTimestamp );
@@ -263,5 +269,8 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     }
 
     stayOnCommittee() {
+    }
+    backClick() {
+        this.router.navigate(['/irb/dashboard']);
     }
 }

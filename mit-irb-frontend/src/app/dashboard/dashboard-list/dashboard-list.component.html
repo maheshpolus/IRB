@@ -275,9 +275,12 @@
 
 			<ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
-				<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+				<!-- <app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-				 [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-committee-card>
+				 [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-committee-card> -->
+				 <app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+					|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
+				 [irbList]="paginatedIrbListData"></app-committee-card>
 				 <!-- PAGINATION - START -->
 				 <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
 					<nav class="paginationSkin text-right pagination">
@@ -292,9 +295,12 @@
 
 			<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
 				<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
-				<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+				<!-- <app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-				 [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-schedule-card>
+				 [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-schedule-card> -->
+				 <app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
+				 [irbList]="paginatedIrbListData"></app-schedule-card>
 				 <!-- PAGINATION - START -->
 				 <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
 					<nav class="paginationSkin text-right pagination">

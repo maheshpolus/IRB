@@ -130,6 +130,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         }
         if (this.lastClickedTab === 'EXEMPT') {
             this.getExemptListData(this.lastClickedTab);
+        } else if (this.lastClickedTab === 'COMMITTEE' || this.lastClickedTab === 'SCHEDULE') {
+            this.getCommitteeScheduleListData(this.lastClickedTab);
         } else {
             this.getIrbListData(this.lastClickedTab);
         }
@@ -484,6 +486,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.paginatedIrbListData = [];
         this.protocolCount = null;
         this.lastClickedTab = tab;
+        this._sharedDataService.changeCurrentTab(tab);
         if (tab === 'COMMITTEE') {
             this._spinner.show();
             this._dashboardService.loadCommitteeList().subscribe(data => {
@@ -493,11 +496,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                     if (this.result.committeList == null || this.result.committeList.length === 0) {
                         this.noIrbList = true;
                     } else {
-                        this.irbListData = this.result.committeList;
+                       this.irbListData = this.result.committeList;
+                        // this.column = 'updatedDate';
+                        // this.direction = parseInt(this.sortOrder, 10);
                         this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
                         this.protocolCount = this.irbListData.length;
-                        this.column = 'committeeId';
-                        this.direction = parseInt(this.sortOrder, 10);
                     }
                 }
             },
@@ -518,18 +521,19 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                         currentDate.setHours(0, 0, 0, 0);
                         this.irbListData = this.result.committeSchedulList;
                         this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                        // this.column = 'updatedDate';
+                        // this.direction = parseInt(this.sortOrder, 10);
                         this.protocolCount = this.irbListData.length;
                         this.irbListData.forEach(element => {
-                            element.scheduledDate = new Date(element.scheduledDate);
-                            element.scheduledDate.setHours(0, 0, 0, 0);
-                            if (currentDate <= element.scheduledDate) {
+                            element.SCHEDULED_DATE = new Date(element.SCHEDULED_DATE);
+                            element.SCHEDULED_DATE.setHours(0, 0, 0, 0);
+                            if (currentDate <= element.SCHEDULED_DATE) {
                                 element.isActive = true;
                             } else {
                                 element.isActive = false;
                             }
                         });
-                        this.column = 'committeeId';
-                        this.direction = parseInt(this.sortOrder, 10);
+
                     }
                 }
             },

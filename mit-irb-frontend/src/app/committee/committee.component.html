@@ -1,9 +1,13 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div id="scrollToTop">
 	<div class="container-fluid pushFixedHeaderFooter">
 		<div class="headerPush"></div>
 		<!-- Session handling component -->
 		<app-sessiontimeout> </app-sessiontimeout>
-		<div class="container-fluid">
+		<div class="container-fluid position-relative">
+		<div class="exit-button" (click)="backClick()" title="Close">
+						<i class="fa fa-times mg-6">&nbsp;</i>
+		</div>
 			<section class="row sect-padding">
 				<div class="col-12 top-aprv-details">
 					<div class="row">

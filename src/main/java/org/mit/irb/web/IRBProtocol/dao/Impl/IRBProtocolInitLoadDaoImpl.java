@@ -1,7 +1,11 @@
 package org.mit.irb.web.IRBProtocol.dao.Impl;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.collections4.ListUtils;
@@ -13,6 +17,10 @@ import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.common.utils.DBEngine;
+import org.mit.irb.web.common.utils.DBEngineConstants;
+import org.mit.irb.web.common.utils.DBException;
+import org.mit.irb.web.common.utils.InParameter;
+import org.mit.irb.web.common.utils.OutParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
@@ -57,30 +65,48 @@ public class IRBProtocolInitLoadDaoImpl implements IRBProtocolInitLoadDao{
 	@Override
 	public IRBProtocolVO loadCommitteeList() {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO(); 
-		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from Committee");
-		List<Committee> committeList = query.list();
-		if(!committeList.isEmpty()){
-			for(Committee committee:committeList ){
-				SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
-				committee.setUpdatedDate(dateFormatter.format((Timestamp) committee.getUpdateTimestamp()));
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure("GET_IRB_COMMITTEE_DETAILS", outputParam);
+			if (result != null && !result.isEmpty()) {
+				irbProtocolVO.setCommitteList(result);
 			}
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in loadCommitteeList:" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in loadCommitteeList:" + e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in loadCommitteeList:" + e);
 		}
-		irbProtocolVO.setCommitteList(committeList);
 		return irbProtocolVO;
 	}
 
 	@Override
 	public IRBProtocolVO loadCommitteeScheduleList() {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO(); 
-		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from CommitteeSchedule");
-		List<CommitteeSchedule> committeScheduleList = query.list();
-		if(!committeScheduleList.isEmpty()){
-			for(CommitteeSchedule schedule:committeScheduleList ){
-				SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
-				schedule.setUpdatedDate(dateFormatter.format((Timestamp) schedule.getUpdateTimestamp()));
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure("GET_IRB_COMM_SCHEDULE_DETAILS", outputParam);
+			if (result != null && !result.isEmpty()) {
+				irbProtocolVO.setCommitteSchedulList(result);
 			}
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in loadCommitteeScheduleList:" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in loadCommitteeScheduleList:" + e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in loadCommitteeScheduleList:" + e);
 		}
-		irbProtocolVO.setCommitteSchedulList(committeScheduleList);
 		return irbProtocolVO;
 	}
 }

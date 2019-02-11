@@ -3,10 +3,14 @@ package org.mit.irb.web.IRBProtocol.pojo;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "ATTACHMENT_FILE")
@@ -23,7 +27,9 @@ public class ProtocolAttachments implements Serializable {
 
 	@Column(name = "FILE_NAME")
 	private String fileName;
-
+	
+	@JsonIgnore
+	@Basic(fetch=FetchType.LAZY)
 	@Column(name = "FILE_DATA")
 	private byte[] fileData;
 

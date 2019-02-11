@@ -94,12 +94,19 @@ public class LoginController extends BaseController {
 		String role = null;
 	      PersonDTO personDTO = null;
 	      Object userName = httpSession.getAttribute("personDTO" + httpSession.getId());
-	      if(userName == null){
+	      if(userName == null && ("USERID".equalsIgnoreCase(login_mode))){
+	    	  logger.info("Session is null in USERID");
 	    	  personDTO = loginValidator.readPersonData(vo.getUserName());
 	    	  role = loginService.checkIRBUserRole(vo.getUserName());
 	    	  personDTO.setRole(role);
-	    	  logger.info("Logged in User Role: "+role);
+	      } else if(userName == null && ("TOUCHSTONE".equalsIgnoreCase(login_mode))){
+	    	  logger.info("Session is null in TOUCHSTONE");
+	    	  Boolean isLoginSuccess = TouchstoneAuthService.authenticate(request, httpSession);
+	    	  if(isLoginSuccess){
+	    		  personDTO = (PersonDTO) httpSession.getAttribute("personDTO"+httpSession.getId());
+	    	  }
 	      } else{
+	    	  logger.info("Session already exists :"+httpSession.getId());
 	    	  personDTO = (PersonDTO) httpSession.getAttribute("personDTO"+httpSession.getId());
 	      }
 		String responseData = null;

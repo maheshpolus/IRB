@@ -1,5 +1,7 @@
 package org.mit.irb.web.IRBProtocol.VO;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
@@ -59,8 +61,8 @@ public class IRBProtocolVO {
 	private Integer collaboratorId;
 	private String searchString;
 	private List<SponsorSearchResult> sponsorSearchResult;
-	private List<Committee> committeList;
-	private List< CommitteeSchedule> committeSchedulList;
+	private List<HashMap<String, Object>> committeList;
+	private List<HashMap<String, Object>> committeSchedulList;
 	
 	public ScienceOfProtocol getScienceOfProtocol() {
 		return scienceOfProtocol;
@@ -302,19 +304,19 @@ public class IRBProtocolVO {
 		this.sponsorSearchResult = sponsorSearchResult;
 	}
 
-	public List<CommitteeSchedule> getCommitteSchedulList() {
+	public List<HashMap<String, Object>> getCommitteSchedulList() {
 		return committeSchedulList;
 	}
 
-	public void setCommitteSchedulList(List<CommitteeSchedule> committeSchedulList) {
-		this.committeSchedulList = committeSchedulList;
+	public void setCommitteSchedulList(ArrayList<HashMap<String, Object>> result) {
+		this.committeSchedulList = result;
 	}
 
-	public List<Committee> getCommitteList() {
+	public List<HashMap<String, Object>> getCommitteList() {
 		return committeList;
 	}
 
-	public void setCommitteList(List<Committee> committeList) {
-		this.committeList = committeList;
+	public void setCommitteList(ArrayList<HashMap<String, Object>> result) {
+		this.committeList = result;
 	}
 }

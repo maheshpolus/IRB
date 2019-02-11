@@ -2,6 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { FileDropModule } from 'ngx-file-drop';
 import { RouterModule } from '@angular/router';
@@ -45,6 +46,7 @@ const routes = [
         FormsModule,
         ReactiveFormsModule,
         Ng2PageScrollModule,
+        NgxSpinnerModule,
         Ng2CompleterModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,

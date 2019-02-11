@@ -9,15 +9,11 @@ import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.dashboard.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /*
  * Controller for getting dashboard details
@@ -33,82 +29,37 @@ public class DashboardController {
 	protected static Logger logger = Logger.getLogger(DashboardController.class.getName());
 	
 	@RequestMapping(value = "/getDashboardSnapshot", method = RequestMethod.POST)
-	public ResponseEntity<String> getDashboardSnapShot(@RequestBody CommonVO vo, HttpServletRequest request,
+	public @ResponseBody DashboardProfile getDashboardSnapShot(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getSnapshotData(vo.getPersonId(), vo.getPersonRoleType());
-		ObjectMapper mapper = new ObjectMapper();
-		String responseData = null;
-		try {
-			responseData = mapper.writeValueAsString(profile);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			logger.info("Exception in getDashboardSnapshot method "+ e);
-		}
-		return new ResponseEntity<String>(responseData, status);
+		return profile;
 	}
 
 	@RequestMapping(value = "/getExpandedSnapShotView", method = RequestMethod.POST)
-	public ResponseEntity<String> getExpandedSnapShotView(@RequestBody CommonVO vo, HttpServletRequest request,
+	public @ResponseBody DashboardProfile getExpandedSnapShotView(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getExpandedSnapShotView(vo.getPersonId(), vo.getPersonRoleType(), vo.getAvSummaryType());
-		ObjectMapper mapper = new ObjectMapper();
-		String responseData = null;
-		try {
-			responseData = mapper.writeValueAsString(profile);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			logger.info("Exception in getExpandedSnapShotView method"+ e);
-		}
-		return new ResponseEntity<String>(responseData, status);
+		return profile;
 	}
 	
 	@RequestMapping(value = "/getDashboardProtocolList", method = RequestMethod.POST)
-	public ResponseEntity<String> getDashboardProtocolList(@RequestBody CommonVO vo, HttpServletRequest request,
+	public @ResponseBody DashboardProfile getDashboardProtocolList(@RequestBody CommonVO vo, HttpServletRequest request,
 			HttpServletResponse response) {
-		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(), vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(), vo.getProtocolTypeCode(), vo.getTitle(),vo.getProtocolStatusCode());
-		ObjectMapper mapper = new ObjectMapper();
-		String responseData = null;
-		try {
-			responseData = mapper.writeValueAsString(profile);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			logger.info("Exception in getDashboardProtocolList:"+ e);
-		}
-		return new ResponseEntity<String>(responseData, status);
+		return profile;
 	}
 	
 	@RequestMapping(value = "/getDashboardProtocolType", method = RequestMethod.POST)
-	public ResponseEntity<String> getDashboardProtocolType(HttpServletRequest request,
+	public @ResponseBody DashboardProfile getDashboardProtocolType(HttpServletRequest request,
 			HttpServletResponse response) {
-		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolType();
-		ObjectMapper mapper = new ObjectMapper();
-		String responseData = null;
-		try {
-			responseData = mapper.writeValueAsString(profile);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			logger.info("Exception in getDashboardProtocolType"+ e);
-		}
-		return new ResponseEntity<String>(responseData, status);
+		return profile;
 	}
 	
 	@RequestMapping(value = "/getDashboardProtocolStatus", method = RequestMethod.POST)
-	public ResponseEntity<String> getDashboardProtocolStatus(HttpServletRequest request,
+	public @ResponseBody DashboardProfile getDashboardProtocolStatus(HttpServletRequest request,
 			HttpServletResponse response) {
-		HttpStatus status = HttpStatus.OK;
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolStatus();
-		ObjectMapper mapper = new ObjectMapper();
-		String responseData = null;
-		try {
-			responseData = mapper.writeValueAsString(profile);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			logger.info("Exception in getDashboardProtocolType"+ e);
-		}
-		return new ResponseEntity<String>(responseData, status);
+		return profile;
 	}
 }

@@ -97,7 +97,14 @@ public class LoginValidator extends BaseController {
 						personDTO.setUnitNumber(resultSet.getString("prmry_dept_cd"));
 						personDTO.setUnitName(resultSet.getString("unit_name"));
 						personDTO.setUserName(userName);
-						personDTO.setJobTitle(resultSet.getString("job_title"));
+						String jobTitle = null;
+						jobTitle = (String) resultSet.getString("peroson_pi_status");
+						if(jobTitle.equals("1")){
+							jobTitle= jobTitle;
+						} else if(jobTitle.equals("0")){
+							jobTitle = null;  //fixing Jira 868
+						}
+						personDTO.setJobTitle(jobTitle);
 						Integer userType = checkUserType(personDTO.getPersonID(), "");
 						personDTO.setUserRoleType(userType);
 						try {

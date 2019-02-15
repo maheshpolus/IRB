@@ -37,10 +37,10 @@
                 <input type="text" class="form-control" [class.poping-border]="isCollaboratorInfoEdit" [owlDateTime]="dt3" [(ngModel)]="protocolCollaborator.approvalDate"
                   (ngModelChange)="validateApprovalDate()" placeholder="mm/dd/yyyy">
                 <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
-                <div class="input-group-append input-span-1">
-                  <span class="input-group-text" [owlDateTimeTrigger]="dt3">
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt3">
+                  <!-- <span class="input-group-text"> -->
                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </span>
+                  <!-- </span> -->
                 </div>
               </div>
               <span *ngIf="invalidData.invalidApprovalDate" class="error">Approval Date should be less than Expiration Date</span>
@@ -53,9 +53,9 @@
                 <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control" [owlDateTime]="dt4" [(ngModel)]="protocolCollaborator.expirationDate"
                   (ngModelChange)="validateExpirationDate()" placeholder="mm/dd/yyyy">
                 <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt4">
-                  <span class="input-group-text" [owlDateTimeTrigger]="dt4">
+                  <!-- <span class="input-group-text"> -->
                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </span>
+                  <!-- </span> -->
                 </div>
                 <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
               </div>

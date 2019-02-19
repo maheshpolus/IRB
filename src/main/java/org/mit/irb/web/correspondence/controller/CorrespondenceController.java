@@ -37,6 +37,13 @@ public class CorrespondenceController {
 	}
 
 
+	@RequestMapping(value = "/generateActionCorrespondence", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> generateActionCorrespondence(HttpServletResponse response,
+			@RequestHeader("jsonObject") String jsonObject) throws Exception{
+		CommonVO commonvoData = getPersonExemptForm(jsonObject);
+		return correspondenceService.generateActionCorrespondence(response,commonvoData);
+	}
+	
 	private CommonVO getPersonExemptForm(String jsonObject) throws Exception {
 		CommonVO commonvo = new CommonVO();
 		String exemptFormId = null;

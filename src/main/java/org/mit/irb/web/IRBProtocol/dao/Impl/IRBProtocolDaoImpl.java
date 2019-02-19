@@ -530,6 +530,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			String protocolNUmber = generateProtocolNumber();
 			generalInfo.setProtocolNumber(protocolNUmber);
 			generalInfo.setSequenceNumber(1);
+			generalInfo.setCreateTimestamp(generalInfo.getUpdateTimestamp()); //since when creating a protocol both created user and updated user is same
+			generalInfo.setCreateUser(generalInfo.getUpdateUser());
 			List<ProtocolPersonnelInfo> protocolPersonnelInfoList = new ArrayList<ProtocolPersonnelInfo>();
 			ProtocolPersonnelInfo protocolPersonnelInfo = generalInfo.getPersonnelInfos().get(0);
 			protocolPersonnelInfo.setProtocolGeneralInfo(generalInfo);

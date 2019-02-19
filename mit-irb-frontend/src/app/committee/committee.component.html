@@ -128,8 +128,16 @@
 			</div> -->
 
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<section class="row">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<section class="row btn-row-med sect-padding">
+							<button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'committee_home')" [ngClass]="{'btnactive':currentTab=='committee_home'}">
+									<i class="fa fa-calendar"></i>Committee
+								</button>
+								<button class="btn btn-primary " type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'btnactive':currentTab=='committee_members',
+							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee" (click)="show_current_tab($event,'committee_members')">
+								<i class="fa fa-users"></i>Members
+								</button>
+					<!-- <section class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<ul class="tabsIcon" style="margin-top: 10px;">
 							<li class="active" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'active':currentTab=='committee_home'}">
 								<a style="padding-top: -5px;" href="#" (click)="show_current_tab($event,'committee_home');">
@@ -143,8 +151,8 @@
 									<span>Members</span>
 								</a>
 							</li>
-						</ul>
-					</div>
+						</ul> 
+					</div> -->
 				</section>
 			</div>
 		</section>

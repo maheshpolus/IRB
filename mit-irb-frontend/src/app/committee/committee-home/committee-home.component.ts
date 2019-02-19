@@ -192,6 +192,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.committeeConfigurationService.changeActivatedtab( 'committee_home' );
 
     }
 

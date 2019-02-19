@@ -46,6 +46,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     alertMsgMiddleOfEdit = '';
     public dataServiceHomeUnit: CompleterData;
     isOnEditMembers = false;
+    isCreateNewCommittee = false;
     memberData: any = [];
     alertMsgMemberMiddleOfEdit: string;
     public onDestroy$ = new Subject<void>();
@@ -80,6 +81,14 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this.initLoadParent();
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;
+        });
+        this.route.queryParams.subscribe(params => {
+            this.id = params['id'];
+        if (this.id == null || this.id === undefined) {
+            this.isCreateNewCommittee = true;
+          } else {
+            this.isCreateNewCommittee = false;
+          }
         });
 
     }

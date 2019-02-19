@@ -10,6 +10,13 @@ public interface CorrespondenceDao{
 	 */
 	byte[] getTemplateData(CommonVO commonVO);
 
+	
+	/**
+	 * @param commonVO
+	 * @return  Action Template for reporting
+	 */
+	byte[] getActionTemplateData(CommonVO commonVO);
+	
 	/**
 	 * @param data
 	 * @param commonVO
@@ -18,4 +25,15 @@ public interface CorrespondenceDao{
 	 */
 	byte[] mergePlaceHolders(byte[] data, CommonVO commonVO);
 
+	
+	
+	/**
+	 * @param data
+	 * @param commonVO
+	 * @return get merged
+	 * @throws Exception 
+	 */
+	byte[] mergeActionPlaceHolders(byte[] data, CommonVO commonVO);
+	
+	
 }

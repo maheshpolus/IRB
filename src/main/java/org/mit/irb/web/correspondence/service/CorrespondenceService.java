@@ -9,5 +9,7 @@ import org.springframework.http.ResponseEntity;
 public interface CorrespondenceService {
 
 	ResponseEntity<byte[]> generateCorrespondence(HttpServletResponse response, CommonVO commonVO);
+	
+	ResponseEntity<byte[]> generateActionCorrespondence(HttpServletResponse response, CommonVO commonVO);
 
 }

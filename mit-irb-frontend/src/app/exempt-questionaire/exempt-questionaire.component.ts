@@ -1484,8 +1484,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.requestObject.irbExemptForm.notificationNumber = 722;
                 }
             }
-            this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
         }
+        this.requestObject.irbExemptForm.statusCode = this.strInProgressStatusCode;
         this.approveRejectAction(this.requestObject);
     }
 

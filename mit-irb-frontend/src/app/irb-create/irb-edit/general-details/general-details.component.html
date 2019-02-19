@@ -32,9 +32,9 @@
                   (ngModelChange)="validateStartDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
                 <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1">
-                  <span class="input-group-text">
+                  <!-- <span class="input-group-text"> -->
                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </span>
+                  <!-- </span> -->
                 </div>
               </div>
               <span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
@@ -48,9 +48,9 @@
                   (ngModelChange)="validateEndDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
                 <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
-                  <span class="input-group-text">
+                  <!-- <span class="input-group-text"> -->
                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </span>
+                  <!-- </span> -->
                 </div>
               </div>
               <span *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</span>

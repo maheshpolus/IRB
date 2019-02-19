@@ -49,5 +49,25 @@ public class CorrespondenceServiceImpl implements CorrespondenceService{
 		}
 		return attachmentData;
 	}
+	
+	@Override
+	public ResponseEntity<byte[]> generateActionCorrespondence(HttpServletResponse response, CommonVO commonVO) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try{
+			byte[] data = correspondenceDao.getActionTemplateData(commonVO);
+			byte[] mergedOutput = correspondenceDao.mergeActionPlaceHolders(data,commonVO);
+			String generatedFileName = "Result"+System.nanoTime()+".pdf";
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.parseMediaType("application/pdf"));
+			headers.setContentDispositionFormData(generatedFileName, generatedFileName);
+			headers.setContentLength(mergedOutput.length);
+			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+			headers.setPragma("public");
+			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);				
+		}catch (Exception e) {
+			logger.error("Exception in generateCorrespondence"+ e.getMessage());
+		}
+		return attachmentData;
+	}
 
 }

@@ -29,6 +29,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     error = '';
     addArea = '';
     areaOfReasearch: any[] = [];
+    previousEditscheduleId: any;
     editClass: string;
     editAreaClass: string;
     maxProtocols: string;
@@ -706,6 +707,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;
                 this.conflictDates = this.result.scheduleData.datesInConflict;
+                if (this.conflictDates != null) {
+                    this.isConflictDates = true;
+                }
                 this.filerEndDate = this.result.scheduleData.filerEndDate;
                 this.result.scheduleData = {};
                 this.result.scheduleData.time = {};
@@ -723,7 +727,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     editScheduleData( e, date, status, place, time, i, scheduleId ) {
         e.preventDefault();
         if ( this.isScheduleListItemEditMode === true ) {
-            this.alertMsg = 'You are editing a schedule data with serial number : ' + ( scheduleId );
+            this.alertMsg = 'You are editing a schedule data with serial number : ' + ( this.previousEditscheduleId );
             this.isScheduleEditWarningModalOpen = true;
         } else {
             this.alertMsg = '';
@@ -732,6 +736,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.scheduleTime = new Date( time );
             this.editSchedule[i] = !this.editSchedule[i];
             this.listDate = date;
+            this.previousEditscheduleId = scheduleId;
             this.listStatus = status;
             this.listPlace = place;
             this.listTime = time;

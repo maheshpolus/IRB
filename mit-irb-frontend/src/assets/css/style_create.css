@@ -2409,5 +2409,8 @@ input:disabled,textarea:disabled{
 {
     font-size: 13px !important;
 }
+.mr-2 {
+    margin-right: 2px !important;
+}
 
 

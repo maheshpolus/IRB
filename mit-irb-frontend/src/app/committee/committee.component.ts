@@ -167,38 +167,38 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this.committeeConfigurationService.changeActivatedtab( current_tab );
         this.clear();
         if ( current_tab === 'committee_members' ) {
-            this.committeeConfigurationService.currentEditFlag.subscribe( data => {
-                this.editFlag = data;
-            } );
-            if ( this.editFlag ) {
-                this.showPopup = true;
-                if ( this.mode === 'view' ) {
-                    this.middleOfEdit = true;
-                    this.alertMsgMiddleOfEdit = 'You are in the middle of editing Committee Details, Do you want to stay on the page..?';
-                } else if ( this.mode === 'create' ) {
-                    this.middleOfSave = true;
-                    this.alertMsgNotSaved = 'You have to save the committee to proceed!';
-                }
-            } else {
+            // this.committeeConfigurationService.currentEditFlag.subscribe( data => {
+            //     this.editFlag = data;
+            // } );
+            // if ( this.editFlag ) {
+            //     this.showPopup = true;
+            //     if ( this.mode === 'view' ) {
+            //         this.middleOfEdit = true;
+            //         this.alertMsgMiddleOfEdit = 'You are in the middle of editing Committee Details, Do you want to stay on the page..?';
+            //     } else if ( this.mode === 'create' ) {
+            //         this.middleOfSave = true;
+            //         this.alertMsgNotSaved = 'You have to save the committee to proceed!';
+            //     }
+            // } else {
                 this.currentTab = current_tab;
                 this.router.navigate( ['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
-            }
+            // }
 
         } else if ( current_tab === 'committee_home' ) {
-            this.committeeConfigurationService.currentMemberEditFlag.takeUntil( this.onDestroy$ ).subscribe( data => {
-                this.isOnEditMembers = data;
+            // this.committeeConfigurationService.currentMemberEditFlag.takeUntil( this.onDestroy$ ).subscribe( data => {
+            //     this.isOnEditMembers = data;
 
-            } );
-            if ( this.isOnEditMembers ) {
-                this.showPopup = true;
-                this.committeeConfigurationService.currentMemberData.takeUntil( this.onDestroy$ ).subscribe( data => {
-                    this.memberData = data;
-                } );
-                this.alertMsgMemberMiddleOfEdit = 'You are in the middle of editing a Member Details, Do you want to stay on the page..?';
-            } else {
+            // } );
+            // if ( this.isOnEditMembers ) {
+            //     this.showPopup = true;
+            //     this.committeeConfigurationService.currentMemberData.takeUntil( this.onDestroy$ ).subscribe( data => {
+            //         this.memberData = data;
+            //     } );
+            //     this.alertMsgMemberMiddleOfEdit = 'You are in the middle of editing a Member Details, Do you want to stay on the page..?';
+            // } else {
                 this.currentTab = current_tab;
                 this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
-            }
+            // }
         }
     }
 

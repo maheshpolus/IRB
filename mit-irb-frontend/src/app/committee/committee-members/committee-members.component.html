@@ -248,10 +248,14 @@
 																	<button *ngIf="editDetails==false" (click)="showEditDetails()" title="Edit" type="button" class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-pencil" aria-hidden="true"></i>
 																	</button>
-																	<button *ngIf="editDetails" title="Save" data-target="#modalWarning" data-toggle="modal" (click)="saveDetails(member)" type="button"
+																	<!-- <button *ngIf="editDetails" title="Save" data-target="#modalWarning" data-toggle="modal" (click)="saveDetails(member)" type="button"
 																	 class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-floppy-o" aria-hidden="true"></i>
-																	</button>
+																	</button> -->
+																	<button *ngIf="editDetails" title="Save" (click)="saveDetails(member)" type="button"
+																	class="btn btn-primary edit-btn-1">
+																	   <i class="fa fa-floppy-o" aria-hidden="true"></i>
+																   </button>
 																	<button title="Cancel" *ngIf="editDetails" (click)="cancelEditDetails()" type="button" class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-times"></i>
 																	</button>
@@ -287,7 +291,10 @@
 														<div class="col-12">
 															<div class="row">
 																<div class="col-md-4">
-																	<a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addRoles($event, member)">
+																	<!-- <a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addRoles($event, member)">
+																		<i class="fa fa-plus icon-padding"></i>Add Roles
+																	</a> -->
+																	<a class="pdf generate-schedule" (click)="addRoles($event, member)">
 																		<i class="fa fa-plus icon-padding"></i>Add Roles
 																	</a>
 																</div>
@@ -433,7 +440,10 @@
 																<div class="col-md-12">
 																	<div class="row">
 																		<div class="col-md-4">
-																			<a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addExpertises($event, member)">
+																			<!-- <a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addExpertises($event, member)">
+																				<i class="fa fa-plus icon-padding"></i>Add Expertise
+																			</a> -->
+																			<a class="pdf generate-schedule" (click)="addExpertises($event, member)">
 																				<i class="fa fa-plus icon-padding"></i>Add Expertise
 																			</a>
 																		</div>
@@ -684,7 +694,11 @@
 																<button *ngIf="editDetails==false" (click)="showEditDetails()" title="Edit" type="button" class="btn btn-primary edit-btn-1">
 																	<i class="fa fa-pencil" aria-hidden="true"></i>
 																</button>
-																<button *ngIf="editDetails" title="Save" data-target="#modalWarning" data-toggle="modal" (click)="saveDetails(member)" type="button"
+																<!-- <button *ngIf="editDetails" title="Save" data-target="#modalWarning" data-toggle="modal" (click)="saveDetails(member)" type="button"
+																 class="btn btn-primary edit-btn-1">
+																	<i class="fa fa-floppy-o" aria-hidden="true"></i>
+																</button> -->
+																<button *ngIf="editDetails" title="Save" (click)="saveDetails(member)" type="button"
 																 class="btn btn-primary edit-btn-1">
 																	<i class="fa fa-floppy-o" aria-hidden="true"></i>
 																</button>
@@ -724,7 +738,10 @@
 													<div class="col-12">
 														<div class="row">
 															<div class="col-md-4">
-																<a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addRoles($event, member)">
+																<!-- <a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addRoles($event, member)">
+																	<i class="fa fa-plus icon-padding"></i>Add Roles
+																</a> -->
+																<a class="pdf generate-schedule" (click)="addRoles($event, member)">
 																	<i class="fa fa-plus icon-padding"></i>Add Roles
 																</a>
 															</div>
@@ -898,7 +915,10 @@
 															<div class="col-12">
 																	<div class="row">
 																			<div class="col-md-4">
-																				<a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addExpertises($event, member)">
+																				<!-- <a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addExpertises($event, member)">
+																					<i class="fa fa-plus icon-padding"></i>Add Expertise
+																				</a> -->
+																				<a class="pdf generate-schedule" data-toggle="modal" (click)="addExpertises($event, member)">
 																					<i class="fa fa-plus icon-padding"></i>Add Expertise
 																				</a>
 																			</div>

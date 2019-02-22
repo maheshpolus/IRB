@@ -272,7 +272,7 @@
 														<th scope="col">Status</th>
 														<th scope="col">Place</th>
 														<th scope="col">Time</th>
-														<th scope="col">Action</th>
+														<th scope="col" width= "12%">Action</th>
 												</tr>
 											  </thead>
 											  <tbody class="tbody-font-size">
@@ -321,7 +321,7 @@
 																			  </div>
 																	</span>
 																</td>
-																<td class="action-btn-list">
+																<td width= "12%" class="action-btn-list">
                     <button *ngIf="!editSchedule[i] == true" title="Edit" data-toggle="modal" data-target="#warningModal" (click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i, committeScheduleData.scheduleId)" type="button"
                       class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>

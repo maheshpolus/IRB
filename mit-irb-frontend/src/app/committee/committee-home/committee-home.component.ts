@@ -707,8 +707,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;
                 this.conflictDates = this.result.scheduleData.datesInConflict;
-                if (this.conflictDates != null) {
+                if (this.conflictDates != null && this.conflictDates.length > 0 ) {
                     this.isConflictDates = true;
+                    document.getElementById('skippedSchedulesButton').click();
                 }
                 this.filerEndDate = this.result.scheduleData.filerEndDate;
                 this.result.scheduleData = {};

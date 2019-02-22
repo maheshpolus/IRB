@@ -374,6 +374,7 @@
 						</div>
 						</div>
 						</div>
+<button type="button margin-class" id="skippedSchedulesButton" [hidden]="true" data-toggle="modal" data-target="#skippedSchedules"></button>
 <!--generate schedule modal-->
 <div class="modal fade bd-example-modal-lg"  *ngIf="showGenerateSchedule && saveCommitteeFlag" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
@@ -683,7 +684,7 @@
 					</div>
 					<div class="modal-footer btn-row-med">
 							<!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal">Close</button> -->
-							<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-toggle="modal"  data-target="#skippedSchedules" (click)="generateSchedule($event)">Generate Schedules</button>
+							<button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-toggle="modal" (click)="generateSchedule($event)">Generate Schedules</button>
 					  </div>
 		  </div>
 		  </div>
@@ -691,8 +692,7 @@
 		  </div>
 		  <!-- Modal for show warning on conflicted dates on generate schedule -->
 
-<div class="modal fade" *ngIf="isConflictDates" id="skippedSchedules" tabindex="-1" role="dialog"
-aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+<div class="modal fade" id="skippedSchedules" tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
    <div class="modal-dialog" role="document">
 	   <div class="modal-content">
 		   <div class="modal-header popup-header">
@@ -705,7 +705,7 @@ aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
 			   <p class="forSkipSchedule">Schedules can not be generated on the following date(s)</p>
 			   <ul class="forSkipSchedule">
 				   <li *ngFor="let conflictDate of conflictDates">
-					   <span class="fa fa-calendar sp-color">&nbsp;&nbsp;{{ conflictDate }}&nbsp;&nbsp;</span> is skipped in recurrence, meeting already scheduled.</li>
+					   <span class="fa fa-calendar sp-color">&nbsp;&nbsp;{{ conflictDate| date: 'MM/dd/yyyy' }}&nbsp;&nbsp;</span> is skipped in recurrence, meeting already scheduled.</li>
 			   </ul>
 		   </div>
 		   <div class="modal-footer btn-row-med">

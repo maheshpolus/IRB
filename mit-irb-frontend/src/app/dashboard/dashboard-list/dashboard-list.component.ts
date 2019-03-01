@@ -12,6 +12,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
 import { ElasticService } from '../../common/service/elastic.service';
+import { PiElasticService } from '../../common/service/pi-elastic.service';
 import { DashboardService } from '../dashboard.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { KeyPressEvent } from '../../common/directives/keyPressEvent.component';
@@ -42,6 +43,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         protocolStatusCode: '',
         dashboardType: '',
         determination: '',
+        isAdvancedSearch: 'N',
         exemptFormStartDate: '',
         exemptFormEndDate: '',
         exemptFormfacultySponsorName: ''
@@ -69,10 +71,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /**elastic search variables */
     message = '';
     _results: Subject<Array<any>> = new Subject<Array<any>>();
+    _piResults: Subject<Array<any>> = new Subject<Array<any>>();
     searchText: FormControl = new FormControl('');
+    piSearchText: FormControl = new FormControl('');
+    fsSearchText: FormControl = new FormControl('');
     searchTextModel: string;
     iconClass: any;
     IsElasticResult = false;
+    IsElasticResultPI = false;
+    IsElasticResultFS = false;
     protocol: string;
     protocolType: string;
     title: string;
@@ -97,6 +104,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     constructor(private _dashboardService: DashboardService,
         private _ngZone: NgZone,
         private _elasticsearchService: ElasticService,
+        private _piElasticsearchService: PiElasticService,
         private _router: Router,
         private _sharedDataService: SharedDataService,
         public keyPressEvent: KeyPressEvent,
@@ -230,7 +238,80 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             })
             .catch(this.handleError)
             .subscribe(this._results);
+            this.piSearchText
+            .valueChanges
+            .map((text: any) => text ? text.trim() : '')
+            .do(searchString => searchString ? this.message = 'searching...' : this.message = '')
+            .debounceTime(500)
+            .distinctUntilChanged()
+            .switchMap(searchString => {
+                return this.getElasticSearchResults(searchString);
+            })
+            .catch(this.handleError)
+            .subscribe(this._piResults);
+            this.fsSearchText
+            .valueChanges
+            .map((text: any) => text ? text.trim() : '')
+            .do(searchString => searchString ? this.message = 'searching...' : this.message = '')
+            .debounceTime(500)
+            .distinctUntilChanged()
+            .switchMap(searchString => {
+                return this.getElasticSearchResults(searchString);
+            })
+            .catch(this.handleError)
+            .subscribe(this._piResults);
     }
+    
+        getElasticSearchResults(searchString) {
+        return new Promise<Array<String>>((resolve, reject) => {
+            this._ngZone.runOutsideAngular(() => {
+                let hits_source: Array<any> = [];
+                let hits_highlight: Array<any> = [];
+                const hits_out: Array<any> = [];
+                const results: Array<any> = [];
+                let personName: string;
+                let test;
+                this._piElasticsearchService.irbSearch(searchString)
+                    .then((searchResult) => {
+                        this._ngZone.run(() => {
+                            hits_source = ((searchResult.hits || {}).hits || [])
+                                .map((hit) => hit._source);
+                            hits_highlight = ((searchResult.hits || {}).hits || [])
+                                .map((hit) => hit.highlight);
+
+                            hits_source.forEach((elmnt, j) => {
+                                personName = hits_source[j].full_name;
+                                test = hits_source[j];
+
+                                if (typeof (hits_highlight[j].full_name) !== 'undefined') {
+                                    personName = hits_highlight[j].full_name;
+                                }
+                                results.push({
+                                    label: personName,
+                                    obj: test
+                                });
+                            });
+                            if (results.length > 0) {
+                                this.message = '';
+                            } else {
+                                if (this.requestObject.piName && this.requestObject.piName.trim()) {
+                                    this.message = 'nothing was found';
+                                }
+                            }
+                            resolve(results);
+                        });
+
+                    })
+                    .catch((error) => {
+                        this._ngZone.run(() => {
+                            reject(error);
+                        });
+                    });
+            });
+        });
+    }
+
+    
 
     /** handles error in elastic search */
     handleError(): any {
@@ -275,9 +356,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.noIrbList = false;
         this.searchTextModel = '';
         this.lastClickedTab = currentTab;
-        if (!this.isAdvancesearch) {
-            this.requestObject = { protocolTypeCode: '' ,
-                                   determination: ''};
+         if (!this.isAdvancesearch) {
+            this.requestObject = { protocolTypeCode: '',
+                                   determination: ''
+                                    };
+            this.requestObject.isAdvancedSearch = 'N';
+        } else {
+            this.requestObject.isAdvancedSearch = 'Y';
         }
         this._sharedDataService.changeCurrentTab(currentTab);
         this.requestObject.personId = this.userDTO.personID;
@@ -375,15 +460,19 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     /** clear all fields in advance search and load orginal irb protocol list if none of the fields where empty*/
     clear() {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
-        this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ||
-        this.requestObject.protocolStatusCode !== '') {
-        this.requestObject.protocolNumber = '';
-        this.requestObject.title = '';
-        this.requestObject.piName = '';
-        this.requestObject.protocolTypeCode = '';
-        this.requestObject.protocolStatusCode = '';
-        this.protocolStatus = '';
-        this.isCheckBoxChecked = {};
+            this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ||
+            this.requestObject.protocolStatusCode !== '' ||
+            this.requestObject.approvalDate !== '' || this.requestObject.expirationDate !== '') {
+            this.requestObject.protocolNumber = '';
+            this.requestObject.title = '';
+            this.requestObject.piName = '';
+            this.requestObject.isAdvancedSearch = 'N';
+            this.requestObject.approvalDate = '';
+            this.requestObject.expirationDate = '';
+            this.requestObject.protocolTypeCode = '';
+            this.requestObject.protocolStatusCode = '';
+            this.protocolStatus = '';
+            this.isCheckBoxChecked = {};
         // No need for backend call to clear data in ALL PROTOCOLS for Admins
         if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && this.lastClickedTab === 'ALL') {
                     this.irbListData = [];
@@ -628,4 +717,14 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this._sharedDataService.searchData = this.requestObject;
 
     }
+    selectedPiResult(result) {
+
+         this.requestObject.piName = result.obj.full_name;
+         this.IsElasticResultPI = false;
+     }
+     selectedFsResult(result) {
+         this.requestObject.exemptFormfacultySponsorName = result.obj.full_name;
+         this.IsElasticResultFS = false;
+     }
 }
+

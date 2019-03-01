@@ -24,7 +24,7 @@
 							<span *ngIf="editDetails != false">
 								<select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="result.committee.reviewTypeDescription" name="Select Type"
 								 [disabled]="editDetails==false">
-									<option value="Select">Select</option>
+									<option value="">Select</option>
 									<option *ngFor="let type of reviewTypes">{{type.description}}</option>
 								</select>
 							</span>

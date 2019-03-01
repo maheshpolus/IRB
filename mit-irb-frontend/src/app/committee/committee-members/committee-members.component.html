@@ -12,7 +12,7 @@
 				<p>{{modalMessage}}</p>
 			</div>
 			<div class="modal-footer btn-row-med" *ngIf="!memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
-				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="showPopup=false">Ok</button>
+				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="showPopup=false">Ok2</button>
 			</div>
 			<div class="modal-footer btn-row-med" *ngIf="memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
 				<button type="button" class="btn tab_btn" data-dismiss="modal" (click)="expandMemberToSave()">Ok</button>
@@ -168,7 +168,10 @@
 												</nav>
 											</div>
 											<div class="card-body card-paddng">
-
+												<div class="col-12  search-eidted-p padding-15">
+													<div *ngIf="member.membershipTypeCode == null || member.termEndDate == null || member.termStartDate == null" class="alert alert-warning ">fill person details
+													</div>
+												  </div>
 												<div class="borderBox col-12">
 													<div class="pullSide">
 														<div class="col-12  search-eidted-p padding-15">
@@ -186,15 +189,17 @@
 																		<label>Membership Type
 																		</label>
 																		<select id="membershipType" [disabled]="editDetails==false" class="custom-select  mr-sm-2 fontsize-persondetails" (change)="memberTypeChange(member,$event.target.value)">
-
+										
 																			<option *ngFor="let type of memberList.committeeMembershipTypes" (value)="type" [selected]="member.committeeMembershipType.description==type.description">{{type.description}}</option>
-
+										
 																		</select>
 																	</div>
 																</div>
 																<div class="col-md-3">
 																	<div class="form-group">
-																		<label>Term Start Date<span class="mandatory">*</span></label>
+																		<label>Term Start Date
+																			<span class="mandatory">*</span>
+																		</label>
 																		<div class="input-group  mb-2">
 																			<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																			 [(ngModel)]="member.termStartDate">
@@ -209,7 +214,9 @@
 																</div>
 																<div class="col-md-3">
 																	<div class="form-group">
-																		<label>Term End Date <span class="mandatory">*</span></label>
+																		<label>Term End Date
+																			<span class="mandatory">*</span>
+																		</label>
 																		<div class="input-group  mb-2">
 																			<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																			 [(ngModel)]="member.termEndDate">
@@ -222,7 +229,7 @@
 																		</div>
 																	</div>
 																</div>
-
+										
 															</div>
 														</div>
 														<div class="col-12">
@@ -243,29 +250,28 @@
 																		 [(ngModel)]="member.trainingNotes"></textarea>
 																	</div>
 																</div>
-
+										
 																<div class="col-1 action-btn-list add-btn-1 pt-35">
 																	<button *ngIf="editDetails==false" (click)="showEditDetails()" title="Edit" type="button" class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-pencil" aria-hidden="true"></i>
 																	</button>
 																	<!-- <button *ngIf="editDetails" title="Save" data-target="#modalWarning" data-toggle="modal" (click)="saveDetails(member)" type="button"
-																	 class="btn btn-primary edit-btn-1">
+																											 class="btn btn-primary edit-btn-1">
+																												<i class="fa fa-floppy-o" aria-hidden="true"></i>
+																											</button> -->
+																	<button *ngIf="editDetails" title="Save" (click)="saveDetails(member)" type="button" class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-floppy-o" aria-hidden="true"></i>
-																	</button> -->
-																	<button *ngIf="editDetails" title="Save" (click)="saveDetails(member)" type="button"
-																	class="btn btn-primary edit-btn-1">
-																	   <i class="fa fa-floppy-o" aria-hidden="true"></i>
-																   </button>
+																	</button>
 																	<button title="Cancel" *ngIf="editDetails" (click)="cancelEditDetails()" type="button" class="btn btn-primary edit-btn-1">
 																		<i class="fa fa-times"></i>
 																	</button>
-
+										
 																</div>
-
+										
 															</div>
 														</div>
-														<div *ngIf="isTermDateFilled == false"> 
-																<span class="mandatory">{{roleWarningMessage}}</span>
+														<div *ngIf="isTermDateFilled == false">
+															<span class="mandatory">{{roleWarningMessage}}</span>
 														</div>
 													</div>
 												</div>
@@ -284,7 +290,10 @@
 												</nav>
 											</div>
 											<div class="card-body card-paddng">
-
+												<div class="col-12  search-eidted-p padding-15">
+													<div *ngIf="member.committeeMemberRoles == null || member.committeeMemberRoles.length < 1" class="alert alert-warning ">Add one Role
+													</div>
+												  </div>
 												<!-- ROLES -->
 												<div class=" borderBox col-12">
 													<div>
@@ -433,7 +442,10 @@
 														</nav>
 													</div>
 													<div class="card-body card-paddng">
-
+														<div class="col-12  search-eidted-p padding-15">
+															<div *ngIf="member.committeeMemberExpertises == null || member.committeeMemberExpertises.length < 1" class="alert alert-warning ">Add on expertise
+															</div>
+														  </div>
 														<!-- EXPERTISE -->
 														<div class=" borderBox col-12">
 															<div>
@@ -596,7 +608,7 @@
 							<div class="setBody" style="display: block;" *ngIf="member.personId == personId && showMembers==true || member.rolodexId == rolodexId && showNonEmployeeMembers == true">
 								<div class="row">
 									<!-- <div class="col-12"> -->
-									<div class="col-12">
+									<div class="col-12 top-distance">
 
 
 
@@ -613,8 +625,12 @@
 												</nav>
 											</div>
 											<div class="card-body card-paddng">
-
-												<div>
+												<div class="col-12  search-eidted-p padding-15">
+													<div *ngIf="member.membershipTypeCode == null || member.termEndDate == null || member.termStartDate == null" class="alert alert-warning ">fill person details
+													</div>
+												  </div>
+												<div class="col-12">
+													<div class="pullSide">
 													<!-- Pull side div -->
 													<div class="col-12  search-eidted-p padding-15">
 														<div class="row">
@@ -630,17 +646,18 @@
 																<div class="form-group ">
 																	<label>Membership Type
 																	</label>
-																	<select id="membershipType" [disabled]="editDetails==false" class="custom-select  mr-sm-2 fontsize-persondetails" (change)="memberTypeChange(member,$event.target.value)"
-																	>
-
+																	<select id="membershipType" [disabled]="editDetails==false" class="custom-select  mr-sm-2 fontsize-persondetails" (change)="memberTypeChange(member,$event.target.value)">
+										
 																		<option *ngFor="let type of memberList.committeeMembershipTypes" (value)="type" [selected]="member.committeeMembershipType.description==type.description">{{type.description}}</option>
-
+										
 																	</select>
 																</div>
 															</div>
 															<div class="col-md-3">
 																<div class="form-group">
-																	<label>Term Start Date <span class="mandatory">*</span></label>
+																	<label>Term Start Date
+																		<span class="mandatory">*</span>
+																	</label>
 																	<div class="input-group  mb-2">
 																		<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt11" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																		 [(ngModel)]="member.termStartDate">
@@ -655,7 +672,9 @@
 															</div>
 															<div class="col-md-3">
 																<div class="form-group">
-																	<label>Term End Date <span class="mandatory">*</span></label>
+																	<label>Term End Date
+																		<span class="mandatory">*</span>
+																	</label>
 																	<div class="input-group  mb-2">
 																		<input type="text" class="form-control fontsize-persondetails" [owlDateTime]="dt12" placeholder="mm/dd/yyyy" [disabled]="editDetails==false"
 																		 [(ngModel)]="member.termEndDate">
@@ -668,7 +687,7 @@
 																	</div>
 																</div>
 															</div>
-
+										
 														</div>
 													</div>
 													<div class="col-12">
@@ -689,42 +708,42 @@
 																	 [(ngModel)]="member.trainingNotes"></textarea>
 																</div>
 															</div>
-
+										
 															<div class="col-1 action-btn-list add-btn-1 pt-35">
 																<button *ngIf="editDetails==false" (click)="showEditDetails()" title="Edit" type="button" class="btn btn-primary edit-btn-1">
 																	<i class="fa fa-pencil" aria-hidden="true"></i>
 																</button>
 																<!-- <button *ngIf="editDetails" title="Save" data-target="#modalWarning" data-toggle="modal" (click)="saveDetails(member)" type="button"
-																 class="btn btn-primary edit-btn-1">
-																	<i class="fa fa-floppy-o" aria-hidden="true"></i>
-																</button> -->
-																<button *ngIf="editDetails" title="Save" (click)="saveDetails(member)" type="button"
-																 class="btn btn-primary edit-btn-1">
+																										 class="btn btn-primary edit-btn-1">
+																											<i class="fa fa-floppy-o" aria-hidden="true"></i>
+																										</button> -->
+																<button *ngIf="editDetails" title="Save" (click)="saveDetails(member)" type="button" class="btn btn-primary edit-btn-1">
 																	<i class="fa fa-floppy-o" aria-hidden="true"></i>
 																</button>
 																<button title="Save" *ngIf="editDetails" (click)="cancelEditDetails()" type="button" class="btn btn-primary edit-btn-1">
 																	<i class="fa fa-times"></i>
 																</button>
-
+										
 															</div>
-
+										
 														</div>
 													</div>
-													<div *ngIf="isTermDateFilled == false"> 
-															<span class="mandatory">{{roleWarningMessage}}</span>
+													<div *ngIf="isTermDateFilled == false">
+														<span class="mandatory">{{roleWarningMessage}}</span>
 													</div>
 												</div>
 											</div>
 										</div>
+										</div>
 										<!-- END PERSON DETAILS INACTIVE FIXED -->
 
 									</div>
-									<div class="borderBox col-12">
+									<div class="col-12">
 
 
 									<!-- Role DETAILS INACTIVE FIXED -->
 
-										<div class="card history-card border-radius-1">
+										<div class="card history-card border-radius-1 top-distance">
 											<div class="card-header history-header">
 												<nav class="nav navbar-pg3">
 													<h5>Roles</h5>
@@ -732,7 +751,11 @@
 												</nav>
 											</div>
 											<div class="card-body card-paddng">
-													<div class=" borderBox col-12">
+													<div class="col-12  search-eidted-p padding-15">
+															<div *ngIf="member.committeeMemberRoles == null || member.committeeMemberRoles.length < 1" class="alert alert-warning ">Add one Role
+															</div>
+														  </div>
+													<div class="col-12">
 
 												<div>
 													<div class="col-12">
@@ -901,7 +924,7 @@
 
 											<!-- EXPERTISE -->
 									<div class="col-6">
-											<div class="card history-card border-radius-1">
+											<div class="card history-card border-radius-1 top-distance">
 													<div class="card-header history-header">
 														<nav class="nav navbar-pg3">
 															<h5>Expertise</h5>
@@ -909,18 +932,22 @@
 														</nav>
 													</div>
 													<div class="card-body card-paddng">
-															<div class=" borderBox col-12">
+															<div class="col-12  search-eidted-p padding-15">
+																	<div *ngIf="member.committeeMemberExpertises == null || member.committeeMemberExpertises.length < 1" class="alert alert-warning ">Add on expertise
+																	</div>
+																  </div>
+															<div class="col-12">
 
 																	<div>
 															<div class="col-12">
 																	<div class="row">
 																			<div class="col-md-4">
-																				<!-- <a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addExpertises($event, member)">
-																					<i class="fa fa-plus icon-padding"></i>Add Expertise
-																				</a> -->
-																				<a class="pdf generate-schedule" data-toggle="modal" (click)="addExpertises($event, member)">
+																				<a class="pdf generate-schedule" data-target="#modalWarning" data-toggle="modal" (click)="addExpertises($event, member)">
 																					<i class="fa fa-plus icon-padding"></i>Add Expertise
 																				</a>
+																				<!-- <a class="pdf generate-schedule" data-toggle="modal" (click)="addExpertises($event, member)">
+																					<i class="fa fa-plus icon-padding"></i>Add Expertise
+																				</a> -->
 																			</div>
 																			<hr>
 	
@@ -977,7 +1004,7 @@
 
 									<!-- CONTACT INFO COMPLETED INACTIVE -->
 									<div class="col-6">
-											<div class="card history-card border-radius-1">
+											<div class="card history-card border-radius-1 top-distance">
 												<div class="card-header history-header">
 													<nav class="nav navbar-pg3">
 														<h5>Contact Information</h5>
@@ -985,7 +1012,7 @@
 													</nav>
 												</div>
 												<div class="card-body card-paddng">
-													<div class="borderBox">
+													<div class="col-12">
 														<div class="row">
 															<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard border-left-card">
 																<div class="row">

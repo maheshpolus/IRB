@@ -1578,6 +1578,10 @@ color: #5e5e5e !important;
 {
     margin-top: 10px;
 }
+.mt-15
+{
+    margin-top: 15px !important;
+}
 .ml-600
 {
     margin-left: 600px;
@@ -2412,5 +2416,15 @@ input:disabled,textarea:disabled{
 .mr-2 {
     margin-right: 2px !important;
 }
+.date-width
+{
+    width: 160px !important;
+}
+.advancedSearchPiElastic
+{
+    width: 33% !important;
+    box-shadow: none !important;
+}
+
 
 

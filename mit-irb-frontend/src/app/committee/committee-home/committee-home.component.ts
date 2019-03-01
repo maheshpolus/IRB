@@ -247,6 +247,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 } else {
                     this.editClass = 'scheduleBoxes';
                     this.editAreaClass = 'scheduleBoxes';
+                    this.result.committee.reviewTypeDescription = '';
                     this.editDetails = true;
                     this.Id = this.result.committee.committeeId;
                     this.showDetails = false;
@@ -305,7 +306,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         if ( ( this.result.committee.minimumMembersRequired == null ||
             this.result.committee.advSubmissionDaysReq === null ||
             this.result.committee.maxProtocols === null || this.Type === null ||
-            this.result.committee.committeeName === null || this.result.committee.committeeName == null ||
+            this.result.committee.committeeName === null || this.result.committee.committeeName === '' ||
             this.result.committee.committeeName === undefined ||
             this.result.committee.homeUnitName === null || this.result.committee.homeUnitName === '' )
          || ( this.result.committee.reviewTypeDescription === 'Select' || this.result.committee.reviewTypeDescription === '' ) ) {

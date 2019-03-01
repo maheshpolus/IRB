@@ -49,7 +49,7 @@
                     (keyup)='setValidation($event, tableField.length, tableField.data_type, i,tableField.can_empty, tableField.column_name )' (ngModelChange)="setCodeTableField(tableField.column_name, index,dataType[i].type, 1)" (click)="emptyId = i">
                   </textarea>
                   <span *ngIf="isEditEnable[index]||tableField.is_editable!='true'" class="spanwidth">{{values[tableField.column_name]}}</span>
-                  <span *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&i==emptyId&&tableField.data_type!='Date'" class="modal-title" [ngClass]="(emptyId == i)?'':'span-padding'">
+                  <span *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&i==emptyId&&tableField.data_type!='Date'" class="code-table-modal-title" [ngClass]="(emptyId == i)?'':'span-padding'">
                     *Maximum {{tableField.length}} {{dataType[i].display_type}}
                   </span>
                   <br *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'&&isLength&&id==i&&tableField.data_type!='Date'" [ngClass]="(emptyId == i)?'':'span-padding'">
@@ -78,7 +78,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="not-available modal-title" *ngIf="isNoData">No data available</div>
+        <div class="not-available code-table-modal-title" *ngIf="isNoData">No data available</div>
       </div>
     </div>
 
@@ -97,7 +97,7 @@
   <div class="modal-dialog modal-lg" [ngClass]="{'widthmodal':totalColumnNo>3}">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add New {{codeTableProperty.codetable_name}}</h5>
+        <h5 class="code-table-modal-title">Add New {{codeTableProperty.codetable_name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -125,7 +125,7 @@
                         (keyup)='setValidation($event, tableField.length, tableField.data_type, i, tableField.can_empty,tableField.column_name)'
                         (ngModelChange)="setCodeTableField(tableField.column_name,i,dataType[i].type)">
                       </textarea>
-                      <span *ngIf="i==emptyId&&tableField.data_type!='Date'" class="modal-title">
+                      <span *ngIf="i==emptyId&&tableField.data_type!='Date'" class="code-table-modal-title">
                         *Maximum {{tableField.length}} {{dataType[i].display_type}}
                       </span>
                       <span *ngIf="isLength&&id==i&&tableField.data_type!='Date'" class="red"><br>*
@@ -160,7 +160,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header footer-padding">
-        <h4 class="modal-title">Remove {{codeTableProperty.codetable_name}}</h4>
+        <h4 class="code-table-modal-title">Remove {{codeTableProperty.codetable_name}}</h4>
       </div>
       <div class="modal-body modal-padding">
         <p *ngIf="isDependency"><b *ngIf="codeTableProperty.dependency.length>1">It has dependency with following tables:</b>
@@ -189,7 +189,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header footer-padding">
-        <h4 class="modal-title">Save changes</h4>
+        <h4 class="code-table-modal-title">Save changes</h4>
       </div>
       <div class="modal-body">
         Do you want to save the changes

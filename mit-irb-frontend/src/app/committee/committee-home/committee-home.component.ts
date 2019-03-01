@@ -722,7 +722,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.result.scheduleData.filterStartDate = this.filterStartDate;
                 this.result.scheduleData.filerEndDate = this.filerEndDate;
                 this.showGenerateSchedule = false;
+                this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
+            this.initialLoadChild();
         }
     }
 

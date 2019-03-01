@@ -69,7 +69,18 @@
 							<input type="text" [(ngModel)]="requestObject.title" class="form-control" placeholder="Title" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 						</div>
 						<div class="form-group">
-							<input type="text" [(ngModel)]="requestObject.piName" class="form-control" placeholder="PI Name" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+								<!-- <input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
+								(keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter) ="onKeyEnterElastic('pIDropDown')" 
+								placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"> -->
+							<input type="text" [(ngModel)]="requestObject.piName" class="form-control input-width" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter) ="onKeyEnterElastic('pIDropDown')" 
+							placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false">
+							<div class="sb-seachresults results-margin advancedSearchPiElastic" id="pIDropDown">
+									<ul class="sb-results-dropdown-menu test mt-15" *ngIf="IsElasticResultPI">
+										<li *ngFor="let result of _piResults | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
+											<span [innerHTML]="result.label"></span>
+										</li>
+									</ul>
+								</div>
 						</div>
 						<div class="form-group">
 							<select class="form-control selectBoxShade" placeholder="Protocol Type" [(ngModel)]="requestObject.protocolTypeCode" (ngModelChange)="getAdvanceSearch(lastClickedTab)" id="inlineFormCustomSelect">
@@ -77,9 +88,33 @@
 								<option *ngFor="let type of protocolTypeList" value="{{type.PROTOCOL_TYPE_CODE}}">{{type.PROTOCOL_TYPE}}</option>
 							</select>
 						</div>
+						
 						<div class="form-group">
-								<input type="text" class="form-control" placeholder="Status" [(ngModel)]="protocolStatus" (click)="openStatusModal()" (keyup.tab)="openStatusModal()" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+							<input type="text" class="form-control" placeholder="Status" [(ngModel)]="protocolStatus" (click)="openStatusModal()" (keyup.tab)="openStatusModal()" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						</div>
+						<!-- <div class="form-group">
+								<input type="text" [(ngModel)]="requestObject.fundingSource" class="form-control" placeholder="Funding Source" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+	
+									
+						</div> -->
+						<div class="form-group">
+							<input class="form-control date-width" [owlDateTime]="dt3" placeholder="Approval Date" [(ngModel)]="requestObject.approvalDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+							<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+							<div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt3">
+								<span title="Choose Approval Date" class="input-group-text">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+								</span>
 							</div>
+						</div>
+						<div class="form-group">
+							<input class="form-control date-width" [owlDateTime]="dt4" placeholder="Expiration Date" [(ngModel)]="requestObject.expirationDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+							<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+							<div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt4">
+								<span title="Choose Expiration Date" class="input-group-text">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
 						<div class="form-group">
 							<button class="btn btn-default btn-search" (click)="getAdvanceSearch(lastClickedTab)">
 								<i class="fa fa-search"></i>Search
@@ -208,11 +243,29 @@
 							<input type="text" [(ngModel)]="requestObject.title" class="form-control search-input input-width" placeholder="Title" (keydown.Enter)="getExemptListData('EXEMPT')">
 						</div>
 						<div class="form-group">
-							<input type="text" [(ngModel)]="requestObject.piName" class="form-control search-input input-width" placeholder="PI Name" (keydown.Enter)="getExemptListData('EXEMPT')">
+								<input type="text" [(ngModel)]="requestObject.piName" class="form-control input-width" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter) ="onKeyEnterElastic('pIDropDown')" 
+								placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false">
+								<div class="sb-seachresults results-margin advancedSearchPiElastic" id="pIDropDown">
+										<ul class="sb-results-dropdown-menu test mt-15" *ngIf="IsElasticResultPI">
+											<li *ngFor="let result of _piResults | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
+												<span [innerHTML]="result.label"></span>
+											</li>
+										</ul>
+									</div>
+							<!-- <input type="text" [(ngModel)]="requestObject.piName" class="form-control search-input input-width" placeholder="PI Name" (keydown.Enter)="getExemptListData('EXEMPT')"> -->
 						</div>
 						<div class="form-group">
-							<input type="text" [(ngModel)]="requestObject.exemptFormfacultySponsorName" class="form-control search-input input-width"
-							 placeholder="Faculty Sponsor" (keydown.Enter)="getExemptListData('EXEMPT')">
+							<!-- <input type="text" [(ngModel)]="requestObject.exemptFormfacultySponsorName" class="form-control search-input input-width"
+							 placeholder="Faculty Sponsor" (keydown.Enter)="getExemptListData('EXEMPT')"> -->
+							 <input type="text" [(ngModel)]="requestObject.exemptFormfacultySponsorName" class="form-control input-width" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'fSDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'fSDropDown')" (keydown.Enter) ="onKeyEnterElastic('fSDropDown')" 
+							placeholder="Search: Faculty Sponsor Name" [formControl]="fsSearchText" (focus)="IsElasticResultFS = true" (focusout)="IsElasticResultFS = false">
+							<div class="sb-seachresults results-margin advancedSearchPiElastic" id="fSDropDown">
+									<ul class="sb-results-dropdown-menu test mt-15" *ngIf="IsElasticResultFS">
+										<li *ngFor="let result of _piResults | async" (mousedown)="selectedFsResult(result)" (click)="selectedFsResult(result)">
+											<span [innerHTML]="result.label"></span>
+										</li>
+									</ul>
+								</div>
 						</div>
 						<div class="form-group">
 							<select class="form-control selectBoxShade search-input input-width" placeholder="Determination" [(ngModel)]="requestObject.determination" (ngModelChange)="getExemptListData('EXEMPT')"

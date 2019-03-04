@@ -301,12 +301,12 @@
 			</div>
 			<div class="container-fluid">
 				<section class="row btn-row-med sect-padding">
-					<button class="btn btn-primary " type="submit" *ngIf="isViewMode == false && isQuestionnaireContinueClicked == false" (click)="evaluateExemptQuestionnaire()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'tab_btn'"
+					<button class="btn submit-btn " type="submit" *ngIf="isViewMode == false && isQuestionnaireContinueClicked == false" (click)="evaluateExemptQuestionnaire()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'submit_btn'"
 						[disabled]="QuestionnaireCompletionFlag=='N'">Continue</button>
 						<button class="btn submit-btn" data-toggle="modal" data-target="#confirmModal" type="submit" *ngIf="isViewMode == false && isQuestionnaireContinueClicked == true"
 					 (click)="submitConfirmation()" [ngClass]="QuestionnaireCompletionFlag=='N'? '':'submit_btn'" [disabled]="QuestionnaireCompletionFlag=='N'">Submit</button>
 					 <button class="btn btn-primary tab_btn" (click)="openActionLogModal()" type="submit" data-toggle="modal" data-target="#routeActionLogModal"
-					 id="actionLog">Action Log</button>
+					 id="actionLog">Action History</button>
 					 <button class="btn btn-primary tab_btn" *ngIf="isViewMode == false" (click)="saveQuestionaire()" id="save">Save</button>
 					 <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#approveRejectActionConfirmModal" type="submit"
 					 *ngIf="isViewMode == false && isActionByPi == true" (click)="returnQuestionnaireClick()" [disabled]="QuestionnaireCompletionFlag=='N'">Return</button>

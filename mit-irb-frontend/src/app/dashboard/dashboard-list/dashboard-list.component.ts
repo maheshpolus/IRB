@@ -43,11 +43,16 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         protocolStatusCode: '',
         dashboardType: '',
         determination: '',
+        approvalDate: null,
+        expirationDate: null,
+        fundingSource: '',
         isAdvancedSearch: 'N',
         exemptFormStartDate: '',
         exemptFormEndDate: '',
         exemptFormfacultySponsorName: ''
     };
+    approvalDate = null;
+    expirationDate = null;
     paginationData = {
         limit       : 10,
         page_number : 1,
@@ -132,6 +137,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             if (this.requestObject !== null && this.requestObject.protocolStatusCode !== ''
                 && this.requestObject.protocolStatusCode !== undefined) {
                 this.protocolStatus =  this._sharedDataService.searchedStatus;
+            }
+            if (this.requestObject.approvalDate != null) {
+                this.approvalDate = this.GetFormattedDateFromString(this.requestObject.approvalDate);
+            }
+            if (this.requestObject.expirationDate != null) {
+                this.expirationDate = this.GetFormattedDateFromString(this.requestObject.expirationDate);
             }
             this.isAdvancesearch = true;
             this.isAdvancsearchPerformed = true;
@@ -261,7 +272,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             .catch(this.handleError)
             .subscribe(this._piResults);
     }
-    
+
         getElasticSearchResults(searchString) {
         return new Promise<Array<String>>((resolve, reject) => {
             this._ngZone.runOutsideAngular(() => {
@@ -311,7 +322,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         });
     }
 
-    
+
 
     /** handles error in elastic search */
     handleError(): any {
@@ -356,13 +367,19 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.noIrbList = false;
         this.searchTextModel = '';
         this.lastClickedTab = currentTab;
-         if (!this.isAdvancesearch) {
+        if (!this.isAdvancesearch) {
             this.requestObject = { protocolTypeCode: '',
                                    determination: ''
                                     };
             this.requestObject.isAdvancedSearch = 'N';
         } else {
             this.requestObject.isAdvancedSearch = 'Y';
+            if (this.approvalDate != null) {
+            this.requestObject.approvalDate = this.GetFormattedDate(this.approvalDate);
+            }
+            if (this.expirationDate != null) {
+            this.requestObject.expirationDate = this.GetFormattedDate(this.expirationDate);
+            }
         }
         this._sharedDataService.changeCurrentTab(currentTab);
         this.requestObject.personId = this.userDTO.personID;
@@ -372,7 +389,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && !this.isAdvancsearchPerformed && currentTab === 'ALL') {
             // No need to call service since no data will be shown for admin users by default
             // (only if advance serach is performed data will be shown in admin 'ALL' tab
-        } else{
+        } else {
             this._spinner.show();
             this._dashboardService.getIrbList(this.requestObject).subscribe(data => {
                 this.result = data || [];
@@ -462,31 +479,37 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
             this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ||
             this.requestObject.protocolStatusCode !== '' ||
-            this.requestObject.approvalDate !== '' || this.requestObject.expirationDate !== '') {
+            this.requestObject.approvalDate !== '' || this.requestObject.expirationDate !== '' || this.requestObject.fundingSource !== '') {
             this.requestObject.protocolNumber = '';
             this.requestObject.title = '';
             this.requestObject.piName = '';
             this.requestObject.isAdvancedSearch = 'N';
-            this.requestObject.approvalDate = '';
-            this.requestObject.expirationDate = '';
+            this.requestObject.approvalDate = null;
+            this.requestObject.expirationDate = null;
+            this.approvalDate = null;
+            this.expirationDate =  null;
             this.requestObject.protocolTypeCode = '';
             this.requestObject.protocolStatusCode = '';
+            this.requestObject.fundingSource = '';
             this.protocolStatus = '';
             this.isCheckBoxChecked = {};
-        // No need for backend call to clear data in ALL PROTOCOLS for Admins
-        if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && this.lastClickedTab === 'ALL') {
-                    this.irbListData = [];
-                    this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
-                    this.protocolCount = this.irbListData.length;
-                    this.sortBy();
-        } else {
-            this.getIrbListData(this.lastClickedTab);
+            // No need for backend call to clear data in ALL PROTOCOLS for Admins
+            if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && this.lastClickedTab === 'ALL') {
+                        this.irbListData = [];
+                        this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
+                        this.protocolCount = this.irbListData.length;
+                        this.sortBy();
+                        if (this.noIrbList) {
+                        this.noIrbList = false;
+                        }
+            } else {
+                this.getIrbListData(this.lastClickedTab);
+            }
+            this.isAdvancsearchPerformed = false;
+            this._sharedDataService.searchData = null;
         }
-        // this.getIrbListData(this.lastClickedTab);
-        this.isAdvancsearchPerformed = false;
-        this._sharedDataService.searchData = null;
     }
-    }
+
 
     /**opens irb view module of a selected protocol
      * @param protocolNumber -unique identifier of a protocol
@@ -661,6 +684,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         const day = currentDate.getDate();
         const year = currentDate.getFullYear();
         return month + '-' + day + '-' + year;
+    }
+    GetFormattedDateFromString(currentDate) {
+        const res = currentDate.split('-');
+        const month = parseInt(res[0], 10);
+        const day = parseInt(res[1], 10);
+        const year = parseInt(res[2], 10);
+        return new Date(year, month - 1, day);
     }
 
     /**

@@ -82,7 +82,6 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			committee = committeeDao.saveCommittee(committee);
 			committeeVo.setCommittee(committee);
 		}
-		//String response = committeeDao.convertObjectToJSON(committeeVo); //changes made here it was committeVo
 		return committeeVo;
 	}
 
@@ -127,8 +126,6 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					/*role.setCommitteeMemberships(committeeMembership);
-					committeeMembership.getCommitteeMemberRoles().add(role);*/
 					CommitteeMemberRoles memberRole = new CommitteeMemberRoles();
 					memberRole.setCommitteeMemberships(committeeMembership);
 					memberRole.setEndDate(role.getEndDate());
@@ -280,8 +277,6 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					/*expertise.setCommitteeMemberships(committeeMembership);
-					committeeMembership.getCommitteeMemberExpertises().add(expertise);*/
 					CommitteeMemberExpertise memberExpertise = new CommitteeMemberExpertise();
 					memberExpertise.setCommitteeMemberships(committeeMembership);
 					memberExpertise.setResearchAreaCode(expertise.getResearchAreaCode());

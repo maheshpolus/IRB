@@ -180,5 +180,4 @@ public class CommitteeScheduleServiceImpl implements CommitteeScheduleService {
 		CronExpression expr = new YearMonthDayOfWeekCronExpression(startDate, time, weekOfMonth, dayOfWeek, month, frequencyInYear);
 		return getScheduledDates(expr, startDate, endDate, time, scheduleSequence);
 	}
-
 }

@@ -77,6 +77,14 @@ public class CommonVO {
 	
 	private String exemptFormEndDate;
 	
+	private String approvalDate;
+	
+	private String expirationDate;
+	
+	private String isAdvancedSearch;
+	
+	private String fundingSource;
+
 	private Integer protocolActionId;
 	
 	private String protocolActionTypecode;
@@ -361,5 +369,36 @@ public class CommonVO {
 
 	public void setProtocolStatusCode(String protocolStatusCode) {
 		this.protocolStatusCode = protocolStatusCode;
+	}
+	public String getIsAdvancedSearch() {
+		return isAdvancedSearch;
+	}
+
+	public void setIsAdvancedSearch(String isAdvancedSearch) {
+		this.isAdvancedSearch = isAdvancedSearch;
+	}
+
+	public String getFundingSource() {
+		return fundingSource;
+	}
+
+	public void setFundingSource(String fundingSource) {
+		this.fundingSource = fundingSource;
+	}
+
+	public String getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(String approvalDate) {
+		this.approvalDate = approvalDate;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 }

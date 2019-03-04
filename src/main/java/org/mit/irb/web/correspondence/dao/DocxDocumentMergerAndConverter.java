@@ -30,7 +30,6 @@ public class DocxDocumentMergerAndConverter {
 	 * @throws IOException
 	 */
 	public InputStream loadDocumentAsStream(String filePath) throws IOException{
-		//URL url =new File(filePath).toURL();
 		URL url =new File(filePath).toURI().toURL();
 		InputStream documentTemplateAsStream=null;
 		documentTemplateAsStream= url.openStream();
@@ -153,10 +152,6 @@ public class DocxDocumentMergerAndConverter {
 	}
 	
 	public byte[] mergeAndGeneratePDFOutput(InputStream inputStream,IXDocReport xdocReport,String templatePath, TemplateEngineKind templateEngineKind,IContext context) throws IOException, XDocReportException, Docx4JException{
-		//InputStream inputStream = loadDocumentAsStream(templatePath);
-		//IXDocReport xdocReport = loadDocumentAsIDocxReport(inputStream,templateEngineKind);
-		//IContext context = replaceVariabalesInTemplateOtherThanImages(xdocReport,nonImageVariableMap);
-		//replaceImagesVariabalesInTemplate(xdocReport, imageVariablesWithPathMap, context);
 		byte[] mergedOutput = generateMergedOutput(xdocReport, context);
 		byte[] pdfBytes = generatePDFOutputFromDocx(mergedOutput);
 		return pdfBytes;

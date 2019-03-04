@@ -1,5 +1,7 @@
 package org.mit.irb.web.dashboard.service;
 
+import java.text.ParseException;
+
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,8 @@ public interface DashboardService {
 	 */
 	
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
-			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode);
+			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode,
+			String approvalDate, String  expirationDate, String isAdvanceSearch,String fundingSource) throws ParseException;
 
 	/**
 	 * @param personId

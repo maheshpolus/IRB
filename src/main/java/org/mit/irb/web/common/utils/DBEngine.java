@@ -18,7 +18,6 @@ import java.util.Hashtable;
 import oracle.jdbc.OracleTypes;
 
 import org.apache.log4j.Logger;
-import org.mit.irb.web.common.utils.*;
 
 public class DBEngine {
 	

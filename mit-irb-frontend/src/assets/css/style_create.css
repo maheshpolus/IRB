@@ -4,16 +4,18 @@
 	cursor: pointer;
 }
 .pi-profile {
-	content: url("../images/principl_avatar.png");
-}
-.pi-profile:after {
-	content: url("../images/principl_avatar.png");
+	background-image: url("../images/principl_avatar.png");
+    height: 100%;
+    width: auto;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .coi-profile {
-	content: url("../images/avatar.png");
-}
-.coi-profile:after {
-	content: url("../images/avatar.png");
+    background-image: url("../images/avatar.png");
+    height: 100%;
+    width: auto;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .card-list-no-data{
 	border-top: none;
@@ -1578,6 +1580,10 @@ color: #5e5e5e !important;
 {
     margin-top: 10px;
 }
+.mt-15
+{
+    margin-top: 15px !important;
+}
 .ml-600
 {
     margin-left: 600px;
@@ -2412,5 +2418,15 @@ input:disabled,textarea:disabled{
 .mr-2 {
     margin-right: 2px !important;
 }
+.date-width
+{
+    width: 160px !important;
+}
+.advancedSearchPiElastic
+{
+    width: 33% !important;
+    box-shadow: none !important;
+}
+
 
 

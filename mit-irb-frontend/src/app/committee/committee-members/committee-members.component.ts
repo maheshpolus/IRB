@@ -295,21 +295,21 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             this.roleWarningMessage = '* Term start date must be after term start date.';
         } else {
             this.isTermDateFilled = true;
-            if ( member.committeeMemberRoles.length === 0 ) {
-                this.showPopup = true;
-                this.modalMessage = 'Please add atleast one role';
-                this.modalTitle = 'No Roles added!';
-            } else if ( member.committeeMemberExpertises.length === 0 ) {
-                this.showPopup = true;
-                this.modalMessage = 'Please add atleast one expertise';
-                this.modalTitle = 'No Expertise added!';
-            } else {
-                this.showPopup = false;
-                this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
-            }
+            // if ( member.committeeMemberRoles.length === 0 ) {
+            //     this.showPopup = true;
+            //     this.modalMessage = 'Please add atleast one role';
+            //     this.modalTitle = 'No Roles added!';
+            // } else if ( member.committeeMemberExpertises.length === 0 ) {
+            //     this.showPopup = true;
+            //     this.modalMessage = 'Please add atleast one expertise';
+            //     this.modalTitle = 'No Expertise added!';
+            // } else {
+            //     this.showPopup = false;
+            //     this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
+            // }
             this.editDetails = false;
             this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
-            this.memberAdded = false;
+           // this.memberAdded = false;
             this.editClass = 'committeeBoxNotEditable';
             const currentDate = new Date();
             const currentTime = currentDate.getTime();
@@ -342,11 +342,11 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
 
     addRoles( event: any, member: any ) {
         event.preventDefault();
-        if ( this.editDetails === true ) {
-            this.showPopup = true;
-            this.modalMessage = 'You are in the middle of editing Person Details, please save the data once to proceed';
-            this.modalTitle = 'Warning!!!';
-        } else {
+        // if ( this.editDetails === true ) {
+        //     this.showPopup = true;
+        //     this.modalMessage = 'You are in the middle of editing Person Details, please save the data once to proceed';
+        //     this.modalTitle = 'Warning!!!';
+        // } else {
             this.addRole = !this.addRole;
             this.addExpertise = false;
             this.editClassRole = 'committeeBox';
@@ -356,13 +356,13 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             this.membershipRoles.description = '';
             this.memberRoleObject.startDate = null;
             this.memberRoleObject.endDate = null;
-        }
+      // }
     }
 
     saveRole( event: any, role, member ) {
         event.preventDefault();
         this.addRole = false;
-        this.memberAdded = false;
+       // this.memberAdded = false;
         this.memberRoleCode = '';
         this.editRole = false;
         this.editClassRole = 'committeeBoxNotEditable';
@@ -389,14 +389,14 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
 
     addExpertises( event: any, member: any ) {
         event.preventDefault();
-        if ( this.editDetails === true ) {
-            this.showPopup = true;
-            this.modalMessage = 'You are in the middle of editing Person Details, please save the data once to proceed';
-            this.modalTitle = 'Warning!!!';
-        } else {
+        // if ( this.editDetails === true ) {
+        //     this.showPopup = true;
+        //     this.modalMessage = 'You are in the middle of editing Person Details, please save the data once to proceed';
+        //     this.modalTitle = 'Warning!!!';
+        // } else {
             this.addExpertise = !this.addExpertise;
             this.addRole = false;
-        }
+        // }
     }
 
     cancelExpertise() {
@@ -443,7 +443,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.roleFieldsFilled = true;
             this.roleWarningMessage = '';
-            this.memberAdded = false;
+           // this.memberAdded = false;
             this.committeCreateEditService.saveCommMemberRole( member.commMembershipId, this.committeeId, this.memberRoleObject )
             .takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.memberRoleObject.startDate = null;
@@ -453,18 +453,18 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                 temp = data;
                 this.resultLoadedById.committee = temp.committee;
             } );
-            if ( member.committeeMemberExpertises.length === 0 ) {
-                this.showPopup = true;
-                this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
-                this.modalMessage = 'Please add atleast one expertise';
-                this.modalTitle = 'No Expertise added!';
-            }
+            // if ( member.committeeMemberExpertises.length === 0 ) {
+            //     this.showPopup = true;
+            //     this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
+            //     this.modalMessage = 'Please add atleast one expertise';
+            //     this.modalTitle = 'No Expertise added!';
+            // }
         }
     }
 
     expertiseAddtoTable( member ) {
-        this.addExpertise = false;
-        this.memberAdded = false;
+        // this.addExpertise = false;
+      //  this.memberAdded = false;
         this.editExpertise = false;
         this.editClass = 'committeeBoxNotEditable';
         this.committeCreateEditService.saveCommMemberExpertise( member.commMembershipId, this.committeeId, this.memberExpertiseObject )
@@ -472,6 +472,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             let temp: any = {};
             temp = data;
             this.resultLoadedById.committee = temp.committee;
+            this.membershipExpertise.description = '';
         } );
     }
 
@@ -535,41 +536,51 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         } );
     }
 
+    // Accordian click if the member is a NON- employee
     showMembersNonEmployeesTab( event: any, rolodexIdFromService, member ) {
         event.preventDefault();
         this.isTermDateFilled = true;
         this.personId = null;
         this.showMembers = false;
-        if ( member.updateTimestamp == null ) {
-            this.memberAdded = true;
+        if ( member.updateTimestamp == null || member.membershipTypeCode == null ||
+            member.termEndDate == null || member.termStartDate == null) {
+          //  this.memberAdded = true;
             this.showEditDetails();
+        } else {
+            this.editDetails = false;
+            this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
         }
         this.committeeConfigurationService.changeMemberData( member );
         this.showNonEmployeeMembers = !this.showNonEmployeeMembers;
-        if ( this.showNonEmployeeMembers ) {
-            this.editDetails = false;
-            this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
-            this.editClass = 'committeeBoxNotEditable';
-        }
+        // if ( this.showNonEmployeeMembers ) {
+        //     this.editDetails = false;
+        //     this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
+        //     this.editClass = 'committeeBoxNotEditable';
+        // }
         this.rolodexId = rolodexIdFromService;
     }
 
+    // Accordian click if the member is an Employee
     showMembersTab( event: any, personIdFromService, member ) {
         event.preventDefault();
         this.isTermDateFilled = true;
         this.rolodexId = null;
         this.showNonEmployeeMembers = false;
-        if ( member.updateTimestamp == null ) {
-            this.memberAdded = true;
+        if ( member.updateTimestamp == null || member.membershipTypeCode == null ||
+            member.termEndDate == null || member.termStartDate == null ) {
+           // this.memberAdded = true;
             this.showEditDetails();
+        } else {
+            this.editDetails = false;
+            this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
         }
         this.showMembers = !this.showMembers;
         this.committeeConfigurationService.changeMemberData( member );
-        if ( this.showMembers ) {
-            this.editDetails = false;
-            this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
-            this.editClass = 'committeeBoxNotEditable';
-        }
+        // if ( this.showMembers ) {
+        //     this.editDetails = false;
+        //     this.committeeConfigurationService.changeEditMemberFlag( this.editDetails );
+        //     this.editClass = 'committeeBoxNotEditable';
+        // }
         this.personId = personIdFromService;
     }
 
@@ -578,10 +589,23 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         this.showAddMember = !this.showAddMember;
     }
 
-    addMember() {
-        if ( this.memberAdded === true ) {
+    addMember() {debugger
+
+        this.memberAdded = false;
+        if (this.resultLoadedById.committee !== undefined && this.resultLoadedById.committee.committeeMemberships !== undefined &&
+            this.resultLoadedById.committee.committeeMemberships !== null &&
+            this.resultLoadedById.committee.committeeMemberships.length > 0) {
+                this.resultLoadedById.committee.committeeMemberships.forEach(( value, index ) => {
+                    if ( value.membershipTypeCode == null || value.termEndDate == null || value.termStartDate == null ||
+                        value.committeeMemberRoles.length === 0 || value.committeeMemberExpertises.length === 0 ) {
+                        this.memberAdded = true;
+                        }
+                    }); }
+
+
+        if ( this.memberAdded ) {
             this.showPopup = true;
-            this.modalMessage = 'You are yet to save the details of an already added member. Please add details and save to proceed';
+            this.modalMessage = 'You are yet to add required details of an already added member. Please add details and save to proceed';
             this.modalTitle = 'Warning!!!';
         } else {
             if (this.selectedMember.id == null || this.selectedMember.id === undefined) {
@@ -603,7 +627,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                         this.memberList.committee.committeeMemberships[length - 1].membershipTypeCode = membertype.membershipTypeCode;
                     }
                 }
-                this.memberAdded = true;
+               // this.memberAdded = true;
                 this.resultLoadedById.committee.committeeMemberships = this.memberList.committee.committeeMemberships;
                 this.memberExist = true;
                 this.expandMemberToSave();
@@ -661,10 +685,12 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             this.resultLoadedById.committee.committeeMemberships !== null &&
             this.resultLoadedById.committee.committeeMemberships.length > 0) {
                 this.resultLoadedById.committee.committeeMemberships.forEach(( value, index ) => {
-                    if ( value.updateTimestamp == null ||
+                    if ( value.membershipTypeCode == null || value.termEndDate == null || value.termStartDate == null ||
                         value.committeeMemberRoles.length === 0 || value.committeeMemberExpertises.length === 0 ) {
-                        this.memberAdded = true;
-                        this.showEditDetails();
+                       // this.memberAdded = true;
+                        if ( value.membershipTypeCode == null || value.termEndDate == null || value.termStartDate == null ) {
+                            this.showEditDetails();
+                        }
                         if ( value.personId == null ) {
                             this.rolodexId = value.rolodexId;
                             this.showNonEmployeeMembers = true;

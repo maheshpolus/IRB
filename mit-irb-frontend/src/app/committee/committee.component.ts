@@ -181,7 +181,10 @@ export class CommitteeComponent implements OnInit, OnDestroy {
             //     }
             // } else {
                 this.currentTab = current_tab;
-                this.router.navigate( ['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
+               // this.router.navigate( ['irb/committee/committeeMembers'],
+               // { queryParams: { 'mode': this.mode, 'id': this.id } } );
+                this.router.navigate( ['irb/committee/committeeMembers'],
+                { queryParams: { 'mode': this.route.snapshot.queryParamMap.get( 'mode' ), 'id': this.id } } );
             // }
 
         } else if ( current_tab === 'committee_home' ) {
@@ -197,7 +200,10 @@ export class CommitteeComponent implements OnInit, OnDestroy {
             //     this.alertMsgMemberMiddleOfEdit = 'You are in the middle of editing a Member Details, Do you want to stay on the page..?';
             // } else {
                 this.currentTab = current_tab;
-                this.router.navigate( ['irb/committee/committeeHome'], { queryParams: { 'mode': this.mode, 'id': this.id } } );
+               // this.router.navigate( ['irb/committee/committeeHome'],
+              //  { queryParams: { 'mode': this.mode, 'id': this.id } } );
+                this.router.navigate( ['irb/committee/committeeHome'],
+                { queryParams: { 'mode': this.route.snapshot.queryParamMap.get( 'mode' ), 'id': this.id } } );
             // }
         }
     }

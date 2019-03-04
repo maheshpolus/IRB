@@ -24,6 +24,15 @@ export class ExpandedViewComponent implements OnInit {
         personRoleType: '',
         avSummaryType: ''
     };
+    sortFieldProtocol = 'UPDATE_TIMESTAMP';
+    sortOrderProtocol = '1';
+    columnProtocol = 'UPDATE_TIMESTAMP';
+    directionProtocol: number;
+
+    sortFieldExempt = 'UPDATE_TIMESTAMP';
+    sortOrderExempt = '1';
+    columnExempt = 'UPDATE_TIMESTAMP';
+    directionExempt: number;
 
     constructor( private _expandedViewService: ExpandedViewService, private _activatedRoute: ActivatedRoute, private _router: Router ) { }
 
@@ -55,9 +64,11 @@ export class ExpandedViewComponent implements OnInit {
                     this.noData = true;
                 } else {
                     this.expandedList = this.result.dashBoardDetailMap;
+                    this.sortByProtocol();
                 }
             }  if (this.result.dashboardExemptCardDetails != null && this.result.dashboardExemptCardDetails.length !== 0) {
                 this.exemptCardDetails = this.result.dashboardExemptCardDetails;
+                this.sortByExempt();
             }
 
         },
@@ -78,5 +89,28 @@ export class ExpandedViewComponent implements OnInit {
         this._router.navigate( ['/irb/exempt-questionaire'],
             { queryParams: { exempHeaderId: exemptId, mode: mode, title: exemptTitle, exemptFormID: exemptFormID,
                              from: this.requestObject.avSummaryType } } );
+    }
+
+
+    /** sets value of direction to implement sorting in tab protocol*/
+    updateSortOrderProtocol() {
+        this.sortOrderProtocol = this.sortOrderProtocol === '1' ? '-1' : '1';
+        this.sortByProtocol();
+    }
+
+    sortByProtocol() {
+        this.columnProtocol = this.sortFieldProtocol;
+        this.directionProtocol = parseInt(this.sortOrderProtocol, 10);
+    }
+
+    /** sets value of direction to implement sorting in tab Exempt*/
+    updateSortOrderExempt() {
+        this.sortOrderExempt = this.sortOrderExempt === '1' ? '-1' : '1';
+        this.sortByExempt();
+    }
+
+    sortByExempt() {
+        this.columnExempt = this.sortFieldExempt;
+        this.directionExempt = parseInt(this.sortOrderExempt, 10);
     }
 }

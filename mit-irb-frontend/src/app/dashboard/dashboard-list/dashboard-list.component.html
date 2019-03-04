@@ -83,7 +83,7 @@
 								</div>
 						</div>
 						<div class="form-group">
-							<select class="form-control selectBoxShade" placeholder="Protocol Type" [(ngModel)]="requestObject.protocolTypeCode" (ngModelChange)="getAdvanceSearch(lastClickedTab)" id="inlineFormCustomSelect">
+							<select class="form-control selectBoxShade select-width" placeholder="Protocol Type" [(ngModel)]="requestObject.protocolTypeCode" (ngModelChange)="getAdvanceSearch(lastClickedTab)" id="inlineFormCustomSelect">
 								<option value="" hidden>Protocol Type</option>
 								<option *ngFor="let type of protocolTypeList" value="{{type.PROTOCOL_TYPE_CODE}}">{{type.PROTOCOL_TYPE}}</option>
 							</select>
@@ -92,13 +92,13 @@
 						<div class="form-group">
 							<input type="text" class="form-control" placeholder="Status" [(ngModel)]="protocolStatus" (click)="openStatusModal()" (keyup.tab)="openStatusModal()" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 						</div>
-						<!-- <div class="form-group">
+						<div class="form-group">
 								<input type="text" [(ngModel)]="requestObject.fundingSource" class="form-control" placeholder="Funding Source" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 	
 									
-						</div> -->
+						</div>
 						<div class="form-group">
-							<input class="form-control date-width" [owlDateTime]="dt3" placeholder="Approval Date" [(ngModel)]="requestObject.approvalDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+							<input class="form-control date-width" [owlDateTime]="dt3" placeholder="Approval Date From" [(ngModel)]="approvalDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 							<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
 							<div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt3">
 								<span title="Choose Approval Date" class="input-group-text">
@@ -107,7 +107,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<input class="form-control date-width" [owlDateTime]="dt4" placeholder="Expiration Date" [(ngModel)]="requestObject.expirationDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+							<input class="form-control date-width" [owlDateTime]="dt4" placeholder="Expiration Date To" [(ngModel)]="expirationDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 							<owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
 							<div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt4">
 								<span title="Choose Expiration Date" class="input-group-text">

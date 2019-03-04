@@ -17,7 +17,7 @@
 "QUESTIONNAIRE_COMPLETE_MESSAGE":"You have completed your Exempt Evaluation. Please click on Continue to assess your responses.",
 "FAQ_URL":"http://couhes.mit.edu/couhes-connect-resources/couhes-connect-faqs",
 "GUIDELINES_URL":"http://couhes.mit.edu/couhes-connect-resources/couhes-connect-guidance",
-"SESSION_TIMEOUT_DEFAULT": 1800,
+"SESSION_TIMEOUT_DEFAULT": 7200,
 "SESSION_TIMEOUT_WARNING": 10,
 "PROTOCOL_BASIC_INFO":"Basic protocol information and current protocol status.",
 "PROTOCOL_PERSONNEL_INFO":"Specified personnel currently engaged in the protocol.",

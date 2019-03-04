@@ -2420,12 +2420,16 @@ input:disabled,textarea:disabled{
 }
 .date-width
 {
-    width: 160px !important;
+    width: 165px !important;
 }
 .advancedSearchPiElastic
 {
     width: 33% !important;
     box-shadow: none !important;
+}
+.select-width
+{
+    width: 345px !important;
 }
 
 

@@ -73,6 +73,10 @@ public class ProtocolGeneralInfo {
 
 	@Column(name = "IS_LATEST")
 	private String islatest;
+	
+	@Column(name = "IS_CANCELLED")
+	private String isCancelled;
+
 
 	@Column(name = "FDA_APPLICATION_NUMBER")
 	private String fdaApplicationNumber;
@@ -295,5 +299,13 @@ public class ProtocolGeneralInfo {
 
 	public void setAttachmentProtocols(List<IRBAttachmentProtocol> attachmentProtocols) {
 		this.attachmentProtocols = attachmentProtocols;
+	}
+
+	public String getIsCancelled() {
+		return isCancelled;
+	}
+
+	public void setIsCancelled(String isCancelled) {
+		this.isCancelled = isCancelled;
 	}
 }

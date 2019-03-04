@@ -1,5 +1,7 @@
 package org.mit.irb.web.controller;
 
+import java.text.ParseException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,8 +46,11 @@ public class DashboardController {
 	
 	@RequestMapping(value = "/getDashboardProtocolList", method = RequestMethod.POST)
 	public @ResponseBody DashboardProfile getDashboardProtocolList(@RequestBody CommonVO vo, HttpServletRequest request,
-			HttpServletResponse response) {
-		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(), vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(), vo.getProtocolTypeCode(), vo.getTitle(),vo.getProtocolStatusCode());
+			HttpServletResponse response) throws ParseException {
+		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(), vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(),
+				vo.getProtocolTypeCode(), vo.getTitle(),vo.getProtocolStatusCode(),vo.getApprovalDate(),
+				vo.getExpirationDate(),vo.getIsAdvancedSearch(),
+				vo.getFundingSource());
 		return profile;
 	}
 	

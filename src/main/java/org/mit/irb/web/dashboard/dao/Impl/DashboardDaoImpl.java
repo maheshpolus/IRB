@@ -2,6 +2,8 @@ package org.mit.irb.web.dashboard.dao.Impl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,7 +110,22 @@ public class DashboardDaoImpl implements DashboardDao{
 
 	@Override
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
-			String pi_name, String protocol_number,String protocol_type_code, String title, String prtocolStatusCode) {
+			String pi_name, String protocol_number,String protocol_type_code, String title,
+			String prtocolStatusCode,String approvalDate,String expirationDate,String  isAdvanceSearch,
+			String fundingSource) throws ParseException {
+		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date approvalDates = null;
+		java.sql.Date sqlApprovalDates = null;
+		java.util.Date expirationDates = null;
+		java.sql.Date sqlExpirationDates = null;
+		if (approvalDate!= null) {
+			approvalDates = sdf1.parse(approvalDate);
+			sqlApprovalDates = new java.sql.Date(approvalDates.getTime());
+		}
+		if (expirationDate!= null) {
+			expirationDates = sdf1.parse(expirationDate);
+			sqlExpirationDates = new java.sql.Date(expirationDates.getTime());
+		}
 		DashboardProfile profile = new DashboardProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -120,6 +137,10 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("PI_NAME", DBEngineConstants.TYPE_STRING, pi_name));
 		inputParam.add(new InParameter("PROTOCOL_TYPE_CODE", DBEngineConstants.TYPE_STRING, protocol_type_code));
 		inputParam.add(new InParameter("AV_PROTOCOL_STATUS_CODE", DBEngineConstants.TYPE_STRING, prtocolStatusCode));
+		inputParam.add(new InParameter("AV_IS_ADV_SEARCH", DBEngineConstants.TYPE_STRING, isAdvanceSearch));
+		inputParam.add(new InParameter("AV_EXPIRATION_DATE", DBEngineConstants.TYPE_DATE, sqlExpirationDates));
+		inputParam.add(new InParameter("AV_APPROVAL_DATE", DBEngineConstants.TYPE_DATE, sqlApprovalDates));
+		inputParam.add(new InParameter("AV_FUNDING_SOURCE", DBEngineConstants.TYPE_STRING, fundingSource));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {

@@ -12,10 +12,7 @@ import org.mit.irb.web.dbengine.DBEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.http.MediaType;
-
-import java.nio.charset.StandardCharsets;
 
 @Service(value = "correspondenceService")
 public class CorrespondenceServiceImpl implements CorrespondenceService{
@@ -36,26 +33,6 @@ public class CorrespondenceServiceImpl implements CorrespondenceService{
 		try{
 			byte[] data = correspondenceDao.getTemplateData(commonVO);
 			byte[] mergedOutput = correspondenceDao.mergePlaceHolders(data,commonVO);
-			String generatedFileName = "Result"+System.nanoTime()+".pdf";
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.parseMediaType("application/pdf"));
-			headers.setContentDispositionFormData(generatedFileName, generatedFileName);
-			headers.setContentLength(mergedOutput.length);
-			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-			headers.setPragma("public");
-			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);				
-		}catch (Exception e) {
-			logger.error("Exception in generateCorrespondence"+ e.getMessage());
-		}
-		return attachmentData;
-	}
-	
-	@Override
-	public ResponseEntity<byte[]> generateActionCorrespondence(HttpServletResponse response, CommonVO commonVO) {
-		ResponseEntity<byte[]> attachmentData = null;
-		try{
-			byte[] data = correspondenceDao.getActionTemplateData(commonVO);
-			byte[] mergedOutput = correspondenceDao.mergeActionPlaceHolders(data,commonVO);
 			String generatedFileName = "Result"+System.nanoTime()+".pdf";
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.parseMediaType("application/pdf"));

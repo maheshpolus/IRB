@@ -1,9 +1,7 @@
 package org.mit.irb.web.correspondence.controller;
 
-import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.dao.IRBExemptProtocolDao;
 import org.mit.irb.web.common.VO.CommonVO;
@@ -15,11 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -34,14 +28,6 @@ public class CorrespondenceController {
 			@RequestHeader("jsonObject") String jsonObject) throws Exception{
 		CommonVO commonvoData = getPersonExemptForm(jsonObject);
 		return correspondenceService.generateCorrespondence(response,commonvoData);
-	}
-
-
-	@RequestMapping(value = "/generateActionCorrespondence", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> generateActionCorrespondence(HttpServletResponse response,
-			@RequestHeader("jsonObject") String jsonObject) throws Exception{
-		CommonVO commonvoData = getPersonExemptForm(jsonObject);
-		return correspondenceService.generateActionCorrespondence(response,commonvoData);
 	}
 	
 	private CommonVO getPersonExemptForm(String jsonObject) throws Exception {

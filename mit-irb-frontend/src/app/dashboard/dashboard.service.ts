@@ -30,6 +30,9 @@ checkingPersonsRightToViewProtocol(params) {
   getProtocolStatusList(params) {
     return this._http.post('/mit-irb/getDashboardProtocolStatus', params);
   }
+  getDashboardProtocolSubmissionStatus(params) {
+    return this._http.post('/mit-irb/getDashboardProtocolSubmissionStatus', params);
+  }
   generateCorrespondence(exemptFormId, personID) {
       const jsonObject = {
         'commonVo': null,

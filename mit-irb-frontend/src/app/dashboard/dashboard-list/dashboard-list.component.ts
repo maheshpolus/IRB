@@ -30,6 +30,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     noIrbList = false;
     isAdvancesearch = false;
     isAdvancsearchPerformed = false;
+    isSubmittedStatusSearch = false;
 
     @Input() userDTO: any;
     lastClickedTab = 'ALL';
@@ -41,6 +42,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         piName: '',
         protocolTypeCode: '',
         protocolStatusCode: '',
+        protocolSubmissionStatus: '',
         dashboardType: '',
         determination: '',
         approvalDate: null,
@@ -71,7 +73,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     sortField = 'UPDATE_TIMESTAMP';
     protocolStatuses: any = [];
     protocolStatusesCopy: any = [];
+    submissionStatuses: any = [];
+    isCheckBoxCheckedSubmit = {};
     isCheckBoxChecked = {};
+    submissionStatus = '';
 
     /**elastic search variables */
     message = '';
@@ -122,7 +127,12 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.result = data;
             if (this.result.dashBoardDetailMap != null || this.result.dashBoardDetailMap !== undefined ) {
             this.protocolStatuses = this.result.dashBoardDetailMap;
-            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+            }
+        });
+        this._dashboardService.getDashboardProtocolSubmissionStatus(null).subscribe(data => {
+            this.result = data;
+            if (this.result.protocolSubmissionStatusList != null || this.result.protocolSubmissionStatusList !== undefined ) {
+            this.submissionStatuses = this.result.protocolSubmissionStatusList;
             }
         });
         this._sharedDataService.currentTab.subscribe(data => {
@@ -138,6 +148,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                 && this.requestObject.protocolStatusCode !== undefined) {
                 this.protocolStatus =  this._sharedDataService.searchedStatus;
             }
+            if (this.requestObject !== null && this.requestObject.protocolSubmissionStatus !== ''
+            && this.requestObject.protocolSubmissionStatus !== undefined) {
+            this.submissionStatus =  this._sharedDataService.searchedSubmissionStatus;
+        }
             if (this.requestObject.approvalDate != null) {
                 this.approvalDate = this.GetFormattedDateFromString(this.requestObject.approvalDate);
             }
@@ -479,7 +493,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
             this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ||
             this.requestObject.protocolStatusCode !== '' ||
-            this.requestObject.approvalDate !== '' || this.requestObject.expirationDate !== '' || this.requestObject.fundingSource !== '') {
+            this.requestObject.approvalDate !== '' || this.requestObject.expirationDate !== ''
+             || this.requestObject.fundingSource !== '' || this.requestObject.protocolSubmissionStatus !== '') {
             this.requestObject.protocolNumber = '';
             this.requestObject.title = '';
             this.requestObject.piName = '';
@@ -493,6 +508,9 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.requestObject.fundingSource = '';
             this.protocolStatus = '';
             this.isCheckBoxChecked = {};
+            this.isCheckBoxCheckedSubmit = {};
+            this.requestObject.protocolSubmissionStatus = '';
+            this.submissionStatus = '';
             // No need for backend call to clear data in ALL PROTOCOLS for Admins
             if ((this.roleType === 'ADMIN' || this.roleType === 'CHAIR') && this.lastClickedTab === 'ALL') {
                         this.irbListData = [];
@@ -702,49 +720,97 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             pageNumber * this.paginationData.limit);
         document.getElementById('scrollToTop').scrollTop = 0;
     }
-    openStatusModal() {
-        const statuses = this.protocolStatus.split(',');
-        statuses.forEach(status => {
+    openStatusModal(isSubmittedStatusSearch) {
+        if (isSubmittedStatusSearch) {
+            this.protocolStatusesCopy = Object.assign([], this.submissionStatuses);
+            this.isSubmittedStatusSearch = true;
+            const statuses = this.submissionStatus.split(',');
+            statuses.forEach(status => {
+            this.isCheckBoxCheckedSubmit[status] = true;
+        });
+        } else {
+            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+            this.isSubmittedStatusSearch = false;
+            const statuses = this.protocolStatus.split(',');
+            statuses.forEach(status => {
             this.isCheckBoxChecked[status] = true;
         });
+    }
         document.getElementById('openStatusModalButton').click();
     }
     statusSearchChange() {
-        if (!this.statusSearchText) {
-            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
-        }
         this.statusSearchText = this.statusSearchText.toLowerCase();
-        this.protocolStatusesCopy = this.protocolStatuses.filter( status => {
-            return status.PROTOCOL_STATUS.toLowerCase().includes(this.statusSearchText);
-          });
+        if (!this.isSubmittedStatusSearch) {
+            if (!this.statusSearchText) {
+                this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+            }
+            this.protocolStatusesCopy = this.protocolStatuses.filter( status => {
+                return status.PROTOCOL_STATUS.toLowerCase().includes(this.statusSearchText);
+             });
+        } else {
+            if (!this.statusSearchText) {
+                this.protocolStatusesCopy = Object.assign([], this.submissionStatus);
+            }
+            this.protocolStatusesCopy = this.submissionStatuses.filter( status => {
+                return status.description.toLowerCase().includes(this.statusSearchText);
+             });
+
+        }
     }
     setProtocolStatus() {
-        this.protocolStatus = '';
-        this.requestObject.protocolStatusCode = '';
-        this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+        if (!this.isSubmittedStatusSearch) {
+            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+            this.protocolStatus = '';
+            this.requestObject.protocolStatusCode = '';
         this.protocolStatuses.forEach(protocolStatus => {
             if (this.isCheckBoxChecked[protocolStatus.PROTOCOL_STATUS] === true) {
                 this.protocolStatus = this.protocolStatus === '' ?
                 protocolStatus.PROTOCOL_STATUS : this.protocolStatus + ',' + protocolStatus.PROTOCOL_STATUS;
-                this._sharedDataService.searchedStatus = this.protocolStatus;
                 this.requestObject.protocolStatusCode = this.requestObject.protocolStatusCode === '' ?
                 protocolStatus.PROTOCOL_STATUS_CODE : this.requestObject.protocolStatusCode + ',' + protocolStatus.PROTOCOL_STATUS_CODE;
             }
         });
+        this._sharedDataService.searchedStatus = this.protocolStatus;
+
+        } else {
+        this.protocolStatusesCopy = Object.assign([], this.submissionStatuses);
+        this.submissionStatus = '';
+        this.requestObject.protocolSubmissionStatus = '';
+        this.submissionStatuses.forEach(protocolStatus => {
+            if (this.isCheckBoxCheckedSubmit[protocolStatus.description] === true) {
+                this.submissionStatus = this.submissionStatus === '' ?
+                protocolStatus.description : this.submissionStatus + ',' + protocolStatus.description;
+                this.requestObject.protocolSubmissionStatus = this.requestObject.protocolSubmissionStatus === '' ?
+                protocolStatus.protocolSubmissionStatusCode
+                : this.requestObject.protocolSubmissionStatus + ',' + protocolStatus.protocolSubmissionStatusCode;
+            }
+        });
+        this._sharedDataService.searchedSubmissionStatus = this.submissionStatus;
+    }
         this.getAdvanceSearch(this.lastClickedTab);
         this.statusSearchText = '';
     }
     clearStatusSearch(event) {
         event.preventDefault();
         this.statusSearchText = '';
-        this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+        if (!this.isSubmittedStatusSearch) {
+            this.protocolStatusesCopy = Object.assign([], this.protocolStatuses);
+        } else {
+        this.protocolStatusesCopy = Object.assign([], this.submissionStatuses);
+        }
     }
     clearStatus() {
-        this.isCheckBoxChecked = {};
-        this.protocolStatus = '';
-        this._sharedDataService.searchedStatus = '';
-        this.requestObject.protocolStatusCode = '';
-        this._sharedDataService.searchData = this.requestObject;
+        if (!this.isSubmittedStatusSearch) {
+            this.isCheckBoxChecked = {};
+            this.protocolStatus = '';
+            this._sharedDataService.searchedStatus = '';
+            this.requestObject.protocolStatusCode = '';
+        } else {
+            this.isCheckBoxCheckedSubmit = {};
+            this.submissionStatus = '';
+            this.requestObject.protocolSubmissionStatus = '';
+            this._sharedDataService.searchedSubmissionStatus = '';
+        }
 
     }
     selectedPiResult(result) {

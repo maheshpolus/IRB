@@ -32,8 +32,12 @@
 		"secure": false
 	},
 	"/mit-irb/getDashboardProtocolStatus":{
-		"target" : "http://192.168.1.93:8080",
+		"target" : "http://192.168.1.66:8081",
 		"secure" : false
+	},
+	"/mit-irb/getDashboardProtocolSubmissionStatus": {
+		"target": "http://192.168.1.66:8081",
+		"secure": false
 	},
 	"/mit-irb/getIRBprotocolSpecialReview": {
 		"target": "http://192.168.1.66:8081",

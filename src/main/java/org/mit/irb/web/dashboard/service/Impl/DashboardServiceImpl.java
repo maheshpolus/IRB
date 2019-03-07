@@ -2,6 +2,7 @@ package org.mit.irb.web.dashboard.service.Impl;
 
 import java.text.ParseException;
 
+import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.dashboard.dao.DashboardDao;
@@ -30,10 +31,10 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
 			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode,String approvalDate,String  expirationDate,
-			String isAdvanceSearch,String fundingSource) throws ParseException {
+			String isAdvanceSearch,String fundingSource,String protocolSubmissionStatus) throws ParseException {
 		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboardType,
 				piName, protocolNumber, protocolTypeCode, title, prtocolStatusCode,
-				approvalDate,expirationDate,isAdvanceSearch,fundingSource);
+				approvalDate,expirationDate,isAdvanceSearch,fundingSource,protocolSubmissionStatus);
 		return profile;
 	}
 
@@ -53,5 +54,11 @@ public class DashboardServiceImpl implements DashboardService {
 	public DashboardProfile getDashboardProtocolStatus() {
 		DashboardProfile profile = dashboardDao.getDashboardProtocolStatus();
 		return profile;
+	}
+
+	@Override
+	public CommonVO getprotocolSubmissionStatus() {
+		CommonVO vo = dashboardDao.getProtocolSubmissionStatus();
+		return vo;
 	}
 }

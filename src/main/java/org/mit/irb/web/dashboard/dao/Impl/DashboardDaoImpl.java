@@ -6,26 +6,34 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
-import org.mit.irb.web.common.view.IRBViews;
 import org.mit.irb.web.common.view.SnapshotData;
 import org.mit.irb.web.dashboard.dao.DashboardDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
 
 @Transactional
 @Service(value="dashboardDao")
 public class DashboardDaoImpl implements DashboardDao{
 	protected static Logger logger = Logger.getLogger(DashboardDaoImpl.class.getName());
 	private DBEngine dBEngine;
+	
+	
+	@Autowired
+	HibernateTemplate hibernateTemplate;
 	
 	public DashboardDaoImpl(){ 
 		dBEngine = new DBEngine();
@@ -112,7 +120,7 @@ public class DashboardDaoImpl implements DashboardDao{
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
 			String pi_name, String protocol_number,String protocol_type_code, String title,
 			String prtocolStatusCode,String approvalDate,String expirationDate,String  isAdvanceSearch,
-			String fundingSource) throws ParseException {
+			String fundingSource,String protocolSubmissionStatus) throws ParseException {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
 		java.util.Date approvalDates = null;
 		java.sql.Date sqlApprovalDates = null;
@@ -121,10 +129,12 @@ public class DashboardDaoImpl implements DashboardDao{
 		if (approvalDate!= null) {
 			approvalDates = sdf1.parse(approvalDate);
 			sqlApprovalDates = new java.sql.Date(approvalDates.getTime());
+			
 		}
 		if (expirationDate!= null) {
 			expirationDates = sdf1.parse(expirationDate);
 			sqlExpirationDates = new java.sql.Date(expirationDates.getTime());
+			
 		}
 		DashboardProfile profile = new DashboardProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
@@ -141,6 +151,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("AV_EXPIRATION_DATE", DBEngineConstants.TYPE_DATE, sqlExpirationDates));
 		inputParam.add(new InParameter("AV_APPROVAL_DATE", DBEngineConstants.TYPE_DATE, sqlApprovalDates));
 		inputParam.add(new InParameter("AV_FUNDING_SOURCE", DBEngineConstants.TYPE_STRING, fundingSource));
+		inputParam.add(new InParameter("AV_PROTO_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING, protocolSubmissionStatus));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
@@ -243,5 +254,14 @@ public class DashboardDaoImpl implements DashboardDao{
 			profile.setDashBoardDetailMap(result);
 		}
 		return profile;
+	}
+
+	@Override
+	public CommonVO getProtocolSubmissionStatus() {
+		CommonVO vo= new CommonVO();
+		Query query =hibernateTemplate.getSessionFactory().getCurrentSession()
+		  .createQuery("from ProtocolSubmissionStatus ");
+		vo.setProtocolSubmissionStatusList(query.list());  
+		return vo;
 	}
 }

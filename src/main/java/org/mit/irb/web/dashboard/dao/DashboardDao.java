@@ -2,6 +2,7 @@ package org.mit.irb.web.dashboard.dao;
 
 import java.text.ParseException;
 
+import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 
 public interface DashboardDao {
@@ -10,11 +11,13 @@ public interface DashboardDao {
 
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType ,String dashboardType, String pi_name,
 			String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode,String approvalDate, String expirationDate,
-			String  isAdvanceSearch,String fundingSource) throws ParseException;
+			String  isAdvanceSearch,String fundingSource,String protocolSubmissionStatus) throws ParseException;
 
 	public DashboardProfile getExpandedSnapShotView(String personId, String personRoleType, String avSummaryType);
 
 	public DashboardProfile getDashboardProtocolType();
 
 	public DashboardProfile getDashboardProtocolStatus();
+	
+	public CommonVO getProtocolSubmissionStatus();
 }

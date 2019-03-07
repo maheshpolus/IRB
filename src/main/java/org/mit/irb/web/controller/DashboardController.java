@@ -50,7 +50,7 @@ public class DashboardController {
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(), vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(),
 				vo.getProtocolTypeCode(), vo.getTitle(),vo.getProtocolStatusCode(),vo.getApprovalDate(),
 				vo.getExpirationDate(),vo.getIsAdvancedSearch(),
-				vo.getFundingSource());
+				vo.getFundingSource(),vo.getProtocolSubmissionStatus());
 		return profile;
 	}
 	
@@ -66,5 +66,12 @@ public class DashboardController {
 			HttpServletResponse response) {
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolStatus();
 		return profile;
+	}
+	
+	@RequestMapping(value = "/getDashboardProtocolSubmissionStatus", method = RequestMethod.POST)
+	public @ResponseBody CommonVO getDashboardProtocolSubmissionStatus(HttpServletRequest request,
+			HttpServletResponse response) {
+		CommonVO vo=this.dashboardService.getprotocolSubmissionStatus();
+		return vo;
 	}
 }

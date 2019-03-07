@@ -247,7 +247,8 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 } else {
                     this.editClass = 'scheduleBoxes';
                     this.editAreaClass = 'scheduleBoxes';
-                    this.result.committee.reviewTypeDescription = '';
+                   this.result.committee.reviewTypeDescription = this.result.committee.reviewTypeDescription == null ?
+                     '' : this.result.committee.reviewTypeDescription;
                     this.editDetails = true;
                     this.Id = this.result.committee.committeeId;
                     this.showDetails = false;

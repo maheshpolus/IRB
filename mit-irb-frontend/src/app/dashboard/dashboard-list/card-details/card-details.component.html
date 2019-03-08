@@ -1,7 +1,7 @@
 <div id="top-card" class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
 	<div class="row list-rows" *ngFor="let irb of irbList let i=index">
 		<div class="col-md-3 col-sm-12 col-12 list-view">
-			<span
+			<span (click)="openIrb(irb.PROTOCOL_NUMBER)" class="pointer"
 				[ngClass]="{
 					'active-status': (irb.PROTOCOL_STATUS_CODE=='200'||
 									 irb.PROTOCOL_STATUS_CODE== '201'||

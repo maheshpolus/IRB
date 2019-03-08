@@ -2,7 +2,6 @@ package org.mit.irb.web.dashboard.service;
 
 import java.text.ParseException;
 
-import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +51,8 @@ public interface DashboardService {
 
 	public DashboardProfile getDashboardProtocolStatus();
 
-	public CommonVO getprotocolSubmissionStatus();
+	/**
+	 * @return List of Submission status
+	 */
+	public DashboardProfile getprotocolSubmissionStatus();
 }

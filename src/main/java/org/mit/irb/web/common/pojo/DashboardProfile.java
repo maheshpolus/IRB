@@ -3,6 +3,8 @@ package org.mit.irb.web.common.pojo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.mit.irb.web.committee.pojo.ProtocolSubmissionStatus;
 import org.mit.irb.web.common.view.IRBViews;
 import org.mit.irb.web.common.view.SnapshotData;
 
@@ -16,6 +18,7 @@ public class DashboardProfile {
 	private SnapshotData snapshotData;
 	private ArrayList<HashMap<String, Object>> dashBoardDetailMap;
 	private ArrayList<HashMap<String, Object>> dashboardExemptCardDetails;
+	private List<ProtocolSubmissionStatus> protocolSubmissionStatusList;
 	
 	public ArrayList<HashMap<String, Object>> getDashboardExemptCardDetails() {
 		return dashboardExemptCardDetails;
@@ -47,5 +50,13 @@ public class DashboardProfile {
 
 	public void setSnapshotData(SnapshotData snapshotData) {
 		this.snapshotData = snapshotData;
+	}
+
+	public List<ProtocolSubmissionStatus> getProtocolSubmissionStatusList() {
+		return protocolSubmissionStatusList;
+	}
+
+	public void setProtocolSubmissionStatusList(List<ProtocolSubmissionStatus> protocolSubmissionStatusList) {
+		this.protocolSubmissionStatusList = protocolSubmissionStatusList;
 	}
 }

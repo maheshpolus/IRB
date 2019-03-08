@@ -91,6 +91,10 @@ public class CommonVO {
 	
 	private String protocolStatusCode;
 	
+	
+	
+	private String protocolSubmissionStatus;
+	
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -400,5 +404,13 @@ public class CommonVO {
 
 	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+	
+	public String getProtocolSubmissionStatus() {
+		return protocolSubmissionStatus;
+	}
+
+	public void setProtocolSubmissionStatus(String protocolSubmissionStatus) {
+		this.protocolSubmissionStatus = protocolSubmissionStatus;
 	}
 }

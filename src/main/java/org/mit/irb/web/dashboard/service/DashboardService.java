@@ -34,7 +34,7 @@ public interface DashboardService {
 	
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
 			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode,
-			String approvalDate, String  expirationDate, String isAdvanceSearch,String fundingSource) throws ParseException;
+			String approvalDate, String  expirationDate, String isAdvanceSearch,String fundingSource,String protocolSubmissionStatus) throws ParseException;
 
 	/**
 	 * @param personId
@@ -50,4 +50,9 @@ public interface DashboardService {
 	public DashboardProfile getDashboardProtocolType();
 
 	public DashboardProfile getDashboardProtocolStatus();
+
+	/**
+	 * @return List of Submission status
+	 */
+	public DashboardProfile getprotocolSubmissionStatus();
 }

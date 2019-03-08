@@ -2,9 +2,7 @@ package org.mit.irb.web.common.VO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import org.mit.irb.web.committee.pojo.ProtocolSubmissionStatus;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
@@ -93,7 +91,7 @@ public class CommonVO {
 	
 	private String protocolStatusCode;
 	
-	private List<ProtocolSubmissionStatus> protocolSubmissionStatusList;
+	
 	
 	private String protocolSubmissionStatus;
 	
@@ -407,16 +405,7 @@ public class CommonVO {
 	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
 	}
-
-	public List<ProtocolSubmissionStatus> getProtocolSubmissionStatusList() {
-		return protocolSubmissionStatusList;
-	}
-
-	public void setProtocolSubmissionStatusList(
-			List<ProtocolSubmissionStatus> protocolSubmissionStatusList) {
-		this.protocolSubmissionStatusList = protocolSubmissionStatusList;
-	}
-
+	
 	public String getProtocolSubmissionStatus() {
 		return protocolSubmissionStatus;
 	}

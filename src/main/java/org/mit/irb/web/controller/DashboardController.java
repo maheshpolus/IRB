@@ -69,9 +69,9 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/getDashboardProtocolSubmissionStatus", method = RequestMethod.POST)
-	public @ResponseBody CommonVO getDashboardProtocolSubmissionStatus(HttpServletRequest request,
+	public @ResponseBody DashboardProfile getDashboardProtocolSubmissionStatus(HttpServletRequest request,
 			HttpServletResponse response) {
-		CommonVO vo=this.dashboardService.getprotocolSubmissionStatus();
-		return vo;
+		DashboardProfile profile=this.dashboardService.getprotocolSubmissionStatus();
+		return profile;
 	}
 }

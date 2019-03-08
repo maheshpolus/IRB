@@ -2,7 +2,6 @@ package org.mit.irb.web.dashboard.service.Impl;
 
 import java.text.ParseException;
 
-import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.dashboard.dao.DashboardDao;
@@ -57,8 +56,8 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
-	public CommonVO getprotocolSubmissionStatus() {
-		CommonVO vo = dashboardDao.getProtocolSubmissionStatus();
-		return vo;
+	public DashboardProfile getprotocolSubmissionStatus() {
+		DashboardProfile profile = dashboardDao.getProtocolSubmissionStatus();
+		return profile;
 	}
 }

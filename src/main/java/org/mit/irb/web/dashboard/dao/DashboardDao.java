@@ -2,7 +2,6 @@ package org.mit.irb.web.dashboard.dao;
 
 import java.text.ParseException;
 
-import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 
 public interface DashboardDao {
@@ -19,5 +18,5 @@ public interface DashboardDao {
 
 	public DashboardProfile getDashboardProtocolStatus();
 	
-	public CommonVO getProtocolSubmissionStatus();
+	public DashboardProfile getProtocolSubmissionStatus();
 }

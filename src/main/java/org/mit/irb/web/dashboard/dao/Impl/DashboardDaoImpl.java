@@ -257,11 +257,11 @@ public class DashboardDaoImpl implements DashboardDao{
 	}
 
 	@Override
-	public CommonVO getProtocolSubmissionStatus() {
-		CommonVO vo= new CommonVO();
+	public DashboardProfile getProtocolSubmissionStatus() {
+		DashboardProfile profile = new DashboardProfile();
 		Query query =hibernateTemplate.getSessionFactory().getCurrentSession()
 		  .createQuery("from ProtocolSubmissionStatus ");
-		vo.setProtocolSubmissionStatusList(query.list());  
-		return vo;
+		profile.setProtocolSubmissionStatusList(query.list());  
+		return profile;
 	}
 }

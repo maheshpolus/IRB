@@ -215,9 +215,10 @@
 							<h4>* Summary:</h4>
 						</div>
 						<div class="col-9 width-exempt searchBox dsp-flex">
-							<textarea class="form-control" [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary"
+							<textarea id="summary"class="form-control" [disabled]="isViewMode" rows="3" maxlength="1250" [(ngModel)]="requestObject.irbExemptForm.summary" (ngModelChange)="remainingChar(requestObject.irbExemptForm.summary.length)"
 							 placeholder="Use this field to summarize your research. This description should be written in lay language. Include a brief description of the purpose of your reasearch along with the experimental procedures. This text should not exceed 1250 characters."></textarea>
 						</div>
+						<span class="sub-label ml-225"> ({{summaryRemainingCount}} characters left)</span>
 					</div>
 					<div *ngIf="!isViewMode" class="col-12 exempt-id">
 						<button [hidden]="showQuestionaire" id="#continueBtn" class="btn mb-3 btn-primary tab_btn center-button" (click)="loadQuestionaire()"
@@ -236,8 +237,10 @@
 			<div class="card coll-card-q">
 				<h5 class="card-header collapse_hd">
 					Exempt Form
-					<i class=" fa fa-info-circle" tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" data-html="true" data-content="The following questions help determine the proper exempt status.Click on the for additional help <i class='yellow-bulb-popper fa fa-lightbulb-o'></i> or visit <a href='https://couhes.mit.edu/' target='_blank'>COUHES.mit.edu.</a>"></i>
-					<!-- <i class="fa fa-info-circle pdf" aria-hidden="true" (click)="isStayOnSamePage = true" data-toggle="modal" data-target="#welcomeModal"></i> -->
+				 <ng-template #exemptPopContent>The following questions help determine exempt status. Click on the <i class="yellow-bulb-popper fa fa-lightbulb-o"></i> for additional help or visit <a href="https://couhes.mit.edu/" target="_blank">COUHES.mit.edu.</a></ng-template>
+					<i class=" fa fa-info-circle" tabindex="0" placement="left" [ngbPopover]="exemptPopContent" container="body" #exemptQuestionnaireInfo="ngbPopover" (document:click)="exemptQuestionnaireInfo.close()" (click)="$event.stopPropagation()"></i>
+		
+					<!-- <i class=" fa fa-info-circle" tabindex="0" data-toggle="popover" data-placement="top" data-trigger="focus" data-html="true" data-content="The following questions help determine exempt status. Click on the for additional help <i class='yellow-bulb-popper fa fa-lightbulb-o'></i> or visit <a href='https://couhes.mit.edu/' target='_blank'>COUHES.mit.edu.</a>"></i> -->
 				</h5>
 				<div class="card-body collapse-card-body">
 					<div class="quest-no" *ngFor=' let questionIndex of questionaire.questionnaireQuestions; let indexQuestion = index'>

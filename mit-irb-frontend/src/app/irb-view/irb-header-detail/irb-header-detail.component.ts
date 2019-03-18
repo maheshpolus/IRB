@@ -31,7 +31,7 @@ export class IrbHeaderDetailComponent implements OnInit {
 
   /** sets requestObject and call function to load header details */
   ngOnInit() {
-  	  this._http.get('/mit-irb/resources/string_config_json').subscribe(
+    this._http.get('/mit-irb/resources/string_config_json').subscribe(
         data => {
             const property_config: any = data;
             if (property_config) {
@@ -70,12 +70,13 @@ export class IrbHeaderDetailComponent implements OnInit {
   toggle() {
       this.isExpanded = !this.isExpanded;
   }
-  
+
   backClick(event) {
       event.preventDefault();
       if (this.previousUrl != null) {
           this.router.navigate(['/irb/expanded-view'],
-                              {queryParams: {personId: this.userDTO.personID, personRole: this.userDTO.role, summaryType: this.previousUrl}});
+                              {queryParams: {personId: this.userDTO.personID,
+                                personRole: this.userDTO.role, summaryType: this.previousUrl}});
       } else {
         this.router.navigate(['/irb/dashboard']);
       }

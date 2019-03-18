@@ -2129,6 +2129,7 @@ div
 .sort-fields> label {
     font-weight: 500;
     font-size: 0.7rem;
+    margin-bottom: 0px !important;
 }
 .sort-field-selected {
     background: #C5C6C8;
@@ -2147,4 +2148,8 @@ div
 }
 .elastic-view-margin {
 	margin-top: 13px;
+}
+.my-custom-class {
+    background: aliceblue;
+      font-size: 125%;
 }

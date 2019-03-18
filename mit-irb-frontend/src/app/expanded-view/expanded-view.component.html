@@ -4,7 +4,7 @@
 		<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10 toptext">
 			<h5 class="pageHeader">{{pageHeader}}</h5>
 		</div>
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf ="this.requestObject.personRoleType !== 'ADMIN' && this.requestObject.personRoleType !== 'CHAIR'">
 			<div class="borderBox box-shawdow">
 				<table class="table table-striped table-type-head table-responsive">
 					<thead class="popup-sub-header">
@@ -65,10 +65,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10 toptext" *ngIf="exemptCardDetails != undefined && exemptCardDetails.length > 0">
+		<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10 toptext">
 			<h5 class="pageHeader">Pending Exempt Studies</h5>
 		</div>
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="exemptCardDetails != undefined && exemptCardDetails.length > 0">
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div class="borderBox box-shawdow">
 				<table class="table table-striped table-type-head table-responsive">
 					<thead class="popup-sub-header">
@@ -125,6 +125,7 @@
 						</tr>
 					</tbody>
 				</table>
+				<div *ngIf="exemptCardDetails === undefined || exemptCardDetails.length === 0">No Pending Exempt Studies</div>
 			</div>
 		</div>
 	</section>

@@ -21,6 +21,8 @@ export class IrbHistoryComponent implements OnInit {
     result: any;
     indexVal: number;
     reviewComments = [];
+    sortField = 'LAST_UPDATE_USER';
+    sortOrder = 1;
 
     requestObject = {
         protocolNumber: '',
@@ -68,8 +70,8 @@ export class IrbHistoryComponent implements OnInit {
     }
 
     /**calls service to get details of a selected history */
-    loadHistoryDetails() {
-        this.irbHistoryDetails = [];
+    loadHistoryDetails(index) {
+       // this.irbHistoryDetails = [];
         this._irbViewService.getProtocolHistotyGroupDetails(this.requestObject).subscribe(data => {
             this.result = data || [];
             if (this.result != null) {
@@ -77,7 +79,7 @@ export class IrbHistoryComponent implements OnInit {
                     this.result.irbViewProtocolHistoryGroupDetails.length === 0) {
                     this.noHistoryDetails = true;
                 } else {
-                    this.irbHistoryDetails = this.result.irbViewProtocolHistoryGroupDetails;
+                    this.irbHistoryDetails[index] = this.result.irbViewProtocolHistoryGroupDetails;
                 }
             }
 
@@ -95,15 +97,16 @@ export class IrbHistoryComponent implements OnInit {
         for (this.indexVal = 0; this.indexVal < this.isExpanded.length; this.indexVal++) {
             if (this.indexVal === index) {
                 this.isExpanded[this.indexVal] = !this.isExpanded[this.indexVal];
-            } else {
-                this.isExpanded[this.indexVal] = false;
             }
+            // else {
+            //     // this.isExpanded[this.indexVal] = false;
+            // }
             if (this.isExpanded[this.indexVal] === true) {
                 this.requestObject.protocolId = this.irbHistoryList[index].PROTOCOL_ID;
                 this.requestObject.actionId = this.irbHistoryList[index].ACTION_ID;
                 this.requestObject.nextGroupActionId = this.irbHistoryList[index].NEXT_GROUP_ACTION_ID;
                 this.requestObject.previousGroupActionId = this.irbHistoryList[index].PREVIOUS_GROUP_ACTION_ID;
-                this.loadHistoryDetails();
+                this.loadHistoryDetails(index);
             }
         }
     }
@@ -131,5 +134,9 @@ export class IrbHistoryComponent implements OnInit {
                 const response: any = data;
                 this.reviewComments = response.irbProtocolHistoryActionComments;
             });
+    }
+
+    updateSortOrder() {
+        this.sortOrder = this.sortOrder === 1 ? -1 : 1;
     }
 }

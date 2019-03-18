@@ -28,7 +28,6 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     uploadedFile: File[] = [];
     files: UploadFile[] = [];
     attachmentList: any[] = [];
-    isTimeStampSorting = true;
     isCollaboratorEdit = false;
     noIrbAttachments = false;
     isMandatoryFilled = true;
@@ -36,7 +35,6 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     isAttachmentEdit = false;
     isReplaceAttachment = false;
     multipleFile = false;
-    isUpArrow = true;
     fil: FileList;
     generalInfo: any;
     attachmentTypeDescription: string;
@@ -351,10 +349,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     }
     /**sort the Attachment list
      */
-    sortBy(column) {
-        this.isUpArrow = !this.isUpArrow;
-        this.isTimeStampSorting = column === 'updateTimestamp' ? true : false;
-        this.column = column;
+    sortBy() {
         this.direction = this.direction === 1 ? -1 : 1;
     }
 

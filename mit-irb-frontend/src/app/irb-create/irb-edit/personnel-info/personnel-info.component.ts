@@ -272,6 +272,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.protocolPersonLeadUnits.forEach(personeUnit => {
           if (personeUnit.unitName === leadUnitName) {
             this.editPersonnelInfo.protocolLeadUnits[0].unitNumber = personeUnit.unitNumber;
+            // this.editPersonnelInfo.protocolLeadUnits[0].protocolPersonLeadUnits = {
+            //                             unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
             this.editPersonnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
           }
         });
@@ -281,6 +283,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.protocolPersonLeadUnits.forEach(personeUnit => {
           if (personeUnit.unitName === leadUnitName) {
             this.editPersonnelInfo.protocolLeadUnits = [{ unitNumber: personeUnit.unitNumber }];
+            // this.editPersonnelInfo.protocolLeadUnits[0].protocolPersonLeadUnits = {
+            //                         unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
             this.editPersonnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
           }
         });
@@ -291,6 +295,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       this.protocolPersonLeadUnits.forEach(personeUnit => {
         if (personeUnit.unitName === leadUnitName) {
           this.editPersonnelInfo.protocolLeadUnits = [{ unitNumber: personeUnit.unitNumber }];
+          // this.editPersonnelInfo.protocolLeadUnits[0].protocolPersonLeadUnits = {
+          //   unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
           this.editPersonnelInfo.protocolPersonLeadUnits = { unitNumber: personeUnit.unitNumber, unitName: leadUnitName };
         }
       });
@@ -376,6 +382,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       // End setting Person Lead Unit Details
      // personnelInfo.protocolGeneralInfo = this.generalInfo;
       this.commonVo.personnelInfo = personnelInfo;
+     // this.commonVo.generalInfo.personnelInfos[0] = personnelInfo; //added newly
     }
     this._irbCreateService.updateProtocolPersonInfo(this.commonVo).subscribe(
       data => {

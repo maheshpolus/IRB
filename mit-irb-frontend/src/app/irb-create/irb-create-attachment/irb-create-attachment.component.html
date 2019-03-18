@@ -24,14 +24,28 @@
                       <table class="table table-striped table-type-head">
                         <thead class="popup-sub-header">
                           <tr>
-                            <th scope="col" class="pdf" (click)="sortBy('attachmentType.description')">Type
+                            <!-- <th scope="col" class="pdf" (click)="sortBy('attachmentType.description')">Type
                               <i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="!isTimeStampSorting"></i>
                             </th>
                             <th scope="col">Description</th>
                             <th scope="col">File</th>
                             <th scope="col" class="pdf" (click)="sortBy('updateTimestamp')">Updated By
                               <i class="fa" [ngClass]="isUpArrow?'fa-caret-up':'fa-caret-down'" *ngIf="isTimeStampSorting"></i>
-                            </th>
+                            </th> -->
+                            <!-- <th class="pointer" (click)="column = 'ATTACHMENT_TYPE';sortBy()">Type
+                                <i class="fa" *ngIf="column == 'ATTACHMENT_TYPE'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
+                                aria-hidden="true"></i></th> -->
+                                <th>Type</th>
+                          <th class="pointer" (click)="column = 'description';sortBy()">Description
+                              <i class="fa" *ngIf="column == 'description'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
+                              aria-hidden="true"></i></th>
+                              <th>File</th>
+                          <!-- <th class="pointer" (click)="column = 'FILE_NAME';sortBy()">File
+                              <i class="fa" *ngIf="column == 'FILE_NAME'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
+                              aria-hidden="true"></i></th> -->
+                          <th class="pointer" (click)="column = 'updateTimestamp';sortBy()">Updated By
+                              <i class="fa" *ngIf="column == 'updateTimestamp'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
+                              aria-hidden="true"></i></th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>

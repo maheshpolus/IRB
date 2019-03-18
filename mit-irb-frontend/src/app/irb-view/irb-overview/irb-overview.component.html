@@ -1,6 +1,5 @@
-<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff"
-	type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
-	<div class="container-fluid">
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+<div class="container-fluid">
 	<section class="row">
 		<!--card list-->
 		<div class="col-12">
@@ -13,55 +12,55 @@
 									<h6>Personnel Information</h6>
 								</div>
 								<div class="col-md-1 col-4 ">
-									<i class="fa fa-info-circle" title="{{PROTOCOL_PERSONNEL_INFO}}" aria-hidden="true"></i>
+									<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_PERSONNEL_INFO}}" #protocolPersonnelInfo="ngbPopover"
+									 (document:click)="protocolPersonnelInfo.close()" (click)="$event.stopPropagation()" container="body"></i>
+									<!-- <i class="fa fa-info-circle" title="{{PROTOCOL_PERSONNEL_INFO}}" aria-hidden="true"></i> -->
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med ovr-flw"
-							*ngIf="noIrbPersons==false">
-							<div class="row pdf" [ngClass]="{'row-line':i!=0}"
-								*ngFor="let irbPersons of irbPersonsDetails;let i= index"
-								data-toggle="modal"
-								data-target="#personModal"
-								(click)="showpersonData(irbPersons.PERSON_ID)">
+						<div class="col-12 card-list-med ovr-flw" *ngIf="noIrbPersons==false">
+							<div class="row pdf" [ngClass]="{'row-line':i!=0}" *ngFor="let irbPersons of irbPersonsDetails;let i= index" data-toggle="modal"
+							 data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
 								<div class="col-md-2 col-sm-6 co-12">
-									<div
-										[ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
-									'coi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID !=='PI'}"
-										class="img-fluid pd20"></div>
+									<div [ngClass]="{'pi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID =='PI',
+									'coi-profile': irbPersons.PROTOCOL_PERSON_ROLE_ID !=='PI'}" class="img-fluid pd20"></div>
 								</div>
 								<div class="col-md-4 col-sm-6 co-12 card-desc">
 									<h6>{{irbPersons.PERSON_NAME}}</h6>
 									<p>
-										Person Role: <span>{{irbPersons.PROTOCOL_PERSON_ROLE}}</span>
+										Person Role:
+										<span>{{irbPersons.PROTOCOL_PERSON_ROLE}}</span>
 									</p>
 									<p>
-										Email: <span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office: <span>{{irbPersons.OFFICE_PHONE}}</span>
+										Email:
+										<span>{{irbPersons.EMAIL_ADDRESS}}</span> | Office:
+										<span>{{irbPersons.OFFICE_PHONE}}</span>
 									</p>
 								</div>
 								<div class="col-md-5 col-sm-6 co-12 card-desc">
-									<p>Training Status: <span class="font-size-23">
-										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
-										<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
-									</span>
-									<p>
-										Title: <span>{{irbPersons.PRIMARY_TITLE}}</span>
-									</p>
-									<p>
-										Affiliation: <span>{{irbPersons.AFFILIATION_TYPE}}</span> |
-										Unit: <span>{{irbPersons.UNIT_NAME}}</span>
-									</p>
+									<p>Training Status:
+										<span class="font-size-23">
+											<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
+											<i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'" class="training-incomplete-color fa fa-times" title="Not Complete"
+											 aria-hidden="true"></i>
+										</span>
+										<p>
+											Title:
+											<span>{{irbPersons.PRIMARY_TITLE}}</span>
+										</p>
+										<p>
+											Affiliation:
+											<span>{{irbPersons.AFFILIATION_TYPE}}</span> | Unit:
+											<span>{{irbPersons.UNIT_NAME}}</span>
+										</p>
 								</div>
 								<div class="col-md-1 col-sm-6 co-12 list-des button-responsive">
-										
-										<a>
-											<button type="button" class="btn btn-outline-secondary button-view"
-											data-toggle="modal"
-											data-target="#personModal"
-											(click)="showpersonData(irbPersons.PERSON_ID)">
-												<i class="fa fa-eye"></i>View
-											</button>
-										</a>
+
+									<a>
+										<button type="button" class="btn btn-outline-secondary button-view" data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
+											<i class="fa fa-eye"></i>View
+										</button>
+									</a>
 								</div>
 
 								<!-- <div class="col-md-2 col-sm-6 co-12 cmp-b">
@@ -70,8 +69,7 @@
 								</div> -->
 							</div>
 						</div>
-						<div class="col-12 card-list-no-data ovrflow-no-data"
-							*ngIf="noIrbPersons">
+						<div class="col-12 card-list-no-data ovrflow-no-data" *ngIf="noIrbPersons">
 							<div class="col-12">No person details found</div>
 						</div>
 					</div>
@@ -85,14 +83,14 @@
 									<h6>Funding Sources</h6>
 								</div>
 								<div class="col-1">
-									<i class="fa fa-info-circle" title="{{PROTOCOL_FUNDING_SOURCE_INFO}}" aria-hidden="true"></i>
+									<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_FUNDING_SOURCE_INFO}}" #protocolFundingSourceInfo="ngbPopover"
+									 (document:click)="protocolFundingSourceInfo.close()" (click)="$event.stopPropagation()" container="body"></i>
+									<!-- <i class="fa fa-info-circle" title="{{PROTOCOL_FUNDING_SOURCE_INFO}}" aria-hidden="true"></i> -->
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med funding-card ovr-flw"
-							*ngIf="noIrbfunds==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}"
-								*ngFor="let fund of irbFundingDetails;let i= index">
+						<div class="col-12 card-list-med funding-card ovr-flw" *ngIf="noIrbfunds==false">
+							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let fund of irbFundingDetails;let i= index">
 								<div class="col-3">
 									<div class="sponser_ico">
 										<i class="fa fa-briefcase" aria-hidden="true"></i>
@@ -102,23 +100,26 @@
 									<div class="row padding-row">
 										<div class="col-12">
 											<h6>
-												<b>{{fund.FUNDING_SOURCE_TYPE}}</b><span class="fund-head">{{fund.FUNDING_SOURCE}}</span>
+												<b>{{fund.FUNDING_SOURCE_TYPE}}</b>
+												<span class="fund-head">{{fund.FUNDING_SOURCE}}</span>
 											</h6>
 										</div>
 										<div class="col-5" *ngIf="fund.FUNDING_SOURCE_TYPE == 'Award'">
 											<h6>
-												<b>Account#: </b><span>{{fund.ACCOUNT_NUMBER}}</span>
+												<b>Account#: </b>
+												<span>{{fund.ACCOUNT_NUMBER}}</span>
 											</h6>
 										</div>
-										<div
-											[ngClass]="fund.FUNDING_SOURCE_TYPE == 'Award'? 'col-7':'col-6'">
+										<div [ngClass]="fund.FUNDING_SOURCE_TYPE == 'Award'? 'col-7':'col-6'">
 											<h6>
-												<b>Name: </b><span>{{fund.FUNDING_SOURCE_NAME}}</span>
+												<b>Name: </b>
+												<span>{{fund.FUNDING_SOURCE_NAME}}</span>
 											</h6>
 										</div>
 										<div class="col-6">
 											<p>
-												<b>Title: </b><span>{{fund.FUNDING_SOURCE_TYPE}}</span>
+												<b>Title: </b>
+												<span>{{fund.FUNDING_SOURCE_TYPE}}</span>
 											</p>
 										</div>
 
@@ -139,14 +140,13 @@
 									<h6>Subjects</h6>
 								</div>
 								<div class="col-1">
-									<i class="fa fa-info-circle" title="{{PROTOCOL_SUBJECT_INFO}}" aria-hidden="true"></i>
+									<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_SUBJECT_INFO}}" #protocolSubjectInfo="ngbPopover"
+									 (document:click)="protocolSubjectInfo.close()" (click)="$event.stopPropagation()" container="body"></i>
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med funding-card ovr-flw"
-							*ngIf="noIrbSubjects==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}"
-								*ngFor="let sub of irbSubjects;let i= index">
+						<div class="col-12 card-list-med funding-card ovr-flw" *ngIf="noIrbSubjects==false">
+							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let sub of irbSubjects;let i= index">
 								<div class="col-3">
 									<div class="hospital_plus_ico">
 										<i class="fa fa-plus-square" aria-hidden="true"></i>
@@ -154,10 +154,12 @@
 								</div>
 								<div class="col-7 card-desc">
 									<h6 class="sub-head">
-										Type: <span>{{sub.VULNERABLE_SUBJECT}}</span>
+										Type:
+										<span>{{sub.VULNERABLE_SUBJECT}}</span>
 									</h6>
 									<h6 class="sub-head">
-										Count: <span>{{sub.SUBJECT_COUNT}}</span>
+										Count:
+										<span>{{sub.SUBJECT_COUNT}}</span>
 									</h6>
 								</div>
 							</div>
@@ -175,14 +177,14 @@
 									<h6>Engaged Institutions</h6>
 								</div>
 								<div class="col-1">
-									<i class="fa fa-info-circle" title="{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}" aria-hidden="true"></i>
+									<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}" #protocolEngagedInstitutionInfo="ngbPopover"
+									 (document:click)="protocolEngagedInstitutionInfo.close()" (click)="$event.stopPropagation()" container="body"></i>
+									<!-- <i class="fa fa-info-circle" title="{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}" aria-hidden="true"></i> -->
 								</div>
 							</div>
 						</div>
-						<div class="col-12 card-list-med ovr-flw"
-							*ngIf="noIrbCollaborators==false">
-							<div class="row" [ngClass]="{'row-line':i!=0}"
-								*ngFor="let irbCollab of irbCollaborators;let i= index">
+						<div class="col-12 card-list-med ovr-flw" *ngIf="noIrbCollaborators==false">
+							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let irbCollab of irbCollaborators;let i= index">
 								<div class="col-2">
 									<div class="profile_avatar_ico">
 										<i class="fa fa-user-o" aria-hidden="true"></i>
@@ -196,18 +198,26 @@
 												<span>{{irbCollab.ROLODEX_NAME}}</span>
 											</p>
 											<p>
-												Email: <span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
-												|Office: <span>{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
+												Email:
+												<span>{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
+												|Office:
+												<span>{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
 											</p>
-											<p>Human Sub Assurance number: <span>{{irbCollab.HUMAN_SUB_ASSURANCE}}</span></p>
+											<p>Human Sub Assurance number:
+												<span>{{irbCollab.HUMAN_SUB_ASSURANCE}}</span>
+											</p>
 										</div>
 										<div class="col-6 row-padng">
 											<p>&nbsp;</p>
 											<p>
-												Expiration date: <span>{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</span>
+												Expiration date:
+												<span>{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE
+													| date: 'MM/dd/yyyy')}}</span>
 											</p>
 											<p>
-												Approval Date: <span>{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span>
+												Approval Date:
+												<span>{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date:
+													'MM/dd/yyyy')}}</span>
 											</p>
 										</div>
 									</div>
@@ -225,16 +235,14 @@
 </div>
 
 <!-- modal -->
-<div class="modal fade bd-example-modal-lg" id="personModal"
-	tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-	aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="personModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+ aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header popup-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Person
-					Details</h5>
-				<button type="button" class="close modal-close" data-dismiss="modal"
-					aria-label="Close">
+				<h5 class="modal-title" id="exampleModalLongTitle">Person Details
+				</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
@@ -259,9 +267,9 @@
 						</div>
 					</div>
 					<div class="row">
-							<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-									<label class="modal-label" for=""> Unit: </label>
-									{{irbPersonDetailedList?.UNIT_NAME}}
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Unit: </label>
+							{{irbPersonDetailedList?.UNIT_NAME}}
 						</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
 							<label class="modal-label" for=""> Address: </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
@@ -270,13 +278,13 @@
 							<label class="modal-label" for=""> City: </label>
 							{{irbPersonDetailedList?.CITY}}
 						</div>
-						
+
 					</div>
 					<div class="row">
-					 <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-									<label class="modal-label" for=""> Country: </label>
-									{{irbPersonDetailedList?.COUNTRY_CODE}}
-								</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Country: </label>
+							{{irbPersonDetailedList?.COUNTRY_CODE}}
+						</div>
 						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
 							<label class="modal-label" for=""> Office Location: </label>
 							{{irbPersonDetailedList?.OFFICE_LOCATION}}
@@ -285,27 +293,29 @@
 							<label class="modal-label" for=""> Office Phone Number: </label>
 							{{irbPersonDetailedList?.OFFICE_PHONE }}
 						</div>
-						
+
 					</div>
 					<div class="row">
-							<div class="col-md-4 col lg- 4 col-sm-4 col-6">
-									<label class="modal-label" for=""> Postal Code: </label>
-									{{irbPersonDetailedList?.POSTAL_CODE}}
-							</div>
+						<div class="col-md-4 col lg- 4 col-sm-4 col-6">
+							<label class="modal-label" for=""> Postal Code: </label>
+							{{irbPersonDetailedList?.POSTAL_CODE}}
+						</div>
 
 					</div>
 				</div>
 				<!-- section2 -->
 				<div>
-					<h4 class="popup-sub-head">Training-<span *ngIf="trainingCompleted=='COMPLETED'"> Completed</span>
-					<span *ngIf="trainingCompleted=='INCOMPLETE'">Not Completed</span></h4>
+					<h4 class="popup-sub-head">Training-
+						<span *ngIf="trainingCompleted=='COMPLETED'"> Completed</span>
+						<span *ngIf="trainingCompleted=='INCOMPLETE'">Not Completed</span>
+					</h4>
 				</div>
 				<div class="modal-padding">
 					<div class="popup-div">
 						<table class="table table-striped">
 							<thead class="popup-sub-header">
 								<tr>
-									<th  scope="col">Description</th>
+									<th scope="col">Description</th>
 									<!-- <th scope="col">Score</th> -->
 									<th scope="col">Expiration Date</th>
 									<!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
@@ -313,7 +323,7 @@
 							</thead>
 							<tbody>
 								<tr *ngFor="let info of irbPersonDetailedTraining">
-									<td  scope="row">{{info.TRAINING_DESCRIPTION}}</td>
+									<td scope="row">{{info.TRAINING_DESCRIPTION}}</td>
 									<!-- <td>{{info.SCORE}}</td> -->
 									<td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
 									<!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
@@ -369,7 +379,9 @@
 							<h6>Special Review</h6>
 						</div>
 						<div class="col-1 text-right">
-							<i class="fa fa-info-circle" title="{{PROTOCOL_SPECIAL_REVIEW_INFO}}"aria-hidden="true"></i>
+							<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_SPECIAL_REVIEW_INFO}}" #protocolSpecialReviewInfo="ngbPopover"
+							 (document:click)="protocolSpecialReviewInfo.close()" (click)="$event.stopPropagation()" container="body"></i>
+							<!-- <i class="fa fa-info-circle" title="{{PROTOCOL_SPECIAL_REVIEW_INFO}}"aria-hidden="true"></i> -->
 						</div>
 					</div>
 				</div>

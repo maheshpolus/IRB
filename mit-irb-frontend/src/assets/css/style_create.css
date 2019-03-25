@@ -436,6 +436,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     margin: 0;
     line-height: 40px;
     font-weight: bold;
+    padding-left: 25px;
 }
 .history-coll-header p span
 {
@@ -476,9 +477,10 @@ ul.sb-results-dropdown-menu > li:last-child {
 {
     color:#a92034;
     position: absolute;
-    top: 24px;
-
-    right: 3px;
+    /* top: 24px; */
+    top: 12px;
+    left: 2px;
+    /* right: 3px; */
     font-size: 20px;
 }
 .history-link:hover
@@ -496,6 +498,13 @@ ul.sb-results-dropdown-menu > li:last-child {
     font-size: 14px;
     line-height: 30px;
     color: #000000;
+    font-weight: bold;
+}
+.list-of-his p
+{
+    font-size: 14px !important;
+    line-height: 30px !important;;
+    color: #000000 !important;;
     font-weight: bold;
 }
 .list-of-his li span
@@ -2431,6 +2440,26 @@ input:disabled,textarea:disabled{
 {
     width: 345px !important;
 }
+.ml-225
+{
+    margin-left: 225px;
+}
+.history-label p
+{
+    line-height: 40px !important;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000 !important;
+}
+.history-label p span
+{
+    font-weight: normal !important;
+}
+.padding-10
+{
+    padding: 10px;
+}
+
 
 
 

@@ -218,6 +218,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   setCollaboratorPersonDetails(item) {
+    this.iconValue = -1;
     this.isShowAddPerson = false;
     this.isShowAddAttachment = false;
     this.protocolCollaboratorSelected = Object.assign({}, item);
@@ -225,6 +226,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
   loadCollaboratorPersonsAndAttachment(CollaboratorId) {
     this.commonVo.collaboratorId = CollaboratorId;
+    this.personalDataList = Object.assign([], this.generalInfo.personnelInfos);
     this._irbCreateService.loadCollaboratorPersonsAndAttachments(this.commonVo).subscribe(
       data => {
         this.result = data;

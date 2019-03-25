@@ -15,8 +15,6 @@ export class IrbAttachmentsComponent implements OnInit {
 
     irbAttachmentsList: any[] = [];
     result: any;
-    isUpArrow = true;
-    isTimeStampSorting = true;
     direction = 1;
     column = 'UPDATE_TIMESTAMP';
 
@@ -30,7 +28,7 @@ export class IrbAttachmentsComponent implements OnInit {
     constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, private _http: HttpClient ) { }
     /** sets requestObject and call function to load attachment details */
     ngOnInit() {
-    	 this._http.get('/mit-irb/resources/string_config_json').subscribe(
+        this._http.get('/mit-irb/resources/string_config_json').subscribe(
             data => {
                 const property_config: any = data;
                 if (property_config) {
@@ -79,10 +77,7 @@ export class IrbAttachmentsComponent implements OnInit {
     }
 
     /**set column and direction to sort attachments */
-    sortBy(column) {
-        this.isUpArrow = !this.isUpArrow;
-        this.isTimeStampSorting = column === 'UPDATE_TIMESTAMP' ? true : false;
-        this.column = column;
+    sortBy() {
         this.direction = this.direction === 1 ? -1 : 1;
     }
 }

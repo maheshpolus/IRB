@@ -6,6 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class OrderByPipe implements PipeTransform {
 
   transform(records: Array<any>, args?: any): any {
+      if (records != null && records !== undefined) {
       return records.sort(function(a, b) {
             a[args.property] = (a[args.property] == null ? '' : a[args.property].toString());
             b[args.property] = (b[args.property] == null ? '' : b[args.property].toString());
@@ -18,4 +19,5 @@ export class OrderByPipe implements PipeTransform {
             }
       });
   }
+}
 }

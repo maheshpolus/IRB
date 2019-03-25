@@ -65,6 +65,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     showWarningAlert = true;
     showWelcomeMessage = true;
     QuestionnaireCompletionFlag = 'N';
+    summaryRemainingCount = 1250;
     showHelpMsg: any = [];
     questionaire: any = [];
     units: any = [];
@@ -144,6 +145,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     PI_DECLARATION_MEMBER_RESPONSIBILITY: string;
     PI_DECLARATION_COMPREHENSIVE_REVIEW: string;
     PI_DECLARATION_INTRODUCTION: string;
+    EXEMPT_QUESTIONNAIRE_INFO: string;
     OTHER_MSG: string;
     NOT_EXEMPT_MSG_SUBMIT: string;
     EXEMPT_MSG_SUBMIT: string;
@@ -197,12 +199,6 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
 
     /** sets requestObject and checks for mode */
     ngOnInit() {
-            $(function () {
-            $('[data-toggle="popover"]').popover();
-            $('.popover-dismiss').popover({
-                trigger: 'focus'
-              });
-          });
         this._http.get('/mit-irb/resources/string_config_json').subscribe(
             data => {
                 const property_config: any = data;
@@ -224,6 +220,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     this.PI_DECLARATION_MEMBER_RESPONSIBILITY = property_config.PI_DECLARATION_MEMBER_RESPONSIBILITY;
                     this.PI_DECLARATION_COMPREHENSIVE_REVIEW = property_config.PI_DECLARATION_COMPREHENSIVE_REVIEW;
                     this.QUESTIONNAIRE_COMPLETE_MESSAGE = property_config.QUESTIONNAIRE_COMPLETE_MESSAGE;
+                    // this.EXEMPT_QUESTIONNAIRE_INFO = property_config.EXEMPT_QUESTIONNAIRE_INFO;
                 }
             }
         );
@@ -596,6 +593,9 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                     if (this.requestObject.irbExemptForm.statusCode === '5'
                         && this.userDTO.personID === this.requestObject.irbExemptForm.createdUser) {
                         this.isViewMode = true;
+                    }
+                    if (this.requestObject.irbExemptForm.summary != null) {
+                        this.remainingChar(this.requestObject.irbExemptForm.summary.length);
                     }
                    this.updateExemptQuestionnaire();
                     this.QuestionnaireCompletionFlag = 'Y';
@@ -1569,4 +1569,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         document.getElementById('openApproveModalButton').click();
         this.showApprovePopup = false;
     }
+    remainingChar(currentLength) {
+        const maxLength = document.getElementById('summary').getAttribute('maxLength');
+        this.summaryRemainingCount = parseInt(maxLength, 10) - currentLength;
+      }
 }

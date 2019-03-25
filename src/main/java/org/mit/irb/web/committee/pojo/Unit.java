@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -18,11 +19,14 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
-
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.mit.irb.web.committee.pojo.UnitAdministrator;
 
 @Entity
 @Table(name = "UNIT")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Unit implements Serializable {
 
 	private static final long serialVersionUID = 1L;

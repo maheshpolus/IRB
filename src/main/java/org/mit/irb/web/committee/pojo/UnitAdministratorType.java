@@ -4,6 +4,7 @@ package org.mit.irb.web.committee.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -11,10 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
 @Table(name = "UNIT_ADMINISTRATOR_TYPE")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UnitAdministratorType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

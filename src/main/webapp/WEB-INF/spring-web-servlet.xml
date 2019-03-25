@@ -122,6 +122,8 @@
 				<prop key="hibernate.c3p0.maxPoolSize">${hibernate.c3p0.maxPoolSize}</prop>
 				<prop key="hibernate.c3p0.max_statement">${hibernate.c3p0.max_statement}</prop>
 				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+				<prop key="cache.use_second_level_cache">true</prop>   
+         		<prop key="cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 			</props>
 		</property>
 	</bean>

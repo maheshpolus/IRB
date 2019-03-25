@@ -3,6 +3,7 @@ package org.mit.irb.web.committee.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -14,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -22,6 +25,8 @@ import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 
 @Entity
 @Table(name = "IRB_COMM_SCHEDULE_ATTENDANCE")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CommitteeScheduleAttendance implements Serializable {
 
 	private static final long serialVersionUID = 1L;

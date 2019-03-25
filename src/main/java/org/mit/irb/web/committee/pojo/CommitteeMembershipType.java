@@ -3,13 +3,19 @@ package org.mit.irb.web.committee.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "IRB_COMM_MEMBERSHIP_TYPE")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CommitteeMembershipType implements Serializable {
 
 	private static final long serialVersionUID = 1L;

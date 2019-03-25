@@ -2,13 +2,19 @@ package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "EPS_PROPOSAL")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class EpsProposal {
 	@Id
 	@Column(name = "PROPOSAL_NUMBER")

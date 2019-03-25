@@ -3,6 +3,7 @@ package org.mit.irb.web.IRBProtocol.pojo;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +20,14 @@ import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="IRB_PROTOCOL_LOCATION")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolCollaborator {
 	@Id
 	@Column(name="PROTOCOL_LOCATION_ID", updatable = false, nullable = false)

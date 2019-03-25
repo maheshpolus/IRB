@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -157,9 +158,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 
 	@Override
-	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
+	public Future<IRBProtocolVO> loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
 		irbProtocolVO = irbProtocolDao.loadProtocolDetails(irbProtocolVO);
-		return irbProtocolVO;
+		return new AsyncResult<> (irbProtocolVO);
 	}
 
 	@Override
@@ -197,6 +198,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		    Future<IRBProtocolVO> protocolAgeGroups = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
 		    irbProtocolVO = protocolTypes.get();
 			irbProtocolVO = roleTypes.get();
 			irbProtocolVO = protocolPersonLeadunits.get();
@@ -205,7 +207,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			irbProtocolVO = protocolAgeGroups.get();
 			irbProtocolVO = protocolFundingSourceTypes.get();
 			irbProtocolVO = protocolCollaboratorNames.get();
-			irbProtocolVO = irbProtocolService.loadProtocolDetails(irbProtocolVO);
+			irbProtocolVO = protocolDetailsVo.get();
 			irbProtocolVO.setPersonnelInfo(personnelInfo);
 			irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
 			irbProtocolVO.setFundingSource(fundingSource);

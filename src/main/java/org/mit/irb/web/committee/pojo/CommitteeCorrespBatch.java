@@ -3,6 +3,8 @@ package org.mit.irb.web.committee.pojo;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -11,8 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "IRB_COMM_CORRESP_BATCH")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CommitteeCorrespBatch implements Serializable {
 
 	private static final long serialVersionUID = 1L;

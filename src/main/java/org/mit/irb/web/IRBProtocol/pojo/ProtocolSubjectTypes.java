@@ -1,13 +1,20 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Date;
+
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name="VULNERABLE_SUBJECT_TYPE")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolSubjectTypes {
 	@Id
 	@Column(name="VULNERABLE_SUBJECT_TYPE_CODE")

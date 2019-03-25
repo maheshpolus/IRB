@@ -151,7 +151,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("AV_EXPIRATION_DATE", DBEngineConstants.TYPE_DATE, sqlExpirationDates));
 		inputParam.add(new InParameter("AV_APPROVAL_DATE", DBEngineConstants.TYPE_DATE, sqlApprovalDates));
 		inputParam.add(new InParameter("AV_FUNDING_SOURCE", DBEngineConstants.TYPE_STRING, fundingSource));
-		inputParam.add(new InParameter("AV_PROTO_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING, protocolSubmissionStatus));
+		//inputParam.add(new InParameter("AV_PROTO_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING, protocolSubmissionStatus));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
@@ -184,12 +184,18 @@ public class DashboardDaoImpl implements DashboardDao{
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<HashMap<String, Object>> exemptCardResult = null;
 		try {
+			if(av_summary_type.equals("ADMIN_PENDING")) {	
+				exemptCardResult = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
+			}
+			else 
+			{
 			result = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
 			if(av_summary_type.equals("REVISION_REQ")){
 				inputParam.remove(2);
 				inputParam.add(new InParameter("AV_SUMMARY_TYPE ", DBEngineConstants.TYPE_STRING, "EXEMPT_REQ"));
 				exemptCardResult = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY_LIST", outputParam);
-			}	
+			    }
+			}
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getExpandedSnapShotView"+ e);

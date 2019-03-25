@@ -3,6 +3,8 @@ package org.mit.irb.web.IRBProtocol.pojo;
 import java.sql.Clob;
 import java.sql.Date;
 import java.util.List;
+
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -26,6 +31,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "IRB_PROTOCOL_PERSONS")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolPersonnelInfo {
 	@Id
 	@GenericGenerator(name = "ProtocolPersonnelInfoIdGenerator", strategy = "increment", parameters = {

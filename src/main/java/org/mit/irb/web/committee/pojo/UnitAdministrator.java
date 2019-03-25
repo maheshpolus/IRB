@@ -3,6 +3,7 @@ package org.mit.irb.web.committee.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,9 +19,13 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "UNIT_ADMINISTRATOR")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @IdClass(UnitAdministrator.UnitAdministratorId.class)
 public class UnitAdministrator implements Serializable {
 

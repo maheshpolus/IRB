@@ -1,6 +1,8 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import java.util.List;
+import java.util.concurrent.Future;
+
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
@@ -11,6 +13,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBProtocolService {
@@ -131,7 +134,8 @@ public interface IRBProtocolService {
 	 * @param IRBProtocolVO
 	 * @return updated protocol Information with latest status change
 	 */
-	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
+	@Async
+    Future<IRBProtocolVO> loadProtocolDetails(IRBProtocolVO irbProtocolVO);
 
 	/**
 	 * @param IRBProtocolVO

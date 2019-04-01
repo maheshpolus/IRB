@@ -151,7 +151,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("AV_EXPIRATION_DATE", DBEngineConstants.TYPE_DATE, sqlExpirationDates));
 		inputParam.add(new InParameter("AV_APPROVAL_DATE", DBEngineConstants.TYPE_DATE, sqlApprovalDates));
 		inputParam.add(new InParameter("AV_FUNDING_SOURCE", DBEngineConstants.TYPE_STRING, fundingSource));
-		//inputParam.add(new InParameter("AV_PROTO_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING, protocolSubmissionStatus));
+		inputParam.add(new InParameter("AV_PROTO_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING, protocolSubmissionStatus));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {

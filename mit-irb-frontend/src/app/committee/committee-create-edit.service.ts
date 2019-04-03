@@ -30,6 +30,17 @@ export class CommitteCreateEditService {
             } );
     }
 
+    loadScheduleDetailsById( committeeId: string ): Observable<JSON> {
+        const params = {
+            committeeId: committeeId,
+        };
+        return this.http.post( '/mit-irb/loadScheduleDetailsById', params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error );
+            } );
+    }
+
     addMember( Id: string, committeeId: string, nonEmployeeFlag: boolean, committeeObj: Object ): Observable<JSON> {
         let params: any = {};
         if ( nonEmployeeFlag === true ) {

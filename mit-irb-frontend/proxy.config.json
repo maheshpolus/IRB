@@ -193,7 +193,11 @@
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeById": {
-		"target": "http://192.168.1.66:8081",
+		"target": "http://192.168.1.12:8080",
+		"secure": false
+	},
+	"/mit-irb/loadScheduleDetailsById": {
+		"target": "http://192.168.1.12:8080",
 		"secure": false
 	},
 	"/mit-irb/saveAreaOfResearch": {
@@ -205,7 +209,7 @@
 		"secure": false
 	},
 	"/mit-irb/addSchedule": {
-		"target": "http://192.168.1.66:8081",
+		"target": "http://192.168.1.12:8080",
 		"secure": false
 	},
 	"/mit-irb/deleteSchedule": {

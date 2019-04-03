@@ -126,6 +126,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     this.result = data || [];
                     this._spinner.hide();
+                    this.loadScheduleList();
                     if ( this.result != null ) {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         const ts = new Date( this.result.committee.updateTimestamp );
@@ -160,6 +161,16 @@ export class CommitteeComponent implements OnInit, OnDestroy {
             } );
         }
 
+    }
+
+    loadScheduleList() {debugger
+        this.committeCreateService.loadScheduleDetailsById( this.id )
+                .takeUntil( this.onDestroy$ ).subscribe( data => {
+                    const schedules: any = data;
+                    if (this.result.committee != null) {
+                        this.result.committee.committeeSchedules = schedules.committee.committeeSchedules || [];
+                    }
+                });
     }
 
     show_current_tab( e: any, current_tab ) {

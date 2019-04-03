@@ -52,13 +52,13 @@ body{
 	z-index: 1000;
 }
 .expndMenu{
-    margin-left:19px;
-    margin-top:10px;
+    /* margin-left:19px;
+    margin-top:10px; */
     font-size:1.2em;	
     } 
 .cntrtMenu{
-        margin-left:200px;
-        margin-top:10px;
+      margin-left:180px;
+       /* margin-top:10px; */
         font-size:22px;
     }
 .hideMenu {

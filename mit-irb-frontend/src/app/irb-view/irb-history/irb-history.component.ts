@@ -94,21 +94,27 @@ export class IrbHistoryComponent implements OnInit {
      * @@param index - unique index of selected history entry
      */
     toggle(index) {
-        for (this.indexVal = 0; this.indexVal < this.isExpanded.length; this.indexVal++) {
-            if (this.indexVal === index) {
-                this.isExpanded[this.indexVal] = !this.isExpanded[this.indexVal];
-            }
-            // else {
-            //     // this.isExpanded[this.indexVal] = false;
-            // }
-            if (this.isExpanded[this.indexVal] === true) {
-                this.requestObject.protocolId = this.irbHistoryList[index].PROTOCOL_ID;
-                this.requestObject.actionId = this.irbHistoryList[index].ACTION_ID;
-                this.requestObject.nextGroupActionId = this.irbHistoryList[index].NEXT_GROUP_ACTION_ID;
-                this.requestObject.previousGroupActionId = this.irbHistoryList[index].PREVIOUS_GROUP_ACTION_ID;
-                this.loadHistoryDetails(index);
-            }
+        // for (this.indexVal = 0; this.indexVal < this.isExpanded.length; this.indexVal++) {
+        //     if (this.indexVal === index) {
+        //         this.isExpanded[this.indexVal] = !this.isExpanded[this.indexVal];
+        //     }
+        //     if (this.isExpanded[this.indexVal] === true) {
+        //         this.requestObject.protocolId = this.irbHistoryList[index].PROTOCOL_ID;
+        //         this.requestObject.actionId = this.irbHistoryList[index].ACTION_ID;
+        //         this.requestObject.nextGroupActionId = this.irbHistoryList[index].NEXT_GROUP_ACTION_ID;
+        //         this.requestObject.previousGroupActionId = this.irbHistoryList[index].PREVIOUS_GROUP_ACTION_ID;
+        //         this.loadHistoryDetails(index);
+        //     }
+        // }
+        this.isExpanded[index] = !this.isExpanded[index];
+        if (this.isExpanded[index] === true) {
+            this.requestObject.protocolId = this.irbHistoryList[index].PROTOCOL_ID;
+            this.requestObject.actionId = this.irbHistoryList[index].ACTION_ID;
+            this.requestObject.nextGroupActionId = this.irbHistoryList[index].NEXT_GROUP_ACTION_ID;
+            this.requestObject.previousGroupActionId = this.irbHistoryList[index].PREVIOUS_GROUP_ACTION_ID;
+            this.loadHistoryDetails(index);
         }
+
     }
     // Download correspondance letter
     downloadCorrespondanceLetter(actionId, fileName) {

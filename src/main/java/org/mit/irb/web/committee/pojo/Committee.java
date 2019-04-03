@@ -95,6 +95,7 @@ public class Committee implements Serializable {
 	@OneToMany(mappedBy = "committee", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeResearchAreas> researchAreas;
 
+	@Transient
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committee", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeSchedule> committeeSchedules;

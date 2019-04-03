@@ -3,9 +3,10 @@ package org.mit.irb.web.committee.dao;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
@@ -20,6 +21,7 @@ import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Rolodex;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.committee.view.PersonDetailsView;
+import org.mit.irb.web.committee.vo.CommitteeVo;
 
 @Service("committeeDao")
 public interface CommitteeDao {
@@ -191,5 +193,51 @@ public interface CommitteeDao {
 	 * @return researchAreas.
 	 */
 	public CommitteeResearchAreas saveCommitteeResearchAreas(CommitteeResearchAreas researchAreas);
+	
+ 	/**
+ 	 * @param unitsearchString
+ 	 * @return
+ 	 */
+ 	public List<Unit> loadhomeUnits(String unitsearchString); 
+
+	/**
+	 * @param researchsearchString
+	 * @return
+	 */
+	public List<ResearchArea> loadResearchAreas(String researchsearchString);
+	
+	/**
+	 * @param committeeVo
+	 * @return
+	 */
+	@Async
+	public Future<CommitteeVo> loadMembershipTypes(CommitteeVo committeeVo);
+
+	/**
+	 * @param committeeVo
+	 * @return
+	 */
+	@Async
+	public Future<CommitteeVo> loadMembershipRoles(CommitteeVo committeeVo);
+
+	/**
+	 * @param committeeVo
+	 * @return
+	 */
+	@Async
+	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo);
+
+	/**
+	 * @param committeeVo
+	 * @return
+	 */
+	@Async
+	public Future<CommitteeVo> loadScheduleStatus(CommitteeVo committeeVo);
+
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	public Committee loadScheduleDetailsById(String committeeId);
 
 }

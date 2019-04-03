@@ -86,4 +86,25 @@ public interface CommitteeService {
 	 */
 	public CommitteeVo  updateCommitteeSchedule(CommitteeVo committeeVo);
 
+	/**
+	 * This method is used to get homeUnits when searchString is passed.
+	 * @param homeUnitSearchString
+	 * @return
+	 */
+	public CommitteeVo loadHomeUnits(String homeUnitSearchString);
+
+	/**
+	 * This method is used to get researchArea when researchSearchString is passed.
+	 * @param researchSearchString
+	 * @return
+	 */
+	public CommitteeVo loadResearchAreas(String researchSearchString);
+
+	/**
+	 * This method is used to get scheduke details  for a particular committee id
+	 * @param committeeId
+	 * @return
+	 */
+	public CommitteeVo loadScheduleDetailsById(String committeeId);
+
 }

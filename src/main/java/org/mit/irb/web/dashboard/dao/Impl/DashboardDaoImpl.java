@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ExpandedViewService } from './expanded-view.service';
 
@@ -34,7 +35,8 @@ export class ExpandedViewComponent implements OnInit {
     columnExempt = 'UPDATE_TIMESTAMP';
     directionExempt: number;
 
-    constructor( private _expandedViewService: ExpandedViewService, private _activatedRoute: ActivatedRoute, private _router: Router ) { }
+    constructor( private _expandedViewService: ExpandedViewService, private _activatedRoute: ActivatedRoute,
+        private _spinner: NgxSpinnerService, private _router: Router ) { }
 
     /** sets page heading and calls function to load snapshot detailed data*/
     ngOnInit() {
@@ -57,8 +59,10 @@ export class ExpandedViewComponent implements OnInit {
 
     /** calls service to load details of selected snapshot*/
     loadExpandedData() {
+        this._spinner.show();
         this._expandedViewService.getExpandedList( this.requestObject ).subscribe( data => {
             this.result = data || [];
+            this._spinner.hide();
             if ( this.result != null ) {
                 if ( this.result.dashBoardDetailMap == null || this.result.dashBoardDetailMap.length === 0 ) {
                     this.noData = true;

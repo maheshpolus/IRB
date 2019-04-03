@@ -1,28 +1,31 @@
 <div class="slideMenu" id="myMenu" (mouseleave)="hideMenu($event)">
-	<p>
-		<a href="#" *ngIf="showMenu" class="expndMenu" (click)="expandMenu($event);">
-			<i class="fa fa-bars" aria-hidden="true"></i>
-		</a>
-		<a href="#" *ngIf="!showMenu" class="cntrtMenu" (click)="hideMenu($event);">
-			<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-		</a>
-	</p>
+
 	<ul class="iconMenu">
-		<li class="active">
-			<a href="#" [routerLink]="['/irb/dashboard']">
+			<li *ngIf="showMenu">
+					<a  href="#"  class="expndMenu" (click)="expandMenu($event);">
+						<i class="fa fa-bars" aria-hidden="true"></i>
+					</a>
+			</li>
+			<li *ngIf="!showMenu">
+					<a href="#"  class="cntrtMenu" (click)="hideMenu($event);">
+						<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+					</a>
+			</li>
+		<li routerLinkActive="active">
+			<a  href="#" [routerLink]="['/irb/dashboard']">
 				<!-- <i class="fa fa-tachometer"></i> -->
 				<i class="fa fa-home"></i>
 				<span>Dashboard</span>
 			</a>
 		</li>
-		<li class="active">
-			<a href="#" [routerLink]="['/irb/configure-questionnaire']">
+		<li routerLinkActive="active">
+			<a  href="#" [routerLink]="['/irb/configure-questionnaire']">
 				<!-- <i class="fa fa-tachometer"></i> -->
 				<i class="fa fa-question"></i>
 				<span>Configure questionnaire</span>
 			</a>
 		</li>
-		<li class="active">
+		<li routerLinkActive="active">
 			<a href="#" [routerLink]="['/irb/code-table']">
 				<!-- <i class="fa fa-tachometer"></i> -->
 				<i class="fa fa-table"></i>

@@ -70,6 +70,10 @@
 		</div>
 		<div class="modal-body modal-popup">
 		  <div class="modal-padding">
+					<div class="col-12  search-eidted-p padding-15" *ngIf="!ismandatoryFilled">
+							<div class="alert alert-danger ">{{attachmentWarningMsg}}
+							</div>
+							</div>
 			<div class="row col-12 form-group">
 			  <div class="col-4 apprve-date">
 				<h4>*Type</h4>
@@ -81,7 +85,7 @@
 				</select>
 			  </div>
 			  <div class="col-8 apprve-date">
-				<h4 class="ml-10">*Description</h4>
+				<h4 class="ml-10">Description</h4>
 				<textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding "
 				id="desc" placeholder="Description"
 				[(ngModel)]="attachmentTypeDescription"></textarea>
@@ -203,8 +207,7 @@
 									<tr
 									*ngFor="let attachments of result?.committeeSchedule?.committeeScheduleAttachments;let i=index">
 									<td>{{attachments.attachmentType.description}}</td>
-									<td> <input type="text"  class="form-control input-field-size" [ngClass]="(!editScheduleattachment[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" 
-										[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
+									<td> <input type="text"  class="form-control input-field-size" *ngIf="!editScheduleattachment[i] == false" [(ngModel)]="attachments.description"><span *ngIf="!editScheduleattachment[i]">{{attachments?.description}}</span></td>
 									<td>{{attachments.fileName}}</td>
 									<!-- <td><ul class="actionButtonGroup">
 											<li><a (click)="tempSave($event,attachments)"

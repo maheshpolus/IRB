@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -15,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,7 @@ import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Rolodex;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.committee.view.PersonDetailsView;
+import org.mit.irb.web.committee.vo.CommitteeVo;
 
 @Transactional
 @Service(value = "committeeDao")
@@ -297,5 +300,119 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		hibernateTemplate.save(researchAreas);
 		return researchAreas;
 	}
+	
+	@Override
+	public List<Unit> loadhomeUnits(String searchString) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(Unit.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("unitNumber"), "unitNumber");
+		projList.add(Projections.property("unitName"), "unitName");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Unit.class));
+		criteria.addOrder(Order.asc("unitName"));
+		criteria.add(Restrictions.eq("active", true));
+		criteria.add(Restrictions.like("unitName", "%" + searchString + "%").ignoreCase());
+		criteria.setMaxResults(25);
+		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Unit> keyWordsList = criteria.list();
+		return keyWordsList;
+	}
 
+	@Override
+	public List<ResearchArea> loadResearchAreas(String researchsearchString) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ResearchArea.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("researchAreaCode"), "researchAreaCode");
+		projList.add(Projections.property(DESCRIPTION),DESCRIPTION);
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ResearchArea.class));
+		criteria.addOrder(Order.asc(DESCRIPTION));
+		criteria.add(Restrictions.eq("active",true));
+		criteria.add(Restrictions.like(DESCRIPTION, "%" + researchsearchString + "%").ignoreCase());
+		criteria.setMaxResults(25);
+		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<ResearchArea> keyWordsList = criteria.list();
+		return keyWordsList;
+	}
+
+	@Override
+	public Future<CommitteeVo> loadMembershipTypes(CommitteeVo vo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeMembershipType.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("membershipTypeCode"), "membershipTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeMembershipType.class));
+		criteria.addOrder(Order.asc(DESCRIPTION));
+		@SuppressWarnings("unchecked")
+		List<CommitteeMembershipType> membershipTypeList = criteria.list();
+		vo.setCommitteeMembershipTypes(membershipTypeList);
+		return new AsyncResult<>(vo);
+	}
+
+	@Override
+	public Future<CommitteeVo> loadMembershipRoles(CommitteeVo committeeVo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(MembershipRole.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("membershipRoleCode"), "membershipRoleCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(MembershipRole.class));
+		criteria.addOrder(Order.asc(DESCRIPTION));
+		@SuppressWarnings("unchecked")
+		List<MembershipRole> membershipRoleList = criteria.list();
+		committeeVo.setMembershipRoles(membershipRoleList);
+		return new AsyncResult<>(committeeVo);
+		
+	}
+
+	@Override
+	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolReviewType.class);
+	    ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("reviewTypeCode"), "reviewTypeCode");
+	    projList.add(Projections.property(DESCRIPTION), DESCRIPTION); 	
+	    criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolReviewType.class));
+		criteria.addOrder(Order.asc(DESCRIPTION));
+		@SuppressWarnings("unchecked")
+		List<ProtocolReviewType> reviewTypes = criteria.list();
+		committeeVo.setReviewTypes(reviewTypes);
+		return new AsyncResult<>(committeeVo);
+	}
+
+	@Override
+	public Future<CommitteeVo> loadScheduleStatus(CommitteeVo committeeVo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ScheduleStatus.class);
+	    ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("scheduleStatusCode"), "scheduleStatusCode");
+		projList.add(Projections.property("description"), "description");
+	    criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ScheduleStatus.class));
+		criteria.addOrder(Order.asc("description"));
+		@SuppressWarnings("unchecked")
+		List<ScheduleStatus> status = criteria.list();
+		committeeVo.setScheduleStatus(status);
+		return new AsyncResult<>(committeeVo);
+	}
+	
+	@Override
+	public Committee loadScheduleDetailsById(String committeeId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeSchedule.class);
+	    ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("scheduleId"), "scheduleId");
+		projList.add(Projections.property("scheduledDate"), "scheduledDate");
+		projList.add(Projections.property("place"), "place");
+		projList.add(Projections.property("time"), "time");
+		projList.add(Projections.property("protocolSubDeadline"), "protocolSubDeadline");
+		projList.add(Projections.property("scheduleStatus"), "scheduleStatus");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeSchedule.class));
+		criteria.createAlias("committee","committee").add(Restrictions.eq("committee.committeeId",committeeId));
+		@SuppressWarnings("unchecked")
+		List<CommitteeSchedule> committeeSchedule = criteria.list();
+		Committee committee=new Committee();
+		committee.setCommitteeSchedules(committeeSchedule);
+		return committee;
+	}
 }

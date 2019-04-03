@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.mit.irb.web.committee.service.CommitteeService;
+import org.mit.irb.web.committee.vo.CommitteeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -12,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.mit.irb.web.committee.service.CommitteeService;
-import org.mit.irb.web.committee.vo.CommitteeVo;
 
 @Controller
 public class CommitteeController {
@@ -40,13 +40,18 @@ public class CommitteeController {
 	}
 
 	@RequestMapping(value = "/loadCommitteeById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody CommitteeVo loadCommitteeById(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody CommitteeVo loadCommitteeById(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
 		logger.info("Requesting for loadCommitteeById");
 		logger.info("CommitteeId : " + vo.getCommitteeId());
 		CommitteeVo committeeVo = committeeService.loadCommitteeById(vo.getCommitteeId());
 		return committeeVo;
 	}
 
+	@RequestMapping(value = "/loadScheduleDetailsById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo loadScheduleDetailsById(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
+		CommitteeVo committeeVo = committeeService.loadScheduleDetailsById(vo.getCommitteeId());
+		return committeeVo;
+	}
 	@RequestMapping(value = "/addSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CommitteeVo addSchedule(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for addSchedule");
@@ -114,6 +119,20 @@ public class CommitteeController {
 		logger.info("CommitteeId : " + vo.getCommitteeId());
 		logger.info("ScheduleId : " + vo.getCommitteeSchedule().getScheduleId());
 		CommitteeVo committeeVo = committeeService.updateCommitteeSchedule(vo);
+		return committeeVo;
+	}
+	@RequestMapping(value = "/loadHomeUnits", method = RequestMethod.POST)
+	public @ResponseBody CommitteeVo loadHomeUnits(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadHomeUnits");
+		String homeUnitSearchString = request.getParameter("homeUnitSearchString");
+		CommitteeVo committeeVo = committeeService.loadHomeUnits(homeUnitSearchString);
+		return committeeVo;
+	}
+	@RequestMapping(value = "/loadResearchAreas", method = RequestMethod.POST)
+	public @ResponseBody CommitteeVo loadResearchAreas(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadResearchAreas");
+		String researchSearchString = request.getParameter("researchSearchString");
+		CommitteeVo  committeeVo = committeeService.loadResearchAreas(researchSearchString);
 		return committeeVo;
 	}
 }

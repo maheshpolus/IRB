@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.mit.irb.web.committee.dao.CommitteeDao;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
@@ -82,18 +82,18 @@ public class CommitteeServiceImpl implements CommitteeService {
 		CommitteeType committeeType = committeeDao.fetchCommitteeType(committeeTypeCode);
 		committee.setCommitteeType(committeeType);
 		committeeVo.setCommittee(committee);
-
-		List<ProtocolReviewType> reviewTypes = committeeDao.fetchAllReviewType();
-		committeeVo.setReviewTypes(reviewTypes);
-		List<Unit> units = committeeDao.fetchAllHomeUnits();
-		committeeVo.setHomeUnits(units);
-		List<ResearchArea> researchAreas = committeeDao.fetchAllResearchAreas();
-		committeeVo.setResearchAreas(researchAreas);
-		List<ScheduleStatus> scheduleStatus = committeeDao.fetchAllScheduleStatus();
-		committeeVo.setScheduleStatus(scheduleStatus);
-
-		committeeVo.setCommitteeMembershipTypes(committeeDao.getMembershipTypes());
-		committeeVo.setMembershipRoles(committeeDao.getMembershipRoles());
+		try {
+			Future<CommitteeVo> loadMembershipTypes=committeeDao.loadMembershipTypes(committeeVo);
+		    Future<CommitteeVo> loadMembershipRoles=committeeDao.loadMembershipRoles(committeeVo);
+		    Future<CommitteeVo> loadAllReviewType=committeeDao.loadAllReviewType(committeeVo);
+		    Future<CommitteeVo> loadScheduleStatus=committeeDao.loadScheduleStatus(committeeVo);
+		    committeeVo=loadMembershipTypes.get();
+		    committeeVo=loadMembershipRoles.get();
+		    committeeVo=loadAllReviewType.get();
+		    committeeVo=loadScheduleStatus.get();
+		}catch (Exception e) {
+			logger.error("Error in createCommittee method : "+e.getMessage());	
+		}
 		return committeeVo;
 	}
 
@@ -115,26 +115,32 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo loadCommitteeById(String committeeId) {
 		CommitteeVo committeeVo = new CommitteeVo();
-		Committee committee = committeeDao.fetchCommitteeById(committeeId);
-		List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
-		if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
-			for (CommitteeMemberships membership : committeeMemberships) {
-				if (membership.getNonEmployeeFlag()) {
-					Rolodex rolodex = committeeDao.getRolodexById(membership.getRolodexId());
-					membership.setRolodex(rolodex);
-				} else {
-					PersonDetailsView personDetails = committeeDao.getPersonDetailsById(membership.getPersonId());
-					membership.setPersonDetails(personDetails);
+		try {
+		    Committee committee = committeeDao.fetchCommitteeById(committeeId);
+		    List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
+			if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
+				for (CommitteeMemberships membership : committeeMemberships) {
+					if (membership.getNonEmployeeFlag()) {
+						Rolodex rolodex = committeeDao.getRolodexById(membership.getRolodexId());
+						membership.setRolodex(rolodex);
+					} else {
+						PersonDetailsView personDetails = committeeDao.getPersonDetailsById(membership.getPersonId());
+						membership.setPersonDetails(personDetails);
+					}
 				}
-			}
+			}	
+		    committeeVo.setCommittee(committee);
+	        Future<CommitteeVo> loadMembershipTypes=committeeDao.loadMembershipTypes(committeeVo);
+		    Future<CommitteeVo> loadMembershipRoles=committeeDao.loadMembershipRoles(committeeVo);
+		    Future<CommitteeVo> loadAllReviewType=committeeDao.loadAllReviewType(committeeVo);
+		    Future<CommitteeVo> loadScheduleStatus=committeeDao.loadScheduleStatus(committeeVo);
+		    committeeVo=loadMembershipTypes.get();
+		    committeeVo=loadMembershipRoles.get();
+		    committeeVo=loadAllReviewType.get();
+		    committeeVo=loadScheduleStatus.get();
+		}catch (Exception e) {
+		logger.error("Error in loadCommitteeById method : "+e.getMessage());		
 		}
-		committeeVo.setCommittee(committee);
-		committeeVo.setCommitteeMembershipTypes(committeeDao.getMembershipTypes());
-		committeeVo.setMembershipRoles(committeeDao.getMembershipRoles());
-		committeeVo.setReviewTypes(committeeDao.fetchAllReviewType());
-		committeeVo.setHomeUnits(committeeDao.fetchAllHomeUnits());
-		committeeVo.setResearchAreas(committeeDao.fetchAllResearchAreas());
-		committeeVo.setScheduleStatus(committeeDao.fetchAllScheduleStatus());
 		return committeeVo;
 	}
 
@@ -459,6 +465,28 @@ public class CommitteeServiceImpl implements CommitteeService {
 		}
 		committeeVo.setCommittee(committee);
 		return committeeVo;
+	}
+
+	@Override
+	public CommitteeVo loadHomeUnits(String homeUnitSearchString) {	
+		CommitteeVo vo=new CommitteeVo();
+	    vo.setHomeUnits(committeeDao.loadhomeUnits(homeUnitSearchString));
+		return vo;
+	}
+	
+	@Override
+	public CommitteeVo loadResearchAreas(String researchSearchString) {
+		CommitteeVo vo=new CommitteeVo();
+		vo.setResearchAreas(committeeDao.loadResearchAreas(researchSearchString));
+		return vo;
+	}
+
+	@Override
+	public CommitteeVo loadScheduleDetailsById(String committeeId) {
+		Committee committee=committeeDao.loadScheduleDetailsById(committeeId);
+		CommitteeVo vo=new CommitteeVo();
+		vo.setCommittee(committee);
+		return vo;
 	}
 
 }

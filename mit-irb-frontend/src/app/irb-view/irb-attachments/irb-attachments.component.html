@@ -36,19 +36,19 @@
 							<table class="table table-striped table-type-head">
 								<thead class="popup-sub-header">
 									<tr>
-										<th class="pointer" (click)="column = 'ATTACHMENT_TYPE';sortBy()">Type
+										<th style="width: 25%"class="pointer" (click)="column = 'ATTACHMENT_TYPE';sortBy()">Type
 											<i class="fa" *ngIf="column == 'ATTACHMENT_TYPE'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
 											 aria-hidden="true"></i>
 										</th>
-										<th class="pointer" (click)="column = 'DESCRIPTION';sortBy()">Description
+										<th style="width: 25%" class="pointer" (click)="column = 'DESCRIPTION';sortBy()">Description
 											<i class="fa" *ngIf="column == 'DESCRIPTION'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
 											 aria-hidden="true"></i>
 										</th>
-										<th class="pointer" (click)="column = 'FILE_NAME';sortBy()">File
+										<th  style="width: 25%" class="pointer" (click)="column = 'FILE_NAME';sortBy()">File
 											<i class="fa" *ngIf="column == 'FILE_NAME'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
 											 aria-hidden="true"></i>
 										</th>
-										<th class="pointer" (click)="column = 'UPDATE_TIMESTAMP';sortBy()">Updated By
+										<th style="width: 25%" class="pointer" (click)="column = 'UPDATE_TIMESTAMP';sortBy()">Updated By
 											<i class="fa" *ngIf="column == 'UPDATE_TIMESTAMP'" (click)="sortBy();" [ngClass]="(direction == '-1')?'fa-arrow-up':'fa-arrow-down'"
 											 aria-hidden="true"></i>
 										</th>
@@ -58,13 +58,13 @@
 									<tr *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}">
 										<td scope="row">{{attachments.ATTACHMENT_TYPE}}</td>
 										<td>{{attachments.DESCRIPTION}}</td>
-										<td>
+										<td style="width: 30%" class="padding-table-content">
 											<span class="pdf" (click)="downloadAttachment(attachments)">
 												<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
 												<span>{{attachments.FILE_NAME}}</span>
 											</span>
 										</td>
-										<td>{{attachments.UPDATE_USER_NAME}} {{(attachments.UPDATE_TIMESTAMP ===' ' || attachments.UPDATE_TIMESTAMP ===null)
+										<td style="width: 30%">{{attachments.UPDATE_USER_NAME}} {{(attachments.UPDATE_TIMESTAMP ===' ' || attachments.UPDATE_TIMESTAMP ===null)
 											? ' ':(attachments.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</td>
 									</tr>
 								</tbody>

@@ -35,8 +35,8 @@
 										<input type="text" class="form-control input-field-size" [owlDateTime]="meetingDt" placeholder="mm/dd/yyyy" [disabled]="!editDetails == true"
 										 [(ngModel)]="result.committeeSchedule.meetingDate">
 										<owl-date-time [pickerType]="'calendar'" #meetingDt></owl-date-time>
-										<div class="input-group-append input-span-1" *ngIf="editDetails == true" [owlDateTimeTrigger]="meetingDt">
-											<span class="input-group-text">
+										<div class="input-group-append" *ngIf="editDetails == true" [owlDateTimeTrigger]="meetingDt">
+											<span class="input-group-text input-span-1">
 												<i class="fa fa-calendar" aria-hidden="true"></i>
 											</span>
 										</div>
@@ -67,8 +67,8 @@
 									<div class="input-group  mb-2">
 										<input type="text" class="form-control" [owlDateTime]="time" [disabled]="!editDetails == true" [(ngModel)]="scheduleTime">
 										<owl-date-time #time [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
-										<div class="input-group-append input-span-1" *ngIf="editDetails == true" [owlDateTimeTrigger]="time">
-											<span class="input-group-text">
+										<div class="input-group-append" *ngIf="editDetails == true" [owlDateTimeTrigger]="time">
+											<span class="input-group-text input-span-1">
 												<i class="fa fa fa-clock-o" aria-hidden="true"></i>
 											</span>
 										</div>
@@ -83,8 +83,8 @@
 										<input type="text" class="form-control input-field-size" [owlDateTime]="deadlineDt" placeholder="mm/dd/yyyy" [(ngModel)]="result.committeeSchedule.protocolSubDeadline"
 										 [disabled]="!editDetails == true">
 										<owl-date-time [pickerType]="'calendar'" #deadlineDt></owl-date-time>
-										<div class="input-group-append input-span-1" *ngIf="editDetails == true" [owlDateTimeTrigger]="deadlineDt">
-											<span class="input-group-text">
+										<div class="input-group-append" *ngIf="editDetails == true" [owlDateTimeTrigger]="deadlineDt">
+											<span class="input-group-text input-span-1">
 												<i class="fa fa-calendar" aria-hidden="true"></i>
 											</span>
 										</div>
@@ -104,8 +104,8 @@
 									<div class="input-group  mb-2">
 										<input type="text" class="form-control" [owlDateTime]="startTime" [disabled]="!editDetails == true" [(ngModel)]="scheduleStartTime">
 										<owl-date-time #startTime [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
-										<div class="input-group-append input-span-1" *ngIf="editDetails == true" [owlDateTimeTrigger]="startTime">
-											<span class="input-group-text">
+										<div class="input-group-append" *ngIf="editDetails == true" [owlDateTimeTrigger]="startTime">
+											<span class="input-group-text input-span-1">
 												<i class="fa fa fa-clock-o" aria-hidden="true"></i>
 											</span>
 										</div>
@@ -118,8 +118,8 @@
 									<div class="input-group  mb-2">
 										<input type="text" class="form-control" [owlDateTime]="endTime" [disabled]="!editDetails == true" [(ngModel)]="scheduleEndTime">
 										<owl-date-time #endTime [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
-										<div class="input-group-append input-span-1" *ngIf="editDetails == true" [owlDateTimeTrigger]="endTime">
-											<span class="input-group-text">
+										<div class="input-group-append" *ngIf="editDetails == true" [owlDateTimeTrigger]="endTime">
+											<span class="input-group-text input-span-1">
 												<i class="fa fa fa-clock-o" aria-hidden="true"></i>
 											</span>
 										</div>
@@ -144,7 +144,7 @@
 								</div>
 							</div>
 
-							<div class="col-1 action-btn-list add-btn-1 pt-35">
+							<div class="col-1 action-btn-list add-btn-1">
 								<button *ngIf="editDetails == false" (click)="showEditDetails(result.committeeSchedule)" title="Edit Schedule details" type="button"
 								 class="btn btn-primary edit-btn-1">
 									<i class="fa fa-pencil" aria-hidden="true"></i>

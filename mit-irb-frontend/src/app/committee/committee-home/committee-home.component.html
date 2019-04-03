@@ -11,10 +11,14 @@
 			</nav>
 		</div>
 		<div class="card-body card-paddng">
+				<div class="col-12  search-eidted-p padding-15" *ngIf="errorFlag">
+						<div class="alert alert-danger ">{{error}}
+						</div>
+					  </div>
 			<div class="col-12  search-eidted-p padding-15" *ngIf="result?.committee">
-					<div *ngIf="errorFlag">
+					<!-- <div *ngIf="errorFlag">
 							<span class="mandatory" style="font-size: 0.85em">{{error}}</span>
-					</div>
+					</div> -->
 				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group ">
@@ -47,11 +51,21 @@
 										<label>Home Unit
 											<span class="mandatory">*</span>
 										</label>
-													<ng2-completer title="Enter Home Unit"
+													<!-- <ng2-completer title="Enter Home Unit" [inputClass]="'form-control'" placeholder="Enter Home Unit"
 														[(ngModel)]="result.committee.homeUnitName"
 														[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
 														(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
-														(selected)="onHomeSelect()" class="input-field-size person-unit" [disabled]=" editDetails == false"></ng2-completer>
+														(selected)="onHomeSelect()" [disabled]=" editDetails == false"></ng2-completer> -->
+														<!-- <ng2-completer title="Enter Home Unit" [inputClass]="'form-control'" placeholder="Enter Home Unit"
+														[(ngModel)]="result.committee.homeUnitName"
+														[datasource]="dataServiceHomeUnit" [minSearchLength]="0" (ngModelChange)="onHomeSelect($event)"
+														(selected)="onHomeSelect($event)" [disabled]=" editDetails == false"></ng2-completer> -->
+														<input type="text" class="form-control input-field-size" placeholder="Enter Home Unit" [(ngModel)]="result.committee.homeUnitName" (ngModelChange)="getHomeUnitList()" (focus)="isHomeUnitSearch = true" (focusout)="isHomeUnitSearch = false" [disabled]=" editDetails == false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'homeUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'homeUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'homeUnitDropDown')">
+														<div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="homeUnitDropDown">
+															<ul class="sb-results-dropdown-menu" *ngIf="isHomeUnitSearch">
+															  <li *ngFor="let result of homeUnitSearchResult" (mousedown)="selectedHomeUnit(result.unitName)" (click)="selectedHomeUnit(result.unitName)"><span [innerHTML]="result.unitName"></span></li>
+															</ul>
+														  </div>
 											</div>
 									</div>
 								</div>
@@ -117,26 +131,39 @@
 				</nav>
 			</div>
 			<div class="card-body card-paddng">
+					<div class="col-12  search-eidted-p padding-15" *ngIf="emptyAreaOfResearch || duplicateAreaOfResearch">
+							<div class="alert alert-danger ">{{alertMsg}}
+							</div>
+			</div>
 			<div class="col-12  search-eidted-p padding-15" *ngIf="result?.committee">
-					<a class="pdf generate-schedule" (click)="isAddClicked = !isAddClicked" >
+					<a class="pdf generate-schedule" (click)="expandAreaOfResearch()" >
 							<i class="fa fa-plus icon-padding"></i>Add Area of Research
 						  </a>
 				<div class="row" *ngIf="isAddClicked"><!-- *ngIf="addResearch && saveCommitteeFlag">-->
-					<div class="col-11">
+					<div class="col-md-11">
 						<div class="form-group ">
 								<label>Area of Research
 								</label>
-								<ng2-completer title="Add area of research"
+								<!-- <ng2-completer title="Add area of research"
 								class="input-field-size person-unit"
 								[(ngModel)]="areaInput.researchAreaDescription"
 								[datasource]="areaList" [minSearchLength]="0"
 								(ngModelChange)="areaChangeFunction(areaInput)"
-								(selected)="onAreaSelect()"></ng2-completer>
+								(selected)="onAreaSelect()"></ng2-completer> -->
+								<!-- <ng2-completer  title="Add area of research" [(ngModel)]="areaInput.researchAreaDescription"  [inputClass]="'form-control ml-0'" placeholder="Add area of research"
+							  [datasource]="areaList" [minSearchLength]="0" (ngModelChange)="areaChangeFunction(areaInput)"
+							  (selected)="onAreaSelect()"></ng2-completer> -->
+							  <input type="text" class="form-control input-field-size" placeholder="Add area of research" [(ngModel)]="areaInput.researchAreaDescription" (ngModelChange)="getAreaResearchList()" (focus)="isAreaReseachSearch = true" (focusout)="isAreaReseachSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'researchAreaSearchDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'researchAreaSearchDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'researchAreaSearchDropDown')">
+														<div class="sb-seachresults top-margin search-dropdown-position research-dropDown-width" id="researchAreaSearchDropDown">
+															<ul class="sb-results-dropdown-menu" *ngIf="isAreaReseachSearch">
+															  <li *ngFor="let result of areaResearchSearchResult" (mousedown)="selectedResearchArea(result.description)" (click)="selectedResearchArea(result.description)"><span [innerHTML]="result.description"></span></li>
+															</ul>
+														</div>
+							  
 					</div>
 					</div>
 					<div class="col-md-1 add-btn-1">
-							<button title="Add" type="button" data-toggle="modal"
-							data-target="#warningModal" class="btn btn-success top-butn" (click)="addAreaOfResearch(areaInput)">
+							<button title="Add" type="button" class="btn btn-success top-butn" (click)="addAreaOfResearch(areaInput)">
 							  <i class="fa fa-plus" aria-hidden="true"></i>
 							</button>
 						  </div>
@@ -211,6 +238,11 @@
 									  </div>
 								  </div>
 									<div class="col-md-12" *ngIf="isFilterClicked">
+											<div class="col-12  search-eidted-p padding-15 confirm-text-padding" *ngIf="isFilterDatePrevious || !isMandatoryFilterFilled">
+												<div class="alert alert-danger ">{{filterValidationMessage}}
+													</div>
+												  </div>
+											
 											<div class="row">
 								  <div class="col-md-4">
 										<div class="form-group">
@@ -218,8 +250,8 @@
 								  <div class="input-group  mb-2">
 										<input type="text" class="form-control" [owlDateTime]="fltrStrDt" placeholder="mm/dd/yyyy" [(ngModel)]="result.scheduleData.filterStartDate">
 										<owl-date-time [pickerType]="'calendar'"#fltrStrDt></owl-date-time>
-										<div class="input-group-append input-span-1" [owlDateTimeTrigger]="fltrStrDt">
-										  <span class="input-group-text">
+										<div class="input-group-append" [owlDateTimeTrigger]="fltrStrDt">
+										  <span class="input-group-text input-span-1">
 											<i class="fa fa-calendar" aria-hidden="true"></i>
 										  </span>
 										</div>
@@ -232,8 +264,8 @@
 										<div class="input-group  mb-2">
 											  <input type="text" class="form-control" [owlDateTime]="fltrEndDt" placeholder="mm/dd/yyyy" [(ngModel)]="result.scheduleData.filerEndDate">
 											  <owl-date-time [pickerType]="'calendar'"#fltrEndDt></owl-date-time>
-											  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="fltrEndDt">
-												<span class="input-group-text">
+											  <div class="input-group-append" [owlDateTimeTrigger]="fltrEndDt">
+												<span class="input-group-text input-span-1">
 												  <i class="fa fa-calendar" aria-hidden="true"></i>
 												</span>
 											  </div>
@@ -254,7 +286,7 @@
 									  </div>
 									  
 				
-							<div *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</div>
+							<!-- <div *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</div> -->
 						
 									  </div>
 									  </div>
@@ -279,15 +311,18 @@
 													<tr *ngFor="let committeScheduleData of result?.committee?.committeeSchedules; let i = index;">
 															<ng-container *ngIf="committeScheduleData.filter">
 																<td>{{ committeScheduleData.scheduleId }}</td>
-																		<td style="width: 70%"class="input-group  mb-2">
-																				<input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="committeScheduleData.scheduledDate"
+																		<td width="15%">
+																			<span class="input-group  mb-2" *ngIf="editSchedule[i] == true">
+																				<input type="text" class="form-control font-size-13" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="committeScheduleData.scheduledDate"
 																				[disabled]="!editSchedule[i] == true">
-																				<owl-date-time [pickerType]="'calendar'"#dt1></owl-date-time>
-																				<div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1" *ngIf="editSchedule[i] == true">
-																				  <span class="input-group-text">
+																				<owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+																				<div class="input-group-append" [owlDateTimeTrigger]="dt1" >
+																				  <span class="input-group-text input-span-1">
 																					<i class="fa fa-calendar" aria-hidden="true"></i>
 																				  </span>
 																				</div>
+																				</span>
+																				<span *ngIf="!editSchedule[i]">{{committeScheduleData?.scheduledDate | date: 'MM/dd/yyyy'}}</span>
 																			  
 																	<!-- <input [owlDateTimeTrigger]="schdlDt" [owlDateTime]="schdlDt" [(ngModel)]="committeScheduleData.scheduledDate" [disabled]="!editSchedule[i] == true"
 																	 [ngClass]="(editSchedule[i] == true)? 'scheduleBoxes' : 'committeeBoxNotEditable'" />
@@ -296,29 +331,36 @@
 																<td>{{ committeScheduleData.dayOfWeek }}</td>
 																<td>{{ committeScheduleData.protocolSubDeadline | date: 'MM/dd/yyyy' }}</td>
 																<td>
-																		<select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="committeScheduleData.scheduleStatus.description" [disabled]="!editSchedule[i] == true">
+																		<span class="form-group" *ngIf="editSchedule[i] == true">	
+																	<select class="custom-select font-size-13 mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="committeScheduleData.scheduleStatus.description">
 																				<option selected value=null>Please Select</option>
 																				<option *ngFor="let status of scheduleStatus">{{ status.description }}</option>
 																			  </select>
+																			  </span>
+																			  <span *ngIf="!editSchedule[i]">{{committeScheduleData?.scheduleStatus?.description}}</span>
 																	<!-- <select [ngClass]="(!editSchedule[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" [disabled]="!editSchedule[i] == true"
 																	 [(ngModel)]="committeScheduleData.scheduleStatus.description">
 																		<option *ngFor="let status of scheduleStatus">{{ status.description }}</option>
 																	</select> -->
 																</td>
 																<td>
+																		<span *ngIf="editSchedule[i] == true">
 																	<input type="text" class="form-control input-field-size" [disabled]="!editSchedule[i] == true"
 																	 [(ngModel)]="committeScheduleData.place">
+																	 </span>
+																	 <span *ngIf="!editSchedule[i]">{{committeScheduleData.place}}</span>
 																</td>
 																<td style="width: 15%">
 																	<span *ngIf="!editSchedule[i] == true">{{ committeScheduleData.time | date:'shortTime' }}</span>
-																	<span  class="input-group  mb-2" *ngIf="!editSchedule[i] == false">
-																		<input type="text" class="form-control" *ngIf="!editSchedule[i] == false" [owlDateTime]="schdlTm" [(ngModel)]="scheduleTime">
+															<span class="input-group  mb-2" *ngIf="!editSchedule[i] == false">
+																		<input type="text" class="form-control font-size-13"  [owlDateTime]="schdlTm" [(ngModel)]="scheduleTime">
 																		<owl-date-time #schdlTm [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
-																		<div class="input-group-append input-span-1" [owlDateTimeTrigger]="schdlTm" *ngIf="editSchedule[i] == true">
-																				<span class="input-group-text">
+																		<div class="input-group-append" [owlDateTimeTrigger]="schdlTm" *ngIf="editSchedule[i] == true">
+																				<span class="input-group-text input-span-1">
 																				  <i class="fa fa fa-clock-o" aria-hidden="true"></i>
 																				</span>
 																			  </div>
+			
 																	</span>
 																</td>
 																<td width= "12%" class="action-btn-list">
@@ -388,6 +430,10 @@
         </button>
       </div>
       <div class="modal-body modal-popup">
+			<div class="col-12  search-eidted-p padding-15" *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled">
+					<div class="alert alert-danger ">{{scheduleValidationMessage}}
+					</div>
+				  </div>
 		<div class="col-12">
 			<div class="row">
 					<div class="col-4">
@@ -396,8 +442,8 @@
 					  <div class="input-group  mb-2">
 							<input type="text" class="form-control" [owlDateTime]="strdt" placeholder="mm/dd/yyyy" [min]="today" [(ngModel)]="result.scheduleData.scheduleStartDate">
 							<owl-date-time [pickerType]="'calendar'" #strdt></owl-date-time>
-							<div class="input-group-append input-span-1" [owlDateTimeTrigger]="strdt">
-							  <span class="input-group-text">
+							<div class="input-group-append" [owlDateTimeTrigger]="strdt">
+							  <span class="input-group-text input-span-1">
 								<i class="fa fa-calendar" aria-hidden="true"></i>
 							  </span>
 							</div>
@@ -410,8 +456,8 @@
 							<div  class="input-group  mb-2">
 									<input type="text" class="form-control" [owlDateTime]="strTime" [(ngModel)]="displayTime">
 									<owl-date-time #strTime [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
-									<div class="input-group-append input-span-1" [owlDateTimeTrigger]="strTime">
-											<span class="input-group-text">
+									<div class="input-group-append" [owlDateTimeTrigger]="strTime">
+											<span class="input-group-text  input-span-1">
 											  <i class="fa fa fa-clock-o" aria-hidden="true"></i>
 											</span>
 										  </div>
@@ -451,7 +497,6 @@
 						</li>
 					</ul>
 					</div>
-					</div>
 					<div class="tab-content" id="myTabContent">
 							<div class="tab-pane fade show active" id="Daily" role="tabpanel" aria-labelledby="home-tab">
 									<div class="tabCover">
@@ -465,13 +510,13 @@
 										</ul>
 									
 												<div class="form-group row end-date-padding">
-														<label class="col-12">Ending On<span class="mandatory">*</span></label>
+														<label class="col-12">Ending On <span class="mandatory">*</span></label>
 											<div class="col-4">
 													<div class="input-group  mb-2">
 															<input type="text" class="form-control" [owlDateTime]="endDt"  placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate" [(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate">
 															<owl-date-time [pickerType]="'calendar'"#endDt></owl-date-time>
-															<div class="input-group-append input-span-1" [owlDateTimeTrigger]="endDt">
-															  <span class="input-group-text">
+															<div class="input-group-append" [owlDateTimeTrigger]="endDt">
+															  <span class="input-group-text input-span-1">
 																<i class="fa fa-calendar" aria-hidden="true"></i>
 															  </span>
 															</div>
@@ -485,12 +530,12 @@
 												</div>
 										</div>
 										
-										<ul class="tablelayout">
+										<!-- <ul class="tablelayout">
 											<li>
 												<span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 													{{scheduleValidationMessage}}</span>
 											</li>
-										</ul>
+										</ul> -->
 									</div>
 								</div>
 								<div class="tab-pane fade" id="Weekly" role="tabpanel" aria-labelledby="profile-tab">
@@ -505,13 +550,13 @@
 													<input type="checkbox" name="options" value="{{option.value}}" [(ngModel)]="option.checked" /> {{option.name}}</li>
 											</ul>
 											<div class="form-group row end-date-padding">
-													<label class="col-12">Ending On<span class="mandatory">*</span></label>
+													<label class="col-12">Ending On <span class="mandatory">*</span></label>
 										<div class="col-4">
 												<div class="input-group  mb-2">
 														<input type="text" class="form-control" [owlDateTime]="wkendDt"  placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate" [(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate">
 														<owl-date-time [pickerType]="'calendar'"#wkendDt></owl-date-time>
-														<div class="input-group-append input-span-1" [owlDateTimeTrigger]="wkendDt">
-														  <span class="input-group-text">
+														<div class="input-group-append" [owlDateTimeTrigger]="wkendDt">
+														  <span class="input-group-text  input-span-1">
 															<i class="fa fa-calendar" aria-hidden="true"></i>
 														  </span>
 														</div>
@@ -528,12 +573,12 @@
 													<owl-date-time #wkendDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
 												</li>
 											</ul> -->
-											<ul class="tablelayout">
+											<!-- <ul class="tablelayout">
 												<li>
 													<span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 														{{scheduleValidationMessage}}</span>
 												</li>
-											</ul>
+											</ul> -->
 										</div>
 										</div>
 										
@@ -566,13 +611,13 @@
 												month(s)</li>
 											</ul>
 											<div class="form-group row end-date-padding">
-													<label class="col-12">Ending On<span class="mandatory">*</span></label>
+													<label class="col-12">Ending On <span class="mandatory">*</span></label>
 										<div class="col-4">
 												<div class="input-group  mb-2">
 														<input type="text" class="form-control" [owlDateTime]="mnendDt"  placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate" [(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate">
 														<owl-date-time [pickerType]="'calendar'"#mnendDt></owl-date-time>
-														<div class="input-group-append input-span-1" [owlDateTimeTrigger]="mnendDt">
-														  <span class="input-group-text">
+														<div class="input-group-append" [owlDateTimeTrigger]="mnendDt">
+														  <span class="input-group-text input-span-1">
 															<i class="fa fa-calendar" aria-hidden="true"></i>
 														  </span>
 														</div>
@@ -589,12 +634,12 @@
 													<owl-date-time #mnendDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
 												</li>
 											</ul> -->
-											<ul class="tablelayout">
+											<!-- <ul class="tablelayout">
 												<li>
 													<span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 														{{scheduleValidationMessage}}</span>
 												</li>
-											</ul>
+											</ul> -->
 										</div>
 									</div>
 									<div class="tab-pane fade" id="Yearly" role="tabpanel"
@@ -651,23 +696,23 @@
 															[pickerMode]="'dialog'"></owl-date-time></li>
 												</ul> -->
 												<div class="form-group row end-date-padding">
-														<label class="col-12">Ending On<span class="mandatory">*</span></label>
+														<label class="col-12">Ending On <span class="mandatory">*</span></label>
 											<div class="col-4">
 													<div class="input-group  mb-2">
 															<input type="text" class="form-control" [owlDateTime]="yrendDt"  placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate" [(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate">
 															<owl-date-time [pickerType]="'calendar'"#yrendDt></owl-date-time>
-															<div class="input-group-append input-span-1" [owlDateTimeTrigger]="yrendDt">
-															  <span class="input-group-text">
+															<div class="input-group-append" [owlDateTimeTrigger]="yrendDt">
+															  <span class="input-group-text input-span-1">
 																<i class="fa fa-calendar" aria-hidden="true"></i>
 															  </span>
 															</div>
 															</div>
 															</div>
 															</div>
-												<ul class="tablelayout">
+												<!-- <ul class="tablelayout">
 													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 															{{scheduleValidationMessage}}</span></li>
-												</ul>
+												</ul> -->
 											</div>
 										</div>
 										<div class="tab-pane fade" id="Never" role="tabpanel"
@@ -676,11 +721,12 @@
 											<ul class="tablelayout padding-0">
 												<li>Do not repeat this event.</li>
 											</ul>
-											<ul class="tablelayout">
+											<!-- <ul class="tablelayout">
 												<li><span *ngIf="isStartDateBeforeToday || !isMandatoryFilled" class="mandatory"> {{scheduleValidationMessage}}</span></li>
-											</ul>
+											</ul> -->
 										</div>
 									</div>
+					</div>
 					</div>
 					<div class="modal-footer btn-row-med">
 							<!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal">Close</button> -->

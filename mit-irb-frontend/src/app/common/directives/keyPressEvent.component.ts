@@ -28,6 +28,8 @@ export class KeyPressEvent {
             } else {
                 $('#' + id + ' li.selected').eq(0).removeClass('selected').prev().addClass('selected');
             }
+        } else if (code === 13 ) { // Enter
+            $('#' + id + ' li.selected').trigger('click');
         }
     }
 }

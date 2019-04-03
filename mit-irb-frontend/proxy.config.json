@@ -329,31 +329,31 @@
 		"secure" : false
 	},
 	"/mit-irb/getApplicableQuestionnaire":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.137:8081",
 		"secure" : false
 	},
 	"/mit-irb/editQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.137:8081",
 		"secure": false
 	  },
 	  "/mit-irb/showAllQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.137:8081",
 		"secure": false
 	  },
 	  "/mit-irb/configureQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.137:8081",
 		"secure": false
 	  },
 	  "/mit-irb/createQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.137:8081",
 		"secure": false
 	  },
 	  "/mit-irb/getQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.137:8081",
 		"secure": false
 	  },
 	  "mit-irb/saveQuestionnaireModule": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.137:8081",
 		"secure": false
 	  },
 	  "/mit-irb/getCodeTableMetaData": {
@@ -377,11 +377,19 @@
 		"secure": false
 	  },
 	  "/saveQuestionnaire": {
-		"target": "http://192.168.1.18:8080/questionnaire",
+		"target": "http://192.168.1.18:8081/questionnaire",
 		"secure": false
 	  },
 	  "/mit-irb/generateCorrespondence":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.66:8081",
+		"secure" : false
+	},
+	"/mit-irb/loadHomeUnits":{
+		"target" : "http://192.168.1.66:8081",
+		"secure" : false
+	},
+	"/mit-irb/loadResearchAreas":{
+		"target" : "http://192.168.1.66:8081",
 		"secure" : false
 	}
 }

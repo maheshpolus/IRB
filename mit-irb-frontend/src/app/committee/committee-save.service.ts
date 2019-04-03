@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class CommitteeSaveService {
@@ -80,4 +80,12 @@ export class CommitteeSaveService {
                 return Observable.throw( error.message || error );
             } );
     }
+    loadHomeUnits(unitSearchString: string) {
+        const params = new HttpParams().set('homeUnitSearchString', unitSearchString);
+        return this.http.post('/mit-irb/loadHomeUnits', params);
+      }
+      loadResearchAreas(researchSearchString: string) {
+        const params = new HttpParams().set('researchSearchString', researchSearchString);
+        return this.http.post('/mit-irb/loadResearchAreas', params);
+      }
 }

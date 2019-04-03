@@ -9,6 +9,9 @@ import 'rxjs/add/operator/takeUntil';
 import { CommitteeMemberEmployeeElasticService } from '../../common/service/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from '../../common/service/committee-members-nonEmployee-elastic-search.service';
 import { CommitteeConfigurationService } from '../../common/service/committee-configuration.service';
+import { CommitteeSaveService } from '../committee-save.service';
+import { KeyPressEvent } from '../../common/directives/keyPressEvent.component';
+declare var $: any;
 @Component( {
     selector: 'app-committee-members',
     templateUrl: './committee-members.component.html',
@@ -23,6 +26,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     modalTitle = '';
     showPopup = false;
     memberAdded = false;
+    isExpertiseSearch = false;
     temptermStartDate = '';
     addRole = false;
     memberRoleCode;
@@ -39,6 +43,8 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     editDetails = false;
     editClass = 'committeeBoxNotEditable';
     mode: string;
+    researchSearchString: string;
+    expertiseSearchResult: any = [];
     memberSearchInput: any = {};
     roleSearchInput: any = {};
     expertiseSearchInput: any = {};
@@ -68,6 +74,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     memberExpertiseObject: any = {};
     selectedExpertise: string;
     nonEmployeeFlag = false;
+    expertiseFieldFilled = true;
 
     showValidationMessage = false;
     selectedRole: string;
@@ -97,6 +104,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     placeHolderText = 'Search an employee';
     roleFieldsFilled = true;
     roleWarningMessage: string;
+    expertiseWarningMessage: string;
     commMemberRolesId: number;
     commMembershipId: string;
     IsToDeleteRole = false;
@@ -109,6 +117,8 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         private _ngZone: NgZone,
         public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService,
         public committeeConfigurationService: CommitteeConfigurationService,
+        public committeeSaveService: CommitteeSaveService,
+        public keyPressEvent: KeyPressEvent,
         public route: ActivatedRoute,
         public completerService: CompleterService,
         public committeCreateEditService: CommitteCreateEditService,
@@ -395,7 +405,10 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         //     this.modalTitle = 'Warning!!!';
         // } else {
             this.addExpertise = !this.addExpertise;
+            this.memberExpertiseObject = {};
             this.addRole = false;
+            this.expertiseFieldFilled = true;
+            this.expertiseWarningMessage = '';
         // }
     }
 
@@ -467,13 +480,25 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
       //  this.memberAdded = false;
         this.editExpertise = false;
         this.editClass = 'committeeBoxNotEditable';
-        this.committeCreateEditService.saveCommMemberExpertise( member.commMembershipId, this.committeeId, this.memberExpertiseObject )
-        .takeUntil( this.onDestroy$ ).subscribe( data => {
-            let temp: any = {};
-            temp = data;
-            this.resultLoadedById.committee = temp.committee;
-            this.membershipExpertise.description = '';
-        } );
+        if (this.memberExpertiseObject.researchAreaCode !== null && this.memberExpertiseObject.researchAreaCode !== ''
+        && this.memberExpertiseObject.researchAreaCode !== undefined && this.memberExpertiseObject.researchAreaDescription !== null
+        && this.memberExpertiseObject.researchAreaDescription !== '' && this.memberExpertiseObject.researchAreaDescription !== undefined ) {
+            this.expertiseFieldFilled = true;
+            this.expertiseWarningMessage = '';
+            this.committeCreateEditService.saveCommMemberExpertise( member.commMembershipId, this.committeeId, this.memberExpertiseObject )
+            .takeUntil( this.onDestroy$ ).subscribe( data => {
+                let temp: any = {};
+                temp = data;
+                this.resultLoadedById.committee = temp.committee;
+                this.memberExpertiseObject.description = '';
+                this.memberExpertiseObject = {};
+            } );
+
+        } else {
+            this.expertiseFieldFilled = false;
+            this.expertiseWarningMessage = '* Please fill the mandatory fileds';
+
+        }
     }
 
     // clear elastic search box
@@ -587,9 +612,10 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     addMemberDiv( event: any ) {
         event.preventDefault();
         this.showAddMember = !this.showAddMember;
+        this.showValidationMessage = false;
     }
 
-    addMember() {debugger
+    addMember() {
 
         this.memberAdded = false;
         if (this.resultLoadedById.committee !== undefined && this.resultLoadedById.committee.committeeMemberships !== undefined &&
@@ -707,5 +733,22 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
         this.IsToDeleteRole = false;
         this.IsToDeleteExpertise = false;
         this.showPopup = false;
+    }
+    getExpertiseList() {
+        this.memberExpertiseObject.researchAreaCode = null;
+        this.researchSearchString = this.memberExpertiseObject.researchAreaDescription;
+        this.committeeSaveService.loadResearchAreas(this.researchSearchString).subscribe(
+            (data: any) => {
+              this.expertiseSearchResult = data.researchAreas;
+            });
+    }
+    expertiseSelected(expertiseName) {
+        this.expertiseSearchResult.forEach(expertise => {
+            if (expertise.description === expertiseName) {
+                this.memberExpertiseObject.researchAreaCode = expertise.researchAreaCode;
+                this.memberExpertiseObject.researchAreaDescription = expertiseName;
+            }
+          });
+          this.isExpertiseSearch = false;
     }
 }

@@ -24,6 +24,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     deleteResearch = false;
     isHomeUnitSearch = false;
     showSaveAreaOfResearch = false;
+    isScheduleFieldsFilled = true;
     reviewType: string;
     description: string;
     minMembers: string;
@@ -700,6 +701,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 }
                 break;
             case 'NEVER': this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
+                this.isDatePrevious = false;
                 if (this.result.scheduleData.scheduleStartDate == null ||
                     this.displayTime == null || this.result.scheduleData.place == null) {
                     this.isMandatoryFilled = false;
@@ -755,16 +757,32 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         }
     }
 
-    showDeleteModal(e, scheduleId, committeeId, scheduledDate) {
+    showDeleteModal(e, scheduleObject, committeeId, scheduledDate) {
         e.preventDefault();
         if (this.isScheduleListItemEditMode === true) {
-            this.alertMsg = 'You are editing a schedule data with serial number : ' + (scheduleId);
+            this.alertMsg = 'You are editing a schedule data with serial number : ' + (scheduleObject.scheduleId);
             this.isScheduleEditWarningModalOpen = true;
         } else {
             this.alertMsg = '';
             this.isScheduleEditWarningModalOpen = false;
             this.scheduledDate = scheduledDate;
-            this.scheduleId = scheduleId;
+            this.scheduleId = scheduleObject.scheduleId;
+            this.sendScheduleRequestData = {};
+        scheduleObject.viewTime = {};
+        scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
+        scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
+        scheduleObject.scheduleStatus.updateTimestamp = new Date();
+        scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+        this.scheduleStatus.forEach((value, index) => {
+            if (value.description === scheduleObject.scheduleStatus.description) {
+                value.updateTimestamp = new Date();
+                value.updateUser = localStorage.getItem('currentUser');
+                scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
+                scheduleObject.scheduleStatus = value;
+                // this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;
+            }
+        });
+        this.sendScheduleRequestData.committeeSchedule = scheduleObject;
             this.committeeId = committeeId;
             if (this.isTodelete === false) {
                 this.isTodelete = true;
@@ -779,7 +797,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     }
 
     deleteScheduleData() {
-        this.sendScheduleRequestData = {};
+       // this.sendScheduleRequestData = {};
         this.sendScheduleRequestData.scheduleId = this.scheduleId;
         this.sendScheduleRequestData.committeeId = this.committeeId;
         if (this.isTodelete === true) {
@@ -789,8 +807,8 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             let temp: any;
             temp = data || [];
             // this.result = data || [];
-            this.result.committee = temp.committee;
-            this.committeeConfigurationService.changeCommmitteeData(this.result);
+            this.result.committee.committeeSchedules = temp.committee.committeeSchedules;
+             this.committeeConfigurationService.changeCommmitteeData(this.result);
         });
         this.initialLoadChild();
     }
@@ -801,6 +819,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
 
     updateScheduleData(e, i, scheduleObject) {
         e.preventDefault();
+         if (scheduleObject.scheduledDate == null || scheduleObject.place === '' ||
+         scheduleObject.place == null || this.scheduleTime == null) {
+            this.isScheduleFieldsFilled = false;
+         } else {
+            this.isScheduleFieldsFilled = true;
         this.editSchedule[i] = !this.editSchedule[i];
         this.sendScheduleRequestData = {};
         scheduleObject.viewTime = {};
@@ -819,17 +842,22 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         });
         this.sendScheduleRequestData.committeeSchedule = scheduleObject;
         this.sendScheduleRequestData.committeeId = this.result.committee.committeeId;
+        this.sendScheduleRequestData.advSubmissionDaysReq = this.result.committee.advSubmissionDaysReq;
         this.committeeSaveService.updateScheduleData(this.sendScheduleRequestData).takeUntil(this.onDestroy$).subscribe(data => {
             // this.result = data || [];
             let temp: any;
             temp = data;
-            this.result.committee = temp.committee;
+            this.result.committee.committeeSchedules = temp.committee.committeeSchedules;
             this.result.message = temp.message;
             this.result.status = temp.status;
-            this.committeeConfigurationService.changeCommmitteeData(this.result);
+            if (this.result.status === false) {
+                document.getElementById('skippedSchedulesButton').click();
+            }
+           this.committeeConfigurationService.changeCommmitteeData(this.result);
         });
-        this.initialLoadChild();
+       this.initialLoadChild();
         this.isScheduleListItemEditMode = false;
+    }
     }
 
     cancelEditSchedule(e, i) {

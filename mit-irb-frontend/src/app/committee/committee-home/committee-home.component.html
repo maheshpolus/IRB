@@ -290,6 +290,10 @@
 						
 									  </div>
 									  </div>
+									  <div class="col-12  search-eidted-p padding-15 confirm-text-padding" *ngIf="!isScheduleFieldsFilled">
+											<div class="alert alert-danger ">Please Fill Mandatory Fields Marked *
+												</div>
+											  </div>
 								 
 								  <div class="col-md-12 users-list-tbl padding-none">
 										<div class="row">
@@ -298,12 +302,12 @@
 											  <thead class="tbl-head-clr thead-font-size">
 												<tr>
 														<th scope="col">Schedule Id</th>
-														<th scope="col" >Schedule Date</th>
+														<th scope="col" >Schedule Date <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span></th>
 														<th scope="col">Day of Week</th>
 														<th scope="col">Deadline</th>
 														<th scope="col">Status</th>
-														<th scope="col">Place</th>
-														<th scope="col">Time</th>
+														<th scope="col">Place <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span></th>
+														<th scope="col">Time <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span></th>
 														<th scope="col" width= "12%">Action</th>
 												</tr>
 											  </thead>
@@ -333,7 +337,6 @@
 																<td>
 																		<span class="form-group" *ngIf="editSchedule[i] == true">	
 																	<select class="custom-select font-size-13 mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="committeScheduleData.scheduleStatus.description">
-																				<option selected value=null>Please Select</option>
 																				<option *ngFor="let status of scheduleStatus">{{ status.description }}</option>
 																			  </select>
 																			  </span>
@@ -375,7 +378,7 @@
                     <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="loadSchedules($event,committeScheduleData.scheduleId)">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
-                    <button title="Delete" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal" data-target="#deleteModal, #warningModal" (click)="showDeleteModal($event, committeScheduleData.scheduleId, result.committee.committeeId, committeScheduleData.scheduledDate)">
+                    <button title="Delete" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal" data-target="#deleteModal, #warningModal" (click)="showDeleteModal($event, committeScheduleData, result.committee.committeeId, committeScheduleData.scheduledDate)">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
@@ -748,14 +751,17 @@
 			   </button>
 		   </div>
 		   <div class="modal-body modal-pop-up">
+			   <div *ngIf="isConflictDates">
 			   <p class="forSkipSchedule">Schedules can not be generated on the following date(s)</p>
 			   <ul class="forSkipSchedule">
 				   <li *ngFor="let conflictDate of conflictDates">
 					   <span class="fa fa-calendar sp-color">&nbsp;&nbsp;{{ conflictDate| date: 'MM/dd/yyyy' }}&nbsp;&nbsp;</span> is skipped in recurrence, meeting already scheduled.</li>
 			   </ul>
+			   </div>
+			   <div *ngIf="result.status == false">{{result.message}}</div>
 		   </div>
 		   <div class="modal-footer btn-row-med">
-			   <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="closeConflictDateModal()">Close</button>
+			   <button type="button margin-class"  class="btn tab_btn" data-dismiss="modal" (click)="closeConflictDateModal()">Close</button>
 		   </div>
 	   </div>
    </div>

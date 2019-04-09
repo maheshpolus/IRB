@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class IrbCreateService {
@@ -73,5 +73,9 @@ export class IrbCreateService {
   getApplicableQuestionnaire(params) {
     // return this._http.post('/mit-irb/getApplicableQuestionnaire', params);
     return this._http.post('/mit-irb/getApplicableQuestionnaire', params);
+  }
+  loadHomeUnits(unitSearchString: string) {
+    const params = new HttpParams().set('homeUnitSearchString', unitSearchString);
+    return this._http.post('/mit-irb/loadHomeUnits', params);
   }
 }

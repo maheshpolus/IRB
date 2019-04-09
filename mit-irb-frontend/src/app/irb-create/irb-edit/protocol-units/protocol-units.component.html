@@ -1,0 +1,80 @@
+<div class="top-distance" *ngIf="isGeneralInfoSaved">
+  <div class="card history-card border-radius-1">
+    <div class="card-header history-header">
+      <nav class="nav navbar-pg3">
+        <h5>Protocol Units</h5>
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </nav>
+    </div>
+    <div class="card-body card-paddng">
+      <!--<div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidPersonnelInfo">
+          <div class="alert alert-danger "[innerHTML]="warningMessage">
+          </div>
+        </div>-->
+      <div class="col-12  search-eidted-p">
+
+        <div class="row top-dis-15">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Department
+                <span class="mandatory">*</span>
+              </label>
+              <input type="text" class="form-control input-field-size" placeholder="Search Unit" [(ngModel)]="protocolUnitName" (ngModelChange)="getHomeUnitList()"
+                (focus)="isProtocolUnitSearch = true" (focusout)="isProtocolUnitSearch = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')"
+                (keydown.arrowup)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')" (keydown.Enter)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')">
+              <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="protocolUnitDropDown">
+                <ul class="sb-results-dropdown-menu" *ngIf="isProtocolUnitSearch">
+                  <li *ngFor="let result of UnitSearchResult" (mousedown)="selectedHomeUnit(result.unitName)" (click)="selectedHomeUnit(result.unitName)">
+                    <span [innerHTML]="result.unitName"></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Type
+                <span class="mandatory">*</span>
+              </label>
+              <select class="custom-select mr-sm-2" id="customRoleSelect">
+                <option selected value="null">Please Select</option>
+                <!--<option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>-->
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Description
+                <!--<span class="mandatory">*</span>-->
+              </label>
+              <textarea class="form-control txt-area-fnt" placeholder="Description"></textarea>
+            </div>
+          </div>
+          <div class="col-md-1 add-btn-1">
+            <button title="Add" type="button" class="btn btn-success top-butn">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-12 users-list-tbl">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr">
+              <thead class="tbl-head-clr thead-font-size">
+                <tr>
+                  <th scope="col">Department Name</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="tbody-font-size">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

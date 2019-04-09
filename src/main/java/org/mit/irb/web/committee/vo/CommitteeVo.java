@@ -74,6 +74,8 @@ public class CommitteeVo {
 	private CommitteeMemberExpertise committeeMemberExpertise;
 
 	private List<ScheduleStatus> scheduleStatus;
+	
+	private Integer advSubmissionDaysReq;
 
 	public List<ProtocolReviewType> getReviewTypes() {
 		return reviewTypes;
@@ -297,6 +299,14 @@ public class CommitteeVo {
 
 	public void setScheduleStatus(List<ScheduleStatus> scheduleStatus) {
 		this.scheduleStatus = scheduleStatus;
+	}
+
+	public Integer getAdvSubmissionDaysReq() {
+		return advSubmissionDaysReq;
+	}
+
+	public void setAdvSubmissionDaysReq(Integer advSubmissionDaysReq) {
+		this.advSubmissionDaysReq = advSubmissionDaysReq;
 	}
 
 }

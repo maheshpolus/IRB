@@ -9,6 +9,8 @@ import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -301,6 +303,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		return researchAreas;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Unit> loadhomeUnits(String searchString) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -311,9 +314,11 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Unit.class));
 		criteria.addOrder(Order.asc("unitName"));
 		criteria.add(Restrictions.eq("active", true));
-		criteria.add(Restrictions.like("unitName", "%" + searchString + "%").ignoreCase());
-		criteria.setMaxResults(25);
-		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		Criterion number=Restrictions.like("unitNumber", "%" + searchString + "%");
+		Criterion name=Restrictions.like("unitName", "%" + searchString + "%").ignoreCase();
+		LogicalExpression andExp=Restrictions.or(number,name);
+		criteria.add(andExp);
+		criteria.setMaxResults(25);		
 		List<Unit> keyWordsList = criteria.list();
 		return keyWordsList;
 	}
@@ -412,7 +417,17 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		@SuppressWarnings("unchecked")
 		List<CommitteeSchedule> committeeSchedule = criteria.list();
 		Committee committee=new Committee();
+		committee.setCommitteeId(committeeId);
 		committee.setCommitteeSchedules(committeeSchedule);
 		return committee;
 	}
+	@Override
+	public void deleteCommitteeSchedule(CommitteeSchedule committeeSchedule) {
+		hibernateTemplate.delete(committeeSchedule);	
+	}
+	
+	public CommitteeSchedule updateCommitteeSchedule(CommitteeSchedule committeeSchedule) {
+		hibernateTemplate.saveOrUpdate(committeeSchedule);	
+		return committeeSchedule;
+  }
 }

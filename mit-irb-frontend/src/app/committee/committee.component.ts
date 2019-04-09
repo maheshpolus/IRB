@@ -163,7 +163,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
 
     }
 
-    loadScheduleList() {debugger
+    loadScheduleList() {
         this.committeCreateService.loadScheduleDetailsById( this.id )
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     const schedules: any = data;

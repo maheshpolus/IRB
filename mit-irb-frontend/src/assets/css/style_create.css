@@ -1588,7 +1588,7 @@ color: #5e5e5e !important;
 }
 .mt-10
 {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 .mt-15
 {
@@ -2474,6 +2474,10 @@ input:disabled,textarea:disabled{
 .font-size-13
 {
     font-size: 13px !important;
+}
+.align-center {
+    display: block;	
+    margin :auto;	
 }
 
 

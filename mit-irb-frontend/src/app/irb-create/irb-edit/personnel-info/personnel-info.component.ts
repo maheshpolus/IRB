@@ -44,6 +44,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   isPersonalInfoEdit = false;
   isGeneralInfoSaved = false;
   showPersonElasticBand = false;
+  isObtainedConsent = false;
+  isObtainedConsentEdit = false;
   showDeletePopup = false;
   warningMessage: string;
   alertMessage: string;
@@ -103,8 +105,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
 
   loadEditDetails() {
     this.personRoleTypes = this.commonVo.personRoleTypes;
-    this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
-    this.protocolPersonLeadUnitsCopy = this._completerService.local(this.protocolPersonLeadUnits, 'unitName,unitNumber', 'unitName');
+    // this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
+   // this.protocolPersonLeadUnitsCopy = this._completerService.local(this.protocolPersonLeadUnits, 'unitName,unitNumber', 'unitName');
     this.affiliationTypes = this.commonVo.affiliationTypes;
     this.generalInfo = Object.assign({}, this.commonVo.generalInfo);
     this.personnelInfo = this.commonVo.personnelInfo;
@@ -192,9 +194,11 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.personnelInfo.personName = result.obj.full_name;
     if (result.obj.person_id !== undefined) {
       this.personnelInfo.personId = result.obj.person_id;
+      this.personnelInfo.nonEmployeeFlag = 'N';
     }
     if (result.obj.rolodex_id !== undefined) {
       this.personnelInfo.personId = result.obj.rolodex_id;
+      this.personnelInfo.nonEmployeeFlag = 'Y';
     }
     this.personnelInfo.emailAddress = result.obj.email_address;
     this.personnelInfo.primaryTitle = result.obj.title;
@@ -323,12 +327,12 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.personalInfoSelectedRow = index;
     this.isPersonalInfoEdit = true;
     this.editPersonnelInfo = Object.assign({}, selectedItem);
-    this.editPersonLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
+    this.isObtainedConsentEdit = this.editPersonnelInfo.isObtainedConsent === 'Y' ? true : false;
+    // this.editPersonLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
   }
   addPersonalDetails(personnelInfo, mode) {
     if (!(personnelInfo.personId == null || personnelInfo.personId === undefined) &&
       !(personnelInfo.protocolPersonRoleId == null || personnelInfo.protocolPersonRoleId === undefined) &&
-      !(personnelInfo.protocolLeadUnits == null || personnelInfo.protocolLeadUnits === undefined) &&
       !(personnelInfo.protocolAffiliationTypes == null || personnelInfo.protocolAffiliationTypes === undefined)
         && !this.invalidData.isPiExists) {
         this.invalidData.invalidPersonnelInfo = false;
@@ -340,6 +344,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
           }
 
         });
+        personnelInfo.isObtainedConsent = this.isObtainedConsent === true  ? 'Y' : 'N';
         if (!this.invalidData.invalidPersonnelInfo) {
         this.showPersonElasticBand = false;
           this.savePersonalInfo(personnelInfo, mode);
@@ -347,6 +352,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       } else {
           this.isPersonalInfoEdit = false;
           this.personalInfoSelectedRow = null;
+          personnelInfo.isObtainedConsent = this.isObtainedConsentEdit === true  ? 'Y' : 'N';
           this.savePersonalInfo(personnelInfo, mode);
       }
     } else {
@@ -367,18 +373,18 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       personnelInfo.sequenceNumber = 1;
       personnelInfo.protocolNumber = this.protocolNumber;
       // Setting Person Lead Unit Details
-      personnelInfo.protocolLeadUnits[0].protocolPersonId = this.personnelInfo.personId;
-      personnelInfo.protocolLeadUnits[0].protocolNumber = this.protocolNumber;
-      personnelInfo.protocolLeadUnits[0].person_id = this.userDTO.personID;
-      personnelInfo.protocolLeadUnits[0].updateTimestamp = new Date();
-      personnelInfo.protocolLeadUnits[0].updateUser = this.userDTO.userName;
-      personnelInfo.protocolLeadUnits[0].protocolId = this.protocolId;
-      personnelInfo.protocolLeadUnits[0].sequenceNumber = 1;
-      if (personnelInfo.protocolPersonRoleId === 'PI') {
-        personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'Y';
-      } else {
-        personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'N';
-      }
+      // personnelInfo.protocolLeadUnits[0].protocolPersonId = this.personnelInfo.personId;
+      // personnelInfo.protocolLeadUnits[0].protocolNumber = this.protocolNumber;
+      // personnelInfo.protocolLeadUnits[0].person_id = this.userDTO.personID;
+      // personnelInfo.protocolLeadUnits[0].updateTimestamp = new Date();
+      // personnelInfo.protocolLeadUnits[0].updateUser = this.userDTO.userName;
+      // personnelInfo.protocolLeadUnits[0].protocolId = this.protocolId;
+      // personnelInfo.protocolLeadUnits[0].sequenceNumber = 1;
+      // if (personnelInfo.protocolPersonRoleId === 'PI') {
+      //   personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'Y';
+      // } else {
+      //   personnelInfo.protocolLeadUnits[0].leadUnitFlag = 'N';
+      // }
       // End setting Person Lead Unit Details
      // personnelInfo.protocolGeneralInfo = this.generalInfo;
       this.commonVo.personnelInfo = personnelInfo;
@@ -388,6 +394,9 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       data => {
         this.result = data;
         this.personnelInfo = {};
+        this.personnelInfo.affiliationTypeCode = null;
+        this.personnelInfo.protocolPersonRoleId = null;
+        this.isObtainedConsent = false;
         this.invalidData.isPersonAdded = false;
         this.editPersonnelInfo = {};
         this.personLeadUnit = null;

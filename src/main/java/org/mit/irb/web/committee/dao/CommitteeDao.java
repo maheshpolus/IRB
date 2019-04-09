@@ -239,5 +239,16 @@ public interface CommitteeDao {
 	 * @return
 	 */
 	public Committee loadScheduleDetailsById(String committeeId);
+	
+	/**
+	 * @param committeeSchedule
+	 */
+	public void deleteCommitteeSchedule(CommitteeSchedule committeeSchedule);
+	
+	/**
+	 * @param committeeSchedule
+	 * @return
+	 */
+	public CommitteeSchedule updateCommitteeSchedule(CommitteeSchedule committeeSchedule);
 
 }

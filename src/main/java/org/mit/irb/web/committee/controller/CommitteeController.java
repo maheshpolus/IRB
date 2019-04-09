@@ -47,11 +47,6 @@ public class CommitteeController {
 		return committeeVo;
 	}
 
-	@RequestMapping(value = "/loadScheduleDetailsById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody CommitteeVo loadScheduleDetailsById(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
-		CommitteeVo committeeVo = committeeService.loadScheduleDetailsById(vo.getCommitteeId());
-		return committeeVo;
-	}
 	@RequestMapping(value = "/addSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CommitteeVo addSchedule(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for addSchedule");
@@ -133,6 +128,12 @@ public class CommitteeController {
 		logger.info("Requesting for loadResearchAreas");
 		String researchSearchString = request.getParameter("researchSearchString");
 		CommitteeVo  committeeVo = committeeService.loadResearchAreas(researchSearchString);
+		return committeeVo;
+	}
+	
+	@RequestMapping(value = "/loadScheduleDetailsById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo loadScheduleDetailsById(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
+		CommitteeVo committeeVo = committeeService.loadScheduleDetailsById(vo.getCommitteeId());
 		return committeeVo;
 	}
 }

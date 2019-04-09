@@ -374,18 +374,16 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo deleteSchedule(CommitteeVo committeeVo) {
 		try {
-			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
+			Committee committee = committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
 			List<CommitteeSchedule> list = committee.getCommitteeSchedules();
 			List<CommitteeSchedule> updatedlist = new ArrayList<CommitteeSchedule>(list);
 			Collections.copy(updatedlist, list);
 			for (CommitteeSchedule schedule : list) {
 				if (schedule.getScheduleId().equals(committeeVo.getScheduleId())) {
-					updatedlist.remove(schedule);
+					committeeDao.deleteCommitteeSchedule(schedule);
 				}
 			}
-			committee.getCommitteeSchedules().clear();
-			committee.getCommitteeSchedules().addAll(updatedlist);
-			committeeDao.saveCommittee(committee);
+			committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
 			committeeVo.setCommittee(committee);
 			committeeVo.setStatus(true);
 			committeeVo.setMessage("Committee schedule deleted successfully");
@@ -440,33 +438,39 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo updateCommitteeSchedule(CommitteeVo committeeVo) {
 		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
-		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
+		Committee com=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
+		List<CommitteeSchedule> committeeSchedule = com.getCommitteeSchedules();		
 		CommitteeSchedule schedule = committeeVo.getCommitteeSchedule();
-		boolean isDateExist = isDateAvailableForUpdate(committeeSchedules, schedule);
+		boolean isDateExist = isDateAvailableForUpdate(committeeSchedule, schedule);
 		String response = "";
 		if (!isDateExist) {
 			committeeVo.setStatus(false);
 			response = "Scheduled date already exist";
 			committeeVo.setMessage(response);
-		} else {
-			for (CommitteeSchedule committeeSchedule : committeeSchedules) {
-				if (committeeSchedule.getScheduleId().equals(schedule.getScheduleId())) {
-					committeeSchedule.setScheduledDate(schedule.getScheduledDate());
-					committeeSchedule.setPlace(schedule.getPlace());
-					committeeSchedule.setTime(schedule.getTime());
-					committeeSchedule.setScheduleStatus(schedule.getScheduleStatus());
-					committeeSchedule.setScheduleStatusCode(schedule.getScheduleStatusCode());
-					int daysToAdd = committeeSchedule.getCommittee().getAdvSubmissionDaysReq();
+		} else {			
+			for (CommitteeSchedule committeeSchedules : committeeSchedule) {
+				if (committeeSchedules.getScheduleId().equals(schedule.getScheduleId())) {
+					committeeSchedules.setScheduledDate(schedule.getScheduledDate());
+					committeeSchedules.setPlace(schedule.getPlace());
+					committeeSchedules.setTime(schedule.getTime());
+					committeeSchedules.setScheduleStatus(schedule.getScheduleStatus());
+					committeeSchedules.setScheduleStatusCode(schedule.getScheduleStatusCode());
+					int daysToAdd =  committeeVo.getAdvSubmissionDaysReq();
 					java.sql.Date sqlDate = calculateAdvancedSubmissionDays(schedule.getScheduledDate(), daysToAdd);
-					committeeSchedule.setProtocolSubDeadline(sqlDate);
+					committeeSchedules.setProtocolSubDeadline(sqlDate);
+					committeeSchedules.setCommittee(committee);
+					schedule = committeeDao.updateCommitteeSchedule(committeeSchedules);
+					committeeVo.setCommitteeSchedule(committeeSchedules);
+					committee.getCommitteeSchedules().add(committeeSchedules);
+					committee = committeeDao.saveCommittee(committee);
+					committeeVo.setCommittee(committee);
 				}
-			}
-			committeeDao.saveCommittee(committee);
-		}
-		committeeVo.setCommittee(committee);
+			}			
+		committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
+		committeeVo.setCommittee(committee);	
+	  }
 		return committeeVo;
 	}
-
 	@Override
 	public CommitteeVo loadHomeUnits(String homeUnitSearchString) {	
 		CommitteeVo vo=new CommitteeVo();

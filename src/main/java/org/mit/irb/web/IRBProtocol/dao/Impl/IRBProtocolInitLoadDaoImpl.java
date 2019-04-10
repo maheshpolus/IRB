@@ -2,11 +2,8 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.commons.collections4.ListUtils;
 import org.apache.log4j.Logger;
@@ -14,12 +11,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
-import org.mit.irb.web.committee.pojo.Committee;
-import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
-import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;

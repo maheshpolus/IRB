@@ -3,7 +3,12 @@ package org.mit.irb.web.IRBProtocol.dao;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
+import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -37,4 +42,12 @@ public interface IRBExemptProtocolDao {
 	ResponseEntity<byte[]> downloadExemptProtocolAttachments(String checkListId);
 
 	ArrayList<HashMap<String, Object>> getExemptProtocolAttachmentList(Integer exemptFormID);
+	
+	IRBProtocolVO updateExemptFundingSource(ExemptFundingSource exemptFundingSource, String updateUser);
+
+	IRBProtocolVO getExemptProtocolFundingSource(String exemptId);
+
+	List<ProtocolFundingSourceTypes> loadProtocolFundingSourceTypes();
+
+	List<Unit> loadhomeUnits(String homeUnitSearchString);
 }

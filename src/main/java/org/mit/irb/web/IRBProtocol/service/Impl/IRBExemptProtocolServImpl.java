@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBExemptProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.constants.KeyConstants;
@@ -275,5 +277,31 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public IRBProtocolVO updateExemptFundingSource(ExemptFundingSource exemptFundingSource, String updateUser) {
+		IRBProtocolVO irbProtocolVO=irbExemptProtocolDao.updateExemptFundingSource(exemptFundingSource,updateUser);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO getExemptProtocolFundingSource(String exemptId) {
+		IRBProtocolVO vo = new IRBProtocolVO();
+	    try {	    	
+			vo = irbExemptProtocolDao.getExemptProtocolFundingSource(exemptId);
+		    vo.setProtocolFundingSourceTypes(irbExemptProtocolDao.loadProtocolFundingSourceTypes());
+		    vo.setExemptFundingSource(new ExemptFundingSource());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return vo;
+	}
+
+	@Override
+	public IRBProtocolVO loadHomeUnits(String homeUnitSearchString) {
+		IRBProtocolVO vo = new IRBProtocolVO();
+	    vo.setHomeUnits(irbExemptProtocolDao.loadhomeUnits(homeUnitSearchString));
+		return vo; 
 	}
 }

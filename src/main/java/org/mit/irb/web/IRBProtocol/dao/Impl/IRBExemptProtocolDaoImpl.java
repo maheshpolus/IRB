@@ -2,7 +2,6 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -13,8 +12,21 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBExemptProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
+import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
@@ -25,12 +37,12 @@ import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.notification.ExemptProtocolEmailNotification;
-import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +56,9 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 	
 	@Autowired
 	IRBExemptProtocolService irbExemptProtocolService;
-	
+
+	@Autowired
+	HibernateTemplate hibernateTemplate;
 	
 	DBEngine dbEngine;
 	Logger logger = Logger.getLogger(IRBExemptProtocolDaoImpl.class.getName());
@@ -623,5 +637,83 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 			logger.error("Exception in methord getExemptFormSubmissionDate", e);
 		}
 		return exemptFormSubmissionDate;
+	}
+	
+	@Override
+	public IRBProtocolVO updateExemptFundingSource(ExemptFundingSource exemptFundingSource, String userName) {
+		modifyExemptFundingSource(exemptFundingSource,userName);
+		IRBProtocolVO irbProtocolVO=getExemptProtocolFundingSource(String.valueOf(exemptFundingSource.getIrbExemptFormId()));
+		sendingExemptNotifications(exemptFundingSource.getIrbExemptFormId(), "", "", 728);
+		return irbProtocolVO;
+	}
+
+	private void modifyExemptFundingSource(ExemptFundingSource exemptFundingSource, String userName) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_EXEMPT_FUNDING_SOURCE_ID", DBEngineConstants.TYPE_INTEGER,exemptFundingSource.getExemptFundingSourceId()));			
+			inputParam.add(new InParameter("AV_IRB_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,exemptFundingSource.getIrbExemptFormId()));				
+			inputParam.add(new InParameter("AV_FUNDING_SRC_TYPE_CODE", DBEngineConstants.TYPE_STRING,exemptFundingSource.getFundingSourceTypeCode()));
+			inputParam.add(new InParameter("AV_FUNDING_SOURCE", DBEngineConstants.TYPE_STRING,exemptFundingSource.getFundingSource()));
+			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,userName));		
+			inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,exemptFundingSource.getDescription()));	
+			inputParam.add(new InParameter("FUNDING_SOURCE_NAME", DBEngineConstants.TYPE_STRING,exemptFundingSource.getFundingSourceName()));
+			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,exemptFundingSource.getAcType()));
+			dbEngine.executeProcedure(inputParam, "UPD_IRB_EXEMPT_FUNDING_SOURCE");
+		} catch (Exception e) {
+			logger.error("Exception in methord updateExemptFundingSource", e);
+		}	
+		
+	}
+
+	@Override
+	public IRBProtocolVO getExemptProtocolFundingSource(String exemptId) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_IRB_EXEMPT_FORM_ID", DBEngineConstants.TYPE_STRING,exemptId));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_EXEMPT_FUNDING_SOURCE", outputParam);
+			if (result != null && !result.isEmpty()) {
+				irbProtocolVO.setExemptFundingSourceList(result);
+			}
+	}catch(Exception e){
+		e.printStackTrace();
+		logger.info("Exception in getExemptProtocolFundingSource:" + e);
+	}
+		return irbProtocolVO;
+	}
+
+	@Override
+	public List<ProtocolFundingSourceTypes> loadProtocolFundingSourceTypes() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolFundingSourceTypes.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("fundingSourceTypeCode"),"fundingSourceTypeCode");
+		projList.add(Projections.property("description"),"description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolFundingSourceTypes.class));
+	    criteria.addOrder(Order.asc("description"));
+		List<ProtocolFundingSourceTypes> protocolFundingSourceTypes =criteria.list();
+		return protocolFundingSourceTypes;
+	}
+
+	@Override
+	public List<Unit> loadhomeUnits(String homeUnitSearchString) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(Unit.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("unitNumber"), "unitNumber");
+		projList.add(Projections.property("unitName"), "unitName");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Unit.class));
+		criteria.addOrder(Order.asc("unitName"));
+		criteria.add(Restrictions.eq("active", true));
+		Criterion number=Restrictions.like("unitNumber", "%" + homeUnitSearchString + "%");
+		Criterion name=Restrictions.like("unitName", "%" + homeUnitSearchString + "%").ignoreCase();
+		LogicalExpression andExp=Restrictions.or(number,name);
+		criteria.add(andExp);
+		criteria.setMaxResults(25);		
+		List<Unit> keyWordsList = criteria.list();
+		return keyWordsList;
 	}
 }

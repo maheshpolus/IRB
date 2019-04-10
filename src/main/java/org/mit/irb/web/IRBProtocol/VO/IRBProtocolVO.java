@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
@@ -24,8 +25,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
-import org.mit.irb.web.committee.pojo.Committee;
-import org.mit.irb.web.committee.pojo.CommitteeSchedule;
+import org.mit.irb.web.committee.pojo.Unit;
 
 /*VO Class to  fetch all the IRB Protocol information
  * @author anu
@@ -64,6 +64,43 @@ public class IRBProtocolVO {
 	private List<HashMap<String, Object>> committeList;
 	private List<HashMap<String, Object>> committeSchedulList;
 	
+	private ExemptFundingSource exemptFundingSource;
+	private List<HashMap<String, Object>> exemptFundingSourceList;
+	private List<Unit> homeUnits;
+	private String updateUser;
+	
+	public ExemptFundingSource getExemptFundingSource() {
+		return exemptFundingSource;
+	}
+
+	public void setExemptFundingSource(ExemptFundingSource exemptFundingSource) {
+		this.exemptFundingSource = exemptFundingSource;
+	}
+
+	public List<HashMap<String, Object>> getExemptFundingSourceList() {
+		return exemptFundingSourceList;
+	}
+
+	public void setExemptFundingSourceList(List<HashMap<String, Object>> exemptFundingSourceList) {
+		this.exemptFundingSourceList = exemptFundingSourceList;
+	}
+
+	public List<Unit> getHomeUnits() {
+		return homeUnits;
+	}
+
+	public void setHomeUnits(List<Unit> homeUnits) {
+		this.homeUnits = homeUnits;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+
 	public ScienceOfProtocol getScienceOfProtocol() {
 		return scienceOfProtocol;
 	}

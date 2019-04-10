@@ -372,4 +372,29 @@ public class IRBController {
 		protocolVO = irbProtocolInitLoadService.loadCommitteeScheduleList();
 		return protocolVO;
 	}
+		
+	@RequestMapping(value = "/updateExemptFundingSource", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO updateExemptFundingSource(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
+		irbProtocolVO = irbExemptProtocolService.updateExemptFundingSource(irbProtocolVO.getExemptFundingSource(), irbProtocolVO.getUpdateUser());
+		return irbProtocolVO; 
+	}
+	
+	@RequestMapping(value = "/getExemptProtocolFundingSource", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO getExemptProtocolFundingSource(HttpServletRequest request,
+			HttpServletResponse response){
+		logger.info("Request for getExemptProtocolFundingSource");
+		IRBProtocolVO vo = new IRBProtocolVO();
+		String exemptId = request.getParameter("exemptId");
+		vo = irbExemptProtocolService.getExemptProtocolFundingSource(exemptId);
+		return vo;
+	}
+	
+	@RequestMapping(value = "/loadHomeUnits", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO loadHomeUnits(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadHomeUnits");
+		String homeUnitSearchString = request.getParameter("homeUnitSearchString");
+		IRBProtocolVO irbProtocolVO = irbExemptProtocolService.loadHomeUnits(homeUnitSearchString);
+		return irbProtocolVO;
+	}	
 }

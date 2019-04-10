@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
@@ -101,4 +103,24 @@ public interface IRBExemptProtocolService {
 	 * @throws Exception
 	 */
 	CommonVO approveOrDisapproveExemptProtocols(CommonVO vo) throws Exception;
+	
+
+	/**
+	 * @param exemptFundingSourceList
+	 * @param updateUser
+	 * @return 
+	 */
+	IRBProtocolVO updateExemptFundingSource(ExemptFundingSource exemptFundingSource, String updateUser);
+
+	/**
+	 * @param exemptId
+	 * @return fetch protocol funding source details
+	 */
+	IRBProtocolVO getExemptProtocolFundingSource(String exemptId);
+
+	/**
+	 * @param homeUnitSearchString
+	 * @return load all departments
+	 */ 
+	IRBProtocolVO loadHomeUnits(String homeUnitSearchString);
 }

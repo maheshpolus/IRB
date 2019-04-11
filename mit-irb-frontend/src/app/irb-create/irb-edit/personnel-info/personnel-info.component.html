@@ -172,9 +172,10 @@
                   <th scope="col">Role</th>
                   <th scope="col">Name</th>
                   <th scope="col">Qualification</th>
-                  <th scope="col">Study Roles</th>
+                  <th scope="col" width="15%">Study Roles</th>
                   <th scope="col">Affiliation</th>
                   <th scope="col">Obtained Consent</th>
+                  <th scope="col">Training Completed</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -190,7 +191,8 @@
                     </td>
                   <td><i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item.personName}}</td>
                   <td>{{item.educationLevel}}</td>
-                  <td *ngIf="i != personalInfoSelectedRow">{{item.description}}</td>
+                  
+                  <td width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}</td>
                   <td *ngIf="i == personalInfoSelectedRow"><textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea></td>
     
                   <td *ngIf="i != personalInfoSelectedRow">{{item.protocolAffiliationTypes?.description}}</td>
@@ -202,6 +204,7 @@
                   </td>
                   <td class="text-center" *ngIf="i != personalInfoSelectedRow"><span *ngIf="item.isObtainedConsent == 'Y'">Yes</span><span *ngIf="item.isObtainedConsent == 'N'">No</span></td>
                   <td *ngIf="i == personalInfoSelectedRow"><input type="checkbox" [(ngModel)]="isObtainedConsentEdit"  class="align-center mt-10"></td>
+                  <td class="text-center"><span *ngIf="item.trainingInfo == 'COMPLETED'">Yes</span><span *ngIf="item.trainingInfo == 'INCOMPLETED'">No</span></td>
                   <td class="action-btn-list">
                     <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button"
                       class="btn btn-primary edit-btn-1">
@@ -293,7 +296,10 @@
         </div>
         <!-- section2 -->
         <div>
-          <h4 class="popup-sub-head">Training</h4>
+            <h4 class="popup-sub-head">Training -
+                <span *ngIf="trainingStatus=='COMPLETED'"> Completed</span>
+                <span *ngIf="trainingStatus=='INCOMPLETE'"> Not Completed</span>
+              </h4>
         </div>
         <div class="modal-padding">
           <div class="popup-div">

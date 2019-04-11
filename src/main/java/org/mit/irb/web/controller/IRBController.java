@@ -390,11 +390,11 @@ public class IRBController {
 		return vo;
 	}
 	
-	@RequestMapping(value = "/loadHomeUnits", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/loadHomeUnitsIRB", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO loadHomeUnits(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for loadHomeUnits");
 		String homeUnitSearchString = request.getParameter("homeUnitSearchString");
 		IRBProtocolVO irbProtocolVO = irbExemptProtocolService.loadHomeUnits(homeUnitSearchString);
 		return irbProtocolVO;
-	}	
+	}	*/
 }

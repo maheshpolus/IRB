@@ -43,7 +43,8 @@ import { FilterPipe } from './common/directives/filter.pipe';
 import { KeyPressEvent } from './common/directives/keyPressEvent.component';
 import { CommitteeCardComponent } from './dashboard/dashboard-list/committee-card/committee-card.component';
 import { ScheduleCardComponent } from './dashboard/dashboard-list/schedule-card/schedule-card.component';
-
+import { FundingSourceModalComponent } from './common/funding-source-modal/funding-source-modal.component';
+import { FundingSourceModalService } from './common/funding-source-modal/funding-source-modal.service';
 
 
 enableProdMode();
@@ -65,7 +66,8 @@ enableProdMode();
         FilterPipe,
         CommitteeCardComponent,
         ScheduleCardComponent,
-        LogoutComponent
+        LogoutComponent,
+        FundingSourceModalComponent
 
     ],
     imports: [
@@ -88,8 +90,9 @@ enableProdMode();
     providers: [AuthGuard, DashboardService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
-        SharedDataService,
+        SharedDataService, FundingSourceModalService,
         KeyPressEvent, HeaderService],
+        entryComponents: [FundingSourceModalComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

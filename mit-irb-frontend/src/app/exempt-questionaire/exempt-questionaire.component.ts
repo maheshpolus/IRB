@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { ActivatedRoute, Router } from '@angular/router';
 import {Location} from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
@@ -21,6 +22,7 @@ import 'rxjs/add/operator/catch';
 import { ExemptQuestionaireService } from './exempt-questionaire.service';
 import { PiElasticService } from '../common/service/pi-elastic.service';
 import { SharedDataService } from '../common/service/shared-data.service';
+import {FundingSourceModalComponent} from '../common/funding-source-modal/funding-source-modal.component';
 declare var $: any;
 
 @Component({
@@ -192,7 +194,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         private _ngZone: NgZone, private _elasticsearchService: PiElasticService, private _http: HttpClient,
         private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef,
         private _router: Router, private _sharedDataService: SharedDataService, public keyPressEvent: KeyPressEvent,
-        public toastr: ToastsManager, vcr: ViewContainerRef) {
+        public toastr: ToastsManager, vcr: ViewContainerRef, private modalService: NgbModal) {
             this.todayDate.setDate(this.todayDate.getDate() - 1);
             this.toastr.setRootViewContainerRef(vcr);
         }
@@ -1572,5 +1574,12 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     remainingChar(currentLength) {
         const maxLength = document.getElementById('summary').getAttribute('maxLength');
         this.summaryRemainingCount = parseInt(maxLength, 10) - currentLength;
+      }
+
+      openFundingSourceModal(exemptHeaderDetail) {
+        const modalRef = this.modalService.open(FundingSourceModalComponent, { size: 'lg',
+        windowClass : 'myCustomModalClass', backdrop : 'static'});
+        modalRef.componentInstance.fundingSourceExemptStudy = exemptHeaderDetail;
+        modalRef.componentInstance.userDTO = this.userDTO;
       }
 }

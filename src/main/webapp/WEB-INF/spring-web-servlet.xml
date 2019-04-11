@@ -69,6 +69,7 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.AgeGroups</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.PersonTraining</value>
 				
 					<value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
 					<value>org.mit.irb.web.committee.pojo.Committee</value>
@@ -120,7 +121,7 @@
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
 				<prop key="hibernate.c3p0.minPoolSize">${hibernate.c3p0.minPoolSize}</prop>
 				<prop key="hibernate.c3p0.maxPoolSize">${hibernate.c3p0.maxPoolSize}</prop>
-				<prop key="hibernate.c3p0.max_statement">${hibernate.c3p0.max_statement}</prop>
+				<prop key="hibernate.c3p0.max_statement">${hibernate.c3p0.max_statement}</prop>				
 				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
 				<prop key="cache.use_second_level_cache">true</prop>   
          		<prop key="cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>

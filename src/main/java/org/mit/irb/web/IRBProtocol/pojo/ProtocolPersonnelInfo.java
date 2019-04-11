@@ -45,7 +45,7 @@ public class ProtocolPersonnelInfo {
 	@ManyToOne(optional = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_PERSONS_FK1"), name = "PROTOCOL_ID", referencedColumnName = "PROTOCOL_ID")
 	private ProtocolGeneralInfo protocolGeneralInfo;
-
+	
 	@Column(name = "AFFILIATION_TYPE_CODE")
 	private Integer affiliationTypeCode;
 
@@ -56,10 +56,10 @@ public class ProtocolPersonnelInfo {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ROLE_FK1"), name = "PROTOCOL_PERSON_ROLE_ID", referencedColumnName = "PROTOCOL_PERSON_ROLE_ID", insertable = false, updatable = false)
 	private ProtocolPersonRoleTypes protocolPersonRoleTypes;
-	
+/*	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "personnelInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
-	private List<ProtocolLeadUnits> protocolLeadUnits;
+	private List<ProtocolLeadUnits> protocolLeadUnits;*/
 
 	@Transient
 	private String acType;
@@ -276,6 +276,21 @@ public class ProtocolPersonnelInfo {
 
 	@Column(name = "PERSON_NAME")
 	private String personName;
+
+	@Column(name="IS_OBTAINED_CONSENT")
+	private String isObtainedConsent;
+	
+	@Column(name="DESCRIPTION")
+	private String description;
+	
+	@Column(name="IS_ACTIVE")
+	private String isActive;
+	
+	@Column(name="IS_EMPLOYEE")	
+	private String isEmployee;
+	
+	@Transient
+	private String trainingInfo;
 
 	public Integer getProtocolPersonId() {
 		return protocolPersonId;
@@ -859,13 +874,13 @@ public class ProtocolPersonnelInfo {
 		this.nonEmployeeFlag = nonEmployeeFlag;
 	}
 
-	public List<ProtocolLeadUnits> getProtocolLeadUnits() {
+	/*public List<ProtocolLeadUnits> getProtocolLeadUnits() {
 		return protocolLeadUnits;
 	}
 
 	public void setProtocolLeadUnits(List<ProtocolLeadUnits> protocolLeadUnits) {
 		this.protocolLeadUnits = protocolLeadUnits;
-	}
+	}*/
 
 	public ProtocolPersonRoleTypes getProtocolPersonRoleTypes() {
 		return protocolPersonRoleTypes;
@@ -873,5 +888,45 @@ public class ProtocolPersonnelInfo {
 
 	public void setProtocolPersonRoleTypes(ProtocolPersonRoleTypes protocolPersonRoleTypes) {
 		this.protocolPersonRoleTypes = protocolPersonRoleTypes;
+	}
+
+	public String getIsObtainedConsent() {
+		return isObtainedConsent;
+	}
+
+	public void setIsObtainedConsent(String isObtainedConsent) {
+		this.isObtainedConsent = isObtainedConsent;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(String isActive) {
+		this.isActive = isActive;
+	}
+
+	public String getIsEmployee() {
+		return isEmployee;
+	}
+
+	public void setIsEmployee(String isEmployee) {
+		this.isEmployee = isEmployee;
+	}
+
+	public String getTrainingInfo() {
+		return trainingInfo;
+	}
+
+	public void setTrainingInfo(String trainingInfo) {
+		this.trainingInfo = trainingInfo;
 	}
 }

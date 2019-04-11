@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -591,6 +592,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			ProtocolGeneralInfo generalInfo) {
 		logger.info(".................Updating person Informations..................");
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		String flag="N";
 		personnelInfo.setSequenceNumber(1);
 		if (personnelInfo.getAcType().equals("U")) {
 			personnelInfo.setProtocolGeneralInfo(generalInfo);
@@ -601,26 +603,29 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			sessionUpdatePersons.close();
 		} else if (personnelInfo.getAcType().equals("D")) {
 			logger.info("Deleting person Info");
-			Query queryDeleteLeadUnits = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("delete from ProtocolLeadUnits p where  p.protocolUnitsId =:protocolUnitsId");
-			queryDeleteLeadUnits.setInteger("protocolUnitsId",
-					personnelInfo.getProtocolLeadUnits().get(0).getProtocolUnitsId());
-			queryDeleteLeadUnits.executeUpdate();
-
 			Query queryDeleteCollaboratorPerson = hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("delete from ProtocolCollaboratorPersons p where  p.personId =:personId");
 			queryDeleteCollaboratorPerson.setInteger("personId", personnelInfo.getProtocolPersonId());
-			queryDeleteCollaboratorPerson.executeUpdate();
-			Query queryDeletePerson = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("delete from ProtocolPersonnelInfo p where  p.protocolPersonId =:protocolPersonId");
-			queryDeletePerson.setInteger("protocolPersonId", personnelInfo.getProtocolPersonId());
-			queryDeletePerson.executeUpdate();
+			queryDeleteCollaboratorPerson.executeUpdate();			
+			if(generalInfo.getProtocolNumber().contains("A")){		
+				Query setInActivePerson = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("update ProtocolPersonnelInfo p set p.isActive=:flag where  p.protocolPersonId =:protocolPersonId");
+				setInActivePerson.setInteger("protocolPersonId", personnelInfo.getProtocolPersonId());
+				setInActivePerson.setString("flag",flag);
+				setInActivePerson.executeUpdate();
+		    }else{
+				Query queryDeletePerson = hibernateTemplate.getSessionFactory().getCurrentSession()
+						.createQuery("delete from ProtocolPersonnelInfo p where  p.protocolPersonId =:protocolPersonId");
+				queryDeletePerson.setInteger("protocolPersonId", personnelInfo.getProtocolPersonId());
+				queryDeletePerson.executeUpdate();	
+		   }
 		}
-		Query queryPersonList = hibernateTemplate.getSessionFactory().getCurrentSession()
+		Query queryPersonactiveList = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolPersonnelInfo p where p.protocolNumber =:protocolNumber");
-		queryPersonList.setString("protocolNumber", personnelInfo.getProtocolNumber());
-		List<ProtocolPersonnelInfo> protocolPersonnelInfoList = queryPersonList.list();
+		queryPersonactiveList.setString("protocolNumber", personnelInfo.getProtocolNumber());	
+		List<ProtocolPersonnelInfo> protocolPersonnelInfoList = queryPersonactiveList.list();
 		irbProtocolVO.setProtocolPersonnelInfoList(protocolPersonnelInfoList);
+
 		return irbProtocolVO;
 	}
 
@@ -723,16 +728,50 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	public Future<IRBProtocolVO> getGeneralPersonnelInfoList(IRBProtocolVO irbProtocolVO) {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
-		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());
+		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());		
 		if (!queryGeneral.list().isEmpty()) {
 			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
-			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);
-			irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
-			System.out.println("general info is set " + new Date());
+			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);			
+			System.out.println("general info is set " + new Date());				
+			List<ProtocolPersonnelInfo> personList=protocolGeneralInfoObj.getPersonnelInfos();			
+			for(ProtocolPersonnelInfo person:personList){
+				person.setTrainingInfo(getTrainingflag(protocolGeneralInfoObj));				
+			}			
+		irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
 		}
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
+	public String getTrainingflag(ProtocolGeneralInfo protocolGeneralInfoObj) {
+		String trainingStatus = null;
+		LocalDate date = LocalDate.now();
+		java.sql.Date sqlDate = java.sql.Date.valueOf(date);		
+		List<ProtocolPersonnelInfo> personnelInfosList = protocolGeneralInfoObj.getPersonnelInfos();		
+		for(ProtocolPersonnelInfo personnel : personnelInfosList){
+			Query training=hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56) and t.followUpDate>= :sysdate");		
+			training.setString("personID",personnel.getPersonId());
+			training.setDate("sysdate",sqlDate);
+			if(training.list().size() > 0){
+				trainingStatus="COMPLETED";
+			}else{
+				Query trainingcase2=hibernateTemplate.getSessionFactory().getCurrentSession()
+						.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56)");		
+				trainingcase2.setString("personID",personnel.getPersonId());					
+
+				Query trainingcase3=hibernateTemplate.getSessionFactory().getCurrentSession()
+						.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(16,23,24,25,27) and t.followUpDate>= :sysdate");		
+				trainingcase3.setString("personID",personnel.getPersonId());
+				trainingcase3.setDate("sysdate",sqlDate);
+				if(trainingcase2.list().size() > 0 && trainingcase3.list().size() > 0){
+					trainingStatus="COMPLETED";
+				}
+				trainingStatus="INCOMPLETED";	
+			}			
+		 }
+	  return trainingStatus;		
+	}
+	
 	@Async
 	public Future<IRBProtocolVO> getCollaboratorList(IRBProtocolVO irbProtocolVO) {
 		Query queryCollaborator = hibernateTemplate.getSessionFactory().getCurrentSession()

@@ -1,8 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardService } from '../../dashboard.service';
+import {FundingSourceModalComponent} from '../../../common/funding-source-modal/funding-source-modal.component';
 
 
 @Component( {
@@ -28,7 +30,8 @@ export class ExemptCardComponent implements  OnChanges  {
       protocolCount = 10;
 
 
-    constructor( private _router: Router, private _dashboardService: DashboardService, private _spinner: NgxSpinnerService ) { }
+    constructor( private _router: Router, private _dashboardService: DashboardService, private _spinner: NgxSpinnerService,
+        private modalService: NgbModal ) { }
 
 
     ngOnChanges(changes) {
@@ -153,4 +156,11 @@ export class ExemptCardComponent implements  OnChanges  {
             },
         );
     }
+
+    openFundingSourceModal(exemptHeaderDetail) {
+        const modalRef = this.modalService.open(FundingSourceModalComponent, { size: 'lg',
+                                                windowClass : 'myCustomModalClass', backdrop : 'static'});
+        modalRef.componentInstance.fundingSourceExemptStudy = exemptHeaderDetail;
+        modalRef.componentInstance.userDTO = this.userDTO;
+      }
 }

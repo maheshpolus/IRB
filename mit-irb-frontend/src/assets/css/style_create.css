@@ -2443,6 +2443,10 @@ input:disabled,textarea:disabled{
 {
     width: 345px !important;
 }
+.border-none::before
+{
+    border: none;
+}
 .ml-225
 {
     margin-left: 225px;
@@ -2479,7 +2483,23 @@ input:disabled,textarea:disabled{
     display: block;	
     margin :auto;	
 }
-
+.myCustomModalClass .modal-dialog {
+    max-width: 1200px;
+  }
+  .ml-95
+  {
+    margin-left: -95px !important;
+  }
+  .search-dropdown-position {
+    top: 72px !important;
+}
+.header-padding{
+    padding: 0 15px;
+}
+.alert-margin{
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
 
 
 

@@ -110,7 +110,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         exemptFormEndDate: null,
         exemptFormfacultySponsorName: null
     };
-
+    options: any = {};
+    elasticPlaceHolder = 'Search: Protocol#, Type, Title, PI Name, Status';
     constructor(private _dashboardService: DashboardService,
         private _ngZone: NgZone,
         private _elasticsearchService: ElasticService,
@@ -118,7 +119,30 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         private _router: Router,
         private _sharedDataService: SharedDataService,
         public keyPressEvent: KeyPressEvent,
-        private _spinner: NgxSpinnerService) { }
+        private _spinner: NgxSpinnerService) {
+        this.options.url = this._elasticsearchService.URL_FOR_ELASTIC;
+        this.options.index = this._elasticsearchService.IRB_INDEX;
+        this.options.type = 'irbprotocol';
+        this.options.size = 20;
+        this.options.contextField = 'protocol_number';
+        this.options.debounceTime = 500;
+        this.options.theme = '#a31f34';
+        this.options.width = '100%';
+        this.options.fontSize = '16px';
+        this.options.defaultValue = '';
+        this.options.formatString = 'protocol_number : title | protocol_type | personName | status';
+        this.options.fields = {
+            pi_name: {},
+            protocol_number: {},
+            title: {},
+            status: {},
+            protocol_type: {},
+            document_number: {},
+            person_id: {},
+            protocol_id: {},
+            status_code: {}
+        };
+         }
 
     /** load protocol list based on tab and load protocoltypes to show in advance search field */
     ngOnInit() {

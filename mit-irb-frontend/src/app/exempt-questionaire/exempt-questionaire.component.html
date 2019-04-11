@@ -75,6 +75,14 @@
 								 class="pending-action active-en margin-fix">Not Exempt-Pending Review</span>
 							</div>
 						</div>
+						<div class="col-2" *ngIf="requestObject?.irbExemptForm?.statusCode === '4' && requestObject?.irbExemptForm?.isExempt == 'Y'">
+							<a>
+									<button type="button" style="float: right;" class="btn btn-outline-secondary button-view mt-10" (click)="openFundingSourceModal(requestObject.irbExemptForm)">
+											<i class="fa fa-usd"></i>Funding Source
+										</button>
+							</a>
+
+						</div>
 						<!-- <div class="col-3 width-exempt searchBox display">
 							<a id="returnToDasboardLink" title="Back to Dashboard" (click)="returnToExemptList($event)">
 								<i class="fa fa-mail-reply">&nbsp;</i>Return to Dashboard</a>
@@ -137,7 +145,7 @@
 							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
 							 *ngIf="!isViewMode" [datasource]="unitName" [minSearchLength]="0" (ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
 							 (selected)="onUnitSelect()"></ng2-completer>
-							<input class="form-control unit-margin" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"
+							<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"
 							 *ngIf="isViewMode" />
 						</div>
 					</div>
@@ -165,7 +173,7 @@
 						</div>
 						<div class="col-4 width-exempt searchBox display">
 							<div class="input-group">
-								<input [min]="todayDate" [disabled]="isViewMode" class="form-control datePickerRadius margin-6 width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
+								<input [min]="todayDate" [disabled]="isViewMode" class="form-control datePickerRadius width-date" [owlDateTime]="dt3" placeholder="mm/dd/yyyy"
 								 [(ngModel)]="requestObject.exemptProtocolEndDate" (ngModelChange)="validateEndDate()">
 								<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
 								<span title="Choose End Date" class="input-span-1 input-group-text" [owlDateTimeTrigger]="dt3">

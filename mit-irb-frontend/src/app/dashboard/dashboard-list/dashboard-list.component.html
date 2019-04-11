@@ -131,6 +131,15 @@
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-lg-12">
 							<div class="searchBox" *ngIf="lastClickedTab == 'ALL'">
+
+
+
+
+									<!-- <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder"  [clearField]="true"
+									(selectedResult)="selectProposalElasticResult($event)"></app-elastic> -->
+
+
+
 								<input type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status" [formControl]="searchText" [(ngModel)]="searchTextModel"
 								 (ngModelChange)="protocolSearchValueChange()" (focus)="IsElasticResult = true" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'protocolDropDown')"
 								 (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'protocolDropDown')" (keydown.Enter) ="onKeyEnterElastic('protocolDropDown')" />

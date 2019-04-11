@@ -45,7 +45,7 @@
 						<p>Not Exempt-Pending Review</p>
 					</span>
 				</div>
-				<div class="col-md-6 col-sm-12 col-12 list-des">
+				<div class="col-sm-12 col-12 list-des" [ngClass]="tabSelected=='STUDIES' || tabSelected=='SUBMITTED' ? 'col-md-5':'col-md-6'">
 					<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
 					<div>
 						<div class="row">
@@ -73,7 +73,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3 col-sm-12 col-12 list-des button-responsive">
+				<div class="col-sm-12 col-12 list-des button-responsive" [ngClass]="tabSelected=='STUDIES' || tabSelected=='SUBMITTED' ? 'col-md-4':'col-md-3'">
 					<a>
 						<button type="button" class="btn btn-outline-secondary button-view" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
 							<i class="fa fa-eye"></i>View
@@ -84,6 +84,11 @@
 							<i class="fa fa-download"></i>Determination
 						</button>
 					</a>
+					<a>
+								<button *ngIf="(tabSelected=='STUDIES' || tabSelected=='SUBMITTED') && irb.isExempt=='Y'" type="button" class="btn btn-outline-secondary button-view" (click)="openFundingSourceModal(irb)">
+										<i class="fa fa-usd"></i>Funding Source
+									</button>
+						</a>
 				</div>
 			</div>
 		</div>

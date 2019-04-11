@@ -193,11 +193,11 @@
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeById": {
-		"target": "http://192.168.1.12:8080",
+		"target": "http://192.168.1.66:8081",
 		"secure": false
 	},
 	"/mit-irb/loadScheduleDetailsById": {
-		"target": "http://192.168.1.12:8080",
+		"target": "http://192.168.1.66:8081",
 		"secure": false
 	},
 	"/mit-irb/saveAreaOfResearch": {
@@ -209,7 +209,7 @@
 		"secure": false
 	},
 	"/mit-irb/addSchedule": {
-		"target": "http://192.168.1.12:8080",
+		"target": "http://192.168.1.66:8081",
 		"secure": false
 	},
 	"/mit-irb/deleteSchedule": {
@@ -395,5 +395,17 @@
 	"/mit-irb/loadResearchAreas":{
 		"target" : "http://192.168.1.66:8081",
 		"secure" : false
+	},
+	"/mit-irb/getExemptProtocolFundingSource":{
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
+	},
+	"/mit-irb/updateExemptFundingSource": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false	
+	},
+	"/mit-irb/loadHomeUnitsIRB": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false	
 	}
 }

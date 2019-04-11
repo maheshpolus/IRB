@@ -50,6 +50,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   warningMessage: string;
   alertMessage: string;
   irbPersonDetailedList: any;
+  trainingStatus: string;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
@@ -428,6 +429,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       if (this.result != null) {
         this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
         this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
+        this.trainingStatus = this.result.trainingStatus;
       }
     },
       error => {

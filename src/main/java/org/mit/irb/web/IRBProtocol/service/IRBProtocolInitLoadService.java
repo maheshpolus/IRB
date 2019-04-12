@@ -75,4 +75,10 @@ public interface IRBProtocolInitLoadService {
 	 * load the list of  schedules 
 	 */
 	public IRBProtocolVO loadCommitteeScheduleList();
+
+	/**
+	 * @param irbProtocolVO
+	 * @return load the list of  Department types
+	 */
+	public Future<IRBProtocolVO> loadProtocolUnitTypes(IRBProtocolVO irbProtocolVO);
 }

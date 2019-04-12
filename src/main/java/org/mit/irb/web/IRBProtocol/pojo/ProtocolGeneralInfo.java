@@ -110,10 +110,22 @@ public class ProtocolGeneralInfo {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolPersonnelInfo> personnelInfos;
-	
+
 	@JsonIgnore 
 	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<IRBAttachmentProtocol> attachmentProtocols;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
+	private List<ProtocolLeadUnits> protocolUnits;
+	
+	public List<ProtocolLeadUnits> getProtocolUnits() {
+		return protocolUnits;
+	}
+
+	public void setProtocolUnits(List<ProtocolLeadUnits> protocolUnits) {
+		this.protocolUnits = protocolUnits;
+	}
 	
 	public Integer getProtocolId() {
 		return protocolId;

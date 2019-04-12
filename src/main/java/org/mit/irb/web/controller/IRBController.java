@@ -239,7 +239,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO createIRBProtocol(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody CommonVO vo) throws Exception {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO = irbProtocolService.modifyProtocolDetails(vo.getProtocolId(), irbProtocolVO);
+		irbProtocolVO = irbProtocolService.modifyProtocolDetails(vo.getProtocolNumber(),vo.getProtocolId(), irbProtocolVO);
 		return irbProtocolVO;
 	}
 
@@ -259,6 +259,14 @@ public class IRBController {
 		return protocolVO;
 	}
 
+	@RequestMapping(value = "/updateUnitDetails", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO updateUnitDetails(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateUnitDetails(irbProtocolVO.getProtocolLeadUnits(), irbProtocolVO.getGeneralInfo());
+		return protocolVO;
+	}
+	
 	@RequestMapping(value = "/updateFundingSource", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateFundingSource(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {

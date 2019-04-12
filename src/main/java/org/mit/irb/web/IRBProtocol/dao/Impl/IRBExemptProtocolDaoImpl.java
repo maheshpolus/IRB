@@ -321,6 +321,18 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 				if (hmap.get("END_DATE") != null) {
 					exemptForm.setExemptProtocolEndDate(df.format((Timestamp) hmap.get("END_DATE")));
 				}
+				if ((hmap.get("FACULTY_SPONSOR_PERSON_ID") != null && personID != null)
+						&& (personID.equals(hmap.get("FACULTY_SPONSOR_PERSON_ID").toString()))) {
+					exemptForm.setLoggedInUserFacultySponsor(true);
+				} else {
+					exemptForm.setLoggedInUserFacultySponsor(false);
+				}
+				if ((hmap.get("PERSON_ID") != null && personID != null)
+						&& (personID.equals(hmap.get("PERSON_ID").toString()))) {
+					exemptForm.setLoggedInUserPI(true);
+				} else {
+					exemptForm.setLoggedInUserPI(false);
+				}
 				irbExemptFormList.add(exemptForm);
 			}
 			irbViewProfile.setIrbExemptFormList(irbExemptFormList);

@@ -182,15 +182,17 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public IRBProtocolVO modifyProtocolDetails(Integer protocolId,IRBProtocolVO irbProtocolVO) {
+	public IRBProtocolVO modifyProtocolDetails(String protocolNumber, Integer protocolId,IRBProtocolVO irbProtocolVO) {
 		try{
 			irbProtocolVO.setProtocolId(protocolId);
+			irbProtocolVO.setProtocolNumber(protocolNumber);
 			ProtocolPersonnelInfo personnelInfo = new ProtocolPersonnelInfo();
 			ProtocolLeadUnits protocolLeadUnits = new ProtocolLeadUnits();
 			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
 		    Future<IRBProtocolVO> protocolTypes = initLoadService.loadProtocolTypes(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolUnitTypes = initLoadService.loadProtocolUnitTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> roleTypes = initLoadService.loadRoleTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolPersonLeadunits = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAffiliationTypes = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);
@@ -200,6 +202,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		    Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
 		    irbProtocolVO = protocolTypes.get();
+		    irbProtocolVO = protocolUnitTypes.get();	    
 			irbProtocolVO = roleTypes.get();
 			irbProtocolVO = protocolPersonLeadunits.get();
 			irbProtocolVO = protocolAffiliationTypes.get();
@@ -263,5 +266,12 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		irbViewProfile = irbProtocolDao.checkingPersonsRightToViewProtocol(personId, protocolNumber);
 		return irbViewProfile;
+	}
+
+	@Override
+	public IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolUnit, ProtocolGeneralInfo generalInfo) {
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolDao.updateUnitDetails(protocolUnit,generalInfo);
+		return irbProtocolVO;
 	}
 }

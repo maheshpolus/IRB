@@ -35,6 +35,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
@@ -539,8 +540,19 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			protocolPersonnelInfo.setProtocolGeneralInfo(generalInfo);
 			protocolPersonnelInfo.setProtocolNumber(protocolNUmber);
 			protocolPersonnelInfo.setSequenceNumber(1);
+			protocolPersonnelInfo.setTrainingInfo(getTrainingflag(protocolPersonnelInfo));
 			protocolPersonnelInfoList.add(protocolPersonnelInfo);
 			generalInfo.setPersonnelInfos(protocolPersonnelInfoList);
+			
+			List<ProtocolLeadUnits> protocolUnitList = new ArrayList<ProtocolLeadUnits>();
+			ProtocolLeadUnits protocolUnit = generalInfo.getProtocolUnits().get(0);
+			protocolUnit.setProtocolGeneralInfo(generalInfo);
+			protocolUnit.setProtocolNumber(protocolNUmber);
+			protocolUnit.setSequenceNumber(1);
+			protocolUnit.setUnitTypeCode("1");
+			protocolUnitList.add(protocolUnit);
+			generalInfo.setProtocolUnits(protocolUnitList);
+		
 		}
 		hibernateTemplate.saveOrUpdate(generalInfo);
 		irbProtocolVO.setGeneralInfo(generalInfo);
@@ -595,6 +607,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		String flag="N";
 		personnelInfo.setSequenceNumber(1);
 		if (personnelInfo.getAcType().equals("U")) {
+			personnelInfo.setIsActive("Y");
 			personnelInfo.setProtocolGeneralInfo(generalInfo);
 			Session sessionUpdatePersons = hibernateTemplate.getSessionFactory().openSession();
 			Transaction transactionUpdatePersons = sessionUpdatePersons.beginTransaction();
@@ -623,7 +636,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Query queryPersonactiveList = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolPersonnelInfo p where p.protocolNumber =:protocolNumber");
 		queryPersonactiveList.setString("protocolNumber", personnelInfo.getProtocolNumber());	
-		List<ProtocolPersonnelInfo> protocolPersonnelInfoList = queryPersonactiveList.list();
+		List<ProtocolPersonnelInfo> protocolPersonnelInfoList = queryPersonactiveList.list();			
+		for(ProtocolPersonnelInfo person:protocolPersonnelInfoList){
+			person.setTrainingInfo(getTrainingflag(person));				
+		}			
 		irbProtocolVO.setProtocolPersonnelInfoList(protocolPersonnelInfoList);
 
 		return irbProtocolVO;
@@ -714,6 +730,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
 		if (protocolId != null) {
 			getGeneralPersonnelInfoList(irbProtocolVO);
+			getDepartmentList(irbProtocolVO);
 			getSubjectoList(irbProtocolVO);
 			getScienceOfProtocol(irbProtocolVO);
 			getCollaboratorList(irbProtocolVO);
@@ -725,6 +742,18 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Async
+	public Future<IRBProtocolVO> getDepartmentList(IRBProtocolVO irbProtocolVO) {
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolLeadUnits p where p.protocolNumber =:protocolNumber");
+		queryGeneral.setString("protocolNumber", irbProtocolVO.getProtocolNumber());
+		if (!queryGeneral.list().isEmpty()) {
+			List<ProtocolLeadUnits> protocolLeadUnits = queryGeneral.list();
+			irbProtocolVO.setProtocolLeadUnitsList(protocolLeadUnits);
+		}
+		return new AsyncResult<>(irbProtocolVO);
+	}
+
+	@Async
 	public Future<IRBProtocolVO> getGeneralPersonnelInfoList(IRBProtocolVO irbProtocolVO) {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
@@ -732,22 +761,19 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		if (!queryGeneral.list().isEmpty()) {
 			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);			
-			System.out.println("general info is set " + new Date());				
 			List<ProtocolPersonnelInfo> personList=protocolGeneralInfoObj.getPersonnelInfos();			
 			for(ProtocolPersonnelInfo person:personList){
-				person.setTrainingInfo(getTrainingflag(protocolGeneralInfoObj));				
+				person.setTrainingInfo(getTrainingflag(person));				
 			}			
 		irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
 		}
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
-	public String getTrainingflag(ProtocolGeneralInfo protocolGeneralInfoObj) {
+	public String getTrainingflag(ProtocolPersonnelInfo personnel) {
 		String trainingStatus = null;
 		LocalDate date = LocalDate.now();
-		java.sql.Date sqlDate = java.sql.Date.valueOf(date);		
-		List<ProtocolPersonnelInfo> personnelInfosList = protocolGeneralInfoObj.getPersonnelInfos();		
-		for(ProtocolPersonnelInfo personnel : personnelInfosList){
+		java.sql.Date sqlDate = java.sql.Date.valueOf(date);
 			Query training=hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56) and t.followUpDate>= :sysdate");		
 			training.setString("personID",personnel.getPersonId());
@@ -767,8 +793,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 					trainingStatus="COMPLETED";
 				}
 				trainingStatus="INCOMPLETED";	
-			}			
-		 }
+			}
 	  return trainingStatus;		
 	}
 	
@@ -779,7 +804,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		queryCollaborator.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		List<ProtocolCollaborator> collaborators = queryCollaborator.list();
 		irbProtocolVO.setProtocolCollaboratorList(collaborators);
-		System.out.println("Collaborator info is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
@@ -789,7 +813,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
 		queryprotocolSubject.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		irbProtocolVO.setProtocolSubjectList(queryprotocolSubject.list());
-		System.out.println("subject list is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
@@ -801,7 +824,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		if (!queryScienceOfProtocol.list().isEmpty()) {
 			irbProtocolVO.setScienceOfProtocol((ScienceOfProtocol) queryScienceOfProtocol.list().get(0));
 		}
-		System.out.println("science of protocol is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
@@ -883,7 +905,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		} catch (Exception e) {
 			logger.error("Error in getProtocolFundingSource method" + e.getMessage());
 		}
-		System.out.println("Funding source is set " + new Date());
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
@@ -1139,6 +1160,33 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId");
 		queryAttachment.setInteger("collaboratorId", collaboratorId);
 		irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolUnit, ProtocolGeneralInfo generalInfo) {
+		logger.info(".................Updating unit Informations..................");
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		protocolUnit.setSequenceNumber(1);
+		if (protocolUnit.getAcType().equals("U")) {
+			protocolUnit.setProtocolGeneralInfo(generalInfo);
+			Session sessionUpdatePersons = hibernateTemplate.getSessionFactory().openSession();
+			Transaction transactionUpdatePersons = sessionUpdatePersons.beginTransaction();
+			hibernateTemplate.saveOrUpdate(protocolUnit);
+			transactionUpdatePersons.commit();
+			sessionUpdatePersons.close();
+		}else if (protocolUnit.getAcType().equals("D")) {
+			logger.info("Deleting unit Info");
+			Query queryDeleteLeadUnits = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from ProtocolLeadUnits p where  p.protocolUnitsId =:protocolUnitsId");
+			queryDeleteLeadUnits.setInteger("protocolUnitsId",protocolUnit.getProtocolUnitsId());
+			queryDeleteLeadUnits.executeUpdate();
+		}
+		Query queryPersonList = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolLeadUnits p where p.protocolNumber =:protocolNumber");
+		queryPersonList.setString("protocolNumber", protocolUnit.getProtocolNumber());
+		List<ProtocolLeadUnits> protocolLeadUnitsList = queryPersonList.list();
+		irbProtocolVO.setProtocolLeadUnitsList(protocolLeadUnitsList);
 		return irbProtocolVO;
 	}
 }

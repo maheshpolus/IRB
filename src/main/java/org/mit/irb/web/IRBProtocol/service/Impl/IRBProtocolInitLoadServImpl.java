@@ -18,6 +18,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -182,4 +183,20 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		irbProtocolVO = irbProtocolInitLoadDao.loadCommitteeScheduleList();
 		return irbProtocolVO;
 	}
+
+	@Override
+	public Future<IRBProtocolVO> loadProtocolUnitTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolUnitType.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("unitTypeCode"), "unitTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolUnitType.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolUnitType> protocolUnitType = criteria.list();
+		irbProtocolVO.setProtocolUnitType(protocolUnitType);
+		session.flush();
+		return new AsyncResult<>(irbProtocolVO);
+	}
+	
 }

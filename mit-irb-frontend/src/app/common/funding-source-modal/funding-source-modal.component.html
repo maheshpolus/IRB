@@ -75,7 +75,7 @@
 						</label>
 						<select [class.poping-border]="isEditFunding" class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="exemptFundingSource.fundingSourceTypeCode"
 						 (ngModelChange)="changeFundingType(exemptFundingSource.fundingSourceTypeCode)">
-							<option selected value="null">Please Select</option>
+							<option selected value=null>Please Select</option>
 							<option *ngFor="let fundingSource of fundingSourceTypes" value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}</option>
 						</select>
 					</div>
@@ -125,11 +125,13 @@
 					</div>
 				</div>
 				<div class="col-md-1 add-btn-1">
-					<button title="Add" *ngIf="!isFundingInfoEdit" type="button" class="btn btn-success top-butn">
-						<i class="fa fa-plus" aria-hidden="true" *ngIf="!isEditFunding" (click)="addEditFundingDetails('I')"></i>
-						<i class="fa fa-floppy-o" aria-hidden="true" *ngIf="isEditFunding" (click)="addEditFundingDetails('U')"></i>
-					</button>
-				</div>
+						<button *ngIf="!isEditFunding" title="Add" type="button" (click)="addEditFundingDetails('I')" class="btn btn-success top-butn">
+							<i class="fa fa-plus" aria-hidden="true"></i>
+						</button>
+						<button *ngIf="isEditFunding" title="Save" type="button" (click)="addEditFundingDetails('U')" class="btn btn-success top-butn">
+							<i class="fa fa-floppy-o" aria-hidden="true"></i>
+						</button>
+					</div>
 				<!-- card view for elastic selected items -->
 				<div *ngIf="showElasticBand" class="col-12 padding-030" (click)="openKcFromElastic(sponsorDetails)">
 					<div class="row">
@@ -206,7 +208,7 @@
 											<button *ngIf="isEditMode" title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
 												<i class="fa fa-pencil" aria-hidden="true"></i>
 											</button>
-											<button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
+											<button *ngIf="item.FUNDING_SOURCE_TYPE_CODE !== '3'" title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
 												<i class="fa fa-eye" aria-hidden="true"></i>
 											</button>
 											<button *ngIf="isEditMode" title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(item)">

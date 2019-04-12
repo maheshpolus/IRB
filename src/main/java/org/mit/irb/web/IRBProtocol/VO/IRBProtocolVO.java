@@ -23,6 +23,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 import org.mit.irb.web.committee.pojo.Unit;
@@ -36,6 +37,7 @@ public class IRBProtocolVO {
 	private ProtocolGeneralInfo generalInfo;
 	private List<ProtocolType> protocolType;
 	private List<SponsorType> sponsorType;
+	private List<ProtocolUnitType> protocolUnitType;
 	private List<ProtocolPersonRoleTypes> personRoleTypes;
 	private List<ProtocolPersonLeadUnits> protocolPersonLeadUnits;
 	private List<ProtocolAffiliationTypes> affiliationTypes;
@@ -355,5 +357,13 @@ public class IRBProtocolVO {
 
 	public void setCommitteList(ArrayList<HashMap<String, Object>> result) {
 		this.committeList = result;
+	}
+
+	public List<ProtocolUnitType> getProtocolUnitType() {
+		return protocolUnitType;
+	}
+
+	public void setProtocolUnitType(List<ProtocolUnitType> protocolUnitType) {
+		this.protocolUnitType = protocolUnitType;
 	}
 }

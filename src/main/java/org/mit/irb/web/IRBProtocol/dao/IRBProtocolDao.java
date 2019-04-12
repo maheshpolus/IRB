@@ -7,6 +7,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
@@ -69,5 +70,7 @@ public interface IRBProtocolDao {
 	IRBViewProfile loadProtocolHistoryActionComments(String protocolNumber, Integer protocolActionId, String protocolActionTypecode);
 
 	IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber);
+
+	IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolUnit, ProtocolGeneralInfo generalInfo);
 
 }

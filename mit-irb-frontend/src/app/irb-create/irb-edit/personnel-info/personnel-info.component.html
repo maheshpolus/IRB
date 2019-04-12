@@ -8,7 +8,7 @@
     </div>
     <div class="card-body card-paddng">
       <div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidPersonnelInfo">
-        <div class="alert alert-danger "[innerHTML]="warningMessage">
+        <div class="alert alert-danger " [innerHTML]="warningMessage">
         </div>
       </div>
       <div class="col-12  search-eidted-p">
@@ -35,15 +35,15 @@
             </div>
           </div> -->
         </div>
-        
-          <!-- <div class="col-md-4">
+
+        <!-- <div class="col-md-4">
             <div class="form-group">
               <label>Email</label>
               <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
                 placeholder="email-id">
             </div>
           </div> -->
-          <div class="row top-dis-15">
+        <div class="row top-dis-15">
           <div class="col-md-3">
             <div class="form-group">
               <label>Role
@@ -72,129 +72,144 @@
               <label>Affiliation
                 <span class="mandatory">*</span>
               </label>
-              <select  class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="personnelInfo.affiliationTypeCode"
-                (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
+              <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="personnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
                 <option selected value="null">Please Select</option>
                 <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
               </select>
             </div>
           </div>
           <div class="col-md-4">
-              <div class="form-group">
-                <label>Study Role
-                  <!-- <span class="mandatory">*</span> -->
-                </label>
-                <textarea class="form-control txt-area-fnt" placeholder="Role Description" [(ngModel)]="personnelInfo.description"></textarea>
-              </div>
+            <div class="form-group">
+              <label>Study Role
+                <!-- <span class="mandatory">*</span> -->
+              </label>
+              <textarea class="form-control txt-area-fnt" placeholder="Role Description" [(ngModel)]="personnelInfo.description"></textarea>
             </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                  <label>Obtained Consent
-                    <!-- <span class="mandatory">*</span> -->
-                  </label>
-                  <div>
-                  <input type="checkbox" class="align-center mt-10" [(ngModel)]="isObtainedConsent"></div>
-                </div>
-              </div>
           </div>
-          <div class="row">
-          <div class="col-md-11">
-              <div class="form-group">
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
-                  </label>
-                </div>
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
-                  </label>
-                  <span class="mandatory">*</span>
-                </div>
-                <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text" class="form-control input-field-size"
-                  placeholder="{{personPlaceHolder}}" [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
-                  (focusout)="isElasticResultPerson = false" />
-                <div class="sb-seachresults top-margin">
-                  <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
-                    <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)">
-                      <span [innerHTML]="result.label"></span>
-                    </li>
-                  </ul>
-                </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Obtained Consent
+                <!-- <span class="mandatory">*</span> -->
+              </label>
+              <div>
+                <input type="checkbox" class="align-center mt-10 checkbox-lg" [(ngModel)]="isObtainedConsent">
               </div>
             </div>
-            <div class="col-md-1 add-btn-1">
-                <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button" class="btn btn-success top-butn">
-                  <i class="fa fa-plus" aria-hidden="true"></i>
-    
-                </button>
-                <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-11">
+            <div class="form-group">
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="optradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="optradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
+                </label>
+                <span class="mandatory">*</span>
+              </div>
+              <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text" class="form-control input-field-size"
+                placeholder="{{personPlaceHolder}}" [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
+                (focusout)="isElasticResultPerson = false" />
+              <div class="sb-seachresults top-margin">
+                <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
+                  <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)">
+                    <span [innerHTML]="result.label"></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 add-btn-1">
+            <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button" class="btn btn-success top-butn">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+
+            </button>
+            <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
                   <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button> -->
-              </div>
-            </div>
-            <div class="col-12" *ngIf="showPersonElasticBand">
+          </div>
+        </div>
+        <div class="col-12" *ngIf="showPersonElasticBand">
+          <div class="row">
+            <div class="col-12 band-s">
+              <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
               <div class="row">
-                <div class="col-12 band-s">
-                  <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
-                  <div class="row">
-                    <div class="col-12">
-                      <label>Name:</label>
-                      <span>{{selectedPerson?.full_name}}</span>
-                    </div>
-                    <div class="col-12">
-                      <label>Username:</label>
-                      <span>{{selectedPerson?.user_name}}</span>
-                      <label>Email:</label>
-                      <span>{{selectedPerson?.email_address}}</span>
-                      <label>Phone no:</label>
-                      <span>{{selectedPerson?.phone_number}}</span>
-                      <label>Title:</label>
-                      <span>{{selectedPerson?.title}}</span>
-                    </div>
-                  </div>
+                <div class="col-12">
+                  <label>Name:</label>
+                  <span>{{selectedPerson?.full_name}}</span>
+                </div>
+                <div class="col-12">
+                  <label>Username:</label>
+                  <span>{{selectedPerson?.user_name}}</span>
+                  <label>Email:</label>
+                  <span>{{selectedPerson?.email_address}}</span>
+                  <label>Phone no:</label>
+                  <span>{{selectedPerson?.phone_number}}</span>
+                  <label>Title:</label>
+                  <span>{{selectedPerson?.title}}</span>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>Active Persons</label>
+          <div class="text-right persons-header">
+              <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
+              <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
+          </div>
+        </div>
       </div>
       
-      <div class="col-12 text-right">
-        <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
-        <i class="fa fa-user-o" aria-hidden="true">&nbsp;
-          Non Employee</i>
-      </div>
-      <div class="col-md-12 users-list-tbl">
+      <!-- <div class="col-12">
+        <div class="form-group">
+          <label>Active Persons</label>
+          </div>
+      </div> -->
+      <div class="col-md-12 users-list-tbl" *ngIf="activePersonExist">
         <div class="row">
           <div class="table-responsive">
             <table class="table table-striped tbl-p-clr" *ngIf="personalDataList?.length > 0">
               <thead class="tbl-head-clr thead-font-size">
-                <tr>
-                  <th scope="col">Role</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Qualification</th>
-                  <th scope="col" width="15%">Study Roles</th>
-                  <th scope="col">Affiliation</th>
-                  <th scope="col">Obtained Consent</th>
-                  <th scope="col">Training Completed</th>
-                  <th scope="col">Action</th>
-                </tr>
+                  <tr>
+                      <th scope="col">Role</th>
+                      <th scope="col" width="15%">Name</th>
+                      <th scope="col">Qualification</th>
+                      <th scope="col" width="15%">Study Roles</th>
+                      <th scope="col">Affiliation</th>
+                      <th scope="col">Obtained Consent</th>
+                      <th scope="col">Training Completed</th>
+                      <th scope="col" width="10%">Action</th>
+                    </tr>
+    
               </thead>
               <tbody class="tbody-font-size">
-                <tr *ngFor="let item of personalDataList let i=index" [class.poping-border]="i == personalInfoSelectedRow">
-                    <td *ngIf="i != personalInfoSelectedRow">{{item.protocolPersonRoleTypes?.description}}</td>
-                    <td *ngIf="i == personalInfoSelectedRow">
-                      <select [(ngModel)]="editPersonnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(editPersonnelInfo.protocolPersonRoleId,'EDIT')"
-                        class="custom-select mr-sm-2" id="customRoleSelect">
-                        <option selected value="null">Please Select</option>
-                        <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
-                      </select>
-                    </td>
-                  <td><i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item.personName}}</td>
+                  <ng-container *ngFor="let item of personalDataList let i=index">
+                <tr *ngIf="item.isActive == 'Y' || item.isActive == null" [class.poping-border]="i == personalInfoSelectedRow">
+                  <td *ngIf="i != personalInfoSelectedRow">{{item.protocolPersonRoleTypes?.description}}</td>
+                  <td *ngIf="i == personalInfoSelectedRow">
+                    <select [(ngModel)]="editPersonnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(editPersonnelInfo.protocolPersonRoleId,'EDIT')"
+                      class="custom-select mr-sm-2" id="customRoleSelect">
+                      <option selected value="null">Please Select</option>
+                      <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
+                    </select>
+                  </td>
+                  <td  width="15%">
+                    <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item.personName}}</td>
                   <td>{{item.educationLevel}}</td>
-                  
+
                   <td width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}</td>
-                  <td *ngIf="i == personalInfoSelectedRow"><textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea></td>
-    
+                  <td *ngIf="i == personalInfoSelectedRow">
+                    <textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea>
+                  </td>
+
                   <td *ngIf="i != personalInfoSelectedRow">{{item.protocolAffiliationTypes?.description}}</td>
                   <td *ngIf="i == personalInfoSelectedRow">
                     <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="editPersonnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
@@ -202,10 +217,18 @@
                       <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
                     </select>
                   </td>
-                  <td class="text-center" *ngIf="i != personalInfoSelectedRow"><span *ngIf="item.isObtainedConsent == 'Y'">Yes</span><span *ngIf="item.isObtainedConsent == 'N'">No</span></td>
-                  <td *ngIf="i == personalInfoSelectedRow"><input type="checkbox" [(ngModel)]="isObtainedConsentEdit"  class="align-center mt-10"></td>
-                  <td class="text-center"><span *ngIf="item.trainingInfo == 'COMPLETED'">Yes</span><span *ngIf="item.trainingInfo == 'INCOMPLETED'">No</span></td>
-                  <td class="action-btn-list">
+                  <td class="text-center" *ngIf="i != personalInfoSelectedRow">
+                      <i *ngIf="item.isObtainedConsent == 'Y'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
+                      <i *ngIf="item.isObtainedConsent == 'N'|| item.isObtainedConsent == null" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
+                    </td>
+                  <td *ngIf="i == personalInfoSelectedRow">
+                    <input type="checkbox" [(ngModel)]="isObtainedConsentEdit" class="align-center mt-10">
+                  </td>
+                  <td class="text-center">
+                      <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
+                      <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
+                  </td>
+                  <td class="action-btn-list" width="10%" >
                     <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button"
                       class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -223,6 +246,7 @@
                     </button>
                   </td>
                 </tr>
+                </ng-container>
                 <tr *ngIf="personalDataList.length==0">
                   <td style="text-align: center" colspan="6">No Data</td>
                 </tr>
@@ -231,6 +255,84 @@
           </div>
         </div>
       </div>
+
+
+
+
+      <div class="col-12" *ngIf="isAmmendment() && inActivePersonExist">
+          <div class="form-group">
+            <label>Inactive Persons</label>
+            <div class="text-right persons-header">
+                <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
+                <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
+            </div>
+          </div>
+        </div>
+      <!-- <div class="col-12">
+        <div class="form-group">
+          <label>Inactive Persons</label>
+        </div>
+      </div> -->
+      <div class="col-md-12 users-list-tbl" *ngIf="isAmmendment() && inActivePersonExist">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr" *ngIf="personalDataList?.length > 0">
+              <thead class="tbl-head-clr thead-font-size">
+                  <tr>
+                      <th scope="col">Role</th>
+                      <th scope="col" width="15%">Name</th>
+                      <th scope="col">Qualification</th>
+                      <th scope="col" width="15%">Study Roles</th>
+                      <th scope="col">Affiliation</th>
+                      <th scope="col">Obtained Consent</th>
+                      <th scope="col">Training Completed</th>
+                      <th scope="col" width="10%">Action</th>
+                    </tr>
+              </thead>
+              <tbody class="tbody-font-size">
+                  <ng-container *ngFor="let item of personalDataList">
+                  <tr *ngIf="item.isActive == 'N'">
+                  <td>{{item.protocolPersonRoleTypes?.description}}</td>
+                  <td  width="15%">
+                    <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item.personName}}
+                  </td>
+                  <td>{{item.educationLevel}}</td>
+                  <td width="15%">{{item.description}}</td>
+                  <td >{{item.protocolAffiliationTypes?.description}}</td>
+                  <td class="text-center">
+                      <i *ngIf="item.isObtainedConsent == 'Y'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
+                      <i *ngIf="item.isObtainedConsent == 'N'|| item.isObtainedConsent == null" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
+                    </td>
+                  <td class="text-center">
+                      <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
+                      <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
+                  </td>
+                  <td class="action-btn-list" width="10%">
+                    <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+                </ng-container>
+                <tr *ngIf="inActivePersonExist == false">
+                  <td style="text-align: center" colspan="6">No Data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
     </div>
   </div>
 </div>
@@ -296,10 +398,10 @@
         </div>
         <!-- section2 -->
         <div>
-            <h4 class="popup-sub-head">Training -
-                <span *ngIf="trainingStatus=='COMPLETED'"> Completed</span>
-                <span *ngIf="trainingStatus=='INCOMPLETE'"> Not Completed</span>
-              </h4>
+          <h4 class="popup-sub-head">Training -
+            <span *ngIf="trainingStatus=='COMPLETED'"> Completed</span>
+            <span *ngIf="trainingStatus=='INCOMPLETE'"> Not Completed</span>
+          </h4>
         </div>
         <div class="modal-padding">
           <div class="popup-div">

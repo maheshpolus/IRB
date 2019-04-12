@@ -2,7 +2,6 @@ package org.mit.irb.web.IRBProtocol.pojo;
 
 import java.sql.Clob;
 import java.sql.Date;
-import java.util.List;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
@@ -13,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -286,8 +284,8 @@ public class ProtocolPersonnelInfo {
 	@Column(name="IS_ACTIVE")
 	private String isActive;
 	
-	@Column(name="IS_EMPLOYEE")	
-	private String isEmployee;
+//	@Column(name="IS_EMPLOYEE")	
+//	private String isEmployee;
 	
 	@Transient
 	private String trainingInfo;
@@ -914,13 +912,13 @@ public class ProtocolPersonnelInfo {
 		this.isActive = isActive;
 	}
 
-	public String getIsEmployee() {
-		return isEmployee;
-	}
-
-	public void setIsEmployee(String isEmployee) {
-		this.isEmployee = isEmployee;
-	}
+//	public String getIsEmployee() {
+//		return isEmployee;
+//	}
+//
+//	public void setIsEmployee(String isEmployee) {
+//		this.isEmployee = isEmployee;
+//	}
 
 	public String getTrainingInfo() {
 		return trainingInfo;

@@ -8,6 +8,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
@@ -151,11 +152,12 @@ public interface IRBProtocolService {
 
 
 	/**
+	 * @param protocolNumber 
 	 * @param protocolId 
 	 * @param irbProtocolVO
 	 * @return modify protocol like view,create,modify 
 	 */
-	IRBProtocolVO modifyProtocolDetails(Integer protocolId, IRBProtocolVO irbProtocolVO);
+	IRBProtocolVO modifyProtocolDetails(String protocolNumber, Integer protocolId, IRBProtocolVO irbProtocolVO);
 
 	/**
 	 * @param scienceOfProtocol
@@ -196,5 +198,13 @@ public interface IRBProtocolService {
 	 * check for users right to view the protocol
 	 */ 
 	IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber);
+
+
+	/**
+	 * @param protocolLeadUnits
+	 * @param generalInfo
+	 * @return modify units
+	 */
+	IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolLeadUnits, ProtocolGeneralInfo generalInfo);
 
 }

@@ -57,6 +57,7 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource</value>

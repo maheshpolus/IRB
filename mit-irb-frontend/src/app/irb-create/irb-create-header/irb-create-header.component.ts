@@ -61,7 +61,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   }
 
   getIRBProtocol() {
-    const requestObject = { protocolId: this.protocolId };
+    const requestObject = { protocolId: this.protocolId, protocolNumber: this.protocolNumber };
     this._spinner.show();
     this._irbCreateService.getEditDetails(requestObject).subscribe(
       data => {

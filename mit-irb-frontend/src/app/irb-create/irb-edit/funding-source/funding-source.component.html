@@ -38,21 +38,27 @@
                 (ngModelChange)="selectedSponsor(fundingSource.sourceName)" [datasource]="sponsorList" [minSearchLength]="0" (click)="getCompleteSponsorList()"
                 class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
                 <!-- <div class="searchBox"> -->
-                <input type="text" *ngIf="sourceType.typeCode == '1'" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="{{sourceType.placeholder}}" [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getSponsorList()" (focus)="isSponsorFundingSearch = true" (focusout)="isSponsorFundingSearch = false">
+                <input type="text" *ngIf="sourceType.typeCode == '1'" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="{{sourceType.placeholder}}" [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getSponsorList()" (focus)="isSponsorFundingSearch = true" (focusout)="isSponsorFundingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'sponsorDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'sponsorDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'sponsorDropDown')">
                 <!-- <a href="#" class="searchButton" (click)="clearsearchBox($event)">
                     <i [ngClass]="iconClass"></i>
                     </a> -->
-                  <div class="sb-seachresults top-margin">
+                  <div class="sb-seachresults top-margin dropdown-width" id = "sponsorDropDown">
                     <ul class="sb-results-dropdown-menu" *ngIf="isSponsorFundingSearch">
-                      <li *ngFor="let result of sponsorSearchResult" (mousedown)="selectedSponsor(result.sponsorName)"><span [innerHTML]="result.sponsorName"></span></li>
+                      <li *ngFor="let result of sponsorSearchResult" (mousedown)="selectedSponsor(result.sponsorName, result.sponsorCode)" (click)="selectedSponsor(result.sponsorName, result.sponsorCode)"><span [innerHTML]="result.sponsorName"></span></li>
                     </ul>
                   </div>
                   <!-- </div> -->
 
               <!-- Unit Search Box -->
-              <ng2-completer *ngIf="sourceType.typeCode == '2'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
+              <!-- <ng2-completer *ngIf="sourceType.typeCode == '2'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
                 (ngModelChange)="selectedDepartment(fundingSource.sourceName)" [datasource]="protocolPersonLeadUnits" [minSearchLength]="0"
-                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer>
+                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
+                <input type="text" *ngIf="sourceType.typeCode == '2'" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="{{sourceType.placeholder}}" [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getUnitList()" (focus)="isUnitSearch = true" (focusout)="isUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'UnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'UnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'UnitDropDown')">
+														<div class="sb-seachresults top-margin dropdown-width" id="UnitDropDown">
+															<ul class="sb-results-dropdown-menu" *ngIf="isUnitSearch">
+															  <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" (click)="selectedUnit(result.unitName, result.unitNumber)"><span> {{result.unitNumber}} - {{result.unitName}}</span></li>
+															</ul>
+														  </div>
               <!-- Normal Input Field -->
               <input *ngIf="sourceType.typeCode != '4' && sourceType.typeCode != '5' && sourceType.typeCode != '6' && sourceType.typeCode != '1' && sourceType.typeCode != '2'"
                 type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size"

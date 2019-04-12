@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { IrbCreateService } from '../../irb-create.service';
 import { ElasticService } from '../../../common/service/elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
+import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component'
 
 @Component({
   selector: 'app-funding-source',
@@ -32,6 +33,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   sponsorDetails: any = {};
   fundingSource: any = {};
   protocolFundingSourceTypes = [];
+  unitSearchResult = [];
   sponsorSearchResult: any = [];
   protocolFundingSourceList = [];
   isElasticResultPerson = false;
@@ -40,6 +42,8 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   isGeneralInfoSaved = false;
   showElasticBand = false;
   showDeletePopup = false;
+  isUnitSearch = false;
+  searchString: string;
   message = '';
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
@@ -54,6 +58,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     private _ngZone: NgZone,
     private _elasticsearchService: ElasticService,
     private _completerService: CompleterService,
+    public keyPressEvent: KeyPressEvent,
     private _http: HttpClient) { }
 
   ngOnInit() {
@@ -322,24 +327,22 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  selectedSponsor(fundingSource) {
+  selectedSponsor(fundingSource, fundingSourceCode) {
     this.fundingSource.fundingSource = null;
-    this.sponsorSearchResult.forEach(sponsor => {
-      if (sponsor.sponsorName === fundingSource) {
-        this.fundingSource.sourceName = fundingSource;
-        this.fundingSource.fundingSource = sponsor.sponsorCode;
-      }
-    });
+    this.fundingSource.sourceName = fundingSource;
+    this.fundingSource.fundingSource = fundingSourceCode;
+    this.isSponsorFundingSearch = false;
   }
 
-  selectedDepartment(fundingSource) {
-    this.fundingSource.fundingSource = null;
-    this.commonVo.protocolPersonLeadUnits.forEach(unit => {
-      if (unit.unitName === fundingSource) {
-        this.fundingSource.fundingSource = unit.unitNumber;
-      }
-    });
-  }
+
+  // selectedDepartment(fundingSource) {
+  //   this.fundingSource.fundingSource = null;
+  //   this.commonVo.protocolPersonLeadUnits.forEach(unit => {
+  //     if (unit.unitName === fundingSource) {
+  //       this.fundingSource.fundingSource = unit.unitNumber;
+  //     }
+  //   });
+  // }
 
   addFundingDetails(mode) {
     if (this.fundingSource.fundingSourceTypeCode != null && this.fundingSource.fundingSourceTypeCode !== undefined &&
@@ -467,6 +470,19 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
         this.commonVo.protocolFundingSourceList = this.protocolFundingSourceList;
 
       });
+  }
+  getUnitList() {
+    this.searchString = this.fundingSource.sourceName;
+    this._irbCreateService.loadHomeUnits(this.searchString).subscribe(
+      (data: any) => {
+        this.unitSearchResult = data.homeUnits;
+      });
+  }
+  selectedUnit(unitName, unitNumber) {
+    this.fundingSource.fundingSource = null;
+    this.fundingSource.fundingSource = unitNumber;
+    this.fundingSource.sourceName = unitName;
+    this.isUnitSearch = false;
   }
 
 }

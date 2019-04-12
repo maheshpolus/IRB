@@ -78,4 +78,7 @@ export class IrbCreateService {
     const params = new HttpParams().set('homeUnitSearchString', unitSearchString);
     return this._http.post('/mit-irb/loadHomeUnits', params);
   }
+  updateProtocolUnits(params) {
+    return this._http.post('/mit-irb/updateUnitDetails', params);
+  }
 }

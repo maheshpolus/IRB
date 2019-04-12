@@ -63,7 +63,7 @@
 														<input type="text" class="form-control input-field-size" placeholder="Enter Home Unit" [(ngModel)]="result.committee.homeUnitName" (ngModelChange)="getHomeUnitList()" (focus)="isHomeUnitSearch = true" (focusout)="isHomeUnitSearch = false" [disabled]=" editDetails == false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'homeUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'homeUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'homeUnitDropDown')">
 														<div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="homeUnitDropDown">
 															<ul class="sb-results-dropdown-menu" *ngIf="isHomeUnitSearch">
-															  <li *ngFor="let result of homeUnitSearchResult" (mousedown)="selectedHomeUnit(result.unitName)" (click)="selectedHomeUnit(result.unitName)"><span [innerHTML]="result.unitName"></span></li>
+															  <li *ngFor="let result of homeUnitSearchResult" (mousedown)="selectedHomeUnit(result.unitName,result.unitNumber)" (click)="selectedHomeUnit(result.unitName,result.unitNumber)"><span>{{result.unitNumber}} - {{result.unitName}}</span></li>
 															</ul>
 														  </div>
 											</div>
@@ -156,7 +156,7 @@
 							  <input type="text" class="form-control input-field-size" placeholder="Add area of research" [(ngModel)]="areaInput.researchAreaDescription" (ngModelChange)="getAreaResearchList()" (focus)="isAreaReseachSearch = true" (focusout)="isAreaReseachSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'researchAreaSearchDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'researchAreaSearchDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'researchAreaSearchDropDown')">
 														<div class="sb-seachresults top-margin search-dropdown-position research-dropDown-width" id="researchAreaSearchDropDown">
 															<ul class="sb-results-dropdown-menu" *ngIf="isAreaReseachSearch">
-															  <li *ngFor="let result of areaResearchSearchResult" (mousedown)="selectedResearchArea(result.description)" (click)="selectedResearchArea(result.description)"><span [innerHTML]="result.description"></span></li>
+															  <li *ngFor="let result of areaResearchSearchResult" (mousedown)="selectedResearchArea(result.description, result.researchAreaCode)" (click)="selectedResearchArea(result.description, result.researchAreaCode)"><span [innerHTML]="result.description"></span></li>
 															</ul>
 														</div>
 							  

@@ -407,5 +407,9 @@
 	"/mit-irb/loadHomeUnitsIRB": {
 		"target" : "http://192.168.1.137:8081",
 		"secure" : false	
+	},
+	"/mit-irb/updateUnitDetails": {
+		"target" : "http://192.168.1.137:8081",
+		"secure" : false	
 	}
 }

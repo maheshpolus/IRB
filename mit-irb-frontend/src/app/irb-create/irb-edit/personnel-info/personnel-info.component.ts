@@ -47,6 +47,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   isObtainedConsent = false;
   isObtainedConsentEdit = false;
   showDeletePopup = false;
+  inActivePersonExist = false;
+  activePersonExist = false;
   warningMessage: string;
   alertMessage: string;
   irbPersonDetailedList: any;
@@ -112,6 +114,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.generalInfo = Object.assign({}, this.commonVo.generalInfo);
     this.personnelInfo = this.commonVo.personnelInfo;
     this.personalDataList = this.commonVo.protocolPersonnelInfoList != null ? this.commonVo.protocolPersonnelInfoList : [];
+    this.personalDataList.forEach(person => {
+        if (person.isActive === 'N') {
+          this.inActivePersonExist = true;
+        }
+        if (person.isActive === 'Y' || person.isActive === null) {
+          this.activePersonExist = true;
+        }
+      });
   }
 
   /**fetches elastic search results
@@ -215,14 +225,15 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   setPersonRole(roleId, mode) {
+    this.invalidData.isPiExists = false;
     if (roleId === 'PI') {
       this.personalDataList.forEach(personData => {
         if (personData.protocolPersonRoleId === 'PI') {
           this.invalidData.isPiExists = true;
         }
       });
-    } else {
-      this.invalidData.isPiExists = false;
+    }
+    if (this.invalidData.isPiExists === false) {
       this.personRoleTypes.forEach(personeRole => {
         if (personeRole.protocolPersonRoleId === roleId) {
           if (mode === 'ADD') {
@@ -436,6 +447,10 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         console.log('Error in method loadPersonDetailedList()', error);
       },
     );
+  }
+  isAmmendment() {
+    const isammendment = this.protocolNumber.includes('A') ? true : false;
+    return isammendment;
   }
 
 }

@@ -70,6 +70,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     summaryRemainingCount = 1250;
     showHelpMsg: any = [];
     questionaire: any = [];
+    unitSearchResult = [];
     units: any = [];
     unitName: any = [];
     result: any = {};
@@ -115,6 +116,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     alertMsg: string;
     showEvaluateWarning: string;
     modalHeading: string;
+    searchString: string;
     exemptQuestionList: any = [];
     userDTO: any = {};
     isViewMode: any;
@@ -172,6 +174,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
     tempEditObject: any = {};
     editScheduleattachment: any = {};
     attachments: any = {};
+    isDepartmentSearch = false;
     isEmptyCheckListDescr = false;
     isDuplicate = false;
     disableButton = false;
@@ -1581,5 +1584,18 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         windowClass : 'myCustomModalClass', backdrop : 'static'});
         modalRef.componentInstance.fundingSourceExemptStudy = exemptHeaderDetail;
         modalRef.componentInstance.userDTO = this.userDTO;
+      }
+      getUnitList() {
+        this.searchString = this.requestObject.irbExemptForm.unitName;
+        this._exemptQuestionaireService.loadHomeUnits(this.searchString).subscribe(
+          (data: any) => {
+            this.unitSearchResult = data.homeUnits;
+          });
+      }
+      selectedUnit(unitName, unitNumber) {
+        this.requestObject.irbExemptForm.unitNumber = null;
+        this.requestObject.irbExemptForm.unitNumber = unitNumber;
+        this.requestObject.irbExemptForm.unitName = unitName;
+        this.isDepartmentSearch = false;
       }
 }

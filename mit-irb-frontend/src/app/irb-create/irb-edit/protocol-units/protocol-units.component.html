@@ -7,10 +7,11 @@
       </nav>
     </div>
     <div class="card-body card-paddng">
-      <!--<div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidPersonnelInfo">
-          <div class="alert alert-danger "[innerHTML]="warningMessage">
-          </div>
-        </div>-->
+      <div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidUnitData">
+        <div class="alert alert-danger" [innerHTML]="alertMessage">
+          <strong>*</strong>
+        </div>
+      </div>
       <div class="col-12  search-eidted-p">
 
         <div class="row top-dis-15">
@@ -19,13 +20,14 @@
               <label>Department
                 <span class="mandatory">*</span>
               </label>
-              <input type="text" class="form-control input-field-size" placeholder="Search Unit" [(ngModel)]="protocolUnitName" (ngModelChange)="getHomeUnitList()"
-                (focus)="isProtocolUnitSearch = true" (focusout)="isProtocolUnitSearch = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')"
+              <input type="text" [class.poping-border]="isProtocolUnitEdit" class="form-control input-field-size" placeholder="Search Unit"
+                [(ngModel)]="protocolUnit.unitName" (ngModelChange)="getHomeUnitList()" (focus)="isProtocolUnitSearch = true"
+                (focusout)="isProtocolUnitSearch = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')"
                 (keydown.arrowup)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')" (keydown.Enter)="keyPressEvent.onKeyDown($event,'protocolUnitDropDown')">
               <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="protocolUnitDropDown">
                 <ul class="sb-results-dropdown-menu" *ngIf="isProtocolUnitSearch">
-                  <li *ngFor="let result of UnitSearchResult" (mousedown)="selectedHomeUnit(result.unitName)" (click)="selectedHomeUnit(result.unitName)">
-                    <span [innerHTML]="result.unitName"></span>
+                  <li *ngFor="let result of unitSearchResult" (mousedown)="selectedHomeUnit(result.unitName,result.unitNumber)" (click)="selectedHomeUnit(result.unitName,result.unitNumber)">
+                    <span>{{result.unitNumber}} - {{result.unitName}}</span>
                   </li>
                 </ul>
               </div>
@@ -36,10 +38,12 @@
               <label>Type
                 <span class="mandatory">*</span>
               </label>
-              <select class="custom-select mr-sm-2" id="customRoleSelect">
+              <select [class.poping-border]="isProtocolUnitEdit" class="custom-select mr-sm-2" id="customRoleSelect" [(ngModel)]="protocolUnit.unitTypeCode"
+                (ngModelChange)="setProtocolUnitType(protocolUnit.unitTypeCode)">
                 <option selected value="null">Please Select</option>
-                <!--<option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>-->
+                <option *ngFor="let protocolUnitType of protocolUnitTypes" value="{{protocolUnitType.unitTypeCode}}">{{protocolUnitType.description}}</option>
               </select>
+              <span *ngIf="invalidData.isLeadUnitExist" class="error">Lead Unit already exists please choose a different type</span>
             </div>
           </div>
           <div class="col-md-4">
@@ -47,18 +51,21 @@
               <label>Description
                 <!--<span class="mandatory">*</span>-->
               </label>
-              <textarea class="form-control txt-area-fnt" placeholder="Description"></textarea>
+              <textarea [class.poping-border]="isProtocolUnitEdit" class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="protocolUnit.description"></textarea>
             </div>
           </div>
           <div class="col-md-1 add-btn-1">
-            <button title="Add" type="button" class="btn btn-success top-butn">
+            <button title="Add" *ngIf="!isProtocolUnitEdit" type="button" class="btn btn-success top-butn" (click)="addProtocolUnit('ADD')">
               <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+            <button title="Save" *ngIf="isProtocolUnitEdit" type="button" class="btn btn-success top-butn" (click)="addProtocolUnit('EDIT')">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
             </button>
           </div>
 
         </div>
       </div>
-      <div class="col-md-12 users-list-tbl">
+      <div class="col-md-12 users-list-tbl" *ngIf="protocolUnitList.length > 0">
         <div class="row">
           <div class="table-responsive">
             <table class="table table-striped tbl-p-clr">
@@ -71,9 +78,50 @@
                 </tr>
               </thead>
               <tbody class="tbody-font-size">
+                <tr *ngFor="let item of protocolUnitList let i =index" [class.poping-border]="i == protocolUnitSelectedRow">
+                  <td>{{item?.unitName}}</td>
+                  <td>{{item?.unitType?.description}}</td>
+                  <td>{{item?.description}}</td>
+                  <td class="action-btn-list">
+                    <button title="Edit" (click)="editProtocolUnit(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <!-- <button *ngIf="isProtocolUnitEdit && i == protocolUnitSelectedRow" title="Save" (click)="addProtocolUnit(item,'EDIT')"
+                        type="button" class="btn btn-primary edit-btn-1">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                      </button> -->
+                    <button title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                      data-target="#deleteUnitDetails">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--delete warning modal-->
+  <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteUnitDetails" tabindex="-1" role="dialog"
+    aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content modal-text-color">
+        <div class="modal-header popup-header">
+          <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+          <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveProtocolUnit('DELETE');" data-dismiss="modal">Yes</button>
         </div>
       </div>
     </div>

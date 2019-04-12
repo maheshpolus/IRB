@@ -142,11 +142,17 @@
 							<h4>Unit:</h4>
 						</div>
 						<div class="col-4 width-exempt searchBox display">
-							<ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
+							<!-- <ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
 							 *ngIf="!isViewMode" [datasource]="unitName" [minSearchLength]="0" (ngModelChange)="unitChangeFunction(requestObject.irbExemptForm.unitName)"
 							 (selected)="onUnitSelect()"></ng2-completer>
 							<input class="form-control" type="text" [disabled]="isViewMode" [(ngModel)]="requestObject.irbExemptForm.unitName"
-							 *ngIf="isViewMode" />
+							 *ngIf="isViewMode" /> -->
+							 <input type="text" [disabled]="isViewMode" class="form-control" placeholder="Search: Department Unit" [(ngModel)]="requestObject.irbExemptForm.unitName" (ngModelChange)="getUnitList()" (focus)="isDepartmentSearch = true" (focusout)="isDepartmentSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'departmentUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'departmentUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'departmentUnitDropDown')">
+							 <div class="sb-seachresults top-margin dropdown-width" id="departmentUnitDropDown">
+								 <ul class="sb-results-dropdown-menu" *ngIf="isDepartmentSearch">
+								   <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" (click)="selectedUnit(result.unitName, result.unitNumber)"><span> {{result.unitNumber}} - {{result.unitName}}</span></li>
+								 </ul>
+							   </div>
 						</div>
 					</div>
 				</div>

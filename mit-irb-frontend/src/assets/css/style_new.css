@@ -343,13 +343,13 @@ header{
 }
 
 
-.searchBox>input[type="text"],.advancedTools input[type="text"], select {
+.searchBox>input[type="text"],.advancedTools input[type="text"], select, input[type="text"] {
     border-radius: .25rem !important;
     border: 1px #DEDEDE solid;
     width: 100%;
     padding-right: 35px;
      line-height: 27px;
-    font-size: .8em;
+    font-size: 1em !important;
     padding-left: 10px;
     /*cursor: pointer;/*newly added*/
 }

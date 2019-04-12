@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class ExemptQuestionaireService {
@@ -59,4 +59,8 @@ downloadExemptProtocolChecklist(checklistId) {
           responseType: 'blob'
       });
     }
+    loadHomeUnits(unitSearchString: string) {
+        const params = new HttpParams().set('homeUnitSearchString', unitSearchString);
+        return this._http.post('/mit-irb/loadHomeUnits', params);
+      }
 }

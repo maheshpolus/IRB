@@ -952,14 +952,10 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
               this.homeUnitSearchResult = data.homeUnits;
             });
     }
-    selectedHomeUnit(homeUnitName) {
-        this.homeUnitSearchResult.forEach(homeUnit => {
-          if (homeUnit.unitName === homeUnitName) {
-            this.result.committee.homeUnitNumber = homeUnit.unitNumber;
+    selectedHomeUnit(homeUnitName, homeUnitNumber) {
+            this.result.committee.homeUnitNumber = homeUnitNumber;
             this.result.committee.homeUnitName = homeUnitName;
-          }
-        });
-        this.isHomeUnitSearch = false;
+            this.isHomeUnitSearch = false;
       }
       getAreaResearchList() {
         this.areaInput.researchAreaCode = null;
@@ -969,13 +965,8 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
               this.areaResearchSearchResult = data.researchAreas;
             });
       }
-      selectedResearchArea(researchAreaDescription) {
-        this.areaResearchSearchResult.forEach(researchArea => {
-            if (researchArea.description === researchAreaDescription) {
-                this.areaInput.researchAreaCode = researchArea.researchAreaCode;
+      selectedResearchArea(researchAreaDescription, researchAreaCode) {
+                this.areaInput.researchAreaCode = researchAreaCode;
                 this.areaInput.researchAreaDescription = researchAreaDescription;
-            }
-          });
-          this.isAreaReseachSearch = false;
       }
 }

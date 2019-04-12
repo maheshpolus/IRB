@@ -65,10 +65,10 @@
               </label>
               <input [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit" type="text"
                 class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
-                (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" />
-              <div class="sb-seachresults top-margin">
+                (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'PIDropDown')" />
+              <div class="sb-seachresults top-margin" id ="PIDropDown">
                 <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
-                  <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)">
+                  <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
                     <span [innerHTML]="result.label"></span>
                   </li>
                 </ul>
@@ -80,9 +80,15 @@
               <label>Lead Unit
                 <span class="mandatory">*</span>
               </label>
-              <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
+              <!-- <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
                 [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
-                placeholder="Lead unit"></ng2-completer>
+                placeholder="Lead unit"></ng2-completer> -->
+                <input type="text"  class="form-control input-field-size" placeholder="Search Unit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="getUnitList()" (focus)="isLeadUnitSearch = true" (focusout)="isLeadUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')">
+                <div class="sb-seachresults top-margin research-dropDown-width " id="leadUnitDropDown">
+                  <ul class="sb-results-dropdown-menu" *ngIf="isLeadUnitSearch">
+                    <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" (click)="selectedUnit(result.unitName, result.unitNumber)"><span> {{result.unitNumber}} - {{result.unitName}}</span></li>
+                  </ul>
+                  </div>
             </div>
           </div>
         </div>

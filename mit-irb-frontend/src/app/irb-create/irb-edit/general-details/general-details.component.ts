@@ -9,6 +9,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { IrbCreateService } from '../../irb-create.service';
 import { PiElasticService } from '../../../common/service/pi-elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
+import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component';
 
 @Component({
   selector: 'app-general-details',
@@ -31,12 +32,15 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   protocolSubject: any = {};
   personalDataList = [];
   protocolType = [];
+  unitSearchResult = [];
   protocolPersonLeadUnits = [];
   isGeneralInfoSaved = false;
   isElasticResultPerson = false;
+  isLeadUnitSearch = false;
   message = '';
   personType = 'employee';
   warningMessage: string;
+  searchString: string;
   remainingLength = 7500;
   private $subscription1: ISubscription;
   invalidData = { invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false };
@@ -48,7 +52,8 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     private _sharedDataService: SharedDataService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _spinner: NgxSpinnerService) { }
+    private _spinner: NgxSpinnerService,
+    public keyPressEvent: KeyPressEvent) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
@@ -88,7 +93,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   loadEditDetails() {
-    this.requestObject = { protocolId: this.protocolId };
+    this.requestObject = { protocolId: this.protocolId};
     this._spinner.show();
     this._spinner.hide();
     // Look up data
@@ -179,22 +184,32 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.generalInfo.personnelInfos[0].protocolPersonRoleId = 'PI';
         this.generalInfo.personnelInfos[0].protocolPersonRoleTypes = { protocolPersonRoleId: 'PI', description: 'Principal Investigator' };
         this.generalInfo.personnelInfos[0].affiliationTypeCode = 2;
+        this.generalInfo.personnelInfos[0].nonEmployeeFlag = 'N';
+        this.generalInfo.personnelInfos[0].isObtainedConsent = 'N';
         this.generalInfo.personnelInfos[0].protocolAffiliationTypes = { affiliationTypeCode: 2, description: 'Non-Faculty' };
-        this.generalInfo.personnelInfos[0].protocolLeadUnits = [{ unitNumber: this.ProtocolPI.unitNumber }];
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].protocolPersonLeadUnits = {
-          unitNumber: this.ProtocolPI.unitNumber,
-          unitName: this.ProtocolPI.LeadUnitName
-        };
-        this.generalInfo.personnelInfos[0].protocolPersonLeadUnits = {
-          unitNumber: this.ProtocolPI.unitNumber,
-          unitName: this.ProtocolPI.LeadUnitName
-        };
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].protocolPersonId = this.ProtocolPI.personName;
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].person_id = this.userDTO.personID;
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].updateTimestamp = new Date();
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].updateUser = this.userDTO.userName;
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].sequenceNumber = 1;
-        this.generalInfo.personnelInfos[0].protocolLeadUnits[0].leadUnitFlag = 'Y';
+       // this.generalInfo.personnelInfos[0].protocolLeadUnits = [{ unitNumber: this.ProtocolPI.unitNumber }];
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].protocolPersonLeadUnits = {
+        //   unitNumber: this.ProtocolPI.unitNumber,
+        //   unitName: this.ProtocolPI.LeadUnitName
+        // };
+        // this.generalInfo.personnelInfos[0].protocolPersonLeadUnits = {
+        //   unitNumber: this.ProtocolPI.unitNumber,
+        //   unitName: this.ProtocolPI.LeadUnitName
+        // };
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].protocolPersonId = this.ProtocolPI.personName;
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].person_id = this.userDTO.personID;
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].updateTimestamp = new Date();
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].updateUser = this.userDTO.userName;
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].sequenceNumber = 1;
+        // this.generalInfo.personnelInfos[0].protocolLeadUnits[0].leadUnitFlag = 'Y';
+        this.generalInfo.protocolUnits = [];
+        this.generalInfo.protocolUnits[0] = this.commonVo.protocolLeadUnits;
+        this.generalInfo.protocolUnits[0].unitTypeCode = '1';
+        this.generalInfo.protocolUnits[0].unitType = { unitTypeCode: '1', description: 'Lead Unit' };
+        this.generalInfo.protocolUnits[0].unitNumber = this.ProtocolPI.unitNumber;
+        this.generalInfo.protocolUnits[0].unitName = this.ProtocolPI.LeadUnitName;
+        this.generalInfo.protocolUnits[0].updateUser = this.userDTO.userName;
+        this.generalInfo.protocolUnits[0].updateTimestamp = new Date();
       }
       this.generalInfo.updateTimestamp = new Date();
       this.generalInfo.updateUser = this.userDTO.userName;
@@ -216,7 +231,9 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
           });
           this.commonVo.generalInfo = this.result.generalInfo;
           this.commonVo.protocolPersonnelInfoList = this.result.generalInfo.personnelInfos;
+          this.commonVo.protocolLeadUnitsList = this.result.generalInfo.protocolUnits;
           this.commonVo.personnelInfo = {};
+          this.commonVo.protocolLeadUnits = {};
           this._sharedDataService.setCommonVo(this.commonVo);
           this.generalInfo = this.result.generalInfo;
           this._sharedDataService.setGeneralInfo(this.generalInfo);
@@ -226,8 +243,8 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   validateGeneralInfo() {
     if (this.generalInfo.protocolTypeCode !== null && this.generalInfo.protocolTypeCode !== 'null' &&
       this.generalInfo.protocolTitle !== null && this.generalInfo.protocolTitle !== '' &&
-      this.invalidData.invalidStartDate === false &&
-      this.invalidData.invalidEndDate === false) {
+      this.invalidData.invalidStartDate === false && this.ProtocolPI.personId != null
+      && this.ProtocolPI.personId !== undefined && this.invalidData.invalidEndDate === false) {
       this.invalidData.invalidGeneralInfo = false;
       return true;
     } else {
@@ -304,5 +321,19 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   clearSelectedPIdata() {
     this.personnelInfo.personId = '';
+  }
+
+  getUnitList() {
+    this.searchString = this.ProtocolPI.LeadUnitName;
+    this._irbCreateService.loadHomeUnits(this.searchString).subscribe(
+      (data: any) => {
+        this.unitSearchResult = data.homeUnits;
+      });
+  }
+  selectedUnit(unitName, unitNumber) {
+    this.ProtocolPI.unitNumber = null;
+    this.ProtocolPI.LeadUnitName = unitName;
+    this.ProtocolPI.unitNumber = unitNumber;
+    this.isLeadUnitSearch = false;
   }
 }

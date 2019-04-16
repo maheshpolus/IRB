@@ -83,7 +83,9 @@
               <label>Study Role
                 <!-- <span class="mandatory">*</span> -->
               </label>
-              <textarea class="form-control txt-area-fnt" placeholder="Role Description" [(ngModel)]="personnelInfo.description"></textarea>
+              <input type="text"  class="form-control input-field-size" placeholder="Role Description"
+              [(ngModel)]="personnelInfo.description">
+              <!-- <textarea class="form-control txt-area-fnt" placeholder="Role Description" [(ngModel)]="personnelInfo.description"></textarea> -->
             </div>
           </div>
           <div class="col-md-2">
@@ -197,8 +199,8 @@
                   <td *ngIf="i == personalInfoSelectedRow">
                     <select [(ngModel)]="editPersonnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(editPersonnelInfo.protocolPersonRoleId,'EDIT')"
                       class="custom-select mr-sm-2" id="customRoleSelect">
-                      <option selected value="null">Please Select</option>
-                      <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
+                      <!-- <option selected value="null">Please Select</option> -->
+                      <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}"  [disabled]="invalidData.isPiExistEdit == true && personRoleType.protocolPersonRoleId == 'PI'">{{personRoleType.description}}</option>
                     </select>
                   </td>
                   <td  width="15%">
@@ -207,13 +209,15 @@
 
                   <td width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}</td>
                   <td *ngIf="i == personalInfoSelectedRow">
-                    <textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea>
+                      <input type="text"  class="form-control input-field-size" placeholder="Role Description"
+                      [(ngModel)]="editPersonnelInfo.description">
+                    <!-- <textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea> -->
                   </td>
 
                   <td *ngIf="i != personalInfoSelectedRow">{{item.protocolAffiliationTypes?.description}}</td>
                   <td *ngIf="i == personalInfoSelectedRow">
                     <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="editPersonnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
-                      <option selected value="null">Please Select</option>
+                      <!-- <option selected value="null">Please Select</option> -->
                       <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
                     </select>
                   </td>

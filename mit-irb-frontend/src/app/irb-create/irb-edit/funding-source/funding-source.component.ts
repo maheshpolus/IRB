@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { ISubscription } from 'rxjs/Subscription';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { HttpClient } from '@angular/common/http';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IrbCreateService } from '../../irb-create.service';
 import { ElasticService } from '../../../common/service/elastic.service';
@@ -59,7 +60,8 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     private _elasticsearchService: ElasticService,
     private _completerService: CompleterService,
     public keyPressEvent: KeyPressEvent,
-    private _http: HttpClient) { }
+    private _http: HttpClient,
+    private _spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
@@ -459,9 +461,11 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
       this.fundingSource.acType = 'U';
       this.commonVo.fundingSource = this.fundingSource;
     }
+    this._spinner.show();
     this._irbCreateService.updateFundingSource(this.commonVo).subscribe(
       data => {
         this.result = data;
+        this._spinner.hide();
         this.fundingSource = {};
         this.fundingSource.fundingSourceTypeCode = null;
         this.sourceType.placeholder = null;

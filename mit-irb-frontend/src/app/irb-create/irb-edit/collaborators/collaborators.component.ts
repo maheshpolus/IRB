@@ -3,6 +3,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IrbCreateService } from '../../irb-create.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
@@ -69,7 +70,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     public changeRef: ChangeDetectorRef,
     private _irbCreateService: IrbCreateService,
     private _irbViewService: IrbViewService,
-    private _completerService: CompleterService) { }
+    private _completerService: CompleterService,
+    private _spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
@@ -206,9 +209,11 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.protocolCollaborator.acType = 'U';
       this.commonVo.protocolCollaborator = this.protocolCollaborator;
     }
+    this._spinner.show();
     this._irbCreateService.updateCollaborator(this.commonVo).subscribe(
       data => {
         this.result = data;
+        this._spinner.hide();
         this.protocolCollaborator = {};
         this.collaboratorName = null;
         this.protocolCollaboratorList = this.result.protocolCollaboratorList;

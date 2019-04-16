@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import { IrbCreateService } from '../../irb-create.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
 
@@ -35,6 +37,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   private $subscription1: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
     private _sharedDataService: SharedDataService,
+    private _spinner: NgxSpinnerService,
     private _irbCreateService: IrbCreateService) { }
 
   ngOnInit() {
@@ -140,9 +143,11 @@ export class SubjectsComponent implements OnInit, OnDestroy {
       this.protocolSubject.acType = 'U';
       this.commonVo.protocolSubject = this.protocolSubject;
     }
+    this._spinner.show();
     this._irbCreateService.updateSubject(this.commonVo).subscribe(
       data => {
         this.result = data;
+        this._spinner.hide();
         this.protocolSubject = {};
         this.protocolSubjectAgeGroupCategory = [];
         this.protocolSubject.vulnerableSubjectTypeCode = null;

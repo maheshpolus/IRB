@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -21,8 +20,12 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.Award;
@@ -744,7 +747,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	@Async
 	public Future<IRBProtocolVO> getDepartmentList(IRBProtocolVO irbProtocolVO) {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolLeadUnits p where p.protocolNumber =:protocolNumber");
+				.createQuery("from ProtocolLeadUnits p where p.protocolNumber =:protocolNumber order by p.updateTimestamp DESC");		
 		queryGeneral.setString("protocolNumber", irbProtocolVO.getProtocolNumber());
 		if (!queryGeneral.list().isEmpty()) {
 			List<ProtocolLeadUnits> protocolLeadUnits = queryGeneral.list();
@@ -800,7 +803,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	@Async
 	public Future<IRBProtocolVO> getCollaboratorList(IRBProtocolVO irbProtocolVO) {
 		Query queryCollaborator = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId");
+				.createQuery("from ProtocolCollaborator p where p.protocolId =:protocolId order by p.updateTimestamp DESC");
 		queryCollaborator.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		List<ProtocolCollaborator> collaborators = queryCollaborator.list();
 		irbProtocolVO.setProtocolCollaboratorList(collaborators);
@@ -810,7 +813,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	@Async
 	public Future<IRBProtocolVO> getSubjectoList(IRBProtocolVO irbProtocolVO) {
 		Query queryprotocolSubject = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolSubject p where p.protocolId =:protocolId");
+				.createQuery("from ProtocolSubject p where p.protocolId =:protocolId order by p.updateTimestamp DESC");
 		queryprotocolSubject.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		irbProtocolVO.setProtocolSubjectList(queryprotocolSubject.list());
 		return new AsyncResult<>(irbProtocolVO);
@@ -831,7 +834,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	private Future<IRBProtocolVO> getProtocolFundingSource(Integer protocolId, IRBProtocolVO irbProtocolVO) {
 		try {
 			Query queryfundingSource = hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId");
+					.createQuery("from ProtocolFundingSource p where p.protocolId =:protocolId order by p.updateTimestamp DESC");
 			queryfundingSource.setInteger("protocolId", protocolId);
 			List<ProtocolFundingSource> fundingSourceList = queryfundingSource.list();
 			if (!fundingSourceList.isEmpty()) {
@@ -909,18 +912,37 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	private Future<Proposal> fetchProposal(String fundingSource) {
-		Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
-				"from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
-		queryProposal.setString("proposalNumber", fundingSource);
+		
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria queryProposal = session.createCriteria(Proposal.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("documentNumber"), "documentNumber");
+		projList.add(Projections.property("title"), "title");
+		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		queryProposal.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Proposal.class));		
+		queryProposal.add(Restrictions.eq("proposalNumber", fundingSource));
+		queryProposal.addOrder(Order.desc("sequenceNumber"));
+		/*Query queryProposal = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
+				"select p1.documentNumber,p1.title,p1.sponsorCode from Proposal p1 where p1.proposalNumber =:proposalNumber and p1.sequenceNumber = (select max(p2.sequenceNumber) from Proposal p2 where p2.proposalNumber = p1.proposalNumber)");
+		queryProposal.setString("proposalNumber", fundingSource);*/
 		Proposal proposal = (Proposal) queryProposal.list().get(0);
 		return new AsyncResult<>(proposal);
 	}
 
 	@Async
 	private Future<EpsProposal> fetchDevPropDetail(String fundingSource) {
-		Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
+		
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria queryDevProposal = session.createCriteria(EpsProposal.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("documentNumber"), "documentNumber");
+		projList.add(Projections.property("title"), "title");
+		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		queryDevProposal.setProjection(projList).setResultTransformer(Transformers.aliasToBean(EpsProposal.class));		
+		queryDevProposal.add(Restrictions.eq("proposalNumber", fundingSource));
+	/*	Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from EpsProposal dp where dp.proposalNumber =:proposalNumber");
-		queryDevProposal.setString("proposalNumber", fundingSource);
+		queryDevProposal.setString("proposalNumber", fundingSource);*/
 		EpsProposal devProposal = (EpsProposal) queryDevProposal.list().get(0);
 		return new AsyncResult<>(devProposal);
 	}
@@ -936,6 +958,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Async
 	private Future<Sponsor> fetchSponsorDetail(String fundingSource) {
+		
+		
 		Query querySponsorDetails = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from Sponsor s where s.sponsorCode =:sponsorCode");
 		querySponsorDetails.setString("sponsorCode", fundingSource);
@@ -945,10 +969,22 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Async
 	private Future<Award> fetchAwardDetail(String fundingSource) {
-		Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
+		
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria queryAwardDetails = session.createCriteria(Award.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("awardId"), "awardId");
+		projList.add(Projections.property("documentNumber"), "documentNumber");
+		projList.add(Projections.property("title"), "title");
+		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		queryAwardDetails.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Award.class));		
+		queryAwardDetails.add(Restrictions.eq("awardNumber", fundingSource));
+		queryAwardDetails.add(Restrictions.eq("awardSequenceStatus",KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE));
+		
+		/*Query queryAwardDetails = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
 				"from Award a where a.awardNumber =:awardNumber and a.awardSequenceStatus =:awardSequenceStatus");
 		queryAwardDetails.setString("awardNumber", fundingSource);
-		queryAwardDetails.setString("awardSequenceStatus", KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE);
+		queryAwardDetails.setString("awardSequenceStatus", KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE);*/
 		Award award = (Award) queryAwardDetails.list().get(0);
 		return new AsyncResult<>(award);
 	}

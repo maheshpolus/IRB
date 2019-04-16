@@ -113,8 +113,8 @@ public class EpsProposal {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 	
-	@Column(name = "NSF_CODE")
-	private String nsfCode;
+/*	@Column(name = "NSF_CODE")
+	private String nsfCode;*/
 	
 	@Column(name = "PRIME_SPONSOR_CODE")
 	private String primeSponsorCode;
@@ -471,13 +471,13 @@ public class EpsProposal {
 		this.updateUser = updateUser;
 	}
 
-	public String getNsfCode() {
+/*	public String getNsfCode() {
 		return nsfCode;
 	}
 
 	public void setNsfCode(String nsfCode) {
 		this.nsfCode = nsfCode;
-	}
+	}*/
 
 	public String getPrimeSponsorCode() {
 		return primeSponsorCode;

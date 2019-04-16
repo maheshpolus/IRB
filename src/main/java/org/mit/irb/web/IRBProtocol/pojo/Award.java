@@ -144,8 +144,8 @@ public class Award {
 	@Column(name = "MODIFICATION_NUMBER")
 	private String modificationNumber;
 
-	@Column(name = "NSF_CODE")
-	private String nsfCode;
+/*	@Column(name = "NSF_CODE")
+	private String nsfCode;*/
 
 	@Column(name = "PAYMENT_SCHEDULE_INDICATOR")
 	private String paymentScheduleIndicator;
@@ -528,14 +528,14 @@ public class Award {
 		this.modificationNumber = modificationNumber;
 	}
 
-	public String getNsfCode() {
+/*	public String getNsfCode() {
 		return nsfCode;
 	}
 
 	public void setNsfCode(String nsfCode) {
 		this.nsfCode = nsfCode;
 	}
-
+*/
 	public String getPaymentScheduleIndicator() {
 		return paymentScheduleIndicator;
 	}

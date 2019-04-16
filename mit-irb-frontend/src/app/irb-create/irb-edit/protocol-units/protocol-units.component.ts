@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IrbCreateService } from '../../irb-create.service';
 import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component';
@@ -41,6 +42,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
   constructor(private _activatedRoute: ActivatedRoute,
     private _sharedDataService: SharedDataService,
     private _irbCreateService: IrbCreateService,
+    private _spinner: NgxSpinnerService,
     public keyPressEvent: KeyPressEvent) { }
 
   ngOnInit() {
@@ -130,8 +132,10 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
       this.protocolUnit.protocolNumber = this.protocolNumber;
       this.commonVo.protocolLeadUnits = this.protocolUnit;
     }
+    this._spinner.show();
     this._irbCreateService.updateProtocolUnits(this.commonVo).subscribe((data: any) => {
       this.protocolUnitList = data.protocolLeadUnitsList;
+      this._spinner.hide();
       this.protocolUnit = {};
       this.protocolUnit.unitTypeCode = null;
       this.commonVo.protocolLeadUnitsList = this.protocolUnitList;

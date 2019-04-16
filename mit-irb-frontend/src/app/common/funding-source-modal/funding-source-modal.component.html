@@ -1,4 +1,5 @@
 <!--Funding Source Modal-->
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="modal-header popup-header" data-backdrop="static">
 	<h5 class="modal-title" id="exampleModalLongTitle">Funding Source</h5>
 	<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
@@ -18,7 +19,7 @@
 							</span>
 						</div>
 						<div class="col-sm-9 col-12 list-des">
-							<h5>E-{{fundingSourceExemptStudy?.exemptFormID}}-{{fundingSourceExemptStudy?.exemptTitle}}</h5>
+							<h5>E-{{fundingSourceExemptStudy?.exemptFormID}} - {{fundingSourceExemptStudy?.exemptTitle}}</h5>
 							<div>
 								<div class="row">
 									<div class="col-md-6">
@@ -181,7 +182,7 @@
 				</div>
 				</div>
 				<div class="row">
-				<div class="col-md-12 users-list-tbl" *ngIf="fundingSourceList.length > 0 ">
+				<div class="col-md-12 users-list-tbl">
 					<div class="row">
 						<div class="table-responsive">
 							<table class="table table-striped tbl-p-clr">
@@ -196,6 +197,7 @@
 									</tr>
 								</thead>
 								<tbody class="tbody-font-size">
+									<ng-container *ngIf="fundingSourceList.length > 0">
 									<tr *ngFor="let item of fundingSourceList let j=index" [class.poping-border]="j == fundingEditIndex">
 										<td>{{item.FUNDING_SOURCE_TYPE}}</td>
 										<td>{{item.FUNDING_SOURCE_NAME}}</td>
@@ -215,6 +217,10 @@
 												<i class="fa fa-trash" aria-hidden="true"></i>
 											</button>
 										</td>
+									</tr>
+									</ng-container>
+									<tr *ngIf="fundingSourceList.length == 0 || fundingSourceList == null">
+											<td style="text-align: center" colspan="6">No Funding Source to show.</td>
 									</tr>
 								</tbody>
 							</table>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ElasticService } from '../../common/service/elastic.service';
 import { FundingSourceModalService } from './funding-source-modal.service';
@@ -36,7 +37,8 @@ export class FundingSourceModalComponent implements OnInit {
   constructor(private _elasticsearchService: ElasticService,
     public keyPressEvent: KeyPressEvent,
     private _fundingSourceModalService: FundingSourceModalService,
-    public activeModal: NgbActiveModal, private _http: HttpClient) {
+    public activeModal: NgbActiveModal, private _http: HttpClient,
+    private _spinner: NgxSpinnerService) {
     this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
     this.options.index = this._elasticsearchService.AWARD_INDEX;
     this.options.type = 'award';
@@ -72,8 +74,10 @@ export class FundingSourceModalComponent implements OnInit {
     } else {
       this.isEditMode = false;
     }
+    this._spinner.show();
     this._fundingSourceModalService.loadFundingSourceDetails(this.fundingSourceExemptStudy.exemptFormID).subscribe(
       data => {
+        this._spinner.hide();
         this.result = data;
         this.fundingSourceTypes = this.result.protocolFundingSourceTypes;
         this.fundingSourceList = this.result.exemptFundingSourceList != null ? this.result.exemptFundingSourceList : [];
@@ -214,8 +218,10 @@ export class FundingSourceModalComponent implements OnInit {
         this.exemptFundingSource.fundingSourceName = this.exemptFundingSource.fundingSource;
         this.exemptFundingSource.fundingSource = null;
       }
+      this._spinner.show();
       this._fundingSourceModalService.updateExemptFundingSource(this.result).subscribe(
         (data: any) => {
+          this._spinner.hide();
           this.fundingSourceList = data.exemptFundingSourceList;
           this.exemptFundingSource = {};
           this.exemptFundingSource.fundingSourceTypeCode = null;
@@ -265,8 +271,10 @@ export class FundingSourceModalComponent implements OnInit {
       this.fundingEditIndex = null;
       this.options.editHighlight = false;
     }
+    this._spinner.show();
     this._fundingSourceModalService.updateExemptFundingSource(this.result).subscribe(
       (data: any) => {
+        this._spinner.hide();
         this.fundingSourceList = data.exemptFundingSourceList != null ? data.exemptFundingSourceList : [];
       });
   }

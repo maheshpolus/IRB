@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import {NgxSpinnerService} from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { IrbCreateService } from '../../irb-create.service';
@@ -57,7 +58,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false,
-    isPersonAdded: false, isPiExists: false, invalidPersonDetails: false
+    isPersonAdded: false, isPiExists: false, invalidPersonDetails: false, isPiExistEdit: false
   };
   private $subscription1: ISubscription;
 
@@ -67,6 +68,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     private _elasticsearchService: PiElasticService,
     private _irbCreateService: IrbCreateService,
     private _irbViewService: IrbViewService,
+    private _spinner: NgxSpinnerService,
     private _completerService: CompleterService) { }
 
   ngOnInit() {
@@ -335,11 +337,17 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   editPersonalDetails(selectedItem: any, index: number) {
+    this.invalidData.isPiExistEdit = false;
     this.editIndex = index;
     this.personalInfoSelectedRow = index;
     this.isPersonalInfoEdit = true;
     this.editPersonnelInfo = Object.assign({}, selectedItem);
     this.isObtainedConsentEdit = this.editPersonnelInfo.isObtainedConsent === 'Y' ? true : false;
+    this.personalDataList.forEach(personData => {
+      if (personData.protocolPersonRoleId === 'PI') {
+        this.invalidData.isPiExistEdit = true;
+      }
+    });
     // this.editPersonLeadUnit = selectedItem.protocolLeadUnits[0].protocolPersonLeadUnits.unitName;
   }
   addPersonalDetails(personnelInfo, mode) {
@@ -402,9 +410,11 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       this.commonVo.personnelInfo = personnelInfo;
      // this.commonVo.generalInfo.personnelInfos[0] = personnelInfo; //added newly
     }
+    this._spinner.show();
     this._irbCreateService.updateProtocolPersonInfo(this.commonVo).subscribe(
       data => {
         this.result = data;
+        this._spinner.hide();
         this.personnelInfo = {};
         this.personnelInfo.affiliationTypeCode = null;
         this.personnelInfo.protocolPersonRoleId = null;

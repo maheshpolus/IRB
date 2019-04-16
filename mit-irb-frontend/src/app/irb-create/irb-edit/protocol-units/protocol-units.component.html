@@ -51,7 +51,9 @@
               <label>Description
                 <!--<span class="mandatory">*</span>-->
               </label>
-              <textarea [class.poping-border]="isProtocolUnitEdit" class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="protocolUnit.description"></textarea>
+              <input type="text" [class.poping-border]="isProtocolUnitEdit" class="form-control input-field-size" placeholder="Description"
+              [(ngModel)]="protocolUnit.description">
+              <!-- <textarea [class.poping-border]="isProtocolUnitEdit" class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="protocolUnit.description"></textarea> -->
             </div>
           </div>
           <div class="col-md-1 add-btn-1">

@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
 
+
 import { IrbCreateService } from '../../irb-create.service';
 import { PiElasticService } from '../../../common/service/pi-elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
@@ -94,8 +95,8 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   loadEditDetails() {
     this.requestObject = { protocolId: this.protocolId};
-    this._spinner.show();
-    this._spinner.hide();
+    // this._spinner.show();
+    // this._spinner.hide();
     // Look up data
     this.protocolType = this.commonVo.protocolType;
     this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
@@ -215,9 +216,11 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       this.generalInfo.updateUser = this.userDTO.userName;
       this.commonVo.generalInfo = this.generalInfo;
       this.requestObject = JSON.stringify(this.commonVo.generalInfo);
+      this._spinner.show();
       this._irbCreateService.updateProtocolGeneralInfo(this.commonVo).subscribe(
         data => {
           this.result = data;
+          this._spinner.hide();
           if (this.protocolNumber == null) {
             this.personalDataList = this.result.generalInfo.personnelInfos;
             this.personnelInfo = {};
@@ -243,8 +246,9 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   validateGeneralInfo() {
     if (this.generalInfo.protocolTypeCode !== null && this.generalInfo.protocolTypeCode !== 'null' &&
       this.generalInfo.protocolTitle !== null && this.generalInfo.protocolTitle !== '' &&
-      this.invalidData.invalidStartDate === false && this.ProtocolPI.personId != null
-      && this.ProtocolPI.personId !== undefined && this.invalidData.invalidEndDate === false) {
+      this.invalidData.invalidStartDate === false && ((this.ProtocolPI.personId != null
+      && this.ProtocolPI.personId !== undefined && this.ProtocolPI.unitNumber !== undefined
+       && this.ProtocolPI.unitNumber != null) || this.isGeneralInfoSaved === true) && this.invalidData.invalidEndDate === false) {
       this.invalidData.invalidGeneralInfo = false;
       return true;
     } else {

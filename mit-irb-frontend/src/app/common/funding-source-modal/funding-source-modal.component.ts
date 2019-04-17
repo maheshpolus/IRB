@@ -97,7 +97,7 @@ export class FundingSourceModalComponent implements OnInit {
     this.clearField = new String('true');
     this.options.defaultValue = '';
     if (fundingTypeCode === '4') { // Development Proposal
-      this.options.index = this._elasticsearchService.DP_INDEX + '/';
+      this.options.index = this._elasticsearchService.DP_INDEX;
       this.options.type = 'devproposal';
       this.options.contextField = 'sponsor';
       this.options.formatString =
@@ -114,7 +114,7 @@ export class FundingSourceModalComponent implements OnInit {
       };
       this.elasticPlaceHolder = 'Search for Development Proposal';
     } else if (fundingTypeCode === '5') { // Institute Proposal
-      this.options.index = this._elasticsearchService.IP_INDEX + '/';
+      this.options.index = this._elasticsearchService.IP_INDEX;
       this.options.type = 'proposal';
       this.options.contextField = 'sponsor_name';
       this.options.formatString =

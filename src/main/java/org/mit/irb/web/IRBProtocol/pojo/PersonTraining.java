@@ -1,56 +1,24 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
+import java.sql.Clob;
 import java.sql.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import org.hibernate.annotations.Immutable;
-
-@Entity
-@Immutable
-@Table(name = "WHOSP_PERSON_TRAINING")
 public class PersonTraining {
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.AUTO)
-	 @Column(name = "PERSON_ID")
+
+	 private Integer personTrainingID;
 	 private String personID;
-	 
-	 @Column(name="TRAINING_NUMBER")
-	 private Integer trainingNumber;
-	 
-	 @Column(name="TRAINING_CODE")
-	 private Integer trainingCode;
-	 
-	 @Column(name="TRAINING_DESCRIPTION")
-	 private String trainingDescription;
-	 
-	 @Column(name="DATE_REQUESTED")
+	 private char activeFlag; 
+	 private Clob comments;	 
+	 private Date dateAcknowledged;	 
 	 private Date dateRequested;
-	 
-	 @Column(name="DATE_SUBMITTED")
-	 private Date dateSubmitted;
-	 
-	 @Column(name="DATE_ACKNOWLEDGED")
-	 private Date dateAcknowledged;
-	 
-	 @Column(name="FOLLOWUP_DATE")
-	 private Date followUpDate;
-	 
-	 @Column(name="SCORE")
-	 private String score;
-	 
-	 @Column(name="UPDATE_TIMESTAMP")
-	 private Date updatetimestamp;
-	 
-	 @Column(name="UPDATE_USER")
+	 private Date dateSubmitted;	 
+	 private Date followUpDate;	 
+	 private String isEmployee;	 
+	 private String score;	 
+	 private Integer trainingCode;	 
+	 private Integer trainingNumber;
+	 private Date updateTimeStamp;	 
 	 private String updateUser;
-	 
-	 @Column(name="WAREHOUSE_LOAD_DATE")
-	 private Date warehouseLoadDate;
 
 	public String getPersonID() {
 		return personID;
@@ -60,28 +28,28 @@ public class PersonTraining {
 		this.personID = personID;
 	}
 
-	public Integer getTrainingNumber() {
-		return trainingNumber;
+	public char getActiveFlag() {
+		return activeFlag;
 	}
 
-	public void setTrainingNumber(Integer trainingNumber) {
-		this.trainingNumber = trainingNumber;
+	public void setActiveFlag(char activeFlag) {
+		this.activeFlag = activeFlag;
 	}
 
-	public Integer getTrainingCode() {
-		return trainingCode;
+	public Clob getComments() {
+		return comments;
 	}
 
-	public void setTrainingCode(Integer trainingCode) {
-		this.trainingCode = trainingCode;
+	public void setComments(Clob comments) {
+		this.comments = comments;
 	}
 
-	public String getTrainingDescription() {
-		return trainingDescription;
+	public Date getDateAcknowledged() {
+		return dateAcknowledged;
 	}
 
-	public void setTrainingDescription(String trainingDescription) {
-		this.trainingDescription = trainingDescription;
+	public void setDateAcknowledged(Date dateAcknowledged) {
+		this.dateAcknowledged = dateAcknowledged;
 	}
 
 	public Date getDateRequested() {
@@ -100,20 +68,20 @@ public class PersonTraining {
 		this.dateSubmitted = dateSubmitted;
 	}
 
-	public Date getDateAcknowledged() {
-		return dateAcknowledged;
-	}
-
-	public void setDateAcknowledged(Date dateAcknowledged) {
-		this.dateAcknowledged = dateAcknowledged;
-	}
-
 	public Date getFollowUpDate() {
 		return followUpDate;
 	}
 
 	public void setFollowUpDate(Date followUpDate) {
 		this.followUpDate = followUpDate;
+	}
+
+	public String getIsEmployee() {
+		return isEmployee;
+	}
+
+	public void setIsEmployee(String isEmployee) {
+		this.isEmployee = isEmployee;
 	}
 
 	public String getScore() {
@@ -124,12 +92,28 @@ public class PersonTraining {
 		this.score = score;
 	}
 
-	public Date getUpdatetimestamp() {
-		return updatetimestamp;
+	public Integer getTrainingCode() {
+		return trainingCode;
 	}
 
-	public void setUpdatetimestamp(Date updatetimestamp) {
-		this.updatetimestamp = updatetimestamp;
+	public void setTrainingCode(Integer trainingCode) {
+		this.trainingCode = trainingCode;
+	}
+
+	public Integer getTrainingNumber() {
+		return trainingNumber;
+	}
+
+	public void setTrainingNumber(Integer trainingNumber) {
+		this.trainingNumber = trainingNumber;
+	}
+
+	public Date getUpdateTimeStamp() {
+		return updateTimeStamp;
+	}
+
+	public void setUpdateTimeStamp(Date updateTimeStamp) {
+		this.updateTimeStamp = updateTimeStamp;
 	}
 
 	public String getUpdateUser() {
@@ -140,12 +124,12 @@ public class PersonTraining {
 		this.updateUser = updateUser;
 	}
 
-	public Date getWarehouseLoadDate() {
-		return warehouseLoadDate;
+	public Integer getPersonTrainingID() {
+		return personTrainingID;
 	}
 
-	public void setWarehouseLoadDate(Date warehouseLoadDate) {
-		this.warehouseLoadDate = warehouseLoadDate;
+	public void setPersonTrainingID(Integer personTrainingID) {
+		this.personTrainingID = personTrainingID;
 	}
-
+	 
 }

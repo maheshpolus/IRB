@@ -778,18 +778,18 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		LocalDate date = LocalDate.now();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(date);
 			Query training=hibernateTemplate.getSessionFactory().getCurrentSession()
-					.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56) and t.followUpDate>= :sysdate");		
+					.createQuery("from PersonTraining1 t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56) and t.followUpDate>= :sysdate");		
 			training.setString("personID",personnel.getPersonId());
 			training.setDate("sysdate",sqlDate);
 			if(training.list().size() > 0){
 				trainingStatus="COMPLETED";
 			}else{
 				Query trainingcase2=hibernateTemplate.getSessionFactory().getCurrentSession()
-						.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56)");		
+						.createQuery("from PersonTraining1 t where t.personID =:personID and t.trainingCode in(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,26,55,56)");		
 				trainingcase2.setString("personID",personnel.getPersonId());					
 
 				Query trainingcase3=hibernateTemplate.getSessionFactory().getCurrentSession()
-						.createQuery("from PersonTraining t where t.personID =:personID and t.trainingCode in(16,23,24,25,27) and t.followUpDate>= :sysdate");		
+						.createQuery("from PersonTraining1 t where t.personID =:personID and t.trainingCode in(16,23,24,25,27) and t.followUpDate>= :sysdate");		
 				trainingcase3.setString("personID",personnel.getPersonId());
 				trainingcase3.setDate("sysdate",sqlDate);
 				if(trainingcase2.list().size() > 0 && trainingcase3.list().size() > 0){

@@ -1,4 +1,107 @@
 <div class="headerPush"></div>
-<p>
-  dashboard works!
-</p>
+<div class="container-fluid">
+  <div class="borderBox irb-margin-top irb-background-tablemaintenance">
+    <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Maintenance</h4>
+    <section class="row outerpadding ml-10 mr-10">
+      <div class="col-md-3">
+        <div class="form-group">
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="empOptradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="nonEmpOptradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
+                </label>
+              </div>
+              <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+        </div>
+      </div>
+      <div class="col-md-4  mt-30">
+        <div class="form-group">
+          <input type="text" [(ngModel)]="trainingName" class="form-control input-field-size" placeholder="Search for a Training" (ngModelChange)="getTrainingList()" (focus)="isTrainingSearch = true" (focusout)="isTrainingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'trainingDropDown')">
+          <div class="sb-seachresults top-margin research-dropDown-width " id="trainingDropDown">
+            <ul class="sb-results-dropdown-menu" *ngIf="isTrainingSearch">
+              <li *ngFor="let result of trainingSearchResult" (mousedown)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)" (click)="selectedUnit(result.DESCRIPTION,result.TRAINING_CODE)"><span> {{result.DESCRIPTION}}</span></li>
+            </ul>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-3  mt-30">
+      <div class="form-group">
+          <button class="btn btn-default btn-search" (click)="getAdvanceSearchResult()">
+            <i class="fa fa-search"></i>Search
+          </button>
+          <button class="btn btn-default btn-close" (click)="clearAdvancedSearch()">
+              <i class="fa fa-close"></i>Clear
+            </button>
+          </div>
+          </div>
+      <div class="col-md-2">
+        <a class="pdf a-right attachment-btn-position" [routerLink]="['person-detail']">
+          <i class="fa fa-plus icon-padding"></i>Add Training
+        </a>
+      </div>
+      <div class="col-md-12 users-list-tbl" >
+          <div class="row">
+            <div class="table-responsive">
+              <table class="table table-striped tbl-p-clr">
+                <thead class="tbl-head-clr thead-font-size">
+                    <tr>
+                        <th scope="col">Person Name</th>
+                        <th scope="col">Training</th>
+                        <th scope="col">Expiration Date</th>
+                        <th scope="col" width="15%">Action</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let personTraining of personTrainingList">
+                          <td>{{personTraining?.FULL_NAME }}</td>
+                          <td>{{personTraining?.TRAINING}}</td>
+                          <td>{{(personTraining?.EXPIRATION_DATE === ' ' || personTraining?.EXPIRATION_DATE === null ) ? ' ':(personTraining?.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</td>
+                          <td class="action-btn-list" width="15%">
+                              <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="showTrainingDetails(personTraining,'EDIT')">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                              </button>
+                              <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="showTrainingDetails(personTraining, 'VIEW')">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                              </button>
+                              <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteTrainingDetails(personTraining)" data-toggle="modal" data-target="#deletewarningModal">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                              </button>
+                            </td>
+                          
+                        </tr>
+                      </tbody>
+                      </table>
+                      </div>
+                      </div>
+                      </div>
+  </section>
+  </div>
+</div>\
+
+<!--delete warning modal-->
+<div class="modal fade" *ngIf="showPopup" id="deletewarningModal"
+ tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header popup-header">
+				<h5 class="modal-title">Want to delete?
+				</h5>
+				<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body modal-pop-up">
+				<p>Are you sure you want to delete this item?</p>
+			</div>
+			<div class="modal-footer btn-row-med">
+				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="showPopup = false">No</button>
+				<!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button> -->
+				<button type="button margin-class"  class="btn btn-primary tab_btn" (click)="confirmDelete()" data-dismiss="modal">Yes</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -70,7 +70,10 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.AgeGroups</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments</value>
-				<value>org.mit.irb.web.IRBProtocol.pojo.PersonTraining1</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.PersonTraining</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.FileData</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments</value>
 				
 					<value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
 					<value>org.mit.irb.web.committee.pojo.Committee</value>

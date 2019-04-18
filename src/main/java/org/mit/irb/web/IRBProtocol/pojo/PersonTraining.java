@@ -8,7 +8,7 @@ public class PersonTraining {
 	 private Integer personTrainingID;
 	 private String personID;
 	 private char activeFlag; 
-	 private Clob comments;	 
+	 private Clob description;	 
 	 private Date dateAcknowledged;	 
 	 private Date dateRequested;
 	 private Date dateSubmitted;	 
@@ -19,6 +19,7 @@ public class PersonTraining {
 	 private Integer trainingNumber;
 	 private Date updateTimeStamp;	 
 	 private String updateUser;
+	 private String acType;
 
 	public String getPersonID() {
 		return personID;
@@ -36,12 +37,12 @@ public class PersonTraining {
 		this.activeFlag = activeFlag;
 	}
 
-	public Clob getComments() {
-		return comments;
+	public Clob getDescription() {
+		return description;
 	}
 
-	public void setComments(Clob comments) {
-		this.comments = comments;
+	public void setDescription(Clob description) {
+		this.description = description;
 	}
 
 	public Date getDateAcknowledged() {
@@ -130,6 +131,14 @@ public class PersonTraining {
 
 	public void setPersonTrainingID(Integer personTrainingID) {
 		this.personTrainingID = personTrainingID;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 	 
 }

@@ -1,4 +1,228 @@
 <div class="headerPush"></div>
-<p>
-    training-details works!
-</p>
+<div class="container-fluid">
+    <div class="borderBox irb-margin-top irb-background-tablemaintenance">
+        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details</h4>
+        <section>
+            <div class="row outerpadding">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="empOptradioDetail" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="empOptradioDetail" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Acknowledgement Date</label>
+                        <div class="input-group  mb-2">
+                            <input type="text" class="form-control" [owlDateTime]="trainingAckDate" placeholder="mm/dd/yyyy">
+                            <owl-date-time [pickerType]="'calendar'" #trainingAckDate></owl-date-time>
+                            <div class="input-group-append input-span-1" [owlDateTimeTrigger]="trainingAckDate">
+                                <!-- <span class="input-group-text"> -->
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <!-- </span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Expiration Date</label>
+                        <div class="input-group  mb-2">
+                            <input type="text" class="form-control" [owlDateTime]="trainingExpDate" placeholder="mm/dd/yyyy">
+                            <owl-date-time [pickerType]="'calendar'" #trainingExpDate></owl-date-time>
+                            <div class="input-group-append input-span-1" [owlDateTimeTrigger]="trainingExpDate">
+                                <!-- <span class="input-group-text"> -->
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <!-- </span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12" *ngIf="showPersonElasticBand">
+                    <div>
+                        <div class="col-12 band-s">
+                            <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label>Name:</label>
+                                    <span>{{selectedPerson?.full_name}}</span>
+                                </div>
+                                <div class="col-12">
+                                    <label>Username:</label>
+                                    <span>{{selectedPerson?.user_name}}</span>
+                                    <label>Email:</label>
+                                    <span>{{selectedPerson?.email_address}}</span>
+                                    <label>Phone no:</label>
+                                    <span>{{selectedPerson?.phone_number}}</span>
+                                    <label>Title:</label>
+                                    <span>{{selectedPerson?.title}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="form-group">
+                        <label>
+                            Training
+                            <span class="mandatory">*</span>
+                        </label>
+                        <input type="text" class="form-control input-field-size" placeholder="Search for a Training">
+                    </div>
+                </div>
+                <div class="col-md-1 add-btn-1">
+                        <button title="Add" *ngIf="!isProtocolUnitEdit" type="button" class="btn btn-success top-butn" (click)="addProtocolUnit('ADD')">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <button title="Save" *ngIf="isProtocolUnitEdit" type="button" class="btn btn-success top-butn" (click)="addProtocolUnit('EDIT')">
+                          <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                      </div>
+            </div>
+            <div class="col-md-12 schedule-box">
+                <h4 class="borderBoxHeading pointer text-color text-right" (click)="showCommentDiv = !showCommentDiv">
+                    <i class="fa fa-plus"></i> Add Comments
+                </h4>
+                <div class="row ml-0 mt-10" *ngIf="showCommentDiv">
+                    <div class="col-md-11">
+                            <div class="form-group">
+                                    <label>
+                                            Comments
+                                            <span class="mandatory">*</span>
+                                    </label>
+                                    <textarea class="form-control txt-area-fnt" placeholder="Comments" ></textarea>
+                        </div>
+                        </div>
+                        <div class="col-md-1 add-btn-1">
+                                <button title="Add" *ngIf="!isProtocolUnitEdit" type="button" class="btn btn-success top-butn" (click)="addProtocolUnit('ADD')">
+                                  <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+                                <button title="Save" *ngIf="isProtocolUnitEdit" type="button" class="btn btn-success top-butn" (click)="addProtocolUnit('EDIT')">
+                                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                </button>
+                              </div>
+
+                        </div>
+
+                <div class="col-md-12 users-list-tbl">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-striped tbl-p-clr">
+                                <thead class="tbl-head-clr thead-font-size">
+                                    <tr>
+                                        <th scope="col">Comments</th>
+                                        <th scope="col">Update User</th>
+                                        <th scope="col" width="10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="top-distance">
+            <div class="col-md-12 schedule-box">
+                    <h4 class="borderBoxHeading pointer text-color text-right" data-toggle="modal" data-target="#attachmentModal" >
+                        <i class="fa fa-plus"></i> Add Attachment
+                    </h4>
+
+                <div class="col-md-12 users-list-tbl">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-striped tbl-p-clr">
+                                <thead class="tbl-head-clr thead-font-size">
+                                    <tr>
+                                        <th scope="col">File Name</th>
+                                        <th scope="col">Update User</th>
+                                        <th scope="col" width="10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+
+        </section>
+    </div>
+</div>
+
+<!--attachment modal-->
+<div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"
+data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog modal-full" role="document">
+  <div class="modal-content">
+    <div class="modal-header popup-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">Add Attachment</h5>
+      <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="clearAttachmentPopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body modal-popup">
+      <div class="modal-padding">
+        <!-- <div class="alert alert-danger " *ngIf="!isMandatoryFilled">
+          Please fill all mandatory fields marked
+          <strong>*</strong>
+        </div>
+        <div class="alert alert-danger " *ngIf="multipleFile">
+          Cannot Add Multiple Files
+        </div> -->
+        <div class="row">
+          <div class="col-md-12">
+              <div class ="form-group">
+                  <label>Description
+                        <!-- <span class="mandatory">*</span> -->
+                  </label>
+            <textarea rows="1" cols="2" class="form-control txt-area-fnt" placeholder="Description"></textarea>
+          </div>
+          </div>
+        </div>
+        <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+          <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+          </button>
+          <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
+          <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+          </div>
+        </file-drop>
+        <div class="filechip">
+          <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+            <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+          </span>
+        </div>
+        <div class="filechip" *ngIf="isReplaceAttachment">
+          <span>{{ fileName }}
+            <i title="Replace Attachment" class="fa fa-close pdf" (click)="replaceAttachment()"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+      <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" (click)="dismissAttachmentModal()"
+        aria-label="Close">Add</button>
+        <!--Button for dismissing modal-->
+        <button id="cancelbtn" data-dismiss="modal" style="display:none"></button>
+      <!-- <button title="Save Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isAttachmentEdit"
+        aria-label="Close">Save</button> -->
+    </section>
+  </div>
+</div>
+</div>

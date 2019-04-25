@@ -2526,3 +2526,10 @@ input:disabled,textarea:disabled{
  {
     margin: 15px;
  }
+ .width-99
+ {
+     width: 99%;
+ }
+ .font-size-1em {
+     font-size: 1.2em;
+ }

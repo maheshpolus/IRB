@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { FileDropModule } from 'ngx-file-drop';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PersonTrainingRoutingModule } from './person-training-routing.module';
 import { AppCommonModule } from '../common/common/common.module';
@@ -17,7 +19,9 @@ import { TrainingDetailsComponent } from './training-details/training-details.co
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PersonTrainingRoutingModule,
-    FileDropModule
+    NgxSpinnerModule,
+    FileDropModule,
+    NgbModule
   ],
   declarations: [DashboardComponent, TrainingDetailsComponent]
 })

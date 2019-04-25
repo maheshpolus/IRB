@@ -1,3 +1,4 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="headerPush"></div>
 <div class="container-fluid">
   <div class="borderBox irb-margin-top irb-background-tablemaintenance">
@@ -20,10 +21,15 @@
       </div>
       <div class="col-md-4  mt-30">
         <div class="form-group">
-          <input type="text" [(ngModel)]="trainingName" class="form-control input-field-size" placeholder="Search for a Training" (ngModelChange)="getTrainingList()" (focus)="isTrainingSearch = true" (focusout)="isTrainingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'trainingDropDown')">
+          <input type="text" [(ngModel)]="trainingName" class="form-control input-field-size" placeholder="Search for a Training" (ngModelChange)="getTrainingList()" (keyup)="isTrainingSearch = true" (focusout)="isTrainingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'trainingDropDown')">
           <div class="sb-seachresults top-margin research-dropDown-width " id="trainingDropDown">
             <ul class="sb-results-dropdown-menu" *ngIf="isTrainingSearch">
-              <li *ngFor="let result of trainingSearchResult" (mousedown)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)" (click)="selectedUnit(result.DESCRIPTION,result.TRAINING_CODE)"><span> {{result.DESCRIPTION}}</span></li>
+                <ng-container *ngIf="trainingSearchResult.length > 0">
+              <li *ngFor="let result of trainingSearchResult" (mousedown)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)" (click)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)"><span> {{result.DESCRIPTION}}</span></li>
+                  </ng-container>
+                  <ng-container *ngIf="trainingSearchResult.length == 0">
+                    <li>No Results</li>
+                  </ng-container>
             </ul>
             </div>
         </div>
@@ -43,7 +49,11 @@
           <i class="fa fa-plus icon-padding"></i>Add Training
         </a>
       </div>
-      <div class="col-md-12 users-list-tbl" >
+      <div class="text-right persons-header width-99">
+          <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
+          <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
+      </div>
+      <div class="col-md-12 users-list-tbl" id ="topOfTrainingList">
           <div class="row">
             <div class="table-responsive">
               <table class="table table-striped tbl-p-clr">
@@ -56,8 +66,9 @@
                       </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let personTraining of personTrainingList">
-                          <td>{{personTraining?.FULL_NAME }}</td>
+                        <ng-container *ngIf="personTrainingList.length > 0">
+                        <tr *ngFor="let personTraining of paginatedTrainingList">
+                          <td><i class="fa" [ngClass]="personTraining.IS_EMPLOYEE == 'Y' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{personTraining?.FULL_NAME }}</td>
                           <td>{{personTraining?.TRAINING}}</td>
                           <td>{{(personTraining?.EXPIRATION_DATE === ' ' || personTraining?.EXPIRATION_DATE === null ) ? ' ':(personTraining?.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</td>
                           <td class="action-btn-list" width="15%">
@@ -73,14 +84,26 @@
                             </td>
                           
                         </tr>
+                        </ng-container>
+                        <tr *ngIf="personTrainingList.length == 0 || personTrainingList == null">
+                          <td class="text-center" colspan="4">No Training details to show</td>
+                        </tr>
                       </tbody>
                       </table>
+                      <div class="text-right pagiSkin margin8" style="float:right" *ngIf="personTrainingList.length > 0">
+                          <nav class="paginationSkin text-right pagination">
+                              <div class="margin8"><b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number * paginationData.limit - paginationData.limit  + paginatedTrainingList.length}} of {{trainingCount}} Records</b></div>
+                            <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="trainingCount" [(page)]="paginationData.page_number"
+                            paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="trainingListPerPage(paginationData.page_number)">
+                            </ngb-pagination>
+                          </nav>
+                        </div>
                       </div>
                       </div>
                       </div>
   </section>
   </div>
-</div>\
+</div>
 
 <!--delete warning modal-->
 <div class="modal fade" *ngIf="showPopup" id="deletewarningModal"

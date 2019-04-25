@@ -81,4 +81,10 @@ public interface IRBProtocolInitLoadService {
 	 * @return load the list of  Department types
 	 */
 	public Future<IRBProtocolVO> loadProtocolUnitTypes(IRBProtocolVO irbProtocolVO);
+
+	/**
+	 * @param irbProtocolVO
+	 * @return load the list of Admin Contact Types
+	 */
+	public Future<IRBProtocolVO> loadProtocolAdminContactType(IRBProtocolVO irbProtocolVO);
 }

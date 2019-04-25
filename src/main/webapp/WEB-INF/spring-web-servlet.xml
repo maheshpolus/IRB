@@ -66,6 +66,9 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementStatus</value>
+				
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType</value>							
 				<value>org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.AgeGroups</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons</value>

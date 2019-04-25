@@ -30,7 +30,25 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbProtocolHistoryActionComments;		
 	private Integer userHasRightToViewProtocol;
 	private String trainingStatus;
+	private List<HashMap<String, Object>> personnelTrainingComment;
+	private List<HashMap<String, Object>> personnelTrainingAttachments;
 	
+	public List<HashMap<String, Object>> getPersonnelTrainingComment() {
+		return personnelTrainingComment;
+	}
+
+	public void setPersonnelTrainingComment(List<HashMap<String, Object>> personnelTrainingComment) {
+		this.personnelTrainingComment = personnelTrainingComment;
+	}
+
+	public List<HashMap<String, Object>> getPersonnelTrainingAttachments() {
+		return personnelTrainingAttachments;
+	}
+
+	public void setPersonnelTrainingAttachments(List<HashMap<String, Object>> personnelTrainingAttachments) {
+		this.personnelTrainingAttachments = personnelTrainingAttachments;
+	}
+
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
 	}

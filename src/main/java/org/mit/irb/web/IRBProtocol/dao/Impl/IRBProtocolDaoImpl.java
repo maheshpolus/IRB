@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -32,6 +31,7 @@ import org.mit.irb.web.IRBProtocol.pojo.Award;
 import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Proposal;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments;
@@ -43,6 +43,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Sponsor;
+import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.constants.KeyConstants;
 
@@ -71,6 +72,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service(value = "iRBProtocolDao")
 @Transactional
 public class IRBProtocolDaoImpl implements IRBProtocolDao {
+	
+	@Autowired
+	IRBProtocolInitLoadService initLoadService;
 
 	DBEngine dbEngine;
 
@@ -282,26 +286,40 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			}
 			outputParam.remove(0);
 			outputParam.add(new OutParameter("trainingStatus", DBEngineConstants.TYPE_INTEGER));
-					ArrayList<HashMap<String, Object>> trainingStatus = dbEngine.executeFunction(inputParam,"fn_irb_per_training_completed", outputParam);
-					String trainingInfo = (String) trainingStatus.get(0).get("trainingStatus");
+			ArrayList<HashMap<String, Object>> trainingStatus = dbEngine.executeFunction(inputParam,"fn_irb_per_training_completed", outputParam);
+			String trainingInfo = (String) trainingStatus.get(0).get("trainingStatus");
 					if(trainingInfo.equals("1")){
 						irbViewProfile.setTrainingStatus("COMPLETED");
 					} else{
 						irbViewProfile.setTrainingStatus("INCOMPLETE");
 					}
-		} catch (DBException e) {
+			String SP="GET_IRB_PERSON_TRAING_COMMENTS";		
+			irbViewProfile.setPersonnelTrainingComment(getPersonTrainingComment(avPersonId,"2",SP));
+			SP="GET_IRB_PERSON_TRAING_ATTACMNT";		
+			irbViewProfile.setPersonnelTrainingAttachments(getPersonTrainingComment(avPersonId,"2",SP));
+		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("DBException in getMITKCPersonInfo:" + e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.info("IOException in getMITKCPersonInfo:" + e);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.info("SQLException in getMITKCPersonInfo:" + e);
+			logger.info("Exception in getMITKCPersonInfo:" + e);
 		}
 		return irbViewProfile;
 	}
 
+	public ArrayList<HashMap<String, Object>> getPersonTrainingComment(String avPersonId,String acType,String SP) {
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		ArrayList<HashMap<String, Object>> result = null;
+		inputParam.add(new InParameter("AV_PERSON_TRAINING_ID", DBEngineConstants.TYPE_INTEGER, null));	
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,avPersonId));
+		inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING, acType));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		try {
+			result = dbEngine.executeProcedure(inputParam,SP, outputParam);
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public ArrayList<HashMap<String, Object>> getMITKCPersonTraingInfo(String avPersonId) {
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -728,18 +746,24 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Override
 	public IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO) {
-		Integer protocolId = null;
-		protocolId = irbProtocolVO.getProtocolId();
-		ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
-		if (protocolId != null) {
-			getGeneralPersonnelInfoList(irbProtocolVO);
-			getDepartmentList(irbProtocolVO);
-			getSubjectoList(irbProtocolVO);
-			getScienceOfProtocol(irbProtocolVO);
-			getCollaboratorList(irbProtocolVO);
-			getProtocolFundingSource(protocolId, irbProtocolVO);
-		} else {
-			irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
+		try{
+			Integer protocolId = null;
+			protocolId = irbProtocolVO.getProtocolId();
+			ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
+			if (protocolId != null) {
+				getGeneralPersonnelInfoList(irbProtocolVO);
+				getDepartmentList(irbProtocolVO);
+				getSubjectoList(irbProtocolVO);
+				getScienceOfProtocol(irbProtocolVO);
+				getCollaboratorList(irbProtocolVO);
+				getProtocolFundingSource(protocolId, irbProtocolVO);
+				Future<IRBProtocolVO> protocolAdminContacts = getProtocolAdminContacts(irbProtocolVO);
+				irbProtocolVO = protocolAdminContacts.get();
+			} else {
+				irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
+			}
+		}catch (Exception e) {
+			logger.error("Error in loadProtocolDetails method" + e.getMessage());
 		}
 		return irbProtocolVO;
 	}
@@ -1252,5 +1276,37 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		List<ProtocolLeadUnits> protocolLeadUnitsList = queryPersonList.list();
 		irbProtocolVO.setProtocolLeadUnitsList(protocolLeadUnitsList);
 		return irbProtocolVO;
+	}
+
+	@Override
+	public void modifyAdminContactDetail(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo) {
+		protocolAdminContact.setProtocolGeneralInfo(generalInfo);
+		Session sessionUpdatePersons = hibernateTemplate.getSessionFactory().openSession();
+		Transaction transactionUpdatePersons = sessionUpdatePersons.beginTransaction();
+		hibernateTemplate.saveOrUpdate(protocolAdminContact);
+		transactionUpdatePersons.commit();
+		sessionUpdatePersons.close();	
+	}
+
+	@Override
+	public void deleteAdminContactDetail(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo) {
+		logger.info("Deleting Admin Contact");
+		Query queryDeleteAdminContact = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from ProtocolAdminContact p where  p.adminContactId =:adminContactId");
+		queryDeleteAdminContact.setInteger("adminContactId",protocolAdminContact.getAdminContactId());
+		queryDeleteAdminContact.executeUpdate();
+	}
+	
+
+	@Override
+	public Future<IRBProtocolVO> getProtocolAdminContacts(IRBProtocolVO irbProtocolVO) {
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolAdminContact p where p.protocolNumber =:protocolNumber order by p.updateTimestamp DESC");		
+		queryGeneral.setString("protocolNumber", irbProtocolVO.getProtocolNumber());
+		if (!queryGeneral.list().isEmpty()) {
+			List<ProtocolAdminContact> adminContactList = queryGeneral.list();
+			irbProtocolVO.setProtocolAdminContactList(adminContactList);
+		}
+		return new AsyncResult<>(irbProtocolVO);
 	}
 }

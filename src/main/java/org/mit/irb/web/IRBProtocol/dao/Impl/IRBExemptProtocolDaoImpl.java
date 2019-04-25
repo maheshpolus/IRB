@@ -210,7 +210,7 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 	
 	@SuppressWarnings("null")
 	@Override
-	public IRBViewProfile getPersonExemptFormList(String personID, String personRoleType, String title, String piName,
+	public IRBViewProfile getPersonExemptFormList(String exemptFormId,String personID, String personRoleType, String title, String piName,
 			String determination, String facultySponsor, String exemptStratDate, String ExemptEndDate)
 			throws ParseException {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
@@ -237,6 +237,7 @@ public class IRBExemptProtocolDaoImpl implements IRBExemptProtocolDao{
 		inputParam.add(new InParameter("AV_FACULTY_SPONSOR_NM", DBEngineConstants.TYPE_STRING, facultySponsor));
 		inputParam.add(new InParameter("AV_START_DATE", DBEngineConstants.TYPE_DATE, sqlExemptStartDate));
 		inputParam.add(new InParameter("AV_END_DATE", DBEngineConstants.TYPE_DATE, sqlExemptEndDate));
+		inputParam.add(new InParameter("AV_EXEMPT_FORM_ID", DBEngineConstants.TYPE_STRING, exemptFormId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {

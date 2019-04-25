@@ -3,6 +3,7 @@ package org.mit.irb.web.IRBProtocol.service.Impl;
 import java.util.List;
 import java.util.concurrent.Future;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -12,6 +13,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
@@ -198,5 +200,19 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		session.flush();
 		return new AsyncResult<>(irbProtocolVO);
 	}
-	
+
+	@Override
+	public Future<IRBProtocolVO> loadProtocolAdminContactType(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(ProtocolAdminContactType.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("adminContactTypeCode"), "adminContactTypeCode");
+		projList.add(Projections.property("description"), "description");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolAdminContactType.class));
+		criteria.addOrder(Order.asc("description"));
+		List<ProtocolAdminContactType> protocolAdminContactType = criteria.list();
+		irbProtocolVO.setProtocolAdminContactType(protocolAdminContactType);
+		session.flush();
+		return new AsyncResult<>(irbProtocolVO);
+	}	
 }

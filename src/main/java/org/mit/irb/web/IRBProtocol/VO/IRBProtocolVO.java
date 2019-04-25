@@ -9,6 +9,8 @@ import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments;
@@ -38,6 +40,7 @@ public class IRBProtocolVO {
 	private List<ProtocolType> protocolType;
 	private List<SponsorType> sponsorType;
 	private List<ProtocolUnitType> protocolUnitType;
+	private List<ProtocolAdminContactType> protocolAdminContactType;
 	private List<ProtocolPersonRoleTypes> personRoleTypes;
 	private List<ProtocolPersonLeadUnits> protocolPersonLeadUnits;
 	private List<ProtocolAffiliationTypes> affiliationTypes;
@@ -49,8 +52,10 @@ public class IRBProtocolVO {
 	private ProtocolLeadUnits protocolLeadUnits;
 	private ProtocolFundingSource fundingSource;
 	private ProtocolSubject protocolSubject;
+	private ProtocolAdminContact protocolAdminContact;
 	private List<ProtocolPersonnelInfo> ProtocolPersonnelInfoList;
 	private List<ProtocolLeadUnits> ProtocolLeadUnitsList;
+	private List<ProtocolAdminContact> ProtocolAdminContactList;
 	private List<ProtocolFundingSource> protocolFundingSourceList;
 	private List<ProtocolSubject> ProtocolSubjectList;
 	private List<ProtocolCollaborator> protocolCollaboratorList;
@@ -365,5 +370,29 @@ public class IRBProtocolVO {
 
 	public void setProtocolUnitType(List<ProtocolUnitType> protocolUnitType) {
 		this.protocolUnitType = protocolUnitType;
+	}
+
+	public List<ProtocolAdminContactType> getProtocolAdminContactType() {
+		return protocolAdminContactType;
+	}
+
+	public void setProtocolAdminContactType(List<ProtocolAdminContactType> protocolAdminContactType) {
+		this.protocolAdminContactType = protocolAdminContactType;
+	}
+
+	public List<ProtocolAdminContact> getProtocolAdminContactList() {
+		return ProtocolAdminContactList;
+	}
+
+	public void setProtocolAdminContactList(List<ProtocolAdminContact> protocolAdminContactList) {
+		ProtocolAdminContactList = protocolAdminContactList;
+	}
+
+	public ProtocolAdminContact getProtocolAdminContact() {
+		return protocolAdminContact;
+	}
+
+	public void setProtocolAdminContact(ProtocolAdminContact protocolAdminContact) {
+		this.protocolAdminContact = protocolAdminContact;
 	}
 }

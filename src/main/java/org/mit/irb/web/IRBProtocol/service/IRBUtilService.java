@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
-import org.mit.irb.web.IRBProtocol.pojo.PersonTraining;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +12,7 @@ public interface IRBUtilService {
 
 	IRBUtilVO loadPersonTraining(IRBUtilVO vo);
 
-	IRBUtilVO updatePersonTraining(PersonTraining personTraining, String user);
+	IRBUtilVO updatePersonTraining(IRBUtilVO vo);
 
 	IRBUtilVO loadTrainingList(String trainingName);
 
@@ -28,7 +27,7 @@ public interface IRBUtilService {
 	 */
 	ResponseEntity<byte[]> downloadFileData(String fileDataId);
 
-	ArrayList<HashMap<String, Object>> addTrainingAttachments(MultipartFile[] files, String formDataJson);
+	ArrayList<HashMap<String, Object>> addTrainingAttachments(MultipartFile[] files, String formDataJson, String fileDataId);
 
-	IRBUtilVO addTrainingComments(PersonTrainingComments personTrainingComments, String updateUser);
+	IRBUtilVO addTrainingComments(PersonTrainingComments personTrainingComments);
 }

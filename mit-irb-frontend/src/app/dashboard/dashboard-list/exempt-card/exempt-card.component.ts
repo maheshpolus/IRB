@@ -74,6 +74,8 @@ export class ExemptCardComponent implements  OnChanges  {
             return ['4'];
         } else if ( (role === 'PI' || role === 'DEPT_ADMIN') && this.userDTO.jobTitle == null && tabClicked === 'PENDING' ) {
             return ['1', '2', '3', '5'];
+        } else if (tabClicked === 'EN-ROUTE') {
+            return ['2', '3', '5'];
         }
     }
 

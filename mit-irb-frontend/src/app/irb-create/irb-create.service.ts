@@ -81,4 +81,7 @@ export class IrbCreateService {
   updateProtocolUnits(params) {
     return this._http.post('/mit-irb/updateUnitDetails', params);
   }
+  updateAdminContact(params) {
+    return this._http.post('/mit-irb/updateAdminContact', params);
+  }
 }

@@ -4,6 +4,7 @@ import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
@@ -191,31 +192,33 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
+		    ProtocolAdminContact protocolAdminContact = new ProtocolAdminContact();
 		    Future<IRBProtocolVO> protocolTypes = initLoadService.loadProtocolTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolUnitTypes = initLoadService.loadProtocolUnitTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> roleTypes = initLoadService.loadRoleTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolPersonLeadunits = initLoadService.loadProtocolPersonLeadunits(irbProtocolVO);
-		   // Future<IRBProtocolVO> protocolAffiliationTypes = initLoadService.loadProtocolAffiliationTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolSubjectTypes = initLoadService.loadProtocolSubjectTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAgeGroups = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
  		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
+		    Future<IRBProtocolVO> protocolAdminContactTypes = initLoadService.loadProtocolAdminContactType(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
 		    irbProtocolVO = protocolTypes.get();
 		    irbProtocolVO = protocolUnitTypes.get();	    
 			irbProtocolVO = roleTypes.get();
 			irbProtocolVO = protocolPersonLeadunits.get();
-			//irbProtocolVO = protocolAffiliationTypes.get();
 			irbProtocolVO = protocolSubjectTypes.get();
 			irbProtocolVO = protocolAgeGroups.get();
 			irbProtocolVO = protocolFundingSourceTypes.get();
 			irbProtocolVO = protocolCollaboratorNames.get();
+			irbProtocolVO = protocolAdminContactTypes.get();
 			irbProtocolVO = protocolDetailsVo.get();
 			irbProtocolVO.setPersonnelInfo(personnelInfo);
 			irbProtocolVO.setProtocolLeadUnits(protocolLeadUnits);
 			irbProtocolVO.setFundingSource(fundingSource);
 			irbProtocolVO.setProtocolSubject(protocolSubject);
 			irbProtocolVO.setProtocolCollaborator(protocolCollaborator);
+			irbProtocolVO.setProtocolAdminContact(protocolAdminContact);
 		} catch (Exception e) {
 			logger.error("Error in modifyProtocolDetails method : "+e.getMessage());
 		}
@@ -272,6 +275,25 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolUnit, ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = null;
 		irbProtocolVO = irbProtocolDao.updateUnitDetails(protocolUnit,generalInfo);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO updateAdminContact(ProtocolAdminContact protocolAdminContact,
+			ProtocolGeneralInfo generalInfo) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		try{
+			irbProtocolVO.setProtocolNumber(protocolAdminContact.getProtocolNumber());
+			if (protocolAdminContact.getAcType().equals("U")) {
+				irbProtocolDao.modifyAdminContactDetail(protocolAdminContact,generalInfo);
+			}else if (protocolAdminContact.getAcType().equals("D")) {
+				irbProtocolDao.deleteAdminContactDetail(protocolAdminContact,generalInfo);
+			}
+			Future<IRBProtocolVO> protocolAdminContacts = irbProtocolDao.getProtocolAdminContacts(irbProtocolVO);
+			irbProtocolVO = protocolAdminContacts.get();	
+		}catch (Exception e) {
+			logger.error("Error in updateAdminContact method : "+e.getMessage());
+		}
 		return irbProtocolVO;
 	}
 }

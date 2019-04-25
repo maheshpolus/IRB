@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBExemptProtocolDao {
-	IRBViewProfile getPersonExemptFormList(String personID, String personRoleType, String title, String piName,
+	IRBViewProfile getPersonExemptFormList(String ExemptFormId, String personID, String personRoleType, String title, String piName,
 			String determination, String facultySponsorname, String exemptStartDate, String exemptEndDate)
 			throws ParseException;
 

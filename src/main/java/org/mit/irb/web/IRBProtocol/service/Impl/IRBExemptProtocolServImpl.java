@@ -189,7 +189,7 @@ public class IRBExemptProtocolServImpl implements IRBExemptProtocolService{
 
 	@Override
 	public IRBViewProfile getPersonExemptFormList(CommonVO vo) throws ParseException {
-		IRBViewProfile irbViewProfile = irbExemptProtocolDao.getPersonExemptFormList(vo.getPersonId(), vo.getPersonRoleType(), vo.getTitle(), vo.getPiName(), vo.getDetermination(), vo.getExemptFormfacultySponsorName(), vo.getExemptFormStartDate(), vo.getExemptFormEndDate());
+		IRBViewProfile irbViewProfile = irbExemptProtocolDao.getPersonExemptFormList(vo.getExemptFormId(), vo.getPersonId(), vo.getPersonRoleType(), vo.getTitle(), vo.getPiName(), vo.getDetermination(), vo.getExemptFormfacultySponsorName(), vo.getExemptFormStartDate(), vo.getExemptFormEndDate());
 		return irbViewProfile;
 	}
 

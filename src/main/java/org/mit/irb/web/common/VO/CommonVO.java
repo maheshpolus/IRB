@@ -62,6 +62,8 @@ public class CommonVO {
 	private String question;
 	
 	private String isExemptGranted;
+	
+	private String exemptFormId;
 
 	private ArrayList<QuestionnaireDto> questionnaireDtos;
 	
@@ -90,8 +92,6 @@ public class CommonVO {
 	private String protocolActionTypecode;
 	
 	private String protocolStatusCode;
-	
-	
 	
 	private String protocolSubmissionStatus;
 	
@@ -412,5 +412,13 @@ public class CommonVO {
 
 	public void setProtocolSubmissionStatus(String protocolSubmissionStatus) {
 		this.protocolSubmissionStatus = protocolSubmissionStatus;
+	}
+
+	public String getExemptFormId() {
+		return exemptFormId;
+	}
+
+	public void setExemptFormId(String exemptFormId) {
+		this.exemptFormId = exemptFormId;
 	}
 }

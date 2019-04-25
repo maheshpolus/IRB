@@ -42,7 +42,7 @@ public class IRBUtilController {
 	@RequestMapping(value = "/updatePersonTraining", method = RequestMethod.POST)
 	public @ResponseBody IRBUtilVO updatePersonTraining(@RequestBody IRBUtilVO vo,  HttpServletRequest request,HttpServletResponse response)
 	{
-		vo = irbUtilService.updatePersonTraining(vo.getPersonTraining(),vo.getUpdateUser());
+		vo = irbUtilService.updatePersonTraining(vo);
 		return vo;
 	}
 	
@@ -71,17 +71,18 @@ public class IRBUtilController {
 	@RequestMapping(value = "/addTrainingAttachments", method = RequestMethod.POST)
 	public @ResponseBody ArrayList<HashMap<String, Object>> addTrainingAttachments(
 			@RequestParam(value = "files", required = false) MultipartFile[] files,
-			@RequestParam("formDataJson") String formDataJson) throws JsonProcessingException {
+			@RequestParam("formDataJson") String formDataJson,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException {
 		logger.info("Requesting for addTrainingAttachments Modification");
+		String fileDataId = request.getParameter("fileDataId");
 		ArrayList<HashMap<String, Object>> result = null;
-		result = irbUtilService.addTrainingAttachments(files, formDataJson);
+		result = irbUtilService.addTrainingAttachments(files, formDataJson,fileDataId);
 		return result;
 	}
 	
 	@RequestMapping(value = "/addTrainingComments", method = RequestMethod.POST)
 	public @ResponseBody IRBUtilVO addTrainingComments(@RequestBody IRBUtilVO vo,HttpServletRequest request,HttpServletResponse response)
 	{	
-		vo = irbUtilService.addTrainingComments(vo.getPersonTrainingComments(),vo.getUpdateUser());
+		vo = irbUtilService.addTrainingComments(vo.getPersonTrainingComments());
 		return vo;
 	}
 	

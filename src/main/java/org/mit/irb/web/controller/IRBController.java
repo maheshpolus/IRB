@@ -398,11 +398,11 @@ public class IRBController {
 		return vo;
 	}
 	
-	/*@RequestMapping(value = "/loadHomeUnitsIRB", method = RequestMethod.POST)
-	public @ResponseBody IRBProtocolVO loadHomeUnits(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Requesting for loadHomeUnits");
-		String homeUnitSearchString = request.getParameter("homeUnitSearchString");
-		IRBProtocolVO irbProtocolVO = irbExemptProtocolService.loadHomeUnits(homeUnitSearchString);
-		return irbProtocolVO;
-	}	*/
+	@RequestMapping(value = "/updateAdminContact", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO updateAdminContact(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.updateAdminContact(irbProtocolVO.getProtocolAdminContact(), irbProtocolVO.getGeneralInfo());
+		return protocolVO;
+	}
 }

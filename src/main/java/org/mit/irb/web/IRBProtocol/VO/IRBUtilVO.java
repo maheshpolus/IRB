@@ -9,7 +9,7 @@ import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 
 public class IRBUtilVO {
 private List<HashMap<String, Object>> personTrainingList;
-private List<HashMap<String, Object>> personnelTrainingInfo;
+private HashMap<String, Object> personnelTrainingInfo;
 private List<HashMap<String, Object>> personnelTrainingComment;
 private List<HashMap<String, Object>> personnelTrainingAttachments;
 private List<HashMap<String, Object>> trainingDesc;
@@ -20,6 +20,8 @@ private String updateUser;
 private String searchMode;
 private Integer trainingCode;
 private String personId;
+private String dateAcknowledged;
+private String followUpDate;
 
 public List<HashMap<String, Object>> getPersonTrainingList() {
 	return personTrainingList;
@@ -51,14 +53,6 @@ public Integer getPersonTrainingId() {
 
 public void setPersonTrainingId(Integer personTrainingId) {
 	this.personTrainingId = personTrainingId;
-}
-
-public List<HashMap<String, Object>> getPersonnelTrainingInfo() {
-	return personnelTrainingInfo;
-}
-
-public void setPersonnelTrainingInfo(List<HashMap<String, Object>> personnelTrainingInfo) {
-	this.personnelTrainingInfo = personnelTrainingInfo;
 }
 
 public List<HashMap<String, Object>> getPersonnelTrainingComment() {
@@ -115,5 +109,29 @@ public PersonTrainingComments getPersonTrainingComments() {
 
 public void setPersonTrainingComments(PersonTrainingComments personTrainingComments) {
 	this.personTrainingComments = personTrainingComments;
+}
+
+public HashMap<String, Object> getPersonnelTrainingInfo() {
+	return personnelTrainingInfo;
+}
+
+public void setPersonnelTrainingInfo(HashMap<String, Object> personnelTrainingInfo) {
+	this.personnelTrainingInfo = personnelTrainingInfo;
+}
+
+public String getDateAcknowledged() {
+	return dateAcknowledged;
+}
+
+public void setDateAcknowledged(String dateAcknowledged) {
+	this.dateAcknowledged = dateAcknowledged;
+}
+
+public String getFollowUpDate() {
+	return followUpDate;
+}
+
+public void setFollowUpDate(String followUpDate) {
+	this.followUpDate = followUpDate;
 }
 }

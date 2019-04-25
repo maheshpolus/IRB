@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
@@ -206,5 +207,13 @@ public interface IRBProtocolService {
 	 * @return modify units
 	 */
 	IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolLeadUnits, ProtocolGeneralInfo generalInfo);
+
+
+	/**
+	 * @param protocolAdminContact
+	 * @param generalInfo
+	 * @return update the Admin contact of protocol
+	 */
+	IRBProtocolVO updateAdminContact(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo);
 
 }

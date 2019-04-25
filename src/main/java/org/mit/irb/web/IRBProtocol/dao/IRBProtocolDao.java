@@ -2,7 +2,10 @@ package org.mit.irb.web.IRBProtocol.dao;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Future;
+
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
@@ -72,5 +75,14 @@ public interface IRBProtocolDao {
 	IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber);
 
 	IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolUnit, ProtocolGeneralInfo generalInfo);
+
+	void modifyAdminContactDetail(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo);
+
+	void deleteAdminContactDetail(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo);
+	/**
+	 * @param irbProtocolVO
+	 * @return load all admin contacts for protocol
+	 */
+	public Future<IRBProtocolVO> getProtocolAdminContacts(IRBProtocolVO irbProtocolVO);
 
 }

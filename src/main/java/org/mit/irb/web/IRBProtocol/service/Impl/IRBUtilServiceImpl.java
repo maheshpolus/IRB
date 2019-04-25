@@ -127,8 +127,4 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 		vo.setPersonnelTrainingComment(personTrainingComment);	
 		return vo;
 	}	
-	
-	public Integer createPersonTrainingId(){		
-		return irbUtilDao.createPersonTrainingId();		
-	}
 }

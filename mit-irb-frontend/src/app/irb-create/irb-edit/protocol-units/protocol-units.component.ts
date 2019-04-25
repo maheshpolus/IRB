@@ -82,7 +82,8 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
   addProtocolUnit(mode) {
     if (this.protocolUnit.unitName != null && this.protocolUnit.unitName !== undefined &&
       this.protocolUnit.unitNumber != null && this.protocolUnit.unitNumber !== undefined
-      && this.protocolUnit.unitTypeCode != null && this.protocolUnit.unitTypeCode !== undefined &&
+      && this.protocolUnit.unitTypeCode != null && this.protocolUnit.unitTypeCode !== undefined && 
+      this.protocolUnit.unitTypeCode !== 'null' &&
       this.invalidData.isLeadUnitExist === false) {
       this.invalidData.invalidUnitData = false;
       this.saveProtocolUnit(mode);

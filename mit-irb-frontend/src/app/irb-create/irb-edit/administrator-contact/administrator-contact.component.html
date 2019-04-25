@@ -7,11 +7,12 @@
         </nav>
       </div>
       <div class="card-body card-paddng">
-        <!-- <div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidUnitData">
-          <div class="alert alert-danger" [innerHTML]="alertMessage">
+        <div class="col-12  search-eidted-p padding-15" *ngIf="mandatoryFieldMissing">
+          <div class="alert alert-danger">
+              Please fill all mandatory fields marked
             <strong>*</strong>
           </div>
-        </div> -->
+        </div>
         <div class="col-12  search-eidted-p">
   
          <div class="row top-dis-15">
@@ -35,23 +36,25 @@
                   <div class="form-group">
                     <label>Type</label>
                       <span class="mandatory">*</span>
-                      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                      <option selected value="null">Please Select</option>
-                      <!-- <option *ngFor="let fundingSource of protocolFundingSourceTypes" value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}</option> -->
+                      <select [class.poping-border]="isAdminContactEdit" class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="protocolAdminContact.adminContactTypeCode"
+                      (ngModelChange)="setAdminContactType(protocolAdminContact.adminContactTypeCode)">
+                      <option selected value=null>Please Select</option>
+                      <option *ngFor="let protocolAdminContact of protocolAdminContactType" value="{{protocolAdminContact.adminContactTypeCode}}">{{protocolAdminContact.description}}</option>
                     </select>
                     </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Description</label>
-                            <input type="text" placeholder="Description" class="form-control input-field-size">
+                            <input type="text" [(ngModel)]="protocolAdminContact.description" placeholder="Description" class="form-control input-field-size"
+                            [class.poping-border]="isAdminContactEdit">
                       </div>
                       </div>  
                       <div class="col-md-1 add-btn-1">
-                          <button title="Add" *ngIf="!isAdminContactEdit" type="button" class="btn btn-success top-butn">
+                          <button title="Add" *ngIf="!isAdminContactEdit" type="button" class="btn btn-success top-butn" (click)="addAdminContact('ADD')">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                           </button>
-                          <button title="Save" *ngIf="isAdminContactEdit" type="button" class="btn btn-success top-butn">
+                          <button title="Save" *ngIf="isAdminContactEdit" type="button" class="btn btn-success top-butn" (click)="addAdminContact('EDIT')">
                             <i class="fa fa-floppy-o" aria-hidden="true"></i>
                           </button>
                         </div>
@@ -128,7 +131,19 @@
   
           </div>
         </div>
-        <div class="col-md-12 users-list-tbl">
+
+
+        <div class="col-12" *ngIf="protocolAdminContactList != null && protocolAdminContactList.length > 0">
+            <div class="form-group">
+              <div class="text-right persons-header">
+                  <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
+                  <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
+              </div>
+            </div>
+          </div>
+
+
+        <div class="col-md-12 users-list-tbl"  *ngIf="protocolAdminContactList != null && protocolAdminContactList.length > 0">
           <div class="row">
             <div class="table-responsive">
               <table class="table table-striped tbl-p-clr">
@@ -141,20 +156,20 @@
                   </tr>
                 </thead>
                 <tbody class="tbody-font-size">
-                  <!-- <tr *ngFor="let item of protocolUnitList let i =index" [class.poping-border]="i == protocolUnitSelectedRow">
-                    <td>{{item?.unitName}}</td>
-                    <td>{{item?.unitType?.description}}</td>
+                  <tr *ngFor="let item of protocolAdminContactList let i =index" [class.poping-border]="i == adminContactSelectedRow">
+                    <td><i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item?.personName}}</td>
+                    <td>{{item?.adminContactType?.description}}</td>
                     <td>{{item?.description}}</td>
                     <td class="action-btn-list">
-                      <button title="Edit" (click)="editProtocolUnit(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                      <button title="Edit" (click)="editAdminContact(item,i)" type="button" class="btn btn-primary edit-btn-1">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                       </button>
                       <button title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
-                        data-target="#deleteUnitDetails">
+                        data-target="#deleteAdminDetails">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                       </button>
                     </td>
-                  </tr> -->
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -164,7 +179,7 @@
     </div>
   
     <!--delete warning modal-->
-    <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteUnitDetails" tabindex="-1" role="dialog"
+    <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteAdminDetails" tabindex="-1" role="dialog"
       aria-labelledby="deleteModalTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-text-color">
@@ -180,8 +195,31 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
-            <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveProtocolUnit('DELETE');" data-dismiss="modal">Yes</button>
+            <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveAdminContact('DELETE')" data-dismiss="modal">Yes</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!--delete warning modal-->
+  <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteUnitDetails" tabindex="-1" role="dialog"
+  aria-labelledby="deleteModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveAdminContact('DELETE');" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -40,7 +40,7 @@
               </label>
               <select [class.poping-border]="isProtocolUnitEdit" class="custom-select mr-sm-2" id="customRoleSelect" [(ngModel)]="protocolUnit.unitTypeCode"
                 (ngModelChange)="setProtocolUnitType(protocolUnit.unitTypeCode)">
-                <option selected value="null">Please Select</option>
+                <option selected value=null>Please Select</option>
                 <option *ngFor="let protocolUnitType of protocolUnitTypes" value="{{protocolUnitType.unitTypeCode}}">{{protocolUnitType.description}}</option>
               </select>
               <span *ngIf="invalidData.isLeadUnitExist" class="error">Lead Unit already exists please choose a different type</span>

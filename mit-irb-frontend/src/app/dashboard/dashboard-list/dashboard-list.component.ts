@@ -51,7 +51,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         isAdvancedSearch: 'N',
         exemptFormStartDate: '',
         exemptFormEndDate: '',
-        exemptFormfacultySponsorName: ''
+        exemptFormfacultySponsorName: '',
+        exemptFormId: ''
     };
     approvalDate = null;
     expirationDate = null;
@@ -101,6 +102,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     elasticResultTab = false;
 
     exemptParams: any = {
+        exemptFormId: '',
         personId: '',
         personRoleType: '',
         title: '',
@@ -609,6 +611,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.exemptParams.piName = this.requestObject.piName;
         this.exemptParams.title = this.requestObject.title;
         this.exemptParams.determination = this.requestObject.determination;
+        this.exemptParams.exemptFormId = this.requestObject.exemptFormId;
         if (this.requestObject.exemptFormStartDate != null && this.requestObject.exemptFormStartDate !== '') {
             this.exemptParams.exemptFormStartDate = this.GetFormattedDate(this.requestObject.exemptFormStartDate);
         }

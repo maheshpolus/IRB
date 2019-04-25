@@ -11,6 +11,12 @@
 				   <i class="fa fa-book pr5" aria-hidden="true"></i>My Studies
 			   </button>
 		</span>
+		<span>
+				<button type="button" name="en-route" (click)="showData(userDTO.role,'EN-ROUTE')" class="btn btn-secondary inner-tab-btn"
+				[ngClass]="{tabActive:(tabSelected=='EN-ROUTE')}">
+				   <i class="fa fa-sitemap pr5" aria-hidden="true"></i>En-Route
+			   </button>
+		</span>
 		<span *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
 			<button type="button" name="submitted" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'SUBMITTED')"
 			 [ngClass]="{tabActive:(tabSelected=='SUBMITTED')}">

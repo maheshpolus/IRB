@@ -160,7 +160,8 @@
 							</div>
 							<div class="row" *ngIf="exemptFundingSource.fundingSourceTypeCode == '4' || exemptFundingSource.fundingSourceTypeCode == '5'">
 								<div class="col-12">
-									<label>IP#:</label>
+										<label *ngIf="exemptFundingSource.fundingSourceTypeCode == '5'">IP#:</label>
+										<label *ngIf="exemptFundingSource.fundingSourceTypeCode == '4'">Proposal Number#:</label>
 									<span>{{sponsorDetails?.proposal_number}}</span>
 								</div>
 								<div class="col-12">

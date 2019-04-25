@@ -286,6 +286,9 @@ export class FundingSourceModalComponent implements OnInit {
     let URL_FOR_KC_FRAME = null;
     let URL_FOR_KC_AWARD = null;
     let URL_FOR_KC_IP = null;
+    let URL_FOR_KC_DP = null;
+    let URL_FOR_KC_SPONSOR = null;
+    let URL_FOR_KC_UNIT = null;
     // LOCAL BUILD
     // BASE_URL_KC = 'http://192.168.1.139:8080/kc-dev';
     // URL_FOR_KC_FRAME = '/kc-krad/landingPage?viewId=Kc-Header-IframeView&href=';
@@ -314,8 +317,11 @@ export class FundingSourceModalComponent implements OnInit {
       URL_FOR_KC_FRAME = externalLinks_config.URL_FOR_KC_FRAME;
       URL_FOR_KC_AWARD = externalLinks_config.URL_FOR_KC_AWARD;
       URL_FOR_KC_IP = externalLinks_config.URL_FOR_KC_IP;
+      URL_FOR_KC_DP = externalLinks_config.URL_FOR_KC_DP;
+      URL_FOR_KC_SPONSOR = externalLinks_config.URL_FOR_KC_SPONSOR;
+      URL_FOR_KC_UNIT = externalLinks_config.URL_FOR_KC_UNIT;
 
-      if (item.FUNDING_SOURCE_TYPE_CODE === '6') {
+      if (item.FUNDING_SOURCE_TYPE_CODE === '6') { // AWARD
         URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{awardId}', item.MODULE_ITEM_KEY);
         URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{docId}', item.DOCUMENT_NUMBER);
         URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{user}', this.userDTO.userName);
@@ -323,13 +329,32 @@ export class FundingSourceModalComponent implements OnInit {
         const url_KCAward = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_AWARD;
         const win = window.open('about:blank', '_blank');
         win.location.href = url_KCAward;
-      } else if (item.FUNDING_SOURCE_TYPE_CODE === '5' || item.FUNDING_SOURCE_TYPE_CODE === '4') {
+      } else if (item.FUNDING_SOURCE_TYPE_CODE === '5') { // IP
         URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{docId}', item.DOCUMENT_NUMBER);
         URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{user}', this.userDTO.userName);
 
         const url_KCIp = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_IP;
         const win = window.open('about:blank', '_blank');
         win.location.href = url_KCIp;
+      } else if (item.FUNDING_SOURCE_TYPE_CODE === '4') { // DP
+        URL_FOR_KC_DP = URL_FOR_KC_DP.replace('{docId}', item.DOCUMENT_NUMBER);
+       // URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{user}', this.userDTO.userName);
+
+        const url_KCDp = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_DP;
+        const win = window.open('about:blank', '_blank');
+        win.location.href = url_KCDp;
+      }  else if (item.FUNDING_SOURCE_TYPE_CODE === '1') { // SPONSOR
+        URL_FOR_KC_SPONSOR = URL_FOR_KC_SPONSOR.replace('{sponsorCode}', item.FUNDING_NUMBER);
+
+        const url_KCsponosr = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_SPONSOR;
+        const win = window.open('about:blank', '_blank');
+        win.location.href = url_KCsponosr;
+      }   else if (item.FUNDING_SOURCE_TYPE_CODE === '2') { // UNIT
+        URL_FOR_KC_UNIT = URL_FOR_KC_UNIT.replace('{unitNumber}', item.FUNDING_NUMBER);
+
+        const url_KCunit = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_UNIT;
+        const win = window.open('about:blank', '_blank');
+        win.location.href = url_KCunit;
       }
 
     });

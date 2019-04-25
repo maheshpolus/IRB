@@ -1,6 +1,5 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
-import java.sql.Clob;
 import java.sql.Date;
 
 public class PersonTraining {
@@ -8,7 +7,7 @@ public class PersonTraining {
 	 private Integer personTrainingID;
 	 private String personID;
 	 private char activeFlag; 
-	 private Clob description;	 
+	 private String description;	 
 	 private Date dateAcknowledged;	 
 	 private Date dateRequested;
 	 private Date dateSubmitted;	 
@@ -37,11 +36,11 @@ public class PersonTraining {
 		this.activeFlag = activeFlag;
 	}
 
-	public Clob getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(Clob description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { PiElasticService } from '../../common/service/pi-elastic.service';
 import { PersonTrainingService } from '../person-training.service';
@@ -21,6 +22,7 @@ export class DashboardComponent implements OnInit {
   IRBUtilVO: any = {};
   trainingSearchResult = [];
   personTrainingList = [];
+  paginatedTrainingList = [];
   clearField: any = 'true';
   isTrainingSearch = false;
   showPopup = false;
@@ -29,9 +31,14 @@ export class DashboardComponent implements OnInit {
     trainingCode: null,
     personId: '',
   };
+  paginationData = {
+    limit: 10,
+    page_number: 1,
+  };
+  trainingCount: number;
 
   constructor(private _elasticsearchService: PiElasticService, private _personTrainingService: PersonTrainingService,
-  private _activatedRoute: ActivatedRoute, private _router: Router) {
+    private _activatedRoute: ActivatedRoute, private _router: Router, private _spinner: NgxSpinnerService) {
     this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
     this.options.index = this._elasticsearchService.IRB_INDEX;
     this.options.type = 'person';
@@ -56,15 +63,25 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
-    console.log(this.userDTO);
     this.loadTrainingList();
   }
+
+  /* load the training list */
   loadTrainingList() {
-    this._personTrainingService.loadPersonTrainingList(this.requestObject).subscribe( data => {
+    this._spinner.show();
+    this.trainingCount = 0;
+    this._personTrainingService.loadPersonTrainingList(this.requestObject).subscribe(data => {
+      this._spinner.hide();
       this.IRBUtilVO = data;
-      this.personTrainingList = this.IRBUtilVO.personTrainingList;
+      this.personTrainingList = this.IRBUtilVO.personTrainingList == null ? [] : this.IRBUtilVO.personTrainingList;
+      this.trainingCount = this.personTrainingList.length;
+      this.paginatedTrainingList = this.personTrainingList.slice(0, this.paginationData.limit);
     });
   }
+
+  /**
+   * @param  {} type- Change the elastic based on type
+   */
   changePersonType(personType) {
     // tslint:disable-next-line:no-construct
     this.clearField = new String('true');
@@ -78,29 +95,47 @@ export class DashboardComponent implements OnInit {
       this.options.type = 'rolodex';
       this.elasticPlaceHolder = 'Search for an Non-Employee Name';
 
+    }
   }
-}
+
+  /**
+   * @param  {} personDetails - person choosen from the elastic search
+   */
   selectPersonElasticResult(personDetails) {
     this.selectedPerson = personDetails;
-    this.requestObject.personId = this.selectedPerson.person_id;
+    if (this.selectedPerson != null) {
+      this.requestObject.personId = this.options.type === 'person' ? personDetails.person_id : personDetails.rolodex_id;
+    } else {
+      this.requestObject.personId = null;
+    }
 
   }
+
+   /* get the training list on each key press */
   getTrainingList() {
     this._personTrainingService.loadTrainingList(this.trainingName).subscribe(
       (data: any) => {
         this.trainingSearchResult = data.trainingDesc;
       });
   }
+
+  /**
+   * @param  {} description - name of the training selecetd
+   * @param  {} typeCode - type code of the training selected
+   */
   selectedTraining(description, typeCode) {
-   this.requestObject.trainingCode = typeCode;
-   this.trainingName = description;
+    this.requestObject.trainingCode = typeCode;
+    this.trainingName = description;
   }
 
+  /* load the training details on advanced search */
   getAdvanceSearchResult() {
     this.requestObject.searchMode = 'A';
     this.loadTrainingList();
 
   }
+
+  /* Clear the advanced search parameters */
   clearAdvancedSearch() {
     // tslint:disable-next-line:no-construct
     this.clearField = new String('true');
@@ -111,31 +146,67 @@ export class DashboardComponent implements OnInit {
     this.trainingName = '';
     this.loadTrainingList();
   }
+
+  /**
+   * @param  {} trainingDetail - training object viewed or edited
+   * @param  {} mode- species whether in edit or view mode
+   */
   showTrainingDetails(trainingDetail, mode) {
-    if ( mode === 'VIEW') {
-      this._router.navigate( ['/irb/training-maintenance/person-detail'],
-      { queryParams: { personTrainingId: trainingDetail.PERSON_TRAINING_ID,
-        mode: 'view' } } );
+    if (mode === 'VIEW') {
+      this._router.navigate(['/irb/training-maintenance/person-detail'],
+        {
+          queryParams: {
+            personTrainingId: trainingDetail.PERSON_TRAINING_ID,
+            mode: 'view'
+          }
+        });
 
     } else {
-      this._router.navigate( ['/irb/training-maintenance/person-detail'],
-      { queryParams: { personTrainingId: trainingDetail.PERSON_TRAINING_ID,
-        mode: 'edit' } } );
+      this._router.navigate(['/irb/training-maintenance/person-detail'],
+        {
+          queryParams: {
+            personTrainingId: trainingDetail.PERSON_TRAINING_ID,
+            mode: 'edit'
+          }
+        });
     }
 
   }
+
+  /**
+   * @param  {} trainingDetail - training object to be deleted
+   */
   deleteTrainingDetails(trainingDetail) {
     this.personDetail = trainingDetail;
     this.showPopup = true;
 
-}
-confirmDelete() {
- this.IRBUtilVO.personTraining.PERSON_TRAINING_ID = this.personDetail.PERSON_TRAINING_ID;
- this.IRBUtilVO.personTraining.UPDATE_USER = this.userDTO.userName;
- this._personTrainingService.updatePersonTraining(this.IRBUtilVO).subscribe((data: any) => {
-  this.IRBUtilVO = data;
-  this.personTrainingList = this.IRBUtilVO.personTrainingList;
- });
+  }
+
+  /* delete the training if it is confirmed */
+  confirmDelete() {
+
+    this.IRBUtilVO.personTraining = {
+      acType: 'D',
+      personTrainingID: this.personDetail.PERSON_TRAINING_ID, updateUser: this.userDTO.userName
+    };
+    this._spinner.show();
+    this._personTrainingService.updatePersonTraining(this.IRBUtilVO).subscribe((data: any) => {
+      this._spinner.hide();
+      this.IRBUtilVO = data;
+      this.personTrainingList = this.IRBUtilVO.personTrainingList;
+      this.paginatedTrainingList = this.personTrainingList.slice(this.paginationData.page_number * this.paginationData.limit 
+        - this.paginationData.limit, this.paginationData.page_number * this.paginationData.limit);
+    });
+  }
+
+  /**
+   * @param  {} pageNumber - page selected to paginate
+   */
+  trainingListPerPage(pageNumber) {
+    this.paginatedTrainingList = this.personTrainingList.slice(pageNumber * this.paginationData.limit - this.paginationData.limit,
+      pageNumber * this.paginationData.limit);
+    document.getElementById('topOfTrainingList').scrollTop = 0;
   }
 
 }
+

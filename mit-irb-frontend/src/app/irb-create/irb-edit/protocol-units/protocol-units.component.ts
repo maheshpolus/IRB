@@ -115,12 +115,12 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
    * @param  {} index - index of the unit object deleted
    */
   deleteProtocolUnit(index) {
-    this.protocolUnit = this.protocolUnitList[index];
     this.protocolUnit.acType = 'D';
-    this.commonVo.protocolLeadUnits = this.protocolUnit;
+    this.commonVo.protocolLeadUnits = this.protocolUnitList[index];
     this.showDeletePopup = true;
 
   }
+
 
   /**
      * @param  {} mode - Specifies the action, whether is EDIT or ADD or DELETE

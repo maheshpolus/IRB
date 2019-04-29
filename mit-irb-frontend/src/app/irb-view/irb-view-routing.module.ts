@@ -6,6 +6,7 @@ import { IrbHeaderDetailComponent } from './irb-header-detail/irb-header-detail.
 import { IrbAttachmentsComponent } from './irb-attachments/irb-attachments.component';
 import { IrbHistoryComponent } from './irb-history/irb-history.component';
 import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
+import { SubmissionDetailsComponent } from './irb-history/submission-details/submission-details.component';
 
 const routes: Routes = [
                         {path: '', component: IrbHeaderDetailComponent, resolve: { irb: DashboardResolverService },
@@ -14,7 +15,8 @@ const routes: Routes = [
                           {path: 'irbOverview', component: IrbOverviewComponent},
                           {path: 'irbQuestionaire', component: IrbQuestionaireComponent},
                           {path: 'irbAttatchments', component: IrbAttachmentsComponent},
-                          {path: 'irbHistory', component: IrbHistoryComponent}
+                          {path: 'irbHistory', component: IrbHistoryComponent},
+                          {path: 'submission-detail', component: SubmissionDetailsComponent}
                           ]}
                         ];
 

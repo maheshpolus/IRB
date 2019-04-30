@@ -1,6 +1,8 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -42,7 +44,7 @@ public interface IRBProtocolDao {
 
 	IRBViewProfile getProtocolHistotyGroupList(String protocol_number);
 
-	IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId, Integer previousGroupActionId);
+	ArrayList<HashMap<String, Object>> getProtocolHistotyGroupDetails(String protocolNumber);
 
 	IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo);
 
@@ -84,5 +86,17 @@ public interface IRBProtocolDao {
 	 * @return load all admin contacts for protocol
 	 */
 	public Future<IRBProtocolVO> getProtocolAdminContacts(IRBProtocolVO irbProtocolVO);
+
+	IRBViewProfile getIRBprotocolUnits(String protocolNumber);
+
+	IRBViewProfile getIRBprotocolAdminContact(String protocolNumber);
+
+	ArrayList<HashMap<String, Object>> getIRBprotocolCollaboratorDetails(Integer protocolCollaboratorId, String acType);
+
+	ResponseEntity<byte[]> downloadCollaboratorFileData(String fileDataId);
+
+	IRBViewProfile getUserTrainingRight(String person_Id);
+
+	Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId);
 
 }

@@ -483,13 +483,18 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
 
   openTrainingMaintainence(trainingDetail, mode) {
     if (mode === 'ADD') {
-    this._router.navigate(['/irb/training-maintenance/person-detail']);
+    this._router.navigate(['/irb/training-maintenance/person-detail'],  {
+      queryParams: {
+        from: 'protocol'
+      }
+    });
     } else {
       this._router.navigate(['/irb/training-maintenance/person-detail'],
         {
           queryParams: {
             personTrainingId: trainingDetail.PERSON_TRAINING_ID,
-            mode: 'edit'
+            mode: 'edit',
+            from: 'protocol'
           }
         });
     }

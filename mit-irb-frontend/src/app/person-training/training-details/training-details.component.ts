@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {Location} from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -22,6 +23,7 @@ export class TrainingDetailsComponent implements OnInit {
   fileDataId = null;
   defaultValue: string;
   mode: string;
+  from: string;
   warningMessage: string;
   commentSelectedRow = null;
   personType = 'employee';
@@ -83,7 +85,8 @@ export class TrainingDetailsComponent implements OnInit {
     invalidPersonData: false, invalidCommentData: false, invalidAttachmentData: false, invalidAckDate: false, invalidExpDate: false
   };
 
-  constructor(private _elasticsearchService: PiElasticService, private _activatedRoute: ActivatedRoute, private _router: Router,
+  constructor(private _elasticsearchService: PiElasticService, private _location: Location,
+     private _activatedRoute: ActivatedRoute, private _router: Router,
     private _personTrainingService: PersonTrainingService, private _spinner: NgxSpinnerService,
     public changeRef: ChangeDetectorRef) {
     this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
@@ -113,6 +116,7 @@ export class TrainingDetailsComponent implements OnInit {
     this._activatedRoute.queryParams.subscribe(params => {
       this.requestObject.personTrainingId = params['personTrainingId'];
       this.mode = params['mode'];
+      this.from = params['from'];
       if (this.requestObject.personTrainingId != null) {
         this._spinner.show();
         this._personTrainingService.getPersonTrainingInfo(this.requestObject).subscribe(data => {
@@ -437,6 +441,9 @@ export class TrainingDetailsComponent implements OnInit {
         this.invalidData.invalidExpDate = false;
       }
     }
+  }
+  returnToProtocol() {
+    this._location.back();
   }
 }
 

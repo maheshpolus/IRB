@@ -276,12 +276,21 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<HashMap<String, Object>> resultTraing = null;
 		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_INFO", outputParam);
+			result = dbEngine.executeProcedure(inputParam, "GET_PERSON_INFO", outputParam);
 			if (result != null && !result.isEmpty()) {
 				irbViewProfile.setIrbViewProtocolMITKCPersonInfo(result.get(0));
 			}
-			resultTraing = getMITKCPersonTraingInfo(avPersonId);
-			if (resultTraing != null && !resultTraing.isEmpty()) {
+			resultTraing = getPersonTraingInfo(avPersonId);
+		    ArrayList<HashMap<String, Object>> comments = null;
+		    ArrayList<HashMap<String, Object>> attachments = null;
+			for (HashMap<String, Object> training : resultTraing) {	
+				comments=getPersonTrainingCommentandAttachmnt(Integer.parseInt(training.get("PERSON_TRAINING_ID").toString()),"1","GET_IRB_PERSON_TRAING_COMMENTS");
+				attachments=getPersonTrainingCommentandAttachmnt(Integer.parseInt(training.get("PERSON_TRAINING_ID").toString()),"1","GET_IRB_PERSON_TRAING_ATTACMNT");
+				training.put("comments",comments);
+				training.put("attachment",attachments);
+			}
+			
+			if (resultTraing != null && !resultTraing.isEmpty()) {			
 				irbViewProfile.setIrbViewProtocolMITKCPersonTrainingInfo(resultTraing);
 			}
 			outputParam.remove(0);
@@ -292,11 +301,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 						irbViewProfile.setTrainingStatus("COMPLETED");
 					} else{
 						irbViewProfile.setTrainingStatus("INCOMPLETE");
-					}
-			String SP="GET_IRB_PERSON_TRAING_COMMENTS";		
-			irbViewProfile.setPersonnelTrainingComment(getPersonTrainingComment(avPersonId,"2",SP));
-			SP="GET_IRB_PERSON_TRAING_ATTACMNT";		
-			irbViewProfile.setPersonnelTrainingAttachments(getPersonTrainingComment(avPersonId,"2",SP));
+					}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info("Exception in getMITKCPersonInfo:" + e);
@@ -304,12 +309,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return irbViewProfile;
 	}
 
-	public ArrayList<HashMap<String, Object>> getPersonTrainingComment(String avPersonId,String acType,String SP) {
+	public ArrayList<HashMap<String, Object>> getPersonTrainingCommentandAttachmnt(Integer avPersonTrainingId,String acType,String SP) {
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		ArrayList<HashMap<String, Object>> result = null;
-		inputParam.add(new InParameter("AV_PERSON_TRAINING_ID", DBEngineConstants.TYPE_INTEGER, null));	
-		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,avPersonId));
+		inputParam.add(new InParameter("AV_PERSON_TRAINING_ID", DBEngineConstants.TYPE_INTEGER, avPersonTrainingId));	
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,null));
 		inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING, acType));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		try {
@@ -320,14 +325,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return result;
 	}
 	
-	public ArrayList<HashMap<String, Object>> getMITKCPersonTraingInfo(String avPersonId) {
+	public ArrayList<HashMap<String, Object>> getPersonTraingInfo(String avPersonId) {
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING, avPersonId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_MITKC_PERSON_TRAINING_INFO", outputParam);
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_TRAINING_INFO", outputParam);
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in getMITKCPersonTraingInfo:" + e);
@@ -496,16 +501,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_GROUP", outputParam);
-		} catch (DBException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("DBException in getProtocolHistotyGroupList:" + e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.info("IOException in getProtocolHistotyGroupList:" + e);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.info("SQLException in getProtocolHistotyGroupList:" + e);
-		}
+			logger.info("Exception in getProtocolHistotyGroupList:" + e);
+		} 
 		if (result != null && !result.isEmpty()) {
 			irbViewProfile.setIrbViewProtocolHistoryGroupList(result);
 		}
@@ -513,34 +512,18 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId,
-			Integer nextGroupActionId, Integer previousGroupActionId) {
-		IRBViewProfile irbViewProfile = new IRBViewProfile();
+	public ArrayList<HashMap<String, Object>> getProtocolHistotyGroupDetails(String protocolNumber) {
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
-		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
-		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
-		inputParam.add(
-				new InParameter("AV_PREVIOUS_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, previousGroupActionId));
+		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_HISTORY_DET", outputParam);
-		} catch (DBException e) {
-			e.printStackTrace();
-			logger.info("DBException in getProtocolHistotyGroupDetails:" + e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.info("IOException in getProtocolHistotyGroupDetails:" + e);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.info("SQLException in getProtocolHistotyGroupDetails:" + e);
+		} catch (Exception e) {
+			logger.info("Exception in getProtocolHistotyGroupDetails:" + e);
 		}
-		if (result != null && !result.isEmpty()) {
-			irbViewProfile.setIrbViewProtocolHistoryGroupDetails(result);
-		}
-		return irbViewProfile;
+		return result;
 	}
 
 	@Override
@@ -670,6 +653,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		fundingSource.setSequenceNumber(1);
+		fundingSource.setFundingSourceName(fundingSource.getSourceName());
 		if (fundingSource.getAcType().equals("U")) {
 			hibernateTemplate.saveOrUpdate(fundingSource);
 		} else {
@@ -898,6 +882,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 							sponsor = fetchSponsorDetail(protocolFundingSource.getFundingSource()).get();
 							protocolFundingSource.setSourceName(sponsor.getSponsorName());
 							protocolFundingSource.setTitle(null);
+							protocolFundingSource.setFundingNumber(sponsor.getSponsorCode());
 						} catch (InterruptedException | ExecutionException e) {
 							e.printStackTrace();
 						}
@@ -908,6 +893,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 							unit = fetchUnitDetail(protocolFundingSource.getFundingSource()).get();
 							protocolFundingSource.setSourceName(unit.getUnitName());
 							protocolFundingSource.setTitle(null);
+							protocolFundingSource.setFundingNumber(unit.getUnitNumber());
 						} catch (InterruptedException | ExecutionException e) {
 							e.printStackTrace();
 						}
@@ -918,6 +904,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 							devProposal = fetchDevPropDetail(protocolFundingSource.getFundingSource()).get();
 							protocolFundingSource.setDocId(devProposal.getDocumentNumber());
 							protocolFundingSource.setTitle(devProposal.getTitle());
+							protocolFundingSource.setFundingNumber(devProposal.getProposalNumber());
 							Sponsor devProposalsponsor = null;
 							devProposalsponsor = fetchSponsorDetail(devProposal.getSponsorCode()).get();
 							protocolFundingSource.setSourceName(devProposalsponsor.getSponsorName());
@@ -931,6 +918,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 							proposal = fetchProposal(protocolFundingSource.getFundingSource()).get();
 							protocolFundingSource.setTitle(proposal.getTitle());
 							protocolFundingSource.setDocId(proposal.getDocumentNumber());
+							protocolFundingSource.setFundingNumber(proposal.getProposalNumber());
 							Sponsor proposalsponsor = null;
 							proposalsponsor = fetchSponsorDetail(proposal.getSponsorCode()).get();
 							protocolFundingSource.setSourceName(proposalsponsor.getSponsorName());
@@ -946,6 +934,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 							protocolFundingSource.setDocId(award.getDocumentNumber());
 							protocolFundingSource.setAwardId(award.getAwardId());
 							protocolFundingSource.setTitle(award.getTitle());
+							protocolFundingSource.setFundingNumber(award.getAccountNumber());
 							Sponsor awardSponsor = fetchSponsorDetail(award.getSponsorCode()).get();
 							protocolFundingSource.setSourceName(awardSponsor.getSponsorName());
 						} catch (InterruptedException | ExecutionException e) {
@@ -971,6 +960,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		projList.add(Projections.property("documentNumber"), "documentNumber");
 		projList.add(Projections.property("title"), "title");
 		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		projList.add(Projections.property("proposalNumber"), "proposalNumber");
 		queryProposal.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Proposal.class));		
 		queryProposal.add(Restrictions.eq("proposalNumber", fundingSource));
 		queryProposal.addOrder(Order.desc("sequenceNumber"));
@@ -990,6 +980,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		projList.add(Projections.property("documentNumber"), "documentNumber");
 		projList.add(Projections.property("title"), "title");
 		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		projList.add(Projections.property("proposalNumber"), "proposalNumber");
 		queryDevProposal.setProjection(projList).setResultTransformer(Transformers.aliasToBean(EpsProposal.class));		
 		queryDevProposal.add(Restrictions.eq("proposalNumber", fundingSource));
 	/*	Query queryDevProposal = hibernateTemplate.getSessionFactory().getCurrentSession()
@@ -1029,6 +1020,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		projList.add(Projections.property("documentNumber"), "documentNumber");
 		projList.add(Projections.property("title"), "title");
 		projList.add(Projections.property("sponsorCode"), "sponsorCode");
+		projList.add(Projections.property("accountNumber"), "accountNumber");
 		queryAwardDetails.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Award.class));		
 		queryAwardDetails.add(Restrictions.eq("awardNumber", fundingSource));
 		queryAwardDetails.add(Restrictions.eq("awardSequenceStatus",KeyConstants.AWARD_SEQUENCE_STATUS_ACTIVE));
@@ -1308,5 +1300,150 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			irbProtocolVO.setProtocolAdminContactList(adminContactList);
 		}
 		return new AsyncResult<>(irbProtocolVO);
+	}
+
+	@Override
+	public IRBViewProfile getIRBprotocolUnits(String protocolNumber) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTO_UNIT_DTLS", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in getIRBProtocolDetails:" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in getIRBProtocolDetails:" + e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in getIRBProtocolDetails:" + e);
+		}
+		if (result != null && !result.isEmpty()) {
+			irbViewProfile.setIrbViewProtocolUnits(result);
+		}
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile getIRBprotocolAdminContact(String protocolNumber) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_ADMIN_CONTACTS_DTLS", outputParam);
+		} catch (DBException e) {
+			e.printStackTrace();
+			logger.info("DBException in getIRBProtocolDetails:" + e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("IOException in getIRBProtocolDetails:" + e);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("SQLException in getIRBProtocolDetails:" + e);
+		}
+		if (result != null && !result.isEmpty()) {
+			irbViewProfile.setIrbViewProtocolAdminContact(result);
+		}
+		return irbViewProfile;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getIRBprotocolCollaboratorDetails(Integer protocolCollaboratorId,String acType) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PROTOCOL_LOCATION_ID", DBEngineConstants.TYPE_INTEGER, protocolCollaboratorId));
+		inputParam.add(new InParameter("AV_TYPE ", DBEngineConstants.TYPE_STRING, acType));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_LOCATION_DTLS", outputParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in getIRBprotocolCollaboratorDetails:" + e);
+		} 
+		return result;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadCollaboratorFileData(String fileDataId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			inParam.add(new InParameter("AV_FILE_ID ", DBEngineConstants.TYPE_STRING, fileDataId));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_PROTO_LOC_ATCHMNT_DWNL",
+					outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("FILE_DATA");
+				byte[] data = byteArrayOutputStream.toByteArray();
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType(hmResult.get("CONTENT_TYPE").toString()));
+				String filename = hmResult.get("FILE_NAME").toString();
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(data.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in downloadFileData method:" + e);
+		}
+		return attachmentData;
+	}
+
+	@Override
+	public IRBViewProfile getUserTrainingRight(String person_Id) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,person_Id));
+		outputParam.add(new OutParameter("hasRight", DBEngineConstants.TYPE_INTEGER));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeFunction(inputParam,"FN_IRB_GET_USER_RIGHTS",outputParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in getUserTrainingRight:" + e);
+		}
+		if (result != null && !result.isEmpty()) {
+		HashMap<String, Object> hmResult = result.get(0);
+		int userHasRight = Integer.parseInt((String) hmResult.get("hasRight"));		
+		irbViewProfile.setUserHasRightToEditTraining(userHasRight);
+		}
+		return irbViewProfile;
+	}
+
+	@Override
+	public Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId) {
+		Integer  nextGroupAction_id = null;
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
+		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_NEXT_GROUP_ACTION_ID", outputParam);
+			if(result != null && !result.isEmpty()){
+				HashMap<String,Object> hmResult = result.get(0);
+				nextGroupAction_id = Integer.parseInt(hmResult.get("NEXT_GROUP_ACTION_ID").toString());			
+			}	
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("DBException in getIRBProtocolDetails:" + e);
+		} 
+		return nextGroupAction_id;
 	}
 }

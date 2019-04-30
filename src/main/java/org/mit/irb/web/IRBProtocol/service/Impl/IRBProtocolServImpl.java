@@ -1,8 +1,11 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
@@ -112,12 +115,30 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	@Override
 	public IRBViewProfile getProtocolHistotyGroupList(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupList(protocolNumber);
+		ArrayList<HashMap<String, Object>> result = irbProtocolDao.getProtocolHistotyGroupDetails(protocolNumber);
+		for(HashMap<String, Object> s1 : irbViewProfile.getIrbViewProtocolHistoryGroupList()){
+			Integer nextGroupActionId = Integer.parseInt(s1.get("NEXT_GROUP_ACTION_ID").toString());  
+			Integer actionId = Integer.parseInt(s1.get("ACTION_ID").toString());
+			Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());
+			nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId);
+			List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
+			for(HashMap<String, Object> detailObject :result){
+				Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
+				if(detailactionId >= actionId && detailactionId <= nextGroupActionId){
+					s2List.add(detailObject);
+				}
+			}
+			HashMap<String, Object> groupDetailList = new HashMap<String, Object>();	
+			groupDetailList.put("GROUP_DETAILS_LIST", s2List);
+			s1.putAll(groupDetailList);
+		}
 		return irbViewProfile;
 	}
 
 	@Override
 	public IRBViewProfile getProtocolHistotyGroupDetails(Integer protocolId, Integer actionId, Integer nextGroupActionId, Integer previousGroupActionId) {
-		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupDetails(protocolId, actionId,nextGroupActionId, previousGroupActionId);
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		//irbViewProfile = irbProtocolDao.getProtocolHistotyGroupDetails(protocolId,irbViewProfile);
 		return irbViewProfile;
 	}		
 
@@ -295,5 +316,62 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			logger.error("Error in updateAdminContact method : "+e.getMessage());
 		}
 		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBViewProfile getIRBprotocolUnits(String protocolNumber) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolUnits(protocolNumber);
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile getIRBprotocolAdminContact(String protocolNumber) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBprotocolAdminContact(protocolNumber);
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile getIRBprotocolCollaboratorDetails(Integer protocolCollaboratorId) {
+		//"P" for get Collaborator person list and "A" for collaborator attachment list
+		IRBViewProfile irbViewProfile =new IRBViewProfile();
+		ArrayList<HashMap<String, Object>> IRBprotocolCollaboratorPersons=irbProtocolDao.getIRBprotocolCollaboratorDetails(protocolCollaboratorId,"P");
+		ArrayList<HashMap<String, Object>> IRBprotocolCollaboratorAttachment= irbProtocolDao.getIRBprotocolCollaboratorDetails(protocolCollaboratorId,"A");
+		irbViewProfile.setIrbViewProtocolCollaboratorPersons(IRBprotocolCollaboratorPersons);
+		irbViewProfile.setIrbViewProtocolCollaboratorAttachments(IRBprotocolCollaboratorAttachment);
+		return irbViewProfile;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadCollaboratorFileData(String fileDataId) {
+		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadCollaboratorFileData(fileDataId);
+		return attachments;
+	}
+
+	@Override
+	public IRBViewProfile getUserTrainingRight(String person_Id) {
+		IRBViewProfile irbViewProfile = irbProtocolDao.getUserTrainingRight(person_Id);
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBUtilVO getProtocolSubmissionDetails(String protocolNumber) {
+		IRBUtilVO irbUtilVO = new IRBUtilVO();
+		try{
+			 Future<IRBUtilVO> submissionDetails = initLoadService.loadProtocolSubmissionDetail(protocolNumber, irbUtilVO);
+			 Future<IRBUtilVO> submissionReviewer = initLoadService.loadProtocolSubmissionReviewer(protocolNumber, irbUtilVO);
+			 Future<IRBUtilVO> renewalDetails = initLoadService.loadProtocolRenewalDetails(protocolNumber, "RENEWAL_AMEND", irbUtilVO);
+			 Future<IRBUtilVO> renewalComments = initLoadService.loadProtocolRenewalDetails(protocolNumber, "SUMMARY", irbUtilVO);
+			 Future<IRBUtilVO> reviewComments = initLoadService.loadProtocolReviewComments(protocolNumber, irbUtilVO);
+			 Future<IRBUtilVO> submissionCheckList = initLoadService.loadSubmissionCheckList(protocolNumber, irbUtilVO);
+			 irbUtilVO = submissionDetails.get();
+			 irbUtilVO = submissionReviewer.get();
+			 irbUtilVO = renewalDetails.get();
+			 irbUtilVO = reviewComments.get();
+			 irbUtilVO = renewalComments.get();
+			 irbUtilVO = submissionCheckList.get();
+		}catch (Exception e) {
+			logger.error("Error in getProtocolSubmissionDetails method : "+e.getMessage());
+		}
+		return irbUtilVO;
 	}
 }

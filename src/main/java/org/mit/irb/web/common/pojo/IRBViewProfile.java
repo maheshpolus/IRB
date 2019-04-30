@@ -18,8 +18,7 @@ public class IRBViewProfile {
 	private HashMap<String, Object> irbViewProtocolMITKCPersonInfo;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolMITKCPersonTrainingInfo;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolAttachmentList;
-	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupList;
-	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails;	
+	private ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupList;	
 	private List<IRBExemptForm> irbExemptFormList;
 	private ArrayList<HashMap<String, Object>> irbProtocolRoleMap;
 	private ArrayList<HashMap<String, Object>> irbProtocolFundingSourceMap;
@@ -30,24 +29,11 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbProtocolHistoryActionComments;		
 	private Integer userHasRightToViewProtocol;
 	private String trainingStatus;
-	private List<HashMap<String, Object>> personnelTrainingComment;
-	private List<HashMap<String, Object>> personnelTrainingAttachments;
-	
-	public List<HashMap<String, Object>> getPersonnelTrainingComment() {
-		return personnelTrainingComment;
-	}
-
-	public void setPersonnelTrainingComment(List<HashMap<String, Object>> personnelTrainingComment) {
-		this.personnelTrainingComment = personnelTrainingComment;
-	}
-
-	public List<HashMap<String, Object>> getPersonnelTrainingAttachments() {
-		return personnelTrainingAttachments;
-	}
-
-	public void setPersonnelTrainingAttachments(List<HashMap<String, Object>> personnelTrainingAttachments) {
-		this.personnelTrainingAttachments = personnelTrainingAttachments;
-	}
+	private ArrayList<HashMap<String, Object>> irbViewProtocolUnits;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolAdminContact;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolCollaboratorPersons;
+	private ArrayList<HashMap<String, Object>> irbViewProtocolCollaboratorAttachments;
+	private Integer userHasRightToEditTraining;
 
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
@@ -55,15 +41,6 @@ public class IRBViewProfile {
 
 	public void setIrbViewProtocolHistoryGroupList(ArrayList<HashMap<String, Object>> irbviewProtocolHistoryGroupList) {
 		this.irbViewProtocolHistoryGroupList = irbviewProtocolHistoryGroupList;
-	}
-
-	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupDetails() {
-		return irbViewProtocolHistoryGroupDetails;
-	}
-
-	public void setIrbViewProtocolHistoryGroupDetails(
-			ArrayList<HashMap<String, Object>> irbViewProtocolHistoryGroupDetails) {
-		this.irbViewProtocolHistoryGroupDetails = irbViewProtocolHistoryGroupDetails;
 	}
 
 	public HashMap<String, Object> getIrbViewHeader() {
@@ -218,5 +195,47 @@ public class IRBViewProfile {
 
 	public void setTrainingStatus(String trainingStatus) {
 		this.trainingStatus = trainingStatus;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolUnits() {
+		return irbViewProtocolUnits;
+	}
+
+	public void setIrbViewProtocolUnits(ArrayList<HashMap<String, Object>> irbViewProtocolUnits) {
+		this.irbViewProtocolUnits = irbViewProtocolUnits;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolAdminContact() {
+		return irbViewProtocolAdminContact;
+	}
+
+	public void setIrbViewProtocolAdminContact(ArrayList<HashMap<String, Object>> irbViewProtocolAdminContact) {
+		this.irbViewProtocolAdminContact = irbViewProtocolAdminContact;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolCollaboratorPersons() {
+		return irbViewProtocolCollaboratorPersons;
+	}
+
+	public void setIrbViewProtocolCollaboratorPersons(
+			ArrayList<HashMap<String, Object>> irbViewProtocolCollaboratorPersons) {
+		this.irbViewProtocolCollaboratorPersons = irbViewProtocolCollaboratorPersons;
+	}
+
+	public ArrayList<HashMap<String, Object>> getIrbViewProtocolCollaboratorAttachments() {
+		return irbViewProtocolCollaboratorAttachments;
+	}
+
+	public void setIrbViewProtocolCollaboratorAttachments(
+			ArrayList<HashMap<String, Object>> irbViewProtocolCollaboratorAttachments) {
+		this.irbViewProtocolCollaboratorAttachments = irbViewProtocolCollaboratorAttachments;
+	}
+
+	public Integer getUserHasRightToEditTraining() {
+		return userHasRightToEditTraining;
+	}
+
+	public void setUserHasRightToEditTraining(Integer userHasRightToEditTraining) {
+		this.userHasRightToEditTraining = userHasRightToEditTraining;
 	}	
 }

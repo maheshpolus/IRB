@@ -26,7 +26,7 @@ private String followUpDate;
 private HashMap<String, Object> protocolSubmissionDetails;
 private List<HashMap<String, Object>> protocolSubmissionReviewers;
 private ProtocolRenewalDetails protocolRenewalDetail;
-private List<HashMap<String, Object>> protocolRenewalComments;
+private String protocolRenewalComments;
 private List<HashMap<String, Object>> protocolReviewerComments;
 private List<HashMap<String, Object>> submissionCheckListData;
 
@@ -166,14 +166,6 @@ public void setProtocolRenewalDetail(ProtocolRenewalDetails protocolRenewalDetai
 	this.protocolRenewalDetail = protocolRenewalDetail;
 }
 
-public List<HashMap<String, Object>> getProtocolRenewalComments() {
-	return protocolRenewalComments;
-}
-
-public void setProtocolRenewalComments(List<HashMap<String, Object>> protocolRenewalComments) {
-	this.protocolRenewalComments = protocolRenewalComments;
-}
-
 public List<HashMap<String, Object>> getProtocolReviewerComments() {
 	return protocolReviewerComments;
 }
@@ -188,5 +180,13 @@ public List<HashMap<String, Object>> getSubmissionCheckListData() {
 
 public void setSubmissionCheckListData(List<HashMap<String, Object>> submissionCheckListData) {
 	this.submissionCheckListData = submissionCheckListData;
+}
+
+public String getProtocolRenewalComments() {
+	return protocolRenewalComments;
+}
+
+public void setProtocolRenewalComments(String protocolRenewalComments) {
+	this.protocolRenewalComments = protocolRenewalComments;
 }
 }

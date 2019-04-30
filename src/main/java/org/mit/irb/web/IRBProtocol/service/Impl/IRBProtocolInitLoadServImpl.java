@@ -283,7 +283,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 					case "Protocol Personnel":
 						protocolRenewalDetail.setProtocolPersonel(true);
 						break;
-					case "Add/Modify Notes and attachments":
+					case "Add/Modify Attachments":
 						protocolRenewalDetail.setAddModifyNoteAttachments(true);
 						break;
 					case "Funding Source":
@@ -292,7 +292,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 					case "Area of Research":
 						protocolRenewalDetail.setAreaOfResearch(true);
 						break;
-					case "Protocol References and Other Identifiers":
+					case "Protocol References":
 						protocolRenewalDetail.setProtocolReferences(true);
 						break;
 					case "Special Review":
@@ -311,12 +311,13 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 						protocolRenewalDetail.setQuestionnaire(true);
 						break;
 					default:
+						protocolRenewalDetail=null;
 						break;
 					}
-				}	
+				}		
 				irbUtilVO.setProtocolRenewalDetail(protocolRenewalDetail);
 			}else{
-				irbUtilVO.setProtocolRenewalComments(protocolRenewalDetails);
+				irbUtilVO.setProtocolRenewalComments(protocolRenewalDetails.isEmpty() ? null :protocolRenewalDetails.get(0).get("SUMMARY").toString());
 			}		
 		}catch (Exception e) {
 			logger.info("Exception in loadProtocolRenewalDetails:" + e);

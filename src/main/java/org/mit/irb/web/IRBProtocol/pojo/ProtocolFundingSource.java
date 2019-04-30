@@ -72,6 +72,9 @@ public class ProtocolFundingSource {
 	@Transient
 	private Integer awardId;
 	
+	@Transient
+	private String fundingNumber;
+	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_FUNDING_SOURCE_FK1"), name = "FUNDING_SOURCE_TYPE_CODE", referencedColumnName = "FUNDING_SOURCE_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolFundingSourceTypes protocolFundingSourceTypes;
@@ -202,5 +205,13 @@ public class ProtocolFundingSource {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getFundingNumber() {
+		return fundingNumber;
+	}
+
+	public void setFundingNumber(String fundingNumber) {
+		this.fundingNumber = fundingNumber;
 	}
 }

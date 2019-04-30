@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.service;
 
 import java.util.concurrent.Future;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.springframework.scheduling.annotation.Async;
 
 public interface IRBProtocolInitLoadService {
@@ -87,4 +88,14 @@ public interface IRBProtocolInitLoadService {
 	 * @return load the list of Admin Contact Types
 	 */
 	public Future<IRBProtocolVO> loadProtocolAdminContactType(IRBProtocolVO irbProtocolVO);
+	
+	public Future<IRBUtilVO> loadProtocolSubmissionDetail(String protocolNumber,IRBUtilVO irbUtilVO);
+
+	public Future<IRBUtilVO> loadProtocolSubmissionReviewer(String protocolNumber, IRBUtilVO irbUtilVO);
+
+	public Future<IRBUtilVO> loadProtocolRenewalDetails(String protocolNumber, String acType, IRBUtilVO irbUtilVO);
+
+	public Future<IRBUtilVO> loadProtocolReviewComments(String protocolNumber, IRBUtilVO irbUtilVO);
+	
+	public Future<IRBUtilVO> loadSubmissionCheckList(String protocolNumber, IRBUtilVO irbUtilVO);
 }

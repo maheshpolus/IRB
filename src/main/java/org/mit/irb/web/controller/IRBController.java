@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
@@ -404,5 +405,52 @@ public class IRBController {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
 		protocolVO = irbProtocolService.updateAdminContact(irbProtocolVO.getProtocolAdminContact(), irbProtocolVO.getGeneralInfo());
 		return protocolVO;
+	}
+	
+	@RequestMapping(value = "/getIRBprotocolUnits", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile getIRBprotocolUnits( @RequestBody CommonVO vo,HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{
+		//String protocolNumber ="1904000175";
+		String protocolNumber =vo.getProtocolNumber();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolUnits(protocolNumber);
+		return irbViewProfile;
+	}
+	
+	@RequestMapping(value = "/getIRBprotocolAdminContact", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile getIRBprotocolAdminContact(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{	
+		String protocolNumber = vo.getProtocolNumber();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolAdminContact(protocolNumber);
+		return irbViewProfile;
+	}
+	
+	@RequestMapping(value = "/getIRBprotocolCollaboratorDetails", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile getIRBprotocolCollaboratorDetails(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException{	
+		Integer protocolCollaboratorId = vo.getProtocolLocationId();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolCollaboratorDetails(protocolCollaboratorId);
+		return irbViewProfile;
+	}
+	
+	@RequestMapping(value = "/downloadCollaboratorFileData", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadCollaboratorFileData(HttpServletResponse response,
+			@RequestHeader("fileDataId") String fileDataId) {
+		return irbProtocolService.downloadCollaboratorFileData(fileDataId);
+	}
+	
+	@RequestMapping(value = "/getUserTrainingRight", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile loadTrainingList(HttpServletRequest request,HttpServletResponse response)
+	{	
+		String person_Id = request.getParameter("person_Id");
+		IRBViewProfile irbViewProfile = irbProtocolService.getUserTrainingRight(person_Id);
+		return irbViewProfile;
+	}
+	
+
+	@RequestMapping(value = "/getProtocolSubmissionDetails", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO getProtocolSubmissionDetails(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
+		IRBUtilVO irbUtilVO = irbProtocolService.getProtocolSubmissionDetails(vo.getProtocolNumber());
+		return irbUtilVO;
 	}
 }

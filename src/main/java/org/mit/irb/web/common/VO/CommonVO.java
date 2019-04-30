@@ -95,6 +95,8 @@ public class CommonVO {
 	
 	private String protocolSubmissionStatus;
 	
+	private Integer protocolLocationId;
+	
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -420,5 +422,13 @@ public class CommonVO {
 
 	public void setExemptFormId(String exemptFormId) {
 		this.exemptFormId = exemptFormId;
+	}
+
+	public Integer getProtocolLocationId() {
+		return protocolLocationId;
+	}
+
+	public void setProtocolLocationId(Integer protocolLocationId) {
+		this.protocolLocationId = protocolLocationId;
 	}
 }

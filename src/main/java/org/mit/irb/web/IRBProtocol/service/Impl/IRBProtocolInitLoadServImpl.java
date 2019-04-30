@@ -1,7 +1,11 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -10,6 +14,7 @@ import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
@@ -18,10 +23,15 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
+import org.mit.irb.web.common.utils.DBEngine;
+import org.mit.irb.web.common.utils.DBEngineConstants;
+import org.mit.irb.web.common.utils.InParameter;
+import org.mit.irb.web.common.utils.OutParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -38,6 +48,14 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 	
 	@Autowired
 	HibernateTemplate hibernateTemplate;
+	
+	DBEngine dbEngine;
+	
+	IRBProtocolInitLoadServImpl() {
+		dbEngine = new DBEngine();
+	}
+	
+	Logger logger = Logger.getLogger(IRBProtocolInitLoadServImpl.class.getName());
 	
 	@Async
 	public Future<IRBProtocolVO> loadProtocolTypes(IRBProtocolVO irbProtocolVO){
@@ -215,4 +233,125 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		session.flush();
 		return new AsyncResult<>(irbProtocolVO);
 	}	
+	
+	@Override
+	public Future<IRBUtilVO> loadProtocolSubmissionDetail(String protocolNumber,IRBUtilVO irbUtilVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<>();
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protocolNumber));			
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTO_SUBMISSION_DTLS",outputParam);
+			irbUtilVO.setProtocolSubmissionDetails(result.isEmpty() ? null :  result.get(0));
+		}catch (Exception e) {
+			logger.info("Exception in loadProtocolSubmissionDetail:" + e);
+		}
+		return new AsyncResult<>(irbUtilVO);
+	}
+
+	@Override
+	public Future<IRBUtilVO> loadProtocolSubmissionReviewer(String protocolNumber, IRBUtilVO irbUtilVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<>();
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protocolNumber));			
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> protocolSubmissionReviewers = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTO_SUBMSN_REVIEWERS",outputParam);
+			irbUtilVO.setProtocolSubmissionReviewers(protocolSubmissionReviewers);
+		}catch (Exception e) {
+			logger.info("Exception in loadProtocolSubmissionReviewer:" + e);
+		}
+		return new AsyncResult<>(irbUtilVO);
+	}
+
+	@Override
+	public Future<IRBUtilVO> loadProtocolRenewalDetails(String protocolNumber, String acTpye, IRBUtilVO irbUtilVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<>();
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protocolNumber));	
+			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,acTpye));
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> protocolRenewalDetails = dbEngine.executeProcedure(inputParam, "GET_IRB_SUBMSN_AMEND_RENWL_DTS",outputParam);
+			if(acTpye == "RENEWAL_AMEND" ){
+				ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
+				for(HashMap<String, Object> protocolDetailKey : protocolRenewalDetails){				
+					switch (protocolDetailKey.get("DESCRIPTION").toString()) {
+					case "General Info":
+						protocolRenewalDetail.setGeneralInfo(true);
+						break;
+					case "Protocol Personnel":
+						protocolRenewalDetail.setProtocolPersonel(true);
+						break;
+					case "Add/Modify Notes and attachments":
+						protocolRenewalDetail.setAddModifyNoteAttachments(true);
+						break;
+					case "Funding Source":
+						protocolRenewalDetail.setFundingSource(true);
+						break;
+					case "Area of Research":
+						protocolRenewalDetail.setAreaOfResearch(true);
+						break;
+					case "Protocol References and Other Identifiers":
+						protocolRenewalDetail.setProtocolReferences(true);
+						break;
+					case "Special Review":
+						protocolRenewalDetail.setSpecialReview(true);
+						break;
+					case "Protocol Organizations":
+						protocolRenewalDetail.setProtocolOrganization(true);
+						break;
+					case "Subjects":
+						protocolRenewalDetail.setSubject(true);
+						break;
+					case "Others":
+						protocolRenewalDetail.setOther(true);
+						break;
+					case "Questionnaire":
+						protocolRenewalDetail.setQuestionnaire(true);
+						break;
+					default:
+						break;
+					}
+				}	
+				irbUtilVO.setProtocolRenewalDetail(protocolRenewalDetail);
+			}else{
+				irbUtilVO.setProtocolRenewalComments(protocolRenewalDetails);
+			}		
+		}catch (Exception e) {
+			logger.info("Exception in loadProtocolRenewalDetails:" + e);
+		}
+		return new AsyncResult<>(irbUtilVO);
+	}
+
+	@Override
+	public Future<IRBUtilVO> loadProtocolReviewComments(String protocolNumber, IRBUtilVO irbUtilVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<>();
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protocolNumber));			
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> protocolReviewerComments = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTO_SUBMSN_REVW_CMTS",outputParam);
+			irbUtilVO.setProtocolReviewerComments(protocolReviewerComments);
+		}catch (Exception e) {
+			logger.info("Exception in loadProtocolReviewComments:" + e);
+		}
+		return new AsyncResult<>(irbUtilVO);
+	}
+	
+
+	@Override
+	public Future<IRBUtilVO> loadSubmissionCheckList(String protocolNumber, IRBUtilVO irbUtilVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<>();
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protocolNumber));			
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> submissionCheckList = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTO_SUBMSN_CHECKLIST",outputParam);
+			irbUtilVO.setSubmissionCheckListData(submissionCheckList);
+		}catch (Exception e) {
+			logger.info("Exception in loadProtocolReviewComments:" + e);
+		}
+		return new AsyncResult<>(irbUtilVO);
+	}
 }

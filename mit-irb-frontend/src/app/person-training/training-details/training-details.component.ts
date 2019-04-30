@@ -134,6 +134,7 @@ export class TrainingDetailsComponent implements OnInit {
     if (this.personnelTrainingInfo != null) {
       this.options.defaultValue = this.personnelTrainingInfo.FULL_NAME;
       this.defaultValue = this.personnelTrainingInfo.FULL_NAME;
+      this.personType = this.personnelTrainingInfo.IS_EMPLOYEE === 'Y' ? 'employee' : 'non-employee';
       this.personnelTrainingInfo.DATE_ACKNOWLEDGED = this.personnelTrainingInfo.DATE_ACKNOWLEDGED != null ?
         new Date(this.personnelTrainingInfo.DATE_ACKNOWLEDGED) : null;
       this.personnelTrainingInfo.EXPIRATION_DATE = this.personnelTrainingInfo.DATE_ACKNOWLEDGED != null ?

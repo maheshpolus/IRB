@@ -20,6 +20,8 @@ export class IrbOverviewComponent implements OnInit {
     noIrbSpecialReviews = false;
     noIrbSubjects = false;
     isExpanded = true;
+    noProtocolUnits = false;
+    noAdminContacts = false;
 
     irbPersonDetailedTraining: any[] = [];
     irbPersonsDetails: any[] = [];
@@ -27,6 +29,12 @@ export class IrbOverviewComponent implements OnInit {
     irbCollaborators: any[] = [];
     irbSubjects: any[] = [];
     irbSpecialReview: any[] = [];
+    irbProtocolUnitList: any = [];
+    irbAdminContactList: any = [];
+    irbViewProtocolCollaboratorAttachments: any = [];
+    irbViewProtocolCollaboratorPersons: any = [];
+    trainingAttachments: any = [];
+    trainingComments: any = [];
     irbPersonDetailedList: any;
     result: any;
 
@@ -37,7 +45,10 @@ export class IrbOverviewComponent implements OnInit {
     PROTOCOL_ENGAGED_INSTITUTIONS_INFO: string;
     PROTOCOL_SPECIAL_REVIEW_INFO: string;
 
+    attachmentIconValue: number;
+    commentIconValue: number;
 
+    protocolCollaboratorSelected: any = {};
 
     requestObject = {
             protocolNumber: '',
@@ -66,6 +77,8 @@ export class IrbOverviewComponent implements OnInit {
       this.loadCollaboratorsDetails();
       this.loadSubjectsDetails();
       this.loadSpecialReviewDetails();
+      this.loadAdminstrativeContactDetails();
+      this.loadProtocolUnitDetails();
   }
 
   /**calls service to load person details of protocol */
@@ -85,6 +98,40 @@ export class IrbOverviewComponent implements OnInit {
           },
       );
   }
+  loadProtocolUnitDetails() {
+    this._irbViewService.getIRBprotocolUnits( this.requestObject ).subscribe( data => {
+          this.result = data || [];
+          if ( this.result != null ) {
+              if (this.result.irbViewProtocolUnits == null || this.result.irbViewProtocolUnits.length === 0) {
+                  this.noProtocolUnits  = true;
+              } else {
+                  this.irbProtocolUnitList = this.result.irbViewProtocolUnits;
+              }
+          }
+      },
+          error => {
+               console.log( 'Error in method loadPersonalDetails()', error );
+          },
+      );
+  }
+
+  loadAdminstrativeContactDetails() {
+    this._irbViewService.getIRBprotocolAdminContact( this.requestObject ).subscribe( data => {
+          this.result = data || [];
+          if ( this.result != null ) {
+              if (this.result.irbViewProtocolAdminContact == null || this.result.irbViewProtocolAdminContact.length === 0) {
+                  this.noAdminContacts = true;
+              } else {
+                  this.irbAdminContactList = this.result.irbViewProtocolAdminContact;
+              }
+          }
+      },
+          error => {
+               console.log( 'Error in method loadPersonalDetails()', error );
+          },
+      );
+  }
+
 
   /**calls service to load funding details of protocol */
   loadFundingDetails() {
@@ -166,6 +213,10 @@ export class IrbOverviewComponent implements OnInit {
   loadPersonDetailedList() {
     this.irbPersonDetailedList = [];
     this.irbPersonDetailedTraining = [];
+    this.trainingAttachments = [];
+    this.trainingComments = [];
+    this.attachmentIconValue = -1;
+    this.commentIconValue = -1;
     this._irbViewService.getIrbPersonDetailedList( this.requestObject ).subscribe( data => {
         this.result = data || [];
         if ( this.result != null ) {
@@ -192,4 +243,58 @@ export class IrbOverviewComponent implements OnInit {
   closeModal() {
       this.showpersonDataList = false;
   }
+  openCollaboratordetails(collaborator) {
+      this.protocolCollaboratorSelected = collaborator;
+      this.result.protocolLocationId = collaborator.PROTOCOL_LOCATION_ID;
+      this._irbViewService.getIRBprotocolCollaboratorDetails(this.result).subscribe(data => {
+        this.result = data || [];
+        if (this.result != null) {
+            this.irbViewProtocolCollaboratorAttachments = this.result.irbViewProtocolCollaboratorAttachments != null ?
+            this.result.irbViewProtocolCollaboratorAttachments : [];
+            this.irbViewProtocolCollaboratorPersons = this.result.irbViewProtocolCollaboratorPersons != null ?
+            this.result.irbViewProtocolCollaboratorPersons : [];
+        }
+      });
+  }
+  downloadCollaboratorAttachment(attachment) {
+    this._irbViewService.downloadIrbAttachment(attachment.FILE_ID).subscribe( data => {
+        const a = document.createElement( 'a' );
+            const blob = new Blob( [data], { type: data.type } );
+            a.href = URL.createObjectURL( blob );
+            a.download = attachment.FILE_NAME;
+            document.body.appendChild(a);
+            a.click();
+    });
+  }
+  showTrainingAttachments(index) {
+    if (this.attachmentIconValue === index) {
+      this.attachmentIconValue = -1;
+    } else {
+      this.attachmentIconValue = index;
+      this.trainingAttachments = this.irbPersonDetailedTraining[index].attachment;
+  }
+}
+
+showTrainingComments(index) {
+  if (this.commentIconValue === index) {
+    this.commentIconValue = -1;
+  } else {
+    this.commentIconValue = index;
+    this.trainingComments = this.irbPersonDetailedTraining[index].comments;
+}
+}
+
+downloadAttachment(attachment) {
+  this._irbViewService.downloadTrainingAttachment(attachment.FILE_DATA_ID).subscribe(data => {
+    const a = document.createElement('a');
+    const blob = new Blob([data], { type: data.type });
+    a.href = URL.createObjectURL(blob);
+    a.download = attachment.FILE_NAME;
+    document.body.appendChild(a);
+    a.click();
+
+  },
+    error => console.log('Error downloading the file.', error),
+    () => console.log('OK'));
+}
 }

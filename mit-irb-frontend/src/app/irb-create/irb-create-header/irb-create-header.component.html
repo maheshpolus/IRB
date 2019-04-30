@@ -1,7 +1,10 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class=" pushFixedHeaderFooter">
 	<div class="headerPush"></div>
-	<div class="container-fluid">
+	<div class="container-fluid position-relative">
+			<div class="exit-button" (click)="backClick($event)" title="Close">
+				<i class="fa fa-times mg-6">&nbsp;</i>
+			</div>
 		<section class="row sect-padding">
 			<div class="col-12 top-aprv-details">
 				<div class="row">
@@ -30,7 +33,7 @@
 								</p>
 							</div>
 							<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
-								<span class="active-en">{{generalInfo?.protocolStatus?.description}}</span>
+								<span class="active-en pending-action">{{generalInfo?.protocolStatus?.description}}</span>
 							</div>
 							<div class="i-icon-top">
 								<span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne"

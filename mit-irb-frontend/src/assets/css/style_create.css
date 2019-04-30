@@ -2533,3 +2533,11 @@ input:disabled,textarea:disabled{
  .font-size-1em {
      font-size: 1.2em;
  }
+ .pr-15
+ {
+     padding-right: 15px;
+ }
+ .bgcolor
+ {
+    background-color: #f5f3f3!important;
+ }

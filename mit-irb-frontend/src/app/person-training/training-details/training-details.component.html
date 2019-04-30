@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Acknowledgement Date</label>
+                        <label>Completion Date</label>
                         <div class="input-group  mb-2" *ngIf="mode != 'view'">
                             <input type="text" class="form-control" [(ngModel)]="personnelTrainingInfo.DATE_ACKNOWLEDGED" (ngModelChange)="validateAckDate()"
                                 [owlDateTime]="trainingAckDate" placeholder="mm/dd/yyyy">
@@ -169,7 +169,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 users-list-tbl">
+                <div class="col-md-12 users-list-tbl" *ngIf="mode == 'view' || (mode != 'view' && personnelTrainingComment.length > 0)">
                     <div class="row">
                         <div class="table-responsive">
                             <table class="table table-striped tbl-p-clr">
@@ -196,25 +196,28 @@
                                             </td>
                                         </tr>
                                     </ng-container>
-                                    <tr *ngIf="personnelTrainingComment.length == 0 || personnelTrainingComment == null">
+                                    <tr *ngIf="(personnelTrainingComment.length == 0 || personnelTrainingComment == null) && mode != 'view'">
                                         <td class="text-center" colspan="3">No Comments to show</td>
                                     </tr>
+                                    <tr *ngIf="(personnelTrainingComment.length == 0 || personnelTrainingComment == null) && mode=='view'">
+                                            <td class="text-center" colspan="2">No Comments to show</td>
+                                        </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="top-distance" *ngIf="requestObject.personTrainingId != null">
+            <div class="top-distance" *ngIf="requestObject.personTrainingId != null || (mode == 'view' && personnelTrainingComment.length > 0)">
                 <div class="col-md-12 schedule-box">
-                    <h4 class="borderBoxHeading text-color">
-                        <span class="font-size-1em pl-0">Training Attachments</span>
+                    <h4 class="borderBoxHeading text-color pl-0">
+                        <span class="font-size-1em">Training Attachments</span>
                         <span *ngIf="mode != 'view'" class="float-right pointer" data-toggle="modal"
                             data-target="#attachmentModal">
                             <i class="fa fa-plus"></i> Add Attachment</span>
                     </h4>
 
-                    <div class="col-md-12 users-list-tbl">
+                    <div class="col-md-12 users-list-tbl" *ngIf="mode == 'view' || (mode != 'view' && personnelTrainingAttachments.length > 0)">
                         <div class="row">
                             <div class="table-responsive">
                                 <table class="table table-striped tbl-p-clr">
@@ -247,7 +250,7 @@
                                             </tr>
                                         </ng-container>
                                         <tr *ngIf="personnelTrainingAttachments.length == 0 || personnelTrainingAttachments == null">
-                                            <td class="text-center" colspan="3">No Attachments to show</td>
+                                            <td class="text-center" colspan="4">No Attachments to show</td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import {NgxSpinnerService} from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
@@ -36,11 +36,16 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   protocolPersonLeadUnits = [];
   affiliationTypes = [];
   personalDataList = [];
+  trainingAttachments = [];
+  trainingComments = [];
   irbPersonDetailedTraining: any[] = [];
   message = '';
   personType = 'employee';
   personPlaceHolder = 'Search for an Employee Name';
   personalInfoSelectedRow: number;
+  userHasRightToEditTraining: number;
+  attachmentIconValue = -1;
+  commentIconValue = -1;
   isElasticResultPerson = false;
   isPersonalInfoEdit = false;
   isGeneralInfoSaved = false;
@@ -69,6 +74,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     private _irbCreateService: IrbCreateService,
     private _irbViewService: IrbViewService,
     private _spinner: NgxSpinnerService,
+    private _router: Router,
     private _completerService: CompleterService) { }
 
   ngOnInit() {
@@ -444,6 +450,10 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
 
   /*calls service to load person details of protocol */
   loadPersonDetailedList(item) {
+    this.attachmentIconValue = -1;
+    this.trainingAttachments = [];
+    this.commentIconValue = -1;
+    this.trainingComments = [];
     const params = { protocolNumber: this.protocolNumber, avPersonId: item.personId };
     this._irbViewService.getIrbPersonDetailedList(params).subscribe(data => {
       this.result = data || [];
@@ -451,6 +461,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
         this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
         this.trainingStatus = this.result.trainingStatus;
+        this.checkUserHasMaintainRight();
       }
     },
       error => {
@@ -458,9 +469,61 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       },
     );
   }
+
+  checkUserHasMaintainRight() {
+    this._irbCreateService.getUserTrainingRight(this.userDTO.personID).subscribe((data: any) => {
+      this.userHasRightToEditTraining = data.userHasRightToEditTraining;
+    });
+  }
+
   isAmmendment() {
     const isammendment = this.protocolNumber.includes('A') ? true : false;
     return isammendment;
   }
 
+  openTrainingMaintainence(trainingDetail, mode) {
+    if (mode === 'ADD') {
+    this._router.navigate(['/irb/training-maintenance/person-detail']);
+    } else {
+      this._router.navigate(['/irb/training-maintenance/person-detail'],
+        {
+          queryParams: {
+            personTrainingId: trainingDetail.PERSON_TRAINING_ID,
+            mode: 'edit'
+          }
+        });
+    }
+  }
+  showTrainingAttachments(index) {
+    if (this.attachmentIconValue === index) {
+      this.attachmentIconValue = -1;
+    } else {
+      this.attachmentIconValue = index;
+      this.trainingAttachments = this.irbPersonDetailedTraining[index].attachment;
+  }
 }
+
+showTrainingComments(index) {
+  if (this.commentIconValue === index) {
+    this.commentIconValue = -1;
+  } else {
+    this.commentIconValue = index;
+    this.trainingComments = this.irbPersonDetailedTraining[index].comments;
+}
+}
+
+downloadAttachment(attachment) {
+  this._irbCreateService.downloadTrainingAttachment(attachment.FILE_DATA_ID).subscribe(data => {
+    const a = document.createElement('a');
+    const blob = new Blob([data], { type: data.type });
+    a.href = URL.createObjectURL(blob);
+    a.download = attachment.FILE_NAME;
+    document.body.appendChild(a);
+    a.click();
+
+  },
+    error => console.log('Error downloading the file.', error),
+    () => console.log('OK'));
+}
+}
+

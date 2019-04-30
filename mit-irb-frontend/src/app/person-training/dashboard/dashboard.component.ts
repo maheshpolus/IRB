@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   trainingSearchResult = [];
   personTrainingList = [];
   paginatedTrainingList = [];
+  userHasRightToEditTraining: number;
   clearField: any = 'true';
   isTrainingSearch = false;
   showPopup = false;
@@ -64,15 +65,22 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this.loadTrainingList();
+    this.checkUserHasMaintainRight();
+  }
+
+  checkUserHasMaintainRight() {
+    this._personTrainingService.getUserTrainingRight(this.userDTO.personID).subscribe((data: any) => {
+      this.userHasRightToEditTraining = data.userHasRightToEditTraining;
+    });
   }
 
   /* load the training list */
   loadTrainingList() {
-    this._spinner.show();
     this.trainingCount = 0;
+    this._spinner.show();
     this._personTrainingService.loadPersonTrainingList(this.requestObject).subscribe(data => {
-      this._spinner.hide();
       this.IRBUtilVO = data;
+      this._spinner.hide();
       this.personTrainingList = this.IRBUtilVO.personTrainingList == null ? [] : this.IRBUtilVO.personTrainingList;
       this.trainingCount = this.personTrainingList.length;
       this.paginatedTrainingList = this.personTrainingList.slice(0, this.paginationData.limit);
@@ -194,7 +202,7 @@ export class DashboardComponent implements OnInit {
       this._spinner.hide();
       this.IRBUtilVO = data;
       this.personTrainingList = this.IRBUtilVO.personTrainingList;
-      this.paginatedTrainingList = this.personTrainingList.slice(this.paginationData.page_number * this.paginationData.limit 
+      this.paginatedTrainingList = this.personTrainingList.slice(this.paginationData.page_number * this.paginationData.limit
         - this.paginationData.limit, this.paginationData.page_number * this.paginationData.limit);
     });
   }

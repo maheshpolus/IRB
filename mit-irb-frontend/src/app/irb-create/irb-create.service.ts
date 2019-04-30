@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class IrbCreateService {
@@ -84,4 +84,14 @@ export class IrbCreateService {
   updateAdminContact(params) {
     return this._http.post('/mit-irb/updateAdminContact', params);
   }
+  getUserTrainingRight(personID: string) {
+    const params = new HttpParams().set('person_Id', personID);
+    return this._http.post('/mit-irb/getUserTrainingRight', params);
+  }
+  downloadTrainingAttachment(fileId) {
+    return this._http.get('/mit-irb/downloadFileData', {
+        headers: new HttpHeaders().set('fileDataId', fileId.toString()),
+        responseType: 'blob'
+    });
+}
 }

@@ -443,5 +443,25 @@
 	"/mit-irb/addTrainingAttachments": {
 		"target" : "http://192.168.1.93:8082",
 		"secure" : false
+	},
+	"/mit-irb/getIRBprotocolUnits": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
+	},
+	"/mit-irb/getIRBprotocolAdminContact": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
+	},
+	"/mit-irb/getIRBprotocolCollaboratorDetails": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
+	},
+	"/mit-irb/downloadCollaboratorFileData": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
+	},
+	"/mit-irb/getUserTrainingRight": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
 	}
 }

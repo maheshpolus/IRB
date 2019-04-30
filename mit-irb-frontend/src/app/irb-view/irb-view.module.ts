@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '../common/common/common.module';
 
 import { IrbViewRoutingModule } from './irb-view-routing.module';
+import { SubmissionDetailsComponent } from './irb-history/submission-details/submission-details.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { IrbViewRoutingModule } from './irb-view-routing.module';
     AppCommonModule,
     NgbModule.forRoot()
   ],
-  declarations: [IrbOverviewComponent, IrbHeaderDetailComponent, IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent]
+  declarations: [IrbOverviewComponent, IrbHeaderDetailComponent, IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent, SubmissionDetailsComponent]
 })
 export class IrbViewModule {}

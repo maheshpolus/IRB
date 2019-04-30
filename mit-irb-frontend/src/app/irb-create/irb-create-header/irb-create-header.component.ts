@@ -93,4 +93,9 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   toggle() {
     this.isExpanded = !this.isExpanded;
   }
+
+  backClick(event) {
+    event.preventDefault();
+      this._router.navigate(['/irb/dashboard']);
+    }
 }

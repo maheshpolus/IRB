@@ -51,4 +51,26 @@ export class IrbViewService {
   loadProtocolHistoryActionComments(params) {
     return this._http.post('/mit-irb/loadProtocolHistoryActionComments', params);
 }
+getIRBprotocolUnits(params) {
+    return this._http.post('/mit-irb/getIRBprotocolUnits', params);
+}
+getIRBprotocolAdminContact(params) {
+    return this._http.post('/mit-irb/getIRBprotocolAdminContact', params);
+}
+getIRBprotocolCollaboratorDetails(params) {
+    return this._http.post('/mit-irb/getIRBprotocolCollaboratorDetails', params);
+}
+downloadCollaboratorFileData(attachmentId) {
+    return this._http.get('/mit-irb/downloadCollaboratorFileData', {
+        headers: new HttpHeaders().set('fileDataId', attachmentId.toString()),
+        responseType: 'blob'
+    });
+}
+downloadTrainingAttachment(fileId) {
+    return this._http.get('/mit-irb/downloadFileData', {
+        headers: new HttpHeaders().set('fileDataId', fileId.toString()),
+        responseType: 'blob'
+    });
+}
+
 }

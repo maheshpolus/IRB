@@ -82,14 +82,13 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
   addProtocolUnit(mode) {
     if (this.protocolUnit.unitName != null && this.protocolUnit.unitName !== undefined &&
       this.protocolUnit.unitNumber != null && this.protocolUnit.unitNumber !== undefined
-      && this.protocolUnit.unitTypeCode != null && this.protocolUnit.unitTypeCode !== undefined && 
+      && this.protocolUnit.unitTypeCode != null && this.protocolUnit.unitTypeCode !== undefined &&
       this.protocolUnit.unitTypeCode !== 'null' &&
       this.invalidData.isLeadUnitExist === false) {
       this.invalidData.invalidUnitData = false;
       this.saveProtocolUnit(mode);
       if (mode === 'EDIT') {
         this.isProtocolUnitEdit = false;
-        this.protocolUnitSelectedRow = null;
       }
     } else {
       this.invalidData.invalidUnitData = true;
@@ -115,8 +114,8 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
    * @param  {} index - index of the unit object deleted
    */
   deleteProtocolUnit(index) {
-    this.protocolUnit.acType = 'D';
     this.commonVo.protocolLeadUnits = this.protocolUnitList[index];
+    this.commonVo.protocolLeadUnits.acType = 'D';
     this.showDeletePopup = true;
 
   }
@@ -139,6 +138,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
       this._spinner.hide();
       this.protocolUnit = {};
       this.protocolUnit.unitTypeCode = null;
+      this.protocolUnitSelectedRow = null;
       this.commonVo.protocolLeadUnitsList = this.protocolUnitList;
       this.isProtocolUnitEdit = false;
     });

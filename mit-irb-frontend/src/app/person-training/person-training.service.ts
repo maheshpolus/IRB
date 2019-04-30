@@ -41,6 +41,9 @@ addTrainingComments(params) {
     this.formData.append('fileDataId', fileDataId);
     return this._http.post('/mit-irb/addTrainingAttachments', this.formData);
   }
-
+  getUserTrainingRight(personID: string) {
+    const params = new HttpParams().set('person_Id', personID);
+    return this._http.post('/mit-irb/getUserTrainingRight', params);
+  }
 
 }

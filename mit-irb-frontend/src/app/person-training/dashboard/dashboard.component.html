@@ -44,7 +44,7 @@
             </button>
           </div>
           </div>
-      <div class="col-md-2">
+      <div class="col-md-2" *ngIf="userHasRightToEditTraining == 1">
         <a class="pdf a-right attachment-btn-position" [routerLink]="['person-detail']">
           <i class="fa fa-plus icon-padding"></i>Add Training
         </a>
@@ -72,13 +72,13 @@
                           <td>{{personTraining?.TRAINING}}</td>
                           <td>{{(personTraining?.EXPIRATION_DATE === ' ' || personTraining?.EXPIRATION_DATE === null ) ? ' ':(personTraining?.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</td>
                           <td class="action-btn-list" width="15%">
-                              <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="showTrainingDetails(personTraining,'EDIT')">
+                              <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="showTrainingDetails(personTraining,'EDIT')" *ngIf="userHasRightToEditTraining == 1">
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                               </button>
                               <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="showTrainingDetails(personTraining, 'VIEW')">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                               </button>
-                              <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteTrainingDetails(personTraining)" data-toggle="modal" data-target="#deletewarningModal">
+                              <button title="Delete" type="button" class="btn btn-primary delete-btn-1" *ngIf="userHasRightToEditTraining == 1" (click)="deleteTrainingDetails(personTraining)" data-toggle="modal" data-target="#deletewarningModal">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                               </button>
                             </td>

@@ -232,9 +232,11 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   loadCollaboratorPersonsAndAttachment(CollaboratorId) {
     this.commonVo.collaboratorId = CollaboratorId;
     this.personalDataList = Object.assign([], this.generalInfo.personnelInfos);
+    this._spinner.show();
     this._irbCreateService.loadCollaboratorPersonsAndAttachments(this.commonVo).subscribe(
       data => {
         this.result = data;
+        this._spinner.hide();
         this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList == null ?
           null : this.result.protocolCollaboratorAttachmentsList;
         this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ? null : this.result.protocolCollaboratorPersons;

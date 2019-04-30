@@ -2,7 +2,7 @@
   <div class="card history-card border-radius-1">
     <div class="card-header history-header">
       <nav class="nav navbar-pg3">
-        <h5>Collaborators</h5>
+        <h5>Engaged Institutions</h5>
         <i class="fa fa-info-circle" aria-hidden="true"></i>
       </nav>
     </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="modal-body modal-popup">
         <div class="modal-header-label">
-          <h4 class="popup-sub-head">Collaborator</h4>
+          <h4 class="popup-sub-head">Engaged Institution</h4>
         </div>
         <!-- section1 -->
         <div class="modal-padding">
@@ -251,7 +251,7 @@
                 <tr>
                   <th scope="col">Name</th>
                   <th scope="col">Role</th>
-                  <th scope="col">Unit</th>
+                  <!-- <th scope="col">Unit</th> -->
                   <th scope="col">Affiliation</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -260,7 +260,7 @@
                 <tr *ngFor="let protocolCollaboratorPerson of protocolCollaboratorPersons">
                   <td scope="row">{{protocolCollaboratorPerson?.personnelInfo?.personName}}</td>
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolPersonRoleTypes?.description}}</td>
-                  <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td>
+                  <!-- <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolLeadUnits[0]?.protocolPersonLeadUnits?.unitName}}</td> -->
                   <td>{{protocolCollaboratorPerson?.personnelInfo?.protocolAffiliationTypes?.description}}</td>
                   <td><ul class="actionButtonGroup padding-icons">
                       <li>

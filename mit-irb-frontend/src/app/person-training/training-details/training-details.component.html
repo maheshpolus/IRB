@@ -2,7 +2,7 @@
 <div class="headerPush"></div>
 <div class="container-fluid">
     <div class="borderBox irb-margin-top irb-background-tablemaintenance">
-        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details  ></h4>
+        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details</h4>
         <section>
             <!-- <div class="row"> -->
             <div class="col-md-12  search-eidted-p padding0" *ngIf="invalidData.invalidPersonData">
@@ -207,7 +207,7 @@
                     </div>
                 </div>
             </div>
-            <div class="top-distance">
+            <div class="top-distance" *ngIf="requestObject.personTrainingId != null">
                 <div class="col-md-12">
                     <h4 class="borderBoxHeading text-color pl-0">
                         <span class="font-size-1em">Training Attachments</span>

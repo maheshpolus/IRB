@@ -72,5 +72,8 @@ downloadTrainingAttachment(fileId) {
         responseType: 'blob'
     });
 }
+getProtocolSubmissionDetails(params) {
+    return this._http.post('/mit-irb/getProtocolSubmissionDetails', params);
+}
 
 }

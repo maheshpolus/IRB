@@ -487,7 +487,6 @@
 																  </div> -->
 																  <ul *ngFor="let comment of trainingComments">
 																		<li title="{{comment?.COMMENT_DESCRIPTION}}">{{comment?.COMMENT_DESCRIPTION| slice:0:25}} <span *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 25"> ...</span></li>
-																	  </ul>
 																</ul>
 																</td>
 															  </tr>

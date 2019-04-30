@@ -1,146 +1,236 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="container-fluid">
     <div class="row">
-      <div class="col-12">
-        <div class="card history-card">
-          <div class="card-header history-header">
-            <nav class="nav navbar-pg3">
-              <h5>Submission details</h5>
-              <i  class=" fa fa-info-circle" tabindex="0"></i>
-            </nav>
-          </div>
-  
-          <div class="card-body card-paddng">
-              <div class="col-12  search-eidted-p padding-15">
-              <div class="col-md-12 padding-10">
-                  <div class="modal-header-label">
-                  <h4 class="popup-sub-head">Details</h4>
+        <div class="col-12">
+            <div class="card history-card">
+                <div class="card-header history-header">
+                    <nav class="nav navbar-pg3">
+                        <h5>Submission details - {{historyName}}</h5> 
+                        <i class=" fa fa-info-circle" tabindex="0"></i>
+                    </nav>
                 </div>
-                </div>
-                <div class="row card-list-med pl-15 pr-15">
-                  <div class="col-6 card-desc">
-                    <p>Committee Id: </p>
-                    <p>Schedule Status: </p>
-                    <p>Review Type: </p>
-                    <p>Submission Status: </p>
-                    <p>Risk Levels: </p>
-                    </div>
-                   
-                        <div class="col-6 card-desc">
-                            <p>Committee Name: </p>
-                            <p>Submission Type: </p>
-                            <p>Type Qualifier: </p>
-                            <p>Billable: </p>
+
+                <div class="card-body card-paddng">
+                    <div class="col-12  search-eidted-p padding-15">
+                        <div class="col-md-12 padding-10">
+                            <div class="row">
+                            <div class=" col-8 modal-header-label">
+                                <h4 class="popup-sub-head">Details</h4>
                             </div>
-                  </div>
-                  <div class="col-md-12 padding-10">
-                  <div class="modal-header-label">
-                      <h4 class="popup-sub-head">Reviewers</h4>
-                    </div>
-                    </div>
-                    <div class="col-md-12 users-list-tbl">
-                        <div class="row">
-                            <div class="table-responsive">
-                                <table class="table table-striped tbl-p-clr">
-                                    <thead class="tbl-head-clr thead-font-size">
-                                        <tr>
-                                            <th scope="col">Reviewer</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">Determination Recommendation</th>
-                                            <th scope="col">Due Date</th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      	<ng-container *ngIf="false">
+                            <div class="col-4 text-right modal-header-label">
+                                    <a title="Back to history" class="return-committee-color history-back pointer" (click)="backToHistory()">
+                                        <i class="fa fa-mail-reply">&nbsp;</i>Back to history</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row card-list-med pl-15 pr-15">
+                            <div class="col-6 card-desc">
+                                <p>Committee Id:
+                                    <span>{{result?.protocolSubmissionDetails?.COMMITTEE_ID}}</span>
+                                </p>
+                                <p>Schedule Date:
+                                    <span>{{result?.protocolSubmissionDetails?.SCHEDULED_DATE}}</span>
+                                </p>
+                                <p>Review Type:
+                                    <span>{{result?.protocolSubmissionDetails?.REVIEW_TYPE_DESCRIPTION}}</span>
+                                </p>
+                                <p>Submission Status:
+                                    <span>{{result?.protocolSubmissionDetails?.SUBMISSION_STATUS_DESCRIPTION}}</span>
+                                </p>
+                                <p>Risk Levels:
+                                    <span>{{result?.protocolSubmissionDetails?.RISK_LEVEL}}</span>
+                                </p>
+                            </div>
+
+                            <div class="col-6 card-desc">
+                                <p>Committee Name:
+                                    <span>{{result?.protocolSubmissionDetails?.COMMITTEE_NAME}}</span>
+                                </p>
+                                <p>Submission Type:
+                                    <span>{{result?.protocolSubmissionDetails?.SUBMISSION_TYPE_DESCRIPTION}}</span>
+                                </p>
+                                <p>Type Qualifier:
+                                    <span>{{result?.protocolSubmissionDetails?.QUAL_TYPE_DESCRIPTION}}</span>
+                                </p>
+                                <p>Billable:
+                                    <span *ngIf="result?.protocolSubmissionDetails?.IS_BILLABLE=='Y'">Yes</span>
+                                    <span *ngIf="result?.protocolSubmissionDetails?.IS_BILLABLE=='N'">No</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12 padding-10">
+                            <div class="modal-header-label">
+                                <h4 class="popup-sub-head">Reviewers</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-12 users-list-tbl">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-striped tbl-p-clr">
+                                        <thead class="tbl-head-clr thead-font-size">
                                             <tr>
+                                                <th scope="col">Reviewer</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Determination Recommendation</th>
+                                                <th scope="col">Due Date</th>
+
                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngIf="protocolSubmissionReviewers.length > 0">
+                                                <tr *ngFor="let reviewer of protocolSubmissionReviewers">
+                                                    <td>{{reviewer.FULL_NAME}}</td>
+                                                    <td>{{reviewer.REVIEWER_TYPE_DESCRIPTION}}</td>
+                                                    <td>{{reviewer.RECOMMENDATION_DETERMINATION}}</td>
+                                                    <td>{{reviewer.DUEDATE}}</td>
+                                                </tr>
                                             </ng-container>
-                                            <ng-container *ngIf="true">
+                                            <ng-container *ngIf="protocolSubmissionReviewers==null || protocolSubmissionReviewers.length==0">
                                                 <tr>
                                                     <td class="text-center" colspan="4">No Reviewer Details to show</td>
                                                 </tr>
-                                                </ng-container>
-                                      </tbody>
-                                      </table>
-                                      </div>
-                                      </div>
-                                      </div>
-                    <div class="col-md-12 padding-10">
-                        <div class="modal-header-label">
-                            <h4 class="popup-sub-head">Vote Summary</h4>
-                          </div>
-                          </div>
-                          <div class="row card-list-med pl-15 pr-15">
-                              <div class="col-1 card-desc">
-                                <p>No: </p>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="col-1 card-desc">
-                                    <p>Yes: </p>
-                                    </div>
-                                    <div class="col-1 card-desc">
-                                        <p>Abstain: </p>
-                                        </div>
-                                        <div class="col-1 card-desc">
-                                            <p>Recused: </p>
-                                            </div>
-                                            <div class="col-8 card-desc">
-                                                <p>Voting Text: </p>
-                                                </div>
                             </div>
+                        </div>
+                        <div class="col-md-12 padding-10">
+                            <div class="modal-header-label">
+                                <h4 class="popup-sub-head">Vote Summary</h4>
+                            </div>
+                        </div>
+                        <div class="row card-list-med pl-15 pr-15">
+                            <div class="col-1 card-desc">
+                                <p>No:
+                                    <span>{{result?.protocolSubmissionDetails?.NO_VOTE_COUNT}}</span>
+                                </p>
+                            </div>
+                            <div class="col-1 card-desc">
+                                <p>Yes:
+                                    <span>{{result?.protocolSubmissionDetails?.YES_VOTE_COUNT}}</span>
+                                </p>
+                            </div>
+                            <div class="col-1 card-desc">
+                                <p>Abstain:
+                                    <span>{{result?.protocolSubmissionDetails?.ABSTAINER_COUNT}}</span>
+                                </p>
+                            </div>
+                            <div class="col-1 card-desc">
+                                <p>Recused:
+                                    <span>{{result?.protocolSubmissionDetails?.RECUSED_COUNT}}</span>
+                                </p>
+                            </div>
+                            <div class="col-8 card-desc">
+                                <p>Voting Text:
+                                    <span>{{result?.protocolSubmissionDetails?.VOTE_COMMENTS}}</span>
+                                </p>
+                            </div>
+                        </div>
 
-                          <div class="col-md-12 padding-10">
-                              <div class="modal-header-label">
-                                  <h4 class="popup-sub-head">Renewal Details</h4>
-                                </div>
-                                </div>
-                                <div class="row card-list-med pl-15 pr-15">
-                                <div class="col-6 card-desc">
-                                    <p>Renew: </p>
+                        <div class="col-md-12 padding-10">
+                            <div class="modal-header-label">
+                                <h4 class="popup-sub-head">Renewal Details</h4>
+                            </div>
+                        </div>
+                        <div class="row card-list-med pl-15 pr-15">
+                            <div class="col-6 card-desc">
+                                <p>Renew: </p>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.generalInfo"> General Info
                                     </div>
-                                    <div class="col-6 card-desc">
-                                        <p>Summary: </p>
-                                        </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.addModifyNoteAttachments"> Add/Modify Notes & Attachments
                                     </div>
-                                <div class="col-md-12 padding-10">
-                                    <div class="modal-header-label">
-                                        <h4 class="popup-sub-head">Checklist Items</h4>
-                                      </div>
-                                      </div>
-                                      <div class="col-md-12 padding-10">
-                                          <div class="modal-header-label">
-                                              <h4 class="popup-sub-head">Review Comments</h4>
-                                            </div>
-                                            </div>
-                                            <div class="col-md-12 users-list-tbl">
-                                                <div class="row">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-striped tbl-p-clr">
-                                                            <thead class="tbl-head-clr thead-font-size">
-                                                                <tr>
-                                                                    <th scope="col">Standard Comments</th>
-                                                                    <th scope="col">Comment</th>
-                                                                    <th scope="col">Private</th>
-                                                                    <th scope="col">Final</th>
-                                                                    
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                              	<ng-container *ngIf="false">
-                                                                    <tr>
-                                                                    </tr>
-                                                                    </ng-container>
-                                                                    <ng-container *ngIf="true">
-                                                                        <tr>
-                                                                            <td class="text-center" colspan="4">No Review Comments to show</td>
-                                                                        </tr>
-                                                                        </ng-container>
-                                                              </tbody>
-                                                              </table>
-                                                              </div>
-                                                              </div>
-                                                              </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.fundingSource"> Funding Source
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.areaOfResearch"> Area of Research
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.protocolReferences"> Protocol References & Other Identifiers
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.specialReview"> Special Reviews
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.protocolOrganization"> Protocol Organisations
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.protocolPersonel"> Protocol Personnel
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.questionnaire"> Questionnaire
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.other"> Others
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 card-desc">
+                                <p>Summary: </p>
+                                <textarea rows="6" cols="80" disabled="true" [(ngModel)]="protocolRenewalComments[0].SUMMARY"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 padding-10">
+                            <div class="modal-header-label">
+                                <h4 class="popup-sub-head">Checklist Items</h4>
+                            </div>
+                            <ng-container *ngIf="submissionCheckListData.length > 0">
+                                    <div *ngFor="let checklist of submissionCheckListData; let i=index" class="margin8">
+                                        <span>{{i+1}}</span> {{checklist.EXEMPT_EXPEDITED_DESCRIPTION}}
+                                    </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-12 padding-10">
+                            <div class="modal-header-label">
+                                <h4 class="popup-sub-head">Review Comments</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-12 users-list-tbl">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-striped tbl-p-clr">
+                                        <thead class="tbl-head-clr thead-font-size">
+                                            <tr>
+                                                <th scope="col">Comment</th>
+                                                <th scope="col">Private</th>
+                                                <th scope="col">Final</th>
+                                                <th scope="col">Updated By</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngIf="protocolReviewerComments.length > 0">
+                                                <tr *ngFor="let comment of protocolReviewerComments">
+                                                    <td>{{comment.CMT}}</td>
+                                                    <td>
+                                                        <span *ngIf="comment.PRIVATE_CMT=='Y'">Yes</span>
+                                                        <span *ngIf="comment.PRIVATE_CMT=='N'">No</span>
+                                                    </td>
+                                                    <td>
+                                                        <span *ngIf="comment.FINAL_CMT=='Y'">Yes</span>
+                                                        <span *ngIf="comment.FINAL_CMT=='N'">No</span>
+                                                    </td>
+                                                    <td>
+                                                        {{comment.UPDATE_USER}} on {{comment.UPDATE_TIMESTAMP}}
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                            <ng-container *ngIf="protocolReviewerComments == null || protocolReviewerComments.length == 0">
+                                                <tr>
+                                                    <td class="text-center" colspan="4">No Review Comments to show</td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>

@@ -452,17 +452,18 @@ ul.sb-results-dropdown-menu > li:last-child {
 .icon-list-coll
 {
     margin: 0;
+    padding-top: 3px;
 }
 .icon-list-coll li i, .review-comment-icon
 {
-	width: 35px;
-    height: 35px;
+    width: 41px;
+    height: 41px;
     border-radius: 50%;
-    background: #8c8c8c;
+    /* background: #8c8c8c; */
     text-align: center;
     line-height: 35px;
-    color: #fff;
-    font-size: 1rem;
+    color: #635f5f;
+    font-size: 1.2rem;
 }
 .review-border
 {
@@ -2176,10 +2177,15 @@ input:disabled,textarea:disabled{
 }
 .return-committee-color
 {
-    color: #628e08;
+    color: #628e08 !important;
     padding: 3px 20px;
     border-radius: 10px;
     border: 1px solid #628e08;
+}
+.history-back{
+    margin-bottom: 10px;
+    float: right;
+    font-size: 15px;
 }
 .return-committee-color:hover 
 {

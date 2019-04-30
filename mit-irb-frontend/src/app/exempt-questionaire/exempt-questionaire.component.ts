@@ -599,6 +599,13 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
                         && this.userDTO.personID === this.requestObject.irbExemptForm.createdUser) {
                         this.isViewMode = true;
                     }
+                    if (this.requestObject.irbExemptForm.statusCode === '5') {
+                        if ( this.result.irbExemptForm.loggedInUserPI === true ) {
+                            this.isViewMode = false;
+                        } else {
+                        this.isViewMode = true;
+}
+                    }
                     if (this.requestObject.irbExemptForm.summary != null) {
                         this.remainingChar(this.requestObject.irbExemptForm.summary.length);
                     }

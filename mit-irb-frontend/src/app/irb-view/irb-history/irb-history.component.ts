@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IrbViewService } from '../irb-view.service';
 
@@ -34,7 +35,8 @@ export class IrbHistoryComponent implements OnInit {
 
     PROTOCOL_HISTORY_INFO: string;
 
-    constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, private _http: HttpClient ) { }
+    constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, private _http: HttpClient,
+    private router: Router, private _spinner: NgxSpinnerService ) { }
 
     /** sets requestObject and calls functions to load history list */
     ngOnInit() {
@@ -51,7 +53,9 @@ export class IrbHistoryComponent implements OnInit {
 
     /**calls service to get history of protocols created*/
     loadHistoryList() {
+        this._spinner.show();
         this._irbViewService.getProtocolHistotyGroupList(this.requestObject).subscribe(data => {
+            this._spinner.hide();
             this.result = data || [];
             if (this.result != null) {
                 if (this.result.irbViewProtocolHistoryGroupList == null || this.result.irbViewProtocolHistoryGroupList.length === 0) {
@@ -59,6 +63,7 @@ export class IrbHistoryComponent implements OnInit {
                 } else {
                     this.irbHistoryList = this.result.irbViewProtocolHistoryGroupList;
                     this.isExpanded.length = this.irbHistoryList.length;
+                    this.isExpanded.fill(true);
                 }
             }
 
@@ -79,7 +84,7 @@ export class IrbHistoryComponent implements OnInit {
                     this.result.irbViewProtocolHistoryGroupDetails.length === 0) {
                     this.noHistoryDetails = true;
                 } else {
-                    this.irbHistoryDetails[index] = this.result.irbViewProtocolHistoryGroupDetails;
+                    this.irbHistoryDetails = this.result.irbViewProtocolHistoryGroupDetails;
                 }
             }
 
@@ -107,15 +112,26 @@ export class IrbHistoryComponent implements OnInit {
         //     }
         // }
         this.isExpanded[index] = !this.isExpanded[index];
-        if (this.isExpanded[index] === true) {
-            this.requestObject.protocolId = this.irbHistoryList[index].PROTOCOL_ID;
-            this.requestObject.actionId = this.irbHistoryList[index].ACTION_ID;
-            this.requestObject.nextGroupActionId = this.irbHistoryList[index].NEXT_GROUP_ACTION_ID;
-            this.requestObject.previousGroupActionId = this.irbHistoryList[index].PREVIOUS_GROUP_ACTION_ID;
-            this.loadHistoryDetails(index);
-        }
+        // if (this.isExpanded[index] === true) {
+        //     this.requestObject.protocolId = this.irbHistoryList[index].PROTOCOL_ID;
+        //     this.requestObject.actionId = this.irbHistoryList[index].ACTION_ID;
+        //     this.requestObject.nextGroupActionId = this.irbHistoryList[index].NEXT_GROUP_ACTION_ID;
+        //     this.requestObject.previousGroupActionId = this.irbHistoryList[index].PREVIOUS_GROUP_ACTION_ID;
+        //     this.loadHistoryDetails(index);
+        // }
 
     }
+
+
+    viewSubmissionDetails(submissionProtocolNumber, comment) {
+        this.router.navigate(['/irb/irb-view/submission-detail'],
+        {queryParams: {protocolNumber: this._activatedRoute.snapshot.queryParamMap.get('protocolNumber'),
+        submissionProtocolNumber: submissionProtocolNumber, comment: comment}});
+    }
+
+
+
+
     // Download correspondance letter
     downloadCorrespondanceLetter(actionId, fileName) {
       this._irbViewService.loadProtocolHistoryCorrespondanceLetter( actionId ).subscribe( data => {

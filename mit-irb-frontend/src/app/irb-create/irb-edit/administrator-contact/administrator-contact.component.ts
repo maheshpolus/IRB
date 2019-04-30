@@ -79,6 +79,8 @@ export class AdministratorContactComponent implements OnInit {
         this.loadEditDetails();
       }
     });
+    this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+    this.options.index = this._elasticsearchService.IRB_INDEX;
   }
 
 
@@ -102,10 +104,12 @@ export class AdministratorContactComponent implements OnInit {
     this.protocolAdminContact.personId = null;
     this.protocolAdminContact.personName = null;
     if (type === 'employee') {
+      this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
       this.options.index = this._elasticsearchService.IRB_INDEX;
       this.options.type = 'person';
       this.elasticPlaceHolder = 'Search for an Employee Name';
     } else {
+      this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
       this.options.index = this._elasticsearchService.NON_EMPLOYEE_INDEX;
       this.options.type = 'rolodex';
       this.elasticPlaceHolder = 'Search for an Non-Employee Name';
@@ -196,6 +200,7 @@ export class AdministratorContactComponent implements OnInit {
       this.protocolAdminContactList = data.protocolAdminContactList;
       this._spinner.hide();
       this.protocolAdminContact = {};
+      this.protocolAdminContact.adminContactTypeCode = null;
       this.protocolAdminContact.adminContactType = {};
       this.showPersonElasticBand = false;
       // tslint:disable-next-line:no-construct

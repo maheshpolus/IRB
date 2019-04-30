@@ -19,9 +19,10 @@ export class SubmissionDetailsComponent implements OnInit {
   protocolSubmissionReviewers = [];
   protocolReviewerComments = [];
   protocolRenewalDetail: any = {};
-  protocolRenewalComments = [1];
+  protocolRenewalComments = '';
   submissionCheckListData = [];
   historyName = '';
+  isammendment = false;
 
   constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute,
     private _spinner: NgxSpinnerService, private _location: Location) {
@@ -33,6 +34,7 @@ export class SubmissionDetailsComponent implements OnInit {
   }
   getsubmissionDetails() {
     this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('submissionProtocolNumber');
+    this.isammendment = this.requestObject.protocolNumber.includes('A') ? true : false;
     this._spinner.show();
     this._irbViewService.getProtocolSubmissionDetails(this.requestObject).subscribe(data => {
       this._spinner.hide();
@@ -40,7 +42,7 @@ export class SubmissionDetailsComponent implements OnInit {
       this.protocolSubmissionReviewers = this.result.protocolSubmissionReviewers != null ? this.result.protocolSubmissionReviewers : [];
       this.protocolReviewerComments = this.result.protocolReviewerComments != null ? this.result.protocolReviewerComments : [];
       this.protocolRenewalDetail = this.result.protocolRenewalDetail;
-      this.protocolRenewalComments = this.result.protocolRenewalComments != null ? this.result.protocolRenewalComments : [];
+      this.protocolRenewalComments = this.result.protocolRenewalComments;
       this.submissionCheckListData = this.result.submissionCheckListData != null ? this.result.submissionCheckListData : [];
 
     },

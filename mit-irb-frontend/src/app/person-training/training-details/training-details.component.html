@@ -2,13 +2,17 @@
 <div class="headerPush"></div>
 <div class="container-fluid">
     <div class="borderBox irb-margin-top irb-background-tablemaintenance">
-        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details</h4>
+        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details  ></h4>
         <section>
             <!-- <div class="row"> -->
             <div class="col-md-12  search-eidted-p padding0" *ngIf="invalidData.invalidPersonData">
                 <div class="alert alert-danger" [innerHTML]="warningMessage">
                 </div>
             </div>
+            <div class="col-12 text-right pointer" *ngIf="from == 'protocol'">
+                    <a class="return-committee-color" title="Back to Protocol" id="returnToCommiteeLink" class="return-committee-color" (click)="returnToProtocol()">
+                        <i class="fa fa-mail-reply">&nbsp;</i>Return to Protocol</a>
+                </div>
             <!-- </div> -->
             <div class="row outerpadding">
                 <div class="text-right persons-header width-99" *ngIf="mode == 'view'">
@@ -132,7 +136,7 @@
                     </button>
                 </div>
             </div>
-            <div class="col-md-12 schedule-box" *ngIf="requestObject.personTrainingId != null">
+            <div class="col-md-12" *ngIf="requestObject.personTrainingId != null">
                 <h4 class="borderBoxHeading text-color pl-0">
                     <span class="font-size-1em">Training Comments</span>
                     <span *ngIf="mode != 'view'" class="float-right pointer" (click)="showCommentDiv = !showCommentDiv">
@@ -168,8 +172,9 @@
 
                     </div>
                 </div>
+                <div *ngIf="personnelTrainingComment.length == 0" class="text-center">No Comments to Show</div>
 
-                <div class="col-md-12 users-list-tbl" *ngIf="mode == 'view' || (mode != 'view' && personnelTrainingComment.length > 0)">
+                <div class="col-md-12 users-list-tbl" *ngIf="personnelTrainingComment.length > 0">
                     <div class="row">
                         <div class="table-responsive">
                             <table class="table table-striped tbl-p-clr">
@@ -196,28 +201,23 @@
                                             </td>
                                         </tr>
                                     </ng-container>
-                                    <tr *ngIf="(personnelTrainingComment.length == 0 || personnelTrainingComment == null) && mode != 'view'">
-                                        <td class="text-center" colspan="3">No Comments to show</td>
-                                    </tr>
-                                    <tr *ngIf="(personnelTrainingComment.length == 0 || personnelTrainingComment == null) && mode=='view'">
-                                            <td class="text-center" colspan="2">No Comments to show</td>
-                                        </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="top-distance" *ngIf="requestObject.personTrainingId != null || (mode == 'view' && personnelTrainingComment.length > 0)">
-                <div class="col-md-12 schedule-box">
+            <div class="top-distance">
+                <div class="col-md-12">
                     <h4 class="borderBoxHeading text-color pl-0">
                         <span class="font-size-1em">Training Attachments</span>
                         <span *ngIf="mode != 'view'" class="float-right pointer" data-toggle="modal"
                             data-target="#attachmentModal">
                             <i class="fa fa-plus"></i> Add Attachment</span>
                     </h4>
+                    <div class="text-center" *ngIf="personnelTrainingAttachments.length == 0">No Attachments to show</div>
 
-                    <div class="col-md-12 users-list-tbl" *ngIf="mode == 'view' || (mode != 'view' && personnelTrainingAttachments.length > 0)">
+                    <div class="col-md-12 users-list-tbl" *ngIf="personnelTrainingAttachments.length > 0">
                         <div class="row">
                             <div class="table-responsive">
                                 <table class="table table-striped tbl-p-clr">
@@ -249,9 +249,6 @@
                                                 </td>
                                             </tr>
                                         </ng-container>
-                                        <tr *ngIf="personnelTrainingAttachments.length == 0 || personnelTrainingAttachments == null">
-                                            <td class="text-center" colspan="4">No Attachments to show</td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

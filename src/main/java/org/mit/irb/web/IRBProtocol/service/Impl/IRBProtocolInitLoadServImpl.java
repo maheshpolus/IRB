@@ -273,9 +273,10 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,acTpye));
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> protocolRenewalDetails = dbEngine.executeProcedure(inputParam, "GET_IRB_SUBMSN_AMEND_RENWL_DTS",outputParam);
+			ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
 			if(acTpye == "RENEWAL_AMEND" ){
-				ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
 				for(HashMap<String, Object> protocolDetailKey : protocolRenewalDetails){				
+				   if(protocolDetailKey.get("DESCRIPTION") != null){
 					switch (protocolDetailKey.get("DESCRIPTION").toString()) {
 					case "General Info":
 						protocolRenewalDetail.setGeneralInfo(true);
@@ -310,10 +311,10 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 					case "Questionnaire":
 						protocolRenewalDetail.setQuestionnaire(true);
 						break;
-					default:
-						protocolRenewalDetail=null;
+					default:						
 						break;
 					}
+				   }
 				}		
 				irbUtilVO.setProtocolRenewalDetail(protocolRenewalDetail);
 			}else{

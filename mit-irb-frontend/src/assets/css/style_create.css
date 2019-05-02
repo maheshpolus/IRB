@@ -2555,3 +2555,6 @@ input:disabled,textarea:disabled{
  {
     background-color: #f5f3f3!important;
  }
+ .close-btn:hover {
+    color: #5e5e5e;
+    }

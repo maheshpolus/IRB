@@ -217,7 +217,9 @@ export class IrbOverviewComponent implements OnInit {
     this.trainingComments = [];
     this.attachmentIconValue = -1;
     this.commentIconValue = -1;
+    this._spinner.show();
     this._irbViewService.getIrbPersonDetailedList( this.requestObject ).subscribe( data => {
+        this._spinner.hide();
         this.result = data || [];
         if ( this.result != null ) {
             this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;

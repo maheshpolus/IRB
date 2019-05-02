@@ -454,8 +454,10 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.trainingAttachments = [];
     this.commentIconValue = -1;
     this.trainingComments = [];
+    this._spinner.show();
     const params = { protocolNumber: this.protocolNumber, avPersonId: item.personId };
     this._irbViewService.getIrbPersonDetailedList(params).subscribe(data => {
+      this._spinner.hide();
       this.result = data || [];
       if (this.result != null) {
         this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;

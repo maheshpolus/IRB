@@ -653,7 +653,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		fundingSource.setSequenceNumber(1);
-		fundingSource.setFundingSourceName(fundingSource.getSourceName());
+		String sourceName=fundingSource.getSourceName();
+		if(sourceName != null && !sourceName.isEmpty()){
+			fundingSource.setFundingSourceName(sourceName);	
+		}
 		if (fundingSource.getAcType().equals("U")) {
 			hibernateTemplate.saveOrUpdate(fundingSource);
 		} else {

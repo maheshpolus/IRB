@@ -45,10 +45,8 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
-			result = dbEngine.executeProcedure(inputParam,"GET_IRB_PERSON_TRAINING_LIST", outputParam);
-			if (result != null && !result.isEmpty()) {
-				vo.setPersonTrainingList(result);
-			}
+			result = dbEngine.executeProcedure(inputParam,"GET_IRB_PERSON_TRAINING_LIST", outputParam);			
+			vo.setPersonTrainingList(result);		
 		} catch (DBException e) {
 			e.printStackTrace();
 			logger.info("DBException in loadPersonTraining:" + e);

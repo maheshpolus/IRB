@@ -116,22 +116,24 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public IRBViewProfile getProtocolHistotyGroupList(String protocolNumber) {
 		IRBViewProfile irbViewProfile = irbProtocolDao.getProtocolHistotyGroupList(protocolNumber);
 		ArrayList<HashMap<String, Object>> result = irbProtocolDao.getProtocolHistotyGroupDetails(protocolNumber);
-		for(HashMap<String, Object> s1 : irbViewProfile.getIrbViewProtocolHistoryGroupList()){
-			Integer nextGroupActionId = Integer.parseInt(s1.get("NEXT_GROUP_ACTION_ID").toString());  
-			Integer actionId = Integer.parseInt(s1.get("ACTION_ID").toString());
-			Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());
-			nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId);
-			List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
-			for(HashMap<String, Object> detailObject :result){
-				Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
-				if(detailactionId >= actionId && detailactionId <= nextGroupActionId){
-					s2List.add(detailObject);
+		if(irbViewProfile.getIrbViewProtocolHistoryGroupList() != null){
+			for(HashMap<String, Object> s1 : irbViewProfile.getIrbViewProtocolHistoryGroupList()){
+				Integer nextGroupActionId = Integer.parseInt(s1.get("NEXT_GROUP_ACTION_ID").toString());  
+				Integer actionId = Integer.parseInt(s1.get("ACTION_ID").toString());
+				Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());
+				nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId);
+				List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
+				for(HashMap<String, Object> detailObject :result){
+					Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
+					if(detailactionId >= actionId && detailactionId <= nextGroupActionId){
+						s2List.add(detailObject);
+					}
 				}
+				HashMap<String, Object> groupDetailList = new HashMap<String, Object>();	
+				groupDetailList.put("GROUP_DETAILS_LIST", s2List);
+				s1.putAll(groupDetailList);
 			}
-			HashMap<String, Object> groupDetailList = new HashMap<String, Object>();	
-			groupDetailList.put("GROUP_DETAILS_LIST", s2List);
-			s1.putAll(groupDetailList);
-		}
+		}	
 		return irbViewProfile;
 	}
 

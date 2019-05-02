@@ -442,8 +442,13 @@ export class TrainingDetailsComponent implements OnInit {
       }
     }
   }
+  /* link back to te protocol from which it is taken */
   returnToProtocol() {
     this._location.back();
+  }
+
+  exitToDashboard() {
+    this._router.navigate(['/irb/training-maintenance']);
   }
 }
 

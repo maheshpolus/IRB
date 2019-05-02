@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Location } from '@angular/common';
 
-import { IrbViewService } from '../../irb-view.service';
+import { IrbViewService } from '../../../irb-view/irb-view.service';
 
 @Component({
   selector: 'app-submission-details',

@@ -1,8 +1,12 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="headerPush"></div>
 <div class="container-fluid">
+        <!-- <div class="exit-button" (click)="backClick($event)" title="Close">
+                <i class="fa fa-times mg-6">&nbsp;</i>
+            </div> -->
     <div class="borderBox irb-margin-top irb-background-tablemaintenance">
-        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details</h4>
+        	
+        <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Details<span (click)="exitToDashboard()" class="float-right close-btn pointer" title="Exit to training dashboard"><i class="fa fa-times mg-6">&nbsp;</i></span></h4>
         <section>
             <!-- <div class="row"> -->
             <div class="col-md-12  search-eidted-p padding0" *ngIf="invalidData.invalidPersonData">

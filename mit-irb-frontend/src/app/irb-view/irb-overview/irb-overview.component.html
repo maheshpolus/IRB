@@ -425,7 +425,7 @@
 						<span *ngIf="trainingCompleted=='INCOMPLETE'">Not Completed</span>
 					</h4>
 				</div>
-				<div class="modal-padding">
+				<div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
 					<div class="popup-div">
 						<table class="table table-striped">
 								<thead class="popup-header">

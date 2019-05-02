@@ -83,7 +83,9 @@ export class IrbOverviewComponent implements OnInit {
 
   /**calls service to load person details of protocol */
   loadPersonalDetails() {
+      this._spinner.show();
     this._irbViewService.getIrbPersonalDetails( this.requestObject ).subscribe( data => {
+        this._spinner.hide();
           this.result = data || [];
           if ( this.result != null ) {
               if (this.result.irbViewProtocolPersons == null || this.result.irbViewProtocolPersons.length === 0) {

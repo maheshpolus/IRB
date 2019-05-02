@@ -184,6 +184,11 @@
                                     <span>{{i+1}}. </span> {{checklist.EXEMPT_EXPEDITED_DESCRIPTION}}
                                 </div>
                             </ng-container>
+                            <ng-container *ngIf="submissionCheckListData.length == 0 || submissionCheckListData == null">
+                                <div class="margin8 text-center" style="color:#6e6e6e">
+                                    No Checklist Items to show
+                                </div>
+                            </ng-container>
                         </div>
                         <div class="col-md-12 padding-10">
                             <div class="modal-header-label">

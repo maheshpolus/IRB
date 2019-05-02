@@ -30,8 +30,8 @@
 										<i class="fa" *ngIf="sortField == 'APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 										 aria-hidden="true"></i>
 									</label>
-									<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'LAST_UPDATE_USER'}" (click)="sortField = 'LAST_UPDATE_USER';updateSortOrder()">UPDATED BY
-										<i class="fa" *ngIf="sortField == 'LAST_UPDATE_USER'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
+									<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'LAST_UPDATE_TIMESTAMP'}" (click)="sortField = 'LAST_UPDATE_TIMESTAMP';updateSortOrder()">UPDATED BY
+										<i class="fa" *ngIf="sortField == 'LAST_UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
 										 aria-hidden="true"></i>
 									</label>
 								</div>
@@ -68,7 +68,7 @@
 										</div>
 										<div class="history-label">
 											<p>Last updated By:
-												<span>{{history.LAST_UPDATE_USER}}</span>
+												<span>{{history.LAST_UPDATE_USER}} On {{history.LAST_UPDATE_TIMESTAMP}}</span>
 											</p>
 										</div>
 									</div>
@@ -78,7 +78,7 @@
 													<button type="button" class="btn btn-secondary btn-sm btn-outline-danger">Small button</button>
 													<button type="button" class="btn btn-secondary btn-sm btn-outline-danger">Small button</button> -->
 										<ul class="icon-list-coll btn-align-rght padding0">
-											<li class="pointer" title="Submission Details" (click)="viewSubmissionDetails(history.PROTOCOL_NUMBER,history.COMMENTS)">
+											<li *ngIf="history.SUBMISSION_DATE != null" class="pointer" title="Submission Details" (click)="viewSubmissionDetails(history.PROTOCOL_NUMBER,history.COMMENTS)">
 												<i class="fa fa-file-text-o" aria-hidden="true"></i>
 											</li>
 											<li style="cursor: none" title="Review Comments(Currently unavailable)" disabled="true">
@@ -96,7 +96,8 @@
 
 							<div id="{{'collapse' + i }}" *ngIf="isExpanded[i]==true" class="active" [attr.aria-labelledby]="'heading' + i ">
 								<div class="card-body history-card-body plr-15">
-									<div class="row list-of-his" [ngClass]="{'history-line':history.GROUP_DETAILS_LIST.length > 1}" *ngFor="let group of history.GROUP_DETAILS_LIST; let j=index">
+									<div class="row list-of-his" [ngClass]="{'history-line':history.GROUP_DETAILS_LIST.length > 1 && history.GROUP_DETAILS_LIST.length-1 != j}"
+									 *ngFor="let group of history.GROUP_DETAILS_LIST; let j=index">
 										<div class="col-12 col-sm-3 col-md-3">
 											<ul>
 												<li class="history-action">{{group.PROTOCOL_ACTION}}</li>

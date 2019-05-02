@@ -461,9 +461,14 @@ ul.sb-results-dropdown-menu > li:last-child {
     border-radius: 50%;
     /* background: #8c8c8c; */
     text-align: center;
-    line-height: 35px;
+    line-height: 40px;
     color: #635f5f;
     font-size: 1.2rem;
+}
+.icon-list-coll li i:hover, .review-comment-icon:hover
+{
+    background: #8c8c8c;
+    color: #fff;
 }
 .review-border
 {
@@ -2458,6 +2463,9 @@ input:disabled,textarea:disabled{
 .ml-225
 {
     margin-left: 225px;
+}
+.history-label{
+    display: inline-block;
 }
 .history-label p
 {

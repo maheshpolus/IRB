@@ -6,6 +6,8 @@ import { CKEditorModule } from 'ngx-ckeditor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { IrbCreateHeaderComponent } from './irb-create-header/irb-create-header.component';
 import { IrbEditComponent } from './irb-edit/irb-edit.component';
 import { IrbCreateRoutingModule } from '../irb-create/irb-create-routing.module';
@@ -22,6 +24,7 @@ import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
 import { ProtocolUnitsComponent } from './irb-edit/protocol-units/protocol-units.component';
 import { AdministratorContactComponent } from './irb-edit/administrator-contact/administrator-contact.component';
+import { SubmissionDetailsComponent } from './irb-create-histroy/submission-details/submission-details.component';
 
 @NgModule({
   imports: [
@@ -35,13 +38,14 @@ import { AdministratorContactComponent } from './irb-edit/administrator-contact/
     Ng2CompleterModule,
     FileDropModule,
     AppCommonModule,
-    CKEditorModule
+    CKEditorModule,
+    NgbModule.forRoot()
   ],
   declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent,
     IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent,
     FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
     IrbQuestionnaireListComponent,
     ProtocolUnitsComponent,
-    AdministratorContactComponent]
+    AdministratorContactComponent, SubmissionDetailsComponent]
 })
 export class IrbCreateModule { }

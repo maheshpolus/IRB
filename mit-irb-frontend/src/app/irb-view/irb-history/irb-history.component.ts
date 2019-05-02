@@ -22,7 +22,7 @@ export class IrbHistoryComponent implements OnInit {
     result: any;
     indexVal: number;
     reviewComments = [];
-    sortField = 'LAST_UPDATE_USER';
+    sortField = '';
     sortOrder = 1;
 
     requestObject = {
@@ -36,7 +36,7 @@ export class IrbHistoryComponent implements OnInit {
     PROTOCOL_HISTORY_INFO: string;
 
     constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute, private _http: HttpClient,
-    private router: Router, private _spinner: NgxSpinnerService ) { }
+        private router: Router, private _spinner: NgxSpinnerService) { }
 
     /** sets requestObject and calls functions to load history list */
     ngOnInit() {
@@ -76,7 +76,7 @@ export class IrbHistoryComponent implements OnInit {
 
     /**calls service to get details of a selected history */
     loadHistoryDetails(index) {
-       // this.irbHistoryDetails = [];
+        // this.irbHistoryDetails = [];
         this._irbViewService.getProtocolHistotyGroupDetails(this.requestObject).subscribe(data => {
             this.result = data || [];
             if (this.result != null) {
@@ -124,9 +124,13 @@ export class IrbHistoryComponent implements OnInit {
 
 
     viewSubmissionDetails(submissionProtocolNumber, comment) {
-        this.router.navigate(['/irb/irb-view/submission-detail'],
-        {queryParams: {protocolNumber: this._activatedRoute.snapshot.queryParamMap.get('protocolNumber'),
-        submissionProtocolNumber: submissionProtocolNumber, comment: comment}});
+        this.router.navigate(['/irb/irb-view/irbHistory/submission-detail'],
+            {
+                queryParams: {
+                    protocolNumber: this._activatedRoute.snapshot.queryParamMap.get('protocolNumber'),
+                    submissionProtocolNumber: submissionProtocolNumber, comment: comment
+                }
+            });
     }
 
 
@@ -134,23 +138,25 @@ export class IrbHistoryComponent implements OnInit {
 
     // Download correspondance letter
     downloadCorrespondanceLetter(actionId, fileName) {
-      this._irbViewService.loadProtocolHistoryCorrespondanceLetter( actionId ).subscribe( data => {
-        const a = document.createElement( 'a' );
-        const blob = new Blob( [data], { type: data.type } );
-        a.href = URL.createObjectURL( blob );
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
+        this._irbViewService.loadProtocolHistoryCorrespondanceLetter(actionId).subscribe(data => {
+            const a = document.createElement('a');
+            const blob = new Blob([data], { type: data.type });
+            a.href = URL.createObjectURL(blob);
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
 
-    },
-        error => console.log( 'Error downloading the file.'),
-        () => console.log( 'OK' ) );
+        },
+            error => console.log('Error downloading the file.'),
+            () => console.log('OK'));
     }
     // Fetching review comments
     getReviewComments(protocolActionId, protocolActionTypecode) {
         this.reviewComments = [];
-        const reqObj = { 'protocolNumber': this.requestObject.protocolNumber,
-                         'protocolActionId': protocolActionId, 'protocolActionTypecode': protocolActionTypecode};
+        const reqObj = {
+            'protocolNumber': this.requestObject.protocolNumber,
+            'protocolActionId': protocolActionId, 'protocolActionTypecode': protocolActionTypecode
+        };
         this._irbViewService.loadProtocolHistoryActionComments(reqObj).subscribe(
             data => {
                 const response: any = data;

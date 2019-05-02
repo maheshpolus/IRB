@@ -16,7 +16,7 @@ const routes: Routes = [
                           {path: 'irbQuestionaire', component: IrbQuestionaireComponent},
                           {path: 'irbAttatchments', component: IrbAttachmentsComponent},
                           {path: 'irbHistory', component: IrbHistoryComponent},
-                          {path: 'submission-detail', component: SubmissionDetailsComponent}
+                          {path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent},
                           ]}
                         ];
 

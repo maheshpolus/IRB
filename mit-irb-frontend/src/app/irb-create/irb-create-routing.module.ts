@@ -8,6 +8,8 @@ import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histr
 import { IrbActionsComponent } from './irb-actions/irb-actions.component';
 import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
+import { SubmissionDetailsComponent } from './irb-create-histroy/submission-details/submission-details.component';
+
 const routes: Routes = [
   {
     path: '', component: IrbCreateHeaderComponent,
@@ -17,6 +19,7 @@ const routes: Routes = [
       { path: 'irbHome', component: IrbEditComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbCreateAttachment', component: IrbCreateAttachmentComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbHistory', component: IrbCreateHistroyComponent },
+      { path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent },
       { path: 'irbActions', component: IrbActionsComponent },
       { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } },
       { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },

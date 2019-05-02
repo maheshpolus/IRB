@@ -1150,6 +1150,62 @@
 			],
 			"primary_key": ["UNIT_ADMINISTRATOR_TYPE_CODE"],
 			"dependency": []
+		},{
+			"group": "Protocol",
+			"codetable_name": "Training",
+			"description": "Short description on Training",
+			"database_table_name": "TRAINING",
+			"fields": [{
+					"column_name": "TRAINING_CODE",
+					"display_name": "Traing Code",
+					"data_type": "Integer",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "Integer",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["TRAINING_CODE"],
+			"dependency": []
 		}
 	]
 }

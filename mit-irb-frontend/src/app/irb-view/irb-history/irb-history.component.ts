@@ -134,7 +134,13 @@ export class IrbHistoryComponent implements OnInit {
     }
 
 
+test() {
+    this.isExpanded.fill(true);
+}
+test1() {
+this.isExpanded.fill(false);
 
+}
 
     // Download correspondance letter
     downloadCorrespondanceLetter(actionId, fileName) {

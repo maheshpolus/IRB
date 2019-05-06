@@ -1594,6 +1594,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         modalRef.componentInstance.userDTO = this.userDTO;
       }
       getUnitList() {
+        this.requestObject.irbExemptForm.unitNumber = null;
         this.searchString = this.requestObject.irbExemptForm.unitName;
         this._exemptQuestionaireService.loadHomeUnits(this.searchString).subscribe(
           (data: any) => {

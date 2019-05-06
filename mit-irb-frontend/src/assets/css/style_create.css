@@ -66,7 +66,7 @@ ul.sb-results-dropdown-menu {
     margin: 0;
     padding: 0;   
     max-height: 400px;
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: white;
     border-left: 1px #a31f34 solid;
     border-right: 1px #a31f34 solid;
@@ -2558,3 +2558,9 @@ input:disabled,textarea:disabled{
  .close-btn:hover {
     color: #5e5e5e;
     }
+.align-right {
+    float: right;
+    margin-left: 15px;
+    color: #a92034;
+    font-weight: bold;
+}

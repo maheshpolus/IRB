@@ -134,7 +134,12 @@ export class IrbCreateHistroyComponent implements OnInit {
             });
     }
 
-
+    test() {
+        this.isExpanded.fill(true);
+    }
+    test1() {
+    this.isExpanded.fill(false);
+    }
 
 
     // Download correspondance letter

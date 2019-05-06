@@ -35,6 +35,10 @@
 										 aria-hidden="true"></i>
 									</label>
 								</div>
+								<label class="align-right pointer" (click)="test()">
+									<i class="fa fa-plus-circle" aria-hidden="true"></i> Expand All</label>
+								<label class="align-right pointer" (click)="test1()">
+									<i class="fa fa-minus-circle" aria-hidden="true"></i> Collapse All</label>
 							</div>
 						</div>
 					</div>
@@ -53,6 +57,12 @@
 									</div>
 									<div class="col-7">
 										<div class="history-label">
+											<p>Action Date:
+												<span>{{(history.ACTION_DATE === '' || history.ACTION_DATE === null ) ? '':(history.ACTION_DATE | date: 'MM/dd/yyyy')}}
+												</span>
+											</p>
+										</div>
+										<div class="history-label">
 											<p>Submitted Date:
 												<span>{{(history.SUBMISSION_DATE === '' || history.SUBMISSION_DATE === null ) ? '':(history.SUBMISSION_DATE | date:
 													'MM/dd/yyyy')}}
@@ -68,15 +78,13 @@
 										</div>
 										<div class="history-label">
 											<p>Last updated By:
-												<span>{{history.LAST_UPDATE_USER}} On {{history.LAST_UPDATE_TIMESTAMP}}</span>
+												<span>{{history.LAST_UPDATE_USER}} On {{(history.LAST_UPDATE_TIMESTAMP === ' ' || history.LAST_UPDATE_TIMESTAMP ===
+													null ) ? ' ':(history.LAST_UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}
+												</span>
 											</p>
 										</div>
 									</div>
 									<div class="col-2 history-label">
-
-										<!-- <button type="button" class="btn btn-primary btn-sm btn-outline-danger">Small button</button>
-													<button type="button" class="btn btn-secondary btn-sm btn-outline-danger">Small button</button>
-													<button type="button" class="btn btn-secondary btn-sm btn-outline-danger">Small button</button> -->
 										<ul class="icon-list-coll btn-align-rght padding0">
 											<li *ngIf="history.SUBMISSION_DATE != null" class="pointer" title="Submission Details" (click)="viewSubmissionDetails(history.PROTOCOL_NUMBER,history.COMMENTS)">
 												<i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -84,9 +92,9 @@
 											<li style="cursor: none" title="Review Comments(Currently unavailable)" disabled="true">
 												<i class="fa fa-comments" aria-hidden="true"></i>
 											</li>
-											<li style="cursor: none" title="Version Compare(Currently unavailable)" disabled="true">
+											<!-- <li style="cursor: none" title="Version Compare(Currently unavailable)" disabled="true">
 												<i class="fa fa-clone" aria-hidden="true"></i>
-											</li>
+											</li> -->
 										</ul>
 									</div>
 								</div>
@@ -104,7 +112,7 @@
 											</ul>
 										</div>
 										<div class="col-12 col-md-4 col-md-4">
-											<ul>
+											<ul style="margin-left: -16px;">
 												<li>Updated By
 													<span>{{group.UPDATE_USER_NAME}}</span> On
 													<span>{{(group.ACTION_DATE === ' ' || group.ACTION_DATE === null ) ? ' ':(group.ACTION_DATE | date: 'MM/dd/yyyy')}}

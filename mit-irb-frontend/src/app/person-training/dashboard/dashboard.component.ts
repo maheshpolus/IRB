@@ -64,6 +64,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
+    this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+    this.options.index = this._elasticsearchService.IRB_INDEX;
     this.loadTrainingList();
     this.checkUserHasMaintainRight();
   }
@@ -93,6 +95,8 @@ export class DashboardComponent implements OnInit {
   changePersonType(personType) {
     // tslint:disable-next-line:no-construct
     this.clearField = new String('true');
+    this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+    this.options.index = this._elasticsearchService.IRB_INDEX;
     if (personType === 'employee') {
       this.options.index = this._elasticsearchService.IRB_INDEX;
       this.options.type = 'person';

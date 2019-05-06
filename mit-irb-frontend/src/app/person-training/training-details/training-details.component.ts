@@ -112,6 +112,8 @@ export class TrainingDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+    this.options.index = this._elasticsearchService.IRB_INDEX;
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this._activatedRoute.queryParams.subscribe(params => {
       this.requestObject.personTrainingId = params['personTrainingId'];
@@ -154,6 +156,8 @@ export class TrainingDetailsComponent implements OnInit {
     // tslint:disable-next-line:no-construct
     this.clearField = new String('true');
     this.showPersonElasticBand = false;
+    this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+    this.options.index = this._elasticsearchService.IRB_INDEX;
     this.options.defaultValue = '';
     this.personTraining.personID = null;
     if (type === 'employee') {

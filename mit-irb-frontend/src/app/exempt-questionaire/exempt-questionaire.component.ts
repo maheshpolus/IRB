@@ -237,8 +237,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         this.requestObject.personDTO.fullName = this.userDTO.fullName;
         this.requestObject.personDTO.role = this.userDTO.role;
         this.requestObject.personJobTitle = this.userDTO.jobTitle;
-        this.requestObject.irbExemptForm.unitName = this.userDTO.unitName;
-        this.requestObject.irbExemptForm.unitNumber = this.userDTO.unitNumber;
+       // this.requestObject.irbExemptForm.unitName = this.userDTO.unitName;
+        // this.requestObject.irbExemptForm.unitNumber = this.userDTO.unitNumber;
         this.requestObject.irbExemptForm.exemptTitle = this._activatedRoute.snapshot.queryParamMap.get('title');
         this.requestObject.irbExemptForm.exemptFormID = this._activatedRoute.snapshot.queryParamMap.get('exemptFormID');
         this.requestObject.irbExemptForm.exemptQuestionnaireAnswerHeaderId =
@@ -487,7 +487,8 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
             (this.requestObject.irbExemptForm.exemptTitle !== null && this.requestObject.irbExemptForm.personName !== null) &&
             (this.requestObject.irbExemptForm.summary !== '' && this.requestObject.irbExemptForm.summary !== null) &&
             (this.requestObject.exemptProtocolStartDate !== '' && this.requestObject.exemptProtocolStartDate !== null) &&
-            (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)) {
+            (this.requestObject.exemptProtocolEndDate !== '' && this.requestObject.exemptProtocolEndDate !== null)
+            && ( this.requestObject.irbExemptForm.unitNumber !== '' && this.requestObject.irbExemptForm.unitName !== null  )) {
             if (Date.parse(this.requestObject.exemptProtocolStartDate) >= Date.parse(this.requestObject.exemptProtocolEndDate)) {
                 this.showAlert = true;
                 this.modalHeading = 'Alert';

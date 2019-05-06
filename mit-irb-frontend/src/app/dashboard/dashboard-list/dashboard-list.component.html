@@ -74,7 +74,7 @@
 								placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"> -->
 							<input type="text" [(ngModel)]="requestObject.piName" class="form-control input-width" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'pIDropDown')"
 							 (keydown.arrowup)="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter)="onKeyEnterElastic('pIDropDown')"
-							 placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false">
+							 placeholder="Search: Protocol Person Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false">
 							<div class="sb-seachresults results-margin advancedSearchPiElastic" id="pIDropDown">
 								<ul class="sb-results-dropdown-menu test mt-15" *ngIf="IsElasticResultPI">
 									<li *ngFor="let result of _piResults | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">

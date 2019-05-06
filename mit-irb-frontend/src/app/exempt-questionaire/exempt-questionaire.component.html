@@ -138,8 +138,8 @@
 							</ul>
 						</div>
 						</div>
-						<div class="col-1 title-head">
-							<h4>Unit:</h4>
+						<div [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.unitNumber == null || requestObject.unitNumber == '')}" class="col-1 title-head padding0">
+							<h4>* Department:</h4>
 						</div>
 						<div class="col-4 width-exempt searchBox display">
 							<!-- <ng2-completer [(ngModel)]="requestObject.irbExemptForm.unitName" [inputClass]="'form-control'" placeholder="Search: Department Unit"
@@ -174,7 +174,7 @@
 							</div>
 							<span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
 						</div>
-						<div class="col-1 title-head " [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolEndDate == null || requestObject.exemptProtocolEndDate == '')}">
+						<div class="col-1 title-head padding0 " [ngClass]="{'invalid':invalidData.invalidExemptData && (requestObject.exemptProtocolEndDate == null || requestObject.exemptProtocolEndDate == '')}">
 							<h4>* End Date:</h4>
 						</div>
 						<div class="col-4 width-exempt searchBox display">

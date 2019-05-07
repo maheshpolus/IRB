@@ -1,5 +1,5 @@
 <div class="searchBox" id="searchElastic">
-  <input id="searchBox" tabindex = "1" type="text" (focus) ="active = true"  placeholder="{{placeHolder}}" 
+  <input id="searchBox" tabindex = "1" type="text" (focus) ="active = true"  placeholder="{{placeHolder}}" autocomplete="off"
     (keydown.arrowdown) = "downArrowEvent($event);" (keydown.esc) = "hideSearchResults($event);"
     [(ngModel)]="searchText" (ngModelChange)="getElasticResult()" [ngClass]="{'poping-border' : options.editHighlight}"/> 
   <a  class="searchButton" >

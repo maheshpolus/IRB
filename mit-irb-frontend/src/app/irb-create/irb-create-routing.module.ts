@@ -20,7 +20,7 @@ const routes: Routes = [
       { path: 'irbCreateAttachment', component: IrbCreateAttachmentComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbHistory', component: IrbCreateHistroyComponent },
       { path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent },
-      { path: 'irbActions', component: IrbActionsComponent },
+      { path: 'irbActions', component: IrbActionsComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } },
       { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },
       { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }

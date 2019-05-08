@@ -46,6 +46,7 @@ import { SubmissionDetailsComponent } from './irb-create-histroy/submission-deta
     FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
     IrbQuestionnaireListComponent,
     ProtocolUnitsComponent,
-    AdministratorContactComponent, SubmissionDetailsComponent]
+    AdministratorContactComponent, SubmissionDetailsComponent],
+    exports: [IrbActionsComponent]
 })
 export class IrbCreateModule { }

@@ -467,5 +467,13 @@
 	"/mit-irb/getProtocolSubmissionDetails": {
 		"target" : "http://192.168.1.93:8082",
 		"secure" : false
+	},
+	"/mit-irb/getPersonRight": {
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
+	},
+	"/mit-irb/performProtocolActions" :{
+		"target" : "http://192.168.1.93:8082",
+		"secure" : false
 	}
 }

@@ -12,26 +12,30 @@
         <div class="card-body collapse-card-body padding-top-bottom">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-lg-6 bottom-space-15">
-                <div class="card request-action-cards cursor-hover" data-toggle="modal" data-target=".bd-example-modal-lg">
-                  <div class="card-body half-padding">
+              <div class="col-lg-4 bottom-space-15" *ngFor="let personAction of personActionsList; let i = index">
+                <div class="card request-action-cards cursor-hover" (click)="openActionDetails(personAction)">
+                  <!-- data-toggle="modal" data-target=".bd-example-modal-lg"> -->
+                  <div class="card-body padding0">
                     <div class="row">
                       <div class="col-3">
                         <div class="media-left card-icon1 blue-circle-cards">
                           <a href="#">
-                            <i class="fa fa-file-text-o"></i>
+                            <i id=icon{{i}}></i>
                           </a>
                         </div>
                       </div>
                       <div class="col-9">
-                        <h5>Create Ammendment</h5>
-                        <p>If you need to do any changes in approved protocol</p>
+                        <h5>{{personAction?.ACTION_NAME}}</h5>
+                        <p>{{personAction?.ACTION_DESCRIPTION}}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6 bottom-space-15">
+
+
+
+              <!--<div class="col-lg-4 bottom-space-15">
                 <div class="card request-action-cards-green cursor-hover card-box-nw">
                   <div class="card-body half-padding">
                     <div class="row">
@@ -50,7 +54,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <div class="card request-action-cards-yellow cursor-hover card-box-nw">
                   <div class="card-body half-padding">
                     <div class="row">
@@ -69,7 +73,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <div class="card request-action-cards-red cursor-hover" data-toggle="modal" data-target="#submitProtocolModal">
                   <div class="card-body half-padding">
                     <div class="row">
@@ -87,7 +91,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
             </div>
           </div>
         </div>
@@ -260,7 +264,7 @@
 </div>
 
 <!-- Crete Ammendment modal -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg mdl-lg-01">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -374,11 +378,11 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!--Create Ammendment modal end-->
 
 <!-- Submit Ammendment modal modal -->
-<div id="submitProtocolModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<!-- <div id="submitProtocolModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg mdl-lg-01">
     <div class="modal-content border-radius">
@@ -497,5 +501,189 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!--Submit Ammendment modal end-->
+
+<!--Submit modal-->
+<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-radius-1">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure to submit this protocol?</p>
+      </div>
+      <div class="modal-footer btn-row-med center-button">
+        <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Yes</button>
+        <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal end-->
+
+<!--validation  modal-->
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-radius-1">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">Validation</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li *ngIf="invalidData.noPiExists">Please choose atleast one Principal Investigator to submit.</li>
+          <li *ngIf="invalidData.noLeadUnit">Please choose atleast one Lead Unit to submit.</li>
+        </ul>
+      </div>
+      <div class="modal-footer btn-row-med">
+        <button type="button margin-class" class="btn btn-primary tab_btn" (click)="openProtocolWithValidations()" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal end-->
+
+<!--Modal with comments-->
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-radius-1">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label *ngIf="currentActionPerformed?.ACTION_CODE != '119'">Reason</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '119'">Comments</label>
+            <textarea class="form-control txt-area-fnt" placeholder="Reason"></textarea>
+          </div>
+        </div>
+
+        <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '119'">
+          <div class="form-group">
+            <label>Action Date</label>
+            <div class="input-group date-pickr-1 mb-3">
+              <input type="text" class="form-control" [owlDateTime]="actionDate" placeholder="mm/dd/yyyy">
+              <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDate">
+                <!-- <span class="input-group-text"> -->
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <!-- </span> -->
+              </div>
+              <owl-date-time [pickerType]="'calendar'" #actionDate></owl-date-time>
+            </div>
+            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+          </div>
+        </div>
+
+        <div class="modal-footer btn-row-med text-center">
+          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{actionButtonName}}</button>
+          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--Modal end-->
+<!--Modal with comments and checkboxes-->
+<div class="modal fade" id="commentCheckboxModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-radius-1">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Amendment Summary</label>
+            <textarea class="form-control txt-area-fnt" placeholder="Amendment Summary"></textarea>
+          </div>
+        </div>
+
+
+        <div class="modal-footer btn-row-med text-center">
+          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Create</button>
+          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--modal end-->
+<!--Modal with comments and attachments-->
+<div class="modal fade" id="commentAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-radius-1">
+      <div class="modal-header modal-head98 d-flex justify-content-center">
+        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <div class="form-group mb-0">
+            <label>Submission Review Type: </label>
+            <span> FYI</span>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label *ngIf="currentActionPerformed?.ACTION_CODE != '116'">Reason</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '116'">Comments</label>
+            <textarea class="form-control txt-area-fnt" placeholder="Reason"></textarea>
+          </div>
+        </div>
+        <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+          <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+          </button>
+          <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
+          <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+          </div>
+        </file-drop>
+
+
+        <div class="modal-footer btn-row-med text-center">
+          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
+          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--MODAL END -->
+
+<!--Modal opening buttons-->
+<button id="submitModalBtn" [hidden]="true" data-toggle="modal" data-target="#submitModal"></button>
+
+<button id="validationModalBtn" [hidden]="true" data-toggle="modal" data-target="#validationModal"></button>
+<button id="commentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentModal"></button>
+<button id="commentAttachmentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentAttachmentModal"></button>
+<button id="commentCheckboxModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentCheckboxModal"></button>

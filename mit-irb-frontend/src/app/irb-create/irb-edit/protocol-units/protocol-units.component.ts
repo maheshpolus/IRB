@@ -27,6 +27,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
   showDeletePopup = false;
   searchString: string;
   alertMessage: string;
+  isProtocolValidated: string;
   unitSearchResult = [];
   protocolUnitList = [];
   protocolUnitTypes = [];
@@ -34,7 +35,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false,
-    invalidUnitData: false, isLeadUnitExist: false
+    invalidUnitData: false, isLeadUnitExist: false, noLeadUnit: true
   };
 
   private $subscription1: ISubscription;
@@ -50,6 +51,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
     this._activatedRoute.queryParams.subscribe(params => {
       this.protocolId = params['protocolId'];
       this.protocolNumber = params['protocolNumber'];
+      this.isProtocolValidated = params['validated'];
       if (this.protocolId != null && this.protocolNumber != null) {
         this.isGeneralInfoSaved = true;
       }
@@ -73,7 +75,26 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
     this.protocolUnit = this.commonVo.protocolLeadUnits;
     this.protocolUnitList = this.commonVo.protocolLeadUnitsList != null ? this.commonVo.protocolLeadUnitsList : [];
     this.protocolUnitTypes = this.commonVo.protocolUnitType;
+    if (this.isProtocolValidated === 'true') {
+      this.checkLeadUnitExists();
+    }
 
+  }
+  checkLeadUnitExists() {
+    this.invalidData.noLeadUnit = true;
+    if (this.protocolUnitList.length > 0) {
+      this.protocolUnitList.forEach(leadUnit => {
+        if (leadUnit.unitTypeCode === '1') {
+          this.invalidData.noLeadUnit = false;
+        }
+      });
+    } else {
+      this.invalidData.noLeadUnit = true;
+    }
+    if (this.invalidData.noLeadUnit === true) {
+      this.invalidData.invalidUnitData = true;
+      this.alertMessage = 'Please choose a Lead Unit';
+    }
   }
 
   /**
@@ -140,7 +161,12 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
       this.protocolUnit.unitTypeCode = null;
       this.protocolUnitSelectedRow = null;
       this.commonVo.protocolLeadUnitsList = this.protocolUnitList;
+      this.commonVo.protocolLeadUnits = this.protocolUnit;
       this.isProtocolUnitEdit = false;
+      this.invalidData.invalidUnitData = false;
+      if (this.isProtocolValidated === 'true') {
+        this.checkLeadUnitExists();
+      }
     });
 
   }

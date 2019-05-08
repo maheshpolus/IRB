@@ -94,4 +94,11 @@ export class IrbCreateService {
         responseType: 'blob'
     });
 }
+
+getAvailableActions(params) {
+return this._http.post('/mit-irb/getPersonRight', params);
+}
+performProtocolActions(params) {
+  return this._http.post('/mit-irb/performProtocolActions', params);
+}
 }

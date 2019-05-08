@@ -202,7 +202,9 @@ export class AdministratorContactComponent implements OnInit {
       this.protocolAdminContact = {};
       this.protocolAdminContact.adminContactTypeCode = null;
       this.protocolAdminContact.adminContactType = {};
+      this.commonVo.protocolAdminContact = this.protocolAdminContact;
       this.showPersonElasticBand = false;
+      this.commonVo.protocolAdminContactList = this.protocolAdminContactList;
       // tslint:disable-next-line:no-construct
       this.clearField = new String('true');
       this.options.defaultValue = '';

@@ -1,21 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ISubscription } from 'rxjs/Subscription';
+
+import { IrbCreateService } from '../irb-create.service';
+import { SharedDataService } from '../../common/service/shared-data.service';
 
 @Component({
   selector: 'app-irb-actions',
   templateUrl: './irb-actions.component.html',
-  styleUrls: ['./irb-actions.component.css']
+  styleUrls: ['./irb-actions.component.css'],
+  providers: [IrbCreateService]
 })
-export class IrbActionsComponent implements OnInit {
+export class IrbActionsComponent implements OnInit, OnDestroy {
 
+  protocolNumber = null;
+  protocolId = null;
   generalInfo = {};
+  userDTO: any = {};
+  IRBActionsVO: any = {};
+  commonVo: any = {};
+  currentActionPerformed: any = {};
+  personnelInfoList = [];
+  leadUnitList = [];
+  personActionsList = [];
   submissionTypes = [];
   typeQualifier = [];
   reviewTypes = [];
   committees = [];
   scheduleDates = [];
+  actionButtonName: string;
+  createOrViewPath: string;
+
+  private $subscription1: ISubscription;
+
+  invalidData = {
+    noPiExists: true, noLeadUnit: true
+  };
 
 
-  constructor() { }
+  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _irbCreateService: IrbCreateService,
+    private _sharedDataService: SharedDataService) { }
 
   ngOnInit() {
     this.submissionTypes = [{ type: 'Initial Protocol Application for Approval' },
@@ -49,6 +73,119 @@ export class IrbActionsComponent implements OnInit {
     ];
     this.committees = [{ type: 'COUHES' },
     ];
+    this.loadInitDetails();
+
+  }
+
+  loadInitDetails() {
+    this.userDTO = this._activatedRoute.snapshot.data['irb'];
+    this._activatedRoute.queryParams.subscribe(params => {
+      this.protocolId = params['protocolId'];
+      this.protocolNumber = params['protocolNumber'];
+    });
+    this.createOrViewPath = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
+    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+      if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
+        this.commonVo = commonVo;
+        this.personnelInfoList = this.commonVo.generalInfo.personnelInfos == null ? [] : this.commonVo.generalInfo.personnelInfos;
+        this.leadUnitList = this.commonVo.protocolLeadUnitsList == null ? [] : this.commonVo.protocolLeadUnitsList;
+        this.getAvailableActions();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.$subscription1) {
+      this.$subscription1.unsubscribe();
+    }
+  }
+
+  getAvailableActions() {
+    this.IRBActionsVO.protocolNumber = this.protocolNumber;
+    this.IRBActionsVO.protocolId = this.protocolId;
+    this.IRBActionsVO.personID = this.userDTO.personID;
+    this.IRBActionsVO.protocolStatus = this.commonVo.generalInfo.protocolStatus.protocolStatusCode;
+    this.IRBActionsVO.submissionStatus = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
+      this.commonVo.generalInfo.protocolSubmissionStatuses.submissionStatusCode;
+    this._irbCreateService.getAvailableActions(this.IRBActionsVO).subscribe((data: any) => {
+      this.personActionsList = data.personActionsList;
+      setTimeout(() => { this.setActionIcons(); }, 1000);
+    });
+  }
+
+  setActionIcons() {
+    this.personActionsList.forEach((personAction, index) => {
+      document.getElementById('icon' + index).className = personAction.ICON_CLASS_NAME;
+    });
+
+  }
+  openActionDetails(action) {
+    this.currentActionPerformed = action;
+    if (action.ACTION_CODE === '101') {
+      document.getElementById('submitModalBtn').click();
+    } else if (action.ACTION_CODE === '303' || action.ACTION_CODE === '119' || action.ACTION_CODE === '995' ||
+      action.ACTION_CODE === '995' || action.ACTION_CODE === '120' || action.ACTION_CODE === '121') {
+      this.actionButtonName = action.ACTION_CODE === '995' || action.ACTION_CODE === '120' || action.ACTION_CODE === '121' ?
+        'Delete' : 'Save';
+      document.getElementById('commentModalBtn').click();
+    } else if (action.ACTION_CODE === '106' || action.ACTION_CODE === '114' || action.ACTION_CODE === '106' ||
+      action.ACTION_CODE === '104' || action.ACTION_CODE === '105' || action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
+      document.getElementById('commentAttachmentModalBtn').click();
+    } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '103') {
+      document.getElementById('commentCheckboxModalBtn').click();
+    }
+
+  }
+
+  validateProtocol() {
+    if (this.personnelInfoList.length > 0) {
+      this.personnelInfoList.forEach(personnelInfo => {
+        if (personnelInfo.protocolPersonRoleId === 'PI') {
+          this.invalidData.noPiExists = false;
+        }
+      });
+    } else {
+      this.invalidData.noPiExists = true;
+    }
+    if (this.leadUnitList.length > 0) {
+      this.leadUnitList.forEach(leadUnit => {
+        if (leadUnit.unitTypeCode === '1') {
+          this.invalidData.noLeadUnit = false;
+        }
+      });
+    } else {
+      this.invalidData.noLeadUnit = true;
+    }
+    if (this.invalidData.noLeadUnit === true || this.invalidData.noPiExists === true) {
+      document.getElementById('validationModalBtn').click();
+    }
+  }
+  openProtocolWithValidations() {
+    this._router.navigate(['/irb/irb-create/irbHome'],
+      { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId, validated: 'true' } });
+  }
+
+  performAction() {
+    if (this.currentActionPerformed.ACTION_CODE === '101') {
+      // this.validateProtocol();
+      if (this.invalidData.noLeadUnit === false || this.invalidData.noPiExists === false) {
+        this.setActionVO();
+      }
+    }
+    this._irbCreateService.performProtocolActions(this.IRBActionsVO).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  setActionVO() {
+    this.IRBActionsVO.acType = 'I';
+    this.IRBActionsVO.actionTypeCode = this.currentActionPerformed.ACTION_CODE;
+    this.IRBActionsVO.createUser = this.userDTO.userName;
+    this.IRBActionsVO.prevProtocolStatusCode = this.currentActionPerformed.PROTO_CURNT_STATUS_CODE;
+    this.IRBActionsVO.protocolSubmissionStatuses = this.commonVo.generalInfo.protocolSubmissionStatuses;
+    this.IRBActionsVO.prevSubmissonStatusCode = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
+      this.commonVo.generalInfo.protocolSubmissionStatuses.submissionStatusCode;
+    this.IRBActionsVO.updateUser = this.userDTO.userName;
   }
 
 }

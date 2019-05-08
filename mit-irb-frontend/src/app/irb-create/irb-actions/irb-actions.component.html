@@ -12,6 +12,7 @@
         <div class="card-body collapse-card-body padding-top-bottom">
           <div class="container-fluid">
             <div class="row">
+              <ng-container *ngIf="personActionsList != null && personActionsList.length > 0">
               <div class="col-lg-4 bottom-space-15" *ngFor="let personAction of personActionsList; let i = index">
                 <div class="card request-action-cards cursor-hover" (click)="openActionDetails(personAction)">
                   <!-- data-toggle="modal" data-target=".bd-example-modal-lg"> -->
@@ -32,8 +33,10 @@
                   </div>
                 </div>
               </div>
-
-
+            </ng-container>
+            <ng-container *ngIf="personActionsList == null || personActionsList.length == 0">
+                <div class="col-12 text-center">You donot have any available actions in this protocol</div>
+            </ng-container>
 
               <!--<div class="col-lg-4 bottom-space-15">
                 <div class="card request-action-cards-green cursor-hover card-box-nw">
@@ -505,7 +508,7 @@
 <!--Submit Ammendment modal end-->
 
 <!--Submit modal-->
-<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="submitModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -529,7 +532,7 @@
 <!--modal end-->
 
 <!--validation  modal-->
-<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="validationModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -554,7 +557,7 @@
 <!--modal end-->
 
 <!--Modal with comments-->
-<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="commentModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -602,7 +605,7 @@
 </div>
 <!--Modal end-->
 <!--Modal with comments and checkboxes-->
-<div class="modal fade" id="commentCheckboxModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="commentCheckboxModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -634,7 +637,7 @@
 </div>
 <!--modal end-->
 <!--Modal with comments and attachments-->
-<div class="modal fade" id="commentAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="commentAttachmentModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -682,7 +685,6 @@
 
 <!--Modal opening buttons-->
 <button id="submitModalBtn" [hidden]="true" data-toggle="modal" data-target="#submitModal"></button>
-
 <button id="validationModalBtn" [hidden]="true" data-toggle="modal" data-target="#validationModal"></button>
 <button id="commentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentModal"></button>
 <button id="commentAttachmentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentAttachmentModal"></button>

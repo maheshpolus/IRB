@@ -91,7 +91,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
     Object.keys(this.options.fields).forEach(field => {
       condition = Object.assign({} , condition);
       condition.match = {};
-      condition.match[field] = { query: this.searchText, operator: 'or'};
+      condition.match[field] = { query: this.searchText.toLocaleLowerCase(), operator: 'or'};
       this.query.query.bool.should.push(condition);
     });
   }

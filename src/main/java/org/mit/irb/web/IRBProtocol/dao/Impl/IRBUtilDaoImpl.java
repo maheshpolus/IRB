@@ -38,7 +38,7 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 	@Override
 	public IRBUtilVO loadPersonTraining(IRBUtilVO vo) {
 		ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-		inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,vo.getSearchMode()));
+		inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"A"));
 		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,vo.getPersonId()));								
 		inputParam.add(new InParameter("AV_TRAINING_CODE", DBEngineConstants.TYPE_INTEGER,vo.getTrainingCode()));
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
@@ -133,11 +133,10 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		IRBUtilVO vo = new IRBUtilVO();
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
-		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("AV_SEARCH_TEXT", DBEngineConstants.TYPE_STRING, trainingName));
+		ArrayList<OutParameter> outputParam = new ArrayList<>();		
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		try {
-			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_TRAINING_CODES", outputParam);
+			result = dbEngine.executeProcedure("GET_IRB_PERSON_TRAINING_CODES", outputParam);
 		} catch (DBException | IOException | SQLException e) {			
 			e.printStackTrace();
 		}

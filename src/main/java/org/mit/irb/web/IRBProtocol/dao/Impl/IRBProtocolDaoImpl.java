@@ -41,9 +41,11 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Sponsor;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
+import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.constants.KeyConstants;
 
@@ -772,13 +774,22 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolGeneralInfo p where p.protocolId =:protocolId");
 		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());		
+		
+		Query querySubmissionStatus = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolSubmissionStatuses s where s.protocolId =:protocolId and s.submission_Id in("
+						+ "select max(t2.submission_Id) from ProtocolSubmissionStatuses t2"
+                      +"  where s.protocolId = t2.protocolId)");
+		querySubmissionStatus.setInteger("protocolId", irbProtocolVO.getProtocolId());		
 		if (!queryGeneral.list().isEmpty()) {
 			ProtocolGeneralInfo protocolGeneralInfoObj = (ProtocolGeneralInfo) queryGeneral.list().get(0);
+			if(!querySubmissionStatus.list().isEmpty()){
+			protocolGeneralInfoObj.setProtocolSubmissionStatuses((ProtocolSubmissionStatuses) querySubmissionStatus.list().get(0));}
 			irbProtocolVO.setGeneralInfo(protocolGeneralInfoObj);			
 			List<ProtocolPersonnelInfo> personList=protocolGeneralInfoObj.getPersonnelInfos();			
 			for(ProtocolPersonnelInfo person:personList){
 				person.setTrainingInfo(getTrainingFlag(person.getPersonId()));				
-			}			
+			}	
+			
 		irbProtocolVO.setProtocolPersonnelInfoList(protocolGeneralInfoObj.getPersonnelInfos());
 		}
 		return new AsyncResult<>(irbProtocolVO);

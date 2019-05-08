@@ -56,6 +56,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   inActivePersonExist = false;
   activePersonExist = false;
   warningMessage: string;
+  isProtocolValidated: string;
   alertMessage: string;
   irbPersonDetailedList: any;
   trainingStatus: string;
@@ -63,7 +64,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
     invalidCollaboratorInfo: false, invalidApprovalDate: false, invalidExpirationDate: false,
-    isPersonAdded: false, isPiExists: false, invalidPersonDetails: false, isPiExistEdit: false
+    isPersonAdded: false, isPiExists: false, invalidPersonDetails: false, isPiExistEdit: false,
+    noPiExists: true
   };
   private $subscription1: ISubscription;
 
@@ -82,6 +84,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this._activatedRoute.queryParams.subscribe(params => {
       this.protocolId = params['protocolId'];
       this.protocolNumber = params['protocolNumber'];
+      this.isProtocolValidated = params['validated'];
       if (this.protocolId != null && this.protocolNumber != null) {
         this.isGeneralInfoSaved = true;
       }
@@ -114,6 +117,23 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       .subscribe(this._results);
   }
 
+  checkPiExists() {
+    this.invalidData.noPiExists = true;
+    if (this.personalDataList.length > 0) {
+      this.personalDataList.forEach(personnelInfo => {
+        if (personnelInfo.protocolPersonRoleId === 'PI') {
+          this.invalidData.noPiExists = false;
+        }
+      });
+    } else {
+      this.invalidData.noPiExists = true;
+    }
+    if (this.invalidData.noPiExists === true) {
+      this.invalidData.invalidPersonnelInfo = true;
+      this.warningMessage = 'Please choose a Principal investigator';
+    }
+  }
+
   loadEditDetails() {
     this.personRoleTypes = this.commonVo.personRoleTypes;
     // this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
@@ -130,6 +150,9 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
           this.activePersonExist = true;
         }
       });
+      if (this.isProtocolValidated === 'true') {
+        this.checkPiExists();
+      }
   }
 
   /**fetches elastic search results
@@ -424,15 +447,22 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         this.personnelInfo = {};
         this.personnelInfo.affiliationTypeCode = null;
         this.personnelInfo.protocolPersonRoleId = null;
+        this.commonVo.personnelInfo = this.personnelInfo;
         this.isObtainedConsent = false;
         this.invalidData.isPersonAdded = false;
+        this.invalidData.invalidPersonnelInfo = false;
         this.editPersonnelInfo = {};
         this.personLeadUnit = null;
         this.personnelInfo.personId = null;
         this.editPersonLeadUnit = null;
         this.personalDataList = this.result.protocolPersonnelInfoList;
         this.generalInfo.personnelInfos = Object.assign([], this.result.protocolPersonnelInfoList);
+        this.commonVo.generalInfo =  this.generalInfo;
+        this.commonVo.protocolPersonnelInfoList = this.personalDataList;
         this._sharedDataService.setGeneralInfo(this.generalInfo);
+        if (this.isProtocolValidated === 'true') {
+          this.checkPiExists();
+        }
       });
   }
   deletePersonalDetails(index) {

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
+import { SharedDataService } from '../../common/service/shared-data.service';
 
 @Component({
   selector: 'app-irb-header-detail',
@@ -26,7 +27,7 @@ export class IrbHeaderDetailComponent implements OnInit {
   };
 
   constructor(private router: Router, private _activatedRoute: ActivatedRoute,
-    private _irbViewService: IrbViewService, private _http: HttpClient) {}
+    private _irbViewService: IrbViewService, private _http: HttpClient, private _sharedDataService: SharedDataService) {}
 
 
   /** sets requestObject and call function to load header details */
@@ -51,6 +52,7 @@ export class IrbHeaderDetailComponent implements OnInit {
               this.result = data || [];
               if ( this.result != null ) {
                   this.irbHeaderDetails = this.result.irbViewHeader;
+                  this._sharedDataService.setviewProtocolDetails(this.irbHeaderDetails);
               }
           },
               error => {

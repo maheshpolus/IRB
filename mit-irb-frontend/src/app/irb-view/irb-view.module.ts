@@ -10,6 +10,7 @@ import { IrbAttachmentsComponent } from './irb-attachments/irb-attachments.compo
 import { IrbHistoryComponent } from './irb-history/irb-history.component';
 import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '../common/common/common.module';
+import { IrbCreateModule } from '../irb-create/irb-create.module';
 
 import { IrbViewRoutingModule } from './irb-view-routing.module';
 import { SubmissionDetailsComponent } from './irb-history/submission-details/submission-details.component';
@@ -21,8 +22,10 @@ import { SubmissionDetailsComponent } from './irb-history/submission-details/sub
     NgxSpinnerModule,
     FormsModule,
     AppCommonModule,
+    IrbCreateModule,
     NgbModule.forRoot()
   ],
-  declarations: [IrbOverviewComponent, IrbHeaderDetailComponent, IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent, SubmissionDetailsComponent]
+  declarations: [IrbOverviewComponent, IrbHeaderDetailComponent,
+    IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent, SubmissionDetailsComponent]
 })
 export class IrbViewModule {}

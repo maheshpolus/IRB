@@ -216,6 +216,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this._spinner.hide();
         this.protocolCollaborator = {};
         this.collaboratorName = null;
+        this.commonVo.protocolCollaborator = this.protocolCollaborator;
         this.protocolCollaboratorList = this.result.protocolCollaboratorList;
         this.commonVo.protocolCollaborator = {};
         this.commonVo.protocolCollaboratorList = this.protocolCollaboratorList;

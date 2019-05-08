@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -118,6 +119,9 @@ public class ProtocolGeneralInfo {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolLeadUnits> protocolUnits;
+	
+	@Transient
+	ProtocolSubmissionStatuses protocolSubmissionStatuses;
 	
 	public List<ProtocolLeadUnits> getProtocolUnits() {
 		return protocolUnits;
@@ -325,5 +329,13 @@ public class ProtocolGeneralInfo {
 
 	public void setIsCancelled(String isCancelled) {
 		this.isCancelled = isCancelled;
+	}
+
+	public ProtocolSubmissionStatuses getProtocolSubmissionStatuses() {
+		return protocolSubmissionStatuses;
+	}
+
+	public void setProtocolSubmissionStatuses(ProtocolSubmissionStatuses protocolSubmissionStatuses) {
+		this.protocolSubmissionStatuses = protocolSubmissionStatuses;
 	}
 }

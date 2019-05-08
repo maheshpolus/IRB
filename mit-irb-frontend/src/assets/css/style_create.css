@@ -2573,3 +2573,7 @@ input:disabled,textarea:disabled{
 .mb-0 {
     margin-bottom: 0 !important;
 }
+.add-training {
+    color: #a92034!important;
+    font-weight: bold;
+}

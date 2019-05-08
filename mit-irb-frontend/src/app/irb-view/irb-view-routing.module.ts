@@ -18,7 +18,7 @@ const routes: Routes = [
                           {path: 'irbAttatchments', component: IrbAttachmentsComponent},
                           {path: 'irbHistory', component: IrbHistoryComponent},
                           {path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent},
-                          {path: 'irbActions', component: IrbActionsComponent},
+                          {path: 'irbActions', component: IrbActionsComponent, resolve: { irb: DashboardResolverService }},
                           ]}
                         ];
 

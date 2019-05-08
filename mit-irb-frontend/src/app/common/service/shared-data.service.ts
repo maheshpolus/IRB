@@ -15,6 +15,9 @@ export class SharedDataService {
   public currentTab = new BehaviorSubject<any>(null);
   currentTabVariable = this.currentTab.asObservable();
 
+  public viewProtocolDetails = new BehaviorSubject<any>(null);
+  viewProtocolDetailsVariable = this.viewProtocolDetails.asObservable();
+
   public searchData: any = null;
   public isAdvancesearch = false;
   public searchedStatus = null;
@@ -38,6 +41,12 @@ export class SharedDataService {
 
   changeCurrentTab(currentTab: any) {
     this.currentTab.next(currentTab);
+}
+getViewProtocolDetails() {
+  return this.viewProtocolDetails;
+}
+setviewProtocolDetails(viewProtocolDetails: any) {
+  this.viewProtocolDetails.next(viewProtocolDetails);
 }
 
 }

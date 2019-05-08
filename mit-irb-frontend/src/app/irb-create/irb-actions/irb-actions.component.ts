@@ -32,6 +32,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   createOrViewPath: string;
 
   private $subscription1: ISubscription;
+  private $subscription2: ISubscription;
 
   invalidData = {
     noPiExists: true, noLeadUnit: true
@@ -84,19 +85,41 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.protocolNumber = params['protocolNumber'];
     });
     this.createOrViewPath = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
-    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
-      if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
-        this.commonVo = commonVo;
-        this.personnelInfoList = this.commonVo.generalInfo.personnelInfos == null ? [] : this.commonVo.generalInfo.personnelInfos;
-        this.leadUnitList = this.commonVo.protocolLeadUnitsList == null ? [] : this.commonVo.protocolLeadUnitsList;
-        this.getAvailableActions();
-      }
-    });
+    if (this.createOrViewPath === 'irb-create') {
+      this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+        if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
+          this.commonVo = commonVo;
+          // this.personnelInfoList = this.commonVo.generalInfo.personnelInfos == null ? [] : this.commonVo.generalInfo.personnelInfos;
+          // this.leadUnitList = this.commonVo.protocolLeadUnitsList == null ? [] : this.commonVo.protocolLeadUnitsList;
+          this.IRBActionsVO.protocolStatus = this.commonVo.generalInfo.protocolStatus.protocolStatusCode;
+          this.IRBActionsVO.submissionStatus = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
+            this.commonVo.generalInfo.protocolSubmissionStatuses.submissionStatusCode;
+          this.IRBActionsVO.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
+          this.IRBActionsVO.submissionNumber = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
+            this.commonVo.generalInfo.protocolSubmissionStatuses.submissionNumber;
+          this.getAvailableActions();
+        }
+      });
+    } else {
+      this.$subscription2 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(commonVo => {
+        if (commonVo !== undefined && commonVo != null) {
+          this.commonVo = commonVo;
+          this.IRBActionsVO.protocolStatus = this.commonVo.PROTOCOL_STATUS_CODE;
+          this.IRBActionsVO.submissionStatus = this.commonVo.SUBMISSION_STATUS_CODE;
+          this.IRBActionsVO.sequenceNumber = this.commonVo.SEQUENCE_NUMBER;
+          this.IRBActionsVO.submissionNumber = this.commonVo.SUBMISSION_NUMBER;
+          this.getAvailableActions();
+        }
+      });
+    }
   }
 
   ngOnDestroy() {
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
+    }
+    if (this.$subscription2) {
+      this.$subscription2.unsubscribe();
     }
   }
 
@@ -104,12 +127,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.protocolNumber = this.protocolNumber;
     this.IRBActionsVO.protocolId = this.protocolId;
     this.IRBActionsVO.personID = this.userDTO.personID;
-    this.IRBActionsVO.protocolStatus = this.commonVo.generalInfo.protocolStatus.protocolStatusCode;
-    this.IRBActionsVO.submissionStatus = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
-      this.commonVo.generalInfo.protocolSubmissionStatuses.submissionStatusCode;
-    this._irbCreateService.getAvailableActions(this.IRBActionsVO).subscribe((data: any) => {
-      this.personActionsList = data.personActionsList;
-      setTimeout(() => { this.setActionIcons(); }, 1000);
+    this._irbCreateService.getAvailableActions(this.IRBActionsVO).subscribe(data => {
+      this.IRBActionsVO = data;
+      this.personActionsList = this.IRBActionsVO.personActionsList;
+      if (this.personActionsList != null && this.personActionsList.length > 0) {
+        setTimeout(() => { this.setActionIcons(); }, 1000);
+      }
     });
   }
 
@@ -128,8 +151,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.actionButtonName = action.ACTION_CODE === '995' || action.ACTION_CODE === '120' || action.ACTION_CODE === '121' ?
         'Delete' : 'Save';
       document.getElementById('commentModalBtn').click();
-    } else if (action.ACTION_CODE === '106' || action.ACTION_CODE === '114' || action.ACTION_CODE === '106' ||
-      action.ACTION_CODE === '104' || action.ACTION_CODE === '105' || action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
+    } else if (action.ACTION_CODE === '114' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
+     action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
       document.getElementById('commentAttachmentModalBtn').click();
     } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '103') {
       document.getElementById('commentCheckboxModalBtn').click();
@@ -137,40 +160,40 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 
   }
 
-  validateProtocol() {
-    if (this.personnelInfoList.length > 0) {
-      this.personnelInfoList.forEach(personnelInfo => {
-        if (personnelInfo.protocolPersonRoleId === 'PI') {
-          this.invalidData.noPiExists = false;
-        }
-      });
-    } else {
-      this.invalidData.noPiExists = true;
-    }
-    if (this.leadUnitList.length > 0) {
-      this.leadUnitList.forEach(leadUnit => {
-        if (leadUnit.unitTypeCode === '1') {
-          this.invalidData.noLeadUnit = false;
-        }
-      });
-    } else {
-      this.invalidData.noLeadUnit = true;
-    }
-    if (this.invalidData.noLeadUnit === true || this.invalidData.noPiExists === true) {
-      document.getElementById('validationModalBtn').click();
-    }
-  }
-  openProtocolWithValidations() {
-    this._router.navigate(['/irb/irb-create/irbHome'],
-      { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId, validated: 'true' } });
-  }
+  // validateProtocol() {
+  //   if (this.personnelInfoList.length > 0) {
+  //     this.personnelInfoList.forEach(personnelInfo => {
+  //       if (personnelInfo.protocolPersonRoleId === 'PI') {
+  //         this.invalidData.noPiExists = false;
+  //       }
+  //     });
+  //   } else {
+  //     this.invalidData.noPiExists = true;
+  //   }
+  //   if (this.leadUnitList.length > 0) {
+  //     this.leadUnitList.forEach(leadUnit => {
+  //       if (leadUnit.unitTypeCode === '1') {
+  //         this.invalidData.noLeadUnit = false;
+  //       }
+  //     });
+  //   } else {
+  //     this.invalidData.noLeadUnit = true;
+  //   }
+  //   if (this.invalidData.noLeadUnit === true || this.invalidData.noPiExists === true) {
+  //     document.getElementById('validationModalBtn').click();
+  //   }
+  // }
+  // openProtocolWithValidations() {
+  //   this._router.navigate(['/irb/irb-create/irbHome'],
+  //     { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId, validated: 'true' } });
+  // }
 
   performAction() {
     if (this.currentActionPerformed.ACTION_CODE === '101') {
       // this.validateProtocol();
-      if (this.invalidData.noLeadUnit === false || this.invalidData.noPiExists === false) {
-        this.setActionVO();
-      }
+      //   if (this.invalidData.noLeadUnit === false || this.invalidData.noPiExists === false) {
+      this.setActionVO();
+      // }
     }
     this._irbCreateService.performProtocolActions(this.IRBActionsVO).subscribe(data => {
       console.log(data);
@@ -181,10 +204,6 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.acType = 'I';
     this.IRBActionsVO.actionTypeCode = this.currentActionPerformed.ACTION_CODE;
     this.IRBActionsVO.createUser = this.userDTO.userName;
-    this.IRBActionsVO.prevProtocolStatusCode = this.currentActionPerformed.PROTO_CURNT_STATUS_CODE;
-    this.IRBActionsVO.protocolSubmissionStatuses = this.commonVo.generalInfo.protocolSubmissionStatuses;
-    this.IRBActionsVO.prevSubmissonStatusCode = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
-      this.commonVo.generalInfo.protocolSubmissionStatuses.submissionStatusCode;
     this.IRBActionsVO.updateUser = this.userDTO.userName;
   }
 

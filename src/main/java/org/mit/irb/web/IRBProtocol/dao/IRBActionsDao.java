@@ -1,5 +1,8 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 
 public interface IRBActionsDao {
@@ -9,8 +12,6 @@ public interface IRBActionsDao {
 	IRBActionsVO submitForReviewProtocolActions(IRBActionsVO vo);
 
 	IRBActionsVO withdrawProtocolActions(IRBActionsVO vo);
-
-	IRBActionsVO adandonProtocolActions(IRBActionsVO vo);
 
 	IRBActionsVO createAmendmentProtocolActions(IRBActionsVO vo);
 
@@ -22,16 +23,13 @@ public interface IRBActionsDao {
 
 	IRBActionsVO requestForDataAnalysisProtocolActions(IRBActionsVO vo);
 
-	IRBActionsVO requestForSuspensionProtocolActions(IRBActionsVO vo);
-
-	IRBActionsVO requestForTerminationProtocolActions(IRBActionsVO vo);
-
 	IRBActionsVO requestForCloseProtocolActions(IRBActionsVO vo);
 
 	IRBActionsVO requestForCloseEnrollmentProtocolActions(IRBActionsVO vo);
 
 	IRBActionsVO requestForReopenEnrollmentProtocolActions(IRBActionsVO vo);
 
-	IRBActionsVO modifyAmendmentSectionProtocolActions(IRBActionsVO vo);
-
+	IRBActionsVO copyProtocolActions(IRBActionsVO vo);
+	
+	List<HashMap<String, Object>> getAmendRenewalModules(String protoocolNumber);
 }

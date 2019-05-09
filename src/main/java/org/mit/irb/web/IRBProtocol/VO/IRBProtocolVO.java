@@ -22,6 +22,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonRoleTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
@@ -70,6 +71,7 @@ public class IRBProtocolVO {
 	private List<SponsorSearchResult> sponsorSearchResult;
 	private List<HashMap<String, Object>> committeList;
 	private List<HashMap<String, Object>> committeSchedulList;
+	private ProtocolRenewalDetails protocolRenewalDetails;
 	
 	private ExemptFundingSource exemptFundingSource;
 	private List<HashMap<String, Object>> exemptFundingSourceList;
@@ -394,5 +396,13 @@ public class IRBProtocolVO {
 
 	public void setProtocolAdminContact(ProtocolAdminContact protocolAdminContact) {
 		this.protocolAdminContact = protocolAdminContact;
+	}
+
+	public ProtocolRenewalDetails getProtocolRenewalDetails() {
+		return protocolRenewalDetails;
+	}
+
+	public void setProtocolRenewalDetails(ProtocolRenewalDetails protocolRenewalDetails) {
+		this.protocolRenewalDetails = protocolRenewalDetails;
 	}
 }

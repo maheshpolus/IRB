@@ -12,6 +12,12 @@ public class ProtocolRenewalDetails {
 	private Boolean subject;
 	private Boolean other;
 	private Boolean questionnaire;
+	private Boolean keyStudyPersonnel;
+	private Boolean protocolCorrespondents;
+	private Boolean notes;
+	private Boolean protocolUnits;
+	private Boolean pointOFContact;
+	private Boolean engangedInstitution;
 	
 	public Boolean getGeneralInfo() {
 		return generalInfo;
@@ -79,6 +85,40 @@ public class ProtocolRenewalDetails {
 	public void setQuestionnaire(Boolean questionnaire) {
 		this.questionnaire = questionnaire;
 	}
-	
-
+	public Boolean getKeyStudyPersonnel() {
+		return keyStudyPersonnel;
+	}
+	public void setKeyStudyPersonnel(Boolean keyStudyPersonnel) {
+		this.keyStudyPersonnel = keyStudyPersonnel;
+	}
+	public Boolean getProtocolCorrespondents() {
+		return protocolCorrespondents;
+	}
+	public void setProtocolCorrespondents(Boolean protocolCorrespondents) {
+		this.protocolCorrespondents = protocolCorrespondents;
+	}
+	public Boolean getNotes() {
+		return notes;
+	}
+	public void setNotes(Boolean notes) {
+		this.notes = notes;
+	}
+	public Boolean getProtocolUnits() {
+		return protocolUnits;
+	}
+	public void setProtocolUnits(Boolean protocolUnits) {
+		this.protocolUnits = protocolUnits;
+	}
+	public Boolean getPointOFContact() {
+		return pointOFContact;
+	}
+	public void setPointOFContact(Boolean pointOFContact) {
+		this.pointOFContact = pointOFContact;
+	}
+	public Boolean getEngangedInstitution() {
+		return engangedInstitution;
+	}
+	public void setEngangedInstitution(Boolean engangedInstitution) {
+		this.engangedInstitution = engangedInstitution;
+	}	
 }

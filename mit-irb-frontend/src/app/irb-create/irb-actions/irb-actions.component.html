@@ -1,3 +1,4 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="container-fluid">
   <div class="row">
     <!--collapse-->
@@ -570,30 +571,31 @@
 
         <div class="col-md-12">
           <div class="form-group">
-            <label *ngIf="currentActionPerformed?.ACTION_CODE != '119'">Reason</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '119'">Comments</label>
-            <textarea class="form-control txt-area-fnt" placeholder="Reason"></textarea>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE != '303'">Reason To Delete</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</label>
+            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment"placeholder="Reason"></textarea>
           </div>
         </div>
 
-        <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '119'">
+        <!-- <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '119'">
           <div class="form-group">
             <label>Action Date</label>
             <div class="input-group date-pickr-1 mb-3">
               <input type="text" class="form-control" [owlDateTime]="actionDate" placeholder="mm/dd/yyyy">
               <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDate">
-                <!-- <span class="input-group-text"> -->
+                
                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                <!-- </span> -->
+                
               </div>
               <owl-date-time [pickerType]="'calendar'" #actionDate></owl-date-time>
-            </div>
-            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+            </div> -->
+            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> 
           </div>
-        </div>
+        </div>-->
 
         <div class="modal-footer btn-row-med text-center">
-          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{actionButtonName}}</button>
+            <button  *ngIf="currentActionPerformed?.ACTION_CODE != '303'" type="button margin-class" class="btn btn-primary tab_btn" (click)="openDeleteWarning()" data-dismiss="modal">Delete</button>
+          <button  *ngIf="currentActionPerformed?.ACTION_CODE == '303'" type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
           <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
 
         </div>
@@ -618,10 +620,19 @@
 
         <div class="col-md-12">
           <div class="form-group">
-            <label>Amendment Summary</label>
-            <textarea class="form-control txt-area-fnt" placeholder="Amendment Summary"></textarea>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '102'">Renewal Summary</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '103'">Amendment Summary</label>
+            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Amendment Summary"></textarea>
           </div>
         </div>
+        <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE != '102'">
+						<div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
+								<input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG"/>
+						
+								<span *ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
+					
+						</div>
+					</div>
 
 
         <div class="modal-footer btn-row-med text-center">
@@ -647,20 +658,34 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="col-md-12">
-          <div class="form-group mb-0">
-            <label>Submission Review Type: </label>
-            <span> FYI</span>
+        <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE == '103'">
+            <div class="col-md-4">
+                    <div class="form-group"> 
+                  <label>Submission Type: </label>
+                 
+                 <span> FYI</span>
+                 </div>
+            </div>
+            <div class="col-md-8"> 
+              <div class="form-group">
+            <label class="pr-8">Submission Type Qualifier: </label>
+            
+            <select class="custom-select select-notify-popup" id="inlineFormCustomSelect">
+            <option value=null selected>Please Select</option>
+            <!-- <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option> -->
+          </select>
           </div>
+          </div>
+        
         </div>
-
-        <div class="col-md-12">
           <div class="form-group">
-            <label *ngIf="currentActionPerformed?.ACTION_CODE != '116'">Reason</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '116'">Comments</label>
-            <textarea class="form-control txt-area-fnt" placeholder="Reason"></textarea>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '105'">Reason for Data Analysis Only</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '105'">Reason to Close</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '108'">Reason to Close Enrollment</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '115'">Reason to Reopen Enrollment</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '103'">Notification Comment</label>
+            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
           </div>
-        </div>
         <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
           <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
           </button>
@@ -668,7 +693,11 @@
           <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
           </div>
         </file-drop>
-
+        <div class="filechip">
+            <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+                <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+            </span>
+        </div>
 
         <div class="modal-footer btn-row-med text-center">
           <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
@@ -682,6 +711,32 @@
   </div>
 </div>
 <!--MODAL END -->
+<!--confirm modal-->
+<div class="modal fade" id="confirmModalBtn" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">Confirmation</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p *ngIf="currentActionPerformed?.ACTION_CODE == '995'">Are you sure to delete this protocol?</p>
+          <p *ngIf="currentActionPerformed?.ACTION_CODE == '120'">Are you sure to delete this Amendment?</p>
+          <p *ngIf="currentActionPerformed?.ACTION_CODE == '121'">Are you sure to delete this Renewal?</p>
+          <p *ngIf="currentActionPerformed?.ACTION_CODE == '911'">Are you sure to copy this Protocol?</p>
+        </div>
+        <div class="modal-footer btn-row-med center-button">
+          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Yes</button>
+          <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--modal end-->
 
 <!--Modal opening buttons-->
 <button id="submitModalBtn" [hidden]="true" data-toggle="modal" data-target="#submitModal"></button>

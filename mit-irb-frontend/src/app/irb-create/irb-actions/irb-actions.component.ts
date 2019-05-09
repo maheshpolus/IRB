@@ -1,6 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 
 import { IrbCreateService } from '../irb-create.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
@@ -20,6 +23,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   IRBActionsVO: any = {};
   commonVo: any = {};
   currentActionPerformed: any = {};
+  moduleAvailableForAmendment: any = [];
   personnelInfoList = [];
   leadUnitList = [];
   personActionsList = [];
@@ -28,8 +32,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   reviewTypes = [];
   committees = [];
   scheduleDates = [];
-  actionButtonName: string;
   createOrViewPath: string;
+
+  uploadedFile: File[] = [];
+  files: UploadFile[] = [];
+  fil: FileList;
+  attachmentList: any[] = [];
 
   private $subscription1: ISubscription;
   private $subscription2: ISubscription;
@@ -40,7 +48,9 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 
 
   constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _irbCreateService: IrbCreateService,
-    private _sharedDataService: SharedDataService) { }
+    private _sharedDataService: SharedDataService, public toastr: ToastsManager, vcr: ViewContainerRef,
+    private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef) {
+      this.toastr.setRootViewContainerRef(vcr);  }
 
   ngOnInit() {
     this.submissionTypes = [{ type: 'Initial Protocol Application for Approval' },
@@ -127,16 +137,21 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.protocolNumber = this.protocolNumber;
     this.IRBActionsVO.protocolId = this.protocolId;
     this.IRBActionsVO.personID = this.userDTO.personID;
+    this._spinner.show();
     this._irbCreateService.getAvailableActions(this.IRBActionsVO).subscribe(data => {
+      this._spinner.hide();
       this.IRBActionsVO = data;
       this.personActionsList = this.IRBActionsVO.personActionsList;
+      this.moduleAvailableForAmendment = this.IRBActionsVO.moduleAvailableForAmendment;
       if (this.personActionsList != null && this.personActionsList.length > 0) {
+        this._spinner.show();
         setTimeout(() => { this.setActionIcons(); }, 1000);
       }
     });
   }
 
   setActionIcons() {
+    this._spinner.hide();
     this.personActionsList.forEach((personAction, index) => {
       document.getElementById('icon' + index).className = personAction.ICON_CLASS_NAME;
     });
@@ -144,18 +159,19 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   }
   openActionDetails(action) {
     this.currentActionPerformed = action;
+    this.uploadedFile = [];
     if (action.ACTION_CODE === '101') {
       document.getElementById('submitModalBtn').click();
-    } else if (action.ACTION_CODE === '303' || action.ACTION_CODE === '119' || action.ACTION_CODE === '995' ||
-      action.ACTION_CODE === '995' || action.ACTION_CODE === '120' || action.ACTION_CODE === '121') {
-      this.actionButtonName = action.ACTION_CODE === '995' || action.ACTION_CODE === '120' || action.ACTION_CODE === '121' ?
-        'Delete' : 'Save';
+    } else if ( action.ACTION_CODE === '995' ||  action.ACTION_CODE === '303' ||
+     action.ACTION_CODE === '120' || action.ACTION_CODE === '121') {
       document.getElementById('commentModalBtn').click();
-    } else if (action.ACTION_CODE === '114' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
+    } else if (action.ACTION_CODE === '103' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
      action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
       document.getElementById('commentAttachmentModalBtn').click();
-    } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '103') {
+    } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '114' || action.ACTION_CODE === '910') { // modify-910
       document.getElementById('commentCheckboxModalBtn').click();
+    } else if (action.ACTION_CODE === '911') { // copy protocol
+      document.getElementById('confirmModalBtn').click();
     }
 
   }
@@ -189,15 +205,23 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   // }
 
   performAction() {
-    if (this.currentActionPerformed.ACTION_CODE === '101') {
+   // if (this.currentActionPerformed.ACTION_CODE === '101') {
       // this.validateProtocol();
       //   if (this.invalidData.noLeadUnit === false || this.invalidData.noPiExists === false) {
       this.setActionVO();
       // }
-    }
-    this._irbCreateService.performProtocolActions(this.IRBActionsVO).subscribe(data => {
+   // }
+    this._irbCreateService.performProtocolActions(this.IRBActionsVO, this.uploadedFile).subscribe(data => {
       console.log(data);
-    });
+      this._router.navigate(['/irb/irb-view/irbActions'],
+       { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId} });
+     // this.toastr.success('Action Performed successfully', null, { toastLife: 2000 });
+    },
+    error => {
+      this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+      console.log('Error in perform action ', error);
+    }
+  );
   }
 
   setActionVO() {
@@ -205,6 +229,55 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.actionTypeCode = this.currentActionPerformed.ACTION_CODE;
     this.IRBActionsVO.createUser = this.userDTO.userName;
     this.IRBActionsVO.updateUser = this.userDTO.userName;
+  }
+
+
+  onChange(files: FileList) {
+    this.fil = files;
+    for (let index = 0; index < this.fil.length; index++) {
+      this.uploadedFile.push(this.fil[index]);
+    }
+    this.changeRef.detectChanges();
+  }
+
+  /** Push the unique files dropped to uploaded file
+  * @param files- files dropped
+  */
+  public dropped(event: UploadEvent) {
+    this.files = event.files;
+    for (const file of this.files) {
+      this.attachmentList.push(file);
+    }
+    for (const file of event.files) {
+      if (file.fileEntry.isFile) {
+        const fileEntry = file.fileEntry as FileSystemFileEntry;
+        fileEntry.file((info: File) => {
+          this.uploadedFile.push(info);
+          this.changeRef.detectChanges();
+        });
+      }
+    }
+  }
+
+  /**Remove an item from the uploded file
+   * @param item-item to be removed
+   */
+  deleteFromUploadedFileList(item) {
+    for (let i = 0; i < this.uploadedFile.length; i++) {
+      if (this.uploadedFile[i].name === item.name) {
+        this.uploadedFile.splice(i, 1);
+        this.changeRef.detectChanges();
+      }
+    }
+  }
+
+  /* Trigger the 'choose File' in attachment modal */
+  triggerAdd() {
+    document.getElementById('addAttach').click();
+  }
+
+  openDeleteWarning() {
+    document.getElementById('confirmModalBtn').click();
   }
 
 }

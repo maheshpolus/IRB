@@ -38,6 +38,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   isGeneralInfoSaved = false;
   isElasticResultPerson = false;
   isLeadUnitSearch = false;
+  isGeneralInfoEditable = true;
   message = '';
   personType = 'employee';
   warningMessage: string;
@@ -95,13 +96,12 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   loadEditDetails() {
     this.requestObject = { protocolId: this.protocolId};
-    // this._spinner.show();
-    // this._spinner.hide();
     // Look up data
     this.protocolType = this.commonVo.protocolType;
     this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
     this.protocolPersonLeadUnitsCopy = this._completerService.local(this.protocolPersonLeadUnits, 'unitName,unitNumber', 'unitName');
     // Look up Data - End
+    this.isGeneralInfoEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.generalInfo : true;
     this.generalInfo = this.commonVo.generalInfo;
     if (this.generalInfo.prtocolDescription != null) {
       this.remainingChar(this.generalInfo.prtocolDescription.length); // Calculating description length

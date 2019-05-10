@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   paginatedTrainingList = [];
   userHasRightToEditTraining: number;
   clearField: any = 'true';
+  showPersonElasticBand = false;
   isTrainingSearch = false;
   showPopup = false;
   requestObject = {
@@ -66,7 +67,7 @@ export class DashboardComponent implements OnInit {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
     this.options.index = this._elasticsearchService.IRB_INDEX;
-    this.loadTrainingList();
+   // this.loadTrainingList();
     this.checkUserHasMaintainRight();
   }
 
@@ -111,9 +112,11 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * @param  {} personDetails - person choosen from the elastic search
+   * @param  {} personDetails - person choosen from the e
+   * lastic search
    */
   selectPersonElasticResult(personDetails) {
+    this.showPersonElasticBand = personDetails != null ? true : false;
     this.selectedPerson = personDetails;
     if (this.selectedPerson != null) {
       this.requestObject.personId = this.options.type === 'person' ? personDetails.person_id : personDetails.rolodex_id;

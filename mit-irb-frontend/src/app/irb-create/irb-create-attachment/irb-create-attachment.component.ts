@@ -21,6 +21,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     irbAttachmentProtocol: any = {};
     tempSaveAttachment: any = {};
     tempEditAttachment: any = {};
+    commonVo: any = {};
     protocolCollaboratorAttachmentsList: any[] = [];
     result: any = {};
     irbAttachmentsList: any[] = [];
@@ -35,6 +36,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     isAttachmentEdit = false;
     isReplaceAttachment = false;
     multipleFile = false;
+    isAttachmentEditable = true;
     fil: FileList;
     generalInfo: any;
     attachmentTypeDescription: string;
@@ -65,7 +67,10 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
         this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
             if (commonVo !== undefined) {
+                this.commonVo = commonVo;
                 this.generalInfo = commonVo.generalInfo;
+                this.isAttachmentEditable =
+                this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.addModifyNoteAttachments : true;
             }
         });
         this._irbCreateService.getAttachmentTypes(null).subscribe(data => {

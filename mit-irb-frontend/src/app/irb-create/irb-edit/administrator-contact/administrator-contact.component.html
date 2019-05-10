@@ -2,7 +2,7 @@
     <div class="card history-card border-radius-1">
       <div class="card-header history-header">
         <nav class="nav navbar-pg3">
-          <h5>Administrator Contact</h5>
+          <h5>Point Of Contact</h5>
           <i class="fa fa-info-circle" aria-hidden="true"></i>
         </nav>
       </div>
@@ -13,7 +13,7 @@
             <strong>*</strong>
           </div>
         </div>
-        <div class="col-12  search-eidted-p">
+        <div class="col-12  search-eidted-p" *ngIf="isAdminContactEditable">
   
          <div class="row top-dis-15">
             <div class="col-md-4">
@@ -161,10 +161,10 @@
                     <td>{{item?.adminContactType?.description}}</td>
                     <td>{{item?.description}}</td>
                     <td class="action-btn-list">
-                      <button title="Edit" (click)="editAdminContact(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                      <button *ngIf="isAdminContactEditable" title="Edit" (click)="editAdminContact(item,i)" type="button" class="btn btn-primary edit-btn-1">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                       </button>
-                      <button title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                      <button *ngIf="isAdminContactEditable" title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
                         data-target="#deleteAdminDetails">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                       </button>

@@ -1765,10 +1765,10 @@ color: #FA7440 !important;
 {
 	cursor: pointer;
 }
-.request-action-cards p
+/* .request-action-cards p
 {
 	font-size: 14px;
-}
+} */
 .blue-card
 {
 	background: #e9ecfd;
@@ -2576,4 +2576,11 @@ input:disabled,textarea:disabled{
 .add-training {
     color: #a92034!important;
     font-weight: bold;
+}
+.select-notify-popup {
+    display: inline-block;
+    width: 66%;
+}
+.pr-8 {
+    padding-right: 8px;
 }

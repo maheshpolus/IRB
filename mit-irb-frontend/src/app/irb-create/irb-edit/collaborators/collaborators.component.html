@@ -11,7 +11,7 @@
         <div class="alert alert-danger " *ngIf="invalidData.invalidCollaboratorInfo" [innerHTML]="warningMessage">
         </div>
       </div>
-      <div class="col-12  search-eidted-p padding-15">
+      <div class="col-12  search-eidted-p padding-15" *ngIf="isCollaboratorEditable">
         <div class="row">
           <div class="col-md-4">
             <div class="form-group">
@@ -100,14 +100,14 @@
                   <td>{{item.approvalDate| date:"MM/dd/yyyy"}}</td>
                   <td>{{item.expirationDate| date:"MM/dd/yyyy"}}</td>
                   <td class="action-btn-list">
-                    <button title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="isCollaboratorEditable" title="Edit" (click)="editCollaboratorDetails(item,l)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
-                    <button title="More Details" type="button" (click)="setCollaboratorPersonDetails(item)" class="btn btn-primary view-btn-1" data-toggle="modal"
+                    <button *ngIf="isCollaboratorEditable" title="More Details" type="button" (click)="setCollaboratorPersonDetails(item)" class="btn btn-primary view-btn-1" data-toggle="modal"
                       data-target="#collaboratorPersonModal">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
-                    <button title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal" data-target="#deleteCollaboratorDetails">
+                    <button *ngIf="isCollaboratorEditable" title="Delete" (click)="deleteCollaboratorDetails(l)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal" data-target="#deleteCollaboratorDetails">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>

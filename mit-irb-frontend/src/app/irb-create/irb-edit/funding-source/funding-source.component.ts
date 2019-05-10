@@ -44,6 +44,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   showElasticBand = false;
   showDeletePopup = false;
   isUnitSearch = false;
+  isFundingSourceEditable = true;
   searchString: string;
   message = '';
   invalidData = {
@@ -102,6 +103,8 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   loadEditDetails() {
+    this.isFundingSourceEditable =
+    this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.fundingSource : true;
     this.protocolFundingSourceTypes = this.commonVo.protocolFundingSourceTypes;
     this.generalInfo = this.commonVo.generalInfo;
     this.fundingSource = this.commonVo.fundingSource;

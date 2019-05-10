@@ -3,8 +3,13 @@
 <div class="container-fluid">
   <div class="borderBox irb-margin-top irb-background-tablemaintenance">
     <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Maintenance</h4>
+    <div class="text-right">
+        <a class="pdf add-training" *ngIf="userHasRightToEditTraining == 1" [routerLink]="['person-detail']">
+            <i class="fa fa-plus icon-padding"></i>Add Training
+          </a>
+    </div>
     <section class="row outerpadding ml-10 mr-10">
-      <div class="col-md-3">
+       <div class="col-md-4">
         <div class="form-group">
             <div class="form-check-inline">
                 <label class="form-check-label">
@@ -19,7 +24,7 @@
               <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
         </div>
       </div>
-      <div class="col-md-4  mt-30">
+      <div class="col-md-5  mt-30">
         <div class="form-group">
           <input type="text" [(ngModel)]="trainingName" class="form-control input-field-size" placeholder="Search for a Training" (ngModelChange)="getTrainingList()" (keyup)="isTrainingSearch = true" (focusout)="isTrainingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'trainingDropDown')">
           <div class="sb-seachresults top-margin research-dropDown-width " id="trainingDropDown">
@@ -44,16 +49,39 @@
             </button>
           </div>
           </div>
-      <div class="col-md-2" *ngIf="userHasRightToEditTraining == 1">
+      <!-- <div class="col-md-2" *ngIf="userHasRightToEditTraining == 1">
         <a class="pdf a-right attachment-btn-position" [routerLink]="['person-detail']">
           <i class="fa fa-plus icon-padding"></i>Add Training
         </a>
-      </div>
-      <div class="text-right persons-header width-99">
+      </div> -->
+      <!-- <div class="col-12" *ngIf="showPersonElasticBand">
+          <div class="row">
+            <div class="col-12 band-s">
+              <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
+              <div class="row">
+                <div class="col-12">
+                  <label>Name:</label>
+                  <span>{{selectedPerson?.full_name}}</span>
+                </div>
+                <div class="col-12">
+                  <label>Username:</label>
+                  <span>{{selectedPerson?.user_name}}</span>
+                  <label>Email:</label>
+                  <span>{{selectedPerson?.email_address}}</span>
+                  <label>Phone no:</label>
+                  <span>{{selectedPerson?.phone_number}}</span>
+                  <label>Title:</label>
+                  <span>{{selectedPerson?.title}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      <div class="text-right persons-header width-99" *ngIf="requestObject.searchMode == 'A'">
           <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
           <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
       </div>
-      <div class="col-md-12 users-list-tbl" id ="topOfTrainingList">
+      <div class="col-md-12 users-list-tbl" id ="topOfTrainingList" *ngIf="requestObject.searchMode == 'A'">
           <div class="row">
             <div class="table-responsive">
               <table class="table table-striped tbl-p-clr">

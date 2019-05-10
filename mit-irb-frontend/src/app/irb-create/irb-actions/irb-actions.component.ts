@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastsManager, Toast } from 'ng2-toastr/ng2-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 
@@ -21,6 +21,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   generalInfo = {};
   userDTO: any = {};
   IRBActionsVO: any = {};
+  IRBActionsResult: any = {};
   commonVo: any = {};
   currentActionPerformed: any = {};
   moduleAvailableForAmendment: any = [];
@@ -50,7 +51,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _irbCreateService: IrbCreateService,
     private _sharedDataService: SharedDataService, public toastr: ToastsManager, vcr: ViewContainerRef,
     private _spinner: NgxSpinnerService, public changeRef: ChangeDetectorRef) {
-      this.toastr.setRootViewContainerRef(vcr);  }
+    // this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.submissionTypes = [{ type: 'Initial Protocol Application for Approval' },
@@ -118,6 +120,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.IRBActionsVO.submissionStatus = this.commonVo.SUBMISSION_STATUS_CODE;
           this.IRBActionsVO.sequenceNumber = this.commonVo.SEQUENCE_NUMBER;
           this.IRBActionsVO.submissionNumber = this.commonVo.SUBMISSION_NUMBER;
+          this.IRBActionsVO.submissionId = this.commonVo.SUBMISSION_ID;
           this.getAvailableActions();
         }
       });
@@ -160,15 +163,17 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   openActionDetails(action) {
     this.currentActionPerformed = action;
     this.uploadedFile = [];
-    if (action.ACTION_CODE === '101') {
+    if (action.ACTION_CODE === '101') { // Submit
       document.getElementById('submitModalBtn').click();
-    } else if ( action.ACTION_CODE === '995' ||  action.ACTION_CODE === '303' ||
-     action.ACTION_CODE === '120' || action.ACTION_CODE === '121') {
+    } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303') {
+      // Delete Protocol,Withdraw
       document.getElementById('commentModalBtn').click();
-    } else if (action.ACTION_CODE === '103' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
-     action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
+    } else if (action.ACTION_CODE === '114' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
+      action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
+      // Rqst Data Analysis, Rqst to close, notify irb, rqst close enrollment,rqst reopen enrollment
       document.getElementById('commentAttachmentModalBtn').click();
-    } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '114' || action.ACTION_CODE === '910') { // modify-910
+    } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '103' || action.ACTION_CODE === '910') {
+      // create renewal,Create amendment,modify-amedment
       document.getElementById('commentCheckboxModalBtn').click();
     } else if (action.ACTION_CODE === '911') { // copy protocol
       document.getElementById('confirmModalBtn').click();
@@ -176,52 +181,45 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 
   }
 
-  // validateProtocol() {
-  //   if (this.personnelInfoList.length > 0) {
-  //     this.personnelInfoList.forEach(personnelInfo => {
-  //       if (personnelInfo.protocolPersonRoleId === 'PI') {
-  //         this.invalidData.noPiExists = false;
-  //       }
-  //     });
-  //   } else {
-  //     this.invalidData.noPiExists = true;
-  //   }
-  //   if (this.leadUnitList.length > 0) {
-  //     this.leadUnitList.forEach(leadUnit => {
-  //       if (leadUnit.unitTypeCode === '1') {
-  //         this.invalidData.noLeadUnit = false;
-  //       }
-  //     });
-  //   } else {
-  //     this.invalidData.noLeadUnit = true;
-  //   }
-  //   if (this.invalidData.noLeadUnit === true || this.invalidData.noPiExists === true) {
-  //     document.getElementById('validationModalBtn').click();
-  //   }
-  // }
-  // openProtocolWithValidations() {
-  //   this._router.navigate(['/irb/irb-create/irbHome'],
-  //     { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId, validated: 'true' } });
-  // }
-
   performAction() {
-   // if (this.currentActionPerformed.ACTION_CODE === '101') {
-      // this.validateProtocol();
-      //   if (this.invalidData.noLeadUnit === false || this.invalidData.noPiExists === false) {
-      this.setActionVO();
-      // }
-   // }
+    this.setActionVO();
+    this._spinner.show();
     this._irbCreateService.performProtocolActions(this.IRBActionsVO, this.uploadedFile).subscribe(data => {
-      console.log(data);
-      this._router.navigate(['/irb/irb-view/irbActions'],
-       { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId} });
-     // this.toastr.success('Action Performed successfully', null, { toastLife: 2000 });
+      this._spinner.hide();
+      this.IRBActionsResult = data;
+      if (this.IRBActionsResult.successCode === true) {
+        this.toastr.success(this.IRBActionsResult.successMessage, null, { toastLife: 2000 });
+
+        // Submit Action,Rqst Data Analysis, Rqst to close, notify irb, rqst close enrollment,rqst reopen enrollment
+        if (this.currentActionPerformed.ACTION_CODE === '101' || this.currentActionPerformed.ACTION_CODE === '114' ||
+        this.currentActionPerformed.ACTION_CODE === '105' || this.currentActionPerformed.ACTION_CODE === '116' ||
+        this.currentActionPerformed.ACTION_CODE === '108' || this.currentActionPerformed.ACTION_CODE === '115') {
+         // this._router.navigate(['/irb/dashboard']);
+          this._router.navigate(['/irb/irb-view/irbOverview'],
+            { queryParams: { protocolNumber: this.protocolNumber} });
+        }
+
+        // create amendment, create renewal, withdrawn, copy protocol
+        if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102' ||
+          this.currentActionPerformed.ACTION_CODE === '303' || this.currentActionPerformed.ACTION_CODE === '911') {
+            this._router.navigate(['/irb/dashboard']);
+            this._router.navigate(['/irb/irb-create/irbHome'],
+            { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber, protocolId: this.IRBActionsResult.protocolId } });
+        }
+
+        // delete protocol
+        if (this.currentActionPerformed.ACTION_CODE === '992') {
+          this._router.navigate(['/irb/dashboard']);
+        }
+      } else {
+        this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+      }
     },
-    error => {
-      this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
-      console.log('Error in perform action ', error);
-    }
-  );
+      error => {
+        this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+        console.log('Error in perform action ', error);
+      }
+    );
   }
 
   setActionVO() {
@@ -230,6 +228,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.createUser = this.userDTO.userName;
     this.IRBActionsVO.updateUser = this.userDTO.userName;
   }
+
 
 
   onChange(files: FileList) {

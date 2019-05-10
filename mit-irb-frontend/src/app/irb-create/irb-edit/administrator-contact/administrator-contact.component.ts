@@ -31,6 +31,7 @@ export class AdministratorContactComponent implements OnInit {
   isAdminContactEdit = false;
   showDeletePopup = false;
   mandatoryFieldMissing = false;
+  isAdminContactEditable = true;
   adminContactSelectedRow = null;
   private subscription1: ISubscription;
 
@@ -86,6 +87,7 @@ export class AdministratorContactComponent implements OnInit {
 
   /*loads the required lookup data and protocol admin contact list if any */
   loadEditDetails() {
+    this.isAdminContactEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.pointOFContact : true;
     this.protocolAdminContactType = this.commonVo.protocolAdminContactType;
     this.protocolAdminContactList = this.commonVo.protocolAdminContactList != null ? this.commonVo.protocolAdminContactList : [];
     this.protocolAdminContact = this.commonVo.protocolAdminContact;

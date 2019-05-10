@@ -19,7 +19,7 @@
               <label>Type
                 <span class="mandatory">*</span>
               </label>
-              <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+              <select [disabled]="isGeneralInfoEditable == false" class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
                 <option selected value=null>Please Select</option>
                 <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
               </select>
@@ -29,7 +29,7 @@
             <div class="form-group">
               <label>Anticipated Start Date</label>
               <div class="input-group  mb-2">
-                <input type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
+                <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
                   (ngModelChange)="validateStartDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
                 <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1">
@@ -45,7 +45,7 @@
             <div class="form-group">
               <label>Anticipated End Date</label>
               <div class="input-group mb-2">
-                <input type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
+                <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
                   (ngModelChange)="validateEndDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
                 <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
@@ -64,7 +64,7 @@
               <label>PI
                 <span class="mandatory">*</span>
               </label>
-              <input [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit" type="text"
+              <input [attr.disabled]="isGeneralInfoEditable == false?' ': null" [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit" type="text"
                 class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
                 (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'PIDropDown')" />
               <div class="sb-seachresults top-margin" id ="PIDropDown">
@@ -84,7 +84,7 @@
               <!-- <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
                 [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
                 placeholder="Lead unit"></ng2-completer> -->
-                <input type="text"  class="form-control input-field-size" placeholder="Search Unit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="getUnitList()" (focus)="isLeadUnitSearch = true" (focusout)="isLeadUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')">
+                <input [disabled]="isGeneralInfoEditable == false" type="text"  class="form-control input-field-size" placeholder="Search Unit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="getUnitList()" (focus)="isLeadUnitSearch = true" (focusout)="isLeadUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')">
                 <div class="sb-seachresults top-margin research-dropDown-width " id="leadUnitDropDown">
                   <ul class="sb-results-dropdown-menu" *ngIf="isLeadUnitSearch">
                     <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" (click)="selectedUnit(result.unitName, result.unitNumber)"><span> {{result.unitNumber}} - {{result.unitName}}</span></li>
@@ -99,7 +99,7 @@
               <label>Title
                 <span class="mandatory">*</span>
               </label>
-              <textarea class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
+              <textarea [disabled]="isGeneralInfoEditable == false" class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
             <div class="form-group">
               <label>Purpose of Study </label>
               <span class="sub-label"> ({{remainingLength}} characters left)</span>
-              <textarea rows="12" class="form-control txt-area-fnt" maxlength="7500" id="purposeOfStudy" placeholder="Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters."
+              <textarea [disabled]="isGeneralInfoEditable == false" rows="12" class="form-control txt-area-fnt" maxlength="7500" id="purposeOfStudy" placeholder="Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters."
                 [(ngModel)]="generalInfo.prtocolDescription" (ngModelChange)="remainingChar(generalInfo.prtocolDescription.length)"></textarea>
             </div>
           </div>

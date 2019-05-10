@@ -622,12 +622,13 @@
           <div class="form-group">
             <label *ngIf="currentActionPerformed?.ACTION_CODE == '102'">Renewal Summary</label>
             <label *ngIf="currentActionPerformed?.ACTION_CODE == '103'">Amendment Summary</label>
-            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Amendment Summary"></textarea>
+            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" 
+            [placeholder]="currentActionPerformed?.ACTION_CODE == '103'?'Amendment Summary':'Renewal Summary'"></textarea>
           </div>
         </div>
         <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE != '102'">
 						<div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
-								<input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG"/>
+								<input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="module.AC_TYPE='U'"/>
 						
 								<span *ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
 					
@@ -658,21 +659,21 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE == '103'">
-            <div class="col-md-4">
+        <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE == '116'">
+            <div class="col-md-3">
                     <div class="form-group"> 
                   <label>Submission Type: </label>
                  
                  <span> FYI</span>
                  </div>
             </div>
-            <div class="col-md-8"> 
+            <div class="col-md-9"> 
               <div class="form-group">
             <label class="pr-8">Submission Type Qualifier: </label>
             
-            <select class="custom-select select-notify-popup" id="inlineFormCustomSelect">
+            <select class="custom-select select-notify-popup" id="inlineFormCustomSelect" [(ngModel)]="IRBActionsVO.selectedNotifyTypeQualifier">
             <option value=null selected>Please Select</option>
-            <!-- <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option> -->
+            <option *ngFor="let notifyType of IRBActionsVO.notifyTypeQualifier" value="{{notifyType.SUBMISSION_TYPE_QUAL_CODE}}">{{notifyType.DESCRIPTION}}</option>
           </select>
           </div>
           </div>
@@ -683,7 +684,7 @@
               <label *ngIf="currentActionPerformed?.ACTION_CODE == '105'">Reason to Close</label>
               <label *ngIf="currentActionPerformed?.ACTION_CODE == '108'">Reason to Close Enrollment</label>
             <label *ngIf="currentActionPerformed?.ACTION_CODE == '115'">Reason to Reopen Enrollment</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '103'">Notification Comment</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '116'">Notification Comment</label>
             <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
           </div>
         <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
@@ -712,7 +713,7 @@
 </div>
 <!--MODAL END -->
 <!--confirm modal-->
-<div class="modal fade" id="confirmModalBtn" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content border-radius-1">
         <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -722,9 +723,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <p *ngIf="currentActionPerformed?.ACTION_CODE == '995'">Are you sure to delete this protocol?</p>
-          <p *ngIf="currentActionPerformed?.ACTION_CODE == '120'">Are you sure to delete this Amendment?</p>
-          <p *ngIf="currentActionPerformed?.ACTION_CODE == '121'">Are you sure to delete this Renewal?</p>
+          <p *ngIf="currentActionPerformed?.ACTION_CODE == '992'">Are you sure to delete this protocol?</p>
           <p *ngIf="currentActionPerformed?.ACTION_CODE == '911'">Are you sure to copy this Protocol?</p>
         </div>
         <div class="modal-footer btn-row-med center-button">
@@ -744,3 +743,4 @@
 <button id="commentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentModal"></button>
 <button id="commentAttachmentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentAttachmentModal"></button>
 <button id="commentCheckboxModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentCheckboxModal"></button>
+<button id="confirmModalBtn" [hidden]="true" data-toggle="modal" data-target="#confirmModal"></button>

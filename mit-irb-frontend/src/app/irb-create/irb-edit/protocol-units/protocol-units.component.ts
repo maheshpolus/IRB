@@ -25,6 +25,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
   isProtocolUnitSearch = false;
   isProtocolUnitEdit = false;
   showDeletePopup = false;
+  isUnitInfoEditable = true;
   searchString: string;
   alertMessage: string;
   isProtocolValidated: string;
@@ -72,6 +73,7 @@ export class ProtocolUnitsComponent implements OnInit, OnDestroy {
 
   /*loads the required lookup data and protocol unit list if any */
   loadEditDetails() {
+    this.isUnitInfoEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.protocolUnits : true;
     this.protocolUnit = this.commonVo.protocolLeadUnits;
     this.protocolUnitList = this.commonVo.protocolLeadUnitsList != null ? this.commonVo.protocolLeadUnitsList : [];
     this.protocolUnitTypes = this.commonVo.protocolUnitType;

@@ -98,7 +98,13 @@ export class IrbCreateService {
 getAvailableActions(params) {
 return this._http.post('/mit-irb/getPersonRight', params);
 }
-performProtocolActions(params) {
-  return this._http.post('/mit-irb/performProtocolActions', params);
+performProtocolActions(iRBActionsVo: Object, uploadedFile) {
+  this.formData.delete('files');
+  this.formData.delete('formDataJson');
+  for (let i = 0; i < uploadedFile.length; i++) {
+    this.formData.append('files', uploadedFile[i]);
+  }
+  this.formData.append('formDataJson', JSON.stringify(iRBActionsVo));
+  return this._http.post('/mit-irb/performProtocolActions', this.formData);
 }
 }

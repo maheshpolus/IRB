@@ -25,6 +25,9 @@ public class IRBActionsVO {
 	private Integer submissionNumber; 
 	private String comment;
 	private Integer protocolId; 
+	private ArrayList<HashMap<String, Object>> moduleAvailableForAmendment;
+	private ArrayList<HashMap<String, Object>> notifyTypeQualifier;
+	private ArrayList<HashMap<String, Object>> amendRenewalModules;
 	
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
@@ -176,5 +179,29 @@ public class IRBActionsVO {
 
 	public void setProtocolId(Integer protocolId) {
 		this.protocolId = protocolId;
+	}
+
+	public ArrayList<HashMap<String, Object>> getModuleAvailableForAmendment() {
+		return moduleAvailableForAmendment;
+	}
+
+	public void setModuleAvailableForAmendment(ArrayList<HashMap<String, Object>> moduleAvailableForAmendment) {
+		this.moduleAvailableForAmendment = moduleAvailableForAmendment;
+	}
+
+	public ArrayList<HashMap<String, Object>> getNotifyTypeQualifier() {
+		return notifyTypeQualifier;
+	}
+
+	public void setNotifyTypeQualifier(ArrayList<HashMap<String, Object>> notifyTypeQualifier) {
+		this.notifyTypeQualifier = notifyTypeQualifier;
+	}
+
+	public ArrayList<HashMap<String, Object>> getAmendRenewalModules() {
+		return amendRenewalModules;
+	}
+
+	public void setAmendRenewalModules(ArrayList<HashMap<String, Object>> amendRenewalModules) {
+		this.amendRenewalModules = amendRenewalModules;
 	}
 }

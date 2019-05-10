@@ -12,7 +12,7 @@
           <strong>*</strong>
         </div>
       </div>
-      <div class="col-12  search-eidted-p">
+      <div class="col-12  search-eidted-p" *ngIf="isUnitInfoEditable">
 
         <div class="row top-dis-15">
           <div class="col-md-4">
@@ -85,14 +85,14 @@
                   <td>{{item?.unitType?.description}}</td>
                   <td>{{item?.description}}</td>
                   <td class="action-btn-list">
-                    <button title="Edit" (click)="editProtocolUnit(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                    <button *ngIf="isUnitInfoEditable" title="Edit" (click)="editProtocolUnit(item,i)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
                     <!-- <button *ngIf="isProtocolUnitEdit && i == protocolUnitSelectedRow" title="Save" (click)="addProtocolUnit(item,'EDIT')"
                         type="button" class="btn btn-primary edit-btn-1">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                       </button> -->
-                    <button title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                    <button *ngIf="isUnitInfoEditable" title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
                       data-target="#deleteUnitDetails">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
@@ -119,12 +119,16 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this item?</p>
+          <p *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode != '1'">Are you sure you want to delete this item?</p>
+          <p *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode == '1'">You cannot delete lead Unit.</p>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode != '1'">
           <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
           <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveProtocolUnit('DELETE');" data-dismiss="modal">Yes</button>
         </div>
+        <div class="modal-footer" *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode == '1'">
+            <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">Ok</button>
+          </div>
       </div>
     </div>
   </div>

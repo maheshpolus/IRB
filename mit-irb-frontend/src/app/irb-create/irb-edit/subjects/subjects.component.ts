@@ -28,6 +28,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   isSubjectInfoEdit = false;
   isGeneralInfoSaved = false;
   showDeletePopup = false;
+  isSubjectEditable = true;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
     invalidPersonnelInfo: false, invalidFundingInfo: false, invalidSubjectInfo: false,
@@ -66,6 +67,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   }
 
   loadEditDetails() {
+    this.isSubjectEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.subject : true;
     this.protocolSubjectTypes = this.commonVo.protocolSubjectTypes;
     this.protocolSubjectAgeGroups = this.commonVo.ageGroups;
     // Look up Data - End

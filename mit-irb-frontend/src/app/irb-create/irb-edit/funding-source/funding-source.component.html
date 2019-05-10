@@ -13,7 +13,7 @@
           <strong>*</strong>
         </div>
       </div>
-      <div class="col-12 search-eidted-p padding-15">
+      <div class="col-12 search-eidted-p padding-15" *ngIf="isFundingSourceEditable">
         <div class="row">
 
           <div class="col-md-4">
@@ -181,13 +181,13 @@
                   <td title="{{item.title}}">{{item.title| slice:0:25}}<span *ngIf="item.title != null && item.title.length > 25"> ...</span></td>
                   <td title="{{item.description}}">{{item.description| slice:0:25}}<span *ngIf="item.description != null && item.description.length > 25"> ...</span></td>
                   <td class="action-btn-list">
-                    <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
+                    <button *ngIf="isFundingSourceEditable" title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
                     <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
-                    <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)" data-toggle="modal" data-target="#deleteFundingSourceDetails">
+                    <button *ngIf="isFundingSourceEditable" title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)" data-toggle="modal" data-target="#deleteFundingSourceDetails">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>

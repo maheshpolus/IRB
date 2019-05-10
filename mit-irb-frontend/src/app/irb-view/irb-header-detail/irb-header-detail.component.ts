@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
@@ -27,7 +27,18 @@ export class IrbHeaderDetailComponent implements OnInit {
   };
 
   constructor(private router: Router, private _activatedRoute: ActivatedRoute,
-    private _irbViewService: IrbViewService, private _http: HttpClient, private _sharedDataService: SharedDataService) {}
+    private _irbViewService: IrbViewService, private _http: HttpClient, private _sharedDataService: SharedDataService) {
+        this.router.events.subscribe((evt: any) => {
+            if (evt instanceof NavigationEnd) {
+              if (evt.url === '/irb/irb-view/irbOverview?protocolNumber=' + this.requestObject.protocolNumber) {
+                this.loadHeaderDetails();
+              }
+            }
+            if (evt.snapshot != null && evt.snapshot.params != null  && evt.snapshot.params.queryParams != null) {
+              this.requestObject.protocolNumber = evt.snapshot.params.queryParams.protocolNumber;
+            }
+        });
+    }
 
 
   /** sets requestObject and call function to load header details */

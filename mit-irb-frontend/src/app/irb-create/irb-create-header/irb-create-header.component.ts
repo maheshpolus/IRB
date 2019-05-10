@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { IrbCreateService } from '../irb-create.service';
@@ -25,7 +25,19 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _irbCreateService: IrbCreateService,
-    private _spinner: NgxSpinnerService) { }
+    private _spinner: NgxSpinnerService) {
+      this._router.events.subscribe((evt: any) => {
+        if (evt instanceof NavigationEnd) {
+          if (evt.url === '/irb/irb-create/irbHome?protocolNumber=' + this.protocolNumber + '&protocolId=' + this.protocolId) {
+            this.getIRBProtocol();
+          }
+        }
+        if (evt.snapshot != null && evt.snapshot.params != null  && evt.snapshot.params.queryParams != null) {
+          this.protocolId = evt.snapshot.params.queryParams.protocolId;
+          this.protocolNumber = evt.snapshot.params.queryParams.protocolNumber;
+        }
+    });
+     }
 
   ngOnInit() {
     this.$subscription1 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {

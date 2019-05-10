@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
 import { HttpClient } from '@angular/common/http';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { Router } from '@angular/router';
 import { SharedDataService } from './common/service/shared-data.service';
@@ -26,7 +27,8 @@ export class AppComponent {
    constructor(private idle: Idle,
     private keepalive: Keepalive,
     private _router: Router,
-    private _sharedDataService: SharedDataService, private _http: HttpClient  ) {
+    private _sharedDataService: SharedDataService, private _http: HttpClient, public toastr: ToastsManager, vcr: ViewContainerRef  ) {
+        this.toastr.setRootViewContainerRef(vcr);
        this._http.get('/mit-irb/resources/string_config_json').subscribe( data => {
            const property_config: any = data;
            if (property_config) {

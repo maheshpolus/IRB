@@ -44,6 +44,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   isShowAddPerson = false;
   isShowAddAttachment = false;
   showPopup = false;
+  isCollaboratorEditable = true;
   protocolNumber = null;
   protocolId = null;
   collaboratorEditIndex = null;
@@ -120,6 +121,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   loadEditDetails() {
+    this.isCollaboratorEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.subject : true;
     this.collaboratorNames = this._completerService.
       local(this.commonVo.collaboratorNames, 'organizationName,organizationId', 'organizationName');
     this.generalInfo = this.commonVo.generalInfo;

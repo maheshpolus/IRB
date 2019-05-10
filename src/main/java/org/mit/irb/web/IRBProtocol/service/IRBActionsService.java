@@ -1,6 +1,7 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBActionsService {
 
@@ -12,7 +13,8 @@ public interface IRBActionsService {
 
 	/**
 	 * @param vo
+	 * @param files 
 	 * @return
 	 */
-	IRBActionsVO performProtocolActions(IRBActionsVO vo);
+	IRBActionsVO performProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 }

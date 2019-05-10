@@ -34,7 +34,7 @@
                                   <td>Saxe, Rebecca On 12/01/2018</td>
                                   <td>
 
-                                      <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
+                                      <a *ngIf="isQstnrEditable" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
                                                                                                                      protocolId: protocolId,
                                                                                                                      ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
                                                                                                                     qnrId: questionnaire.QUESTIONNAIRE_ID}">

@@ -11,7 +11,7 @@
         <div class="alert alert-danger " [innerHTML]="warningMessage">
         </div>
       </div>
-      <div class="col-12  search-eidted-p">
+      <div class="col-12  search-eidted-p" *ngIf="isPersonnelInfoEditable">
         <div class="row">
           <!-- <div class="col-md-4">
             <div class="form-group">
@@ -232,7 +232,7 @@
                       <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
                       <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
                   </td>
-                  <td class="action-btn-list" width="10%" >
+                  <td class="action-btn-list" width="10%" *ngIf="isPersonnelInfoEditable">
                     <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button"
                       class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -249,6 +249,11 @@
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
+                  <td class="action-btn-list" width="10%" *ngIf="!isPersonnelInfoEditable">
+                      <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                      </button>
+                    </td>
                 </tr>
                 </ng-container>
                 <tr *ngIf="personalDataList.length==0">
@@ -409,9 +414,9 @@
           </h4>
           </div>
           <div class="col-6">
-                <a class="pdf a-right attachment-btn-position" *ngIf="userHasRightToEditTraining == 1" data-dismiss="modal" (click)="openTrainingMaintainence(null,'ADD')">
+                <!-- <a class="pdf a-right attachment-btn-position" *ngIf="userHasRightToEditTraining == 1" data-dismiss="modal" (click)="openTrainingMaintainence(null,'ADD')">
                   <i class="fa fa-plus icon-padding"></i>Add Training
-                </a>
+                </a> -->
                 </div>
                 </div>
         <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
@@ -433,9 +438,9 @@
                   <td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
                   <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
                   <td class="action-btn-list">
-                      <button *ngIf="userHasRightToEditTraining == 1" (click)="openTrainingMaintainence(info,'EDIT')" data-dismiss="modal" title="Edit" type="button" class="btn btn-primary edit-btn-1" >
+                      <!-- <button *ngIf="userHasRightToEditTraining == 1" (click)="openTrainingMaintainence(info,'EDIT')" data-dismiss="modal" title="Edit" type="button" class="btn btn-primary edit-btn-1" >
                         <i class="fa fa-pencil" aria-hidden="true"></i>
-                      </button>
+                      </button> -->
                       <button *ngIf="info?.attachment?.length > 0"  title="Attachments" (click)="showTrainingAttachments(l)" type="button" class="btn btn-primary view-btn-1" >
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
                       </button>
@@ -514,10 +519,13 @@
       <div class="modal-body">
         <p>{{alertMessage}}</p>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" *ngIf="this.commonVo.personnelInfo.protocolPersonRoleId != 'PI'">
         <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
         <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="savePersonalInfo(null, 'DELETE')" data-dismiss="modal">Yes</button>
       </div>
+      <div class="modal-footer" *ngIf="this.commonVo.personnelInfo.protocolPersonRoleId == 'PI'">
+          <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">Ok</button>
+        </div>
     </div>
   </div>
 </div>

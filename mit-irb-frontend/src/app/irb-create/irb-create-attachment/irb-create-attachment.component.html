@@ -16,7 +16,7 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
               <div class="row">
                 <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
-                  <a class="pdf a-right attachment-btn-position" data-toggle="modal" data-target="#attachmentModal" (click)="clearAttachmentPopup()">
+                  <a *ngIf="isAttachmentEditable" class="pdf a-right attachment-btn-position" data-toggle="modal" data-target="#attachmentModal" (click)="clearAttachmentPopup()">
                     <i class="fa fa-plus icon-padding"></i>Add Attachment
                   </a>
                   <div class="col-12 mt-10">
@@ -86,7 +86,7 @@
                             <td>
                               <ul class="actionButtonGroup padding-icons">
                                 <li>
-                                  <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachmentsCollaborator">
+                                  <a *ngIf="isAttachmentEditable" title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachmentsCollaborator">
                                     <i class="fa fa-trash-o delete-color"></i>
                                   </a>
                                 </li>
@@ -96,7 +96,7 @@
                                   </a>
                                 </li>
                                 <li>
-                                      <a (click)="editAttachments(protocolCollaboratorAttachment,i,true)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                      <a *ngIf="isAttachmentEditable" (click)="editAttachments(protocolCollaboratorAttachment,i,true)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
                                         <i class="fa fa-edit edit-color"></i>
                                       </a>
                                     </li>

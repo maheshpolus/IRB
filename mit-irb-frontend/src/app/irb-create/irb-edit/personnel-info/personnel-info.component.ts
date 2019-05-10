@@ -55,6 +55,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   showDeletePopup = false;
   inActivePersonExist = false;
   activePersonExist = false;
+  isPersonnelInfoEditable = true;
   warningMessage: string;
   isProtocolValidated: string;
   alertMessage: string;
@@ -139,6 +140,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     // this.protocolPersonLeadUnits = this.commonVo.protocolPersonLeadUnits;
    // this.protocolPersonLeadUnitsCopy = this._completerService.local(this.protocolPersonLeadUnits, 'unitName,unitNumber', 'unitName');
     this.affiliationTypes = this.commonVo.affiliationTypes;
+    this.isPersonnelInfoEditable =
+    this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.protocolPersonel : true;
     this.generalInfo = Object.assign({}, this.commonVo.generalInfo);
     this.personnelInfo = this.commonVo.personnelInfo;
     this.personalDataList = this.commonVo.protocolPersonnelInfoList != null ? this.commonVo.protocolPersonnelInfoList : [];
@@ -471,7 +474,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   //  this.commonVo.personnelInfo.protocolGeneralInfo = this.generalInfo;
     this.showDeletePopup = true;
     if (this.commonVo.personnelInfo.protocolPersonRoleId === 'PI') {
-      this.alertMessage = 'You are going to delete the PI. Are you sure you want to delete this item?';
+      this.alertMessage = 'You cannot delete the PI.';
     } else {
       this.alertMessage = 'Are you sure you want to delete this item?';
     }

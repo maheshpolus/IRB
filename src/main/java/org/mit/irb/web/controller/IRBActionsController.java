@@ -12,7 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class IRBActionsController {
@@ -31,9 +35,17 @@ public class IRBActionsController {
 	}
 	
 	@RequestMapping(value = "/performProtocolActions", method = RequestMethod.POST)
-	public @ResponseBody IRBActionsVO performProtocolActions(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
+	public @ResponseBody IRBActionsVO performProtocolActions(@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson,HttpServletRequest request,HttpServletResponse response)
 	{
-		vo = irbActionsService.performProtocolActions(vo);
+		IRBActionsVO vo=new IRBActionsVO();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			 vo = mapper.readValue(formDataJson,IRBActionsVO.class);
+		} catch (Exception e) {			
+			e.printStackTrace();
+		} 
+		vo = irbActionsService.performProtocolActions(vo,files);
 		return vo;
 	}
 	

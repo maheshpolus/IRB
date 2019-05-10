@@ -133,7 +133,8 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		IRBUtilVO vo = new IRBUtilVO();
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
-		ArrayList<OutParameter> outputParam = new ArrayList<>();		
+		ArrayList<OutParameter> outputParam = new ArrayList<>();	
+		inputParam.add(new InParameter("AV_SEARCH_TEXT", DBEngineConstants.TYPE_STRING,trainingName));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		try {
 			result = dbEngine.executeProcedure("GET_IRB_PERSON_TRAINING_CODES", outputParam);

@@ -1,20 +1,13 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolActionAttachments;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
-import org.mit.irb.web.common.pojo.IRBExemptForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service(value = "irbActionsService")
 public class IRBActionsServImpl implements IRBActionsService {
@@ -45,23 +38,30 @@ public class IRBActionsServImpl implements IRBActionsService {
 		case "102":
 			vo = irbActionsDao.createRenewalProtocolActions(vo);//3
 			break;
-		case "1":
-			vo = irbActionsDao.deleteProtocolAmendmentRenewalProtocolActions(vo);//11  995-deleteproto, 120,121
-			break;
+		case "992":
+			if(vo.getProtocolNumber().contains("A")){
+				vo.setActionTypeCode("120");
+			}else if(vo.getProtocolNumber().contains("R")){
+				vo.setActionTypeCode("121");
+			}else{
+				vo.setActionTypeCode("124");
+			}
+			vo = irbActionsDao.deleteProtocolAmendmentRenewalProtocolActions(vo);//11  deleteproto, 120,121
+			break;			
 		case "116":			
-		//	vo = irbActionsDao.notifyIRBProtocolActions(vo,attachmentobj);//4
+			vo = irbActionsDao.notifyIRBProtocolActions(vo,files);//4
 			break;
 		case "114":
-			vo = irbActionsDao.requestForDataAnalysisProtocolActions(vo);//8
+			vo = irbActionsDao.requestForDataAnalysisProtocolActions(vo,files);//8
 			break;
 		case "105":
-			vo = irbActionsDao.requestForCloseProtocolActions(vo);//9
+			vo = irbActionsDao.requestForCloseProtocolActions(vo,files);//9
 			break;
 		case "108":
-			vo = irbActionsDao.requestForCloseEnrollmentProtocolActions(vo);//6
+			vo = irbActionsDao.requestForCloseEnrollmentProtocolActions(vo,files);//6
 			break;
 		case "115":
-			vo = irbActionsDao.requestForReopenEnrollmentProtocolActions(vo);//7
+			vo = irbActionsDao.requestForReopenEnrollmentProtocolActions(vo,files);//7
 			break;
 		case "911":
 			vo = irbActionsDao.copyProtocolActions(vo);//12 911-copy  910 modify amendmnt

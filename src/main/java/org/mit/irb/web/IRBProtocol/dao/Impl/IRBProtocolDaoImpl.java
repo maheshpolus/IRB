@@ -25,7 +25,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.transform.Transformers;
+import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.Award;
 import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
@@ -40,12 +42,12 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Sponsor;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
-import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.constants.KeyConstants;
 
@@ -74,6 +76,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service(value = "iRBProtocolDao")
 @Transactional
 public class IRBProtocolDaoImpl implements IRBProtocolDao {
+	
+	@Autowired
+	IRBActionsDao irbAcionDao;
 	
 	@Autowired
 	IRBProtocolInitLoadService initLoadService;
@@ -383,12 +388,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Override
 	public ResponseEntity<byte[]> downloadAttachments(String attachmentId) {
-		Integer attachmentsId = Integer.parseInt(attachmentId);
+		/*Integer attachmentsId = Integer.parseInt(attachmentId);*/
 		ResponseEntity<byte[]> attachmentData = null;
 		try {
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();
-			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_INTEGER, attachmentsId));
+			inParam.add(new InParameter("AV_FIL_ID", DBEngineConstants.TYPE_STRING, attachmentId));
 			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_MITKC_ATTACHMENT_FILE",
 					outParam);
@@ -531,6 +536,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	@Override
 	public IRBProtocolVO updateGeneralInfo(ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		IRBActionsVO vo = new IRBActionsVO();
+		ProtocolSubmissionStatuses status = new ProtocolSubmissionStatuses();
 		if (generalInfo.getProtocolNumber() == null) {
 			generalInfo.setActive("Y");
 			generalInfo.setIslatest("Y");
@@ -548,8 +555,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			protocolPersonnelInfo.setSequenceNumber(1);
 			protocolPersonnelInfo.setTrainingInfo(getTrainingFlag(protocolPersonnelInfo.getPersonId()));
 			protocolPersonnelInfoList.add(protocolPersonnelInfo);
-			generalInfo.setPersonnelInfos(protocolPersonnelInfoList);
-			
+			generalInfo.setPersonnelInfos(protocolPersonnelInfoList);			
 			List<ProtocolLeadUnits> protocolUnitList = new ArrayList<ProtocolLeadUnits>();
 			ProtocolLeadUnits protocolUnit = generalInfo.getProtocolUnits().get(0);
 			protocolUnit.setProtocolGeneralInfo(generalInfo);
@@ -557,15 +563,28 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			protocolUnit.setSequenceNumber(1);
 			protocolUnit.setUnitTypeCode("1");
 			protocolUnitList.add(protocolUnit);
-			generalInfo.setProtocolUnits(protocolUnitList);
-		
+			generalInfo.setProtocolUnits(protocolUnitList);						
+			status.setProtocolNumber(generalInfo.getProtocolNumber());
+			status.setProtocolId(generalInfo.getProtocolId());
+			status.setSequenceNumber(generalInfo.getSequenceNumber());					
+			vo.setActionTypeCode("100"); 
+			vo.setUpdateUser(generalInfo.getUpdateUser());
+			vo.setCreateUser(generalInfo.getCreateUser());
+			vo.setAcType("I");
+			vo.setProtocolStatus(generalInfo.getProtocolStatusCode());
 		}
-		hibernateTemplate.saveOrUpdate(generalInfo);
-		irbProtocolVO.setGeneralInfo(generalInfo);
+		 hibernateTemplate.saveOrUpdate(generalInfo);			
+		 irbProtocolVO.setGeneralInfo(generalInfo);
+		 if(vo.getAcType().equals("I")){
+			 status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
+			 vo.setProtocolSubmissionStatuses(status);
+			 irbAcionDao.updateActionStatus(vo);
+		 }	
 		return irbProtocolVO;
 	}
 
-	private String generateProtocolNumber() {
+	@Override
+	public String generateProtocolNumber() {
 		String generatedId = null;
 		try {
 			String prefix = "";
@@ -748,6 +767,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				getProtocolFundingSource(protocolId, irbProtocolVO);
 				Future<IRBProtocolVO> protocolAdminContacts = getProtocolAdminContacts(irbProtocolVO);
 				irbProtocolVO = protocolAdminContacts.get();
+				if(irbProtocolVO.getProtocolNumber().contains("A")){
+					List<HashMap<String, Object>> amendRenewalModule = irbAcionDao.getAmendRenewalModules(irbProtocolVO.getProtocolNumber());
+					irbProtocolVO.setProtocolRenewalDetails(fetchAmendRenewalDetails(amendRenewalModule));
+				  }else if (irbProtocolVO.getProtocolNumber().contains("R")) {
+					  ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
+					  protocolRenewalDetail.setAddModifyNoteAttachments(true);
+					  irbProtocolVO.setProtocolRenewalDetails(protocolRenewalDetail);		  
+				  }
 			} else {
 				irbProtocolVO.setGeneralInfo(protocolGeneralInfo);
 			}
@@ -757,6 +784,63 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return irbProtocolVO;
 	}
 
+	private ProtocolRenewalDetails fetchAmendRenewalDetails(List<HashMap<String, Object>> amendRenewalModule) {
+		ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
+		try{
+			for(HashMap<String, Object> protocolDetailKey : amendRenewalModule){				
+				   if(protocolDetailKey.get("STATUS_FLAG").equals("Y")){
+					switch (protocolDetailKey.get("PROTOCOL_MODULE_CODE").toString()) {
+					case "001":
+						protocolRenewalDetail.setGeneralInfo(true);
+						break;
+					case "002":
+						protocolRenewalDetail.setProtocolPersonel(true);
+						break;
+					case "003":
+						protocolRenewalDetail.setKeyStudyPersonnel(true);
+						break;
+					case "008":
+						protocolRenewalDetail.setAddModifyNoteAttachments(true);
+						break;
+					case "005":
+						protocolRenewalDetail.setFundingSource(true);
+						break;
+					case "004":
+						protocolRenewalDetail.setAreaOfResearch(true);
+						break;
+					case "009":
+						protocolRenewalDetail.setProtocolCorrespondents(true);
+						break;
+					case "015":
+						protocolRenewalDetail.setNotes(true);
+						break;
+					case "027":
+						protocolRenewalDetail.setProtocolUnits(true);
+						break;
+					case "007":
+						protocolRenewalDetail.setSpecialReview(true);
+						break;
+					case "028":
+						protocolRenewalDetail.setPointOFContact(true);
+						break;
+					case "006":
+						protocolRenewalDetail.setSubject(true);
+						break;
+					case "029":
+						protocolRenewalDetail.setEngangedInstitution(true);
+						break;
+					case "Questionnaire":
+						protocolRenewalDetail.setQuestionnaire(true);
+						break;					
+					}
+				   }
+				}
+		}catch (Exception e) {
+			logger.info("Exception in fetchAmendRenewalDetails:" + e);
+		}
+		return protocolRenewalDetail;
+	}
+	
 	@Async
 	public Future<IRBProtocolVO> getDepartmentList(IRBProtocolVO irbProtocolVO) {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()

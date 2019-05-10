@@ -6,7 +6,6 @@ import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
-import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
@@ -15,7 +14,6 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolLeadUnits;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolPersonnelInfo;
-import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
@@ -52,9 +50,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	
 	@Autowired
 	IRBProtocolInitLoadService initLoadService;
-	
-	@Autowired
-	IRBActionsDao irbAcionDao;
 	
 	org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(IRBProtocolServImpl.class.getName());
 
@@ -219,10 +214,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			ProtocolLeadUnits protocolLeadUnits = new ProtocolLeadUnits();
 			ProtocolFundingSource fundingSource= new ProtocolFundingSource();
 		    ProtocolSubject protocolSubject= new ProtocolSubject();
-		  if(protocolNumber.contains("A")){
-			List<HashMap<String, Object>> amendRenewalModule = irbAcionDao.getAmendRenewalModules(protocolNumber);
-			irbProtocolVO.setProtocolRenewalDetails(fetchAmendRenewalDetails(amendRenewalModule));
-		  }
 		    ProtocolCollaborator protocolCollaborator = new ProtocolCollaborator();
 		    ProtocolAdminContact protocolAdminContact = new ProtocolAdminContact();
 		    Future<IRBProtocolVO> protocolTypes = initLoadService.loadProtocolTypes(irbProtocolVO);
@@ -257,66 +248,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		return irbProtocolVO;
 	}
 	
-	
-	
-	private ProtocolRenewalDetails fetchAmendRenewalDetails(List<HashMap<String, Object>> amendRenewalModule) {
-		ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
-		try{
-			for(HashMap<String, Object> protocolDetailKey : amendRenewalModule){				
-				   if(protocolDetailKey.get("IS_EDITABLE").equals("Y")){
-					switch (protocolDetailKey.get("PROTOCOL_MODULE_CODE").toString()) {
-					case "001":
-						protocolRenewalDetail.setGeneralInfo(true);
-						break;
-					case "002":
-						protocolRenewalDetail.setProtocolPersonel(true);
-						break;
-					case "003":
-						protocolRenewalDetail.setKeyStudyPersonnel(true);
-						break;
-					case "008":
-						protocolRenewalDetail.setAddModifyNoteAttachments(true);
-						break;
-					case "005":
-						protocolRenewalDetail.setFundingSource(true);
-						break;
-					case "004":
-						protocolRenewalDetail.setAreaOfResearch(true);
-						break;
-					case "009":
-						protocolRenewalDetail.setProtocolCorrespondents(true);
-						break;
-					case "015":
-						protocolRenewalDetail.setNotes(true);
-						break;
-					case "027":
-						protocolRenewalDetail.setProtocolUnits(true);
-						break;
-					case "007":
-						protocolRenewalDetail.setSpecialReview(true);
-						break;
-					case "028":
-						protocolRenewalDetail.setPointOFContact(true);
-						break;
-					case "006":
-						protocolRenewalDetail.setSubject(true);
-						break;
-					case "029":
-						protocolRenewalDetail.setEngangedInstitution(true);
-						break;
-					case "Questionnaire":
-						protocolRenewalDetail.setQuestionnaire(true);
-						break;
-					default:						
-						break;
-					}
-				   }
-				}
-		}catch (Exception e) {
-			logger.info("Exception in fetchAmendRenewalDetails:" + e);
-		}
-		return protocolRenewalDetail;
-	}
 	@Override
 	public IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();

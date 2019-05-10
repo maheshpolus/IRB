@@ -1,23 +1,23 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
 public class ProtocolRenewalDetails {
-	private Boolean generalInfo;
-	private Boolean addModifyNoteAttachments;
-	private Boolean fundingSource;
-	private Boolean areaOfResearch;
-	private Boolean protocolReferences;
-	private Boolean specialReview;
-	private Boolean protocolOrganization;
-	private Boolean protocolPersonel;
-	private Boolean subject;
-	private Boolean other;
-	private Boolean questionnaire;
-	private Boolean keyStudyPersonnel;
-	private Boolean protocolCorrespondents;
-	private Boolean notes;
-	private Boolean protocolUnits;
-	private Boolean pointOFContact;
-	private Boolean engangedInstitution;
+	private Boolean generalInfo=false;
+	private Boolean addModifyNoteAttachments=false;
+	private Boolean fundingSource=false;
+	private Boolean areaOfResearch=false;
+	private Boolean protocolReferences=false;
+	private Boolean specialReview=false;
+	private Boolean protocolOrganization=false;
+	private Boolean protocolPersonel=false;
+	private Boolean subject=false;
+	private Boolean other=false;
+	private Boolean questionnaire=false;
+	private Boolean keyStudyPersonnel=false;
+	private Boolean protocolCorrespondents=false;
+	private Boolean notes=false;
+	private Boolean protocolUnits=false;
+	private Boolean pointOFContact=false;
+	private Boolean engangedInstitution=false;
 	
 	public Boolean getGeneralInfo() {
 		return generalInfo;

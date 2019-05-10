@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBActionsDao {
 
@@ -19,17 +20,19 @@ public interface IRBActionsDao {
 
 	IRBActionsVO deleteProtocolAmendmentRenewalProtocolActions(IRBActionsVO vo);
 
-	IRBActionsVO notifyIRBProtocolActions(IRBActionsVO vo);
+	IRBActionsVO notifyIRBProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 
-	IRBActionsVO requestForDataAnalysisProtocolActions(IRBActionsVO vo);
+	IRBActionsVO requestForDataAnalysisProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 
-	IRBActionsVO requestForCloseProtocolActions(IRBActionsVO vo);
+	IRBActionsVO requestForCloseProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 
-	IRBActionsVO requestForCloseEnrollmentProtocolActions(IRBActionsVO vo);
+	IRBActionsVO requestForCloseEnrollmentProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 
-	IRBActionsVO requestForReopenEnrollmentProtocolActions(IRBActionsVO vo);
+	IRBActionsVO requestForReopenEnrollmentProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 
 	IRBActionsVO copyProtocolActions(IRBActionsVO vo);
 	
 	List<HashMap<String, Object>> getAmendRenewalModules(String protoocolNumber);
+	
+	void updateActionStatus(IRBActionsVO vo);
 }

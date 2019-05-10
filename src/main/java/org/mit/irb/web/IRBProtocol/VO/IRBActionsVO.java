@@ -28,6 +28,8 @@ public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> moduleAvailableForAmendment;
 	private ArrayList<HashMap<String, Object>> notifyTypeQualifier;
 	private ArrayList<HashMap<String, Object>> amendRenewalModules;
+	private String selectedNotifyTypeQualifier;
+	private String submissionId;
 	
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
@@ -203,5 +205,21 @@ public class IRBActionsVO {
 
 	public void setAmendRenewalModules(ArrayList<HashMap<String, Object>> amendRenewalModules) {
 		this.amendRenewalModules = amendRenewalModules;
+	}
+
+	public String getSelectedNotifyTypeQualifier() {
+		return selectedNotifyTypeQualifier;
+	}
+
+	public void setSelectedNotifyTypeQualifier(String selectedNotifyTypeQualifier) {
+		this.selectedNotifyTypeQualifier = selectedNotifyTypeQualifier;
+	}
+
+	public String getSubmissionId() {
+		return submissionId;
+	}
+
+	public void setSubmissionId(String submissionId) {
+		this.submissionId = submissionId;
 	}
 }

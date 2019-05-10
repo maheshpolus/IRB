@@ -8,12 +8,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service(value = "irbActionsDao")
 public class IRBActionsDaoImpl implements IRBActionsDao {
@@ -23,6 +26,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		dbEngine = new DBEngine();
 	}
 
+	@Autowired
+	IRBProtocolDao irbProtocolDao;
+	
 	Logger logger = Logger.getLogger(IRBUtilDaoImpl.class.getName());
 
 	@Override
@@ -75,10 +81,13 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try{
 			for(int i=0;i<finalResult.size();i++){		
 			ArrayList<InParameter> inputparams  = new ArrayList<InParameter>();
-			ArrayList<OutParameter> outputParams = new ArrayList<OutParameter>();						
+			ArrayList<OutParameter> outputParams = new ArrayList<OutParameter>();
+			Integer submissionId = null;
+				if(vo.getSubmissionId()!=null)
+					submissionId=Integer.parseInt(vo.getSubmissionId());
 				inputparams.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));	
 				inputparams.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));	
-				inputparams.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSubmissionNumber()));	
+				inputparams.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionId));	
 				outputParams.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
 				results=dbEngine.executeProcedure(inputparams,"GET_IRB_PROTO_ACTION_SUBMISSN",outputParams);
 				if(results != null && !results.isEmpty()){
@@ -155,11 +164,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					protocolSubmissionStatuses.setProtocolId(vo.getProtocolId());
 				}
 				 if(finalResult.get(i).get("ACTION_CODE").toString().equals("103")){
-						ArrayList<InParameter> inputparam  = new ArrayList<InParameter>();
+						/*ArrayList<InParameter> inputparam  = new ArrayList<InParameter>();
 						ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();
 						inputparam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));	
 						outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
-						renewalModules=dbEngine.executeProcedure(inputparam,"GET_IRB_AMEND_RENEWAL_MODULES",outputparam);
+						renewalModules=dbEngine.executeProcedure(inputparam,"GET_IRB_AMEND_RENEWAL_MODULES",outputparam);*/
+					    renewalModules=(ArrayList<HashMap<String, Object>>) getAmendRenewalModules(vo.getProtocolNumber());
 						for(HashMap<String,Object> modules: renewalModules) {
 							if(modules.get("STATUS_FLAG").toString().equals("Y")){
 								modules.remove("STATUS_FLAG");
@@ -225,6 +235,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		return vo;
 	}
 
+	@Override
 	public void updateActionStatus(IRBActionsVO vo){
 		try {
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
@@ -256,28 +267,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 	
 	@Override
-	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo) {	
-		ArrayList<HashMap<String, Object>> result = null;
-		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			ArrayList<OutParameter> outputParam = new ArrayList<OutParameter>();		
-			inputParam.add(new InParameter("AV_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getActionTypeCode()));	
-			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));		
-			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
-			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
-			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
-			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));	
-			inputParam.add(new InParameter("AV_PREV_SUB_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevSubmissonStatusCode()));	 
-			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevProtocolStatusCode()));	
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_QUAL_CODE", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionTypeQualCode()));	 
-			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
-			result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTCOL_ACTIONS",outputParam);
+	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo) {			
+		try {			
+			protocolActionSP(vo,null);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Withdrawn successfully");	
 		} catch (Exception e) {
@@ -292,33 +284,14 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO createAmendmentProtocolActions(IRBActionsVO vo) {	
 		ArrayList<HashMap<String, Object>> result = null;
-		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			ArrayList<OutParameter> outputParam = new ArrayList<OutParameter>();		
-			inputParam.add(new InParameter("AV_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getActionTypeCode()));	
-			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));		
-			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
-			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
-			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
-			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));	
-			inputParam.add(new InParameter("AV_PREV_SUB_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevSubmissonStatusCode()));	 
-			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevProtocolStatusCode()));	
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_QUAL_CODE", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionTypeQualCode()));	 
-			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
-			result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTCOL_ACTIONS",outputParam);		
+		try {		
+			result=protocolActionSP(vo,null);
 		    vo.setProtocolNumber(result.get(0).get("PROTOCOL_NUMBER").toString());
 		    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
 		    updateAmendRenewModule(vo);
 		    vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Amendment created successfully");	
-		} catch (Exception e) {
-			updateAmendRenewModule(vo);
+		} catch (Exception e) {																																																																																										
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("Amendment creation Failed");
 			e.printStackTrace();
@@ -355,146 +328,141 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO createRenewalProtocolActions(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result=protocolActionSP(vo,null);	
+			vo.setProtocolNumber(result.get(0).get("PROTOCOL_NUMBER").toString());
+			vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+		    vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Renewal created successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Renewal creation Failed");
+			e.printStackTrace();
+			logger.info("Exception in createRenewalProtocolActions:" + e);	
+		}
+		return vo;
 	}
 
 	@Override
 	public IRBActionsVO deleteProtocolAmendmentRenewalProtocolActions(IRBActionsVO vo) {	
+		vo=deleteProtocolActions(vo);
+		return vo;
+		
+	}
+	
+	public IRBActionsVO deleteProtocolActions(IRBActionsVO vo){
 		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getActionTypeCode()));	
-			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));		
-			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
-			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
-			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
-			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_INTEGER,vo.getUpdateUser()));	
-			inputParam.add(new InParameter("AV_PREV_SUB_STATUS_CODE", DBEngineConstants.TYPE_INTEGER,vo.getPrevSubmissonStatusCode()));	 
-			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_INTEGER,vo.getPrevProtocolStatusCode()));	
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
-			inputParam.add(new InParameter("AV_ATTACHMENTS", DBEngineConstants.TYPE_STRING,new byte[0]));
-		    dbEngine.executeFunction(inputParam,"UPD_irb_protcol_actions");
-			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Withdrawn successfully");	
+			protocolActionSP(vo,null);		
+		    vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Deleted successfully");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
-			vo.setSuccessMessage("Withdrawn Failed");
+			vo.setSuccessMessage("Deletion Failed");
 			e.printStackTrace();
-			logger.info("Exception in updateSubmissionStatus:" + e);	
+			logger.info("Exception in deleteProtocolActions:" + e);	
 		}
 		return vo;
 	}
 	
 	@Override
-	public IRBActionsVO notifyIRBProtocolActions(IRBActionsVO vo) {	
+	public IRBActionsVO notifyIRBProtocolActions(IRBActionsVO vo, MultipartFile[] files) {	
 		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getActionTypeCode()));	
-			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));		
-			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
-			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
-			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
-			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_INTEGER,vo.getUpdateUser()));	
-			inputParam.add(new InParameter("AV_PREV_SUB_STATUS_CODE", DBEngineConstants.TYPE_INTEGER,vo.getPrevSubmissonStatusCode()));	 
-			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_INTEGER,vo.getPrevProtocolStatusCode()));	
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
-			inputParam.add(new InParameter("AV_ATTACHMENTS", DBEngineConstants.TYPE_STRING,new byte[0]));
-		    dbEngine.executeFunction(inputParam,"UPD_irb_protcol_actions");
+	        protocolActionSP(vo,null);	
+	        protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Withdrawn successfully");	
+		    vo.setSuccessMessage("NotifyIRB successfully");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
-			vo.setSuccessMessage("Withdrawn Failed");
+			vo.setSuccessMessage("NotifyIRB Failed");
 			e.printStackTrace();
-			logger.info("Exception in updateSubmissionStatus:" + e);	
+			logger.info("Exception in notifyIRBProtocolActions:" + e);	
+		}
+		return vo;
+	}
+	
+	@Override
+	public IRBActionsVO requestForDataAnalysisProtocolActions(IRBActionsVO vo, MultipartFile[] files) {	
+		try {			
+			protocolActionSP(vo,null);		
+			protocolActionAttachments(files,vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Request for Data Analysis successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Request for Data Analysis Failed");
+			e.printStackTrace();
+			logger.info("Exception in requestForDataAnalysisProtocolActions:" + e);	
 		}
 		return vo;
 	}
 
 	@Override
-	public IRBActionsVO requestForDataAnalysisProtocolActions(IRBActionsVO vo) {	
-		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getActionTypeCode()));	
-			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));		
-			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
-			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
-			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
-			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
-			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_INTEGER,vo.getUpdateUser()));	
-			inputParam.add(new InParameter("AV_PREV_SUB_STATUS_CODE", DBEngineConstants.TYPE_INTEGER,vo.getPrevSubmissonStatusCode()));	 
-			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_INTEGER,vo.getPrevProtocolStatusCode()));	
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
-			inputParam.add(new InParameter("AV_ATTACHMENTS", DBEngineConstants.TYPE_STRING,new byte[0]));
-		    dbEngine.executeFunction(inputParam,"UPD_irb_protcol_actions");
+	public IRBActionsVO requestForCloseProtocolActions(IRBActionsVO vo, MultipartFile[] files) {
+		try {			
+			protocolActionSP(vo, null);
+			protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Withdrawn successfully");	
+		    vo.setSuccessMessage("Request for Close successfully");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
-			vo.setSuccessMessage("Withdrawn Failed");
+			vo.setSuccessMessage("Request for Close Failed");
 			e.printStackTrace();
-			logger.info("Exception in updateSubmissionStatus:" + e);	
+			logger.info("Exception in requestForCloseProtocolActions:" + e);	
+		}
+		return vo;	
+	}
+
+	@Override
+	public IRBActionsVO requestForCloseEnrollmentProtocolActions(IRBActionsVO vo, MultipartFile[] files) {
+		try {			
+			protocolActionSP(vo, null);
+			protocolActionAttachments(files,vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Request for Close Enrollment successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Request for Close Enrollment Failed");
+			e.printStackTrace();
+			logger.info("Exception in requestForCloseEnrollmentProtocolActions:" + e);	
 		}
 		return vo;
 	}
 
 	@Override
-	public IRBActionsVO requestForCloseProtocolActions(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IRBActionsVO requestForCloseEnrollmentProtocolActions(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IRBActionsVO requestForReopenEnrollmentProtocolActions(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+	public IRBActionsVO requestForReopenEnrollmentProtocolActions(IRBActionsVO vo, MultipartFile[] files) {
+		try {			
+			protocolActionSP(vo, null);
+			protocolActionAttachments(files,vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Request for Re-Open Enrollment successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Request for Re-Open Enrollment Failed");
+			e.printStackTrace();
+			logger.info("Exception in requestForReopenEnrollmentProtocolActions:" + e);	
+		}
+		return vo;
 	}
 
 	@Override
 	public IRBActionsVO copyProtocolActions(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-/*	
-	public void protocolActionAttachments(MultipartFile[] files) {		
-		try {					
-			ArrayList<InParameter> inputParam = null;
-			for (int i = 0; i < files.length; i++) {
-				inputParam = new ArrayList<>();
-				inputParam.add(new InParameter("AV_EXEMPT_FORM_CHECKLST_ID", DBEngineConstants.TYPE_INTEGER,));
-				inputParam.add(new InParameter("AV_IRB_PERSON_EXEMPT_FORM_ID", DBEngineConstants.TYPE_INTEGER,));
-				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,));
-				inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING, files[i].getOriginalFilename()));
-				inputParam.add(new InParameter("AV_FILE_DATA", DBEngineConstants.TYPE_BLOB, files[i].getBytes()));
-				inputParam.add(new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
-				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,));
-				inputParam.add(new InParameter("AC_TYPE", DBEngineConstants.TYPE_STRING,));
-				dbEngine.executeProcedure(inputParam, "");
-			}
-		} catch (DBException e) {
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			String newProtocolNumber = irbProtocolDao.generateProtocolNumber();
+			result=protocolActionSP(vo,newProtocolNumber);			
+			vo.setProtocolNumber(result.get(0).get("PROTOCOL_NUMBER").toString());
+			vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Copy successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Copy Failed");
 			e.printStackTrace();
-			logger.info("DBException in protocolActionAttachments method" + e);
-		}*/
+			logger.info("Exception in copyProtocolActions:" + e);	
+		}
+		return vo;
+	}
 	
 	@Override
 	public List<HashMap<String, Object>> getAmendRenewalModules(String protoocolNumber) {
@@ -505,11 +473,65 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputparams.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protoocolNumber));        
             outputParams.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));        
             result = dbEngine.executeProcedure(inputparams,"GET_IRB_AMEND_RENEWAL_MODULES",outputParams);
-
 		}catch (Exception e) {
 			logger.info("Exception in getAmendRenewalModules:" + e);
 		}
 		return result;
 	}
-
+	
+	public ArrayList<HashMap<String, Object>> protocolActionSP(IRBActionsVO vo,String newProtocolNumber){
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			ArrayList<OutParameter> outputParam = new ArrayList<OutParameter>();		
+			inputParam.add(new InParameter("AV_ACTION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getActionTypeCode()));	
+			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));		
+			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
+			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
+			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
+			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
+			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
+			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));	
+			inputParam.add(new InParameter("AV_PREV_SUB_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevSubmissonStatusCode()));	 
+			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevProtocolStatusCode()));	
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
+			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_QUAL_CODE", DBEngineConstants.TYPE_STRING,vo.getSelectedNotifyTypeQualifier()));	 
+			inputParam.add(new InParameter("AV_NEW_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,newProtocolNumber));
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
+			result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTCOL_ACTIONS",outputParam);
+		     } catch (Exception e) {	
+		        e.printStackTrace();
+		    	logger.info("Exception in updateSubmissionStatus:" + e);	
+		  }
+		return result;	
+		}
+	
+	public void protocolActionAttachments(MultipartFile[] files,IRBActionsVO vo) {		
+		try {					
+			ArrayList<InParameter> inputParam = null;
+			for (int i = 0; i < files.length; i++) {
+				inputParam = new ArrayList<>();
+				inputParam.add(new InParameter("AV_SUBMISSION_DOC_ID ", DBEngineConstants.TYPE_INTEGER,null));
+				inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolId()));
+				inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
+				inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
+				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));
+				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));
+				inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING,files[i].getOriginalFilename()));
+				inputParam.add(new InParameter("AV_DOCUMENT", DBEngineConstants.TYPE_BLOB,files[i].getBytes()));
+				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
+				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,null));
+				inputParam.add(new InParameter("AV_CONTENT_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
+				inputParam.add(new InParameter("AV_FILE_DATA_ID ", DBEngineConstants.TYPE_STRING,null));
+				inputParam.add(new InParameter("AV_TYPE ", DBEngineConstants.TYPE_STRING,"I"));			
+				dbEngine.executeProcedure(inputParam, "UPD_IRB_PROTO_ACTION_ATTACMNT");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in protocolActionAttachments method" + e);
+		}
+	}
 }

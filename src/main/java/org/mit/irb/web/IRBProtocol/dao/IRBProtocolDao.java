@@ -98,5 +98,7 @@ public interface IRBProtocolDao {
 	IRBViewProfile getUserTrainingRight(String person_Id);
 
 	Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId);
+	
+	String generateProtocolNumber();
 
 }

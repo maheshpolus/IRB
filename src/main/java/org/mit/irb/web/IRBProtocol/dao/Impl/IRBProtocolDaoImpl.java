@@ -575,7 +575,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		}
 		 hibernateTemplate.saveOrUpdate(generalInfo);			
 		 irbProtocolVO.setGeneralInfo(generalInfo);
-		 if(vo.getAcType().equals("I")){
+		 if (vo.getAcType() != null){
 			 status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
 			 vo.setProtocolSubmissionStatuses(status);
 			 irbAcionDao.updateActionStatus(vo);
@@ -802,7 +802,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 					case "008":
 						protocolRenewalDetail.setAddModifyNoteAttachments(true);
 						break;
-					case "005":
+					case "024":
 						protocolRenewalDetail.setFundingSource(true);
 						break;
 					case "004":

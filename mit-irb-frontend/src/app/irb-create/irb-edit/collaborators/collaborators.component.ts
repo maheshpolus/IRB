@@ -121,7 +121,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   loadEditDetails() {
-    this.isCollaboratorEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.subject : true;
+    this.isCollaboratorEditable =
+    this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.engangedInstitution : true;
     this.collaboratorNames = this._completerService.
       local(this.commonVo.collaboratorNames, 'organizationName,organizationId', 'organizationName');
     this.generalInfo = this.commonVo.generalInfo;

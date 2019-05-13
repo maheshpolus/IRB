@@ -1,5 +1,8 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
@@ -19,7 +22,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 
 	@Override
 	public IRBActionsVO getPersonRight(IRBActionsVO vo) {
-		 vo=irbActionsDao.getPersonRight(vo);
+		 vo = irbActionsDao.getPersonRight(vo);
 		return vo;
 	}
 
@@ -68,5 +71,39 @@ public class IRBActionsServImpl implements IRBActionsService {
 			break;
 		}
 		return vo;
+	}
+
+	@Override
+	public IRBActionsVO getAmendRenwalSummary(IRBActionsVO vo) {
+		IRBActionsVO irbActionsVO = new IRBActionsVO();
+		try{
+			ArrayList<HashMap<String, Object>> renewalModules = null;
+			renewalModules = irbActionsDao.iterateAmendRenewalModule(vo,renewalModules);	
+			irbActionsVO.setModuleAvailableForAmendment(renewalModules);
+			irbActionsVO.setComment(irbActionsDao.getAmendRenewalSummary(vo));
+			irbActionsVO.setProtocolStatus(vo.getPrevProtocolStatusCode());
+			irbActionsVO.setSuccessCode(true);
+		} catch (Exception e) {
+			irbActionsVO.setSuccessCode(false);
+			irbActionsVO.setSuccessMessage("Get AmendRenwalSummary Failed");
+			logger.info("Exception in getAmendRenwalSummary:" + e);
+		}
+		return irbActionsVO;
+	}
+
+	@Override
+	public IRBActionsVO updateAmendRenwalSummary(IRBActionsVO vo) {
+		IRBActionsVO irbActionsVO = new IRBActionsVO();
+		try{
+ 			irbActionsDao.updateAmendRenewModule(vo);
+			irbActionsVO = getAmendRenwalSummary(vo);
+			irbActionsVO.setSuccessCode(true);
+			irbActionsVO.setSuccessMessage("Updated Amendment Renewal Summary");
+		} catch (Exception e) {
+			irbActionsVO.setSuccessCode(false);
+			irbActionsVO.setSuccessMessage("Get AmendRenwalSummary Failed");
+			logger.info("Exception in getAmendRenwalSummary:" + e);
+		}
+		return irbActionsVO;
 	}
 }

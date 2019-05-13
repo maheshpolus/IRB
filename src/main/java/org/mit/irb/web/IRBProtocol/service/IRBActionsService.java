@@ -17,4 +17,16 @@ public interface IRBActionsService {
 	 * @return
 	 */
 	IRBActionsVO performProtocolActions(IRBActionsVO vo, MultipartFile[] files);
+
+	/**
+	 * @param vo
+	 * @return List of modified modules
+	 */
+	IRBActionsVO getAmendRenwalSummary(IRBActionsVO vo);
+
+	/**
+	 * @param vo
+	 * @return update the modules and summary section
+	 */
+	IRBActionsVO updateAmendRenwalSummary(IRBActionsVO vo);
 }

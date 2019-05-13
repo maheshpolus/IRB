@@ -1,5 +1,6 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,4 +36,10 @@ public interface IRBActionsDao {
 	List<HashMap<String, Object>> getAmendRenewalModules(String protoocolNumber);
 	
 	void updateActionStatus(IRBActionsVO vo);
+
+	ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo,ArrayList<HashMap<String, Object>> renewalModules);
+
+	String getAmendRenewalSummary(IRBActionsVO vo);
+
+	IRBActionsVO updateAmendRenewModule(IRBActionsVO vo);
 }

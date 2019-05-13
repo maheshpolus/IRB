@@ -43,6 +43,10 @@ public class DashboardDaoImpl implements DashboardDao{
 		DashboardProfile profile = new DashboardProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		ArrayList<InParameter> inputParams = new ArrayList<>();
+		ArrayList<OutParameter> outputParams = new ArrayList<>();
+
+		ArrayList<HashMap<String, Object>> permissionList = null;
 		inputParam.add(new InParameter("PERSON_ID", DBEngineConstants.TYPE_STRING, personId));
 		inputParam.add(new InParameter("PERSON_ROLE_TYPE", DBEngineConstants.TYPE_STRING, personRoleType));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
@@ -55,6 +59,18 @@ public class DashboardDaoImpl implements DashboardDao{
 				}
 				else if (personRoleType.equals("ADMIN")||personRoleType.equals("CHAIR")){
 					getAdminSnaspshots(profile, result);
+				}
+			}		
+			inputParams.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,personId));	
+			outputParams.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));		
+			permissionList = dBEngine.executeProcedure(inputParams,"GET_IRB_PERSON_PERMISSION", outputParams);
+			if(permissionList !=null && !permissionList.isEmpty()){			
+				for(HashMap<String,Object> permName : permissionList){							
+					if(permName.get("PERM_NM").toString().equals("Create ProtocolDocument")){
+						profile.setCanCreateProtocol(true);
+					}else{
+						profile.setCanCreateProtocol(false);
+					}
 				}
 			}
 		} catch (Exception e) {

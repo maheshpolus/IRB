@@ -19,6 +19,7 @@ public class DashboardProfile {
 	private ArrayList<HashMap<String, Object>> dashBoardDetailMap;
 	private ArrayList<HashMap<String, Object>> dashboardExemptCardDetails;
 	private List<ProtocolSubmissionStatus> protocolSubmissionStatusList;
+	private  Boolean canCreateProtocol;
 	
 	public ArrayList<HashMap<String, Object>> getDashboardExemptCardDetails() {
 		return dashboardExemptCardDetails;
@@ -58,5 +59,13 @@ public class DashboardProfile {
 
 	public void setProtocolSubmissionStatusList(List<ProtocolSubmissionStatus> protocolSubmissionStatusList) {
 		this.protocolSubmissionStatusList = protocolSubmissionStatusList;
+	}
+
+	public Boolean getCanCreateProtocol() {
+		return canCreateProtocol;
+	}
+
+	public void setCanCreateProtocol(Boolean canCreateProtocol) {
+		this.canCreateProtocol = canCreateProtocol;
 	}
 }

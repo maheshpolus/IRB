@@ -1206,6 +1206,110 @@
 			],
 			"primary_key": ["TRAINING_CODE"],
 			"dependency": []
+		},{
+			"group": "Protocol",
+			"codetable_name": "Protocol Available Actions",
+			"description": "Short description on Available Actions",
+			"database_table_name": "IRB_PROTOCOL_AVAILABLE_ACTIONS",
+			"fields": [{
+					"column_name": "AVAILABLE_ACTION_ID",
+					"display_name": "Available Action Id",
+					"data_type": "Integer",
+					"is_editable": "false",
+					"length": "10",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "ACTION_CODE",
+					"display_name": "Action Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "ACTION_DESCRIPTION",
+					"display_name": "Action Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "ACTION_NAME",
+					"display_name": "Action Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "ICON_CLASS_NAME",
+					"display_name": "Icon Class Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "PERMISSION_NAME",
+					"display_name": "Permission Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_CURNT_STATUS_CODE",
+					"display_name": "Current Status Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_NEXT_STATUS_CODE",
+					"display_name": "Next Status Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_SUBMS_NEXT_STATUS_CODE",
+					"display_name": "Next Submission Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_SUBMS_STATUS_CODE",
+					"display_name": "Current Submission Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["AVAILABLE_ACTION_ID"],
+			"dependency": []
 		}
 	]
 }

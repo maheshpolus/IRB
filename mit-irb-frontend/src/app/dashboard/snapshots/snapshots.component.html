@@ -56,14 +56,14 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards link-card mt-12">
+		<div class="col-12 top-cards link-card mt-12" style="height: 88%;">
 			<ul>
 				<li>
 					<a class="pdf" (click)="goToQuestionaire()">
 						<i class="fa fa-check-square-o"></i>Start Exempt Evaluation
 					</a>
 				</li>
-				<li>
+				<li *ngIf="result.canCreateProtocol">
 					<a class="pdf" (click)="goToCreateProtocol()">
 						<i class="fa fa-plus"></i>Create Protocol
 					</a>

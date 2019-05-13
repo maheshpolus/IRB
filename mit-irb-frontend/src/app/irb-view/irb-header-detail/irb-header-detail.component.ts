@@ -104,8 +104,12 @@ export class IrbHeaderDetailComponent implements OnInit {
   }
 
   isAmmendmentOrRenewal() {
+    if (this.requestObject.protocolNumber !== null && this.requestObject.protocolNumber !== undefined) {
     const isammendmentOrRenewal = this.requestObject.protocolNumber.includes('A') ||
     this.requestObject.protocolNumber.includes('R') ? true : false;
     return isammendmentOrRenewal;
+    } else {
+        return false;
+    }
   }
 }

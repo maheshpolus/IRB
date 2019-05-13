@@ -227,6 +227,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.actionTypeCode = this.currentActionPerformed.ACTION_CODE;
     this.IRBActionsVO.createUser = this.userDTO.userName;
     this.IRBActionsVO.updateUser = this.userDTO.userName;
+    this.IRBActionsVO.personAction = this.currentActionPerformed;
   }
 
 

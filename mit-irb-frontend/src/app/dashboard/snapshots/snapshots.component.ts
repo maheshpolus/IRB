@@ -12,7 +12,7 @@ import { DashboardService } from '../dashboard.service';
 export class SnapshotsComponent implements OnInit {
 
     @Input() userDTO: any;
-    result: any;
+    result: any = {};
     snapshots: any = [];
     requestObject = {
             personId : '',

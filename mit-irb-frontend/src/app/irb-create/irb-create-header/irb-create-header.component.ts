@@ -64,6 +64,9 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
       }
     });
     this.getIRBProtocol();
+    if (this.isAmmendmentOrRenewal()) {
+      this.show_current_tab('irbSummaryDetails');
+    }
   }
 
   ngOnDestroy() {
@@ -109,5 +112,10 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   backClick(event) {
     event.preventDefault();
       this._router.navigate(['/irb/dashboard']);
+    }
+
+    isAmmendmentOrRenewal() {
+      const isammendmentOrRenewal = this.protocolNumber.includes('A') || this.protocolNumber.includes('R') ? true : false;
+      return isammendmentOrRenewal;
     }
 }

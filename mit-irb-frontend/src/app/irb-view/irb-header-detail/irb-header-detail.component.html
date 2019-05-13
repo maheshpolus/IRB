@@ -144,6 +144,10 @@
 		 routerLinkActive="btnactive" (click)="show_current_tab('irbActions')">
 			<i class="fa fa-cog" aria-hidden="true"></i>Actions
 		</button>
+		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
+		 routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
+			<i class="fa fa-cog" aria-hidden="true"></i>Summary Details
+		</button>
 	</section>
 </div>
 <div>

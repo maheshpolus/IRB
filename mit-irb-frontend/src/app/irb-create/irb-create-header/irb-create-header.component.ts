@@ -115,7 +115,11 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     }
 
     isAmmendmentOrRenewal() {
+      if (this.protocolNumber !== null && this.protocolNumber !== undefined ) {
       const isammendmentOrRenewal = this.protocolNumber.includes('A') || this.protocolNumber.includes('R') ? true : false;
       return isammendmentOrRenewal;
+      } else {
+        return false;
+      }
     }
 }

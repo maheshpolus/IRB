@@ -49,4 +49,17 @@ public class IRBActionsController {
 		return vo;
 	}
 	
+	@RequestMapping(value = "/getAmendRenwalSummary", method = RequestMethod.POST)
+	public @ResponseBody IRBActionsVO getAmendRenwalSummary(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getAmendRenwalSummary(vo);
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateAmendRenwalSummary", method = RequestMethod.POST)
+	public @ResponseBody IRBActionsVO updateAmendRenwalSummary(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateAmendRenwalSummary(vo);
+		return vo;
+	}
 }

@@ -124,6 +124,10 @@
 </div>
 <div class="container-fluid">
 	<section class="row btn-row-med sect-padding">
+			<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
+			routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
+			   <i class="fa fa-cog" aria-hidden="true"></i>Summary Details
+		   </button>
 		<button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
 		 (click)="show_current_tab('irb_overView')" routerLinkActive="btnactive">
 			<i class="fa fa-home" aria-hidden="true"></i>General
@@ -144,10 +148,7 @@
 		 routerLinkActive="btnactive" (click)="show_current_tab('irbActions')">
 			<i class="fa fa-cog" aria-hidden="true"></i>Actions
 		</button>
-		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
-		 routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
-			<i class="fa fa-cog" aria-hidden="true"></i>Summary Details
-		</button>
+		
 	</section>
 </div>
 <div>

@@ -7,6 +7,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 
 public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> personActionsList;
+	private HashMap<String, Object> personAction;
 	private Integer personID;
 	private String protocolNumber;
 	private String submissionStatus;
@@ -221,5 +222,13 @@ public class IRBActionsVO {
 
 	public void setSubmissionId(String submissionId) {
 		this.submissionId = submissionId;
+	}
+
+	public HashMap<String, Object> getPersonAction() {
+		return personAction;
+	}
+
+	public void setPersonAction(HashMap<String, Object> personAction) {
+		this.personAction = personAction;
 	}
 }

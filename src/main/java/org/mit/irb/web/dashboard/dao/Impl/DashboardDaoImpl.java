@@ -64,12 +64,11 @@ public class DashboardDaoImpl implements DashboardDao{
 			inputParams.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,personId));	
 			outputParams.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));		
 			permissionList = dBEngine.executeProcedure(inputParams,"GET_IRB_PERSON_PERMISSION", outputParams);
+			profile.setCanCreateProtocol(false);
 			if(permissionList !=null && !permissionList.isEmpty()){			
 				for(HashMap<String,Object> permName : permissionList){							
 					if(permName.get("PERM_NM").toString().equals("Create ProtocolDocument")){
 						profile.setCanCreateProtocol(true);
-					}else{
-						profile.setCanCreateProtocol(false);
 					}
 				}
 			}

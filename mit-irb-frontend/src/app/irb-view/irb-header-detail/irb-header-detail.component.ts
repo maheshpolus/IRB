@@ -55,6 +55,11 @@ export class IrbHeaderDetailComponent implements OnInit {
       this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
       this.previousUrl = this._activatedRoute.snapshot.queryParamMap.get('from');
       this.loadHeaderDetails();
+      if (this.isAmmendmentOrRenewal()) {
+        this.show_current_tab('irbSummaryDetails');
+        this.router.navigate(['/irb/irb-view/irbSummaryDetails'],
+        { queryParams: { protocolNumber: this.requestObject.protocolNumber } });
+      }
   }
 
   /**sets current tab value to identify which tabs has been clicked */
@@ -96,5 +101,11 @@ export class IrbHeaderDetailComponent implements OnInit {
       // event.preventDefault();
       // this.router.navigate(['/irb/dashboard']);
      // this.location.back();
+  }
+
+  isAmmendmentOrRenewal() {
+    const isammendmentOrRenewal = this.requestObject.protocolNumber.includes('A') ||
+    this.requestObject.protocolNumber.includes('R') ? true : false;
+    return isammendmentOrRenewal;
   }
 }

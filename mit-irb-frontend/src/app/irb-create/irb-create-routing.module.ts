@@ -9,6 +9,7 @@ import { IrbActionsComponent } from './irb-actions/irb-actions.component';
 import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
 import { SubmissionDetailsComponent } from './irb-create-histroy/submission-details/submission-details.component';
+import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-details.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'irbHistory', component: IrbCreateHistroyComponent },
       { path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent },
       { path: 'irbActions', component: IrbActionsComponent, resolve: { irb: DashboardResolverService } },
+      { path: 'irbSummaryDetails', component: IrbSummaryDetailsComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } },
       { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },
       { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }

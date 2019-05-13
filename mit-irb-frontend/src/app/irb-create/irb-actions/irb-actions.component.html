@@ -36,7 +36,7 @@
               </div>
             </ng-container>
             <ng-container *ngIf="personActionsList == null || personActionsList.length == 0">
-                <div class="col-12 text-center">You donot have any available actions in this protocol</div>
+                <div class="col-12 text-center">You don't have any available actions in this protocol</div>
             </ng-container>
 
               <!--<div class="col-lg-4 bottom-space-15">
@@ -630,7 +630,7 @@
 						<div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
 								<input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="module.AC_TYPE='U'"/>
 						
-								<span *ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
+								<span [ngStyle]="{'color': module.IS_EDITABLE == 'N' ? 'grey' : ''}"*ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
 					
 						</div>
 					</div>

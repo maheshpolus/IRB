@@ -104,6 +104,10 @@
 			 [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbActions')">
 				<i class="fa  fa-cog" aria-hidden="true"></i>Actions
 			</button>
+			<button class="btn btn-primary" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" type="submit" [routerLink]="['irbSummaryDetails']" routerLinkActive="btnactive"
+			[ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbSummaryDetails')">
+			   <i class="fa  fa-cog" aria-hidden="true"></i>Summary Details
+		   </button>
 		</section>
 	</div>
 </div>

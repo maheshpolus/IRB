@@ -107,4 +107,12 @@ performProtocolActions(iRBActionsVo: Object, uploadedFile) {
   this.formData.append('formDataJson', JSON.stringify(iRBActionsVo));
   return this._http.post('/mit-irb/performProtocolActions', this.formData);
 }
+
+getAmendRenwalSummary(param) {
+  return this._http.post('/mit-irb/getAmendRenwalSummary', param);
+}
+
+updateAmendRenwalSummary(param) {
+  return this._http.post('/mit-irb/updateAmendRenwalSummary', param);
+}
 }

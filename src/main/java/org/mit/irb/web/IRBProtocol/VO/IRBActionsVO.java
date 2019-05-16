@@ -1,5 +1,6 @@
 package org.mit.irb.web.IRBProtocol.VO;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -31,6 +32,8 @@ public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> amendRenewalModules;
 	private String selectedNotifyTypeQualifier;
 	private String submissionId;
+	private String actionDate;
+	private Date sqlActionDate;
 	
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
@@ -230,5 +233,21 @@ public class IRBActionsVO {
 
 	public void setPersonAction(HashMap<String, Object> personAction) {
 		this.personAction = personAction;
+	}
+
+	public String getActionDate() {
+		return actionDate;
+	}
+
+	public void setActionDate(String actionDate) {
+		this.actionDate = actionDate;
+	}
+
+	public Date getSqlActionDate() {
+		return sqlActionDate;
+	}
+
+	public void setSqlActionDate(Date sqlActionDate) {
+		this.sqlActionDate = sqlActionDate;
 	}
 }

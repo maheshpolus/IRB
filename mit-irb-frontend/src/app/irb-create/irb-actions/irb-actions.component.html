@@ -571,31 +571,32 @@
 
         <div class="col-md-12">
           <div class="form-group">
-            <label *ngIf="currentActionPerformed?.ACTION_CODE != '303'">Reason To Delete</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303'">Comments</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '992'">Reason To Delete</label>
             <label *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</label>
             <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment"placeholder="Reason"></textarea>
           </div>
         </div>
-
-        <!-- <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '119'">
-          <div class="form-group">
+        <!--For withdraw and delete action date not required-->
+        <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303'">
+                     <div class="form-group">
             <label>Action Date</label>
             <div class="input-group date-pickr-1 mb-3">
-              <input type="text" class="form-control" [owlDateTime]="actionDate" placeholder="mm/dd/yyyy">
+              <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDate" placeholder="mm/dd/yyyy" >
               <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDate">
                 
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 
               </div>
               <owl-date-time [pickerType]="'calendar'" #actionDate></owl-date-time>
-            </div> -->
-            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> 
+            </div> 
+            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
           </div>
-        </div>-->
+        </div>
 
         <div class="modal-footer btn-row-med text-center">
-            <button  *ngIf="currentActionPerformed?.ACTION_CODE != '303'" type="button margin-class" class="btn btn-primary tab_btn" (click)="openDeleteWarning()" data-dismiss="modal">Delete</button>
-          <button  *ngIf="currentActionPerformed?.ACTION_CODE == '303'" type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
+            <button  *ngIf="currentActionPerformed?.ACTION_CODE == '992'" type="button margin-class" class="btn btn-primary tab_btn" (click)="openDeleteWarning()" data-dismiss="modal">Delete</button>
+          <button  *ngIf="currentActionPerformed?.ACTION_CODE != '992'" type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{actionButtonName}}</button>
           <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
 
         </div>

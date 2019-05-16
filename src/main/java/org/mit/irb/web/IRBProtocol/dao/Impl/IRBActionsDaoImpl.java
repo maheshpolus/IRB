@@ -1,6 +1,5 @@
 package org.mit.irb.web.IRBProtocol.dao.Impl;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -241,6 +240,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,vo.getAcType()));
 			inputParam.add(new InParameter("AV_PROTOCOL_ACTION_ID", DBEngineConstants.TYPE_STRING,null));
 			inputParam.add(new InParameter("AV_SYSTEM_COMMENT", DBEngineConstants.TYPE_STRING,null));
+			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
 		    dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTOCOL_LOG_ACTION");
 		    vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Submitted Successfully");
@@ -474,7 +474,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
 		inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
 		inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-		inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,null));		
+		inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,vo.getSqlActionDate()));		
 		inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
 		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
 		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
@@ -595,5 +595,65 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			vo.setSuccessMessage("updateSummarryData Failed");
 			logger.info("Exception in updateSummarryData:" + e);	
 		}		
+	}
+
+	@Override
+	public IRBActionsVO returnToPiAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Returned to PI successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Return to PI Failed");
+			e.printStackTrace();
+			logger.info("Exception in returnToPiAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO closeAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("CLosed successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Close Failed");
+			e.printStackTrace();
+			logger.info("Exception in closeAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Dissapproved successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Dissapprove Failed");
+			e.printStackTrace();
+			logger.info("Exception in disapproveAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("IRB Acknowledgement successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("IRB Acknowledgement Failed");
+			e.printStackTrace();
+			logger.info("Exception in irbAcknowledgementAdminActions:" + e);	
+		}
+		return vo;
 	}
 }

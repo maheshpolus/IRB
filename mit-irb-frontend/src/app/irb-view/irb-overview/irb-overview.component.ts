@@ -137,7 +137,7 @@ export class IrbOverviewComponent implements OnInit {
 
   /**calls service to load funding details of protocol */
   loadFundingDetails() {
-    this._spinner.show();
+    // this._spinner.show();
     this._irbViewService.getIrbFundingDetails( this.requestObject ).subscribe( data => {
           this.result = data || [];
           if ( this.result != null ) {
@@ -152,7 +152,7 @@ export class IrbOverviewComponent implements OnInit {
                console.log( 'Error in method loadFundingDetails()', error );
           },
           () => {
-              this._spinner.hide();
+            //   this._spinner.hide();
           }
       );
   }

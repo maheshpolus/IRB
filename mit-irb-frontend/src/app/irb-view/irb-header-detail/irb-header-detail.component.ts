@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { IrbViewService } from '../irb-view.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-irb-header-detail',
@@ -27,7 +28,8 @@ export class IrbHeaderDetailComponent implements OnInit {
   };
 
   constructor(private router: Router, private _activatedRoute: ActivatedRoute,
-    private _irbViewService: IrbViewService, private _http: HttpClient, private _sharedDataService: SharedDataService) {
+    private _irbViewService: IrbViewService, private _http: HttpClient,
+    private _spinner: NgxSpinnerService, private _sharedDataService: SharedDataService) {
         this.router.events.subscribe((evt: any) => {
             if (evt instanceof NavigationEnd) {
               if (evt.url === '/irb/irb-view/irbOverview?protocolNumber=' + this.requestObject.protocolNumber) {
@@ -64,7 +66,9 @@ export class IrbHeaderDetailComponent implements OnInit {
 
   /**sets current tab value to identify which tabs has been clicked */
   loadHeaderDetails() {
+      this._spinner.show();
             this._irbViewService.getIrbHeaderDetails( this.requestObject ).subscribe( data => {
+                this._spinner.hide();
               this.result = data || [];
               if ( this.result != null ) {
                   this.irbHeaderDetails = this.result.irbViewHeader;

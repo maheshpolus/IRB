@@ -1,5 +1,7 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,16 +32,16 @@ public class IRBActionsServImpl implements IRBActionsService {
 	public IRBActionsVO performProtocolActions(IRBActionsVO vo,MultipartFile[] files) {		
 		switch (vo.getActionTypeCode()) {
 		case "101":			
-			vo = irbActionsDao.submitForReviewProtocolActions(vo);//1,10
+			vo = irbActionsDao.submitForReviewProtocolActions(vo);
 			break;
 		case "303":
-		   vo = irbActionsDao.withdrawProtocolActions(vo);//5
+		   vo = irbActionsDao.withdrawProtocolActions(vo);
 			break;
 		case "103":
-			vo = irbActionsDao.createAmendmentProtocolActions(vo);//2
+			vo = irbActionsDao.createAmendmentProtocolActions(vo);
 			break;
 		case "102":
-			vo = irbActionsDao.createRenewalProtocolActions(vo);//3
+			vo = irbActionsDao.createRenewalProtocolActions(vo);
 			break;
 		case "992":
 			if(vo.getProtocolNumber().contains("A")){
@@ -49,25 +51,41 @@ public class IRBActionsServImpl implements IRBActionsService {
 			}else{
 				vo.setActionTypeCode("124");
 			}
-			vo = irbActionsDao.deleteProtocolAmendmentRenewalProtocolActions(vo);//11  deleteproto, 120,121
+			vo = irbActionsDao.deleteProtocolAmendmentRenewalProtocolActions(vo);
 			break;			
 		case "116":			
-			vo = irbActionsDao.notifyIRBProtocolActions(vo,files);//4
+			vo = irbActionsDao.notifyIRBProtocolActions(vo,files);
 			break;
 		case "114":
-			vo = irbActionsDao.requestForDataAnalysisProtocolActions(vo,files);//8
+			vo = irbActionsDao.requestForDataAnalysisProtocolActions(vo,files);
 			break;
 		case "105":
-			vo = irbActionsDao.requestForCloseProtocolActions(vo,files);//9
+			vo = irbActionsDao.requestForCloseProtocolActions(vo,files);
 			break;
 		case "108":
-			vo = irbActionsDao.requestForCloseEnrollmentProtocolActions(vo,files);//6
+			vo = irbActionsDao.requestForCloseEnrollmentProtocolActions(vo,files);
 			break;
 		case "115":
-			vo = irbActionsDao.requestForReopenEnrollmentProtocolActions(vo,files);//7
+			vo = irbActionsDao.requestForReopenEnrollmentProtocolActions(vo,files);
 			break;
 		case "911":
-			vo = irbActionsDao.copyProtocolActions(vo);//12 911-copy  910 modify amendmnt
+			vo = irbActionsDao.copyProtocolActions(vo);
+			break;
+		case "213":		
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.returnToPiAdminActions(vo);
+			break;
+		case "300":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.closeAdminActions(vo);
+			break;
+		case "304":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.disapproveAdminActions(vo);
+			break;
+		case "209":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.irbAcknowledgementAdminActions(vo);
 			break;
 		}
 		return vo;
@@ -105,5 +123,21 @@ public class IRBActionsServImpl implements IRBActionsService {
 			logger.info("Exception in getAmendRenwalSummary:" + e);
 		}
 		return irbActionsVO;
+	}
+	
+	public IRBActionsVO generateSqlActionDate(IRBActionsVO vo){
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date utilActionDate = null;
+		java.sql.Date sqlActionDate= null;
+		if (vo.getActionDate()!= null) {
+			try {
+				utilActionDate = sdf.parse(vo.getActionDate());
+			} catch (ParseException e) {				
+				e.printStackTrace();
+			}
+			sqlActionDate = new java.sql.Date(utilActionDate.getTime());
+			vo.setSqlActionDate(sqlActionDate);			
+		}
+		return vo;
 	}
 }

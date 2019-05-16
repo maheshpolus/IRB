@@ -42,4 +42,12 @@ public interface IRBActionsDao {
 	String getAmendRenewalSummary(IRBActionsVO vo);
 
 	IRBActionsVO updateAmendRenewModule(IRBActionsVO vo);
+
+	IRBActionsVO returnToPiAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO closeAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO disapproveAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo);
 }

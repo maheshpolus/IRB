@@ -32,9 +32,46 @@
 									<span>{{piName}}</span>
 								</p>
 							</div>
-							<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
+							<!-- <div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
 								<span class="active-en pending-action">{{generalInfo?.protocolStatus?.description}}</span>
-							</div>
+							</div> -->
+
+
+							<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
+									<span class="active-en" [ngClass]="{
+											'active-status': (generalInfo?.protocolStatus?.protocolStatusCode=='200'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '201'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '202'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '901'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '400'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '401'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '203'),
+											'in-drafts': (generalInfo?.protocolStatus?.protocolStatusCode=='309'||
+															 generalInfo?.protocolStatus?.protocolStatusCode=='310'),
+											'pending-action': (generalInfo?.protocolStatus?.protocolStatusCode=='100'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '103'||
+															 generalInfo?.protocolStatus?.protocolStatusCode=='105'||
+															 generalInfo?.protocolStatus?.protocolStatusCode=='106'||
+															 generalInfo?.protocolStatus?.protocolStatusCode=='107'||
+															 generalInfo?.protocolStatus?.protocolStatusCode=='900'),
+											'revision-required': (generalInfo?.protocolStatus?.protocolStatusCode=='102'||
+															 generalInfo?.protocolStatus?.protocolStatusCode== '104'),
+											'submitted' :   generalInfo?.protocolStatus?.protocolStatusCode=='101',
+											'completed-closed': (generalInfo?.protocolStatus?.protocolStatusCode=='103'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '300'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '301'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '304'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '305'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '306'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '307'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '313'),
+										'suspended': (generalInfo?.protocolStatus?.protocolStatusCode=='302'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '308'||
+															generalInfo?.protocolStatus?.protocolStatusCode== '311')}">{{generalInfo?.protocolStatus?.description}}</span>
+									<!-- <i class="fa fa-exclamation-triangle ml-10" *ngIf="irbHeaderDetails?.IS_NEW_RULE=='N'" title="Follows OLD-RULE" aria-hidden="true"></i> -->
+								</div>
+
+
 							<div class="i-icon-top">
 								<span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne"
 								 aria-expanded="false" aria-controls="collapseOne"> </span>

@@ -188,7 +188,7 @@
                       <th scope="col">Affiliation</th>
                       <th scope="col">Obtained Consent</th>
                       <th scope="col">Training Completed</th>
-                      <th scope="col" width="10%">Action</th>
+                      <th scope="col" width="12%">Action</th>
                     </tr>
     
               </thead>
@@ -232,7 +232,7 @@
                       <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
                       <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
                   </td>
-                  <td class="action-btn-list" width="10%" *ngIf="isPersonnelInfoEditable">
+                  <td class="action-btn-list" width="12%" *ngIf="isPersonnelInfoEditable">
                     <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button"
                       class="btn btn-primary edit-btn-1">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -295,7 +295,7 @@
                       <th scope="col">Affiliation</th>
                       <th scope="col">Obtained Consent</th>
                       <th scope="col">Training Completed</th>
-                      <th scope="col" width="10%">Action</th>
+                      <th scope="col" width="12%">Action</th>
                     </tr>
               </thead>
               <tbody class="tbody-font-size">
@@ -316,7 +316,7 @@
                       <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
                       <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
                   </td>
-                  <td class="action-btn-list" width="10%">
+                  <td class="action-btn-list" width="12%">
                     <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>

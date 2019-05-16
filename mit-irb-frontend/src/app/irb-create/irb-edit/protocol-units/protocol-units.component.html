@@ -119,14 +119,14 @@
           </button>
         </div>
         <div class="modal-body">
-          <p *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode != '1'">Are you sure you want to delete this item?</p>
-          <p *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode == '1'">You cannot delete lead Unit.</p>
+          <p *ngIf="commonVo?.protocolLeadUnits?.unitType?.unitTypeCode != '1'">Are you sure you want to delete this item?</p>
+          <p *ngIf="commonVo?.protocolLeadUnits?.unitType?.unitTypeCode == '1'">You cannot delete lead Unit.</p>
         </div>
-        <div class="modal-footer" *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode != '1'">
+        <div class="modal-footer" *ngIf="commonVo?.protocolLeadUnits?.unitType?.unitTypeCode != '1'">
           <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
           <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveProtocolUnit('DELETE');" data-dismiss="modal">Yes</button>
         </div>
-        <div class="modal-footer" *ngIf="commonVo.protocolLeadUnits.unitType.unitTypeCode == '1'">
+        <div class="modal-footer" *ngIf="commonVo?.protocolLeadUnits?.unitType?.unitTypeCode == '1'">
             <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">Ok</button>
           </div>
       </div>

@@ -59,7 +59,7 @@
                             <td>
                               <ul class="actionButtonGroup padding-icons">
                                 <li>
-                                  <a title="Delete Attachment" (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
+                                  <a *ngIf="isAttachmentEditable" title="Delete Attachment" (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
                                     <i class="fa fa-trash-o delete-color"></i>
                                   </a>
                                 </li>
@@ -69,7 +69,7 @@
                                   </a>
                                 </li>
                                 <li>
-                                  <a (click)="editAttachments(attachments,i,false)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
+                                  <a *ngIf="isAttachmentEditable" (click)="editAttachments(attachments,i,false)" data-toggle="modal" data-target="#attachmentModal" title="Edit Attachment">
                                     <i class="fa fa-edit edit-color"></i>
                                   </a>
                                 </li>

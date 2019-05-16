@@ -40,8 +40,8 @@ export class IrbSummaryDetailsComponent implements OnInit, OnDestroy {
       this.requestObject.protocolNumber = params['protocolNumber'];
      // this.protocolId = params['protocolId'];
       this.isAmendment  = this.requestObject.protocolNumber.includes('A') ? true : false;
-      this.loadInitDetails();
-      this.getProtocolcolStatus();
+      this.getProtocolcolDetails();
+      this.loadSummaryDetails();
     });
   }
 
@@ -54,17 +54,21 @@ export class IrbSummaryDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-getProtocolcolStatus() {
+  getProtocolcolDetails() {
   this.createOrViewPath = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
     if (this.createOrViewPath === 'irb-create') {
+      // this._spinner.show();
       this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe((commonVo: any) => {
+        // this._spinner.hide();
         if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
           this.protocolStatus = commonVo.generalInfo.protocolStatus.protocolStatusCode;
           this.sequenceNumber = commonVo.generalInfo.sequenceNumber;
         }
       });
     } else {
+      // this._spinner.show();
       this.$subscription2 = this._sharedDataService.viewProtocolDetailsVariable.subscribe((commonVo: any) => {
+        //   this._spinner.hide();
         if (commonVo !== undefined && commonVo != null) {
           this.protocolStatus = commonVo.PROTOCOL_STATUS_CODE;
           this.sequenceNumber = commonVo.SEQUENCE_NUMBER;
@@ -73,10 +77,10 @@ getProtocolcolStatus() {
     }
 }
 
-loadInitDetails() {
-  this._spinner.show();
+loadSummaryDetails() {
+  // this._spinner.show();
   this._irbCreateService.getAmendRenwalSummary(this.requestObject).subscribe( data => {
-    this._spinner.hide();
+  // this._spinner.hide();
     this.irbSummaryVo = data;
     this.moduleAvailableForAmendment = this.irbSummaryVo.moduleAvailableForAmendment;
   }

@@ -18,6 +18,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 
   protocolNumber = null;
   protocolId = null;
+  currentActionDate = null;
   generalInfo = {};
   userDTO: any = {};
   IRBActionsVO: any = {};
@@ -34,6 +35,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   committees = [];
   scheduleDates = [];
   createOrViewPath: string;
+  actionButtonName: string;
 
   uploadedFile: File[] = [];
   files: UploadFile[] = [];
@@ -165,8 +167,21 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.uploadedFile = [];
     if (action.ACTION_CODE === '101') { // Submit
       document.getElementById('submitModalBtn').click();
-    } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303') {
-      // Delete Protocol,Withdraw
+    } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
+    action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
+    || action.ACTION_CODE === '304' || action.ACTION_CODE === '209') {
+      if ( action.ACTION_CODE === '213' ) {
+        this.actionButtonName = 'Return';
+      } else if ( action.ACTION_CODE === '300' ) {
+        this.actionButtonName = 'Close';
+      } else  {
+        this.actionButtonName = 'Save';
+      }
+      // Delete Protocol, Withdraw, return to PI, Close, disapprove, irb-Acknowledgment
+      if ( action.ACTION_CODE === '213' || action.ACTION_CODE === '300' ||
+      action.ACTION_CODE === '304' || action.ACTION_CODE === '209') {
+        this.IRBActionsVO.actionDate = new Date();
+      }
       document.getElementById('commentModalBtn').click();
     } else if (action.ACTION_CODE === '114' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
       action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
@@ -228,6 +243,22 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.createUser = this.userDTO.userName;
     this.IRBActionsVO.updateUser = this.userDTO.userName;
     this.IRBActionsVO.personAction = this.currentActionPerformed;
+    if ( this.currentActionPerformed.ACTION_CODE === '213' || this.currentActionPerformed.ACTION_CODE === '300' ||
+    this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '209') {
+      this.IRBActionsVO.actionDate = this.IRBActionsVO.actionDate != null ?
+      this.GetFormattedDate(this.IRBActionsVO.actionDate) : null;
+    }
+}
+
+  /**
+   * @param  {} currentDate - date to be conveted
+   * convert the date to string with format mm-dd-yyyy
+   */
+  GetFormattedDate(currentDate) {
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+    const year = currentDate.getFullYear();
+    return month + '-' + day + '-' + year;
   }
 
 

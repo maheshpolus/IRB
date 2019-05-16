@@ -87,6 +87,18 @@ public class IRBActionsServImpl implements IRBActionsService {
 			vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.irbAcknowledgementAdminActions(vo);
 			break;
+		case "212":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.reOpenEnrollmentAdminActions(vo,files);
+			break;
+		case "211":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.dataAnalysisOnlyAdminActions(vo);
+			break;
+		case "207":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
+			break;			
 		}
 		return vo;
 	}

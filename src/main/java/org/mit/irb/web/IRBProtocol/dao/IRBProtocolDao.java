@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
+import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
@@ -101,4 +102,5 @@ public interface IRBProtocolDao {
 	
 	String generateProtocolNumber();
 
+	List<CollaboratorNames> loadCollaborators(String collaboratorSearchString);
 }

@@ -13,6 +13,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
+import org.mit.irb.web.committee.vo.CommitteeVo;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -409,8 +410,7 @@ public class IRBController {
 	
 	@RequestMapping(value = "/getIRBprotocolUnits", method = RequestMethod.POST)
 	public @ResponseBody IRBViewProfile getIRBprotocolUnits( @RequestBody CommonVO vo,HttpServletRequest request,
-			HttpServletResponse response) throws JsonProcessingException{
-		//String protocolNumber ="1904000175";
+			HttpServletResponse response) throws JsonProcessingException{	
 		String protocolNumber =vo.getProtocolNumber();
 		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolUnits(protocolNumber);
 		return irbViewProfile;
@@ -446,11 +446,17 @@ public class IRBController {
 		return irbViewProfile;
 	}
 	
-
 	@RequestMapping(value = "/getProtocolSubmissionDetails", method = RequestMethod.POST)
 	public @ResponseBody IRBUtilVO getProtocolSubmissionDetails(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
 		IRBUtilVO irbUtilVO = irbProtocolService.getProtocolSubmissionDetails(vo.getProtocolNumber());
 		return irbUtilVO;
+	}
+	
+	@RequestMapping(value = "/loadCollaborators", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile loadCollaborators(HttpServletRequest request, HttpServletResponse response) {		
+		String collaboratorSearchString = request.getParameter("collaboratorSearchString");
+		IRBViewProfile irbViewProfile = irbProtocolService.loadCollaborators(collaboratorSearchString);
+		return irbViewProfile;
 	}
 }

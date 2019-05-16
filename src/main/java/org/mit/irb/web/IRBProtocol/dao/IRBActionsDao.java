@@ -50,4 +50,10 @@ public interface IRBActionsDao {
 	IRBActionsVO disapproveAdminActions(IRBActionsVO vo);
 
 	IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO reOpenEnrollmentAdminActions(IRBActionsVO vo, MultipartFile[] files);
+
+	IRBActionsVO dataAnalysisOnlyAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo);
 }

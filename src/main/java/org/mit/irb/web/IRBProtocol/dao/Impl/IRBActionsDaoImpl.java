@@ -647,12 +647,58 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("IRB Acknowledgement successfull");	
+		    vo.setSuccessMessage("IRB acknowledgement successfull");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
-			vo.setSuccessMessage("IRB Acknowledgement Failed");
+			vo.setSuccessMessage("IRB acknowledgement Failed");
 			e.printStackTrace();
 			logger.info("Exception in irbAcknowledgementAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO reOpenEnrollmentAdminActions(IRBActionsVO vo, MultipartFile[] files) {
+		try {			
+			protocolActionSP(vo,null);
+			protocolActionAttachments(files,vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Re-Open enrollment successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Re-Open enrollment Failed");
+			e.printStackTrace();
+			logger.info("Exception in reOpenEnrollmentAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO dataAnalysisOnlyAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Data analysis only successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Data analysis only Failed");
+			e.printStackTrace();
+			logger.info("Exception in dataAnalysisOnlyAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Closed for enrollment successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Closed for enrollment Failed");
+			e.printStackTrace();
+			logger.info("Exception in closedForEnrollmentAdminActions:" + e);	
 		}
 		return vo;
 	}

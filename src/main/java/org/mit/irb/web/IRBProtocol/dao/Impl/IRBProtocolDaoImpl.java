@@ -19,6 +19,8 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -30,6 +32,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.Award;
+import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Proposal;
@@ -1543,5 +1546,23 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			logger.info("DBException in getIRBProtocolDetails:" + e);
 		} 
 		return nextGroupAction_id;
+	}
+
+	@Override
+	public List<CollaboratorNames> loadCollaborators(String collaboratorSearchString) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CollaboratorNames.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("organizationId"), "organizationId");
+		projList.add(Projections.property("organizationName"), "organizationName");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CollaboratorNames.class));
+		criteria.addOrder(Order.asc("organizationName"));
+		Criterion number=Restrictions.like("organizationId", "%" + collaboratorSearchString + "%");
+		Criterion name=Restrictions.like("organizationName", "%" + collaboratorSearchString + "%").ignoreCase();
+		LogicalExpression andExp=Restrictions.or(number,name);
+		criteria.add(andExp);
+		criteria.setMaxResults(25);		
+		List<CollaboratorNames> keyWordsList = criteria.list();
+		return keyWordsList;
 	}
 }

@@ -18,6 +18,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
+import org.mit.irb.web.committee.vo.CommitteeVo;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,7 +224,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		    Future<IRBProtocolVO> protocolSubjectTypes = initLoadService.loadProtocolSubjectTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAgeGroups = initLoadService.loadProtocolAgeGroups(irbProtocolVO);
  		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
-		    Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
+		//  Future<IRBProtocolVO> protocolCollaboratorNames = initLoadService.loadProtocolCollaboratorNames(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAdminContactTypes = initLoadService.loadProtocolAdminContactType(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
 		    irbProtocolVO = protocolTypes.get();
@@ -233,7 +234,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			irbProtocolVO = protocolSubjectTypes.get();
 			irbProtocolVO = protocolAgeGroups.get();
 			irbProtocolVO = protocolFundingSourceTypes.get();
-			irbProtocolVO = protocolCollaboratorNames.get();
+		//	irbProtocolVO = protocolCollaboratorNames.get();
 			irbProtocolVO = protocolAdminContactTypes.get();
 			irbProtocolVO = protocolDetailsVo.get();
 			irbProtocolVO.setPersonnelInfo(personnelInfo);
@@ -375,5 +376,12 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			logger.error("Error in getProtocolSubmissionDetails method : "+e.getMessage());
 		}
 		return irbUtilVO;
+	}
+
+	@Override
+	public IRBViewProfile loadCollaborators(String collaboratorSearchString) {
+		IRBViewProfile irbViewProfile=new IRBViewProfile();
+		irbViewProfile.setCollaboratorList(irbProtocolDao.loadCollaborators(collaboratorSearchString));
+		return irbViewProfile;
 	}
 }

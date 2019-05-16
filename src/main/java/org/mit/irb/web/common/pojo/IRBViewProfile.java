@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.committee.pojo.Unit;
+
 public class IRBViewProfile {
 	private HashMap<String, Object> irbViewHeader;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolPersons;
@@ -34,6 +37,7 @@ public class IRBViewProfile {
 	private ArrayList<HashMap<String, Object>> irbViewProtocolCollaboratorPersons;
 	private ArrayList<HashMap<String, Object>> irbViewProtocolCollaboratorAttachments;
 	private Integer userHasRightToEditTraining;
+	private List<CollaboratorNames> collaboratorList;
 
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
@@ -237,5 +241,13 @@ public class IRBViewProfile {
 
 	public void setUserHasRightToEditTraining(Integer userHasRightToEditTraining) {
 		this.userHasRightToEditTraining = userHasRightToEditTraining;
+	}
+
+	public List<CollaboratorNames> getCollaboratorList() {
+		return collaboratorList;
+	}
+
+	public void setCollaboratorList(List<CollaboratorNames> collaboratorList) {
+		this.collaboratorList = collaboratorList;
 	}	
 }

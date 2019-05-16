@@ -201,14 +201,12 @@ public interface IRBProtocolService {
 	 */ 
 	IRBViewProfile checkingPersonsRightToViewProtocol(String personId, String protocolNumber);
 
-
 	/**
 	 * @param protocolLeadUnits
 	 * @param generalInfo
 	 * @return modify units
 	 */
 	IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolLeadUnits, ProtocolGeneralInfo generalInfo);
-
 
 	/**
 	 * @param protocolAdminContact
@@ -217,22 +215,46 @@ public interface IRBProtocolService {
 	 */
 	IRBProtocolVO updateAdminContact(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo);
 
-
+	/**
+	 * @param protocolNumber
+	 * @return
+	 */
 	IRBViewProfile getIRBprotocolUnits(String protocolNumber);
 
-
+	/**
+	 * @param protocolNumber
+	 * @return
+	 */
 	IRBViewProfile getIRBprotocolAdminContact(String protocolNumber);
 
-
+	/**
+	 * @param protocolCollaboratorId
+	 * @return
+	 */
 	IRBViewProfile getIRBprotocolCollaboratorDetails(Integer protocolCollaboratorId);
 
-
+	/**
+	 * @param fileDataId
+	 * @return
+	 */
 	ResponseEntity<byte[]> downloadCollaboratorFileData(String fileDataId);
 
-
+    /**
+     * @param person_Id
+     * @return
+     */
     IRBViewProfile getUserTrainingRight(String person_Id);
 
-
+	/**
+	 * @param protocolNumber
+	 * @return
+	 */
 	IRBUtilVO getProtocolSubmissionDetails(String protocolNumber);
+
+	/**
+	 * @param collaboratorSearchString
+	 * @return
+	 */
+	IRBViewProfile loadCollaborators(String collaboratorSearchString);
 
 }

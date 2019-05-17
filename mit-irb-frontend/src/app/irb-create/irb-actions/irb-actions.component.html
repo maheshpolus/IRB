@@ -577,6 +577,21 @@
             <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment"placeholder="Reason"></textarea>
           </div>
         </div>
+        
+        <div class="mb-15" *ngIf="currentActionPerformed?.ACTION_CODE == '212'">
+        <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+          <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+          </button>
+          <input type="file" #files (change)="onChange(files.files)" id="addAttach" style="display: none" />
+          <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+          </div>
+        </file-drop>
+        <div class="filechip">
+            <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+                <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+            </span>
+        </div>
+        </div>
         <!--For withdraw and delete action date not required-->
         <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303'">
                      <div class="form-group">

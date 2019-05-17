@@ -18,9 +18,20 @@
               <label>Organization
                 <span class="mandatory">*</span>
               </label>
-              <ng2-completer [class.normal-border]="!isCollaboratorInfoEdit" [datasource]="collaboratorNames" [minSearchLength]="0" [(ngModel)]="collaboratorName"
+              <!-- <ng2-completer [class.normal-border]="!isCollaboratorInfoEdit" [datasource]="collaboratorNames" [minSearchLength]="0" [(ngModel)]="collaboratorName"
                 (ngModelChange)="setCollaborator(collaboratorName)" class="input-field-size person-unit collaborator-holder"
-                placeholder="Name"></ng2-completer>
+                placeholder="Name"></ng2-completer> -->
+                <input type="text" [class.poping-border]="isCollaboratorInfoEdit" class="form-control input-field-size" placeholder="Search Organization"
+                [(ngModel)]="collaboratorName" (ngModelChange)="getOrganizationList()" (focus)="isOrganizationSearch = true"
+                (focusout)="isOrganizationSearch = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'OrganizationDropDown')"
+                (keydown.arrowup)="keyPressEvent.onKeyDown($event,'OrganizationDropDown')" (keydown.Enter)="keyPressEvent.onKeyDown($event,'OrganizationDropDown')">
+              <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="OrganizationDropDown">
+                <ul class="sb-results-dropdown-menu" *ngIf="isOrganizationSearch">
+                  <li *ngFor="let result of organizationSearchResult" (mousedown)="selectedOrganization(result.organizationName,result.organizationId)" (click)="selectedOrganization(result.organizationName,result.organizationName)">
+                    <span>{{result.organizationId}} - {{result.organizationName}}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="col-md-3">

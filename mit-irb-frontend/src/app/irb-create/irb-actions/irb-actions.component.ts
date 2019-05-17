@@ -169,17 +169,26 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       document.getElementById('submitModalBtn').click();
     } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
     action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
-    || action.ACTION_CODE === '304' || action.ACTION_CODE === '209') {
+    || action.ACTION_CODE === '304' || action.ACTION_CODE === '209' ||
+    action.ACTION_CODE === '211' || action.ACTION_CODE === '212' ||
+    action.ACTION_CODE === '207' || action.ACTION_CODE === '301' ||
+    action.ACTION_CODE === '302') {
       if ( action.ACTION_CODE === '213' ) {
         this.actionButtonName = 'Return';
       } else if ( action.ACTION_CODE === '300' ) {
         this.actionButtonName = 'Close';
+      } else if ( action.ACTION_CODE === '301' ) {
+        this.actionButtonName = 'Terminate';
       } else  {
         this.actionButtonName = 'Save';
       }
-      // Delete Protocol, Withdraw, return to PI, Close, disapprove, irb-Acknowledgment
+      // Delete Protocol, Withdraw
+      // return to PI, Close, disapprove, irb-Acknowledgment, data-Analysis-only, reopen enrollment, closed for enrollment
+      // terminated, suspended
       if ( action.ACTION_CODE === '213' || action.ACTION_CODE === '300' ||
-      action.ACTION_CODE === '304' || action.ACTION_CODE === '209') {
+      action.ACTION_CODE === '304' || action.ACTION_CODE === '209' ||
+      action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '207' ||
+      action.ACTION_CODE === '301' || action.ACTION_CODE === '302') {
         this.IRBActionsVO.actionDate = new Date();
       }
       document.getElementById('commentModalBtn').click();
@@ -206,9 +215,13 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         this.toastr.success(this.IRBActionsResult.successMessage, null, { toastLife: 2000 });
 
         // Submit Action,Rqst Data Analysis, Rqst to close, notify irb, rqst close enrollment,rqst reopen enrollment
+        // admin actions data analysis only, reopen entrollment, close, terminated, suspended
         if (this.currentActionPerformed.ACTION_CODE === '101' || this.currentActionPerformed.ACTION_CODE === '114' ||
         this.currentActionPerformed.ACTION_CODE === '105' || this.currentActionPerformed.ACTION_CODE === '116' ||
-        this.currentActionPerformed.ACTION_CODE === '108' || this.currentActionPerformed.ACTION_CODE === '115') {
+        this.currentActionPerformed.ACTION_CODE === '108' || this.currentActionPerformed.ACTION_CODE === '115' ||
+        this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
+        this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
+        this.currentActionPerformed.ACTION_CODE === '302') {
          // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-view/irbOverview'],
             { queryParams: { protocolNumber: this.protocolNumber} });
@@ -244,7 +257,10 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.updateUser = this.userDTO.userName;
     this.IRBActionsVO.personAction = this.currentActionPerformed;
     if ( this.currentActionPerformed.ACTION_CODE === '213' || this.currentActionPerformed.ACTION_CODE === '300' ||
-    this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '209') {
+    this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '209' ||
+    this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
+    this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
+    this.currentActionPerformed.ACTION_CODE === '302') {
       this.IRBActionsVO.actionDate = this.IRBActionsVO.actionDate != null ?
       this.GetFormattedDate(this.IRBActionsVO.actionDate) : null;
     }

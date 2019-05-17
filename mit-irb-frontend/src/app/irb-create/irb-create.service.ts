@@ -115,4 +115,9 @@ getAmendRenwalSummary(param) {
 updateAmendRenwalSummary(param) {
   return this._http.post('/mit-irb/updateAmendRenwalSummary', param);
 }
+
+getOrganizationList(searchString) {
+  const params = new HttpParams().set('collaboratorSearchString', searchString);
+    return this._http.post('/mit-irb/loadCollaborators', params);
+}
 }

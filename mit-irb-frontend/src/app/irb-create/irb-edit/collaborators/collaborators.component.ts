@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { IrbCreateService } from '../../irb-create.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
 import { IrbViewService } from '../../../irb-view/irb-view.service';
+import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component';
 
 
 declare var $: any;
@@ -29,6 +30,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   tempSaveAttachment: any = {};
   protocolCollaboratorAttachmentsList: any = [];
   protocolCollaboratorPersons: any = [];
+  organizationSearchResult: any = [];
   selectedPerson: any = {};
   protocolCollaboratorList = [];
   personsSelected = [];
@@ -45,6 +47,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   isShowAddAttachment = false;
   showPopup = false;
   isCollaboratorEditable = true;
+  isOrganizationSearch = false;
   protocolNumber = null;
   protocolId = null;
   collaboratorEditIndex = null;
@@ -52,6 +55,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   fil: FileList;
   iconValue = -1;
   attachmentTypeDescription: string;
+  collaboratorSearchString: string;
   warningMessage: string;
   protected collaboratorNames: CompleterData;
   invalidData = {
@@ -72,6 +76,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     private _irbCreateService: IrbCreateService,
     private _irbViewService: IrbViewService,
     private _completerService: CompleterService,
+    public keyPressEvent: KeyPressEvent,
     private _spinner: NgxSpinnerService
   ) { }
 
@@ -123,22 +128,23 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   loadEditDetails() {
     this.isCollaboratorEditable =
     this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.engangedInstitution : true;
-    this.collaboratorNames = this._completerService.
-      local(this.commonVo.collaboratorNames, 'organizationName,organizationId', 'organizationName');
+    // this.collaboratorNames = this._completerService.
+    //   local(this.commonVo.collaboratorNames, 'organizationName,organizationId', 'organizationName');
     this.generalInfo = this.commonVo.generalInfo;
     this.protocolCollaborator = this.commonVo.protocolCollaborator != null ? this.commonVo.protocolCollaborator : {};
     this.protocolCollaboratorList = this.commonVo.protocolCollaboratorList != null ? this.commonVo.protocolCollaboratorList : [];
   }
 
-  setCollaborator(collaboratorName) {
-    this.protocolCollaborator.collaboratorNames = null;
-    this.commonVo.collaboratorNames.forEach(collaborator => {
-      if (collaborator.organizationName === collaboratorName) {
-        this.protocolCollaborator.organizationId = collaborator.organizationId;
-        this.protocolCollaborator.collaboratorNames = { organizationId: collaborator.organizationId, organizationName: collaboratorName };
-      }
-    });
-  }
+  // setCollaborator(collaboratorName) {
+  //   this.protocolCollaborator.collaboratorNames = null;
+  //   this.commonVo.collaboratorNames.forEach(collaborator => {
+  //     if (collaborator.organizationName === collaboratorName) {
+  //       this.protocolCollaborator.organizationId = collaborator.organizationId;
+  //       this.protocolCollaborator.collaboratorNames =
+  // { organizationId: collaborator.organizationId, organizationName: collaboratorName };
+  //     }
+  //   });
+  // }
 
   validateApprovalDate() {
     if (this.protocolCollaborator.expirationDate !== null && this.protocolCollaborator.expirationDate !== undefined) {
@@ -436,6 +442,21 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.loadCollaboratorPersonsAndAttachment(item.protocolLocationId);
     }
 
+  }
+
+  getOrganizationList() {
+    this.collaboratorSearchString = this.collaboratorName;
+    this._irbCreateService.getOrganizationList(this.collaboratorSearchString).subscribe(
+      (data: any) => {
+        this.organizationSearchResult = data.collaboratorList;
+      });
+  }
+
+  selectedOrganization(organizationName, organizationId) {
+    this.collaboratorName = organizationName;
+    this.protocolCollaborator.organizationId = organizationId;
+    this.protocolCollaborator.collaboratorNames = { organizationId: organizationId, organizationName: organizationName };
+    this.isOrganizationSearch = false;
   }
 
 }

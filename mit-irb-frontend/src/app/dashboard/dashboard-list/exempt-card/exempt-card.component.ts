@@ -121,7 +121,7 @@ export class ExemptCardComponent implements  OnChanges  {
                             } else {
                                 return value;
                             }
-                        } else { // works for submitted tab for 'IRB ADMIN's
+                        } else { // works for submitted tab for 'IRB ADMIN's and en-route tab
                             return value;
                         }
                     }

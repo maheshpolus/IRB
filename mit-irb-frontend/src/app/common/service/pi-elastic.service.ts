@@ -135,6 +135,22 @@ export class PiElasticService {
                     },
                     {
                       match: {
+                        rolodex_id: {
+                          query: value,
+                          operator: 'or'
+                        }
+                      }
+                    },
+                    {
+                      match: {
+                        person_id: {
+                          query: value,
+                          operator: 'or'
+                        }
+                      }
+                    },
+                    {
+                      match: {
                           user_name: {
                           query: value,
                           operator: 'or'

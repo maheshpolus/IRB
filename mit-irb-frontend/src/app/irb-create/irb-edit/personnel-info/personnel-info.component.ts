@@ -171,6 +171,8 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
         let email: string;
         // let title: string;
         let home_unit: string;
+        let person_id: string;
+        let rolodex_id: string;
         let test;
         this._elasticsearchService.personSearch(searchString, this.personType)
           .then((searchResult) => {
@@ -190,16 +192,29 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
                 if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].full_name) !== undefined) {
                   personName = hits_highlight[j].full_name;
                 }
-                if (hits_highlight[j] !== undefined && typeof (hits_source[j].email_address) !== undefined) {
+                if (typeof (hits_source[j].email_address) !== undefined) {
                   email = hits_source[j].email_address;
                 }
-                if (hits_highlight[j] !== undefined && typeof (hits_source[j].home_unit) !== undefined) {
+                if (typeof (hits_source[j].home_unit) !== undefined) {
                   home_unit = hits_source[j].home_unit;
                 }
-                results.push({
-                  label: personName + ' | ' + email + ' | ' + home_unit,
-                  obj: test
-                });
+                if (typeof (hits_source[j].person_id) !== undefined) {
+                  person_id = hits_source[j].person_id;
+                }
+                if ( typeof (hits_source[j].rolodex_id) !== undefined) {
+                  rolodex_id = hits_source[j].rolodex_id;
+                }
+                if (this.personType === 'non-employee') {
+                  results.push({
+                    label: personName + ' | ' + email + ' | ' + home_unit + ' | ' + rolodex_id,
+                    obj: test
+                  });
+                } else {
+                  results.push({
+                    label: personName + ' | ' + email + ' | ' + home_unit + ' | ' + person_id,
+                    obj: test
+                  });
+                }
               });
               if (results.length > 0) {
                 this.message = '';

@@ -91,7 +91,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <label>Name:</label>
-                                    <span>{{selectedPerson?.full_name}}</span>
+                                    <span>{{selectedPerson?.full_name}} (<span *ngIf="personTraining.isEmployee == 'Y'">{{selectedPerson?.person_id}}</span><span *ngIf="personTraining.isEmployee == 'N'">{{selectedPerson?.rolodex_id}}</span>)</span>
                                 </div>
                                 <div class="col-12">
                                     <label>Username:</label>

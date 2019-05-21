@@ -57,7 +57,8 @@ export class DashboardComponent implements OnInit {
       first_name: {},
       user_name: {},
       email_address: {},
-      home_unit: {}
+      home_unit: {},
+      person_id: {}
 
     };
     this.elasticPlaceHolder = 'Search for an Employee Name';
@@ -102,11 +103,27 @@ export class DashboardComponent implements OnInit {
       this.options.index = this._elasticsearchService.IRB_INDEX;
       this.options.type = 'person';
       this.elasticPlaceHolder = 'Search for an Employee Name';
+      this.options.fields = {
+        full_name: {},
+        first_name: {},
+        user_name: {},
+        email_address: {},
+        home_unit: {},
+        person_id: {}
+      };
 
     } else {
       this.options.index = this._elasticsearchService.NON_EMPLOYEE_INDEX;
       this.options.type = 'rolodex';
       this.elasticPlaceHolder = 'Search for an Non-Employee Name';
+      this.options.fields = {
+        full_name: {},
+        first_name: {},
+        user_name: {},
+        email_address: {},
+        home_unit: {},
+        rolodex_id: {}
+      };
 
     }
   }
@@ -130,7 +147,7 @@ export class DashboardComponent implements OnInit {
   getTrainingList() {
     this._personTrainingService.loadTrainingList(this.trainingName).subscribe(
       (data: any) => {
-        this.trainingSearchResult = data.trainingDesc;
+        this.trainingSearchResult = data.trainingDesc != null ? data.trainingDesc : [];
       });
   }
 
@@ -156,10 +173,10 @@ export class DashboardComponent implements OnInit {
     this.clearField = new String('true');
     this.selectedPerson = {};
     this.requestObject.trainingCode = null;
-    this.requestObject.searchMode = 'L';
+    // this.requestObject.searchMode = 'L';
     this.requestObject.personId = '';
     this.trainingName = '';
-    this.loadTrainingList();
+    // this.loadTrainingList();
   }
 
   /**

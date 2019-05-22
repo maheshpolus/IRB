@@ -9,7 +9,7 @@ public interface IRBActionsService {
 	 * @param vo
 	 * @return
 	 */
-	IRBActionsVO getPersonRight(IRBActionsVO vo);
+	IRBActionsVO getActionList(IRBActionsVO vo);
 
 	/**
 	 * @param vo

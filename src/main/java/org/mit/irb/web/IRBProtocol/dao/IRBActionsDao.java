@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBActionsDao {
 
-	IRBActionsVO getPersonRight(IRBActionsVO vo);
+	IRBActionsVO getActionList(IRBActionsVO vo);
 
 	IRBActionsVO submitForReviewProtocolActions(IRBActionsVO vo);
 

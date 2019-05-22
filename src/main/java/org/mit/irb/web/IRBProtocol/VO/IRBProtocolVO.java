@@ -77,6 +77,7 @@ public class IRBProtocolVO {
 	private List<HashMap<String, Object>> exemptFundingSourceList;
 	private List<Unit> homeUnits;
 	private String updateUser;
+	private ProtocolLeadUnits leadUnit;
 	
 	public ExemptFundingSource getExemptFundingSource() {
 		return exemptFundingSource;
@@ -404,5 +405,13 @@ public class IRBProtocolVO {
 
 	public void setProtocolRenewalDetails(ProtocolRenewalDetails protocolRenewalDetails) {
 		this.protocolRenewalDetails = protocolRenewalDetails;
+	}
+
+	public ProtocolLeadUnits getLeadUnit() {
+		return leadUnit;
+	}
+
+	public void setLeadUnit(ProtocolLeadUnits leadUnit) {
+		this.leadUnit = leadUnit;
 	}
 }

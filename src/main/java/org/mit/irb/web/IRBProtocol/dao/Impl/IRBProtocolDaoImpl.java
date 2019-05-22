@@ -849,8 +849,23 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from ProtocolLeadUnits p where p.protocolNumber =:protocolNumber order by p.updateTimestamp DESC");		
 		queryGeneral.setString("protocolNumber", irbProtocolVO.getProtocolNumber());
+		
+		/*Query queryGeneralLeadUnit = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from ProtocolLeadUnits p "
+		+"where p.protocolGeneralInfo.protocolId = :protocolId "
+		+"and p.protocolUnitsId IN (SELECT MAX(U2.protocolUnitsId) "
+	   + "from ProtocolLeadUnits U2 where p.protocolGeneralInfo.protocolId = U2.protocolGeneralInfo.protocolId "
+		                 +  "and U2.unitType.unitTypeCode = '1')");		
+		queryGeneralLeadUnit.setInteger("protocolId", irbProtocolVO.getProtocolId());
+		
+		if(!queryGeneralLeadUnit.list().isEmpty()){
+			ProtocolLeadUnits leadUnit=(ProtocolLeadUnits) queryGeneralLeadUnit.list().get(0);
+			irbProtocolVO.setLeadUnit(leadUnit);
+		}	*/
+		
 		if (!queryGeneral.list().isEmpty()) {
 			List<ProtocolLeadUnits> protocolLeadUnits = queryGeneral.list();
+			irbProtocolVO.setLeadUnit(protocolLeadUnits.get(protocolLeadUnits.size()-1));
 			irbProtocolVO.setProtocolLeadUnitsList(protocolLeadUnits);
 		}
 		return new AsyncResult<>(irbProtocolVO);

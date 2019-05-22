@@ -1,6 +1,5 @@
 package org.mit.irb.web.notification;
 
-import java.sql.Clob;
 
 public interface ExemptEmailNotificationservice {
 

@@ -126,8 +126,11 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 				List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
 				for(HashMap<String, Object> detailObject :result){
 					Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
-					if(detailactionId >= actionId && detailactionId <= nextGroupActionId){
+					Integer detailProtocolId = Integer.parseInt(detailObject.get("PROTOCOL_ID").toString());				
+					if(detailactionId >= actionId && detailactionId <= nextGroupActionId){	
+						if(detailProtocolId.equals(protocolId)){						
 						s2List.add(detailObject);
+					  }
 					}
 				}
 				HashMap<String, Object> groupDetailList = new HashMap<String, Object>();	

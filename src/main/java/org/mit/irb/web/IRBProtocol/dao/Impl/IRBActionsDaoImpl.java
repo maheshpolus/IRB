@@ -1,7 +1,8 @@
 package org.mit.irb.web.IRBProtocol.dao.Impl;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,20 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
-import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
 @Service(value = "irbActionsDao")
 public class IRBActionsDaoImpl implements IRBActionsDao {
@@ -67,6 +76,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	                } 
 	            }
 	        }
+			vo.setPersonActionsList(finalResult);	
 			vo = getProtocolActionDetails(finalResult, vo);
 		} catch (Exception e) {
 			logger.info("Exception in getPersonRight:" + e);
@@ -77,33 +87,36 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO getProtocolActionDetails(ArrayList<HashMap<String, Object>> finalResult,IRBActionsVO vo){
 		ArrayList<HashMap<String, Object>> renewalModules = null;
 		try{
-			for(int i = 0; i < finalResult.size() ; i++){		
+			ProtocolSubmissionStatuses protocolSubmissionStatuses = new ProtocolSubmissionStatuses();
 			if(vo.getSubmissionId() != null){
-				ProtocolSubmissionStatuses protocolSubmissionStatuses = fetchSubmissionDetails(vo);
-				vo.setProtocolSubmissionStatuses(protocolSubmissionStatuses);
+				protocolSubmissionStatuses  = fetchSubmissionDetails(vo,protocolSubmissionStatuses);		
+			}else{
+				protocolSubmissionStatuses.setProtocolNumber(vo.getProtocolNumber());
+				protocolSubmissionStatuses.setSequenceNumber(vo.getSequenceNumber());
+				protocolSubmissionStatuses.setProtocolId(vo.getProtocolId());
 			}
-			switch (finalResult.get(i).get("ACTION_CODE").toString()) {
-			case KeyConstants.CREATE_AMENDMENT_ACTION_CODE:
-				 renewalModules = iterateAmendRenewalModule(vo,renewalModules);
-				 vo.setModuleAvailableForAmendment(renewalModules);			
-				break;
-			case KeyConstants.NOTIFY_COHEUS_ACTION_CODE:						
-				ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
-				outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
-				renewalModules=dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputparam);
-				vo.setNotifyTypeQualifier(renewalModules);		
-				break;
-			}							
-			vo.setPersonActionsList(finalResult);					
-		}
+			vo.setProtocolSubmissionStatuses(protocolSubmissionStatuses);
+			for(HashMap<String, Object> data : finalResult){
+				switch (data.get("ACTION_CODE").toString()) {
+				case KeyConstants.CREATE_AMENDMENT_ACTION_CODE:
+					 renewalModules = iterateAmendRenewalModule(vo,renewalModules);
+					 vo.setModuleAvailableForAmendment(renewalModules);			
+					break;
+				case KeyConstants.NOTIFY_COHEUS_ACTION_CODE:						
+					ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+					outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
+					renewalModules=dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputparam);
+					vo.setNotifyTypeQualifier(renewalModules);		
+					break;
+				}
+			}
 		}catch (Exception e) {
 			logger.info("Exception in getProtocolSubmissionDetails:" + e);		
 		}
 		return vo;			
 	}
 
-	private ProtocolSubmissionStatuses fetchSubmissionDetails(IRBActionsVO vo) {
-		ProtocolSubmissionStatuses protocolSubmissionStatuses = new ProtocolSubmissionStatuses();
+	private ProtocolSubmissionStatuses fetchSubmissionDetails(IRBActionsVO vo,ProtocolSubmissionStatuses protocolSubmissionStatuses) {
 		try{
 			Integer submissionId = Integer.parseInt(vo.getSubmissionId());
 			ArrayList<InParameter> inputparams  = new ArrayList<InParameter>();
@@ -166,11 +179,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				if (results.get(0).get("SCHEDULE_ID") != null) {
 					protocolSubmissionStatuses.setScheduleId(Integer.parseInt(results.get(0).get("SCHEDULE_ID").toString()));
 				}										
-			}else{
-				protocolSubmissionStatuses.setProtocolNumber(vo.getProtocolNumber());
-				protocolSubmissionStatuses.setSequenceNumber(vo.getSequenceNumber());
-				protocolSubmissionStatuses.setProtocolId(vo.getProtocolId());
-			}		
+			}	
 		}catch (Exception e) {
 			logger.info("Exception in getProtocolSubmissionDetails:" + e);		
 		}
@@ -211,8 +220,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		    updateActionStatus(vo);
 	} catch (Exception e) {
 			logger.info("Exception in updateSubmissionStatus:" + e);		
-			}
-		
+			}	
 		return vo;
 	}
 
@@ -558,7 +566,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,protoAmendRenewalId == null ? "I":"D"));
 					try {
 						dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTO_AMND_RNEW_MODULE");
-					} catch (DBException | IOException | SQLException e) {
+					} catch (Exception e) {
 						vo.setSuccessCode(false);
 						vo.setSuccessMessage("Amendment creation Failed");
 						logger.info("Exception in updateAmendRenewModule:" + e);	
@@ -589,13 +597,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO returnToPiAdminActions(IRBActionsVO vo) {
+		ArrayList<HashMap<String, Object>> result = null;
 		try {			
-			protocolActionSP(vo,null);
+			result=protocolActionSP(vo,null);			
+			vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Returned to PI successfully");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("Return to PI Failed");
+			e.printStackTrace();
 			logger.info("Exception in returnToPiAdminActions:" + e);	
 		}
 		return vo;
@@ -605,8 +617,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO closeAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("CLosed successfully");	
+		    vo.setSuccessMessage("Closed successfully");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("Close Failed");
@@ -619,6 +632,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Dissapproved successfully");	
 		} catch (Exception e) {
@@ -633,6 +647,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("IRB acknowledgement successfull");	
 		} catch (Exception e) {
@@ -647,6 +662,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO reOpenEnrollmentAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
 			protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Re-Open enrollment successfull");	
@@ -662,6 +678,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO dataAnalysisOnlyAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Data analysis only successfull");	
 		} catch (Exception e) {
@@ -676,6 +693,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Closed for enrollment successfull");	
 		} catch (Exception e) {
@@ -685,4 +703,170 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		}
 		return vo;
 	}
+	
+
+	@Override
+	public IRBActionsVO terminateAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Terminated successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Terminate Failed");
+			e.printStackTrace();
+			logger.info("Exception in terminateAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO suspendAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Suspended successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Suspend Failed");
+			e.printStackTrace();
+			logger.info("Exception in suspendAdminActions:" + e);	
+		}
+		return vo;
+	}
+	
+	@Override
+	public IRBActionsVO notifyCommiteeAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Notify Commitee successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Notify Commitee Failed");
+			e.printStackTrace();
+			logger.info("Exception in notifyCommiteeAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO deferAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Defer successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Defer Failed");
+			e.printStackTrace();
+			logger.info("Exception in deferAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	public void generateProtocolCorrespondence(IRBActionsVO vo){
+		ResponseEntity<byte[]> attachmentData = null;
+		try{
+			byte[] data = getTemplateData(vo);
+			byte[] mergedOutput = mergePlaceHolders(data,vo);
+			String generatedFileName = "Result"+System.nanoTime()+".pdf";
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.parseMediaType("application/pdf"));
+			headers.setContentDispositionFormData(generatedFileName, generatedFileName);
+			headers.setContentLength(mergedOutput.length);
+			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+			headers.setPragma("public");
+			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);	
+			saveProtocolCorrespondence(vo,attachmentData);
+		}catch (Exception e) {
+			logger.error("Exception in generateProtocolCorrespondence"+ e.getMessage());
+		}	
+	}
+	
+	public byte[] getTemplateData(IRBActionsVO vo) {
+		byte[] attachmentData =null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();			
+			inParam.add(new InParameter("AV_LETTER_TEMPLATE_TYPE_CODE", DBEngineConstants.TYPE_STRING, vo.getTemplateTypeCode()));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_LETTER_TEMPLATE_TYPE", outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("CORRESPONDENCE_TEMPLATE");
+				attachmentData = byteArrayOutputStream.toByteArray();
+			}
+		} catch (Exception e) {
+			logger.info("Exception in getTemplateData method:" + e);
+		}
+		return attachmentData;
+	}
+	
+	public byte[] mergePlaceHolders(byte[] data, IRBActionsVO vo) {
+		byte[] mergedOutput = null;
+		try{
+			InputStream myInputStream = new ByteArrayInputStream(data); 
+			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(myInputStream,TemplateEngineKind.Velocity);
+			FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
+			//fieldsMetadata.load("exempt", Exempt.class, true);
+			IContext context = report.createContext();
+			/*List<Exempt> exemptList = setExemptQuestionList(commonVO.getIrbExemptForm().getExemptQuestionList());
+			context.put("exemptList", exemptList);
+			if(commonVO.getIrbExemptForm().getIsExempt().equalsIgnoreCase("O")){
+				context.put("exemptList", "");
+			}*/
+			context = setPlaceHolderData(context,vo);
+			/*DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
+			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);*/
+		}catch (Exception e) {
+			logger.info("Exception in mergePlaceHolders method:" + e);
+		}
+		return mergedOutput;
+	}
+
+	private IContext setPlaceHolderData(IContext context,IRBActionsVO vo) {
+		try{
+			/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM-dd-yyyy");
+			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");  
+			SimpleDateFormat formatterSlash = new SimpleDateFormat("MM/dd/yyyy");  
+			Date date1 = null;
+			String exemptStartDate = null;
+			String exemptEndDateStr = null;
+			String exemptSubmissionDate = null;
+			if (irbExemptForm.getExemptProtocolStartDate() != null) {
+			 date1=formatter.parse(irbExemptForm.getExemptProtocolStartDate());
+			 exemptStartDate = simpleDateFormat.format(date1);
+			} if (irbExemptForm.getExemptProtocolEndDate() != null) {
+				date1=formatter.parse(irbExemptForm.getExemptProtocolEndDate());
+				exemptEndDateStr = simpleDateFormat.format(date1);
+			}
+			if (irbExemptForm.getSubmissionDate() != null) {
+				date1=formatterSlash.parse(irbExemptForm.getSubmissionDate());
+				exemptSubmissionDate = simpleDateFormat.format(date1);
+			}
+			context.put("START_DATE", exemptStartDate);
+			context.put("END_DATE", exemptEndDateStr);
+			context.put("PI_NAME", irbExemptForm.getPersonName());
+			context.put("EXEMPT_ID", irbExemptForm.getExemptFormID());
+			context.put("SUBMISSION_DATE", irbExemptForm.getSubmissionDate() == null?"":exemptSubmissionDate);
+			context.put("TITLE", irbExemptForm.getExemptTitle());
+			context.put("UNIT_NAME", irbExemptForm.getUnitName());
+			context.put("FACULTY_SPONSOR_NAME", irbExemptForm.getFacultySponsorPerson() == null?"":irbExemptForm.getFacultySponsorPerson());*/
+		}catch (Exception e) {
+			logger.info("Exception in setPlaceHolderData method:" + e);
+		}
+		return context;
+	}
+
+	public void saveProtocolCorrespondence(IRBActionsVO vo, ResponseEntity<byte[]> attachmentData) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

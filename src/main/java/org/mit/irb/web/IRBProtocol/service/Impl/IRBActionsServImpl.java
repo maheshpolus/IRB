@@ -23,8 +23,8 @@ public class IRBActionsServImpl implements IRBActionsService {
 	protected static Logger logger = Logger.getLogger(IRBActionsServImpl.class.getName());
 
 	@Override
-	public IRBActionsVO getPersonRight(IRBActionsVO vo) {
-		 vo = irbActionsDao.getPersonRight(vo);
+	public IRBActionsVO getActionList(IRBActionsVO vo) {
+		 vo = irbActionsDao.getActionList(vo);
 		return vo;
 	}
 

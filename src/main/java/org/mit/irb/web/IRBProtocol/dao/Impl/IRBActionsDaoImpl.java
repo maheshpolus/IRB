@@ -44,7 +44,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	Logger logger = Logger.getLogger(IRBUtilDaoImpl.class.getName());
 
 	@Override
-	public IRBActionsVO getPersonRight(IRBActionsVO vo) {		
+	public IRBActionsVO getActionList(IRBActionsVO vo) {		
 		ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		ArrayList<HashMap<String, Object>> permissionList = null;

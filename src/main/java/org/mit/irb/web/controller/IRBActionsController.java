@@ -27,10 +27,10 @@ public class IRBActionsController {
 	
 	protected static Logger logger = Logger.getLogger(IRBController.class.getName());
 	
-	@RequestMapping(value = "/getPersonRight", method = RequestMethod.POST)
-	public @ResponseBody IRBActionsVO getPersonRight(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
+	@RequestMapping(value = "/getActionList", method = RequestMethod.POST)
+	public @ResponseBody IRBActionsVO getActionList(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
 	{
-		vo = irbActionsService.getPersonRight(vo);
+		vo = irbActionsService.getActionList(vo);
 		return vo;
 	}
 	

@@ -151,7 +151,7 @@ export class PiElasticService {
                     },
                     {
                       match: {
-                          user_name: {
+                        rolodex_id: {
                           query: value,
                           operator: 'or'
                         }
@@ -176,6 +176,8 @@ export class PiElasticService {
               fields: {
                  first_name: {},
                 full_name: {},
+                person_id: {},
+                rolodex_id: {}
               }
             }
           }

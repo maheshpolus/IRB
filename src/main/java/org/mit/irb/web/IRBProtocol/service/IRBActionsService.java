@@ -29,4 +29,6 @@ public interface IRBActionsService {
 	 * @return update the modules and summary section
 	 */
 	IRBActionsVO updateAmendRenwalSummary(IRBActionsVO vo);
+
+	IRBActionsVO getActionLookup(IRBActionsVO vo);
 }

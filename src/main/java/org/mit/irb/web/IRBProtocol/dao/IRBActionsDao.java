@@ -56,4 +56,12 @@ public interface IRBActionsDao {
 	IRBActionsVO dataAnalysisOnlyAdminActions(IRBActionsVO vo);
 
 	IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo);
+	
+	IRBActionsVO terminateAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO suspendAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO notifyCommiteeAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO deferAdminActions(IRBActionsVO vo);
 }

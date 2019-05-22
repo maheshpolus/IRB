@@ -62,4 +62,11 @@ public class IRBActionsController {
 		vo = irbActionsService.updateAmendRenwalSummary(vo);
 		return vo;
 	}
+	
+	@RequestMapping(value = "/getActionLookup", method = RequestMethod.POST)
+	public @ResponseBody IRBActionsVO getActionLookup(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getActionLookup(vo);
+		return vo;
+	}
 }

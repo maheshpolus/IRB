@@ -137,7 +137,7 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		inputParam.add(new InParameter("AV_SEARCH_TEXT", DBEngineConstants.TYPE_STRING,trainingName));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		try {
-			result = dbEngine.executeProcedure("GET_IRB_PERSON_TRAINING_CODES", outputParam);
+			result = dbEngine.executeProcedure(inputParam,"GET_IRB_PERSON_TRAINING_CODES", outputParam);
 		} catch (DBException | IOException | SQLException e) {			
 			e.printStackTrace();
 		}

@@ -34,6 +34,7 @@ public class IRBActionsVO {
 	private String submissionId;
 	private String actionDate;
 	private Date sqlActionDate;
+	private String templateTypeCode;
 	
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
@@ -249,5 +250,13 @@ public class IRBActionsVO {
 
 	public void setSqlActionDate(Date sqlActionDate) {
 		this.sqlActionDate = sqlActionDate;
+	}
+
+	public String getTemplateTypeCode() {
+		return templateTypeCode;
+	}
+
+	public void setTemplateTypeCode(String templateTypeCode) {
+		this.templateTypeCode = templateTypeCode;
 	}
 }

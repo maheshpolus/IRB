@@ -98,7 +98,23 @@ public class IRBActionsServImpl implements IRBActionsService {
 		case "207":
 			vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
-			break;			
+			break;
+		case "301":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.terminateAdminActions(vo);
+			break;	
+		case "302":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.suspendAdminActions(vo);
+			break;	
+		case "109":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.notifyCommiteeAdminActions(vo);
+			break;
+		case "201":
+			vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.deferAdminActions(vo);
+			break;
 		}
 		return vo;
 	}
@@ -151,5 +167,11 @@ public class IRBActionsServImpl implements IRBActionsService {
 			vo.setSqlActionDate(sqlActionDate);			
 		}
 		return vo;
+	}
+
+	@Override
+	public IRBActionsVO getActionLookup(IRBActionsVO vo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

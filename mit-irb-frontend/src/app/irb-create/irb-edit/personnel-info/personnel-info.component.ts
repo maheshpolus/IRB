@@ -183,26 +183,31 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
                 .map((hit) => hit.highlight);
 
               hits_source.forEach((elmnt, j) => {
-                personName = hits_source[j].full_name;
+                if (this.personType === 'non-employee') {
+                  personName = hits_source[j].first_name;
+                } else {
+                  personName = hits_source[j].full_name;
+                }
+                person_id = hits_source[j].person_id;
+                rolodex_id = hits_source[j].rolodex_id;
                 test = hits_source[j];
-                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].first_name) !== undefined) {
+                if (hits_highlight[j] !== undefined && hits_highlight[j].first_name !== undefined) {
                   personName = hits_highlight[j].first_name;
                 }
-
-                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].full_name) !== undefined) {
+                if (hits_highlight[j] !== undefined && hits_highlight[j].full_name !== undefined) {
                   personName = hits_highlight[j].full_name;
+                }
+                if (hits_highlight[j] !== undefined && hits_highlight[j].person_id !== undefined) {
+                  person_id = hits_highlight[j].person_id;
+                }
+                if (hits_highlight[j] !== undefined && hits_highlight[j].rolodex_id !== undefined) {
+                  rolodex_id = hits_highlight[j].rolodex_id;
                 }
                 if (typeof (hits_source[j].email_address) !== undefined) {
                   email = hits_source[j].email_address;
                 }
                 if (typeof (hits_source[j].home_unit) !== undefined) {
                   home_unit = hits_source[j].home_unit;
-                }
-                if (typeof (hits_source[j].person_id) !== undefined) {
-                  person_id = hits_source[j].person_id;
-                }
-                if ( typeof (hits_source[j].rolodex_id) !== undefined) {
-                  rolodex_id = hits_source[j].rolodex_id;
                 }
                 if (this.personType === 'non-employee') {
                   results.push({

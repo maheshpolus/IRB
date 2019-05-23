@@ -51,6 +51,9 @@ export class IrbViewService {
   loadProtocolHistoryActionComments(params) {
     return this._http.post('/mit-irb/loadProtocolHistoryActionComments', params);
 }
+loadProtocolHistoryGroupComments(params) {
+    return this._http.post('/mit-irb/loadProtocolHistoryGroupComments', params);
+}
 getIRBprotocolUnits(params) {
     return this._http.post('/mit-irb/getIRBprotocolUnits', params);
 }

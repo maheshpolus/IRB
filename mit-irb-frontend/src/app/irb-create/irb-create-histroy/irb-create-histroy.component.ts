@@ -148,7 +148,7 @@ export class IrbCreateHistroyComponent implements OnInit {
             const a = document.createElement('a');
             const blob = new Blob([data], { type: data.type });
             a.href = URL.createObjectURL(blob);
-            a.download = fileName;
+            a.download = fileName + '.pdf';
             document.body.appendChild(a);
             a.click();
 
@@ -167,6 +167,23 @@ export class IrbCreateHistroyComponent implements OnInit {
             data => {
                 const response: any = data;
                 this.reviewComments = response.irbProtocolHistoryActionComments;
+            });
+    }
+    setGroupComment(history, event) {
+        event.stopPropagation();
+        document.getElementById('commentBtn').click();
+        this.reviewComments = [];
+        const reqObj = {
+            'actionId': history.ACTION_ID,
+            'protocolId': history.PROTOCOL_ID,
+            'nextGroupActionId': history.NEXT_GROUP_ACTION_ID,
+            'protocolNumber': history.PROTOCOL_NUMBER
+
+        };
+        this._irbViewService.loadProtocolHistoryGroupComments(reqObj).subscribe(
+            data => {
+                const response: any = data;
+                this.reviewComments = response.irbProtocolHistoryGroupComments;
             });
     }
 

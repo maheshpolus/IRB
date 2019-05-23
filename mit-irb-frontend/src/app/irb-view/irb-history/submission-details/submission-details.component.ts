@@ -23,6 +23,7 @@ export class SubmissionDetailsComponent implements OnInit {
   submissionCheckListData = [];
   historyName = '';
   isammendment = false;
+  isrenewal = false;
 
   constructor(private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute,
     private _spinner: NgxSpinnerService, private _location: Location) {
@@ -36,6 +37,7 @@ export class SubmissionDetailsComponent implements OnInit {
   getsubmissionDetails() {
     this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('submissionProtocolNumber');
     this.isammendment = this.requestObject.protocolNumber.includes('A') ? true : false;
+    this.isrenewal = this.requestObject.protocolNumber.includes('R') ? true : false;
     this._spinner.show();
     this._irbViewService.getProtocolSubmissionDetails(this.requestObject).subscribe(data => {
       this._spinner.hide();

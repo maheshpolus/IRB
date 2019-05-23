@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
@@ -66,6 +67,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		projList.add(Projections.property("description"), "description");
 		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ProtocolType.class));
 		criteria.addOrder(Order.asc("description"));
+		criteria.add(Restrictions.ne("protocolTypeCode", new String("4")));
 		List<ProtocolType> protocolType = criteria.list();
 		irbProtocolVO.setProtocolType(protocolType);
 		session.flush();

@@ -121,8 +121,8 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			for(HashMap<String, Object> s1 : irbViewProfile.getIrbViewProtocolHistoryGroupList()){
 				Integer nextGroupActionId = Integer.parseInt(s1.get("NEXT_GROUP_ACTION_ID").toString());  
 				Integer actionId = Integer.parseInt(s1.get("ACTION_ID").toString());
-				Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());
-				nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId);
+				Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());			
+				nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId,actionId);				
 				List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
 				for(HashMap<String, Object> detailObject :result){
 					Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
@@ -385,6 +385,19 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public IRBViewProfile loadCollaborators(String collaboratorSearchString) {
 		IRBViewProfile irbViewProfile=new IRBViewProfile();
 		irbViewProfile.setCollaboratorList(irbProtocolDao.loadCollaborators(collaboratorSearchString));
+		return irbViewProfile;
+	}
+
+	@Override
+	public IRBViewProfile loadProtocolHistoryGroupComments(String protocolNumber, Integer protocolActionId,
+			Integer protocolId, Integer nextGroupActionId) {
+		IRBViewProfile irbViewProfile = new IRBViewProfile();
+		ArrayList<HashMap<String, Object>> commentList = new ArrayList<HashMap<String,Object>>();
+		commentList = irbProtocolDao.getHistoryGroupComment(protocolNumber,protocolActionId,protocolId,nextGroupActionId);
+		if (commentList != null && !commentList.isEmpty()) {
+			logger.info("Action comments exists");
+			irbViewProfile.setIrbProtocolHistoryGroupComments(commentList);
+		}
 		return irbViewProfile;
 	}
 }

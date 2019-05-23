@@ -222,7 +222,7 @@ public class IRBController {
 		logger.info("loadProtocolHistoryActionComments");
 		return irbProtocolService.loadProtocolHistoryActionComments(vo.getProtocolNumber(), vo.getProtocolActionId(), vo.getProtocolActionTypecode());
 	}
-
+	
 	@RequestMapping(value = "/checkingPersonsRightToViewProtocol", method = RequestMethod.POST)
 	public @ResponseBody IRBViewProfile checkingPersonsRightToViewProtocol(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
@@ -458,5 +458,12 @@ public class IRBController {
 		String collaboratorSearchString = request.getParameter("collaboratorSearchString");
 		IRBViewProfile irbViewProfile = irbProtocolService.loadCollaborators(collaboratorSearchString);
 		return irbViewProfile;
+	}
+	
+	@RequestMapping(value = "/loadProtocolHistoryGroupComments", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile loadProtocolHistoryGroupComments(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
+		logger.info("loadProtocolHistoryActionComments");
+		return irbProtocolService.loadProtocolHistoryGroupComments(vo.getProtocolNumber(), vo.getActionId(), vo.getProtocolId(), vo.getNextGroupActionId());
 	}
 }

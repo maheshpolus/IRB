@@ -10,6 +10,7 @@ import { IrbCreateService } from '../../irb-create.service';
 import { PiElasticService } from '../../../common/service/pi-elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
 import { IrbViewService } from '../../../irb-view/irb-view.service';
+import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component';
 
 @Component({
   selector: 'app-personnel-info',
@@ -78,6 +79,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     private _irbViewService: IrbViewService,
     private _spinner: NgxSpinnerService,
     private _router: Router,
+    public keyPressEvent: KeyPressEvent,
     private _completerService: CompleterService) { }
 
   ngOnInit() {

@@ -115,10 +115,10 @@
               </div>
               <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text" class="form-control input-field-size"
                 placeholder="{{personPlaceHolder}}" [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
-                (focusout)="isElasticResultPerson = false" />
-              <div class="sb-seachresults top-margin">
+                (focusout)="isElasticResultPerson = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'personSearch')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'personSearch')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'personSearch')"/>
+              <div class="sb-seachresults top-margin" id="personSearch">
                 <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
-                  <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)">
+                  <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)" (click)="selectedPersonResult(result)">
                     <span [innerHTML]="result.label"></span>
                   </li>
                 </ul>

@@ -128,15 +128,15 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 padding-10">
+                        <div class="col-md-12 padding-10"  *ngIf="isrenewal || isammendment">
                             <div class="modal-header-label">
                                 <h4 class="popup-sub-head" *ngIf="isammendment">Ammendment Details</h4>
-                                <h4 class="popup-sub-head" *ngIf="!isammendment">Renewal Details</h4>
+                                <h4 class="popup-sub-head" *ngIf="isrenewal">Renewal Details</h4>
                             </div>
                         </div>
-                        <div class="row card-list-med pl-15 pr-15">
-                            <div class="col-7 card-desc">
-                                <p>Renew: </p>
+                        <div class="row card-list-med pl-15 pr-15"  *ngIf="isrenewal || isammendment">
+                            <div class="col-7 card-desc"  *ngIf="isammendment">
+                                <p>Modify Sections: </p>
                                 <div class="row">
                                     <div class="col-6">
                                         <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.generalInfo"> General Info
@@ -170,9 +170,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 card-desc">
+                            <div class="col-5 card-desc"  [ngClass]="{'col-12': isrenewal}">
                                 <p>Summary: </p>
-                                <textarea rows="6" cols="68" disabled="true" [(ngModel)]="protocolRenewalComments"></textarea>
+                                <textarea rows="6" cols="68" disabled="true" [(ngModel)]="protocolRenewalComments"  style="width: 100%"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 padding-10">

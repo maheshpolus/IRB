@@ -89,7 +89,8 @@
 											<li *ngIf="history.SUBMISSION_DATE != null" class="pointer" title="Submission Details" (click)="viewSubmissionDetails(history.PROTOCOL_NUMBER,history.COMMENTS)">
 												<i class="fa fa-file-text-o" aria-hidden="true"></i>
 											</li>
-											<li style="cursor: none" title="Review Comments(Currently unavailable)" disabled="true">
+											<li style="cursor: none" title="Review Comments" disabled="true"
+											(click)="setGroupComment(history,$event)">
 												<i class="fa fa-comments" aria-hidden="true"></i>
 											</li>
 											<!-- <li style="cursor: none" title="Version Compare(Currently unavailable)" disabled="true">
@@ -180,3 +181,5 @@
 			</div>
 		</div>
 	</div>
+
+	<button id="commentBtn" [hidden]="true" data-toggle="modal" data-target="#deletePersonnelInfoDetails"></button>

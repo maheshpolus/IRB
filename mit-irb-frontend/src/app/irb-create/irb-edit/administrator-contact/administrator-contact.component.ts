@@ -52,14 +52,14 @@ export class AdministratorContactComponent implements OnInit {
     this.options.width = '100%';
     this.options.fontSize = '16px';
     this.options.defaultValue = '';
-    this.options.formatString = 'full_name | email_address | home_unit';
+    this.options.formatString = 'full_name | email_address | home_unit | person_id';
     this.options.fields = {
       full_name: {},
       first_name: {},
       user_name: {},
       email_address: {},
-      home_unit: {}
-
+      home_unit: {},
+      person_id: {}
     };
     this.elasticPlaceHolder = 'Search for an Employee Name';
   }
@@ -109,12 +109,30 @@ export class AdministratorContactComponent implements OnInit {
       this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
       this.options.index = this._elasticsearchService.IRB_INDEX;
       this.options.type = 'person';
+      this.options.formatString = 'full_name | email_address | home_unit | person_id';
+      this.options.fields = {
+        full_name: {},
+        first_name: {},
+        user_name: {},
+        email_address: {},
+        home_unit: {},
+        person_id: {}
+      };
       this.elasticPlaceHolder = 'Search for an Employee Name';
     } else {
       this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
       this.options.index = this._elasticsearchService.NON_EMPLOYEE_INDEX;
       this.options.type = 'rolodex';
       this.elasticPlaceHolder = 'Search for an Non-Employee Name';
+      this.options.formatString = 'full_name | email_address | home_unit | rolodex_id';
+      this.options.fields = {
+        full_name: {},
+        first_name: {},
+        user_name: {},
+        email_address: {},
+        home_unit: {},
+        rolodex_id: {}
+      };
     }
   }
 

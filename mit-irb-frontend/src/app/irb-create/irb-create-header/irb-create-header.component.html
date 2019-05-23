@@ -118,10 +118,7 @@
 	</div>
 	<div class="container-fluid">
 		<section class="row btn-row-med sect-padding">
-				<button class="btn btn-primary" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" type="submit" [routerLink]="['irbSummaryDetails']" routerLinkActive="btnactive"
-				[ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbSummaryDetails')">
-				   <i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details
-			   </button>
+				
 			<button class="btn btn-primary tab_btn" [routerLink]="['irbHome']" (click)="show_current_tab('irbHome')" routerLinkActive="btnactive">
 				<i class="fa fa-home" aria-hidden="true"></i>General
 			</button>
@@ -140,6 +137,10 @@
 			<button class="btn btn-primary" [routerLink]="['irbHistory']" type="submit" [routerLink]="['irbHistory']" routerLinkActive="btnactive"
 			 [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbHistory')">
 				<i class="fa fa-history" aria-hidden="true"></i>History
+			</button>
+			<button class="btn btn-primary" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" type="submit" [routerLink]="['irbSummaryDetails']" routerLinkActive="btnactive"
+				[ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbSummaryDetails')">
+				   <i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details
 			</button>
 			<button class="btn btn-primary" [routerLink]="['irbActions']" type="submit" [routerLink]="['irbActions']" routerLinkActive="btnactive"
 			 [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbActions')">

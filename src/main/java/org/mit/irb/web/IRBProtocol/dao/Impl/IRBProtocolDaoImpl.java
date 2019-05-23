@@ -541,6 +541,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		IRBActionsVO vo = new IRBActionsVO();
 		ProtocolSubmissionStatuses status = new ProtocolSubmissionStatuses();
+		Session sessionUpdateGeneral = hibernateTemplate.getSessionFactory().openSession();
+		Transaction transactionUpdateGeneral = sessionUpdateGeneral.beginTransaction();
 		if (generalInfo.getProtocolNumber() == null) {
 			generalInfo.setActive("Y");
 			generalInfo.setIslatest("Y");
@@ -553,8 +555,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			generalInfo.setIsCancelled("N");
 			List<ProtocolPersonnelInfo> protocolPersonnelInfoList = new ArrayList<ProtocolPersonnelInfo>();
 			//ProtocolPersonnelInfo personnelInfo = generalInfo.getPersonnelInfos().get(0);
-			ProtocolPersonnelInfo protocolPersonnelInfo = new ProtocolPersonnelInfo();
+			ProtocolPersonnelInfo protocolPersonnelInfo = new ProtocolPersonnelInfo();			
 			protocolPersonnelInfo = generalInfo.getPersonnelInfos().get(0);
+			protocolPersonnelInfo.setProtocolPersonId(generatePersonId());
 			protocolPersonnelInfo.setProtocolGeneralInfo(generalInfo);
 			protocolPersonnelInfo.setProtocolNumber(protocolNUmber);
 			protocolPersonnelInfo.setSequenceNumber(1);
@@ -585,9 +588,21 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			 vo.setProtocolSubmissionStatuses(status);
 			 irbAcionDao.updateActionStatus(vo);
 		 }	
+		 transactionUpdateGeneral.commit();
+		 sessionUpdateGeneral.close();
 		return irbProtocolVO;
 	}
 
+	public Integer generatePersonId(){
+		Integer personId=null;
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("SELECT NVL(MAX(PROTOCOL_PERSON_ID),0)+1 FROM ProtocolPersonnelInfo");	
+		if(!queryGeneral.list().isEmpty()){
+			personId = Integer.parseInt(queryGeneral.list().get(0).toString());
+		}
+		return personId;		
+	}
+	
 	@Override
 	public String generateProtocolNumber() {
 		String generatedId = null;
@@ -637,7 +652,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		String flag="N";
 		personnelInfo.setSequenceNumber(1);
 		if (personnelInfo.getAcType().equals("U")) {
-			personnelInfo.setIsActive("Y");
+			personnelInfo.setIsActive("Y");	
+			if(personnelInfo.getProtocolPersonId()==null){
+				personnelInfo.setProtocolPersonId(generatePersonId());
+			}
 			personnelInfo.setProtocolGeneralInfo(generalInfo);
 			Session sessionUpdatePersons = hibernateTemplate.getSessionFactory().openSession();
 			Transaction transactionUpdatePersons = sessionUpdatePersons.beginTransaction();
@@ -1337,7 +1355,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 						"delete from ProtocolCollaboratorPersons p where p.collaboratorPersonId =:collaboratorPersonId");
 				queryDeletePerson.setInteger("collaboratorPersonId", person.getCollaboratorPersonId());
 				queryDeletePerson.executeUpdate();
-				transaction.commit();
+				transaction.commit();			
 				session.close();
 			}
 		}
@@ -1550,7 +1568,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
 		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
-		//inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
+		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {

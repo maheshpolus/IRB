@@ -31,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolPersonnelInfo {
 	@Id
-	@GenericGenerator(name = "ProtocolPersonnelInfoIdGenerator", strategy = "increment", parameters = {
+/*	@GenericGenerator(name = "ProtocolPersonnelInfoIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolPersonnelInfoIdGenerator")
+	@GeneratedValue(generator = "ProtocolPersonnelInfoIdGenerator")*/
 	@Column(name = "PROTOCOL_PERSON_ID")
 	private Integer protocolPersonId;
 

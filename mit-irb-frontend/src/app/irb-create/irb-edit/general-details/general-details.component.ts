@@ -274,6 +274,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         let hits_highlight: Array<any> = [];
         const results: Array<any> = [];
         let personName: string;
+        let person_id: string;
         let test;
         this._elasticsearchService.personSearch(searchString, this.personType)
           .then((searchResult) => {
@@ -285,16 +286,19 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
               hits_source.forEach((elmnt, j) => {
                 personName = hits_source[j].full_name;
+                person_id = hits_source[j].person_id;
                 test = hits_source[j];
-                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].first_name) !== undefined) {
+                if (hits_highlight[j] !== undefined && hits_highlight[j].first_name !== undefined) {
                   personName = hits_highlight[j].first_name;
                 }
-
-                if (hits_highlight[j] !== undefined && typeof (hits_highlight[j].full_name) !== undefined) {
+                if (hits_highlight[j] !== undefined && hits_highlight[j].person_id !== undefined) {
+                  person_id = hits_highlight[j].person_id;
+                }
+                if (hits_highlight[j] !== undefined && hits_highlight[j].full_name !== undefined) {
                   personName = hits_highlight[j].full_name;
                 }
                 results.push({
-                  label: personName,
+                  label: personName + ' | ' + person_id,
                   obj: test
                 });
               });

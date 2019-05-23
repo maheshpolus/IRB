@@ -98,9 +98,12 @@ public interface IRBProtocolDao {
 
 	IRBViewProfile getUserTrainingRight(String person_Id);
 
-	Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId);
+	Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId, Integer actionId);
 	
 	String generateProtocolNumber();
 
 	List<CollaboratorNames> loadCollaborators(String collaboratorSearchString);
+
+	ArrayList<HashMap<String, Object>> getHistoryGroupComment(String protocolNumber, Integer actionId, Integer protocolId,
+			Integer nextGroupActionId);
 }

@@ -552,11 +552,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			generalInfo.setCreateUser(generalInfo.getUpdateUser());
 			generalInfo.setIsCancelled("N");
 			List<ProtocolPersonnelInfo> protocolPersonnelInfoList = new ArrayList<ProtocolPersonnelInfo>();
-			ProtocolPersonnelInfo protocolPersonnelInfo = generalInfo.getPersonnelInfos().get(0);
+			ProtocolPersonnelInfo personnelInfo = generalInfo.getPersonnelInfos().get(0);
+			ProtocolPersonnelInfo protocolPersonnelInfo = new ProtocolPersonnelInfo();
 			protocolPersonnelInfo.setProtocolGeneralInfo(generalInfo);
 			protocolPersonnelInfo.setProtocolNumber(protocolNUmber);
 			protocolPersonnelInfo.setSequenceNumber(1);
-			protocolPersonnelInfo.setTrainingInfo(getTrainingFlag(protocolPersonnelInfo.getPersonId()));
+			protocolPersonnelInfo.setTrainingInfo(getTrainingFlag(personnelInfo.getPersonId()));
 			protocolPersonnelInfoList.add(protocolPersonnelInfo);
 			generalInfo.setPersonnelInfos(protocolPersonnelInfoList);			
 			List<ProtocolLeadUnits> protocolUnitList = new ArrayList<ProtocolLeadUnits>();
@@ -1542,12 +1543,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId) {
+	public Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId, Integer actionId) {
 		Integer  nextGroupAction_id = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
 		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
+		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
@@ -1579,5 +1581,25 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		criteria.setMaxResults(25);		
 		List<CollaboratorNames> keyWordsList = criteria.list();
 		return keyWordsList;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getHistoryGroupComment(String protocolNumber, Integer actionId, Integer protocolId,
+			Integer nextGroupActionId) {		
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER ", DBEngineConstants.TYPE_STRING, protocolNumber));
+		inputParam.add(new InParameter("AV_PROTOCOL_ID ", DBEngineConstants.TYPE_INTEGER, protocolId));
+		inputParam.add(new InParameter("AV_ACTION_ID ", DBEngineConstants.TYPE_INTEGER, actionId));
+		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_GRP_COMMENTS", outputParam);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in getHistoryGroupComment:" + e);
+		} 
+		return result;
 	}
 }

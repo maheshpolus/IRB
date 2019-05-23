@@ -257,4 +257,15 @@ public interface IRBProtocolService {
 	 */
 	IRBViewProfile loadCollaborators(String collaboratorSearchString);
 
+
+	/**
+	 * @param protocolNumber
+	 * @param protocolActionId
+	 * @param protocolId
+	 * @param nextGroupActionId
+	 * @return
+	 */
+	IRBViewProfile loadProtocolHistoryGroupComments(String protocolNumber, Integer protocolActionId, Integer protocolId,
+			Integer nextGroupActionId);
+
 }

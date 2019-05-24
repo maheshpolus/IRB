@@ -34,9 +34,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolGeneralInfo {
 	@Id
-	@GenericGenerator(name = "ProtocolIdGenerator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "ProtocolIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolIdGenerator")
+	@GeneratedValue(generator = "ProtocolIdGenerator")*/
 	@Column(name = "PROTOCOL_ID")
 	private Integer protocolId;
 

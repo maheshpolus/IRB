@@ -6,7 +6,6 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,9 +14,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 
 @Entity
 @Table(name="IRB_PROTOCOL_LOCATION_PERSON")
@@ -27,9 +23,9 @@ public class ProtocolCollaboratorPersons {
 
 	@Id
 	@Column(name="PROTOCOL_LOCATION_PERSON_ID")
-	@GenericGenerator(name = "ProtocolCollaboratorPersonsIdGenerator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "ProtocolCollaboratorPersonsIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolCollaboratorPersonsIdGenerator")
+	@GeneratedValue(generator = "ProtocolCollaboratorPersonsIdGenerator")*/
 	private Integer collaboratorPersonId;
 	
 	@Column(name="PROTOCOL_PERSON_ID")

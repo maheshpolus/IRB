@@ -26,9 +26,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolLeadUnits {
 	@Id
-	@GenericGenerator(name = "ProtocolLeadUnitIdGenerator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "ProtocolLeadUnitIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolLeadUnitIdGenerator")
+	@GeneratedValue(generator = "ProtocolLeadUnitIdGenerator")*/
 	@Column(name = "PROTOCOL_UNITS_ID")
 	private Integer protocolUnitsId;
 

@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,8 +15,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "IRB_ATTACHMENT_PROTOCOL")
@@ -26,9 +23,9 @@ import org.hibernate.annotations.Parameter;
 public class IRBAttachmentProtocol {
 
 	@Id
-	@GenericGenerator(name = "IRBProtocolAttachmentIdGenerator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "IRBProtocolAttachmentIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "IRBProtocolAttachmentIdGenerator")
+	@GeneratedValue(generator = "IRBProtocolAttachmentIdGenerator")*/
 	@Column(name = "PA_PROTOCOL_ID")
 	private Integer paProtocolId;
 

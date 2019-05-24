@@ -5,14 +5,11 @@ import java.sql.Date;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name="IRB_PROTOCOL_SCIENTIFIC_DATA")
@@ -20,9 +17,9 @@ import org.hibernate.annotations.Parameter;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ScienceOfProtocol {
 	@Id
-	@GenericGenerator(name = "scientificIdGenerator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "scientificIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "scientificIdGenerator")
+	@GeneratedValue(generator = "scientificIdGenerator")*/
 	@Column(name="SCIENTIFIC_DATA_ID")
 	private Integer scientificId;
 	

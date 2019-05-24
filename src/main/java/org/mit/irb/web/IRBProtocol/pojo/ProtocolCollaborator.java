@@ -8,21 +8,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="IRB_PROTOCOL_LOCATION")
@@ -30,11 +27,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolCollaborator {
 	@Id
-	@Column(name="PROTOCOL_LOCATION_ID", updatable = false, nullable = false)
-	
-	@GenericGenerator(name = "ProtocolCollaboratorIdGenerator", strategy = "increment", parameters = {
+	@Column(name="PROTOCOL_LOCATION_ID")
+	/*@GenericGenerator(name = "ProtocolCollaboratorIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolCollaboratorIdGenerator")
+	@GeneratedValue(generator = "ProtocolCollaboratorIdGenerator")*/
 	private Integer protocolLocationId;
 	
 	@Transient

@@ -96,7 +96,7 @@
 								<span>{{(irbHeaderDetails?.LAST_APPROVAL_DATE === ' ' || irbHeaderDetails?.LAST_APPROVAL_DATE === null ) ? ' ':(irbHeaderDetails?.LAST_APPROVAL_DATE
 									| date: 'MM/dd/yyyy')}}</span>
 								<br /> Expected Start Date :
-								<span>{{(irbHeaderDetails?.EXPECTED_START_DATE === ' ' || irbHeaderDetails?.EXPECTED_START_DATE === null ) ? ' ':(irbHeaderDetails?.EXPECTED_START_DATE
+								<span>{{(irbHeaderDetails?.START_DATE === ' ' || irbHeaderDetails?.START_DATE === null ) ? ' ':(irbHeaderDetails?.START_DATE
 									| date: 'MM/dd/yyyy')}}</span>
 							</p>
 						</div>
@@ -105,7 +105,7 @@
 								Lead Unit :
 								<span>{{irbHeaderDetails?.UNIT_NAME}}</span>
 								<br /> Anticipated End Date :
-								<span>{{(irbHeaderDetails?.ANTICICPATED_END_DATE === ' ' || irbHeaderDetails?.ANTICICPATED_END_DATE === null ) ? ' ':(irbHeaderDetails?.ANTICICPATED_END_DATE
+								<span>{{(irbHeaderDetails?.END_DATE === ' ' || irbHeaderDetails?.END_DATE === null ) ? ' ':(irbHeaderDetails?.END_DATE
 									| date: 'MM/dd/yyyy')}}</span>
 							</p>
 						</div>
@@ -144,7 +144,7 @@
 		
 		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
 		routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
-		   <i class="fa fa-cog" aria-hidden="true"></i>Summary Details
+		   <i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details
 	   </button>
 		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbActions']" [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
 		 routerLinkActive="btnactive" (click)="show_current_tab('irbActions')">

@@ -163,8 +163,10 @@ this.isExpanded.fill(false);
             'protocolNumber': this.requestObject.protocolNumber,
             'protocolActionId': protocolActionId, 'protocolActionTypecode': protocolActionTypecode
         };
+        this._spinner.show();
         this._irbViewService.loadProtocolHistoryActionComments(reqObj).subscribe(
             data => {
+                this._spinner.hide();
                 const response: any = data;
                 this.reviewComments = response.irbProtocolHistoryActionComments;
             });
@@ -181,8 +183,10 @@ this.isExpanded.fill(false);
             'protocolNumber': history.PROTOCOL_NUMBER
 
         };
+        this._spinner.show();
         this._irbViewService.loadProtocolHistoryGroupComments(reqObj).subscribe(
             data => {
+                this._spinner.hide();
                 const response: any = data;
                 this.reviewComments = response.irbProtocolHistoryGroupComments;
             });

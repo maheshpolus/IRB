@@ -32,7 +32,7 @@
                 <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
                   (ngModelChange)="validateStartDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt1">
+                <div class="input-group-append input-span-1" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="dt1">
                   <!-- <span class="input-group-text"> -->
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                   <!-- </span> -->
@@ -48,7 +48,7 @@
                 <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
                   (ngModelChange)="validateEndDate()">
                 <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dt2">
+                <div class="input-group-append input-span-1" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="dt2">
                   <!-- <span class="input-group-text"> -->
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                   <!-- </span> -->
@@ -115,7 +115,7 @@
         </div>
         <div class="row bottom-margin">
           <div class="col-md-2">
-            <button type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
+            <button *ngIf="isGeneralInfoEditable" type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
               <span *ngIf="!isGeneralInfoSaved">Proceed</span>
               <span *ngIf="isGeneralInfoSaved">Save</span>
             </button>

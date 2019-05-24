@@ -6,7 +6,6 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,8 +14,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -26,9 +23,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolAdminContact {
 	@Id
-	@GenericGenerator(name = "ProtocolAdminContactIdGenerator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "ProtocolAdminContactIdGenerator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "ProtocolAdminContactIdGenerator")
+	@GeneratedValue(generator = "ProtocolAdminContactIdGenerator")*/
 	@Column(name = "ADMIN_CONTACT_ID")
 	private Integer adminContactId;
 	

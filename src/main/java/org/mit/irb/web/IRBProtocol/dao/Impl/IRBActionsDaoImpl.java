@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +14,8 @@ import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
-import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
-import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.correspondence.dao.DocxDocumentMergerAndConverter;
@@ -1045,5 +1042,18 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			logger.info("Exception in getScheduleDates:" + e);	
 		}
 		return scheduleDates;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getCommitteeList() {
+		ArrayList<HashMap<String, Object>> committeeList = null;														
+		try {
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			committeeList = dbEngine.executeProcedure("GET_IRB_COMMITTEE",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getCommitteeList:" + e);	
+		}
+		return committeeList;
 	}
 }

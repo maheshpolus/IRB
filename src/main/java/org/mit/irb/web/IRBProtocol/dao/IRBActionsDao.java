@@ -86,4 +86,6 @@ public interface IRBActionsDao {
 	IRBActionsVO administrativeCorrectionAdminActions(IRBActionsVO vo);
 
 	ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId);
+
+	ArrayList<HashMap<String, Object>> getCommitteeList();
 }

@@ -1,13 +1,11 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,5 +205,18 @@ public class IRBActionsServImpl implements IRBActionsService {
 		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates("committeeId");
 		vo.setScheduleDates(scheduleDates);	
 		return vo;	
+	}
+
+	@Override
+	public SubmissionDetailVO getCommitteeList(SubmissionDetailVO submissionDetailvo) {
+		SubmissionDetailVO subDetailvo = new SubmissionDetailVO();
+		try{
+			ArrayList<HashMap<String, Object>> committeeList = irbActionsDao.getCommitteeList();
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getCommitteeList Failed"+e);
+			logger.info("Exception in getAmendRenwalSummary:" + e);
+		}
+		return null;
 	}
 }

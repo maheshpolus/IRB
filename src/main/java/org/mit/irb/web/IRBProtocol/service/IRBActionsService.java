@@ -1,6 +1,7 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBActionsService {
@@ -41,4 +42,10 @@ public interface IRBActionsService {
 	 * @return
 	 */
 	IRBActionsVO getCommitteeScheduledDates(String committeeId);
+
+	/**
+	 * @param vo
+	 * @return get committee List
+	 */
+	SubmissionDetailVO getCommitteeList(SubmissionDetailVO vo);
 }

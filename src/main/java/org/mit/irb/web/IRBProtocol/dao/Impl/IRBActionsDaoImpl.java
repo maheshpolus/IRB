@@ -3,6 +3,9 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +18,10 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
+import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
+import org.mit.irb.web.correspondence.dao.DocxDocumentMergerAndConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -73,19 +78,19 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	                if(temp.equals(finalResult.get(k).get("ACTION_NAME")))
 	                {
 	                	finalResult.remove(k); 
-	                } 
+	                }                 
 	            }
+	       //     if(finalResult.get(i).get("ACTION_NAME").toString().equals("EXPEDITED_APPROVAL") && )
 	        }
 			vo.setPersonActionsList(finalResult);	
-			vo = getProtocolActionDetails(finalResult, vo);
+			vo = getProtocolActionDetails(vo);
 		} catch (Exception e) {
 			logger.info("Exception in getPersonRight:" + e);
 		}
 		return vo;
 	}
 
-	public IRBActionsVO getProtocolActionDetails(ArrayList<HashMap<String, Object>> finalResult,IRBActionsVO vo){
-		ArrayList<HashMap<String, Object>> renewalModules = null;
+	public IRBActionsVO getProtocolActionDetails(IRBActionsVO vo){
 		try{
 			ProtocolSubmissionStatuses protocolSubmissionStatuses = new ProtocolSubmissionStatuses();
 			if(vo.getSubmissionId() != null){
@@ -95,21 +100,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				protocolSubmissionStatuses.setSequenceNumber(vo.getSequenceNumber());
 				protocolSubmissionStatuses.setProtocolId(vo.getProtocolId());
 			}
-			vo.setProtocolSubmissionStatuses(protocolSubmissionStatuses);
-			for(HashMap<String, Object> data : finalResult){
-				switch (data.get("ACTION_CODE").toString()) {
-				case KeyConstants.CREATE_AMENDMENT_ACTION_CODE:
-					 renewalModules = iterateAmendRenewalModule(vo,renewalModules);
-					 vo.setModuleAvailableForAmendment(renewalModules);			
-					break;
-				case KeyConstants.NOTIFY_COHEUS_ACTION_CODE:						
-					ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
-					outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
-					renewalModules=dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputparam);
-					vo.setNotifyTypeQualifier(renewalModules);		
-					break;
-				}
-			}
+			vo.setProtocolSubmissionStatuses(protocolSubmissionStatuses);			
 		}catch (Exception e) {
 			logger.info("Exception in getProtocolSubmissionDetails:" + e);		
 		}
@@ -218,6 +209,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			vo.getProtocolSubmissionStatuses().setSubmission_Id(Integer.parseInt(result.get(0).get("SUBMISSION_ID").toString()));
 			vo.getProtocolSubmissionStatuses().setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
 		    updateActionStatus(vo);
+		  //  vo=generateProtocolCorrespondence(vo);
 	} catch (Exception e) {
 			logger.info("Exception in updateSubmissionStatus:" + e);		
 			}	
@@ -468,7 +460,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));		
 			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));		
 			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getComment()));
-			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,vo.getSqlActionDate()));		
+			inputParam.add(new InParameter("AV_ACTION_DATE", DBEngineConstants.TYPE_DATE,vo.getActionDate() != null ? generateSqlDate(vo.getActionDate()): null));		
+			//inputParam.add(new InParameter("AV_ACTION_DATEeeee", DBEngineConstants.TYPE_DATE,vo.getApprovalDate() != null ? generateSqlDate(vo.getApprovalDate()): null));		
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));		
 			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getProtocolId()));		
 			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getProtocolNumber()));		
@@ -515,8 +508,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo,
-			ArrayList<HashMap<String, Object>> renewalModules) {
+	public ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo) {
+		ArrayList<HashMap<String, Object>> renewalModules = null;
 		renewalModules=(ArrayList<HashMap<String, Object>>) getAmendRenewalModules(vo.getProtocolNumber());
 		renewalModules.forEach(modules ->{
 			if(modules.get("STATUS_FLAG").toString().equals("Y")){
@@ -539,7 +532,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_PROTO_AMEND_REN_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inputParam,"GET_IRB_PROTO_AMND_RENW_SUMARY",outputParam);
-			if(result != null && !result.isEmpty()){
+			if(result.get(0).get("SUMMARY") != null){
 				amendRenewalSummary = result.get(0).get("SUMMARY").toString();
 			}
 		} catch (Exception e) {
@@ -596,11 +589,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 
 	@Override
-	public IRBActionsVO returnToPiAdminActions(IRBActionsVO vo) {
-		ArrayList<HashMap<String, Object>> result = null;
+	public IRBActionsVO returnToPiAdminActions(IRBActionsVO vo,MultipartFile[] files) {
 		try {			
-			result=protocolActionSP(vo,null);			
-			vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			protocolActionSP(vo,null);	
+			protocolActionAttachments(files,vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Returned to PI successfully");	
@@ -769,7 +761,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		return vo;
 	}
 
-	public void generateProtocolCorrespondence(IRBActionsVO vo){
+	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
 		ResponseEntity<byte[]> attachmentData = null;
 		try{
 			byte[] data = getTemplateData(vo);
@@ -782,10 +774,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 			headers.setPragma("public");
 			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);	
-			saveProtocolCorrespondence(vo,attachmentData);
+			//saveProtocolCorrespondence(vo,attachmentData);
 		}catch (Exception e) {
 			logger.error("Exception in generateProtocolCorrespondence"+ e.getMessage());
 		}	
+		//vo.setAttachmentData(attachmentData);
+		return vo;
 	}
 	
 	public byte[] getTemplateData(IRBActionsVO vo) {
@@ -793,7 +787,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {
 			ArrayList<InParameter> inParam = new ArrayList<>();
 			ArrayList<OutParameter> outParam = new ArrayList<>();			
-			inParam.add(new InParameter("AV_LETTER_TEMPLATE_TYPE_CODE", DBEngineConstants.TYPE_STRING, vo.getTemplateTypeCode()));
+			inParam.add(new InParameter("AV_LETTER_TEMPLATE_TYPE_CODE", DBEngineConstants.TYPE_STRING, "5"));
 			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_LETTER_TEMPLATE_TYPE", outParam);
 			if (result != null && !result.isEmpty()) {
@@ -813,7 +807,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try{
 			InputStream myInputStream = new ByteArrayInputStream(data); 
 			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(myInputStream,TemplateEngineKind.Velocity);
-			FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
+			//FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
 			//fieldsMetadata.load("exempt", Exempt.class, true);
 			IContext context = report.createContext();
 			/*List<Exempt> exemptList = setExemptQuestionList(commonVO.getIrbExemptForm().getExemptQuestionList());
@@ -822,8 +816,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				context.put("exemptList", "");
 			}*/
 			context = setPlaceHolderData(context,vo);
-			/*DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
-			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);*/
+			DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
+			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);
 		}catch (Exception e) {
 			logger.info("Exception in mergePlaceHolders method:" + e);
 		}
@@ -858,15 +852,198 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			context.put("TITLE", irbExemptForm.getExemptTitle());
 			context.put("UNIT_NAME", irbExemptForm.getUnitName());
 			context.put("FACULTY_SPONSOR_NAME", irbExemptForm.getFacultySponsorPerson() == null?"":irbExemptForm.getFacultySponsorPerson());*/
+			context.put("ToAddress", "Saxe Rebecca");
+			context.put("FromAddress", "COHEUS Committee");
+			context.put("Date", "27-06-2019");
+			context.put("CommitteeActionDate", "30-06-2019");
 		}catch (Exception e) {
 			logger.info("Exception in setPlaceHolderData method:" + e);
 		}
 		return context;
 	}
-
-	public void saveProtocolCorrespondence(IRBActionsVO vo, ResponseEntity<byte[]> attachmentData) {
-		// TODO Auto-generated method stub
-		
+	
+	public Date generateSqlDate(String date){
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date utilDate = null;
+		java.sql.Date sqlDate= null;
+		try{
+			utilDate = sdf.parse(date);
+			sqlDate = new java.sql.Date(utilDate.getTime());
+		}catch (Exception e) {
+			logger.info("Exception in generateSqlActionDate:" + e);
+		}
+		return sqlDate;
 	}
 
+	@Override
+	public IRBActionsVO assignToAgendaAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Assign to agenda successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Assign to agenda Failed");
+			e.printStackTrace();
+			logger.info("Exception in assignToAgendaAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO grantExceptionAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Exception granted successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Grant exception Failed");
+			e.printStackTrace();
+			logger.info("Exception in grantExceptionAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Review not required successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Review not required Failed");
+			e.printStackTrace();
+			logger.info("Exception in reviewNotRequiredAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getSubmissionTypeQulifier() {
+		ArrayList<HashMap<String, Object>> submissionTypeQulifier = null;														
+		try {
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			submissionTypeQulifier=dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getSubmissionTypeQulifier:" + e);	
+		}
+		return submissionTypeQulifier;
+	}
+
+	@Override
+	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Approved successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Approve Failed");
+			e.printStackTrace();
+			logger.info("Exception in approvedAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO SMRRAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("SMRR successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("SMRR Failed");
+			e.printStackTrace();
+			logger.info("Exception in SMRRAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO SRRAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("SRR successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("SRR Failed");
+			e.printStackTrace();
+			logger.info("Exception in SRRAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Expedited approval successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Expedited approval Failed");
+			e.printStackTrace();
+			logger.info("Exception in expeditedApprovalAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO responseApprovalAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Response approval successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Response approval Failed");
+			e.printStackTrace();
+			logger.info("Exception in responseApprovalAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO administrativeCorrectionAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Adminstrative correction successfully");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Adminstrative correction Failed");
+			e.printStackTrace();
+			logger.info("Exception in administrativeCorrectionAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId) {
+		ArrayList<HashMap<String, Object>> scheduleDates = null;														
+		try {
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,committeeId));
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			scheduleDates=dbEngine.executeProcedure(inputParam,"GET_IRB_SCHEDULE_DATE",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getScheduleDates:" + e);	
+		}
+		return scheduleDates;
+	}
 }

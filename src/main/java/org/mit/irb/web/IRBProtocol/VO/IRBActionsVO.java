@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
+import org.springframework.http.ResponseEntity;
 
 public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> personActionsList;
@@ -33,8 +34,11 @@ public class IRBActionsVO {
 	private String selectedNotifyTypeQualifier;
 	private String submissionId;
 	private String actionDate;
-	private Date sqlActionDate;
 	private String templateTypeCode;
+	private String decisionDate;
+	private String approvalDate;
+	private String expirationDate;
+	private ArrayList<HashMap<String, Object>> scheduleDates;
 	
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
@@ -244,19 +248,43 @@ public class IRBActionsVO {
 		this.actionDate = actionDate;
 	}
 
-	public Date getSqlActionDate() {
-		return sqlActionDate;
-	}
-
-	public void setSqlActionDate(Date sqlActionDate) {
-		this.sqlActionDate = sqlActionDate;
-	}
-
 	public String getTemplateTypeCode() {
 		return templateTypeCode;
 	}
 
 	public void setTemplateTypeCode(String templateTypeCode) {
 		this.templateTypeCode = templateTypeCode;
+	}
+
+	public String getDecisionDate() {
+		return decisionDate;
+	}
+
+	public void setDecisionDate(String decisionDate) {
+		this.decisionDate = decisionDate;
+	}
+
+	public String getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(String approvalDate) {
+		this.approvalDate = approvalDate;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	
+	public ArrayList<HashMap<String, Object>> getScheduleDates() {
+		return scheduleDates;
+	}
+
+	public void setScheduleDates(ArrayList<HashMap<String, Object>> scheduleDates) {
+		this.scheduleDates = scheduleDates;
 	}
 }

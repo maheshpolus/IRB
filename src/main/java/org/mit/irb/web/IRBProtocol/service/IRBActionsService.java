@@ -30,5 +30,15 @@ public interface IRBActionsService {
 	 */
 	IRBActionsVO updateAmendRenwalSummary(IRBActionsVO vo);
 
+	/**
+	 * @param vo
+	 * @return
+	 */
 	IRBActionsVO getActionLookup(IRBActionsVO vo);
+
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	IRBActionsVO getCommitteeScheduledDates(String committeeId);
 }

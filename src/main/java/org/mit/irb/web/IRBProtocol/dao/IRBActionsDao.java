@@ -37,13 +37,13 @@ public interface IRBActionsDao {
 	
 	void updateActionStatus(IRBActionsVO vo);
 
-	ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo,ArrayList<HashMap<String, Object>> renewalModules);
+	ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo);
 
 	String getAmendRenewalSummary(IRBActionsVO vo);
 
 	IRBActionsVO updateAmendRenewModule(IRBActionsVO vo);
 
-	IRBActionsVO returnToPiAdminActions(IRBActionsVO vo);
+	IRBActionsVO returnToPiAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
 	IRBActionsVO closeAdminActions(IRBActionsVO vo);
 
@@ -64,4 +64,26 @@ public interface IRBActionsDao {
 	IRBActionsVO notifyCommiteeAdminActions(IRBActionsVO vo);
 
 	IRBActionsVO deferAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO assignToAgendaAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO grantExceptionAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo);
+
+	ArrayList<HashMap<String, Object>> getSubmissionTypeQulifier();
+
+	IRBActionsVO approvedAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO SMRRAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO SRRAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO responseApprovalAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO administrativeCorrectionAdminActions(IRBActionsVO vo);
+
+	ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId);
 }

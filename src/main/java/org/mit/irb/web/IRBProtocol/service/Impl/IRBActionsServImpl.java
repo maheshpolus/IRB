@@ -1,5 +1,6 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 		switch (vo.getActionTypeCode()) {
 		case "101":			
 			vo = irbActionsDao.submitForReviewProtocolActions(vo);
+			
 			break;
 		case "303":
 		   vo = irbActionsDao.withdrawProtocolActions(vo);
@@ -72,49 +74,85 @@ public class IRBActionsServImpl implements IRBActionsService {
 			vo = irbActionsDao.copyProtocolActions(vo);
 			break;
 		case "213":		
-			vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.returnToPiAdminActions(vo);
+			//vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.returnToPiAdminActions(vo,files);
 			break;
 		case "300":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closeAdminActions(vo);
 			break;
 		case "304":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.disapproveAdminActions(vo);
 			break;
 		case "209":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.irbAcknowledgementAdminActions(vo);
 			break;
 		case "212":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.reOpenEnrollmentAdminActions(vo,files);
 			break;
 		case "211":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.dataAnalysisOnlyAdminActions(vo);
 			break;
 		case "207":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
 			break;
 		case "301":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.terminateAdminActions(vo);
 			break;	
 		case "302":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.suspendAdminActions(vo);
 			break;	
 		case "109":
-			vo=generateSqlActionDate(vo);
+		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.notifyCommiteeAdminActions(vo);
 			break;
 		case "201":
-			vo=generateSqlActionDate(vo);
+		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.deferAdminActions(vo);
 			break;
+		case "200":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.assignToAgendaAdminActions(vo);
+			break;
+		case "206":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.grantExceptionAdminActions(vo);
+			break;
+		case "210":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.reviewNotRequiredAdminActions(vo);
+			break;
+		case "204":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.approvedAdminActions(vo);
+			break;
+		case "203":
+		//	vo=generateSqlActionDate(vo);
+	    	vo = irbActionsDao.SMRRAdminActions(vo);
+			break;
+		case "202":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.SRRAdminActions(vo);
+			break;
+		case "205":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.expeditedApprovalAdminActions(vo);
+			break;
+		case "208":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.responseApprovalAdminActions(vo);
+			break;
+		case "113":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
+			break;		
 		}
 		return vo;
 	}
@@ -123,8 +161,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 	public IRBActionsVO getAmendRenwalSummary(IRBActionsVO vo) {
 		IRBActionsVO irbActionsVO = new IRBActionsVO();
 		try{
-			ArrayList<HashMap<String, Object>> renewalModules = null;
-			renewalModules = irbActionsDao.iterateAmendRenewalModule(vo,renewalModules);	
+			ArrayList<HashMap<String, Object>> renewalModules =irbActionsDao.iterateAmendRenewalModule(vo);	
 			irbActionsVO.setModuleAvailableForAmendment(renewalModules);
 			irbActionsVO.setComment(irbActionsDao.getAmendRenewalSummary(vo));
 			irbActionsVO.setProtocolStatus(vo.getPrevProtocolStatusCode());
@@ -151,27 +188,24 @@ public class IRBActionsServImpl implements IRBActionsService {
 			logger.info("Exception in getAmendRenwalSummary:" + e);
 		}
 		return irbActionsVO;
-	}
-	
-	public IRBActionsVO generateSqlActionDate(IRBActionsVO vo){
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-		java.util.Date utilActionDate = null;
-		java.sql.Date sqlActionDate= null;
-		if (vo.getActionDate()!= null) {
-			try {
-				utilActionDate = sdf.parse(vo.getActionDate());
-			} catch (ParseException e) {				
-				e.printStackTrace();
-			}
-			sqlActionDate = new java.sql.Date(utilActionDate.getTime());
-			vo.setSqlActionDate(sqlActionDate);			
-		}
-		return vo;
-	}
+	}	
 
 	@Override
 	public IRBActionsVO getActionLookup(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<HashMap<String, Object>> renewalModules = irbActionsDao.iterateAmendRenewalModule(vo);	
+		vo.setModuleAvailableForAmendment(renewalModules);
+		ArrayList<HashMap<String, Object>> submissionTypeQulifier = irbActionsDao.getSubmissionTypeQulifier();
+		vo.setNotifyTypeQualifier(submissionTypeQulifier);	
+		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates("FWA00004881");
+		vo.setScheduleDates(scheduleDates);	
+		return vo;	
+	}
+
+	@Override
+	public IRBActionsVO getCommitteeScheduledDates(String committeeId) {
+		IRBActionsVO vo = new IRBActionsVO();
+		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates("committeeId");
+		vo.setScheduleDates(scheduleDates);	
+		return vo;	
 	}
 }

@@ -69,4 +69,12 @@ public class IRBActionsController {
 		vo = irbActionsService.getActionLookup(vo);
 		return vo;
 	}
+	
+	@RequestMapping(value = "/getCommitteeScheduledDates", method = RequestMethod.POST)
+	public @ResponseBody IRBActionsVO getCommitteeScheduledDates(HttpServletRequest request,HttpServletResponse response)
+	{
+		String committeeId = request.getParameter("committeeId");
+		IRBActionsVO vo = irbActionsService.getCommitteeScheduledDates(committeeId);
+		return vo;
+	}
 }

@@ -1,107 +1,136 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, Output,
+         ChangeDetectorRef, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Constants } from '../../questionnaire.constants';
 import * as _ from 'lodash';
-// import _.remove from 'lodash/remove';
-// import _.filter from 'lodash/filter';
-// import _.forEach from 'lodash/forEach';
-// import _.find from 'lodash/find';
+import { CreateQuestionnaireService } from '../../services/create.service';
+import { easeInOUt } from '../../services/animations';
+import { ISubscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-create-questionnaire',
   templateUrl: './create-questionnaire.component.html',
   styleUrls: ['./create-questionnaire.component.css'],
+  animations: [easeInOUt],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateQuestionnaireComponent implements OnInit {
+export class CreateQuestionnaireComponent implements OnInit, OnDestroy {
 
-  constructor( private _activatedRoute: ActivatedRoute ) { }
-
-  @Output() saveQuestionniare: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() createTree: EventEmitter<number> = new EventEmitter<number>();
-  @Output() previewTab: EventEmitter<string> = new EventEmitter<string>();
-  @Input()  questionnaire: any = {};
-  @Input()  commonValues: any  = {};
-  @Input()  groupLabels: any   = {};
-  @Input()  nodes: any  = {};
-  isQuestionEdited      = false;
+  constructor( private _activatedRoute: ActivatedRoute,
+     private _createQuestionnaireService: CreateQuestionnaireService,
+     private _changeRef: ChangeDetectorRef) {}
+  @Input() questionnaire: any = {};
+  @Input() commonValues: any  = {};
+  @Input() nodes: any  = {};
+  @Input() isFinal = false;
   selectedQuestionIndex = 0;
   toDeleteData   = {};
   editorConfig   = Constants.editorConfig;
   parentDetails  = '';
   isViewmode     = false;
   deleteTypeFlag = null;
-  ckEditorConfig = {
+  editIndex      = 0;
+  debounceTimer: any;
+  $updatEditIndex: ISubscription;
+  $addQuestion: ISubscription;
+  ckEditorConfig: {} = {
     height: '300px',
     toolbarCanCollapse: 1,
     removePlugins: 'sourcearea',
   };
 
   ngOnInit() {
-    this._activatedRoute.queryParams.subscribe( data  => {
-      const result: any = data;
-      this.isViewmode   = (result.viewmode === 'true');
+    this._activatedRoute.queryParams.subscribe( (data: any)  => {
+      this.isViewmode   = (data.viewmode === 'true');
       this.editorConfig.editable = !this.isViewmode;
-      if (result.id === undefined && this.questionnaire.questions.length === 0 ) {
+      if (data.id === undefined && this.questionnaire.questions.length === 0 ) {
         this.addNewQuestion('G0');
       }
     });
+    this.addQuestionEvent();
+    this.updateEditIndexEvent();
   }
+
+  ngOnDestroy() {
+    this.$addQuestion.unsubscribe();
+    this.$updatEditIndex.unsubscribe();
+    this.editIndex = null;
+    this.scrollAnimate();
+  }
+  @HostListener('window:scroll',['$event']) onWindowScroll() {
+      this.scrollAnimate();
+  }
+  /**Animates the button as user scrolls
+   */
+  scrollAnimate() {
+// tslint:disable-next-line: no-unused-expression
+    this.debounceTimer ? clearTimeout(this.debounceTimer) : null;
+    this.debounceTimer = setTimeout(() => {
+      if (this.editIndex) {
+        document.getElementById('floater').style.top =
+        document.getElementById( this.editIndex.toString()).getBoundingClientRect().top + 'px' ;
+      } else {
+        const el =  document.getElementById('floater');
+        if (el) {
+          el.style.top = '100px';
+        }
+      }
+    }, 500);
+  }
+  autoFocus() {
+    setTimeout( () => {
+      document.getElementById(this.editIndex.toString()).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('question' + this.editIndex.toString()).focus();
+      this.scrollAnimate();
+     });
+  }
+
   /**
    * @param  {} groupName
    * @param  {} parentId
-   * Creates a new question which will be pushed into questinnaire questions array the basic details for the
-   * question is added here
+   * Creates a new question basic features for the question is added here
+   * like questionId, groupname etc and updates the new questionID
    */
   configureNewQuestion(groupName, parentId) {
-    this.isQuestionEdited = true;
-    if (groupName === 'G0') {
-      Constants.newQuestion.SHOW_QUESTION = true;
-      this.addParentToTree(this.commonValues.lastQuestionId, groupName);
-      this.nodes = Object.assign({}, this.nodes);
-    } else {
-      Constants.newQuestion.SHOW_QUESTION = false;
-      this.addChildToTree(this.nodes.nodes, parentId, this.commonValues.lastQuestionId, groupName);
-      this.nodes = Object.assign({}, this.nodes);
-    }
+    this.commonValues.isQuestionEdited = true;
+    groupName === 'G0' ? Constants.newQuestion.SHOW_QUESTION = true : Constants.newQuestion.SHOW_QUESTION = false;
     Constants.newQuestion.GROUP_NAME  = groupName;
     Constants.newQuestion.QUESTION_ID = this.commonValues.lastQuestionId;
-    Constants.newQuestion.GROUP_LABEL = this.groupLabels[groupName] || groupName ;
     Constants.newQuestion.PARENT_QUESTION_ID = parentId;
     this.addOption(this.commonValues.lastQuestionId, null);
     this.commonValues.lastQuestionId ++;
+    this._changeRef.markForCheck();
     return Object.assign({}, Constants.newQuestion);
   }
+
   /**
-   * @param  {} id
-   * event from the tree is catched here
-   * it allows to navigate to selected question and focus is set on the question field
+   * subcribes to the event from add button Add new question is triggred on click. You should unsubcribe on ngOnDestroy
+   * to avoid duplicate subcriptions
    */
-  viewQuestion(id) {
-    document.getElementById(id).scrollIntoView({behavior: 'instant' });
-    document.getElementById('question' + id).focus();
+  addQuestionEvent() {
+    this.$addQuestion = this._createQuestionnaireService.addQuestionEvent
+                        .subscribe( data => { this.addNewQuestion(data); });
   }
-  /**
-   * @param  {} groupName
-   * Adds a base question(G0).A timeout is used to avoid error of navigating to question before creation
+   /**
+   * subcribes to the event from tree which emits the current selected question. You should unsubcribe on ngOnDestroy
+   * to avoid duplicate subcriptions
    */
-  addNewQuestion(groupName) {
-    this.groupLabels[groupName] = this.groupLabels[groupName] || groupName;
-    this.questionnaire.questions.push( Object.assign({}, this.configureNewQuestion(groupName, null)));
-    const id = (this.commonValues.lastQuestionId - 1).toString();
-    setTimeout( () => {
-      document.getElementById(id).scrollIntoView({behavior: 'instant' });
-      document.getElementById('question' + id).focus();
+  updateEditIndexEvent() {
+    this.$updatEditIndex = this._createQuestionnaireService.updateSelectedQuestionId.subscribe(
+      (data: number) => {
+        this.editIndex = data;
+        this.autoFocus();
+        this._changeRef.markForCheck();
     });
   }
   /**
    * @param  {} questionid
    * @param  {} optionLabel
    * updates the QuestionnaireOptions in Questionaire the basic details of option are added
-   * the option number is calculated with QuestionnaireOptions array length
+   * the option number is calculated with QuestionnaireOptions array length and timeout is used to avoid errors
    */
   addOption(questionid, optionLabel) {
-    this.isQuestionEdited = true;
+    this.commonValues.isQuestionEdited = true;
     let optionNumber      = 1;
     if (this.questionnaire.options.length > 0) {
       optionNumber = this.questionnaire.options[this.questionnaire.options.length - 1].QUESTION_OPTION_ID + 1;
@@ -110,6 +139,7 @@ export class CreateQuestionnaireComponent implements OnInit {
     Constants.newOption.QUESTION_OPTION_ID = optionNumber;
     Constants.newOption.OPTION_LABEL       = optionLabel;
     this.questionnaire.options.push(Object.assign({}, Constants.newOption));
+    setTimeout(() => { document.getElementById('option' + optionNumber).focus(); });
   }
   /**
    * @param  {} questionId
@@ -117,7 +147,7 @@ export class CreateQuestionnaireComponent implements OnInit {
    * creates a new Condition for a selected question and pushed into QuestionnaireCondition array of questionnaire
    */
   addBranching(questionId, index) {
-    this.isQuestionEdited = true;
+    this.commonValues.isQuestionEdited = true;
     this.questionnaire.questions[index].HAS_CONDITION = 'Y';
     Constants.newCondition.QUESTION_CONDITION_ID = this.commonValues.lastConditionId;
     Constants.newCondition.QUESTION_ID = questionId;
@@ -134,26 +164,37 @@ export class CreateQuestionnaireComponent implements OnInit {
    * A timeout is used to avoid error of navigating to question before creation
    */
   addConditionBasedQuestion(index, groupName, parentId) {
-    this.groupLabels[groupName] = this.groupLabels[groupName] || groupName;
     this.questionnaire.questions.splice(index + 1, 0, this.configureNewQuestion(groupName, parentId));
-    const id = (this.commonValues.lastQuestionId - 1).toString();
-    setTimeout( () => {
-      document.getElementById(id).scrollIntoView({ behavior: 'instant' });
-      document.getElementById('question' + id).focus();
-     });
+    this._createQuestionnaireService.updateTree.next(
+      {'parentId': parentId, 'questionId': this.commonValues.lastQuestionId, 'groupName': groupName});
+    const id = (this.commonValues.lastQuestionId - 1);
+    this.editIndex = id;
+    this.autoFocus();
+    this._createQuestionnaireService.updateSelectedQuestionId.next(this.editIndex);
+  }
+  /**
+   * @param  {} groupName
+   * Adds a base question(G0).A timeout is used to avoid error of navigating to question before creation
+   */
+  addNewQuestion(groupName) {
+    this.questionnaire.questions.push( Object.assign({}, this.configureNewQuestion(groupName, null)));
+    this._createQuestionnaireService.updateTree.next({'questionId': this.commonValues.lastQuestionId, 'groupName': groupName})
+    this.editIndex = this.commonValues.lastQuestionId - 1;
+    this.autoFocus();
+    this._createQuestionnaireService.updateSelectedQuestionId.next(this.editIndex);
   }
   /**
    * @param  {} optionId
    * removes an option matching the optionNumber from QuestionnaireOptions
    */
   removeOption(option) {
-    if (option.AC_TYPE === undefined || option.AC_TYPE === 'U') {
+    if (option.AC_TYPE === undefined) {
       this.questionnaire.deleteList.option.push(option.QUESTION_OPTION_ID);
-      this.isQuestionEdited = true;
+      this.commonValues.isQuestionEdited = true;
     }
     _.remove( this.questionnaire.options, { 'QUESTION_OPTION_ID': option.QUESTION_OPTION_ID });
     const matchingCondtion = _.find( this.questionnaire.conditions,
-                                  { 'CONDITION_VALUE': option.OPTION_LABEL, 'QUESTION_ID': option.QUESTION_ID });
+                             { 'CONDITION_VALUE': option.OPTION_LABEL, 'QUESTION_ID': option.QUESTION_ID });
     if (matchingCondtion) {
       this.removeCondition(matchingCondtion);
     }
@@ -163,16 +204,13 @@ export class CreateQuestionnaireComponent implements OnInit {
    * removes a condition matching the conditionId
    */
   removeCondition(condition) {
-    if (condition.AC_TYPE === undefined || condition.AC_TYPE === 'U') {
-      this.isQuestionEdited = true;
+    if (condition.AC_TYPE === undefined) {
+      this.commonValues.isQuestionEdited = true;
       this.questionnaire.deleteList.condition.push(condition.QUESTION_CONDITION_ID);
     }
     const matchingQuestions: any = _.filter(this.questionnaire.questions, { 'GROUP_NAME': condition.GROUP_NAME });
     if (matchingQuestions) {
-      _.forEach(matchingQuestions , (question) => {
-        this.removeQuestion(question);
-      });
-      this.createTree.emit();
+      _.forEach(matchingQuestions , (question) => { this.removeQuestion(question); });
     }
     _.remove( this.questionnaire.conditions, { 'QUESTION_CONDITION_ID': condition.QUESTION_CONDITION_ID });
   }
@@ -192,17 +230,17 @@ export class CreateQuestionnaireComponent implements OnInit {
   }
 
   removeQuestion(question) {
-    if (question.AC_TYPE === undefined || question.AC_TYPE === 'U') {
-      this.isQuestionEdited = true;
+    this.editIndex = null;
+    if (question.AC_TYPE === undefined) {
+      this.commonValues.isQuestionEdited = true;
      this.questionnaire.deleteList.question.push(question.QUESTION_ID);
     }
     _.remove( this.questionnaire.questions, { 'QUESTION_ID': question.QUESTION_ID });
     this.removeQuestionConditions(question.QUESTION_ID);
     this.removeQuestionOptions(question.QUESTION_ID);
     const childQuestionList: any = _.filter( this.questionnaire.questions, {'PARENT_QUESTION_ID': question.QUESTION_ID});
-    _.forEach( childQuestionList, (childQuestion) => {
-      this.removeQuestion(childQuestion);
-    });
+    _.forEach( childQuestionList, (childQuestion) => { this.removeQuestion(childQuestion); });
+    this._createQuestionnaireService.updateTree.next({});
   }
   /**
    * @param  {} questionId
@@ -214,10 +252,8 @@ export class CreateQuestionnaireComponent implements OnInit {
   /**
    * @param  {} questionId
    * @param  {} questionType
-   * for a given question looks for enabling braching for the question.
-   * returns true
-   * if the length of matching conditions is less than matching option for the given questionid or
-   * ceratin types which does not have options
+   * for a given question looks for enabling braching .returns true if the length of matching
+   * conditions is less than matching option for the given questionid or ceratin types which does not have options
    */
   enableBraching(questionId, questionType) {
     if (questionType === 'Text' || questionType === 'Textarea') {
@@ -233,134 +269,38 @@ export class CreateQuestionnaireComponent implements OnInit {
     }
   }
   /**
-   * @param  {} index
-   * hides the child question of a particular base question(G0)
-   */
-  hideQuestions(index) {
-    for (let i = index + 1; i <  this.questionnaire.questions.length; i++ ) {
-      if (this.questionnaire.questions[i].GROUP_NAME !== 'G0') {
-        this.questionnaire.questions[i].HIDE_QUESTION = !this.questionnaire.questions[i].HIDE_QUESTION;
-      } else {
-        break;
-      }
-    }
-  }
-  /**
    * @param  {} questionType
    * @param  {} questionId
-   * updates the questionnaireOptions for change in questionType.
-   * removes the existing questions and updates with default options
+   * updates the questionnaireOptions for change in questionType.removes the existing questions and updates with default options
    */
   changeQuestionType(questionType, questionId , index) {
-    this.isQuestionEdited = true;
+    this.commonValues.isQuestionEdited = true;
     this.questionnaire.questions[index].HAS_CONDITION = null;
     const options = _.filter( this.questionnaire.options, {'QUESTION_ID': questionId});
-    _.forEach( options, (option) => {
-      this.removeOption(option);
-    });
+    _.forEach( options, (option) => { this.removeOption(option); });
     if (questionType === 'Radio' || questionType === 'Checkbox') {
       this.addOption(questionId, null);
     }
     if (questionType === 'Y/N') {
-      ['Yes', 'No'].forEach(element => {
-        this.addOption(questionId, element);
-      });
+      ['Yes', 'No'].forEach(element => {this.addOption(questionId, element); });
     }
     if (questionType === 'Y/N/NA') {
-      ['Yes', 'No' , 'N/A'].forEach(element => {
-        this.addOption(questionId, element);
-      });
-    }
-  }
-  /**
-   * @param  {} groupLabel
-   * @param  {} groupName
-   * Changes the name of the group in the questionnaire heirarchy tree
-   */
-  updateTree(groupLabel , groupName) {
-    this.updateTreeWithNewGroupName(this.nodes.nodes, groupLabel , groupName);
-    this.nodes = Object.assign({}, this.nodes);
-    this.isQuestionEdited       = true;
-    this.groupLabels[groupName] = groupLabel;
-  }
-  /**
-   * @param  {} questionId
-   * @param  {} groupName
-   * adds a base node to tree(G0)
-   * simply pushes the created node to the nodes array and creates new nodes reference
-   */
-  addParentToTree( questionId, groupName) {
-    this.nodes.nodes.push({
-      questionId: questionId,
-      name: (this.groupLabels[ groupName] || groupName ) + ': Q ' + questionId,
-      groupName: groupName,
-      children: []
-    });
-  }
-  /**
-   * @param  {} nodes
-   * @param  {} parentId
-   * @param  {} childId
-   * @param  {} groupName
-   * Traverese the existing tree to find the exact postion of parent node.
-   * pushes the created node to the children of parent tree and breaks the tree traversal
-   */
-  addChildToTree( nodes, parentId, childId, groupName) {
-    _.forEach(nodes, (node) => {
-      if (node.questionId === parentId) {
-        node.children.push({questionId: childId,
-                            name: (this.groupLabels[ groupName] || groupName ) + ': Q ' + childId,
-                            groupName: groupName ,
-                            children: []
-                          });
-        return false;
-      } else if ( node.children.length > 0) {
-        this.addChildToTree(node.children, parentId, childId, groupName);
-      }
-    });
-  }
-  /**
-   * @param  {} nodes
-   * @param  {} groupLabel
-   * @param  {} groupName
-   * traverse the tree to find the exact nodes.updates the name of the node with new groupName
-   */
-  updateTreeWithNewGroupName(nodes, groupLabel , groupName) {
-    _.forEach(nodes, (node) => {
-      if (node.groupName === groupName) {
-        node.name = groupLabel + ':' + node.name.split(':')[1];
-      } else if ( node.children.length > 0) {
-        this.updateTreeWithNewGroupName(node.children, groupLabel, groupName);
-      }
-    });
-  }
-  getParentDetails(parentId, groupname) {
-    if (groupname === 'G0') {
-      this.parentDetails = 'It does not have a parent question';
-    } else {
-      if (parentId !== undefined ) {
-      const parentCondition: any = _.find(this.questionnaire.conditions, {'QUESTION_ID': parentId, 'GROUP_NAME': groupname});
-      const parentQuestion: any  = _.find(this.questionnaire.questions, {'QUESTION_ID': parentId});
-      this.parentDetails         = 'If ' + '"' + parentQuestion.QUESTION + '"' + ' ' +
-                                    parentCondition.CONDITION_TYPE  + ' ' +
-                                    '"' + parentCondition.CONDITION_VALUE + '"';
-      }
+      ['Yes', 'No' , 'N/A'].forEach(element => { this.addOption(questionId, element); });
     }
   }
   /**
    * @param  {} deleteData - data to be deleted
    * @param  {} deleteTypeFlag - who intiated the delete
-   * a single modal is used for all delete conformation.
-   * selected data to delete  and from where flag is set here
+   * a single modal is used for all delete conformation. selected data to delete  and from where flag is set here
    */
   setDeleteData(deleteData, deleteTypeFlag) {
     this.toDeleteData   = deleteData;
     this.deleteTypeFlag = deleteTypeFlag;
   }
    /**
-    * executes the delete option if the user confirms the delete
+    *if the user confirms the delete and deletes accroding to the type(option,question or condition)
    */
-  executeDeleteData() {
+  deleteAttribute() {
     if (this.deleteTypeFlag === 'question') {
       this.removeQuestion(this.toDeleteData);
     } else if ( this.deleteTypeFlag === 'condition') {
@@ -368,30 +308,15 @@ export class CreateQuestionnaireComponent implements OnInit {
     } else if ( this.deleteTypeFlag === 'option') {
       this.removeOption(this.toDeleteData);
     }
-    this.createTree.emit();
     this.toDeleteData   = {};
     this.deleteTypeFlag = null;
-  }
-  /**
-   * emits an event to the parent for saving questionnaire also attaches the user created groupnames to the
-   * grouplabl of questions
-   */
-  save() {
-    this.saveQuestionniare.emit(this.isQuestionEdited);
-  }
-
-  /**
-   * @param  {} selectedTab changes to priview tab
-   */
-  changeCurrentTab(selectedTab) {
-    this.previewTab.emit(selectedTab);
   }
   /**
    * @param  {} index
    * set actype to u if user changes
    */
   updateOptionACType(index) {
-    this.isQuestionEdited = true;
+    this.commonValues.isQuestionEdited = true;
     if (this.questionnaire.options[index].AC_TYPE === undefined) {
       this.questionnaire.options[index].AC_TYPE = 'U';
     }
@@ -401,9 +326,18 @@ export class CreateQuestionnaireComponent implements OnInit {
    * set actype to u if user changes
    */
   updateConditionACType(index) {
-    this.isQuestionEdited = true;
+    this.commonValues.isQuestionEdited = true;
     if (this.questionnaire.conditions[index].AC_TYPE === undefined) {
       this.questionnaire.conditions[index].AC_TYPE = 'U';
     }
+  }
+  changeEditQuestion(questionId, id) {
+    this.editIndex = questionId;
+    this._createQuestionnaireService.updateSelectedQuestionId.next(questionId);
+    this.scrollAnimate();
+    setTimeout(() => {
+      const el = document.getElementById(id).focus();
+    }, 100);
+
   }
 }

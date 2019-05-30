@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ViewQuestionnaireService } from '../view.service';
+import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
 import * as _ from 'lodash';
 // import _.forEach from 'lodash/forEach';
@@ -10,7 +11,16 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-view-questionnaire',
   templateUrl: './view-questionnaire.component.html',
-  styleUrls: ['./view-questionnaire.component.css']
+  styleUrls: ['./view-questionnaire.component.css'],
+  animations: [trigger('items', [
+    transition(':enter', [
+      animate('1s ease-in', keyframes([
+        style({opacity: 0, transform: 'translateY(-30%)', offset: 0}),
+        style({opacity: .5, transform: 'translateY(5px)',  offset: 0.3}),
+        style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+      ]))
+    ])
+])]
 })
 export class ViewQuestionnaireComponent implements OnInit {
 
@@ -25,6 +35,7 @@ export class ViewQuestionnaireComponent implements OnInit {
   result: any = {};
   showHelpMsg = [];
   helpMsg     = [];
+  isViewmode  = false;
 
   ngOnInit() {
     this._activatedRoute.queryParams.subscribe(params => {
@@ -41,7 +52,7 @@ export class ViewQuestionnaireComponent implements OnInit {
       const tempLabels: any = {};
       this.questionnaire.questions.forEach(question => {
         if (!tempLabels[question.GROUP_NAME]) {
-          question.SHOW_LABEL = true;
+          // question.SHOW_LABEL = true;
           tempLabels[question.GROUP_NAME] = question.GROUP_NAME;
         }
         this.showChildQuestions(question);
@@ -221,35 +232,48 @@ export class ViewQuestionnaireComponent implements OnInit {
    */
   setDateFormat(index) {
     const date = new Date( this.questionnaire.questions[index].ANSWERS[1]);
+    if (date.getDate()) {
     this.questionnaire.questions[index].ANSWERS[1]  = ('0' + (date.getMonth() + 1)).slice(-2)
                                                       + '/' + ('0' + date.getDate()).slice(-2)
                                                       + '/' + date.getFullYear();
+    }
   }
-  /**
+   /**
    * pushes the files to the file list once user confirms the attachment upload
    */
   addFiletoArray() {
     if ( this.tempFiles.length >= 1) {
-      this.questionnaire.questions[this.attachmentIndex].ANSWERS[1] = this.tempFiles[0].fileName;
       if (this.questionnaire.questions[this.attachmentIndex].AC_TYPE == null) {
         this.questionnaire.questions[this.attachmentIndex].AC_TYPE = 'I';
       }
-      this.removeDulplicateFile(this.questionnaire.questions[this.attachmentIndex].QUESTION_ID);
+      if (this.questionnaire.questions[this.attachmentIndex].AC_TYPE === 'D') {
+        this.questionnaire.questions[this.attachmentIndex].AC_TYPE = 'U';
+      }
+      this.removeDulplicateFile(this.questionnaire.questions[this.attachmentIndex].QUESTION_ID, null);
+      this.questionnaire.questions[this.attachmentIndex].ANSWERS[1] = this.tempFiles[0].fileName;
       this.filesArray.push(this.tempFiles[0]);
+      this.tempFiles = [];
     }
   }
   /**
    * @param  {} questionId
    * removes duplicate entry for files
    */
-  removeDulplicateFile(questionId) {
-    _.remove( this.filesArray, { 'questionId': questionId });
+  removeDulplicateFile(questionId, index) {
+    if (this.filesArray.length > 0) {
+      _.remove( this.filesArray, { 'questionId': questionId });
+    }
+    if ( index !== null) {
+      this.questionnaire.questions[index].ANSWERS[1] = '';
+      this.questionnaire.questions[index].AC_TYPE    = 'D';
+    }
   }
   /**
    * @param  {} file
    * add file to temporarylist
    */
   addFileToTempFiles(file) {
+    (<HTMLInputElement>document.getElementById('selectedFile')).value = '';
     if (file) {
       this.tempFiles = [];
       this.tempFiles.push({ attachment : file,
@@ -262,6 +286,7 @@ export class ViewQuestionnaireComponent implements OnInit {
     this._activatedRoute.queryParams.subscribe(params => {
       this.result.module_item_key = params.protocolNumber;
     });
+    this.checkQuestionaireCompletion();
     const toastId = document.getElementById('toast-success');
     this._questionService.saveQuestionnaire(this.result).subscribe(
       data => {
@@ -270,16 +295,16 @@ export class ViewQuestionnaireComponent implements OnInit {
     });
   }
   /** assigns help link message of a question
-     * sets no help message if help mesag is not available
-     * @param helpMsg
-     */
-    getHelpLink(helpMsg, index) {
-      this.showHelpMsg[index] = !this.showHelpMsg[index];
-      if (helpMsg == null) {
-          this.helpMsg[index] = 'No help message availabe!';
-      } else {
-          this.helpMsg[index] = helpMsg;
-      }
+   * sets no help message if help mesag is not available
+   * @param helpMsg
+   */
+  getHelpLink(helpMsg, index) {
+    this.showHelpMsg[index] = !this.showHelpMsg[index];
+    if (helpMsg == null) {
+        this.helpMsg[index] = 'No help message availabe!';
+    } else {
+        this.helpMsg[index] = helpMsg;
+    }
   }
   /**
    * @param  {} toastId
@@ -290,5 +315,29 @@ export class ViewQuestionnaireComponent implements OnInit {
     setTimeout(function () {
     toastId.className = toastId.className.replace('show', '');
     }, 2000);
+  }
+
+  checkQuestionaireCompletion() {
+    this.result.questionnaire_complete_flag  = 'Y';
+    _.forEach(this.questionnaire.questions, (question) => {
+      if (question.SHOW_QUESTION === true) {
+        if (question.ANSWER_TYPE === 'Checkbox') {
+          let flag = 'N';
+          _.forEach(question.ANSWERS, (answer, key) => {
+            if (question.ANSWERS[key] !== '' || question.ANSWERS[key] !== null && key !== '1')  {
+              flag = 'Y';
+            }
+          });
+          this.result.questionnaire_complete_flag = flag;
+        } else {
+          _.forEach(question.ANSWERS, (answer, key) => {
+            if (question.ANSWERS[key] === '' || question.ANSWERS[key] == null)  {
+              this.result.questionnaire_complete_flag  = 'N';
+              return false;
+            }
+          });
+        }
+      }
+    });
   }
 }

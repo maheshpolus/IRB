@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import * as _ from 'lodash';
+import {easeIn } from '../../services/animations';
 // import _.forEach from 'lodash/forEach';
 // import _.filter from 'lodash/filter';
 // import _mergeWith from 'lodash/mergeWith';
@@ -8,6 +9,7 @@ import * as _ from 'lodash';
   selector: 'app-preview-questionnaire',
   templateUrl: './preview-questionnaire.component.html',
   styleUrls: ['./preview-questionnaire.component.css'],
+  animations: [easeIn],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PreviewQuestionnaireComponent implements OnInit {
@@ -15,14 +17,23 @@ export class PreviewQuestionnaireComponent implements OnInit {
   constructor() { }
   @Input() questionnaire: any = {};
   conditions = [];
-  ngOnInit() {}
+  showHelpMsg = [];
+  helpMsg     = [];
+  ngOnInit() {
+    const tempLabels: any = {};
+    this.questionnaire.questions.forEach(question => {
+      if (!tempLabels[question.GROUP_NAME]) {
+        // question.SHOW_LABEL = true;
+        tempLabels[question.GROUP_NAME] = question.GROUP_NAME;
+      }
+    });
+  }
 
   /**
    * @param  {} currentQuestion
    * finds the child question of the currently answered question
    */
   showChildQuestions(currentQuestion) {
-    console.log(currentQuestion.ANSWERS);
     if (currentQuestion.HAS_CONDITION === 'Y') {
       this.conditions = _.filter( this.questionnaire.conditions, {'QUESTION_ID': currentQuestion.QUESTION_ID});
       this.conditions.forEach(condition => {
@@ -103,7 +114,6 @@ export class PreviewQuestionnaireComponent implements OnInit {
    * if question group matches and check answer fails the set them as invisible
    */
   findChildQuestion(currentQuestion, condition) {
-    // filter(this.questionnaire.questions , {'GROUP_NAME' : condition.GROUP_NAME})
     this.questionnaire.questions.forEach(question => {
       if (condition.GROUP_NAME === question.GROUP_NAME && this.checkAnswer(currentQuestion, condition)) {
         question.SHOW_QUESTION = true;
@@ -182,5 +192,17 @@ export class PreviewQuestionnaireComponent implements OnInit {
       }
      });
      return result;
+  }
+  /** assigns help link message of a question
+     * sets no help message if help mesag is not available
+     * @param helpMsg
+     */
+    getHelpLink(helpMsg, index) {
+      this.showHelpMsg[index] = !this.showHelpMsg[index];
+      if (helpMsg == null) {
+          this.helpMsg[index] = 'No help message availabe!';
+      } else {
+          this.helpMsg[index] = helpMsg;
+      }
   }
 }

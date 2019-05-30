@@ -11,11 +11,11 @@
           <div class="card-body card-paddng">
             <div class="col-md-12 users-list-tbl">
               <div class="quest-no">
-                <ng-container *ngFor=' let question of questionnaire.questions; let indexQuestion = index'>
+                <div *ngFor=' let question of questionnaire.questions; let indexQuestion = index' @items>
                 <ul [ngSwitch]="true" class="list" style="list-style: none !important;">
   
                   <li *ngSwitchCase="question.ANSWER_TYPE == 'Text'" class="list">
-                    <div *ngIf="question.SHOW_QUESTION == true">
+                    <div *ngIf="question.SHOW_QUESTION == true"  @items>
                       <div class="row category-margin p-0" *ngIf="question.SHOW_LABEL">
                         <div class="col-12 col-sm-12 col-md-12 pl-0">
                           <p class="category">{{question.GROUP_LABEL}}</p>
@@ -27,12 +27,12 @@
                         </span>
                       </p>
                       <div *ngFor=" let number of  getArray(question.NO_OF_ANSWERS); let i = index">
-                        <input type="text" [(ngModel)]="question.ANSWERS[i+1]" (ngModelChange)="showChildQuestions(question)" name="name" />
+                        <input type="text" class="qst-input-width" [(ngModel)]="question.ANSWERS[i+1]" (ngModelChange)="showChildQuestions(question)" name="name" [disabled] = "isViewmode" />
                       </div>
                     </div>
                   </li>
                   <li *ngSwitchCase="question.ANSWER_TYPE == 'Radio' || question.ANSWER_TYPE == 'Y/N'|| question.ANSWER_TYPE == 'Y/N/NA'" class="list">
-                    <div *ngIf="question.SHOW_QUESTION == true">
+                    <div *ngIf="question.SHOW_QUESTION == true"  @items>
                       <div class="row category-margin p-0" *ngIf="question.SHOW_LABEL">
                         <div class="col-12 col-sm-12 col-md-12 pl-0">
                           <p class="category">{{question.GROUP_LABEL}}</p>
@@ -46,7 +46,7 @@
                       <div *ngFor=" let option of questionnaire.options" class="radio-inline ">
                         <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
                           <input type="radio" name="{{option.QUESTION_ID}}" [value]="option.OPTION_LABEL" [(ngModel)]="question.ANSWERS[1]" (ngModelChange)="showChildQuestions(question)"
-                            required/> {{option.OPTION_LABEL}}
+                          [disabled] = "isViewmode" /> {{option.OPTION_LABEL}}
                         </span>
                       </div>
                       <div class="row category-margin" *ngIf="showHelpMsg[indexQuestion] == true">
@@ -62,7 +62,7 @@
                     </div>
                   </li>
                   <li *ngSwitchCase="question.ANSWER_TYPE == 'Checkbox'" class="list">
-                    <div *ngIf="question.SHOW_QUESTION == true">
+                    <div *ngIf="question.SHOW_QUESTION == true"  @items>
                       <div class="row category-margin p-0" *ngIf="question.SHOW_LABEL">
                         <div class="col-12 col-sm-12 col-md-12 pl-0">
                           <p class="category">{{question.GROUP_LABEL}}</p>
@@ -76,56 +76,110 @@
                       <div class="checkbox-inline" *ngFor=" let option of questionnaire.options">
                         <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
                           <input type="checkbox" required [(ngModel)]="question.ANSWERS[option.OPTION_LABEL]" (change)="showChildQuestions(question)"
-                          /> {{option.OPTION_LABEL}}
+                          [disabled] = "isViewmode" /> {{option.OPTION_LABEL}}
                         </span>
                       </div>
                     </div>
                   </li>
-                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Attachment'" class="list">
-                    <div *ngIf="question.SHOW_QUESTION == true">
-                      <div class="row category-margin p-0" *ngIf="question.SHOW_LABEL">
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Attachment'">
+                    <div *ngIf="question.SHOW_QUESTION == true"  @items>
+                      <div class="row qst-category-margin p-0" *ngIf="question.SHOW_LABEL">
                         <div class="col-12 col-sm-12 col-md-12 pl-0">
-                          <p class="category">{{question.GROUP_LABEL}}</p>
+                          <p class="qst-category">{{question.GROUP_LABEL}}</p>
                         </div>
                       </div>
                       <p class="questionfont">{{question.QUESTION}}
                         <span>
-                          <i class="fa fa-info-circle" aria-hidden="true"></i>
+                          <i (click)="getHelpLink(question.DESCRIPTION, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
                         </span>
                       </p>
-                      <a data-toggle="modal" data-target="#AttachmentModal" (click)="attachmentIndex = indexQuestion">Add Attachment
+                      <a class="qst-attachment-addlink" data-toggle="modal" data-target="#AttachmentModal" (click)="attachmentIndex = indexQuestion">Add Attachment :
                       </a>
+                      <span *ngIf="question.ANSWERS[1]" class="qst-attachment-label">
+                        <label><b>{{ question.ANSWERS[1]}}</b></label>
+                        <button class="qst-attachment-cls-btn" (click)="removeDulplicateFile(question.QUESTION_ID, indexQuestion)">
+                          <i class="fa fa-times"></i>
+                        </button>
+                        <button *ngIf="question.ATTACHMENT_ID" class="qst-attachment-cls-btn" (click)="downloadAttachment(question.ATTACHMENT_ID, question.ANSWERS[1])" >
+                          <i class="fa fa-download"></i>
+                        </button>
+                    </span>
+                      <div class="row qst-category-margin" *ngIf="showHelpMsg[indexQuestion] == true">
+                          <div class="col-12 col-sm-12 col-md-12 pl-0 qst-helpCard">
+                            <button class="qst-closeResultCard qst-close-help" (click)="getHelpLink(question.DESCRIPTION, indexQuestion)">
+                              <i class="fa fa-times"></i>
+                            </button>
+                            <div class="qst-helpMsg">
+                              <label [innerHTML]="helpMsg[indexQuestion]"></label>
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
                     </div>
                   </li>
-                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Textarea'" class="list">
-                    <div *ngIf="question.SHOW_QUESTION == true">
-                      <div class="row category-margin p-0" *ngIf="question.SHOW_LABEL">
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Textarea'">
+                    <div *ngIf="question.SHOW_QUESTION == true "  @items>
+                      <div class="row qst-category-margin p-0" *ngIf="question.SHOW_LABEL">
                         <div class="col-12 col-sm-12 col-md-12 pl-0">
-                          <p class="category">{{question.GROUP_LABEL}}</p>
+                          <p class="qst-category">{{question.GROUP_LABEL}}</p>
                         </div>
                       </div>
                       <p class="questionfont">{{question.QUESTION}}
                         <span>
-                          <i class="fa fa-info-circle" aria-hidden="true"></i>
+                          <i (click)="getHelpLink(question.DESCRIPTION, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
                         </span>
                       </p>
-                      <textarea name="name" [(ngModel)]="question.ANSWERS[1]" (ngModelChange)="showChildQuestions(question)"> </textarea>
-                    </div>
+                      <textarea name="name" class="qst-input-width" [(ngModel)]="question.ANSWERS[1]" (ngModelChange)="showChildQuestions(question)"> </textarea>
+                      <div class="row qst-category-margin" *ngIf="showHelpMsg[indexQuestion] == true">
+                          <div class="col-12 col-sm-12 col-md-12 pl-0 qst-helpCard">
+                            <button class="qst-closeResultCard qst-close-help" (click)="getHelpLink(question.DESCRIPTION, indexQuestion)">
+                              <i class="fa fa-times"></i>
+                            </button>
+                            <div class="qst-helpMsg">
+                              <label [innerHTML]="helpMsg[indexQuestion]"></label>
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                      </div>
                   </li>
-                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Date'" class="list">
-                    <div *ngIf="question.SHOW_QUESTION == true">
-                      <div class="row category-margin p-0" *ngIf="question.SHOW_LABEL">
+                  <li *ngSwitchCase="question.ANSWER_TYPE == 'Date'">
+                    <div *ngIf="question.SHOW_QUESTION == true"  @items>
+                      <div class="row qst-category-margin p-0" *ngIf="question.SHOW_LABEL">
                         <div class="col-12 col-sm-12 col-md-12 pl-0">
-                          <p class="category">{{question.GROUP_LABEL}}</p>
+                          <p class="qst-category">{{question.GROUP_LABEL}}</p>
                         </div>
                       </div>
-                      <input [owlDateTimeTrigger]="dt3" [(ngModel)]="question.ANSWERS[1]" [attr.readonly]=t rue placeholder="{{question.ANSWERS[1]}}"
-                        (ngModelChange)="showChildQuestions(question)" [owlDateTime]="dt3">
-                      <owl-date-time [pickerType]="'calendar'" #dt3 (afterPickerClosed)="setDateFormat(indexQuestion)"></owl-date-time>
+                      <p class="questionfont">{{question.QUESTION}}
+                          <span>
+                              <i (click)="getHelpLink(question.DESCRIPTION, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
+                            </span>
+                      </p>
+                      <div>
+                        <div class="qst-date-dv">
+                        <input [owlDateTimeTrigger]="dt3" [(ngModel)]="question.ANSWERS[1]" [attr.readonly]=true placeholder="{{question.ANSWERS[1]}}"
+                          (ngModelChange)="showChildQuestions(question)" [owlDateTime]="dt3">
+                          <span class="trigger qst-date-i" [owlDateTimeTrigger]="dt3">
+                              <i class="fas fa-calendar-alt"></i>
+                          </span>
+                        <owl-date-time [pickerType]="'calendar'" #dt3 (afterPickerClosed)="setDateFormat(indexQuestion)"></owl-date-time>
+                    </div>
+                      </div>
+                    <div class="row qst-category-margin" *ngIf="showHelpMsg[indexQuestion] == true">
+                        <div class="col-12 col-sm-12 col-md-12 pl-0 qst-helpCard">
+                          <button class="qst-closeResultCard qst-close-help" (click)="getHelpLink(question.DESCRIPTION, indexQuestion)">
+                            <i class="fa fa-times"></i>
+                          </button>
+                          <div class="qst-helpMsg">
+                            <label [innerHTML]="helpMsg[indexQuestion]"></label>
+                          </div>
+                        </div>
+                      </div>
+                    <hr>
                     </div>
                   </li>
                 </ul>
-              </ng-container>
+              </div>
               <div class="row">
                 <div class="col-12">
               <button type="button" (click)="saveQuestionniare()" class=" float-right btn btn-primary irb-btn-primary">Save</button> 

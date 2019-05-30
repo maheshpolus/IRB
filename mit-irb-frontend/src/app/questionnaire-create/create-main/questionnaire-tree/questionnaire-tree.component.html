@@ -1,0 +1,43 @@
+<div class="row fixed-tree">
+<div class="col-12">
+  <div  class="qst-tree-heading"><span>Question Tree</span>
+      <span *ngIf="!isMaximized" class="float-right" (click)= "maximizeTree()"> <i class="fas fa-expand"></i></span>
+      <span *ngIf="isMaximized" class="float-right" (click)= "minimizeTree()"> <i class="fas fa-compress"></i></span>
+  </div>     
+  <div class="qst-tree-content">
+    <div class="u-tree-outer">
+      <ul class="unit-tree ui-tree" *ngIf = '!isMaximized'>
+        <ng-template #recursiveList let-treeData>
+          <li @items *ngFor="let node of treeData; let i=index" class="child-li pointer">
+              <div title="Click to view {{node.name}} : {{node.id}}" class="md-box unit-tree-blocks"
+                [ngClass] = "{'highlight-node': highlightNode == node.questionId}"
+                (click)="updateHighlightNode(node.questionId)" id="tree{{node.questionId}}">
+                  <span class="qn-ft">{{node.name}}</span>
+              </div>
+            <ul *ngIf="node?.children?.length > 0 " [ngClass]="{ 'subfolder': selectedNode == node }">
+              <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: node.children }"></ng-container>
+            </ul>
+          </li>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: treeData }"></ng-container>
+      </ul>
+      <ul class="unit-tree ui-tree" *ngIf = 'isMaximized'>
+        <ng-template #recursiveList let-expandedTreeData>
+          <li @items *ngFor="let node of expandedTreeData; let i=index" class="child-li pointer">
+              <div *ngIf ='!node.condition'  class="md-box unit-tree-blocks expanded-treeblock" id="tree{{node.questionId}}">
+                <span class="qn-ft"><b>{{node.questionId}}</b></span> <span>{{node.content}}</span>
+              </div>
+              <div *ngIf ='node.condition' class="unit-tree-blocks highlight-node expanded-treeblock">
+                <span >If <b>"{{node.questionId}}"</b> answer is <b>"{{node.condition}}"</b></span>
+              </div>
+            <ul *ngIf="node?.children?.length > 0 " [ngClass]="{ 'subfolder': selectedNode == node }">
+              <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: node.children }"></ng-container>
+            </ul>
+          </li>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: expandedTreeData }"></ng-container>
+      </ul>
+    </div>
+  </div>
+</div>
+</div> 

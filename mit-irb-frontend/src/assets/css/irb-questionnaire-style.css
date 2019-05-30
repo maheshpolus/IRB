@@ -13,11 +13,13 @@
 {
     background: #a92034 !important;		/*line no 77*/
     border-color: #a92034 !important;
+    color:#fff;
 }
 .irb-qst-savebtn-clr
 {
     background-color: #28a745 !important;
     border-color: #28a745 !important;
+    color:#fff;
 }
 .irb-qst-graybtn-clr
 {
@@ -53,6 +55,7 @@
 .irb-qst-bg-head
 {
     background: #a92034;
+    color: #fff;
 }
 .add-new-1{
     color: #a92034;
@@ -79,4 +82,11 @@
 }
 .qst-tree-head {
     color: #424242;
+}
+.qst-plus-icon i {
+    color: #a92034; 
+    border: solid 1px #a92034;
+}
+.qst-tree-heading {
+    color: #a92034;
 }

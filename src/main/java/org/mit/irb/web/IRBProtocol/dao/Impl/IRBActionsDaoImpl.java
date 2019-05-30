@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
@@ -482,12 +483,13 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_PREV_PROTO_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPrevProtocolStatusCode()));	
 			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getSubmissionTypeCode()));	 
 			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,vo.getProtocolSubmissionStatuses().getCommitteeId()));	 
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_QUAL_CODE", DBEngineConstants.TYPE_STRING,vo.getSelectedNotifyTypeQualifier()));	 
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_QUAL_CODE", DBEngineConstants.TYPE_STRING,vo.getSelectedTypeQualifier()));	 
 			inputParam.add(new InParameter("AV_NEW_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,newProtocolNumber));
 			inputParam.add(new InParameter("AV_NEXT_SUBMISN_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPersonAction().get("PROTO_SUBMS_NEXT_STATUS_CODE")));
 			inputParam.add(new InParameter("AV_NEXT_PROTO_STATUS_CODE", DBEngineConstants.TYPE_STRING,vo.getPersonAction().get("PROTO_NEXT_STATUS_CODE"))); 
-			//inputParam.add(new InParameter("AV_ACTION_DATEeeee", DBEngineConstants.TYPE_DATE,vo.getApprovalDate() != null ? generateSqlDate(vo.getApprovalDate()): null));		
-
+			inputParam.add(new InParameter("AV_APPROVAL_DATE", DBEngineConstants.TYPE_DATE,vo.getApprovalDate() != null ? generateSqlDate(vo.getApprovalDate()): null));		
+			inputParam.add(new InParameter("AV_EXPIRATION_DATE", DBEngineConstants.TYPE_DATE,vo.getExpirationDate() != null ? generateSqlDate(vo.getExpirationDate()): null));		
+			inputParam.add(new InParameter("AV_DECISION_DATE", DBEngineConstants.TYPE_DATE,vo.getDecisionDate() != null ? generateSqlDate(vo.getDecisionDate()): null));		
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
 			result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTCOL_ACTIONS",outputParam);
 		} catch (Exception e) {	
@@ -647,6 +649,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			updateApprovalsRiskLevel(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Dissapproved successfully");	
@@ -972,6 +975,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);						
 			//generateProtocolCorrespondence(vo);
+			updateApprovalsRiskLevel(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Approved successfully");	
 		} catch (Exception e) {
@@ -986,7 +990,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO SMRRAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);						
+			protocolActionSP(vo,null);		
+			updateApprovalsRiskLevel(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("SMRR successfull");	
@@ -1002,7 +1007,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO SRRAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);						
+			protocolActionSP(vo,null);		
+			updateApprovalsRiskLevel(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("SRR successfully");	
@@ -1209,5 +1215,37 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			logger.info("Exception in getExpeditedCannedComments:" + e);	
 		}
 		return expeditedCannedComments;
-	}			
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, Object>> getIRBAdminList() {
+		ArrayList<HashMap<String, Object>> irbAdminList = null;														
+		try {
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			irbAdminList = dbEngine.executeProcedure("GET_IRB_ADMINISTRATORS",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getIRBAdminList:" + e);	
+		}
+		return irbAdminList;
+	}
+	
+	@Override
+	public void updateIRBAdmin(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_ASSIGNEE_PERSON_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonID().toString()));
+			inputParam.add(new InParameter("AV_ASSIGNEE_PERSON_NAME", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonName()));
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
+			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getProtocolId()));
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getProtocolNumber()));
+			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSequenceNumber()));
+			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionNumber()));
+			inputParam.add(new InParameter("AV_REVIEW_TYPE_CODE", DBEngineConstants.TYPE_STRING,"1"));
+			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getUpdateUser()));
+			dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTO_ASSIGN_ADMIN");
+		} catch (Exception e) {
+			logger.info("Exception in updateIRBAdmin:" + e);	
+		}	
+	}
 }

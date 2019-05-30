@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 public interface IRBProtocolDao {
 
-	IRBViewProfile getIRBProtocolDetails(String protocolNumber);
 
 	IRBViewProfile getIRBprotocolPersons(String protocolNumber);
 
@@ -106,4 +105,6 @@ public interface IRBProtocolDao {
 
 	ArrayList<HashMap<String, Object>> getHistoryGroupComment(String protocolNumber, Integer actionId, Integer protocolId,
 			Integer nextGroupActionId);
+	
+	HashMap<String, Object> getIRBProtocolDetail(String protocolNumber);
 }

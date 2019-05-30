@@ -31,7 +31,7 @@ public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> moduleAvailableForAmendment;
 	private ArrayList<HashMap<String, Object>> notifyTypeQualifier;
 	private ArrayList<HashMap<String, Object>> amendRenewalModules;
-	private String selectedNotifyTypeQualifier;
+	private String selectedTypeQualifier;
 	private String submissionId;
 	private String actionDate;
 	private String templateTypeCode;
@@ -224,14 +224,6 @@ public class IRBActionsVO {
 		this.amendRenewalModules = amendRenewalModules;
 	}
 
-	public String getSelectedNotifyTypeQualifier() {
-		return selectedNotifyTypeQualifier;
-	}
-
-	public void setSelectedNotifyTypeQualifier(String selectedNotifyTypeQualifier) {
-		this.selectedNotifyTypeQualifier = selectedNotifyTypeQualifier;
-	}
-
 	public String getSubmissionId() {
 		return submissionId;
 	}
@@ -358,5 +350,13 @@ public class IRBActionsVO {
 
 	public void setExpeditedCannedComments(ArrayList<HashMap<String, Object>> expeditedCannedComments) {
 		this.expeditedCannedComments = expeditedCannedComments;
+	}
+
+	public String getSelectedTypeQualifier() {
+		return selectedTypeQualifier;
+	}
+
+	public void setSelectedTypeQualifier(String selectedTypeQualifier) {
+		this.selectedTypeQualifier = selectedTypeQualifier;
 	}
 }

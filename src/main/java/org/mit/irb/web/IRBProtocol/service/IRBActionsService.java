@@ -47,5 +47,17 @@ public interface IRBActionsService {
 	 * @param vo
 	 * @return get committee List
 	 */
-	SubmissionDetailVO getCommitteeList(SubmissionDetailVO vo);
+	SubmissionDetailVO getCommitteeList(SubmissionDetailVO vo);		
+
+	/**
+		 * @param vo
+		 * @return get committee List
+		 */
+	SubmissionDetailVO getIRBAdminList(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return save new IRB Admin
+	 */
+	SubmissionDetailVO updateIRBAdmin(SubmissionDetailVO vo);
 }

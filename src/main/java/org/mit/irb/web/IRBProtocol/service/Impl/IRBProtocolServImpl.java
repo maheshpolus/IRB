@@ -56,9 +56,12 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@Override
 	public IRBViewProfile getIRBProtocolDetails(String protocolNumber) {
-		IRBViewProfile irbViewProfile = irbProtocolDao.getIRBProtocolDetails(protocolNumber);
-		return irbViewProfile;
-	}
+	IRBViewProfile irbViewProfile = new IRBViewProfile();
+    HashMap<String, Object> irbProtocolDetail = irbProtocolDao.getIRBProtocolDetail(protocolNumber);
+    irbViewProfile.setIrbViewHeader(irbProtocolDetail);
+    //IRBViewProfile irbViewProfile = irbProtocolDao.getIRBProtocolDetails(protocolNumber);
+    return irbViewProfile;
+}
 
 	@Override
 	public IRBViewProfile getIRBProtocolPersons(String protocolNumber) {

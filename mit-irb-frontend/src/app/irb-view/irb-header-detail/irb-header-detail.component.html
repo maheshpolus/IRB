@@ -72,6 +72,17 @@
 													irbHeaderDetails.PROTOCOL_STATUS_CODE== '308'||
 													irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
 							<i class="fa fa-exclamation-triangle ml-10" *ngIf="irbHeaderDetails?.IS_NEW_RULE=='N'" title="Follows OLD-RULE" aria-hidden="true"></i>
+							
+							<div style="margin-top: 61px">
+								<p class="admin-label" *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null">
+									COUHES Admin :
+									<span>{{irbHeaderDetails?.ASSIGNEE_PERSON_NAME}}</span>
+									<button type="button" class="btn page-link" (click)="openAssignPopUp('up-arrow')">
+										<i class="fa fa-pencil" aria-hidden="true"></i> Reassign</button>
+								</p>
+								<button *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null" type="button" class="btn page-link" (click)="openAssignPopUp('I')">
+									<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin</button>
+							</div>
 						</div>
 
 						<div class="i-icon-top">
@@ -141,16 +152,20 @@
 		 routerLinkActive="btnactive" (click)="show_current_tab('irb_history')">
 			<i class="fa fa-history" aria-hidden="true"></i>History
 		</button>
-		
-		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
-		routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
-		   <i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details
-	   </button>
+
+		<!-- <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
+		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSubmissionDetails')">
+			<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
+		</button> -->
+		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']"
+		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
+			<i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details
+		</button>
 		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbActions']" [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
 		 routerLinkActive="btnactive" (click)="show_current_tab('irbActions')">
 			<i class="fa fa-cog" aria-hidden="true"></i>Actions
 		</button>
-		
+
 	</section>
 </div>
 <div>

@@ -85,7 +85,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			break;
 		case "209":
 			//vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.irbAcknowledgementAdminActions(vo);
+			vo = irbActionsDao.irbAcknowledgementAdminActions(vo,files);
 			break;
 		case "212":
 			//vo=generateSqlActionDate(vo);
@@ -101,11 +101,11 @@ public class IRBActionsServImpl implements IRBActionsService {
 			break;
 		case "301":
 			//vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.terminateAdminActions(vo);
+			vo = irbActionsDao.terminateAdminActions(vo,files);
 			break;	
 		case "302":
 			//vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.suspendAdminActions(vo);
+			vo = irbActionsDao.suspendAdminActions(vo,files);
 			break;	
 		case "109":
 		//	vo=generateSqlActionDate(vo);
@@ -113,19 +113,19 @@ public class IRBActionsServImpl implements IRBActionsService {
 			break;
 		case "201":
 		//	vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.deferAdminActions(vo);
+			vo = irbActionsDao.deferAdminActions(vo,files);
 			break;
+		case "119":
+			//	vo=generateSqlActionDate(vo);
+				vo = irbActionsDao.adandonAdminActions(vo,files);
+				break;	
 		case "200":
 		//	vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.assignToAgendaAdminActions(vo);
-			break;
-		case "206":
-		//	vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.grantExceptionAdminActions(vo);
-			break;
+			vo = irbActionsDao.assignToAgendaAdminActions(vo,files);
+			break;		
 		case "210":
 		//	vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.reviewNotRequiredAdminActions(vo);
+			vo = irbActionsDao.reviewNotRequiredAdminActions(vo,files);
 			break;
 		case "204":
 		//	vo=generateSqlActionDate(vo);
@@ -150,7 +150,11 @@ public class IRBActionsServImpl implements IRBActionsService {
 		case "113":
 		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
-			break;		
+			break;	
+		case "910":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.undoLastActionAdminActions(vo);
+			break;	
 		}
 		return vo;
 	}
@@ -194,15 +198,23 @@ public class IRBActionsServImpl implements IRBActionsService {
 		vo.setModuleAvailableForAmendment(renewalModules);
 		ArrayList<HashMap<String, Object>> submissionTypeQulifier = irbActionsDao.getSubmissionTypeQulifier();
 		vo.setNotifyTypeQualifier(submissionTypeQulifier);	
-		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates("FWA00004881");
+		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(null);
 		vo.setScheduleDates(scheduleDates);	
+		ArrayList<HashMap<String, Object>> committeeList = irbActionsDao.getCommitteeList();
+		vo.setCommitteeList(committeeList);
+		ArrayList<HashMap<String, Object>> riskLevel = irbActionsDao.getRiskLevel();
+		vo.setRiskLevel(riskLevel);
+		ArrayList<HashMap<String, Object>> expeditedApprovalCheckList = irbActionsDao.getExpeditedApprovalCheckList();
+		vo.setExpeditedApprovalCheckList(expeditedApprovalCheckList);
+		ArrayList<HashMap<String, Object>> expeditedCannedComments = irbActionsDao.getExpeditedCannedComments();
+		vo.setExpeditedCannedComments(expeditedCannedComments);
 		return vo;	
 	}
 
 	@Override
 	public IRBActionsVO getCommitteeScheduledDates(String committeeId) {
 		IRBActionsVO vo = new IRBActionsVO();
-		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates("committeeId");
+		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(committeeId);
 		vo.setScheduleDates(scheduleDates);	
 		return vo;	
 	}

@@ -164,23 +164,23 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource) {
+	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = null;
-		irbProtocolVO = irbProtocolDao.updateFundingSource(fundingSource);
+		irbProtocolVO = irbProtocolDao.updateFundingSource(fundingSource,generalInfo);
 		return irbProtocolVO;
 	}
 
 	@Override
-	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject) {
+	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = null;
-		irbProtocolVO = irbProtocolDao.updateSubject(protocolSubject);
+		irbProtocolVO = irbProtocolDao.updateSubject(protocolSubject,generalInfo);
 		return irbProtocolVO;
 	}
 
 	@Override
-	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator) {
+	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = null;
-		irbProtocolVO = irbProtocolDao.updateCollaborator(protocolCollaborator);
+		irbProtocolVO = irbProtocolDao.updateCollaborator(protocolCollaborator,generalInfo);
 		return irbProtocolVO;
 	}
 
@@ -253,9 +253,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 	
 	@Override
-	public IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol) {
+	public IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO = irbProtocolDao.saveScienceOfProtocol(irbProtocolVO,scienceOfProtocol);
+		irbProtocolVO = irbProtocolDao.saveScienceOfProtocol(irbProtocolVO,scienceOfProtocol,generalInfo);
 		return irbProtocolVO;
 	}
 
@@ -316,6 +316,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			}else if (protocolAdminContact.getAcType().equals("D")) {
 				irbProtocolDao.deleteAdminContactDetail(protocolAdminContact,generalInfo);
 			}
+			irbProtocolVO.setProtocolId(generalInfo.getProtocolId());
 			Future<IRBProtocolVO> protocolAdminContacts = irbProtocolDao.getProtocolAdminContacts(irbProtocolVO);
 			irbProtocolVO = protocolAdminContacts.get();	
 		}catch (Exception e) {

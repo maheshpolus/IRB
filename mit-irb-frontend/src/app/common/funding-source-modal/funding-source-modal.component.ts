@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-import { ElasticService } from '../../common/service/elastic.service';
+import { ElasticService } from '../service/elastic.service';
 import { FundingSourceModalService } from './funding-source-modal.service';
 import { KeyPressEvent } from '../directives/keyPressEvent.component';
 

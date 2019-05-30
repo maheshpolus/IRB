@@ -13,7 +13,6 @@ import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
-import org.mit.irb.web.committee.vo.CommitteeVo;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -273,7 +272,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO updateFundingSource(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateFundingSource(irbProtocolVO.getFundingSource());
+		protocolVO = irbProtocolService.updateFundingSource(irbProtocolVO.getFundingSource(),irbProtocolVO.getGeneralInfo());
 		return protocolVO;
 	}
 
@@ -281,7 +280,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO updateSubject(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateSubject(irbProtocolVO.getProtocolSubject());
+		protocolVO = irbProtocolService.updateSubject(irbProtocolVO.getProtocolSubject(),irbProtocolVO.getGeneralInfo());
 		return protocolVO;
 	}
 
@@ -289,7 +288,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO updateCollaborator(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateCollaborator(irbProtocolVO.getProtocolCollaborator());
+		protocolVO = irbProtocolService.updateCollaborator(irbProtocolVO.getProtocolCollaborator(),irbProtocolVO.getGeneralInfo());
 		return protocolVO;
 	}
 
@@ -324,7 +323,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO saveScienceOfProtocol(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO protocolVO) throws JsonProcessingException {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol());
+		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol(),irbProtocolVO.getGeneralInfo());
 		return irbProtocolVO;
 	}
 

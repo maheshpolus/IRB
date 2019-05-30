@@ -1,9 +1,10 @@
 package org.mit.irb.web.IRBProtocol.VO;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 
 public class IRBActionsVO {
@@ -33,9 +34,20 @@ public class IRBActionsVO {
 	private String selectedNotifyTypeQualifier;
 	private String submissionId;
 	private String actionDate;
-	private Date sqlActionDate;
 	private String templateTypeCode;
-	
+	private String decisionDate;
+	private String approvalDate;
+	private String expirationDate;
+	private ArrayList<HashMap<String, Object>> scheduleDates;
+	private ArrayList<HashMap<String, Object>> committeeList;
+	private ArrayList<HashMap<String, Object>> riskLevel;
+	private ArrayList<HashMap<String, Object>> expeditedApprovalCheckList;
+	private List<String> expeditedCheckListSelectedCode;
+	private List<IRBProtocolRiskLevel> riskLevelList;
+	private String selectedCommitteeId;
+	private String selectedScheduleId;	
+	private ArrayList<HashMap<String, Object>> expeditedCannedComments;
+
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
 	}
@@ -244,19 +256,107 @@ public class IRBActionsVO {
 		this.actionDate = actionDate;
 	}
 
-	public Date getSqlActionDate() {
-		return sqlActionDate;
-	}
-
-	public void setSqlActionDate(Date sqlActionDate) {
-		this.sqlActionDate = sqlActionDate;
-	}
-
 	public String getTemplateTypeCode() {
 		return templateTypeCode;
 	}
 
 	public void setTemplateTypeCode(String templateTypeCode) {
 		this.templateTypeCode = templateTypeCode;
+	}
+
+	public String getDecisionDate() {
+		return decisionDate;
+	}
+
+	public void setDecisionDate(String decisionDate) {
+		this.decisionDate = decisionDate;
+	}
+
+	public String getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(String approvalDate) {
+		this.approvalDate = approvalDate;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	
+	public ArrayList<HashMap<String, Object>> getScheduleDates() {
+		return scheduleDates;
+	}
+
+	public void setScheduleDates(ArrayList<HashMap<String, Object>> scheduleDates) {
+		this.scheduleDates = scheduleDates;
+	}
+
+	public ArrayList<HashMap<String, Object>> getCommitteeList() {
+		return committeeList;
+	}
+
+	public void setCommitteeList(ArrayList<HashMap<String, Object>> committeeList) {
+		this.committeeList = committeeList;
+	}
+
+	public ArrayList<HashMap<String, Object>> getRiskLevel() {
+		return riskLevel;
+	}
+
+	public void setRiskLevel(ArrayList<HashMap<String, Object>> riskLevel) {
+		this.riskLevel = riskLevel;
+	}
+
+	public ArrayList<HashMap<String, Object>> getExpeditedApprovalCheckList() {
+		return expeditedApprovalCheckList;
+	}
+
+	public void setExpeditedApprovalCheckList(ArrayList<HashMap<String, Object>> expeditedApprovalCheckList) {
+		this.expeditedApprovalCheckList = expeditedApprovalCheckList;
+	}
+
+	public List<String> getExpeditedCheckListSelectedCode() {
+		return expeditedCheckListSelectedCode;
+	}
+
+	public void setExpeditedCheckListSelectedCode(List<String> expeditedCheckListSelectedCode) {
+		this.expeditedCheckListSelectedCode = expeditedCheckListSelectedCode;
+	}
+
+	public String getSelectedCommitteeId() {
+		return selectedCommitteeId;
+	}
+
+	public void setSelectedCommitteeId(String selectedCommitteeId) {
+		this.selectedCommitteeId = selectedCommitteeId;
+	}
+
+	public String getSelectedScheduleId() {
+		return selectedScheduleId;
+	}
+
+	public void setSelectedScheduleId(String selectedScheduleId) {
+		this.selectedScheduleId = selectedScheduleId;
+	}
+
+	public List<IRBProtocolRiskLevel> getRiskLevelList() {
+		return riskLevelList;
+	}
+
+	public void setRiskLevelList(List<IRBProtocolRiskLevel> riskLevelList) {
+		this.riskLevelList = riskLevelList;
+	}
+
+	public ArrayList<HashMap<String, Object>> getExpeditedCannedComments() {
+		return expeditedCannedComments;
+	}
+
+	public void setExpeditedCannedComments(ArrayList<HashMap<String, Object>> expeditedCannedComments) {
+		this.expeditedCannedComments = expeditedCannedComments;
 	}
 }

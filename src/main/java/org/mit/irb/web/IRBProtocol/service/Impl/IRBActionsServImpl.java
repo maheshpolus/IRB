@@ -1,12 +1,11 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 		switch (vo.getActionTypeCode()) {
 		case "101":			
 			vo = irbActionsDao.submitForReviewProtocolActions(vo);
+			
 			break;
 		case "303":
 		   vo = irbActionsDao.withdrawProtocolActions(vo);
@@ -72,49 +72,89 @@ public class IRBActionsServImpl implements IRBActionsService {
 			vo = irbActionsDao.copyProtocolActions(vo);
 			break;
 		case "213":		
-			vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.returnToPiAdminActions(vo);
+			//vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.returnToPiAdminActions(vo,files);
 			break;
 		case "300":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closeAdminActions(vo);
 			break;
 		case "304":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.disapproveAdminActions(vo);
 			break;
 		case "209":
-			vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.irbAcknowledgementAdminActions(vo);
+			//vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.irbAcknowledgementAdminActions(vo,files);
 			break;
 		case "212":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.reOpenEnrollmentAdminActions(vo,files);
 			break;
 		case "211":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.dataAnalysisOnlyAdminActions(vo);
 			break;
 		case "207":
-			vo=generateSqlActionDate(vo);
+			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
 			break;
 		case "301":
-			vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.terminateAdminActions(vo);
+			//vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.terminateAdminActions(vo,files);
 			break;	
 		case "302":
-			vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.suspendAdminActions(vo);
+			//vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.suspendAdminActions(vo,files);
 			break;	
 		case "109":
-			vo=generateSqlActionDate(vo);
+		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.notifyCommiteeAdminActions(vo);
 			break;
 		case "201":
-			vo=generateSqlActionDate(vo);
-			vo = irbActionsDao.deferAdminActions(vo);
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.deferAdminActions(vo,files);
 			break;
+		case "119":
+			//	vo=generateSqlActionDate(vo);
+				vo = irbActionsDao.adandonAdminActions(vo,files);
+				break;	
+		case "200":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.assignToAgendaAdminActions(vo,files);
+			break;		
+		case "210":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.reviewNotRequiredAdminActions(vo,files);
+			break;
+		case "204":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.approvedAdminActions(vo);
+			break;
+		case "203":
+		//	vo=generateSqlActionDate(vo);
+	    	vo = irbActionsDao.SMRRAdminActions(vo);
+			break;
+		case "202":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.SRRAdminActions(vo);
+			break;
+		case "205":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.expeditedApprovalAdminActions(vo);
+			break;
+		case "208":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.responseApprovalAdminActions(vo);
+			break;
+		case "113":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
+			break;	
+		case "910":
+		//	vo=generateSqlActionDate(vo);
+			vo = irbActionsDao.undoLastActionAdminActions(vo);
+			break;	
 		}
 		return vo;
 	}
@@ -123,8 +163,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 	public IRBActionsVO getAmendRenwalSummary(IRBActionsVO vo) {
 		IRBActionsVO irbActionsVO = new IRBActionsVO();
 		try{
-			ArrayList<HashMap<String, Object>> renewalModules = null;
-			renewalModules = irbActionsDao.iterateAmendRenewalModule(vo,renewalModules);	
+			ArrayList<HashMap<String, Object>> renewalModules =irbActionsDao.iterateAmendRenewalModule(vo);	
 			irbActionsVO.setModuleAvailableForAmendment(renewalModules);
 			irbActionsVO.setComment(irbActionsDao.getAmendRenewalSummary(vo));
 			irbActionsVO.setProtocolStatus(vo.getPrevProtocolStatusCode());
@@ -151,27 +190,45 @@ public class IRBActionsServImpl implements IRBActionsService {
 			logger.info("Exception in getAmendRenwalSummary:" + e);
 		}
 		return irbActionsVO;
-	}
-	
-	public IRBActionsVO generateSqlActionDate(IRBActionsVO vo){
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-		java.util.Date utilActionDate = null;
-		java.sql.Date sqlActionDate= null;
-		if (vo.getActionDate()!= null) {
-			try {
-				utilActionDate = sdf.parse(vo.getActionDate());
-			} catch (ParseException e) {				
-				e.printStackTrace();
-			}
-			sqlActionDate = new java.sql.Date(utilActionDate.getTime());
-			vo.setSqlActionDate(sqlActionDate);			
-		}
-		return vo;
-	}
+	}	
 
 	@Override
 	public IRBActionsVO getActionLookup(IRBActionsVO vo) {
-		// TODO Auto-generated method stub
+		ArrayList<HashMap<String, Object>> renewalModules = irbActionsDao.iterateAmendRenewalModule(vo);	
+		vo.setModuleAvailableForAmendment(renewalModules);
+		ArrayList<HashMap<String, Object>> submissionTypeQulifier = irbActionsDao.getSubmissionTypeQulifier();
+		vo.setNotifyTypeQualifier(submissionTypeQulifier);	
+		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(null);
+		vo.setScheduleDates(scheduleDates);	
+		ArrayList<HashMap<String, Object>> committeeList = irbActionsDao.getCommitteeList();
+		vo.setCommitteeList(committeeList);
+		ArrayList<HashMap<String, Object>> riskLevel = irbActionsDao.getRiskLevel();
+		vo.setRiskLevel(riskLevel);
+		ArrayList<HashMap<String, Object>> expeditedApprovalCheckList = irbActionsDao.getExpeditedApprovalCheckList();
+		vo.setExpeditedApprovalCheckList(expeditedApprovalCheckList);
+		ArrayList<HashMap<String, Object>> expeditedCannedComments = irbActionsDao.getExpeditedCannedComments();
+		vo.setExpeditedCannedComments(expeditedCannedComments);
+		return vo;	
+	}
+
+	@Override
+	public IRBActionsVO getCommitteeScheduledDates(String committeeId) {
+		IRBActionsVO vo = new IRBActionsVO();
+		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(committeeId);
+		vo.setScheduleDates(scheduleDates);	
+		return vo;	
+	}
+
+	@Override
+	public SubmissionDetailVO getCommitteeList(SubmissionDetailVO submissionDetailvo) {
+		SubmissionDetailVO subDetailvo = new SubmissionDetailVO();
+		try{
+			ArrayList<HashMap<String, Object>> committeeList = irbActionsDao.getCommitteeList();
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getCommitteeList Failed"+e);
+			logger.info("Exception in getAmendRenwalSummary:" + e);
+		}
 		return null;
 	}
 }

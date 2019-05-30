@@ -51,11 +51,11 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo, ProtocolGeneralInfo generalInfo);
 
-	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource);
+	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource, ProtocolGeneralInfo generalInfo);
 
-	IRBProtocolVO updateSubject(ProtocolSubject protocolSubject);
+	IRBProtocolVO updateSubject(ProtocolSubject protocolSubject, ProtocolGeneralInfo generalInfo);
 
-	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator);
+	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator, ProtocolGeneralInfo generalInfo);
 
 	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
 
@@ -63,7 +63,7 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
 
-	IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol);
+	IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol, ProtocolGeneralInfo generalInfo);
 
 	IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) throws JsonParseException, JsonMappingException, IOException;
 

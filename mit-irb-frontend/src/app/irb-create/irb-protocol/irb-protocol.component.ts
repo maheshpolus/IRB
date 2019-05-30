@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastsManager } from 'ng2-toastr';
 import { IrbCreateService } from '../irb-create.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
 

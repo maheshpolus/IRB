@@ -2056,6 +2056,10 @@ select#inlineFormCustomSelect
 {
     padding-right:0;
 }
+.pl-0
+{
+    padding-left:0;
+}
 .add-small-mt
 {
     margin-top:0 !important ;
@@ -2508,13 +2512,13 @@ input:disabled,textarea:disabled{
 .myCustomModalClass .modal-dialog {
     max-width: 1200px;
   }
+  .assignAdminModal .modal-dialog {
+    max-width: 600px;
+  }
   .ml-95
   {
     margin-left: -95px !important;
   }
-  .search-dropdown-position {
-    top: 72px !important;
-}
 .header-padding{
     padding: 0 15px;
 }
@@ -2583,4 +2587,17 @@ input:disabled,textarea:disabled{
 }
 .pr-8 {
     padding-right: 8px;
+}
+.admin-label{
+    display: inline-flex;
+}
+.admin-label button{
+    margin-left: 39px;
+}
+.label-width{
+    width: 29%;
+}
+.submission-accordion {
+    top: 77px;
+    right: 19px;
 }

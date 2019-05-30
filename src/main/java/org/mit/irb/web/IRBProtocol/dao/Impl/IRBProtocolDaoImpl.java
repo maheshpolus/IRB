@@ -751,8 +751,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			ProtocolGeneralInfo generalInfo) {
 		logger.info(".................Updating person Informations..................");
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		String flag="N";
-		personnelInfo.setSequenceNumber(1);
+		String flag="N";		
+		personnelInfo.setSequenceNumber(generalInfo.getSequenceNumber());	
 		if (personnelInfo.getAcType().equals("U")) {
 			personnelInfo.setIsActive("Y");	
 			if(personnelInfo.getProtocolPersonId() == null){
@@ -796,9 +796,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource) {
+	public IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		fundingSource.setSequenceNumber(1);
+		fundingSource.setSequenceNumber(generalInfo.getSequenceNumber());
 		String sourceName=fundingSource.getSourceName();
 		if(sourceName != null && !sourceName.isEmpty()){
 			fundingSource.setFundingSourceName(sourceName);	
@@ -825,9 +825,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject) {
+	public IRBProtocolVO updateSubject(ProtocolSubject protocolSubject,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		protocolSubject.setSequenceNumber(1);
+		protocolSubject.setSequenceNumber(generalInfo.getSequenceNumber());
 		if (protocolSubject.getAcType().equals("U")) {
 			if(protocolSubject.getProtocolVulnerableSubId() == null){
 				protocolSubject.setProtocolVulnerableSubId(generateSubjectId()); 
@@ -847,9 +847,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator) {
+	public IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator,ProtocolGeneralInfo generalInfo) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		protocolCollaborator.setSequenceNumber(1);
+		protocolCollaborator.setSequenceNumber(generalInfo.getSequenceNumber());
 		if (protocolCollaborator.getAcType().equals("U")) {
 			if(protocolCollaborator.getProtocolLocationId() == null){
 				protocolCollaborator.setProtocolLocationId(generateLocationId());
@@ -1376,10 +1376,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol) {
+	public IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol,ProtocolGeneralInfo generalInfo) {
 		if(scienceOfProtocol.getScientificId() == null){
 			scienceOfProtocol.setScientificId(generateScientificId());
 		}
+		scienceOfProtocol.setSequenceNumber(generalInfo.getSequenceNumber());
 		hibernateTemplate.saveOrUpdate(scienceOfProtocol);
 		irbProtocolVO.setScienceOfProtocol(scienceOfProtocol);
 		return irbProtocolVO;
@@ -1502,7 +1503,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	public IRBProtocolVO updateUnitDetails(ProtocolLeadUnits protocolUnit, ProtocolGeneralInfo generalInfo) {
 		logger.info(".................Updating unit Informations..................");
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		protocolUnit.setSequenceNumber(1);
+		protocolUnit.setSequenceNumber(generalInfo.getSequenceNumber());
 		if (protocolUnit.getAcType().equals("U")) {
 			if(protocolUnit.getProtocolUnitsId() == null){
 				protocolUnit.setProtocolUnitsId(generateUnitId()); 
@@ -1530,12 +1531,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Override
 	public void modifyAdminContactDetail(ProtocolAdminContact protocolAdminContact, ProtocolGeneralInfo generalInfo) {
+		protocolAdminContact.setSequenceNumber(generalInfo.getSequenceNumber());	
 		protocolAdminContact.setProtocolGeneralInfo(generalInfo);
 		Session sessionUpdatePersons = hibernateTemplate.getSessionFactory().openSession();
 		Transaction transactionUpdatePersons = sessionUpdatePersons.beginTransaction();
 		if(protocolAdminContact.getAdminContactId() == null){
 			protocolAdminContact.setAdminContactId(generateAdminContactId());
-		}
+		}					
 		hibernateTemplate.saveOrUpdate(protocolAdminContact);
 		transactionUpdatePersons.commit();
 		sessionUpdatePersons.close();	
@@ -1554,8 +1556,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	@Override
 	public Future<IRBProtocolVO> getProtocolAdminContacts(IRBProtocolVO irbProtocolVO) {
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolAdminContact p where p.protocolNumber =:protocolNumber order by p.updateTimestamp DESC");		
-		queryGeneral.setString("protocolNumber", irbProtocolVO.getProtocolNumber());
+				.createQuery("from ProtocolAdminContact p where p.protocolGeneralInfo.protocolId =:protocolId order by p.updateTimestamp DESC");		
+		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		if (!queryGeneral.list().isEmpty()) {
 			List<ProtocolAdminContact> adminContactList = queryGeneral.list();
 			irbProtocolVO.setProtocolAdminContactList(adminContactList);

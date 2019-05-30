@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,6 +68,21 @@ public class IRBActionsController {
 	public @ResponseBody IRBActionsVO getActionLookup(@RequestBody IRBActionsVO vo, HttpServletRequest request,HttpServletResponse response)
 	{
 		vo = irbActionsService.getActionLookup(vo);
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getCommitteeScheduledDates", method = RequestMethod.POST)
+	public @ResponseBody IRBActionsVO getCommitteeScheduledDates(HttpServletRequest request,HttpServletResponse response)
+	{
+		String committeeId = request.getParameter("committeeId");
+		IRBActionsVO vo = irbActionsService.getCommitteeScheduledDates(committeeId);
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getCommitteeList", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getCommitteeList(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getCommitteeList(vo);
 		return vo;
 	}
 }

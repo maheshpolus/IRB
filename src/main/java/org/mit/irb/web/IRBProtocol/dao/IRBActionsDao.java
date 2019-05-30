@@ -3,6 +3,7 @@ package org.mit.irb.web.IRBProtocol.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,19 +38,19 @@ public interface IRBActionsDao {
 	
 	void updateActionStatus(IRBActionsVO vo);
 
-	ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo,ArrayList<HashMap<String, Object>> renewalModules);
+	ArrayList<HashMap<String, Object>> iterateAmendRenewalModule(IRBActionsVO vo);
 
 	String getAmendRenewalSummary(IRBActionsVO vo);
 
 	IRBActionsVO updateAmendRenewModule(IRBActionsVO vo);
 
-	IRBActionsVO returnToPiAdminActions(IRBActionsVO vo);
+	IRBActionsVO returnToPiAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
 	IRBActionsVO closeAdminActions(IRBActionsVO vo);
 
 	IRBActionsVO disapproveAdminActions(IRBActionsVO vo);
 
-	IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo);
+	IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
 	IRBActionsVO reOpenEnrollmentAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
@@ -57,11 +58,45 @@ public interface IRBActionsDao {
 
 	IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo);
 	
-	IRBActionsVO terminateAdminActions(IRBActionsVO vo);
+	IRBActionsVO terminateAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
-	IRBActionsVO suspendAdminActions(IRBActionsVO vo);
+	IRBActionsVO suspendAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
 	IRBActionsVO notifyCommiteeAdminActions(IRBActionsVO vo);
 
-	IRBActionsVO deferAdminActions(IRBActionsVO vo);
+	IRBActionsVO deferAdminActions(IRBActionsVO vo, MultipartFile[] files);
+
+	IRBActionsVO assignToAgendaAdminActions(IRBActionsVO vo, MultipartFile[] files);
+
+	IRBActionsVO grantExceptionAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo, MultipartFile[] files);
+
+	ArrayList<HashMap<String, Object>> getSubmissionTypeQulifier();
+
+	IRBActionsVO approvedAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO SMRRAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO SRRAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO responseApprovalAdminActions(IRBActionsVO vo);
+
+	IRBActionsVO administrativeCorrectionAdminActions(IRBActionsVO vo);
+
+	ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId);
+
+	ArrayList<HashMap<String, Object>> getCommitteeList();
+
+	ArrayList<HashMap<String, Object>> getRiskLevel();
+
+	ArrayList<HashMap<String, Object>> getExpeditedApprovalCheckList();
+
+	IRBActionsVO adandonAdminActions(IRBActionsVO vo, MultipartFile[] files);
+
+	IRBActionsVO undoLastActionAdminActions(IRBActionsVO vo);
+
+	ArrayList<HashMap<String, Object>> getExpeditedCannedComments();
 }

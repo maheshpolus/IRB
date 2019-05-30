@@ -6,7 +6,7 @@ import {Location} from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastsManager } from 'ng2-toastr';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { KeyPressEvent } from '../common/directives/keyPressEvent.component';
 

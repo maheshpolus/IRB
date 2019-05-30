@@ -45,7 +45,9 @@ import { CommitteeCardComponent } from './dashboard/dashboard-list/committee-car
 import { ScheduleCardComponent } from './dashboard/dashboard-list/schedule-card/schedule-card.component';
 import { FundingSourceModalComponent } from './common/funding-source-modal/funding-source-modal.component';
 import { FundingSourceModalService } from './common/funding-source-modal/funding-source-modal.service';
+import { AssignModalServiceService } from './common/assign-modal/assign-modal.service';
 import { PersonTrainingService } from './person-training/person-training.service';
+import { AssignModalComponent } from './common/assign-modal/assign-modal.component';
 
 enableProdMode();
 
@@ -67,7 +69,8 @@ enableProdMode();
         CommitteeCardComponent,
         ScheduleCardComponent,
         LogoutComponent,
-        FundingSourceModalComponent
+        FundingSourceModalComponent,
+        AssignModalComponent
 
     ],
     imports: [
@@ -90,9 +93,9 @@ enableProdMode();
     providers: [AuthGuard, DashboardService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
-        SharedDataService, FundingSourceModalService, PersonTrainingService,
+        SharedDataService, FundingSourceModalService, AssignModalServiceService, PersonTrainingService,
         KeyPressEvent, HeaderService],
-        entryComponents: [FundingSourceModalComponent],
+        entryComponents: [FundingSourceModalComponent, AssignModalComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

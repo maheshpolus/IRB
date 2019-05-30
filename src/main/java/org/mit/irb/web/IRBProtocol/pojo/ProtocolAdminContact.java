@@ -18,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "IRB_PROTOCOL_ADMIN_CONTACTS")
+@Table(name = "IRB_PROTOCOL_ADMIN_CONTACTS") 
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProtocolAdminContact {
@@ -43,6 +43,9 @@ public class ProtocolAdminContact {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+
+	@Column(name="SEQUENCE_NUMBER")
+	private Integer sequenceNumber;
 	
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Date updateTimestamp;
@@ -159,5 +162,13 @@ public class ProtocolAdminContact {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
+
+	public void setSequenceNumber(Integer sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
 	}
 }

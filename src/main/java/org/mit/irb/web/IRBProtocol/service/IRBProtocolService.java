@@ -111,25 +111,28 @@ public interface IRBProtocolService {
 	IRBProtocolVO updateProtocolPersonInfo(ProtocolPersonnelInfo personnelInfo, ProtocolGeneralInfo generalInfo);
 
 	/**
+	 * @param protocolGeneralInfo 
 	 * @param IRBProtocolVO
 	 * @return updated Funding Source Information with latest status change
 	 * @throws Exception
 	 */
-	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource);
+	IRBProtocolVO updateFundingSource(ProtocolFundingSource fundingSource, ProtocolGeneralInfo protocolGeneralInfo);
 
 	/**
+	 * @param protocolGeneralInfo 
 	 * @param IRBProtocolVO
 	 * @return updated Subject Information with latest status change
 	 * @throws Exception
 	 */
-	IRBProtocolVO updateSubject(ProtocolSubject protocolSubject);
+	IRBProtocolVO updateSubject(ProtocolSubject protocolSubject, ProtocolGeneralInfo protocolGeneralInfo);
 
 	/**
+	 * @param protocolGeneralInfo 
 	 * @param IRBProtocolVO
 	 * @return updated Collaborator Information with latest status change
 	 * @throws Exception
 	 */
-	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator);
+	IRBProtocolVO updateCollaborator(ProtocolCollaborator protocolCollaborator, ProtocolGeneralInfo protocolGeneralInfo);
 
 
 
@@ -163,9 +166,10 @@ public interface IRBProtocolService {
 
 	/**
 	 * @param scienceOfProtocol
+	 * @param protocolGeneralInfo 
 	 * @return updated VO object
 	 */
-	IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol);
+	IRBProtocolVO saveScienceOfProtocol(ScienceOfProtocol scienceOfProtocol, ProtocolGeneralInfo protocolGeneralInfo);
 
 	/**
 	 * @param files
@@ -175,6 +179,7 @@ public interface IRBProtocolService {
 	IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson);
 
 	/**
+	 * @param protocolGeneralInfo 
 	 * @param protocolCollaboratorPersonsList
 	 * @return updated VO object
 	 */

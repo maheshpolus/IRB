@@ -10,7 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { IrbCreateHeaderComponent } from './irb-create-header/irb-create-header.component';
 import { IrbEditComponent } from './irb-edit/irb-edit.component';
-import { IrbCreateRoutingModule } from '../irb-create/irb-create-routing.module';
+import { IrbCreateRoutingModule } from './irb-create-routing.module';
 import { IrbCreateAttachmentComponent } from './irb-create-attachment/irb-create-attachment.component';
 import { IrbCreateHistroyComponent } from './irb-create-histroy/irb-create-histroy.component';
 import { AppCommonModule } from '../common/common/common.module';

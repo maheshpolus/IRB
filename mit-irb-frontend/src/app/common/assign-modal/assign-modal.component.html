@@ -1,0 +1,51 @@
+<!--asign admin Modal-->
+<!-- <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner> -->
+<div class="modal-header popup-header" data-backdrop="static">
+  <h5 class="modal-title">Assign COUHES Admin</h5>
+  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body modal-popup">
+  <!-- <section class="row header-padding">
+    <div class="col-12">
+      <div class="row">
+        
+          Description on assiign
+        
+      </div>
+    </div>
+
+  </section> -->
+
+  <!--Assign Admin Section-->
+  <div class="modal-header-label padding-15">
+    <h4 class="popup-sub-head sub-head-width">COUHES Admin</h4>
+  </div>
+  <div class="card-body card-paddng">
+    <div class="col-12 search-eidted-p padding-15">
+      <div class="row">
+        <div class="col-md-10">
+          <!--Unit Search-->
+          <!-- <input type="text" placeholder="Search for COUHES Admins" class="form-control input-field-size"
+            (focus)="isAdmintSearch = true" (focusout)="isAdmintSearch = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'UnitDropDown')"
+            (keydown.arrowup)="keyPressEvent.onKeyDown($event,'UnitDropDown')" (keydown.Enter)="keyPressEvent.onKeyDown($event,'UnitDropDown')">
+           <div class="sb-seachresults list-position" id="UnitDropDown">
+             <ul class="sb-results-dropdown-menu" *ngIf="isAdmintSearch">
+               <li *ngFor="let result of adminList" (mousedown)="selectedHomeUnit(result.unitNumber,result.unitName)" (click)="selectedHomeUnit(result.unitNumber,result.unitName)">
+                 <span>{{result.PERSON_ID}} - {{result.FULL_NAME}}</span>
+               </li>
+             </ul>
+           </div> -->
+          <ng2-completer [datasource]="adminListDataSource" [minSearchLength]="0" [placeholder]="'Search COUHES Admin'" [openOnFocus]="true"
+            [inputClass]="'ng-pristine ng-valid ng-touched'" [(ngModel)]="SearchTableName" (selected)="setAdmin($event)">
+          </ng2-completer>
+        </div>
+
+        <div class="col-md-2">
+          <button type="button" class="btn btn-success" (click)="updateIrbAdmin()">Assign</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

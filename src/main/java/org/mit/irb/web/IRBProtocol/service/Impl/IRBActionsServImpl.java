@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class IRBActionsServImpl implements IRBActionsService {
 
 	@Autowired
 	IRBActionsDao irbActionsDao;
+	
+	@Autowired
+	IRBProtocolDao irbProtocolDao;
 	
 	protected static Logger logger = Logger.getLogger(IRBActionsServImpl.class.getName());
 
@@ -71,90 +75,88 @@ public class IRBActionsServImpl implements IRBActionsService {
 		case "911":
 			vo = irbActionsDao.copyProtocolActions(vo);
 			break;
-		case "213":		
-			//vo=generateSqlActionDate(vo);
+			
+			
+			     //*****************************admin actions*****************************//
+			
+			
+		case "213":								
 			vo = irbActionsDao.returnToPiAdminActions(vo,files);
 			break;
 		case "300":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closeAdminActions(vo);
 			break;
 		case "304":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.disapproveAdminActions(vo);
 			break;
 		case "209":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.irbAcknowledgementAdminActions(vo,files);
 			break;
 		case "212":
-			//vo=generateSqlActionDate(vo);
+			if(vo.getSelectedCommitteeId() != null)
+			{
+			vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
+			}
 			vo = irbActionsDao.reOpenEnrollmentAdminActions(vo,files);
 			break;
 		case "211":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.dataAnalysisOnlyAdminActions(vo);
 			break;
 		case "207":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
 			break;
 		case "301":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.terminateAdminActions(vo,files);
 			break;	
 		case "302":
-			//vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.suspendAdminActions(vo,files);
 			break;	
-		case "109":
-		//	vo=generateSqlActionDate(vo);
+		/*case "109":
 			vo = irbActionsDao.notifyCommiteeAdminActions(vo);
-			break;
+			break;*/
 		case "201":
-		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.deferAdminActions(vo,files);
 			break;
 		case "119":
-			//	vo=generateSqlActionDate(vo);
-				vo = irbActionsDao.adandonAdminActions(vo,files);
-				break;	
+			vo = irbActionsDao.adandonAdminActions(vo,files);
+			break;	
 		case "200":
-		//	vo=generateSqlActionDate(vo);
+			if(vo.getSelectedCommitteeId() != null && vo.getSelectedScheduleId() != null)
+			{
+			vo.getProtocolSubmissionStatuses().setScheduleId(Integer.parseInt(vo.getSelectedScheduleId()));
+			vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
+			}
 			vo = irbActionsDao.assignToAgendaAdminActions(vo,files);
 			break;		
 		case "210":
-		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.reviewNotRequiredAdminActions(vo,files);
 			break;
 		case "204":
-		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.approvedAdminActions(vo);
 			break;
 		case "203":
-		//	vo=generateSqlActionDate(vo);
 	    	vo = irbActionsDao.SMRRAdminActions(vo);
 			break;
 		case "202":
-		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.SRRAdminActions(vo);
 			break;
 		case "205":
-		//	vo=generateSqlActionDate(vo);
+			if(vo.getSelectedCommitteeId() != null && vo.getSelectedScheduleId() != null)
+			{
+			vo.getProtocolSubmissionStatuses().setScheduleId(Integer.parseInt(vo.getSelectedScheduleId()));
+			vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
+			}
 			vo = irbActionsDao.expeditedApprovalAdminActions(vo);
 			break;
-		case "208":
-		//	vo=generateSqlActionDate(vo);
+		/*case "208":
 			vo = irbActionsDao.responseApprovalAdminActions(vo);
-			break;
+			break;*/
 		case "113":
-		//	vo=generateSqlActionDate(vo);
 			vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
 			break;	
-		case "910":
-		//	vo=generateSqlActionDate(vo);
+		/*case "910":
 			vo = irbActionsDao.undoLastActionAdminActions(vo);
-			break;	
+			break;	*/
 		}
 		return vo;
 	}
@@ -230,5 +232,35 @@ public class IRBActionsServImpl implements IRBActionsService {
 			logger.info("Exception in getAmendRenwalSummary:" + e);
 		}
 		return null;
+	}
+	
+	@Override
+	public SubmissionDetailVO getIRBAdminList(SubmissionDetailVO submissionDetailvo) {
+		SubmissionDetailVO subDetailvo = new SubmissionDetailVO();
+		try{
+			ArrayList<HashMap<String, Object>> adminList = irbActionsDao.getIRBAdminList();
+			subDetailvo.setIrbAdminsList(adminList);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getIRBAdminList Failed"+e);
+			logger.info("Exception in getIRBAdminList:" + e);
+		}
+		return subDetailvo;
+	}
+	
+	@Override
+	public SubmissionDetailVO updateIRBAdmin(SubmissionDetailVO submissionDetailvo) {
+		try{
+			irbActionsDao.updateIRBAdmin(submissionDetailvo);
+			HashMap<String, Object> irbProtocolDetail = irbProtocolDao.getIRBProtocolDetail(submissionDetailvo.getProtocolNumber());
+			submissionDetailvo.setIrbViewHeader(irbProtocolDetail);
+			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("IRB Admin Assigned Successfully");
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getIRBAdminList Failed"+e);
+			logger.info("Exception in updateIRBAdmin:" + e);
+		}
+		return submissionDetailvo;
 	}
 }

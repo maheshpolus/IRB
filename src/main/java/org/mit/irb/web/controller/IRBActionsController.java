@@ -85,4 +85,19 @@ public class IRBActionsController {
 		vo = irbActionsService.getCommitteeList(vo);
 		return vo;
 	}
+	
+	@RequestMapping(value = "/getIRBAdminList", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getIRBAdminList(HttpServletRequest request,HttpServletResponse response)
+	{
+		SubmissionDetailVO vo = new SubmissionDetailVO();
+		vo = irbActionsService.getIRBAdminList(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateIRBAdmin", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateIRBAdmin(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateIRBAdmin(vo); 
+		return vo;
+	}
 }

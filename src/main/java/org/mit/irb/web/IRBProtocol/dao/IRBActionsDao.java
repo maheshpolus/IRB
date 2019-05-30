@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBActionsDao {
@@ -99,4 +100,8 @@ public interface IRBActionsDao {
 	IRBActionsVO undoLastActionAdminActions(IRBActionsVO vo);
 
 	ArrayList<HashMap<String, Object>> getExpeditedCannedComments();
+
+	ArrayList<HashMap<String, Object>> getIRBAdminList();
+
+	void updateIRBAdmin(SubmissionDetailVO submissionDetailvo);
 }

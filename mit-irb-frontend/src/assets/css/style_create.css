@@ -2601,3 +2601,23 @@ input:disabled,textarea:disabled{
     top: 77px;
     right: 19px;
 }
+.select-assign-to-agenda {
+    display: inline-block;
+    width: 80%;
+}
+.pr-10 {
+    padding-right: 10px;
+}
+.icon_tab {
+    border: none !important;
+    background-color: #fff4f4 !important;
+    border-radius: unset !important;
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1rem !important;
+    color: #403f3f !important;
+}
+.icon_tab:hover {
+    background-color: #a92034 !important;
+    color: #fff !important;
+    
+}

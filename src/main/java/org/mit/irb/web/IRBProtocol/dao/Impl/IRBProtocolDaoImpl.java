@@ -97,7 +97,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName());
 
-	@Override
+	/*@Override
 	public IRBViewProfile getIRBProtocolDetails(String protocolNumber) {
 		IRBViewProfile irbViewProfile = new IRBViewProfile();
 		ArrayList<InParameter> inputParam = new ArrayList<>();
@@ -121,7 +121,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			irbViewProfile.setIrbViewHeader(result.get(0));
 		}
 		return irbViewProfile;
-	}
+	}*/
 
 	@Override
 	public IRBViewProfile getIRBprotocolPersons(String protocolNumber) {
@@ -1747,5 +1747,21 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			logger.info("Exception in getHistoryGroupComment:" + e);
 		} 
 		return result;
+	}
+	
+	@Override
+	public HashMap<String, Object> getIRBProtocolDetail(String protocolNumber) {
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTOCOL_DETAILS", outputParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("DBException in getIRBProtocolDetails:" + e);
+		} 
+		return result.get(0);
 	}
 }

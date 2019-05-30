@@ -74,7 +74,7 @@
 			</button>
 		</a>
 		<a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105 || irb.PROTOCOL_STATUS_CODE == 106
-		          || irb.PROTOCOL_STATUS_CODE == 304">
+		          || irb.PROTOCOL_STATUS_CODE == 304 || irb.PROTOCOL_STATUS_CODE == 107">
 			<button type="button" class="btn btn-outline-secondary button-view"
 				(click)="EditIrb(irb.PROTOCOL_NUMBER,irb.PROTOCOL_ID)">
 				<i class="fa fa-pencil"></i>Edit

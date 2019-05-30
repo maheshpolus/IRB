@@ -24,7 +24,7 @@ ul.sb-results-dropdown-menu {
     margin: 0;
     padding: 0;
     max-height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: white;
     border-left: 1px #26A69A solid;
     border-right: 1px #26A69A solid;

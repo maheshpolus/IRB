@@ -120,4 +120,11 @@ getOrganizationList(searchString) {
   const params = new HttpParams().set('collaboratorSearchString', searchString);
     return this._http.post('/mit-irb/loadCollaborators', params);
 }
+getActionLookup(param) {
+  return this._http.post('/mit-irb/getActionLookup', param);
+}
+getCommitteeScheduledDates(committeeId) {
+  const params = new HttpParams().set('committeeId', committeeId);
+    return this._http.post('/mit-irb/getCommitteeScheduledDates', params);
+}
 }

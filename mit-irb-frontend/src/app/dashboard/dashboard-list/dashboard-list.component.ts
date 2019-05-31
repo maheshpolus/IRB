@@ -745,7 +745,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     protocolListPerPage(pageNumber) {
         this.paginatedIrbListData = this.irbListData.slice(pageNumber * this.paginationData.limit - this.paginationData.limit,
             pageNumber * this.paginationData.limit);
-        document.getElementById('scrollToTop').scrollTop = 0;
+        // document.getElementById('scrollToTop').scrollTop = 0;
+        const id = document.getElementById('scrollToTop');
+                if (id) {
+                    id.scrollIntoView({behavior : 'smooth'});
+                }
     }
     openStatusModal(isSubmittedStatusSearch) {
         if (isSubmittedStatusSearch) {

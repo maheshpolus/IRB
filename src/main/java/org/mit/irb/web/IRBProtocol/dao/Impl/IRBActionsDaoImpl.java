@@ -14,6 +14,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.IRBActionsReviewerComments;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.common.utils.DBEngine;
@@ -90,7 +91,18 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			for(int i=0;i<finalResult.size();i++){
 				 temp = finalResult.get(i).get("ACTION_CODE");
 				 if(temp.toString().equals("205")){
-					 if(!reviewTypeCode.equals("2")){
+					 if(reviewTypeCode == null){
+						 finalResult.remove(i);
+					 }					 
+					 else if(!reviewTypeCode.equals("2")){
+						 finalResult.remove(i);
+					 }
+				 }
+				 else if((temp.toString().equals("208"))){
+					 if(reviewTypeCode == null){
+						 finalResult.remove(i);
+					 }					 
+					 else if(!reviewTypeCode.equals("6")){
 						 finalResult.remove(i);
 					 }
 				 }
@@ -650,6 +662,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);
 			updateApprovalsRiskLevel(vo);
+			updateReviewComments(vo);			
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Dissapproved successfully");	
@@ -665,7 +678,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO irbAcknowledgementAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
-			protocolActionAttachments(files, vo);
+			updateReviewComments(vo);
+			protocolActionReviewerAttachments(files, vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("COUHES acknowledged successfully");	
@@ -683,7 +697,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			protocolActionSP(vo,null);
 			protocolActionAttachments(files, vo);
 			//generateProtocolCorrespondence(vo);
-			protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Re-Open enrollment successful");	
 		} catch (Exception e) {
@@ -713,6 +726,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
+			updateReviewComments(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Closed for enrollment successful");	
@@ -729,7 +743,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO terminateAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
-			protocolActionAttachments(files, vo);
+			updateReviewComments(vo);
+			protocolActionReviewerAttachments(files, vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Terminated successfully");	
@@ -746,7 +761,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO suspendAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
-			protocolActionAttachments(files, vo);
+			updateReviewComments(vo);
+			protocolActionReviewerAttachments(files, vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Suspended successfully");	
@@ -779,7 +795,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO deferAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
-			protocolActionAttachments(files, vo);
+			updateReviewComments(vo);
+			protocolActionReviewerAttachments(files, vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Defer successfully");	
@@ -910,9 +927,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO assignToAgendaAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
-			protocolActionAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
-			protocolActionAttachments(files, vo);
+			updateReviewComments(vo);
+			protocolActionReviewerAttachments(files, vo);
+			//generateProtocolCorrespondence(vo);			
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Assign to agenda successfull");	
 		} catch (Exception e) {
@@ -944,7 +961,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
 			protocolActionSP(vo,null);
-			protocolActionAttachments(files, vo);
+			updateReviewComments(vo);
+			protocolActionReviewerAttachments(files, vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Review not required successfull");	
@@ -976,6 +994,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			protocolActionSP(vo,null);						
 			//generateProtocolCorrespondence(vo);
 			updateApprovalsRiskLevel(vo);
+			updateReviewComments(vo);
+			//protocolActionReviewerAttachments(files, vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Approved successfully");	
 		} catch (Exception e) {
@@ -992,6 +1012,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);		
 			updateApprovalsRiskLevel(vo);
+			updateReviewComments(vo);			
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("SMRR successfull");	
@@ -1009,6 +1030,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);		
 			updateApprovalsRiskLevel(vo);
+			updateReviewComments(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("SRR successfully");	
@@ -1045,7 +1067,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			protocolActionSP(vo,null);						
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Response approval successfully");	
+		    vo.setSuccessMessage("Response approval successful");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("Response approval Failed");
@@ -1061,7 +1083,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			protocolActionSP(vo,null);						
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Adminstrative correction successfully");	
+		    vo.setSuccessMessage("Adminstrative correction successful");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("Adminstrative correction Failed");
@@ -1234,7 +1256,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public void updateIRBAdmin(SubmissionDetailVO submissionDetailvo) {
 		try{
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_ASSIGNEE_PERSON_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getPersonID().toString()));
+			inputParam.add(new InParameter("AV_ASSIGNEE_PERSON_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonID().toString()));
 			inputParam.add(new InParameter("AV_ASSIGNEE_PERSON_NAME", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonName()));
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
 			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getProtocolId()));
@@ -1313,5 +1335,56 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			logger.info("Exception in fetchSubmissionHistory:" + e);	
 		}
 		return submissionHistory;
+	}
+	
+	public void updateReviewComments(IRBActionsVO vo){
+		List<IRBActionsReviewerComments> irbActionsReviewerComments=null;
+		irbActionsReviewerComments =vo.getIrbActionsReviewerComments();
+		if(irbActionsReviewerComments !=null)
+			irbActionsReviewerComments.forEach(irbActionsReviewerCommentList ->{
+				try{
+				ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+				inputParam.add(new InParameter("AV_COMM_SCHEDULE_MINUTES_ID", DBEngineConstants.TYPE_STRING,null));
+				inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
+				inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
+				inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolId()));
+				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_STRING,vo.getSubmissionId()));
+				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSubmissionNumber()));
+				inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getComments()));
+				inputParam.add(new InParameter("AV_PRIVATE_COMMENT_FLAG", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getFlag()));
+				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getContingencyCode()));
+				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
+				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));			
+			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
+			} catch (Exception e) {
+				logger.info("Exception in updateIRBAdminReviewers:" + e);	
+			}			
+	   });
+	}
+	
+	public void protocolActionReviewerAttachments(MultipartFile[] files,IRBActionsVO vo) {		
+		try {					
+			ArrayList<InParameter> inputParam = null;
+			for (int i = 0; i < files.length; i++) {			
+				inputParam = new ArrayList<>();
+				inputParam.add(new InParameter("AV_REVIEWER_ATTACHMENT_ID", DBEngineConstants.TYPE_INTEGER,null));
+				inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolId()));
+				inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
+				inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
+				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));
+				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));
+				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,null));
+				inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING,files[i].getOriginalFilename()));
+				inputParam.add(new InParameter("AV_MIME_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
+				inputParam.add(new InParameter("AV_PRIVATE_FLAG", DBEngineConstants.TYPE_STRING,"Y"));
+				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
+				inputParam.add(new InParameter("AV_ATTACHMENT", DBEngineConstants.TYPE_BLOB,files[i].getBytes()));
+				inputParam.add(new InParameter("AV_FILE_DATA_ID ", DBEngineConstants.TYPE_STRING,null));
+				inputParam.add(new InParameter("AV_TYPE ", DBEngineConstants.TYPE_STRING,"I"));			
+				dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_ATTACHMENTS");
+			}
+		} catch (Exception e) {
+			logger.info("Exception in protocolActionReviewerAttachments method" + e);
+		}
 	}
 }

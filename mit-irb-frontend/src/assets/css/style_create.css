@@ -2621,3 +2621,21 @@ input:disabled,textarea:disabled{
     color: #fff !important;
     
 }
+.icon_tab_active {
+    background-color: #a92034 !important;
+    color: #fff !important;
+    
+}
+.mt-33 {
+    margin-top: 33px;
+}
+.checkbox-label {
+    font-size: 14px !important;
+    line-height: 30px;
+    margin: 0;
+    color: #a92034;
+    font-weight: bold !important;
+ }
+ .icon-center {
+    margin: auto;
+ }

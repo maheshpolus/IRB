@@ -153,15 +153,15 @@ public class IRBActionsServImpl implements IRBActionsService {
 			}
 			vo = irbActionsDao.expeditedApprovalAdminActions(vo);
 			break;
-		/*case "208":
+		case "208":
 			vo = irbActionsDao.responseApprovalAdminActions(vo);
-			break;*/
+			break;
 		case "113":
 			vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
 			break;	
-		/*case "910":
+		case "910":
 			vo = irbActionsDao.undoLastActionAdminActions(vo);
-			break;	*/
+			break;	
 		}
 		return vo;
 	}

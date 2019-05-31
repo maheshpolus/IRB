@@ -3,7 +3,6 @@ package org.mit.irb.web.IRBProtocol.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
@@ -104,4 +103,12 @@ public interface IRBActionsDao {
 	ArrayList<HashMap<String, Object>> getIRBAdminList();
 
 	void updateIRBAdmin(SubmissionDetailVO submissionDetailvo);
+	
+	void updateIRBAdminReviewers(SubmissionDetailVO submissionDetailvo);
+
+	ArrayList<HashMap<String, Object>> fetchIRBAdminReviewers(SubmissionDetailVO submissionDetailvo);
+
+	ArrayList<HashMap<String, Object>> fetchCommitteeMembers(SubmissionDetailVO submissionDetailvo);
+
+	ArrayList<HashMap<String, Object>> fetchSubmissionHistory(SubmissionDetailVO submissionDetailvo);
 }

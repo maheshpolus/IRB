@@ -8,7 +8,7 @@ public class SubmissionDetailVO {
 	private String personName;
 	private String protocolNumber;
 	private Integer protocolId; 
-	private String submissionId;
+	private Integer submissionId;
 	private Integer submissionNumber; 
 	private Integer sequenceNumber;
 	private String updateUser;
@@ -94,12 +94,6 @@ public class SubmissionDetailVO {
 	}
 	public void setProtocolId(Integer protocolId) {
 		this.protocolId = protocolId;
-	}
-	public String getSubmissionId() {
-		return submissionId;
-	}
-	public void setSubmissionId(String submissionId) {
-		this.submissionId = submissionId;
 	}
 	public Integer getSubmissionNumber() {
 		return submissionNumber;
@@ -208,5 +202,11 @@ public class SubmissionDetailVO {
 	}
 	public void setPersonName(String personName) {
 		this.personName = personName;
+	}
+	public Integer getSubmissionId() {
+		return submissionId;
+	}
+	public void setSubmissionId(Integer submissionId) {
+		this.submissionId = submissionId;
 	}
 }

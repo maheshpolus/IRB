@@ -100,4 +100,40 @@ public class IRBActionsController {
 		vo = irbActionsService.updateIRBAdmin(vo); 
 		return vo;
 	}
+	
+	@RequestMapping(value = "/updateIRBAdminReviewer", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateIRBAdminReviewer(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateIRBAdminReviewer(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getSubmissionLookups", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getSubmissionLookups(HttpServletRequest request,HttpServletResponse response)
+	{
+		SubmissionDetailVO vo = new SubmissionDetailVO();
+		vo = irbActionsService.getSubmissionLookups(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getCommitteeMembers", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getCommitteeMembers(@RequestBody SubmissionDetailVO vo,HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getCommitteeMembers(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getSubmissionHistory", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getSubmissionHistory(@RequestBody SubmissionDetailVO vo,HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getSubmissionHistory(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getIRBAdminReviewDetails", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getIRBAdminReviewDetails(@RequestBody SubmissionDetailVO vo,HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getIRBAdminReviewDetails(vo); 
+		return vo;
+	}
 }

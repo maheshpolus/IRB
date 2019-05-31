@@ -3,6 +3,7 @@ package org.mit.irb.web.IRBProtocol.service;
 import java.util.concurrent.Future;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.springframework.scheduling.annotation.Async;
 
 public interface IRBProtocolInitLoadService {
@@ -98,4 +99,21 @@ public interface IRBProtocolInitLoadService {
 	public Future<IRBUtilVO> loadProtocolReviewComments(String protocolNumber, IRBUtilVO irbUtilVO);
 	
 	public Future<IRBUtilVO> loadSubmissionCheckList(String protocolNumber, IRBUtilVO irbUtilVO);
+
+	public Future<SubmissionDetailVO> loadSubmissionTypes(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadsubmissionRewiewType(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadCommitteeList(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadTypeQualifierList(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadIRBAdminRewiewType(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadIRBAdminList(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadIRBAdminComments(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadIRBAdminAttachments(SubmissionDetailVO submissionDetailvo);
+
 }

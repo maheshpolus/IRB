@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
-import org.mit.irb.web.committee.pojo.Unit;
 
 public class IRBViewProfile {
 	private HashMap<String, Object> irbViewHeader;

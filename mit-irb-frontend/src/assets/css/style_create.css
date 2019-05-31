@@ -2589,10 +2589,10 @@ input:disabled,textarea:disabled{
     padding-right: 8px;
 }
 .admin-label{
-    display: inline-flex;
-}
-.admin-label button{
-    margin-left: 39px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #a91f34;
+    border: #a91f34;
 }
 .label-width{
     width: 29%;

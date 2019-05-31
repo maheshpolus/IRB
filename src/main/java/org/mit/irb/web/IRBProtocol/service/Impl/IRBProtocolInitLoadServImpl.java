@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
+import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
@@ -357,5 +358,113 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 			logger.info("Exception in loadProtocolReviewComments:" + e);
 		}
 		return new AsyncResult<>(irbUtilVO);
+	}
+	
+	@Async
+	public Future<SubmissionDetailVO> loadSubmissionTypes(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();		
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> submissionTypeList = dbEngine.executeProcedure("GET_IRB_SUBMISSION_TYPE",outputParam);
+			submissionDetailvo.setSubmissionTypeList(submissionTypeList);
+		}catch (Exception e) {
+			logger.info("Exception in loadSubmissionTypes:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadsubmissionRewiewType(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();		
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> submissionReviewTypeList = dbEngine.executeProcedure("GET_IRB_REVIEW_TYPE",outputParam);
+			submissionDetailvo.setSubmissionRewiewTypeList(submissionReviewTypeList);
+		}catch (Exception e) {
+			logger.info("Exception in loadsubmissionRewiewType:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadCommitteeList(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();		
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> committeeList = dbEngine.executeProcedure("GET_IRB_COMMITTEE_DETAILS",outputParam);
+			submissionDetailvo.setCommitteeList(committeeList);
+		}catch (Exception e) {
+			logger.info("Exception in loadCommitteeList:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadTypeQualifierList(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();		
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> typeQualifierList = dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputParam);
+			submissionDetailvo.setTypeQualifierList(typeQualifierList);
+		}catch (Exception e) {
+			logger.info("Exception in loadTypeQualifierList:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadIRBAdminRewiewType(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();		
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> irbAdminReviewTypeList = dbEngine.executeProcedure("GET_IRB_ADMIN_REVIEW_TYPE",outputParam);
+			submissionDetailvo.setIrbAdminsReviewerType(irbAdminReviewTypeList);
+		}catch (Exception e) {
+			logger.info("Exception in loadIRBAdminRewiewType:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadIRBAdminList(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();		
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> irbAdminList = dbEngine.executeProcedure("GET_IRB_ADMINISTRATORS",outputParam);
+			submissionDetailvo.setIrbAdminsList(irbAdminList);
+		}catch (Exception e) {
+			logger.info("Exception in loadIRBAdminList:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadIRBAdminComments(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();	
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getSubmissionId()));
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> irbAdminCommentList = dbEngine.executeProcedure(inputParam,"GET_IRB_ADMINISTRATORS",outputParam);
+			submissionDetailvo.setIrbAdminCommentList(irbAdminCommentList);
+		}catch (Exception e) {
+			logger.info("Exception in loadIRBAdminComments:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<SubmissionDetailVO> loadIRBAdminAttachments(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();	
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getSubmissionId()));
+			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> irbAdminAttachmentList = dbEngine.executeProcedure(inputParam,"GET_IRB_ADMINISTRATORS",outputParam);
+			submissionDetailvo.setIrbAdminAttachmentList(irbAdminAttachmentList);
+		}catch (Exception e) {
+			logger.info("Exception in loadIRBAdminAttachments:" + e);
+		}
+		return new AsyncResult<>(submissionDetailvo);
 	}
 }

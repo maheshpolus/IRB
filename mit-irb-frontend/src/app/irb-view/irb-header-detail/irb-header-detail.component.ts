@@ -133,6 +133,10 @@ export class IrbHeaderDetailComponent implements OnInit {
     modalRef.componentInstance.userDTO = this.userDTO;
     modalRef.componentInstance.passEntry.subscribe((receivedEntry) => {
       this.irbHeaderDetails = receivedEntry;
+      // if (this.router.url.includes('/irbActions')) {
+      //   this.router.navigate(['/irb/irb-view/irbActions'],
+      //   { queryParams: { protocolNumber: this.requestObject.protocolNumber, protocolId: this.irbHeaderDetails.PROTOCOL_ID}});
+      // }
       });
   }
 }

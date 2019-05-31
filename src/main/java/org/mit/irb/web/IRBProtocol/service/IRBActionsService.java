@@ -60,4 +60,34 @@ public interface IRBActionsService {
 	 * @return save new IRB Admin
 	 */
 	SubmissionDetailVO updateIRBAdmin(SubmissionDetailVO vo);
+	
+	/**
+	 * @param vo
+	 * @return update IRB Admin Reviewers
+	 */
+	SubmissionDetailVO updateIRBAdminReviewer(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return fetch all submission screen lookups
+	 */
+	SubmissionDetailVO getSubmissionLookups(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return fetch Members for selected scedule
+	 */
+	SubmissionDetailVO getCommitteeMembers(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return fetch submission history
+	 */
+	SubmissionDetailVO getSubmissionHistory(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return List of Comments,Attachments and Review CheckList of given submission
+	 */
+	SubmissionDetailVO getIRBAdminReviewDetails(SubmissionDetailVO vo);
 }

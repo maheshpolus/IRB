@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
@@ -9,6 +10,7 @@ import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
+import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,9 @@ public class IRBActionsServImpl implements IRBActionsService {
 	
 	@Autowired
 	IRBProtocolDao irbProtocolDao;
+	
+	@Autowired
+	IRBProtocolInitLoadService initLoadService;
 	
 	protected static Logger logger = Logger.getLogger(IRBActionsServImpl.class.getName());
 
@@ -260,6 +265,89 @@ public class IRBActionsServImpl implements IRBActionsService {
 			submissionDetailvo.setSuccessCode(false);
 			submissionDetailvo.setSuccessMessage("getIRBAdminList Failed"+e);
 			logger.info("Exception in updateIRBAdmin:" + e);
+		}
+		return submissionDetailvo;
+	}
+	
+	@Override
+	public SubmissionDetailVO updateIRBAdminReviewer(SubmissionDetailVO submissionDetailvo) {
+		try{
+			irbActionsDao.updateIRBAdminReviewers(submissionDetailvo);
+			ArrayList<HashMap<String, Object>> irbAdminReviewerList = irbActionsDao.fetchIRBAdminReviewers(submissionDetailvo);
+			submissionDetailvo.setIrbAdminsReviewers(irbAdminReviewerList);
+			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("IRB Reviewer Assigned Successfully");
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("updateIRBAdminReviewer Failed"+e);
+			logger.info("Exception in updateIRBAdminReviewer:" + e);
+		}
+		return null;
+	}
+
+	@Override
+	public SubmissionDetailVO getSubmissionLookups(SubmissionDetailVO submissionDetailvo) {
+		try{
+			 Future<SubmissionDetailVO> submissionTypes = initLoadService.loadSubmissionTypes(submissionDetailvo);
+			 Future<SubmissionDetailVO> submissionRewiewType = initLoadService.loadsubmissionRewiewType(submissionDetailvo);
+			 Future<SubmissionDetailVO> committeeList = initLoadService.loadCommitteeList(submissionDetailvo);
+			 Future<SubmissionDetailVO> typeQualifierList = initLoadService.loadTypeQualifierList(submissionDetailvo);
+			 Future<SubmissionDetailVO> irbAdminRewiewType = initLoadService.loadIRBAdminRewiewType(submissionDetailvo);
+			 Future<SubmissionDetailVO> irbAdminList = initLoadService.loadIRBAdminList(submissionDetailvo);
+			 submissionDetailvo = submissionTypes.get();
+			 submissionDetailvo = submissionRewiewType.get();
+			 submissionDetailvo = committeeList.get();
+			 submissionDetailvo = typeQualifierList.get();
+			 submissionDetailvo = irbAdminRewiewType.get();
+			 submissionDetailvo = irbAdminList.get();
+			 submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getSubmissionLookups Failed"+e);
+			logger.info("Exception in getSubmissionLookups:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO getCommitteeMembers(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<HashMap<String, Object>> committeeMembers = irbActionsDao.fetchCommitteeMembers(submissionDetailvo);
+			submissionDetailvo.setCommitteeMemberList(committeeMembers);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getCommitteeMembers Failed"+e);
+			logger.info("Exception in getCommitteeMembers:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO getSubmissionHistory(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<HashMap<String, Object>> submissionHistory = irbActionsDao.fetchSubmissionHistory(submissionDetailvo);
+			submissionDetailvo.setSubmissionHistory(submissionHistory);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getSubmissionHistory Failed"+e);
+			logger.info("Exception in getSubmissionHistory:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO getIRBAdminReviewDetails(SubmissionDetailVO submissionDetailvo) {
+		try{
+			Future<SubmissionDetailVO> irbAdminComments = initLoadService.loadIRBAdminComments(submissionDetailvo);
+			Future<SubmissionDetailVO> irbAdminAttachments = initLoadService.loadIRBAdminAttachments(submissionDetailvo);
+			submissionDetailvo = irbAdminComments.get();
+		    submissionDetailvo = irbAdminAttachments.get();
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getSubmissionHistory Failed"+e);
+			logger.info("Exception in getSubmissionHistory:" + e);
 		}
 		return submissionDetailvo;
 	}

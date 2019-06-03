@@ -214,8 +214,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
       action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
       || action.ACTION_CODE === '113' || action.ACTION_CODE === '119' ||
-      action.ACTION_CODE === '211' || action.ACTION_CODE === '212' ||
-      action.ACTION_CODE === '207' || action.ACTION_CODE === '910' || action.ACTION_CODE === '113') {
+      action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '910' || action.ACTION_CODE === '113') {
       if (action.ACTION_CODE === '213') {
         this.actionButtonName = 'Return';
       } else if (action.ACTION_CODE === '300') {
@@ -227,7 +226,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       // return to PI, Close, disapprove, irb-Acknowledgment, data-Analysis-only, reopen enrollment, closed for enrollment
       // terminated, suspended
       if (action.ACTION_CODE === '213' || action.ACTION_CODE === '300' ||
-        action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '207'
+        action.ACTION_CODE === '211' || action.ACTION_CODE === '212'
         || action.ACTION_CODE === '201' ||
         action.ACTION_CODE === '910' || action.ACTION_CODE === '113' || action.ACTION_CODE === '119') {
         this.IRBActionsVO.actionDate = new Date();
@@ -252,7 +251,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     } else if (action.ACTION_CODE === '200' || action.ACTION_CODE === '205' ||
       action.ACTION_CODE === '204' || action.ACTION_CODE === '202' || action.ACTION_CODE === '301' || action.ACTION_CODE === '302' ||
       action.ACTION_CODE === '203' || action.ACTION_CODE === '304' || action.ACTION_CODE === '209' || action.ACTION_CODE === '201' ||
-      action.ACTION_CODE === '210' || action.ACTION_CODE === '208') {
+      action.ACTION_CODE === '210' || action.ACTION_CODE === '208' || action.ACTION_CODE === '207') {
         setTimeout(() => {
         const id = document.getElementById('actionScreen');
                 if (id) {
@@ -308,7 +307,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
           this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '910'
           || this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '210' ||
-          this.currentActionPerformed.ACTION_CODE === '203' ||  this.currentActionPerformed.ACTION_CODE === '208') {
+          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ||
+          this.currentActionPerformed.ACTION_CODE === '208') {
           // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-view/irbOverview'],
             { queryParams: { protocolNumber: this.protocolNumber } });
@@ -393,7 +393,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.currentActionPerformed.ACTION_CODE === '301' || this.currentActionPerformed.ACTION_CODE === '302' ||
     this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '304' ||
     this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '201' ||
-    this.currentActionPerformed.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE === '208') {
+    this.currentActionPerformed.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE === '208' ||
+    this.currentActionPerformed.ACTION_CODE === '207') {
       this.IRBActionsVO.irbActionsReviewerComments = this.commentList;
     }
   }

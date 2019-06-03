@@ -69,7 +69,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					if(result != null && !result.isEmpty())
 					finalResult.addAll(result);								
 				}						
-			}	
+			}
+			vo = getProtocolActionDetails(vo);	
+			String reviewTypeCode = null;
+			reviewTypeCode = vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
+			if(finalResult !=null && !finalResult.isEmpty()){
 			for(int i=0;i<finalResult.size();i++)
 	        {
 	            Object temp = finalResult.get(i).get("ACTION_NAME");
@@ -79,14 +83,32 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	                {
 	                	finalResult.remove(k); 
 	                }                 
-	            }	    
-	        }
-			vo = getProtocolActionDetails(vo);	
+	            }
+	            temp=finalResult.get(i).get("ACTION_CODE"); 
+	            if(temp.toString().equals("205")){
+					 if(reviewTypeCode == null){
+						 finalResult.remove(i);
+					 }					 
+					 else if(!reviewTypeCode.equals("2")){
+						 finalResult.remove(i);
+					 }
+				 }
+				 else if((temp.toString().equals("208"))){
+					 if(reviewTypeCode == null){
+						 finalResult.remove(i);
+					 }					 
+					 else if(!reviewTypeCode.equals("6")){
+						 finalResult.remove(i);
+					 }
+				  }
+	           }
+		     }
 			
-			//for expedited approval
-			Object temp = null;
+			
+		    //for expedited approval && response approval
+		/*	Object temp = null;
 			String reviewTypeCode = null;
-			reviewTypeCode = vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
+			reviewTypeCode = vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();		
 			if(finalResult !=null && !finalResult.isEmpty()){				
 			for(int i=0;i<finalResult.size();i++){
 				 temp = finalResult.get(i).get("ACTION_CODE");
@@ -107,7 +129,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					 }
 				 }
 			  }
-		   }
+		   }*/
 			
 			vo.setPersonActionsList(finalResult);	
 		} catch (Exception e) {
@@ -809,119 +831,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		return vo;
 	}
 
-	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
-		ResponseEntity<byte[]> attachmentData = null;
-		try{
-			byte[] data = getTemplateData(vo);
-			byte[] mergedOutput = mergePlaceHolders(data,vo);
-			String generatedFileName = "Result"+System.nanoTime()+".pdf";
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.parseMediaType("application/pdf"));
-			headers.setContentDispositionFormData(generatedFileName, generatedFileName);
-			headers.setContentLength(mergedOutput.length);
-			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-			headers.setPragma("public");
-			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);	
-			//saveProtocolCorrespondence(vo,attachmentData);
-		}catch (Exception e) {
-			logger.error("Exception in generateProtocolCorrespondence"+ e.getMessage());
-		}	
-		//vo.setAttachmentData(attachmentData);
-		return vo;
-	}
-	
-	public byte[] getTemplateData(IRBActionsVO vo) {
-		byte[] attachmentData =null;
-		try {
-			ArrayList<InParameter> inParam = new ArrayList<>();
-			ArrayList<OutParameter> outParam = new ArrayList<>();			
-			inParam.add(new InParameter("AV_LETTER_TEMPLATE_TYPE_CODE", DBEngineConstants.TYPE_STRING, "5"));
-			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_LETTER_TEMPLATE_TYPE", outParam);
-			if (result != null && !result.isEmpty()) {
-				HashMap<String, Object> hmResult = result.get(0);
-				ByteArrayOutputStream byteArrayOutputStream = null;
-				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("CORRESPONDENCE_TEMPLATE");
-				attachmentData = byteArrayOutputStream.toByteArray();
-			}
-		} catch (Exception e) {
-			logger.info("Exception in getTemplateData method:" + e);
-		}
-		return attachmentData;
-	}
-	
-	public byte[] mergePlaceHolders(byte[] data, IRBActionsVO vo) {
-		byte[] mergedOutput = null;
-		try{
-			InputStream myInputStream = new ByteArrayInputStream(data); 
-			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(myInputStream,TemplateEngineKind.Velocity);
-			//FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
-			//fieldsMetadata.load("exempt", Exempt.class, true);
-			IContext context = report.createContext();
-			/*List<Exempt> exemptList = setExemptQuestionList(commonVO.getIrbExemptForm().getExemptQuestionList());
-			context.put("exemptList", exemptList);
-			if(commonVO.getIrbExemptForm().getIsExempt().equalsIgnoreCase("O")){
-				context.put("exemptList", "");
-			}*/
-			context = setPlaceHolderData(context,vo);
-			DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
-			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);
-		}catch (Exception e) {
-			logger.info("Exception in mergePlaceHolders method:" + e);
-		}
-		return mergedOutput;
-	}
-
-	private IContext setPlaceHolderData(IContext context,IRBActionsVO vo) {
-		try{
-			/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM-dd-yyyy");
-			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");  
-			SimpleDateFormat formatterSlash = new SimpleDateFormat("MM/dd/yyyy");  
-			Date date1 = null;
-			String exemptStartDate = null;
-			String exemptEndDateStr = null;
-			String exemptSubmissionDate = null;
-			if (irbExemptForm.getExemptProtocolStartDate() != null) {
-			 date1=formatter.parse(irbExemptForm.getExemptProtocolStartDate());
-			 exemptStartDate = simpleDateFormat.format(date1);
-			} if (irbExemptForm.getExemptProtocolEndDate() != null) {
-				date1=formatter.parse(irbExemptForm.getExemptProtocolEndDate());
-				exemptEndDateStr = simpleDateFormat.format(date1);
-			}
-			if (irbExemptForm.getSubmissionDate() != null) {
-				date1=formatterSlash.parse(irbExemptForm.getSubmissionDate());
-				exemptSubmissionDate = simpleDateFormat.format(date1);
-			}
-			context.put("START_DATE", exemptStartDate);
-			context.put("END_DATE", exemptEndDateStr);
-			context.put("PI_NAME", irbExemptForm.getPersonName());
-			context.put("EXEMPT_ID", irbExemptForm.getExemptFormID());
-			context.put("SUBMISSION_DATE", irbExemptForm.getSubmissionDate() == null?"":exemptSubmissionDate);
-			context.put("TITLE", irbExemptForm.getExemptTitle());
-			context.put("UNIT_NAME", irbExemptForm.getUnitName());
-			context.put("FACULTY_SPONSOR_NAME", irbExemptForm.getFacultySponsorPerson() == null?"":irbExemptForm.getFacultySponsorPerson());*/
-			context.put("ToAddress", "Saxe Rebecca");
-			context.put("FromAddress", "COHEUS Committee");
-			context.put("Date", "27-06-2019");
-			context.put("CommitteeActionDate", "30-06-2019");
-		}catch (Exception e) {
-			logger.info("Exception in setPlaceHolderData method:" + e);
-		}
-		return context;
-	}
-	
-	public Date generateSqlDate(String date){
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-		java.util.Date utilDate = null;
-		java.sql.Date sqlDate= null;
-		try{
-			utilDate = sdf.parse(date);
-			sqlDate = new java.sql.Date(utilDate.getTime());
-		}catch (Exception e) {
-			logger.info("Exception in generateSqlActionDate:" + e);
-		}
-		return sqlDate;
-	}
 
 	@Override
 	public IRBActionsVO assignToAgendaAdminActions(IRBActionsVO vo, MultipartFile[] files) {
@@ -973,19 +882,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			logger.info("Exception in reviewNotRequiredAdminActions:" + e);	
 		}
 		return vo;
-	}
-
-	@Override
-	public ArrayList<HashMap<String, Object>> getSubmissionTypeQulifier() {
-		ArrayList<HashMap<String, Object>> submissionTypeQulifier = null;														
-		try {
-			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
-			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			submissionTypeQulifier=dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputparam);
-		} catch (Exception e) {
-			logger.info("Exception in getSubmissionTypeQulifier:" + e);	
-		}
-		return submissionTypeQulifier;
 	}
 
 	@Override
@@ -1094,18 +990,163 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId) {
-		ArrayList<HashMap<String, Object>> scheduleDates = null;														
+	public IRBActionsVO adandonAdminActions(IRBActionsVO vo, MultipartFile[] files) {
+		try {			
+			protocolActionSP(vo,null);	
+			protocolActionAttachments(files, vo);
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Adandon successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Abandon Failed");
+			e.printStackTrace();
+			logger.info("Exception in adandonAdminActions:" + e);	
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBActionsVO undoLastActionAdminActions(IRBActionsVO vo) {
+		try {			
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);
+			vo.setSuccessCode(true);
+		    vo.setSuccessMessage("Undo last action successfull");	
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("Undo last action Failed");
+			e.printStackTrace();
+			logger.info("Exception in undoLastActionAdminActions:" + e);	
+		}
+		return vo;
+	}
+	
+	public Date generateSqlDate(String date){
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date utilDate = null;
+		java.sql.Date sqlDate= null;
+		try{
+			utilDate = sdf.parse(date);
+			sqlDate = new java.sql.Date(utilDate.getTime());
+		}catch (Exception e) {
+			logger.info("Exception in generateSqlActionDate:" + e);
+		}
+		return sqlDate;
+	}
+	
+	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
+		ResponseEntity<byte[]> attachmentData = null;
+		try{
+			byte[] data = getTemplateData(vo);
+			byte[] mergedOutput = mergePlaceHolders(data,vo);
+			String generatedFileName = "Result"+System.nanoTime()+".pdf";
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.parseMediaType("application/pdf"));
+			headers.setContentDispositionFormData(generatedFileName, generatedFileName);
+			headers.setContentLength(mergedOutput.length);
+			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+			headers.setPragma("public");
+			attachmentData = new ResponseEntity<byte[]>(mergedOutput, headers, HttpStatus.OK);	
+			//saveProtocolCorrespondence(vo,attachmentData);
+		}catch (Exception e) {
+			logger.error("Exception in generateProtocolCorrespondence"+ e.getMessage());
+		}	
+		//vo.setAttachmentData(attachmentData);
+		return vo;
+	}
+	
+	public byte[] getTemplateData(IRBActionsVO vo) {
+		byte[] attachmentData =null;
 		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,committeeId));
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();			
+			inParam.add(new InParameter("AV_LETTER_TEMPLATE_TYPE_CODE", DBEngineConstants.TYPE_STRING, "5"));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_LETTER_TEMPLATE_TYPE", outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("CORRESPONDENCE_TEMPLATE");
+				attachmentData = byteArrayOutputStream.toByteArray();
+			}
+		} catch (Exception e) {
+			logger.info("Exception in getTemplateData method:" + e);
+		}
+		return attachmentData;
+	}
+	
+	public byte[] mergePlaceHolders(byte[] data, IRBActionsVO vo) {
+		byte[] mergedOutput = null;
+		try{
+			InputStream myInputStream = new ByteArrayInputStream(data); 
+			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(myInputStream,TemplateEngineKind.Velocity);
+			//FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
+			//fieldsMetadata.load("exempt", Exempt.class, true);
+			IContext context = report.createContext();
+			/*List<Exempt> exemptList = setExemptQuestionList(commonVO.getIrbExemptForm().getExemptQuestionList());
+			context.put("exemptList", exemptList);
+			if(commonVO.getIrbExemptForm().getIsExempt().equalsIgnoreCase("O")){
+				context.put("exemptList", "");
+			}*/
+			context = setPlaceHolderData(context,vo);
+			DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
+			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);
+		}catch (Exception e) {
+			logger.info("Exception in mergePlaceHolders method:" + e);
+		}
+		return mergedOutput;
+	}
+
+	private IContext setPlaceHolderData(IContext context,IRBActionsVO vo) {
+		try{
+			/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM-dd-yyyy");
+			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");  
+			SimpleDateFormat formatterSlash = new SimpleDateFormat("MM/dd/yyyy");  
+			Date date1 = null;
+			String exemptStartDate = null;
+			String exemptEndDateStr = null;
+			String exemptSubmissionDate = null;
+			if (irbExemptForm.getExemptProtocolStartDate() != null) {
+			 date1=formatter.parse(irbExemptForm.getExemptProtocolStartDate());
+			 exemptStartDate = simpleDateFormat.format(date1);
+			} if (irbExemptForm.getExemptProtocolEndDate() != null) {
+				date1=formatter.parse(irbExemptForm.getExemptProtocolEndDate());
+				exemptEndDateStr = simpleDateFormat.format(date1);
+			}
+			if (irbExemptForm.getSubmissionDate() != null) {
+				date1=formatterSlash.parse(irbExemptForm.getSubmissionDate());
+				exemptSubmissionDate = simpleDateFormat.format(date1);
+			}
+			context.put("START_DATE", exemptStartDate);
+			context.put("END_DATE", exemptEndDateStr);
+			context.put("PI_NAME", irbExemptForm.getPersonName());
+			context.put("EXEMPT_ID", irbExemptForm.getExemptFormID());
+			context.put("SUBMISSION_DATE", irbExemptForm.getSubmissionDate() == null?"":exemptSubmissionDate);
+			context.put("TITLE", irbExemptForm.getExemptTitle());
+			context.put("UNIT_NAME", irbExemptForm.getUnitName());
+			context.put("FACULTY_SPONSOR_NAME", irbExemptForm.getFacultySponsorPerson() == null?"":irbExemptForm.getFacultySponsorPerson());*/
+			context.put("ToAddress", "Saxe Rebecca");
+			context.put("FromAddress", "COHEUS Committee");
+			context.put("Date", "27-06-2019");
+			context.put("CommitteeActionDate", "30-06-2019");
+		}catch (Exception e) {
+			logger.info("Exception in setPlaceHolderData method:" + e);
+		}
+		return context;
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, Object>> getSubmissionTypeQulifier() {
+		ArrayList<HashMap<String, Object>> submissionTypeQulifier = null;														
+		try {
 			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			scheduleDates=dbEngine.executeProcedure(inputParam,"GET_IRB_SCHEDULE_DATE",outputparam);
+			submissionTypeQulifier=dbEngine.executeProcedure("GET_IRB_SUB_TYPE_QUALIFIER",outputparam);
 		} catch (Exception e) {
-			logger.info("Exception in getScheduleDates:" + e);	
+			logger.info("Exception in getSubmissionTypeQulifier:" + e);	
 		}
-		return scheduleDates;
+		return submissionTypeQulifier;
 	}
 
 	@Override
@@ -1192,39 +1233,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    }
 		  });
 	 }
-
-	@Override
-	public IRBActionsVO adandonAdminActions(IRBActionsVO vo, MultipartFile[] files) {
-		try {			
-			protocolActionSP(vo,null);	
-			protocolActionAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
-			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Adandon successfull");	
-		} catch (Exception e) {
-			vo.setSuccessCode(false);
-			vo.setSuccessMessage("Abandon Failed");
-			e.printStackTrace();
-			logger.info("Exception in adandonAdminActions:" + e);	
-		}
-		return vo;
-	}
-
-	@Override
-	public IRBActionsVO undoLastActionAdminActions(IRBActionsVO vo) {
-		try {			
-			protocolActionSP(vo,null);						
-			//generateProtocolCorrespondence(vo);
-			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("Undo last action successfull");	
-		} catch (Exception e) {
-			vo.setSuccessCode(false);
-			vo.setSuccessMessage("Undo last action Failed");
-			e.printStackTrace();
-			logger.info("Exception in undoLastActionAdminActions:" + e);	
-		}
-		return vo;
-	}
 
 	@Override
 	public ArrayList<HashMap<String, Object>> getExpeditedCannedComments() {
@@ -1386,5 +1394,20 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		} catch (Exception e) {
 			logger.info("Exception in protocolActionReviewerAttachments method" + e);
 		}
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId) {
+		ArrayList<HashMap<String, Object>> scheduleDates = null;														
+		try {
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,committeeId));
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			scheduleDates=dbEngine.executeProcedure(inputParam,"GET_IRB_SCHEDULE_DATE",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getScheduleDates:" + e);	
+		}
+		return scheduleDates;
 	}
 }

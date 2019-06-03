@@ -52,7 +52,8 @@
 
 
                 <div class="col-md-12" id="actionScreen" *ngIf="currentActionPerformed?.ACTION_CODE == '200' || currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '202' || currentActionPerformed.ACTION_CODE == '301' ||
-                          currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '304' || currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed.ACTION_CODE == '302'">
+                          currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '304' || currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed.ACTION_CODE == '302'||
+                          currentActionPerformed.ACTION_CODE == '207' || currentActionPerformed?.ACTION_CODE == '208'">
                   <div class="card">
                     <div class="card-header collapse-bg padding0-t-b print-background paddingleft" id="headingOne">
                       <h5 class="mb-0">
@@ -182,7 +183,7 @@
                           <div class="col-md-12 mb-15">
                               <button type="button" class="btn btn-outline-secondary icon_tab" *ngIf="currentActionPerformed.ACTION_CODE == '200' || currentActionPerformed.ACTION_CODE == '205' || currentActionPerformed.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '304' ||
                               currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '202' ||  currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' ||
-                              currentActionPerformed.ACTION_CODE == '301' || currentActionPerformed.ACTION_CODE == '302' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed?.ACTION_CODE == '208'" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}"><i class="fa fa-commenting-o pr-8"  aria-hidden="true" ></i>Review Comments</button>
+                              currentActionPerformed.ACTION_CODE == '301' || currentActionPerformed.ACTION_CODE == '302' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed?.ACTION_CODE == '208' || currentActionPerformed?.ACTION_CODE == '207'" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}"><i class="fa fa-commenting-o pr-8"  aria-hidden="true" ></i>Review Comments</button>
                             <button type="button" class="btn icon_tab" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
                               [ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}">
                               <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>

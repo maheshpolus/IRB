@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.mit.irb.web.IRBProtocol.pojo.IRBActionsReviewerComments;
+import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 
@@ -48,7 +48,7 @@ public class IRBActionsVO {
 	private String selectedCommitteeId;
 	private String selectedScheduleId;	
 	private ArrayList<HashMap<String, Object>> expeditedCannedComments;
-	private List<IRBActionsReviewerComments> irbActionsReviewerComments;
+	private List<IRBCommitteeReviewerComments> irbActionsReviewerComments;
 	
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
@@ -362,11 +362,11 @@ public class IRBActionsVO {
 		this.selectedTypeQualifier = selectedTypeQualifier;
 	}
 
-	public List<IRBActionsReviewerComments> getIrbActionsReviewerComments() {
+	public List<IRBCommitteeReviewerComments> getIrbActionsReviewerComments() {
 		return irbActionsReviewerComments;
 	}
 
-	public void setIrbActionsReviewerComments(List<IRBActionsReviewerComments> irbActionsReviewerComments) {
+	public void setIrbActionsReviewerComments(List<IRBCommitteeReviewerComments> irbActionsReviewerComments) {
 		this.irbActionsReviewerComments = irbActionsReviewerComments;
 	}
 }

@@ -323,7 +323,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO saveScienceOfProtocol(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO protocolVO) throws JsonProcessingException {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol(),irbProtocolVO.getGeneralInfo());
+		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol(),protocolVO.getGeneralInfo());
 		return irbProtocolVO;
 	}
 

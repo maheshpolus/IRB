@@ -336,7 +336,7 @@
 				<div class="col-sm-12" *ngIf="noIrbList">No IRB protocol found for this status</div>
 				<div *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 								|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')">
-					<app-card-details [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-card-details>
+					<app-card-details [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}" [userDTO]="userDTO" [currentTab]="lastClickedTab"></app-card-details>
 					<!-- PAGINATION - START -->
 					<div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
 						<nav class="paginationSkin text-right pagination">

@@ -2,6 +2,10 @@ package org.mit.irb.web.IRBProtocol.VO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
+import org.mit.irb.web.IRBProtocol.pojo.IRBReviewComment;
 
 public class SubmissionDetailVO {
 	private Integer personID;
@@ -20,6 +24,18 @@ public class SubmissionDetailVO {
 	private Integer adminReviewerId;
 	private String selectedDate;
 	private String committeeId;
+	private String statusFlag;
+	private Integer commentId;
+	private Integer adminReviewId;
+	private String publicFLag;
+	private Integer attachmentId;
+	private Integer yesVotingCount;
+	private Integer noVotingCount;
+	private Integer abstainCount;
+	private Integer submissionTypeCode;
+	private Integer sceduleId;
+	private String submissionQualifierCode;
+	
 	private ArrayList<HashMap<String, Object>> irbAdminsList;
 	private ArrayList<HashMap<String, Object>> irbAdminsReviewers;
 	private ArrayList<HashMap<String, Object>> irbAdminsReviewerType;
@@ -29,12 +45,80 @@ public class SubmissionDetailVO {
 	private ArrayList<HashMap<String, Object>> committeeList;
 	private ArrayList<HashMap<String, Object>> typeQualifierList;
 	private ArrayList<HashMap<String, Object>> committeeMemberList;
+	private ArrayList<HashMap<String, Object>> committeeReviewType;
+	private ArrayList<HashMap<String, Object>> recomendedActionType;
+	private ArrayList<HashMap<String, Object>> scheduleDates;
 	
+	private ArrayList<HashMap<String, Object>> irbAdminCheckList;
 	private ArrayList<HashMap<String, Object>> irbAdminAttachmentList;
 	private ArrayList<HashMap<String, Object>> irbAdminCommentList;
 	private ArrayList<HashMap<String, Object>> submissionHistory;
+	private ArrayList<HashMap<String, Object>> committeeReviewers;
 	private HashMap<String, Object> irbViewHeader;
+	private HashMap<String, Object> submissionDetail;
+	private HashMap<String, Object> committeeVotingDetails;
+	private List<IRBReviewComment> irbAdminCommentAttachment;
 	
+	private String flag;
+	private String attachmentDescription;
+	private Integer reviewerAttachmentId;
+	private String commMinutesScheduleId;
+	private List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments;
+	
+	public String getSubmissionQualifierCode() {
+		return submissionQualifierCode;
+	}
+	public void setSubmissionQualifierCode(String submissionQualifierCode) {
+		this.submissionQualifierCode = submissionQualifierCode;
+	}
+	public Integer getSceduleId() {
+		return sceduleId;
+	}
+	public void setSceduleId(Integer sceduleId) {
+		this.sceduleId = sceduleId;
+	}
+	public Integer getSubmissionTypeCode() {
+		return submissionTypeCode;
+	}
+	public void setSubmissionTypeCode(Integer submissionTypeCode) {
+		this.submissionTypeCode = submissionTypeCode;
+	}
+	public ArrayList<HashMap<String, Object>> getRecomendedActionType() {
+		return recomendedActionType;
+	}
+	public void setRecomendedActionType(ArrayList<HashMap<String, Object>> recomendedActionType) {
+		this.recomendedActionType = recomendedActionType;
+	}
+	public Integer getAbstainCount() {
+		return abstainCount;
+	}
+	public void setAbstainCount(Integer abstainCount) {
+		this.abstainCount = abstainCount;
+	}
+	public Integer getYesVotingCount() {
+		return yesVotingCount;
+	}
+	public void setYesVotingCount(Integer yesVotingCount) {
+		this.yesVotingCount = yesVotingCount;
+	}
+	public Integer getNoVotingCount() {
+		return noVotingCount;
+	}
+	public void setNoVotingCount(Integer noVotingCount) {
+		this.noVotingCount = noVotingCount;
+	}
+	public Integer getCommentId() {
+		return commentId;
+	}
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
+	}
+	public Integer getAdminReviewId() {
+		return adminReviewId;
+	}
+	public void setAdminReviewId(Integer adminReviewId) {
+		this.adminReviewId = adminReviewId;
+	}
 	public ArrayList<HashMap<String, Object>> getIrbAdminAttachmentList() {
 		return irbAdminAttachmentList;
 	}
@@ -208,5 +292,95 @@ public class SubmissionDetailVO {
 	}
 	public void setSubmissionId(Integer submissionId) {
 		this.submissionId = submissionId;
+	}
+	public ArrayList<HashMap<String, Object>> getIrbAdminCheckList() {
+		return irbAdminCheckList;
+	}
+	public void setIrbAdminCheckList(ArrayList<HashMap<String, Object>> irbAdminCheckList) {
+		this.irbAdminCheckList = irbAdminCheckList;
+	}
+	public List<IRBReviewComment> getIrbAdminCommentAttachment() {
+		return irbAdminCommentAttachment;
+	}
+	public void setIrbAdminCommentAttachment(List<IRBReviewComment> irbAdminCommentAttachment) {
+		this.irbAdminCommentAttachment = irbAdminCommentAttachment;
+	}
+	public ArrayList<HashMap<String, Object>> getCommitteeReviewType() {
+		return committeeReviewType;
+	}
+	public void setCommitteeReviewType(ArrayList<HashMap<String, Object>> committeeReviewType) {
+		this.committeeReviewType = committeeReviewType;
+	}
+	public ArrayList<HashMap<String, Object>> getScheduleDates() {
+		return scheduleDates;
+	}
+	public void setScheduleDates(ArrayList<HashMap<String, Object>> scheduleDates) {
+		this.scheduleDates = scheduleDates;
+	}
+	public HashMap<String, Object> getSubmissionDetail() {
+		return submissionDetail;
+	}
+	public void setSubmissionDetail(HashMap<String, Object> submissionDetail) {
+		this.submissionDetail = submissionDetail;
+	}
+	public ArrayList<HashMap<String, Object>> getCommitteeReviewers() {
+		return committeeReviewers;
+	}
+	public void setCommitteeReviewers(ArrayList<HashMap<String, Object>> committeeReviewers) {
+		this.committeeReviewers = committeeReviewers;
+	}
+	public String getStatusFlag() {
+		return statusFlag;
+	}
+	public void setStatusFlag(String statusFlag) {
+		this.statusFlag = statusFlag;
+	}
+	public String getPublicFLag() {
+		return publicFLag;
+	}
+	public void setPublicFLag(String publicFLag) {
+		this.publicFLag = publicFLag;
+	}
+	public Integer getAttachmentId() {
+		return attachmentId;
+	}
+	public void setAttachmentId(Integer attachmentId) {
+		this.attachmentId = attachmentId;
+	}
+	public HashMap<String, Object> getCommitteeVotingDetails() {
+		return committeeVotingDetails;
+	}
+	public void setCommitteeVotingDetails(HashMap<String, Object> committeeVotingDetails) {
+		this.committeeVotingDetails = committeeVotingDetails;
+	}
+	public String getFlag() {
+		return flag;
+	}
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+	public String getAttachmentDescription() {
+		return attachmentDescription;
+	}
+	public void setAttachmentDescription(String attachmentDescription) {
+		this.attachmentDescription = attachmentDescription;
+	}
+	public Integer getReviewerAttachmentId() {
+		return reviewerAttachmentId;
+	}
+	public void setReviewerAttachmentId(Integer reviewerAttachmentId) {
+		this.reviewerAttachmentId = reviewerAttachmentId;
+	}
+	public String getCommMinutesScheduleId() {
+		return commMinutesScheduleId;
+	}
+	public void setCommMinutesScheduleId(String commMinutesScheduleId) {
+		this.commMinutesScheduleId = commMinutesScheduleId;
+	}
+	public List<IRBCommitteeReviewerComments> getIrbCommitteeReviewerComments() {
+		return irbCommitteeReviewerComments;
+	}
+	public void setIrbCommitteeReviewerComments(List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments) {
+		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
 	}
 }

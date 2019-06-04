@@ -243,12 +243,17 @@
                       <tr *ngFor="let irbAdminsReviewer of submissionVo.irbAdminsReviewers; let i=index" [class.poping-border]="i == IRBReviweverSelectedRow">
                         <td> {{irbAdminsReviewer.REVIEW_TYPE}}</td>
                         <td>{{irbAdminsReviewer.FULL_NAME}}</td>
-                        <td>test</td>
+                        <td>
+                          <span *ngIf="irbAdminsReviewer.STATUS_FLAG=='Y'">Completed</span>
+                          <span *ngIf="irbAdminsReviewer.STATUS_FLAG=='N'">
+                            <button type="button" class="btn btn-outline-success border-button">Mark Complete</button>
+                          </span>
+                        </td>
                         <td class="action-btn-list">
                           <button title="Edit" (click)="editIRBReviewer(irbAdminsReviewer,i)" type="button" class="btn btn-primary edit-btn-1">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                           </button>
-                          <button title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                          <button title="Delete" (click)="deleteIRBAdmin(irbAdminsReviewer)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
                             data-target="#deleteAdminDetails">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                           </button>
@@ -268,9 +273,9 @@
                   <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Checklist</button>
                 <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='IRBHISTORY'" [ngClass]="{icon_tab_active:(tabSelected=='IRBHISTORY')}">
                   <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Submission History</button>
-                  <span *ngIf="tabSelected=='IRBCOMMENTS'" class="filterLink mt-10">
-                    <a class="pointer">Show All</a>
-                  </span>
+                <span *ngIf="tabSelected=='IRBCOMMENTS'" class="filterLink mt-10">
+                  <a class="pointer">Show All</a>
+                </span>
               </div>
             </div>
 
@@ -301,17 +306,18 @@
               <div class="row mr-0 ml-0 padding-exempt" *ngFor="let checkList of submissionVo?.irbAdminCheckList; let i=index">
 
                 <div class="col-md-1">
-                  <input class="align-center mt-10" type="checkbox" [(ngModel)]="isCheckListChecked[i]"/>
+                  <input class="align-center mt-10" type="checkbox" [(ngModel)]="isCheckListChecked[i]" />
                 </div>
-                <div class="col-md-9 text-justify" (click)="showCheckListComment[i] = !showCheckListComment[i]">
-                  {{checkList?.DESCRIPTION}} 
-                  <i aria-hidden="true" [ngClass]="(showCheckListComment[i]==true)?'fa fa-angle-double-up':'fa fa-angle-double-down'" title="More info"></i>
-                  
+                <div class="col-md-9 text-justify">
+                  {{checkList?.DESCRIPTION}}
+                  <i aria-hidden="true" [ngClass]="(showCheckListComment[i]==true)?'fa fa-angle-double-up':'fa fa-angle-double-down'" title="More info"
+                    (click)="showCheckListComment[i] = !showCheckListComment[i]"></i>
+
                   <textarea *ngIf="showCheckListComment[i]==true" class="form-control txt-area-fnt" placeholder="Add comments if any..."></textarea>
                 </div>
                 <div class="col-md-2">
-                    Updated by {{checkList?.UPDATE_USER}} on {{checkList?.UPDATE_TIMESTAMP}}
-                  </div>
+                  Updated by {{checkList?.UPDATE_USER}} on {{checkList?.UPDATE_TIMESTAMP}}
+                </div>
               </div>
             </div>
 

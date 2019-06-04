@@ -2639,3 +2639,11 @@ input:disabled,textarea:disabled{
  .icon-center {
     margin: auto;
  }
+ .border-button {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    line-height: 10px;
+    font-size: 14px;
+ }

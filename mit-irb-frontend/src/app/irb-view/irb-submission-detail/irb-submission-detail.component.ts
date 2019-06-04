@@ -4,7 +4,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { IrbViewService } from '../irb-view.service';
-import {SharedDataService} from '../../common/service/shared-data.service';
+import { SharedDataService } from '../../common/service/shared-data.service';
 
 @Component({
   selector: 'app-irb-submission-detail',
@@ -31,13 +31,13 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   isEditIRBReviewer = false;
   IRBReviweverSelectedRow = null;
 
-// Add Committee fields here only
+  // Add Committee fields here only
 
   adminListDataSource: CompleterData;
   private $subscription: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
-  private _irbViewService: IrbViewService, private _completerService: CompleterService,
-  private _sharedDataService: SharedDataService) { }
+    private _irbViewService: IrbViewService, private _completerService: CompleterService,
+    private _sharedDataService: SharedDataService) { }
 
   ngOnInit() {
     this.getLookUpData();
@@ -59,7 +59,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   getLookUpData() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this._irbViewService.getSubmissionLookups(null).subscribe(data => {
-      this.lookUpData  = data || [];
+      this.lookUpData = data || [];
       this.irbAdminsReviewerType = this.lookUpData.irbAdminsReviewerType != null ? this.lookUpData.irbAdminsReviewerType : [];
       this.irbAdminsList = this.lookUpData.irbAdminsList != null ? this.lookUpData.irbAdminsList : [];
       this.adminListDataSource = this._completerService.local(this.irbAdminsList, 'FULL_NAME,PERSON_ID', 'FULL_NAME');
@@ -71,32 +71,32 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   getIRBAdminReviewers() {
-    const reqstObj = {submissionId: this.headerDetails.SUBMISSION_ID};
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
     this._irbViewService.getIRBAdminReviewers(reqstObj).subscribe(data => {
       const result: any = data || [];
-       this.submissionVo.irbAdminsReviewers  = result.irbAdminsReviewers;
+      this.submissionVo.irbAdminsReviewers = result.irbAdminsReviewers;
     });
   }
 
   getIRBAdminReviewDetails() {
-    const reqstObj = {submissionId: this.headerDetails.SUBMISSION_ID};
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
     this._irbViewService.getIRBAdminReviewDetails(reqstObj).subscribe(data => {
       const result: any = data || [];
-      this.submissionVo.irbAdminCheckList  = result.irbAdminCheckList;
-      this.submissionVo.irbAdminCommentAttachment  = result.irbAdminCommentAttachment;
+      this.submissionVo.irbAdminCheckList = result.irbAdminCheckList;
+      this.submissionVo.irbAdminCommentAttachment = result.irbAdminCommentAttachment;
     });
   }
 
   getSubmissionBasicDetails() {
-    const reqstObj = {submissionId: this.headerDetails.SUBMISSION_ID};
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
     this._irbViewService.getSubmissionBasicDetails(reqstObj).subscribe(data => {
       const result: any = data || [];
-       this.submissionVo.submissionDetail  = result.submissionDetail;
+      this.submissionVo.submissionDetail = result.submissionDetail;
     });
   }
 
   setAdmin(event) {
-    this.adminReviewer.personID  = event.originalObject.PERSON_ID;
+    this.adminReviewer.personID = event.originalObject.PERSON_ID;
   }
 
   addAdminReviwever(mode) {
@@ -108,18 +108,34 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.adminReviewer.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
     this.adminReviewer.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
     this.adminReviewer.updateUser = this.userDTO.userName;
-    this._irbViewService.updateIRBAdminReviewer(this.adminReviewer).subscribe(data => {
-      const result: any = data || [];
-      this.submissionVo.irbAdminsReviewers  = result.irbAdminsReviewers;
-    });
+    this.saveOrUpdateAdminReviwever(this.adminReviewer);
   }
 
   editIRBReviewer(item, index) {
     this.isEditIRBReviewer = true;
     this.IRBReviweverSelectedRow = index;
-    this.adminReviewer.personID  = item.PERSON_ID;
+    this.adminReviewer.personID = item.PERSON_ID;
     this.adminReviewer.personName = item.FULL_NAME;
     this.adminReviewer.reviewTypeCode = item.REVIEW_TYPE_CODE;
+    this.adminReviewer.adminReviewerId = item.ADMIN_REVIEWER_ID;
+  }
+
+  deleteIRBAdmin(item) {
+    const reqstObj: any = {};
+    reqstObj.adminReviewerId = item.ADMIN_REVIEWER_ID;
+    reqstObj.submissionId = item.SUBMISSION_ID;
+    reqstObj.acType = 'D';
+    this.saveOrUpdateAdminReviwever(reqstObj);
+  }
+
+  saveOrUpdateAdminReviwever(requestObj) {
+    this._irbViewService.updateIRBAdminReviewer(requestObj).subscribe(data => {
+      const result: any = data || [];
+      this.submissionVo.irbAdminsReviewers = result.irbAdminsReviewers;
+      this.adminReviewer = {};
+      this.IRBReviweverSelectedRow = null;
+      this.isEditIRBReviewer = false;
+    });
   }
 
 
@@ -134,7 +150,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.adminReviewerComment.updateUser = this.userDTO.userName;
     this._irbViewService.updateIRBAdminComment(this.adminReviewerComment).subscribe(data => {
       const result: any = data || [];
-    //  this.submissionVo.irbAdminsReviewers  = result.irbAdminsReviewers;
+      //  this.submissionVo.irbAdminsReviewers  = result.irbAdminsReviewers;
     });
   }
 

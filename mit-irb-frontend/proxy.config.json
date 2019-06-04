@@ -502,11 +502,35 @@
 	},
 	
 	"/mit-irb/getActionLookup": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/mit-irb/getCommitteeScheduledDates": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/getSubmissionLookups": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/updateIRBAdminReviewer": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/getIRBAdminReviewers": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/getIRBAdminReviewDetails": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/getSubmissionBasicDetails": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/updateIRBAdminComment": {
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	}
 }

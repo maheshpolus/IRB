@@ -8,9 +8,9 @@ import { Component, OnInit, HostListener } from '@angular/core';
 export class IrbComponent {
 
   constructor() { }
-  @HostListener('scroll', ['$event'])
+  @HostListener('window:scroll', ['$event'])
   scrollEvent() {
-    const scrollHeight = document.getElementById('scrollToTop').scrollTop;
+    const scrollHeight = window.pageYOffset;
     if (scrollHeight > 100) {
       document.getElementById('myBtn').style.display = 'block';
     } else {
@@ -19,7 +19,11 @@ export class IrbComponent {
   }
 
   scrollToTop() {
-   document.getElementById('scrollToTop').scrollTop = 0;
+   // document.getElementById('scrollToTop').scrollTop = 0;
+ const id = document.getElementById('scrollToTop');
+                if (id) {
+                    id.scrollIntoView({behavior : 'smooth'});
+                }
   }
 
 }

@@ -1,0 +1,335 @@
+<!-- <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner> -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 bottom-space-20">
+      <div class="card history-card border-radius-1">
+        <div class="card-header history-header">
+          <nav class="nav navbar-pg3">
+            <h5>Submission Details</h5>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </nav>
+        </div>
+        <div class="card-body card-paddng">
+          <div class="col-12  search-eidted-p padding-15">
+            <i>Submitted on kfdghfd fkhgdfkgj sfdngkdfgj</i>
+          </div>
+          <div class="col-12  search-eidted-p padding-15">
+            <div class="row mb15">
+              <div class="col-md-5 pr-0">
+                <div class="form-group">
+                  <label class="label-width">Submission Type
+                    <span class="mandatory">*</span>
+                  </label>
+                  <select [disabled]="isGeneralInfoEditable == false" class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect"
+                    (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                    <option selected value=null>Please Select</option>
+                    <option *ngFor="let type of submissionTypeList" value="{{type.SUBMISSION_TYPE_CODE}}">{{type.DESCRIPTION}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 pl-0 pr-0">
+                <div class="form-group">
+                  <label class="label-width">Review Type</label>
+                  <select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                    <option selected value=null>Please Select</option>
+                    <option *ngFor="let type of submissionRewiewTypeList" value="{{type.PROTOCOL_REVIEW_TYPE_CODE}}">{{type.DESCRIPTION}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group ">
+                  <label class="label-width">Committee</label>
+                  <select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                    <option selected value=null>Please Select</option>
+                    <option *ngFor="let committee of committeeList" value="{{committee.COMMITTEE_ID}}">{{committee.COMMITTEE_NAME}}</option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5 pr-0">
+                <div class="form-group">
+                  <label class="label-width">Schedule Date</label>
+                  <select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                    <option selected value=null>Please Select</option>
+                    <!-- <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option> -->
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 pl-0 pr-0">
+                <div class="form-group ">
+                  <label class="label-width">Type Qualifier</label>
+                  <select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                    <option selected value=null>Please Select</option>
+                    <option *ngFor="let type of typeQualifierList" value="{{type.SUBMISSION_TYPE_QUAL_CODE}}">{{type.DESCRIPTION}}</option>
+                  </select>
+                </div>
+              </div>
+              <i class="btn btn-link submission-accordion collapsed" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" (click)="isExpanded = !isExpanded"
+                data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"></i>
+            </div>
+
+            <div id="headingOne" class="expand-div card-spcl-padding">
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" *ngIf="isExpanded == true">
+                <div class="row mb15">
+                  <hr class="hr-line">
+
+                  <div class="col-12  search-eidted-p mb15">
+                    <b>Protocol Reviewers</b>
+                    <div>
+                      <i>Add reviewers by selecting type and Reviewer</i>
+                    </div>
+                  </div>
+
+                  <div class="col-12  search-eidted-p mb15">
+                    <div class="row">
+                      <div class="col-md-5 pr-0">
+                        <div class="form-group">
+                          <label class="label-width">Type
+                            <span class="mandatory">*</span>
+                          </label>
+                          <select [disabled]="isGeneralInfoEditable == false" class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect"
+                            (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                            <option selected value=null>Please Select</option>
+                            <!-- <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option> -->
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4 pl-0 pr-0">
+                        <div class="form-group">
+                          <label class="label-width">Reviewers</label>
+                          <select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                            <option selected value=null>Please Select</option>
+                            <!-- <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option> -->
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12 users-list-tbl">
+                    <div class="row">
+                      <div class="table-responsive">
+                        <table class="table table-striped tbl-p-clr">
+                          <thead class="tbl-head-clr thead-font-size">
+                            <tr>
+                              <th scope="col">Type</th>
+                              <th scope="col">Reviewer</th>
+                              <th scope="col">Assigned Date</th>
+                              <th scope="col">Due Date</th>
+                              <th scope="col">Review Status</th>
+                              <th scope="col">Recommended Action</th>
+                              <th scope="col"></th>
+                            </tr>
+                          </thead>
+                          <tbody class="tbody-font-size">
+                            <tr>
+                              <td> test</td>
+                              <td>test</td>
+                              <td>test</td>
+                              <td>test</td>
+                              <td>test</td>
+                              <td>test</td>
+                              <td class="action-btn-list">
+                                <button title="Edit" (click)="editAdminContact(item,i)" type="button" class="btn btn-primary edit-btn-1">
+                                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </button>
+                                <button title="Delete" (click)="deleteProtocolUnit(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                                  data-target="#deleteAdminDetails">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="col-md-12 mb-15">
+                      <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}">
+                        <i class="fa fa-commenting-o pr-8" aria-hidden="true"></i>Review Comments</button>
+                      <button type="button" class="btn icon_tab" (click)="tabSelected='RISKLEVEL'" [ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}">
+                        <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>
+                      <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='CHECKLIST'" [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}">
+                        <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Checklist</button>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="row bottom-margin">
+              <div class="col-md-2">
+                <button *ngIf="isGeneralInfoEditable" type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
+                  <span *ngIf="!isGeneralInfoSaved">Proceed</span>
+                  <span *ngIf="isGeneralInfoSaved">Save</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="col-12 bottom-space-20">
+      <div class="card history-card border-radius-1">
+        <div class="card-header history-header">
+          <nav class="nav navbar-pg3">
+            <h5>Administrative Review</h5>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </nav>
+        </div>
+        <div class="card-body card-paddng">
+          <div class="col-12  search-eidted-p padding-15">
+            <i>Submitted on kfdghfd fkhgdfkgj sfdngkdfgj</i>
+          </div>
+          <div class="col-12  search-eidted-p padding-15">
+            <div class="row mb15">
+              <div class="col-md-5 pr-0">
+                <div class="form-group">
+                  <label class="label-width"> Review Type
+                    <span class="mandatory">*</span>
+                  </label>
+                  <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [class.poping-border]="isEditIRBReviewer"
+                    [(ngModel)]="adminReviewer.reviewTypeCode">
+                    <option selected value=null>Please Select</option>
+                    <option *ngFor="let type of irbAdminsReviewerType" value="{{type.REVIEW_TYPE_CODE}}">{{type.DESCRIPTION}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-5 pl-0 pr-0">
+                <div class="form-group">
+                  <label class="label-width">Administrators
+                    <span class="mandatory">*</span>
+                  </label>
+                  <ng2-completer class="mr-sm-2 select-notify-popup collaborator-holder" [class.normal-border]="!isEditIRBReviewer" [datasource]="adminListDataSource"
+                    [minSearchLength]="0" [placeholder]="'Search IRB Admin'" [openOnFocus]="true" [inputClass]="'ng-pristine ng-valid ng-touched'"
+                    [(ngModel)]="adminReviewer.personName" (selected)="setAdmin($event)">
+                  </ng2-completer>
+                </div>
+              </div>
+              <div class="col-md-1 add-btn-1">
+                <button title="Add" *ngIf="!isEditIRBReviewer" (click)="addAdminReviwever('I')" type="button" class="btn btn-success">
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+                <button title="Save" *ngIf="isEditIRBReviewer" (click)="addAdminReviwever('U')" type="button" class="btn btn-success">
+                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+
+
+            <div class="col-md-12 users-list-tbl">
+              <div class="row">
+                <div class="table-responsive" *ngIf="submissionVo?.irbAdminsReviewers != null && submissionVo?.irbAdminsReviewers.length > 0">
+                  <table class="table table-striped tbl-p-clr">
+                    <thead class="tbl-head-clr thead-font-size">
+                      <tr>
+                        <th scope="col">Review Type</th>
+                        <th scope="col">IRB Administrator</th>
+                        <th scope="col">Review Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="tbody-font-size">
+                      <tr *ngFor="let irbAdminsReviewer of submissionVo.irbAdminsReviewers; let i=index" [class.poping-border]="i == IRBReviweverSelectedRow">
+                        <td> {{irbAdminsReviewer.REVIEW_TYPE}}</td>
+                        <td>{{irbAdminsReviewer.FULL_NAME}}</td>
+                        <td>
+                          <span *ngIf="irbAdminsReviewer.STATUS_FLAG=='Y'">Completed</span>
+                          <span *ngIf="irbAdminsReviewer.STATUS_FLAG=='N'">
+                            <button type="button" class="btn btn-outline-success border-button">Mark Complete</button>
+                          </span>
+                        </td>
+                        <td class="action-btn-list">
+                          <button title="Edit" (click)="editIRBReviewer(irbAdminsReviewer,i)" type="button" class="btn btn-primary edit-btn-1">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                          </button>
+                          <button title="Delete" (click)="deleteIRBAdmin(irbAdminsReviewer)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
+                            data-target="#deleteAdminDetails">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="col-md-12 mb-15">
+                <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='IRBCOMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='IRBCOMMENTS')}">
+                  <i class="fa fa-commenting-o pr-8" aria-hidden="true"></i>Review Comments & Attachments</button>
+                <button type="button" class="btn icon_tab" (click)="tabSelected='CHECKLIST'" [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}">
+                  <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Checklist</button>
+                <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='IRBHISTORY'" [ngClass]="{icon_tab_active:(tabSelected=='IRBHISTORY')}">
+                  <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Submission History</button>
+                <span *ngIf="tabSelected=='IRBCOMMENTS'" class="filterLink mt-10">
+                  <a class="pointer">Show All</a>
+                </span>
+              </div>
+            </div>
+
+            <div *ngIf="tabSelected=='IRBCOMMENTS'" class="mb-15">
+              <div class="row mr-0 ml-0">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <textarea class="form-control txt-area-fnt" placeholder="Write your review comments...." [(ngModel)]="adminReviewerComment.comment"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-1 mt-12">
+                  <input type="checkbox" [(ngModel)]="adminReviewerComment.publicFLag" /> Public
+                  <!-- <button title="Add" type="button" class="btn btn-success" (click)="addRiskLevel(riskLevelObject)">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button> -->
+                </div>
+                <div class="col-md-1 add-btn-1">
+                  <button title="Add" type="button" class="btn btn-success" (click)="addIRBReviewComments('I')">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="mb-15 person-modal-scroll" *ngIf="tabSelected=='CHECKLIST'">
+              <div class="row mr-0 ml-0 padding-exempt" *ngFor="let checkList of submissionVo?.irbAdminCheckList; let i=index">
+
+                <div class="col-md-1">
+                  <input class="align-center mt-10" type="checkbox" [(ngModel)]="isCheckListChecked[i]" />
+                </div>
+                <div class="col-md-9 text-justify">
+                  {{checkList?.DESCRIPTION}}
+                  <i aria-hidden="true" [ngClass]="(showCheckListComment[i]==true)?'fa fa-angle-double-up':'fa fa-angle-double-down'" title="More info"
+                    (click)="showCheckListComment[i] = !showCheckListComment[i]"></i>
+
+                  <textarea *ngIf="showCheckListComment[i]==true" class="form-control txt-area-fnt" placeholder="Add comments if any..."></textarea>
+                </div>
+                <div class="col-md-2">
+                  Updated by {{checkList?.UPDATE_USER}} on {{checkList?.UPDATE_TIMESTAMP}}
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+</div>

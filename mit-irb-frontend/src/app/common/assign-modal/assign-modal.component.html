@@ -20,7 +20,11 @@
 
   <!--Assign Admin Section-->
   <div class="modal-header-label padding-15">
-    <h4 class="popup-sub-head sub-head-width">COUHES Admin</h4>
+    <h4 class="popup-sub-head sub-head-width select-notify-popup">IRB Admin</h4>
+    <div class="display" *ngIf="userDTO.personID != protocoldetails.ASSIGNEE_PERSON_ID">
+      <input type="checkbox" [(ngModel)]="assignCheckbox" (ngModelChange)="assignMeAsAdmin()"/>
+      <i> Assign Me as Admin</i>
+    </div>
   </div>
   <div class="card-body card-paddng">
     <div class="col-12 search-eidted-p padding-15">
@@ -37,7 +41,7 @@
                </li>
              </ul>
            </div> -->
-          <ng2-completer [datasource]="adminListDataSource" [minSearchLength]="0" [placeholder]="'Search COUHES Admin'" [openOnFocus]="true"
+          <ng2-completer [datasource]="adminListDataSource" [minSearchLength]="0" [placeholder]="'Search IRB Admin'" [openOnFocus]="true"
             [inputClass]="'ng-pristine ng-valid ng-touched'" [(ngModel)]="SearchTableName" (selected)="setAdmin($event)">
           </ng2-completer>
         </div>

@@ -26,11 +26,13 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   commonVo: any = {};
   currentActionPerformed: any = {};
   moduleAvailableForAmendment: any = [];
+  cannedCommentList: any = [];
   isItemChecked: any = [];
   checkListSelectedCodes: any = [];
   expeditedCheckList: any = [];
   notifyTypeQualifier: any = [];
   riskLevelList: any = [];
+  commentList: any = [];
   scheduleDateList: any = [];
   committeeList: any = [];
   riskLevel: any = [];
@@ -48,12 +50,19 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   tabSelected: string;
   selectedScheduleId: string;
   isIncludedInAgenda = false;
+  isPrivate = true;
 
   riskLevelObject = {
     riskLevelCode: null,
     comment: '',
     date: null,
     riskLevelDescription: ''
+  };
+
+  commentObject = {
+    comments: '',
+    flag: 'Y',
+    contingencyCode: ''
   };
 
   uploadedFile: File[] = [];
@@ -167,7 +176,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this._spinner.hide();
       this.IRBActionsVO = data;
       this.personActionsList = this.IRBActionsVO.personActionsList;
-     // this.moduleAvailableForAmendment = this.IRBActionsVO.moduleAvailableForAmendment;
+      // this.moduleAvailableForAmendment = this.IRBActionsVO.moduleAvailableForAmendment;
       if (this.personActionsList != null && this.personActionsList.length > 0) {
         this._spinner.show();
         setTimeout(() => { this.setActionIcons(); }, 1000);
@@ -175,7 +184,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
   }
   getActionLookup() {
-    this._irbCreateService.getActionLookup(this.IRBActionsVO).subscribe(( data: any ) => {
+    this._irbCreateService.getActionLookup(this.IRBActionsVO).subscribe((data: any) => {
       this.moduleAvailableForAmendment = data.moduleAvailableForAmendment != null ? data.moduleAvailableForAmendment : [];
       this.notifyTypeQualifier = data.notifyTypeQualifier != null ? data.notifyTypeQualifier : [];
       this.expeditedCheckList = data.expeditedApprovalCheckList != null ? data.expeditedApprovalCheckList : [];
@@ -183,7 +192,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.committeeList = data.committeeList != null ? data.committeeList : [];
       this.selectedCommitteeId = this.committeeList[0].COMMITTEE_ID;
       this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
-      this.selectedScheduleId = this.scheduleDateList.length > 0 ? this.scheduleDateList[0].SCHEDULED_DATE : null;
+      this.selectedScheduleId = this.scheduleDateList.length > 0 ? this.scheduleDateList[0].SCHEDULE_ID : null;
+      this.cannedCommentList = data.expeditedCannedComments != null ? data.expeditedCannedComments : [];
     });
   }
 
@@ -197,27 +207,28 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   openActionDetails(action) {
     this.currentActionPerformed = action;
     this.uploadedFile = [];
+    this.riskLevelList = [];
+    this.commentList = [];
     if (action.ACTION_CODE === '101') { // Submit
       document.getElementById('submitModalBtn').click();
     } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
-    action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
-    ||  action.ACTION_CODE === '113' || action.ACTION_CODE === '119' ||
-    action.ACTION_CODE === '211' || action.ACTION_CODE === '212' ||
-    action.ACTION_CODE === '207' || action.ACTION_CODE === '910' || action.ACTION_CODE === '113') {
-      if ( action.ACTION_CODE === '213' ) {
+      action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
+      || action.ACTION_CODE === '113' || action.ACTION_CODE === '119' ||
+      action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '910' || action.ACTION_CODE === '113') {
+      if (action.ACTION_CODE === '213') {
         this.actionButtonName = 'Return';
-      } else if ( action.ACTION_CODE === '300' ) {
+      } else if (action.ACTION_CODE === '300') {
         this.actionButtonName = 'Close';
-      }  else  {
+      } else {
         this.actionButtonName = 'Save';
       }
       // Delete Protocol, Withdraw
       // return to PI, Close, disapprove, irb-Acknowledgment, data-Analysis-only, reopen enrollment, closed for enrollment
       // terminated, suspended
-      if ( action.ACTION_CODE === '213' || action.ACTION_CODE === '300' ||
-      action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '207'
-       || action.ACTION_CODE === '201' ||
-      action.ACTION_CODE === '910' || action.ACTION_CODE === '113'  || action.ACTION_CODE === '119') {
+      if (action.ACTION_CODE === '213' || action.ACTION_CODE === '300' ||
+        action.ACTION_CODE === '211' || action.ACTION_CODE === '212'
+        || action.ACTION_CODE === '201' ||
+        action.ACTION_CODE === '910' || action.ACTION_CODE === '113' || action.ACTION_CODE === '119') {
         this.IRBActionsVO.actionDate = new Date();
       }
       document.getElementById('commentModalBtn').click();
@@ -230,44 +241,43 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       document.getElementById('commentCheckboxModalBtn').click();
     } else if (action.ACTION_CODE === '911') { // copy protocol
       document.getElementById('confirmModalBtn').click();
-    } else if ( action.ACTION_CODE === '206'  || action.ACTION_CODE === '208') {
+    } else if (action.ACTION_CODE === '206') {
       this.IRBActionsVO.actionDate = new Date();
       // grant exemption, approved, response approval <-- Approval date
-      if (action.ACTION_CODE === '206' || action.ACTION_CODE === '208') {
         this.IRBActionsVO.approvalDate = new Date();
-      // IRB Review Not Required <-- Decision date
-      } else if ( action.ACTION_CODE === '208' ) { // expiration Date intialised as one year after the current date
-       // approved, response approval <-- Expiration date
-        this.IRBActionsVO.expirationDate = new Date();
-        const todayDate = new Date();
-        this.IRBActionsVO.expirationDate.setYear(todayDate.getFullYear() + 1);
-        this.IRBActionsVO.expirationDate = new Date(this.IRBActionsVO.expirationDate);
-      }
-      if ( action.ACTION_CODE === '208' ) {
-        this.actionButtonName = 'Approve';
-      } else {
         this.actionButtonName = 'Assign';
-      }
       // In Agenda, Grant Exemption, IRB review not required, Approved, SMR, SRR, response approval
       document.getElementById('commentDatesModalBtn').click();
     } else if (action.ACTION_CODE === '200' || action.ACTION_CODE === '205' ||
-    action.ACTION_CODE === '204' || action.ACTION_CODE === '202' || action.ACTION_CODE === '301' || action.ACTION_CODE === '302' ||
-    action.ACTION_CODE === '203' || action.ACTION_CODE === '304' || action.ACTION_CODE === '209' || action.ACTION_CODE === '201' ||
-    action.ACTION_CODE === '210') {
-      this.IRBActionsVO.actionDate = new Date();
-      if (action.ACTION_CODE === '200' || action.ACTION_CODE === '204') {
-      this.isIncludedInAgenda = true;
+      action.ACTION_CODE === '204' || action.ACTION_CODE === '202' || action.ACTION_CODE === '301' || action.ACTION_CODE === '302' ||
+      action.ACTION_CODE === '203' || action.ACTION_CODE === '304' || action.ACTION_CODE === '209' || action.ACTION_CODE === '201' ||
+      action.ACTION_CODE === '210' || action.ACTION_CODE === '208' || action.ACTION_CODE === '207') {
+        setTimeout(() => {
+        const id = document.getElementById('actionScreen');
+                if (id) {
+                    id.scrollIntoView({behavior : 'smooth'});
       }
-      if (action.ACTION_CODE === '205' || action.ACTION_CODE === '204') {
+    }, 300);
+      this.IRBActionsVO.actionDate = new Date();
+      this.tabSelected = 'COMMENTS';
+      if (action.ACTION_CODE === '200' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
+        this.isIncludedInAgenda = true;
+      }
+      if (action.ACTION_CODE === '205' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
         this.IRBActionsVO.expirationDate = new Date();
         const todayDate = new Date();
         this.IRBActionsVO.expirationDate.setYear(todayDate.getFullYear() + 1);
         this.IRBActionsVO.expirationDate = new Date(this.IRBActionsVO.expirationDate);
         this.IRBActionsVO.approvalDate = new Date();
       }
-      if (  action.ACTION_CODE === '210' ) {
+      if (action.ACTION_CODE === '210') {
         this.IRBActionsVO.decisionDate = new Date();
       }
+      // if (action.ACTION_CODE === '200' || action.ACTION_CODE === '205' || action.ACTION_CODE === '204' || action.ACTION_CODE === '304' ||
+      //  action.ACTION_CODE === '203' || action.ACTION_CODE === '202' ||  action.ACTION_CODE === '209' || action.ACTION_CODE === '201' ||
+      //   action.ACTION_CODE === '301' || action.ACTION_CODE === '302' || action.ACTION_CODE === '210') {
+      //   this.tabSelected = 'COMMENTS';
+      // }
     }
     // else if (action.ACTION_CODE === '205') {
     //   document.getElementById('expeditedApprovalModalBtn').click();
@@ -287,27 +297,29 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         // Submit Action,Rqst Data Analysis, Rqst to close, notify irb, rqst close enrollment,rqst reopen enrollment
         // admin actions data analysis only, reopen entrollment, close, terminated, suspended, defered
         if (this.currentActionPerformed.ACTION_CODE === '101' || this.currentActionPerformed.ACTION_CODE === '114' ||
-        this.currentActionPerformed.ACTION_CODE === '105' || this.currentActionPerformed.ACTION_CODE === '116' ||
-        this.currentActionPerformed.ACTION_CODE === '108' || this.currentActionPerformed.ACTION_CODE === '115' ||
-        this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
-        this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
-        this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE === '201' ||
-        this.currentActionPerformed.ACTION_CODE === '300' ||  this.currentActionPerformed.ACTION_CODE === '213' ||
-        this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '119' ||
-        this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
-        this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '910'
-        || this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '210') {
-         // this._router.navigate(['/irb/dashboard']);
+          this.currentActionPerformed.ACTION_CODE === '105' || this.currentActionPerformed.ACTION_CODE === '116' ||
+          this.currentActionPerformed.ACTION_CODE === '108' || this.currentActionPerformed.ACTION_CODE === '115' ||
+          this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
+          this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
+          this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE === '201' ||
+          this.currentActionPerformed.ACTION_CODE === '300' || this.currentActionPerformed.ACTION_CODE === '213' ||
+          this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '119' ||
+          this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
+          this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '910'
+          || this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '210' ||
+          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ||
+          this.currentActionPerformed.ACTION_CODE === '208') {
+          // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-view/irbOverview'],
-            { queryParams: { protocolNumber: this.protocolNumber} });
+            { queryParams: { protocolNumber: this.protocolNumber } });
         }
 
         // create amendment, create renewal, withdrawn, copy protocol
         if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102' ||
           this.currentActionPerformed.ACTION_CODE === '303' || this.currentActionPerformed.ACTION_CODE === '911' ||
           this.currentActionPerformed.ACTION_CODE === '113') {
-            this._router.navigate(['/irb/dashboard']);
-            this._router.navigate(['/irb/irb-create/irbHome'],
+          this._router.navigate(['/irb/dashboard']);
+          this._router.navigate(['/irb/irb-create/irbHome'],
             { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber, protocolId: this.IRBActionsResult.protocolId } });
         }
 
@@ -332,49 +344,60 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.IRBActionsVO.createUser = this.userDTO.userName;
     this.IRBActionsVO.updateUser = this.userDTO.userName;
     this.IRBActionsVO.personAction = this.currentActionPerformed;
-    if ( this.currentActionPerformed.ACTION_CODE === '213' || this.currentActionPerformed.ACTION_CODE === '300' ||
-    this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '209' ||
-    this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
-    this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
-    this.currentActionPerformed.ACTION_CODE === '302' ||  this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '201' ||
-    this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '200' ||  this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '206' ||
-    this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '204'
-    || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '203' ||
-     this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '113' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '910' ||
-    this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' || this.currentActionPerformed.ACTION_CODE === '119') {
+    if (this.currentActionPerformed.ACTION_CODE === '213' || this.currentActionPerformed.ACTION_CODE === '300' ||
+      this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '209' ||
+      this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
+      this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
+      this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '201' ||
+      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '206' ||
+      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '204'
+      || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '203' ||
+      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '113' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '910' ||
+      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' || this.currentActionPerformed.ACTION_CODE === '119') {
       this.IRBActionsVO.actionDate = this.IRBActionsVO.actionDate != null ?
-      this.GetFormattedDate(this.IRBActionsVO.actionDate) : null;
+        this.GetFormattedDate(this.IRBActionsVO.actionDate) : null;
     }
-    if ( this.currentActionPerformed.ACTION_CODE === '206' ||  this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' ||
-    this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '205') {
+    if (this.currentActionPerformed.ACTION_CODE === '206' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' ||
+      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '205') {
       this.IRBActionsVO.approvalDate = this.IRBActionsVO.approvalDate != null ?
-      this.GetFormattedDate(this.IRBActionsVO.approvalDate) : null;
+        this.GetFormattedDate(this.IRBActionsVO.approvalDate) : null;
     }
-    if ( this.currentActionPerformed.ACTION_CODE === '210') {
+    if (this.currentActionPerformed.ACTION_CODE === '210') {
       this.IRBActionsVO.approvalDate = this.IRBActionsVO.decisionDate != null ?
-      this.GetFormattedDate(this.IRBActionsVO.decisionDate) : null;
+        this.GetFormattedDate(this.IRBActionsVO.decisionDate) : null;
     }
-    if ( this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' ||
-    this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '205') {
+    if (this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' ||
+      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '205') {
       this.IRBActionsVO.approvalDate = this.IRBActionsVO.expirationDate != null ?
-      this.GetFormattedDate(this.IRBActionsVO.expirationDate) : null;
+        this.GetFormattedDate(this.IRBActionsVO.expirationDate) : null;
     }
-    if ( this.currentActionPerformed.ACTION_CODE === '212' || this.currentActionPerformed.ACTION_CODE === '200' ||
-    this.currentActionPerformed.ACTION_CODE === '205') {
+    if (this.currentActionPerformed.ACTION_CODE === '212' || this.currentActionPerformed.ACTION_CODE === '200' ||
+      this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '208') {
       this.IRBActionsVO.selectedCommitteeId = this.selectedCommitteeId;
     }
-    if ( this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205') {
+    if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205' ||
+    this.currentActionPerformed.ACTION_CODE === '208') {
       this.IRBActionsVO.selectedScheduleId = this.selectedScheduleId;
     }
     if (this.currentActionPerformed.ACTION_CODE === '205') {
       this.IRBActionsVO.expeditedCheckListSelectedCode = this.checkListSelectedCodes;
     }
     if (this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
-    this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '202' ||
-     this.currentActionPerformed.ACTION_CODE === '304') {
+      this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '202' ||
+       this.currentActionPerformed.ACTION_CODE === '208' ||
+      this.currentActionPerformed.ACTION_CODE === '304') {
       this.IRBActionsVO.riskLevelList = this.riskLevelList;
     }
-}
+    if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205' ||
+    this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '202' ||
+    this.currentActionPerformed.ACTION_CODE === '301' || this.currentActionPerformed.ACTION_CODE === '302' ||
+    this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '304' ||
+    this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '201' ||
+    this.currentActionPerformed.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE === '208' ||
+    this.currentActionPerformed.ACTION_CODE === '207') {
+      this.IRBActionsVO.irbActionsReviewerComments = this.commentList;
+    }
+  }
 
   /**
    * @param  {} currentDate - date to be conveted
@@ -451,8 +474,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this._spinner.hide();
       this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
       if (this.scheduleDateList.length > 0) {
-        this.selectedScheduleId = this.scheduleDateList[0].SCHEDULED_DATE;
-        }
+        this.selectedScheduleId = this.scheduleDateList[0].SCHEDULE_ID;
+      }
     });
   }
 
@@ -460,7 +483,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.riskLevelObject.date = this.riskLevelObject.date != null ?
       this.GetFormattedDate(this.riskLevelObject.date) : null;
     this.riskLevelList.push(risklevelObject);
-    this. riskLevelObject = {
+    this.riskLevelObject = {
       riskLevelCode: null,
       comment: '',
       date: null,
@@ -473,5 +496,18 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   }
   deleteRiskLevel(index) {
     this.riskLevelList.splice(index, 1);
+  }
+
+  addReviewComments(commentObject, isPrivate) {
+    commentObject.flag = isPrivate === true ? 'Y' : 'N';
+    this.commentList.push(commentObject);
+    this.commentObject = {
+      comments: '',
+      flag: 'Y',
+      contingencyCode: ''
+    };
+  }
+  deleteReviewComments(index) {
+    this.commentList.splice(index, 1);
   }
 }

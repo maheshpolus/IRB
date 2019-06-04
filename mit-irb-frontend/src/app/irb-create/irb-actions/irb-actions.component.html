@@ -14,27 +14,27 @@
           <div class="container-fluid">
             <div class="row">
               <ng-container *ngIf="personActionsList != null && personActionsList.length > 0">
-              <div class="col-lg-4 bottom-space-15" *ngFor="let personAction of personActionsList; let i = index">
-                <div class="card request-action-cards cursor-hover" (click)="openActionDetails(personAction)">
-                  <!-- data-toggle="modal" data-target=".bd-example-modal-lg"> -->
-                  <div class="card-body padding0">
-                    <div class="row">
-                      <div class="col-3">
-                        <div class="media-left card-icon1 blue-circle-cards">
-                          <a href="#">
-                            <i id=icon{{i}}></i>
-                          </a>
+                <div class="col-lg-4 bottom-space-15" *ngFor="let personAction of personActionsList; let i = index">
+                  <div class="card request-action-cards cursor-hover" (click)="openActionDetails(personAction)">
+                    <!-- data-toggle="modal" data-target=".bd-example-modal-lg"> -->
+                    <div class="card-body padding0">
+                      <div class="row">
+                        <div class="col-3">
+                          <div class="media-left card-icon1 blue-circle-cards">
+                            <a href="#">
+                              <i id=icon{{i}}></i>
+                            </a>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-9">
-                        <h5>{{personAction?.ACTION_NAME}}</h5>
-                        <p>{{personAction?.ACTION_DESCRIPTION}}</p>
+                        <div class="col-9">
+                          <h5>{{personAction?.ACTION_NAME}}</h5>
+                          <p>{{personAction?.ACTION_DESCRIPTION}}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- <div class="col-12">
+                <!-- <div class="col-12">
                   <div class="card coll-card-q border-radius-1 bottom-space-20">
                   <div class="card bottom-space-15">
                       <div class="card-header collapse-bg padding0-t-b paddingleft print-background" id="headingOne">
@@ -50,296 +50,322 @@
 
 
 
-                          
-                          <div class="col-md-12" *ngIf="currentActionPerformed?.ACTION_CODE == '200' || currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE === '202' || currentActionPerformed.ACTION_CODE === '301' ||
-                          currentActionPerformed.ACTION_CODE === '203' || currentActionPerformed.ACTION_CODE === '304' || currentActionPerformed.ACTION_CODE === '209' || currentActionPerformed.ACTION_CODE === '201'">
-                                    <div class="card">
-                                      <div class="card-header collapse-bg padding0-t-b print-background paddingleft" id="headingOne">
-                                        <h5 class="mb-0">
-                                          <span class="btn coll-click cardhead">
-                                            {{currentActionPerformed?.ACTION_NAME}}
-                                          </span>
-            
-                                        </h5>
-                                        <hr class="col-hr">
-                                      </div>
-                                      <div id="collapseTwo" class="collapse show">
-                                      <div class="card-body qs-bdy background-white padding0 tbl-list1">
-                                          <div class="row ml-0 mr-0">
-                                            
-                                                    <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' ">
-                                                        <div class="form-group">
-                                                    <label>Approval Date</label>
-                                                 <div class="input-group date-pickr-1 mb-3">
-                                                   <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.approvalDate" [owlDateTime]="approvalDateExpedited" placeholder="mm/dd/yyyy" >
-                                                   <div class="input-group-append input-span-1" [owlDateTimeTrigger]="approvalDateExpedited">
-                                                     
-                                                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                     
-                                                   </div>
-                                                   <owl-date-time [pickerType]="'calendar'" #approvalDateExpedited></owl-date-time>
-                                                 </div> 
-                                                 <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-                                               </div>
-                                             </div>
-                                             <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' ">
-                                                <div class="form-group">
-                                            <label>Expiration Date</label>
-                                            <div class="input-group date-pickr-1 mb-3">
-                                            <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.expirationDate" [owlDateTime]="expirationDateExpedited" placeholder="mm/dd/yyyy" >
-                                            <div class="input-group-append input-span-1" [owlDateTimeTrigger]="expirationDateExpedited">
-                                             
-                                             <i class="fa fa-calendar" aria-hidden="true"></i>
-                                             
-                                            </div>
-                                            <owl-date-time [pickerType]="'calendar'" #expirationDateExpedited></owl-date-time>
-                                            </div> 
-                                            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-                                            </div>
-                                            </div>
-                                            <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '210'">
-                                                <div class="form-group">
-                                            <label>Decision Date</label>
-                                          <div class="input-group date-pickr-1 mb-3">
-                                           <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.decisionDate" [owlDateTime]="decisionDate" placeholder="mm/dd/yyyy" >
-                                           <div class="input-group-append input-span-1" [owlDateTimeTrigger]="decisionDate">
-                                             
-                                             <i class="fa fa-calendar" aria-hidden="true"></i>
-                                             
-                                           </div>
-                                           <owl-date-time [pickerType]="'calendar'" #decisionDate></owl-date-time>
-                                          </div> 
-                                          <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-                                          </div>
-                                          </div>
-                                             
-                                            <div class="col-md-4" >
-                                                <div class="form-group">
-                                            <label>Action Date</label>
-                                            <div class="input-group date-pickr-1 mb-3">
-                                            <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDatesExpedited" placeholder="mm/dd/yyyy" >
-                                            <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDatesExpedited">
-                                            
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            
-                                            </div>
-                                            <owl-date-time [pickerType]="'calendar'" #actionDatesExpedited></owl-date-time>
-                                            </div> 
-                                            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-                                            </div>
-                                            </div>
-                                           
-                                                <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
-                                                    <div class="form-group">
-                                                        <!-- <label> Include in Agenda</label> -->
-                                                        <div class="mt-33">
-                                                        <input type="checkbox"  [(ngModel)]="isIncludedInAgenda"/> <span class="checkbox-label">Include in Agenda</span>
-                                                        </div>
-                                                      </div>
-                                                      </div>
-                                                      <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205'">
-                                                          <div class="form-group">
-                                                              <label>Committee</label>
-                                                              <select class="custom-select" id="inlineFormCustomSelect" [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedCommitteeId" (ngModelChange)="getScheduleDate(selectedCommitteeId)">
-                                                                  <option *ngFor="let committee of committeeList" [value]="committee.COMMITTEE_ID">{{committee.COMMITTEE_NAME}}</option>
-                                                                </select>
-                                                            </div>
-                                                            </div>
-                                                      <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205'">
-                                                          <div class="form-group">
-                                                              <label>Schedule Date</label>
-                                                              <select class="custom-select" id="inlineFormCustomSelect" [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedScheduleId">
-                                                                  <option value=null selected>Please Select</option>
-                                                                  <option *ngFor="let scheduleDate of scheduleDateList" value="{{scheduleDate.SCHEDULED_DATE}}">{{scheduleDate.SCHEDULE_ID}}, {{(scheduleDate.SCHEDULED_DATE == '' || scheduleDate.SCHEDULED_DATE == null) ? '' : scheduleDate.SCHEDULED_DATE | date: 'MM/dd/yyyy'}}, {{ (scheduleDate.TIME == '' || scheduleDate.TIME == null) ? '' : scheduleDate.TIME| date:'shortTime'}}</option>
-                                                                  
-                                                                </select>
-                                                            </div>
-                                                            </div>
-                                                            <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
-                                                                <div class="form-group">
-                                                                    <label>Type Qualifier</label>
-                                                                    <select class="custom-select" id="inlineFormCustomSelect"  [(ngModel)]="IRBActionsVO.selectedTypeQualifier">
-                                                                        <option value=null selected>Please Select</option>
-                                                                        <option *ngFor="let notifyType of notifyTypeQualifier" value="{{notifyType.SUBMISSION_TYPE_QUAL_CODE}}">{{notifyType.DESCRIPTION}}</option>
-                                                                        
-                                                                      </select>
-                                                                  </div>
-                                                                  </div>
-                                              </div>
-                                          <div class="col-md-12">
-                                                      <div class="form-group">
-                                                        <label>Comments</label>
-                                                        <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
-                                                      </div>
 
-                                                      </div>
-                                                      <div>
-                                                      <div class="col-md-12 mb-15">
-                                                      <button type="button" class="btn icon_tab" (click)="tabSelected='RISKLEVEL'"  *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'"[ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}"><i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>
-                                                      <!-- <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}"><i class="fa fa-commenting-o pr-8"  aria-hidden="true" ></i>Review Comments</button> -->
-                                                      <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='CHECKLIST'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'" [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}"><i class="fa fa-list-ul pr-8"  aria-hidden="true"></i>Checklist</button>
-                                                      <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='ATTACHMENT'" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '209' || currentActionPerformed?.ACTION_CODE == '201' || currentActionPerformed?.ACTION_CODE == '301'||currentActionPerformed?.ACTION_CODE == '302'|| currentActionPerformed?.ACTION_CODE == '210'" [ngClass]="{icon_tab_active:(tabSelected=='ATTACHMENT')}"><i class="fa fa-paperclip pr-8"  aria-hidden="true"></i>Attachments</button>
-                                                        </div>
-                                                        </div>
-                                                        <div *ngIf="tabSelected=='RISKLEVEL'">
-                                                        <div class="row mr-0 ml-0">
-                                                            <div class="col-md-3" >
-                                                                <div class="form-group">
-                                                                    <label>Risk Level</label>
-                                                                    <select class="custom-select" [(ngModel)]="riskLevelObject.riskLevelCode" (ngModelChange)="setRiskLevelDescription(riskLevelObject.riskLevelCode)">
-                                                                        <option value=null selected>Please Select</option>
-                                                                        <option *ngFor="let level of riskLevel" value="{{level.RISK_LEVEL_CODE}}">{{level.DESCRIPTION}}</option>
-                                                                      </select>
-                                                                  </div>
-                                                                  </div>
-                                                                  <div class="col-md-3" >
-                                                                      <div class="form-group">
-                                                                  <label>Date Assigned</label>
-                                                                  <div class="input-group date-pickr-1 mb-3">
-                                                                  <input type="text" class="form-control"  [(ngModel)]="riskLevelObject.date"[owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy" >
-                                                                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
-                                                                  
-                                                                  <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                                  
-                                                                  </div>
-                                                                  <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
-                                                                  </div> 
-                                                                  <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-                                                                  </div>
-                                                                  </div>
-                                                                  <div class="col-md-5">
-                                                                  <div class="form-group">
-                                                                      <label>Comments</label>
-                                                                      <textarea class="form-control txt-area-fnt" [(ngModel)]="riskLevelObject.comment" placeholder="Comment"></textarea>
-                                                                    </div>
-                                                                    </div>
-                                                                    <div class="col-md-1 add-btn-1">
-                                                                        <button title="Add" type="button" class="btn btn-success mt-33" (click)="addRiskLevel(riskLevelObject)">
-                                                                          <i class="fa fa-plus" aria-hidden="true"></i>
-                                                                        </button>
-                                                                      </div>
-                                                        </div>
-                                                        <div class="col-md-12 users-list-tbl" *ngIf="riskLevelList?.length > 0 && riskLevelList != null">
-                                                            <div class="row">
-                                                              <div class="table-responsive">
-                                                                <table class="table table-striped tbl-p-clr">
-                                                                  <thead class="tbl-head-clr thead-font-size">
-                                                                    <tr>
-                                                                      <th width="40%" scope="col">Risk Level</th>
-                                                                      <th scope="col">Date assigned</th>
-                                                                      <th width="40%" scope="col">Comments</th>
-                                                                      <th width="5%" scope="col">Action</th>
-                                                                    </tr>
-                                                                  </thead>
-                                                                  <tbody class="tbody-font-size">
-                                                                  <tr *ngFor="let riskLevel of riskLevelList let i = index">
-                                                                    <td width="40%">{{riskLevel?.riskLevelDescription}}</td>
-                                                                    <td>{{(riskLevel.date == '' || riskLevel.date == null) ? '' : riskLevel?.date | date: 'MM/dd/yyyy'}}</td>
-                                                                    <td width="40%">{{riskLevel?.comment}}</td>
-                                                                    <td class="action-btn-list">
-                                                                        <button title="Delete" (click)="deleteRiskLevel(i)" type="button" class="btn btn-primary delete-btn-1" >
-                                                                          <i class="fa fa-trash" aria-hidden="true"></i>
-                                                                        </button>
-                                                                      </td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                  </table>
-                                                                  </div>
-                                                                  </div>
-                                                                  </div>
-                                                                  </div>
+                <div class="col-md-12" id="actionScreen" *ngIf="currentActionPerformed?.ACTION_CODE == '200' || currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '202' || currentActionPerformed.ACTION_CODE == '301' ||
+                          currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '304' || currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed.ACTION_CODE == '302'||
+                          currentActionPerformed.ACTION_CODE == '207' || currentActionPerformed?.ACTION_CODE == '208'">
+                  <div class="card">
+                    <div class="card-header collapse-bg padding0-t-b print-background paddingleft" id="headingOne">
+                      <h5 class="mb-0">
+                        <span class="btn coll-click cardhead">
+                          {{currentActionPerformed?.ACTION_NAME}}
+                        </span>
 
+                      </h5>
+                      <hr class="col-hr">
+                    </div>
+                    <div id="collapseTwo" class="collapse show">
+                      <div class="card-body qs-bdy background-white padding0 tbl-list1">
+                        <div class="row ml-0 mr-0">
 
-                                                                  <div class="mb-15" *ngIf="tabSelected=='CHECKLIST'">
-                                                                          <div class="row mr-0 ml-0 padding-exempt" *ngFor="let checkList of expeditedCheckList; let i=index">
-                                                                            
-                                                                            <div class="col-md-1">
-                                                                              	<input class="align-center mt-10" type="checkbox" [(ngModel)]="isItemChecked[i]" (ngModelChange)="setSelectedCheckList(checkList.EXPEDITED_REV_CHKLST_CODE,isItemChecked[i])"/>
-                                                                              </div>
-                                                                              <div class="col-md-11 text-justify">
-                                                                                 {{checkList?.EXPEDITED_REV_CHKLST}}
-                                                                                </div>
-                                                                              </div>
-                                                                              </div>
-                                                                              <div class="mb-15" *ngIf="tabSelected=='COMMENTS'">
-                                                                                  <div class="row mr-0 ml-0 padding-exempt">
-                                                                                    <div class="col-md-10">  
-                                                                                    <div class="form-group">
-                                                                                          <label>Comments</label>
-                                                                                          <div class="input-group date-pickr-1 mb-3">
-                                                                                              <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
-                                                                                              <div class="input-group-append input-span-1" title="Search For Canned comments" data-target="#cannedCommentsModal" data-toggle="modal">
-                                                                                                    <i class="fa fa-search icon-center"></i>
-                                                                                                </div>
-                                                                                          <!-- <textarea rows="1" class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea> -->
-                                                                                        </div>
-                                                                                      </div>
-                                                                                    </div>
-                                                                                       
-                                                                                      <div class="icon-center">
-                                                                                          <input type="checkbox"  [(ngModel)]="isPrivate"/> <span class="checkbox-label">Private</span>
-                                                                                          </div>
-                                                                                          <div class="col-md-1 add-btn-1">
-                                                                                              <button title="Add" type="button" class="btn btn-success mt-33">
-                                                                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                                                                              </button>
-                                                                                            </div>
-                                                                                     
-                                                                                          </div>
-                                                                                          <div class="col-md-12 users-list-tbl">
-                                                                                              <div class="row">
-                                                                                                <div class="table-responsive">
-                                                                                                  <table class="table table-striped tbl-p-clr">
-                                                                                                    <thead class="tbl-head-clr thead-font-size">
-                                                                                                      <tr>
-                                                                                                        <th scope="col">Comments</th>
-                                                                                                        <th scope="col">Private</th>
-                                                                                                        <th scope="col">Action</th>
-                                                                                                      </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody class="tbody-font-size"></tbody>
-                                                                                                    </table>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                          
-                                                                                          </div>
-                                                                                          <div class="mb-15" *ngIf="tabSelected=='ATTACHMENT'">
-                                                                                              <div class="col-md-12 mr-0 ml-0" >
-                                                                                                
-                                                                                                  <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
-                                                                                                      <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
-                                                                                                      </button>
-                                                                                                      <input type="file" #filesAtt (change)="onChange(filesAtt.files)" id="addAttach" style="display: none" />
-                                                                                                      <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
-                                                                                                      </div>
-                                                                                                    </file-drop>
-                                                                                                    </div>
-                                                                                                    <div class="filechip ml-0 mr-0">
-                                                                                                        <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
-                                                                                                            <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
-                                                                                                        </span>
-                                                                                               
-                                                                                                  </div>
-                                                                                                  </div>
-                                                                                                  <div class="btn-row-med text-center padding-exempt">
-                                                                                                      <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
-                                                                                                      <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
-                                                                                            
-                                                                                                    </div>
-                                                                              </div>
-                                                                              </div>
-                                              </div>
-                                              </div>
-                           
-                               
+                          <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '208' ">
+                            <div class="form-group">
+                              <label>Approval Date</label>
+                              <div class="input-group date-pickr-1 mb-3">
+                                <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.approvalDate" [owlDateTime]="approvalDateExpedited" placeholder="mm/dd/yyyy">
+                                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="approvalDateExpedited">
+
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                                </div>
+                                <owl-date-time [pickerType]="'calendar'" #approvalDateExpedited></owl-date-time>
+                              </div>
+                              <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+                            </div>
+                          </div>
+                          <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '208' ">
+                            <div class="form-group">
+                              <label>Expiration Date</label>
+                              <div class="input-group date-pickr-1 mb-3">
+                                <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.expirationDate" [owlDateTime]="expirationDateExpedited"
+                                  placeholder="mm/dd/yyyy">
+                                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="expirationDateExpedited">
+
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                                </div>
+                                <owl-date-time [pickerType]="'calendar'" #expirationDateExpedited></owl-date-time>
+                              </div>
+                              <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+                            </div>
+                          </div>
+                          <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '210'">
+                            <div class="form-group">
+                              <label>Decision Date</label>
+                              <div class="input-group date-pickr-1 mb-3">
+                                <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.decisionDate" [owlDateTime]="decisionDateScreen" placeholder="mm/dd/yyyy">
+                                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="decisionDateScreen">
+
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                                </div>
+                                <owl-date-time [pickerType]="'calendar'" #decisionDateScreen></owl-date-time>
+                              </div>
+                              <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label>Action Date</label>
+                              <div class="input-group date-pickr-1 mb-3">
+                                <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDatesExpedited" placeholder="mm/dd/yyyy">
+                                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDatesExpedited">
+
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                                </div>
+                                <owl-date-time [pickerType]="'calendar'" #actionDatesExpedited></owl-date-time>
+                              </div>
+                              <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+                            </div>
+                          </div>
+
+                          <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
+                            <div class="form-group">
+                              <!-- <label> Include in Agenda</label> -->
+                              <div class="mt-33">
+                                <input type="checkbox" [(ngModel)]="isIncludedInAgenda" />
+                                <span class="checkbox-label">Include in Agenda</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
+                            <div class="form-group">
+                              <label>Committee</label>
+                              <select class="custom-select" id="inlineFormCustomSelect" [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedCommitteeId"
+                                (ngModelChange)="getScheduleDate(selectedCommitteeId)">
+                                <option *ngFor="let committee of committeeList" [value]="committee.COMMITTEE_ID">{{committee.COMMITTEE_NAME}}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
+                            <div class="form-group">
+                              <label>Schedule Date</label>
+                              <select class="custom-select" id="inlineFormCustomSelect" [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedScheduleId">
+                                <option value=null selected>Please Select</option>
+                                <option *ngFor="let scheduleDate of scheduleDateList" value="{{scheduleDate.SCHEDULE_ID}}">{{scheduleDate.SCHEDULE_ID}}, {{(scheduleDate.SCHEDULED_DATE == '' || scheduleDate.SCHEDULED_DATE
+                                  == null) ? '' : scheduleDate.SCHEDULED_DATE | date: 'MM/dd/yyyy'}}, {{ (scheduleDate.TIME
+                                  == '' || scheduleDate.TIME == null) ? '' : scheduleDate.TIME| date:'shortTime'}}</option>
+
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
+                            <div class="form-group">
+                              <label>Type Qualifier</label>
+                              <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="IRBActionsVO.selectedTypeQualifier">
+                                <option value=null selected>Please Select</option>
+                                <option *ngFor="let notifyType of notifyTypeQualifier" value="{{notifyType.SUBMISSION_TYPE_QUAL_CODE}}">{{notifyType.DESCRIPTION}}</option>
+
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Comments</label>
+                            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Comments"></textarea>
+                          </div>
+
+                        </div>
+                        <div>
+                          <div class="col-md-12 mb-15">
+                              <button type="button" class="btn btn-outline-secondary icon_tab" *ngIf="currentActionPerformed.ACTION_CODE == '200' || currentActionPerformed.ACTION_CODE == '205' || currentActionPerformed.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '304' ||
+                              currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '202' ||  currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' ||
+                              currentActionPerformed.ACTION_CODE == '301' || currentActionPerformed.ACTION_CODE == '302' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed?.ACTION_CODE == '208' || currentActionPerformed?.ACTION_CODE == '207'" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}"><i class="fa fa-commenting-o pr-8"  aria-hidden="true" ></i>Review Comments</button>
+                            <button type="button" class="btn icon_tab" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
+                              [ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}">
+                              <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>
+                            <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='CHECKLIST'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'"
+                              [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}">
+                              <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Checklist</button>
+                            <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='ATTACHMENT'" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '209' || currentActionPerformed?.ACTION_CODE == '201' || currentActionPerformed?.ACTION_CODE == '301'||currentActionPerformed?.ACTION_CODE == '302'|| currentActionPerformed?.ACTION_CODE == '210'"
+                              [ngClass]="{icon_tab_active:(tabSelected=='ATTACHMENT')}">
+                              <i class="fa fa-paperclip pr-8" aria-hidden="true"></i>Attachments</button>
+                          </div>
+                        </div>
+                        <div *ngIf="tabSelected=='RISKLEVEL'">
+                          <div class="row mr-0 ml-0">
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label>Risk Level</label>
+                                <select class="custom-select" [(ngModel)]="riskLevelObject.riskLevelCode" (ngModelChange)="setRiskLevelDescription(riskLevelObject.riskLevelCode)">
+                                  <option value=null selected>Please Select</option>
+                                  <option *ngFor="let level of riskLevel" value="{{level.RISK_LEVEL_CODE}}">{{level.DESCRIPTION}}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label>Date Assigned</label>
+                                <div class="input-group date-pickr-1 mb-3">
+                                  <input type="text" class="form-control" [(ngModel)]="riskLevelObject.date" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
+                                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
+
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                                  </div>
+                                  <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
+                                </div>
+                                <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+                              </div>
+                            </div>
+                            <div class="col-md-5">
+                              <div class="form-group">
+                                <label>Comments</label>
+                                <textarea class="form-control txt-area-fnt" [(ngModel)]="riskLevelObject.comment" placeholder="Comment"></textarea>
+                              </div>
+                            </div>
+                            <div class="col-md-1 add-btn-1">
+                              <button title="Add" type="button" class="btn btn-success mt-33" (click)="addRiskLevel(riskLevelObject)">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="col-md-12 users-list-tbl" *ngIf="riskLevelList?.length > 0 && riskLevelList != null">
+                            <div class="row">
+                              <div class="table-responsive">
+                                <table class="table table-striped tbl-p-clr">
+                                  <thead class="tbl-head-clr thead-font-size">
+                                    <tr>
+                                      <th width="40%" scope="col">Risk Level</th>
+                                      <th scope="col">Date assigned</th>
+                                      <th width="40%" scope="col">Comments</th>
+                                      <th width="5%" scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="tbody-font-size">
+                                    <tr *ngFor="let riskLevel of riskLevelList let i = index">
+                                      <td width="40%">{{riskLevel?.riskLevelDescription}}</td>
+                                      <td>{{(riskLevel.date == '' || riskLevel.date == null) ? '' : riskLevel?.date | date: 'MM/dd/yyyy'}}</td>
+                                      <td width="40%">{{riskLevel?.comment}}</td>
+                                      <td class="action-btn-list">
+                                        <button title="Delete" (click)="deleteRiskLevel(i)" type="button" class="btn btn-primary delete-btn-1">
+                                          <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
 
+                        <div class="mb-15" *ngIf="tabSelected=='CHECKLIST'">
+                          <div class="row mr-0 ml-0 padding-exempt" *ngFor="let checkList of expeditedCheckList; let i=index">
 
-            </ng-container>
-            <ng-container *ngIf="personActionsList == null || personActionsList.length == 0">
+                            <div class="col-md-1">
+                              <input class="align-center mt-10" type="checkbox" [(ngModel)]="isItemChecked[i]" (ngModelChange)="setSelectedCheckList(checkList.EXPEDITED_REV_CHKLST_CODE,isItemChecked[i])"
+                              />
+                            </div>
+                            <div class="col-md-11 text-justify">
+                              {{checkList?.EXPEDITED_REV_CHKLST}}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-15" *ngIf="tabSelected=='COMMENTS'">
+                          <div class="row mr-0 ml-0 padding-exempt">
+                            <div class="col-md-10">
+                              <div class="form-group">
+                                <label>Comments</label>
+                                <div class="input-group date-pickr-1 mb-3">
+                                  <textarea class="form-control txt-area-fnt" [(ngModel)]="commentObject.comments" placeholder="Comment"></textarea>
+                                  <div *ngIf="currentActionPerformed?.ACTION_CODE == '205'" class="input-group-append input-span-1" title="Search For Canned comments" data-target="#cannedCommentsModal" data-toggle="modal">
+                                    <i class="fa fa-search icon-center"></i>
+                                  </div>
+                                  <!-- <textarea rows="1" class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea> -->
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="icon-center">
+                              <input type="checkbox" [(ngModel)]="isPrivate" />
+                              <span class="checkbox-label">Private</span>
+                            </div>
+                            <div class="col-md-1 add-btn-1">
+                              <button title="Add" type="button" class="btn btn-success mt-33" (click)="addReviewComments(commentObject,isPrivate)">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                              </button>
+                            </div>
+
+                          </div>
+                          <div class="col-md-12 users-list-tbl" *ngIf="commentList.length > 0 && commentList != null ">
+                            <div class="row">
+                              <div class="table-responsive">
+                                <table class="table table-striped tbl-p-clr">
+                                  <thead class="tbl-head-clr thead-font-size">
+                                    <tr>
+                                      <th width="70%"scope="col">Comments</th>
+                                      <th scope="col">Private</th>
+                                      <th width="5%" scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="tbody-font-size">
+                                    <tr *ngFor =" let comment of commentList; let i= index">
+                                      <td>{{comment?.comments}}</td>
+                                      <td>{{comment?.flag == 'Y' ? 'Yes' : 'No'}}</td>
+                                      <td class="action-btn-list">
+                                          <button title="Delete" (click)="deleteReviewComments(i)" type="button" class="btn btn-primary delete-btn-1">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="mb-15" *ngIf="tabSelected=='ATTACHMENT'">
+                          <div class="col-md-12 mr-0 ml-0">
+
+                            <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+                              <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+                              </button>
+                              <input type="file" #filesAtt (change)="onChange(filesAtt.files)" id="addAttach" style="display: none" />
+                              <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+                              </div>
+                            </file-drop>
+                          </div>
+                          <div class="col-md-12 filechip ml-0 mr-0">
+                            <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+                              <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+                            </span>
+
+                          </div>
+                        </div>
+                        <div class="btn-row-med text-center padding-exempt">
+                          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
+                          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+              </ng-container>
+              <ng-container *ngIf="personActionsList == null || personActionsList.length == 0">
                 <div class="col-12 text-center">You don't have any available actions in this protocol</div>
-            </ng-container>
+              </ng-container>
 
               <!--<div class="col-lg-4 bottom-space-15">
                 <div class="card request-action-cards-green cursor-hover card-box-nw">
@@ -511,7 +537,7 @@
         </div>
       </div>
     </div>
-     <!--<div class="col-12">
+    <!--<div class="col-12">
       <div class="card coll-card-q border-radius-1">
         <h5 class="card-header collapse_hd">Route Log
           <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -567,10 +593,10 @@
       </div>
     </div>
   </div>-->
-</div>
+  </div>
 
-<!-- Crete Ammendment modal -->
-<!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <!-- Crete Ammendment modal -->
+  <!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg mdl-lg-01">
     <div class="modal-content border-radius-1">
       <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -685,10 +711,10 @@
     </div>
   </div>
 </div> -->
-<!--Create Ammendment modal end-->
+  <!--Create Ammendment modal end-->
 
-<!-- Submit Ammendment modal modal -->
-<!-- <div id="submitProtocolModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  <!-- Submit Ammendment modal modal -->
+  <!-- <div id="submitProtocolModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg mdl-lg-01">
     <div class="modal-content border-radius">
@@ -808,318 +834,326 @@
     </div>
   </div>
 </div> -->
-<!--Submit Ammendment modal end-->
+  <!--Submit Ammendment modal end-->
 
-<!--Submit modal-->
-<div class="modal fade" id="submitModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content border-radius-1">
-      <div class="modal-header modal-head98 d-flex justify-content-center">
-        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure to submit this protocol?</p>
-      </div>
-      <div class="modal-footer btn-row-med center-button">
-        <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Yes</button>
-        <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--modal end-->
-
-<!--validation  modal-->
-<div class="modal fade" id="validationModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content border-radius-1">
-      <div class="modal-header modal-head98 d-flex justify-content-center">
-        <h5 class="modal-title  text-center" id="exampleModalLabel">Validation</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <ul>
-          <li *ngIf="invalidData.noPiExists">Please choose atleast one Principal Investigator to submit.</li>
-          <li *ngIf="invalidData.noLeadUnit">Please choose atleast one Lead Unit to submit.</li>
-        </ul>
-      </div>
-      <div class="modal-footer btn-row-med">
-        <button type="button margin-class" class="btn btn-primary tab_btn" (click)="openProtocolWithValidations()" data-dismiss="modal">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--modal end-->
-
-<!--Modal with comments-->
-<div class="modal fade" id="commentModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content border-radius-1">
-      <div class="modal-header modal-head98 d-flex justify-content-center">
-        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <div class="col-md-12">
-          <div class="form-group">
-              <label *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303' && currentActionPerformed?.ACTION_CODE != '113'">Comments</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '992'">Reason To Delete</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '113'">Administrative Correction Comments</label>
-            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment"placeholder="Reason"></textarea>
-          </div>
-        </div>
-        <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '212'">
-            <div class="form-group">
-                <label>Committee</label>
-                <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedCommitteeId">
-                    <option *ngFor="let committee of committeeList" [value]="committee.COMMITTEE_ID">{{committee.COMMITTEE_NAME}}</option>
-                  </select>
-              </div>
-              </div>
-        
-        <div class="mb-15" *ngIf="currentActionPerformed?.ACTION_CODE == '212' || currentActionPerformed?.ACTION_CODE == '213' || currentActionPerformed?.ACTION_CODE == '119'">
-        <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
-          <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+  <!--Submit modal-->
+  <div class="modal fade" id="submitModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
           </button>
-          <input type="file" #files (change)="onChange(files.files)" id="addAttach" style="display: none" />
-          <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
-          </div>
-        </file-drop>
-        <div class="filechip">
-            <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
-                <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
-            </span>
         </div>
+        <div class="modal-body">
+          <p>Are you sure to submit this protocol?</p>
         </div>
-        <!--For withdraw and delete action date not required-->
-        <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303'">
-                     <div class="form-group">
-            <label>Action Date</label>
-            <div class="input-group date-pickr-1 mb-3">
-              <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDate" placeholder="mm/dd/yyyy" >
-              <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDate">
-                
-                <i class="fa fa-calendar" aria-hidden="true"></i>
-                
-              </div>
-              <owl-date-time [pickerType]="'calendar'" #actionDate></owl-date-time>
-            </div> 
-            <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-          </div>
-        </div>
-
-        <div class="modal-footer btn-row-med text-center">
-            <button  *ngIf="currentActionPerformed?.ACTION_CODE == '992'" type="button margin-class" class="btn btn-primary tab_btn" (click)="openDeleteWarning()" data-dismiss="modal">Delete</button>
-          <button  *ngIf="currentActionPerformed?.ACTION_CODE != '992'" type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{actionButtonName}}</button>
-          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+        <div class="modal-footer btn-row-med center-button">
+          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Yes</button>
+          <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
 
         </div>
-
       </div>
-
     </div>
   </div>
-</div>
-<!--Modal end-->
-<!--Modal with comments and checkboxes-->
-<div class="modal fade" id="commentCheckboxModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content border-radius-1">
-      <div class="modal-header modal-head98 d-flex justify-content-center">
-        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
 
-        <div class="col-md-12">
-          <div class="form-group">
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '102'">Renewal Summary</label>
-            <label *ngIf="currentActionPerformed?.ACTION_CODE == '103'">Amendment Summary</label>
-            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" 
-            [placeholder]="currentActionPerformed?.ACTION_CODE == '103'?'Amendment Summary':'Renewal Summary'"></textarea>
-          </div>
+  <!--modal end-->
+
+  <!--validation  modal-->
+  <div class="modal fade" id="validationModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">Validation</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE != '102'">
-						<div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
-								<input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="module.AC_TYPE='U'"/>
-						
-								<span [ngStyle]="{'color': module.IS_EDITABLE == 'N' ? 'grey' : ''}"*ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
-					
-						</div>
-					</div>
-
-
-        <div class="modal-footer btn-row-med text-center">
-          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Create</button>
-          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
-
+        <div class="modal-body">
+          <ul>
+            <li *ngIf="invalidData.noPiExists">Please choose atleast one Principal Investigator to submit.</li>
+            <li *ngIf="invalidData.noLeadUnit">Please choose atleast one Lead Unit to submit.</li>
+          </ul>
         </div>
-
+        <div class="modal-footer btn-row-med">
+          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="openProtocolWithValidations()" data-dismiss="modal">Ok</button>
+        </div>
       </div>
-
     </div>
   </div>
-</div>
-<!--modal end-->
-<!--Modal with comments and attachments-->
-<div class="modal fade" id="commentAttachmentModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content border-radius-1">
-      <div class="modal-header modal-head98 d-flex justify-content-center">
-        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE == '116'">
-            <div class="col-md-3">
-                    <div class="form-group"> 
-                  <label>Submission Type: </label>
-                 
-                 <span> FYI</span>
-                 </div>
+
+  <!--modal end-->
+
+  <!--Modal with comments-->
+  <div class="modal fade" id="commentModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303' && currentActionPerformed?.ACTION_CODE != '113'">Comments</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '992'">Reason To Delete</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '113'">Administrative Correction Comments</label>
+              <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
             </div>
-            <div class="col-md-9"> 
-              <div class="form-group">
-            <label class="pr-8">Submission Type Qualifier: </label>
-            
-            <select class="custom-select select-notify-popup" id="inlineFormCustomSelect" [(ngModel)]="IRBActionsVO.selectedTypeQualifier">
-            <option value=null selected>Please Select</option>
-            <option *ngFor="let notifyType of notifyTypeQualifier" value="{{notifyType.SUBMISSION_TYPE_QUAL_CODE}}">{{notifyType.DESCRIPTION}}</option>
-          </select>
           </div>
+          <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '212'">
+            <div class="form-group">
+              <label>Committee</label>
+              <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedCommitteeId">
+                <option *ngFor="let committee of committeeList" [value]="committee.COMMITTEE_ID">{{committee.COMMITTEE_NAME}}</option>
+              </select>
+            </div>
           </div>
-        
+
+          <div class="mb-15" *ngIf="currentActionPerformed?.ACTION_CODE == '212' || currentActionPerformed?.ACTION_CODE == '213' || currentActionPerformed?.ACTION_CODE == '119'">
+            <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+              <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+              </button>
+              <input type="file" #files (change)="onChange(files.files)" id="addAttach" style="display: none" />
+              <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+              </div>
+            </file-drop>
+            <div class="filechip">
+              <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+                <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+              </span>
+            </div>
+          </div>
+          <!--For withdraw and delete action date not required-->
+          <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303'">
+            <div class="form-group">
+              <label>Action Date</label>
+              <div class="input-group date-pickr-1 mb-3">
+                <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDate" placeholder="mm/dd/yyyy">
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDate">
+
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                </div>
+                <owl-date-time [pickerType]="'calendar'" #actionDate></owl-date-time>
+              </div>
+              <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+            </div>
+          </div>
+
+          <div class="modal-footer btn-row-med text-center">
+            <button *ngIf="currentActionPerformed?.ACTION_CODE == '992'" type="button margin-class" class="btn btn-primary tab_btn" (click)="openDeleteWarning()"
+              data-dismiss="modal">Delete</button>
+            <button *ngIf="currentActionPerformed?.ACTION_CODE != '992'" type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()"
+              data-dismiss="modal">{{actionButtonName}}</button>
+            <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+          </div>
+
         </div>
+
+      </div>
+    </div>
+  </div>
+  <!--Modal end-->
+  <!--Modal with comments and checkboxes-->
+  <div class="modal fade" id="commentCheckboxModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '102'">Renewal Summary</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '103'">Amendment Summary</label>
+              <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" [placeholder]="currentActionPerformed?.ACTION_CODE == '103'?'Amendment Summary':'Renewal Summary'"></textarea>
+            </div>
+          </div>
+          <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE != '102'">
+            <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
+              <input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="module.AC_TYPE='U'"
+              />
+
+              <span [ngStyle]="{'color': module.IS_EDITABLE == 'N' ? 'grey' : ''}" *ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
+
+            </div>
+          </div>
+
+
+          <div class="modal-footer btn-row-med text-center">
+            <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Create</button>
+            <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--modal end-->
+  <!--Modal with comments and attachments-->
+  <div class="modal fade" id="commentAttachmentModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE == '116'">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Submission Type: </label>
+
+                <span> FYI</span>
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="form-group">
+                <label class="pr-8">Submission Type Qualifier: </label>
+
+                <select class="custom-select select-notify-popup" id="inlineFormCustomSelect" [(ngModel)]="IRBActionsVO.selectedTypeQualifier">
+                  <option value=null selected>Please Select</option>
+                  <option *ngFor="let notifyType of notifyTypeQualifier" value="{{notifyType.SUBMISSION_TYPE_QUAL_CODE}}">{{notifyType.DESCRIPTION}}</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
           <div class="form-group">
-              <label *ngIf="currentActionPerformed?.ACTION_CODE == '114'">Reason for Data Analysis Only</label>
-              <label *ngIf="currentActionPerformed?.ACTION_CODE == '105'">Reason to Close</label>
-              <label *ngIf="currentActionPerformed?.ACTION_CODE == '108'">Reason to Close Enrollment</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '114'">Reason for Data Analysis Only</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '105'">Reason to Close</label>
+            <label *ngIf="currentActionPerformed?.ACTION_CODE == '108'">Reason to Close Enrollment</label>
             <label *ngIf="currentActionPerformed?.ACTION_CODE == '115'">Reason to Reopen Enrollment</label>
             <label *ngIf="currentActionPerformed?.ACTION_CODE == '116'">Notification Comment</label>
             <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
           </div>
-        <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
-          <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
-          </button>
-          <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
-          <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
-          </div>
-        </file-drop>
-        <div class="filechip">
+          <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+            <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+            </button>
+            <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
+            <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+            </div>
+          </file-drop>
+          <div class="filechip">
             <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
-                <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+              <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
             </span>
-        </div>
+          </div>
 
-        <div class="modal-footer btn-row-med text-center">
-          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
-          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+          <div class="modal-footer btn-row-med text-center">
+            <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
+            <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+          </div>
 
         </div>
 
       </div>
-
     </div>
   </div>
-</div>
-<!--MODAL END -->
+  <!--MODAL END -->
 
-<!--Modal with comments and dates-->
-<div class="modal fade" id="commentDatesModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content border-radius-1">
-      <div class="modal-header modal-head98 d-flex justify-content-center">
-        <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-        <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '206' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '208'">
-            <div class="form-group">
-        <label>Approval Date</label>
-     <div class="input-group date-pickr-1 mb-3">
-       <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.approvalDate" [owlDateTime]="approvalDate" placeholder="mm/dd/yyyy" >
-       <div class="input-group-append input-span-1" [owlDateTimeTrigger]="approvalDate">
-         
-         <i class="fa fa-calendar" aria-hidden="true"></i>
-         
-       </div>
-       <owl-date-time [pickerType]="'calendar'" #approvalDate></owl-date-time>
-     </div> 
-     <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-   </div>
- </div>
- <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '208'">
-    <div class="form-group">
-<label>Expiration Date</label>
-<div class="input-group date-pickr-1 mb-3">
-<input type="text" class="form-control" [(ngModel)]="IRBActionsVO.expirationDate" [owlDateTime]="expirationDate" placeholder="mm/dd/yyyy" >
-<div class="input-group-append input-span-1" [owlDateTimeTrigger]="expirationDate">
- 
- <i class="fa fa-calendar" aria-hidden="true"></i>
- 
-</div>
-<owl-date-time [pickerType]="'calendar'" #expirationDate></owl-date-time>
-</div> 
-<!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-</div>
-</div>
+  <!--Modal with comments and dates-->
+  <div class="modal fade" id="commentDatesModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content border-radius-1">
+        <div class="modal-header modal-head98 d-flex justify-content-center">
+          <h5 class="modal-title  text-center" id="exampleModalLabel">{{currentActionPerformed?.ACTION_NAME}}</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '206'">
+              <div class="form-group">
+                <label>Approval Date</label>
+                <div class="input-group date-pickr-1 mb-3">
+                  <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.approvalDate" [owlDateTime]="approvalDate" placeholder="mm/dd/yyyy">
+                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="approvalDate">
 
-<div class="col-md-4" >
-    <div class="form-group">
-<label>Action Date</label>
-<div class="input-group date-pickr-1 mb-3">
-<input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDates" placeholder="mm/dd/yyyy" >
-<div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDates">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
 
-<i class="fa fa-calendar" aria-hidden="true"></i>
+                  </div>
+                  <owl-date-time [pickerType]="'calendar'" #approvalDate></owl-date-time>
+                </div>
+                <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+              </div>
+            </div>
+            <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '204'">
+              <div class="form-group">
+                <label>Expiration Date</label>
+                <div class="input-group date-pickr-1 mb-3">
+                  <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.expirationDate" [owlDateTime]="expirationDate" placeholder="mm/dd/yyyy">
+                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="expirationDate">
 
-</div>
-<owl-date-time [pickerType]="'calendar'" #actionDates></owl-date-time>
-</div> 
-<!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
-</div>
-</div>
-</div>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                  </div>
+                  <owl-date-time [pickerType]="'calendar'" #expirationDate></owl-date-time>
+                </div>
+                <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Action Date</label>
+                <div class="input-group date-pickr-1 mb-3">
+                  <input type="text" class="form-control" [(ngModel)]="IRBActionsVO.actionDate" [owlDateTime]="actionDates" placeholder="mm/dd/yyyy">
+                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="actionDates">
+
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                  </div>
+                  <owl-date-time [pickerType]="'calendar'" #actionDates></owl-date-time>
+                </div>
+                <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
+              </div>
+            </div>
+          </div>
           <div class="form-group">
             <label>Comments</label>
             <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
           </div>
-          
 
-        <div class="modal-footer btn-row-med text-center">
-          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{actionButtonName}}</button>
-          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+          <div class="modal-footer btn-row-med text-center">
+            <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{actionButtonName}}</button>
+            <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+          </div>
 
         </div>
 
       </div>
-
     </div>
   </div>
-</div>
-<!--MODAL END -->
+  <!--MODAL END -->
 
-<!--Modal for expedited approval-->
-<!-- <div class="modal fade" id="expeditedApprovalModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <!--Modal for expedited approval-->
+  <!-- <div class="modal fade" id="expeditedApprovalModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content border-radius-1">
         <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -1217,8 +1251,9 @@
   <!--MODAL END -->
 
 
-<!--confirm modal-->
-<div class="modal fade" id="confirmModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <!--confirm modal-->
+  <div class="modal fade" id="confirmModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content border-radius-1">
         <div class="modal-header modal-head98 d-flex justify-content-center">
@@ -1234,62 +1269,62 @@
         <div class="modal-footer btn-row-med center-button">
           <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Yes</button>
           <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
-  
+
         </div>
       </div>
     </div>
   </div>
-  
+
   <!--modal end-->
 
-  <div class="modal fade bd-example-modal-lg"  id="cannedCommentsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-    <div class="modal-header popup-header">
-      <h5 class="modal-title" id="exampleModalLongTitle">Canned Comments
-      </h5>
-      <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body modal-popup">
+  <div class="modal fade bd-example-modal-lg" id="cannedCommentsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header popup-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Canned Comments
+          </h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-popup">
 
-        <div class="table-responsive">
+          <div class="table-responsive">
             <table class="table table-striped tbl-p-clr">
               <thead class="tbl-head-clr thead-font-size p-75">
                 <tr>
-                    
-                    <th title="">Code</th>
-                    <th title="">Description</th>
-                  </tr>
-                  </thead>
-                  <tbody class="tbody-font-size p-75">
-                      <tr *ngFor="let comment of cannedCommentList" >
-                          <td class="pointer" data-dismiss="modal" (click)="selectedCannedComment($event, comment)">{{comment?.protocolContingencyCode}}</td>
-                          <td class="pointer" data-dismiss="modal" (click)="selectedCannedComment($event, comment)">{{comment?.description}}</td>
-                        </tr>
 
-                    </tbody>
-        
-            
-          </table>
+                  <th title="">Code</th>
+                  <th title="">Description</th>
+                </tr>
+              </thead>
+              <tbody class="tbody-font-size p-75">
+                <tr *ngFor="let comment of cannedCommentList">
+                  <td class="pointer" data-dismiss="modal" (click)="commentObject.comments = comment.DESCRIPTION;commentObject.contingencyCode = comment.PROTOCOL_CONTINGENCY_CODE">{{comment?.PROTOCOL_CONTINGENCY_CODE}}</td>
+                  <td class="pointer" data-dismiss="modal" (click)="commentObject.comments = comment.DESCRIPTION;commentObject.contingencyCode = comment.PROTOCOL_CONTINGENCY_CODE">{{comment?.DESCRIPTION}}</td>
+                </tr>
+
+              </tbody>
+
+
+            </table>
           </div>
-      </div>
-      <div class="modal-footer btn-row-med text-center">
+        </div>
+        <div class="modal-footer btn-row-med text-center">
           <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Ok</button>
 
         </div>
       </div>
-      </div>
-      </div>
+    </div>
+  </div>
 
-<!--Modal opening buttons-->
-<button id="submitModalBtn" [hidden]="true" data-toggle="modal" data-target="#submitModal"></button>
-<button id="validationModalBtn" [hidden]="true" data-toggle="modal" data-target="#validationModal"></button>
-<button id="commentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentModal"></button>
-<button id="commentAttachmentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentAttachmentModal"></button>
-<button id="commentCheckboxModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentCheckboxModal"></button>
-<button id="commentDatesModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentDatesModal"></button>
-<button id="confirmModalBtn" [hidden]="true" data-toggle="modal" data-target="#confirmModal"></button>
-<button id="expeditedApprovalModalBtn" [hidden]="true" data-toggle="modal" data-target="#expeditedApprovalModal"></button>
+  <!--Modal opening buttons-->
+  <button id="submitModalBtn" [hidden]="true" data-toggle="modal" data-target="#submitModal"></button>
+  <button id="validationModalBtn" [hidden]="true" data-toggle="modal" data-target="#validationModal"></button>
+  <button id="commentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentModal"></button>
+  <button id="commentAttachmentModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentAttachmentModal"></button>
+  <button id="commentCheckboxModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentCheckboxModal"></button>
+  <button id="commentDatesModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentDatesModal"></button>
+  <button id="confirmModalBtn" [hidden]="true" data-toggle="modal" data-target="#confirmModal"></button>
+  <button id="expeditedApprovalModalBtn" [hidden]="true" data-toggle="modal" data-target="#expeditedApprovalModal"></button>

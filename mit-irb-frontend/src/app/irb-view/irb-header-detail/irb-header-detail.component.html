@@ -73,14 +73,15 @@
 													irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
 							<i class="fa fa-exclamation-triangle ml-10" *ngIf="irbHeaderDetails?.IS_NEW_RULE=='N'" title="Follows OLD-RULE" aria-hidden="true"></i>
 							
-							<div style="margin-top: 61px">
-								<p class="admin-label" *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null">
+							<div style="margin-top: 30px" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100'">
+								<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null">
 									COUHES Admin :
 									<span>{{irbHeaderDetails?.ASSIGNEE_PERSON}}</span>
-									<button type="button" class="btn page-link" (click)="openAssignPopUp('up-arrow')">
-										<i class="fa fa-pencil" aria-hidden="true"></i> Reassign</button>
+									<button type="button" class="btn admin-label" (click)="openAssignPopUp('up-arrow')">
+										<i class="fa fa-pencil" aria-hidden="true"> Reassign</i>
+									</button>
 								</p>
-								<button *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null" type="button" class="btn page-link" (click)="openAssignPopUp('I')">
+								<button *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null" type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
 									<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin</button>
 							</div>
 						</div>
@@ -141,7 +142,7 @@
 			<i class="fa fa-home" aria-hidden="true"></i>General
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit">
-			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire
+			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Additional Forms
 		</button>
 		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
 		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
@@ -153,10 +154,10 @@
 			<i class="fa fa-history" aria-hidden="true"></i>History
 		</button>
 
-		<!-- <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
 		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSubmissionDetails')">
 			<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
-		</button> -->
+		</button>
 		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']"
 		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
 			<i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details

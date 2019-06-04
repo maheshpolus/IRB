@@ -35,7 +35,7 @@
 									<i class="fa fa-exclamation-triangle ml-10" *ngIf="irb.IS_NEW_RULE=='N'" 
 									title="Follows OLD-RULE" aria-hidden="true"></i>
 		</div>
-		<div class="col-md-7 col-sm-12 col-12 list-des">
+		<div class="col-sm-12 col-12 list-des col-md-5">
 			<h5>{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}</h5>
 			<div>
 				<div class="row">
@@ -66,7 +66,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+		<div class="col-md-4 col-sm-12 col-12 list-des button-responsive">
 		<a href="#/irb/irb-view/irbOverview?protocolNumber={{irb.PROTOCOL_NUMBER}}">
 			<button type="button" class="btn btn-outline-secondary button-view"
 				(click)="openIrb(irb.PROTOCOL_NUMBER)">
@@ -74,13 +74,21 @@
 			</button>
 		</a>
 		<a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105 || irb.PROTOCOL_STATUS_CODE == 106
-		          || irb.PROTOCOL_STATUS_CODE == 304 || irb.PROTOCOL_STATUS_CODE == 107">
+		          || irb.PROTOCOL_STATUS_CODE == 304 || irb.PROTOCOL_STATUS_CODE == 107 || irb.PROTOCOL_STATUS_CODE == 102 || irb.PROTOCOL_STATUS_CODE == 104">
 			<button type="button" class="btn btn-outline-secondary button-view"
 				(click)="EditIrb(irb.PROTOCOL_NUMBER,irb.PROTOCOL_ID)">
 				<i class="fa fa-pencil"></i>Edit
 			</button>
 		</a>
-		</div>
+		<a style="margin-top: 30px" *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && currentTab == 'NEW_SUBMISSION' && irb?.ASSIGNEE_PERSON_ID == null">
+			
+				<button type="button" class="btn btn-outline-secondary button-view" (click)="openAssignPopUp('I', irb, i )">
+					<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin</button>
+				</a>
+				<p  class="display ml-10" *ngIf="irb?.ASSIGNEE_PERSON_ID != null">
+						<span>COUHES Admin : </span>{{irb?.ASSIGNEE_PERSON}}
+				</p>
+		</div> 
 	</div>
 	<!-- <a *ngIf="irbList?.length >1" href="#"(click)="scrollToTop()">scroll to top</a> -->
 </div>

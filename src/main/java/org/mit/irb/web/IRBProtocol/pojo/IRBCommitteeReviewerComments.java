@@ -1,6 +1,6 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
-public class IRBActionsReviewerComments {
+public class IRBCommitteeReviewerComments {
 	private String committeeScheduleMinutesId;
 	private String comments;
 	private String flag;

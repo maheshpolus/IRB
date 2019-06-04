@@ -79,4 +79,28 @@ getProtocolSubmissionDetails(params) {
     return this._http.post('/mit-irb/getProtocolSubmissionDetails', params);
 }
 
+getSubmissionLookups(params) {
+    return this._http.post('/mit-irb/getSubmissionLookups', params);
+}
+
+updateIRBAdminReviewer(params) {
+    return this._http.post('/mit-irb/updateIRBAdminReviewer', params);
+}
+
+getIRBAdminReviewers(params) {
+    return this._http.post('/mit-irb/getIRBAdminReviewers', params);
+}
+
+getIRBAdminReviewDetails(params) {
+    return this._http.post('/mit-irb/getIRBAdminReviewDetails', params);
+}
+
+getSubmissionBasicDetails(params) {
+    return this._http.post('/mit-irb/getSubmissionBasicDetails', params);
+}
+
+updateIRBAdminComment(params) {
+    return this._http.post('/mit-irb/updateIRBAdminComment', params);
+}
+
 }

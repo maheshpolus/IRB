@@ -154,10 +154,10 @@
 			<i class="fa fa-history" aria-hidden="true"></i>History
 		</button>
 
-		<!-- <button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
 		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSubmissionDetails')">
 			<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
-		</button> -->
+		</button>
 		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']"
 		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
 			<i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details

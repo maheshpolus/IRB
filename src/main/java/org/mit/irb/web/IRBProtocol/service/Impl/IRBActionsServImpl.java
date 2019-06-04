@@ -360,7 +360,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 		try{
 		 for(HashMap<String, Object> comment :submissionDetailvo.getIrbAdminCommentList()){
 		    	IRBReviewComment irbReviewComment = new IRBReviewComment();
-		    	irbReviewComment.setAdminReviewId(Integer.parseInt(comment.get("ADMIN_REVIEWER_ID").toString()));
+		    	//irbReviewComment.setAdminReviewId(Integer.parseInt(comment.get("ADMIN_REVIEWER_ID").toString()));
 		    	irbReviewComment.setSubmissionId(Integer.parseInt(comment.get("SUBMISSION_ID").toString()));
 		    	irbReviewComment.setSequenceNumber(Integer.parseInt(comment.get("SEQUENCE_NUMBER").toString()));
 		    	irbReviewComment.setCommentDescription(comment.get("COMMENT_DESCRIPTION").toString());
@@ -369,24 +369,21 @@ public class IRBActionsServImpl implements IRBActionsService {
 		    	irbReviewComment.setFullName(comment.get("FULL_NAME").toString());
 		    	irbReviewComment.setCommentId(Integer.parseInt(comment.get("COMMENT_ID").toString()));
 		    	irbReviewComment.setUpdateTimestamp(comment.get("UPDATE_TIMESTAMP").toString());
+		    	irbReviewComment.setActionType(comment.get("ACTION_TYPE").toString());
 		    	irbReviewComment.setProtocolId(Integer.parseInt(comment.get("PROTOCOL_ID").toString()));
-		    	if(comment.get("ATTACHMENT_ID") != null){
+		    	if(comment.get("ATTACH_FLG").toString().equalsIgnoreCase("Y")){
 		    		List<IRBReviewAttachment> irbReviewAttachments = new ArrayList<IRBReviewAttachment>();
-		    		irbReviewComment.setAttachmentId(Integer.parseInt(comment.get("ATTACHMENT_ID").toString()));
 		    		for(HashMap<String, Object> attachment : submissionDetailvo.getIrbAdminAttachmentList()){
-		    			if(//irbReviewComment.getAttachmentId() == Integer.parseInt(attachment.get("ATTACHMENT_ID").toString()) &&
-		    					irbReviewComment.getCommentId() == Integer.parseInt(attachment.get("COMMENT_ID").toString())){
+		    			if(irbReviewComment.getCommentId() == Integer.parseInt(attachment.get("COMMENT_ID").toString())){
 		    				IRBReviewAttachment irbReviewAttachment = new IRBReviewAttachment();
-		    				irbReviewAttachment.setAdminReviewId(Integer.parseInt(attachment.get("ADMIN_REVIEWER_ID").toString()));
+		    				//irbReviewAttachment.setAdminReviewId(Integer.parseInt(attachment.get("ADMIN_REVIEWER_ID").toString()));
 		    				irbReviewAttachment.setAttachmentId(Integer.parseInt(attachment.get("ATTACHMENT_ID").toString()));
 		    				irbReviewAttachment.setCommentId(Integer.parseInt(attachment.get("COMMENT_ID").toString()));
 		    				irbReviewAttachment.setDescription(attachment.get("DESCRIPTION").toString());
-		    				//irbReviewAttachment.setFileDataId(Integer.parseInt(attachment.get("FILE_DATA_ID").toString()));
-		    				//irbReviewAttachment.setFileName(attachment.get("FILE_NAME").toString());
 		    				irbReviewAttachment.setFullName(attachment.get("FULL_NAME").toString());
-		    				//irbReviewAttachment.setMimeType(attachment.get("MIME_TYPE").toString());
 		    				irbReviewAttachment.setUpdateTimeStamp(attachment.get("UPDATE_TIMESTAMP").toString());
 		    				irbReviewAttachment.setUpdateUser(attachment.get("UPDATE_USER").toString());
+		    				irbReviewAttachment.setActionType(attachment.get("ACTION_TYPE").toString());
 		    				irbReviewAttachments.add(irbReviewAttachment);
 		    			}		   		    			
 		    		}  
@@ -463,6 +460,8 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Override
 	public SubmissionDetailVO updateIRBAdminAttachments(SubmissionDetailVO submissionDetailvo, MultipartFile[] files) {
 		try{
+			Integer commentId = irbActionsDao.updateIRBAdminComment(submissionDetailvo);
+			submissionDetailvo.setCommentId(commentId);
 			irbActionsDao.updateIRBAdminAttachment(submissionDetailvo,files);
 			submissionDetailvo = getIRBAdminReviewDetails(submissionDetailvo);
 			submissionDetailvo.setSuccessCode(true);
@@ -507,5 +506,20 @@ public class IRBActionsServImpl implements IRBActionsService {
 	public SubmissionDetailVO getCommitteeList(SubmissionDetailVO vo) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public SubmissionDetailVO updateIRBAdminCheckList(SubmissionDetailVO submissionDetailvo) {
+		try{
+			irbActionsDao.updateIRBAdminCheckList(submissionDetailvo);
+			Future<SubmissionDetailVO> irbAdminCheckList = initLoadService.loadIRBAdminCHeckList(submissionDetailvo);
+		    submissionDetailvo = irbAdminCheckList.get();
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("updateIRBAdminCheckList Failed "+e);
+			logger.info("Exception in updateIRBAdminCheckList : " + e);
+		}
+		return submissionDetailvo;
 	}
 }

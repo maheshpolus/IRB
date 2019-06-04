@@ -11,6 +11,7 @@ public class IRBReviewAttachment {
 	private String FileName;
 	private String mimeType;
 	private String updateTimeStamp;
+	private String actionType;
 	
 	public String getDescription() {
 		return description;
@@ -71,6 +72,12 @@ public class IRBReviewAttachment {
 	}
 	public void setUpdateTimeStamp(String updateTimeStamp) {
 		this.updateTimeStamp = updateTimeStamp;
+	}
+	public String getActionType() {
+		return actionType;
+	}
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
 	}
 
 }

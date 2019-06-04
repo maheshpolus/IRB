@@ -185,4 +185,11 @@ public class IRBActionsController {
 		vo = irbActionsService.getIRBAdminReviewers(vo); 
 		return vo;
 	}
+	
+	@RequestMapping(value = "/updateIRBAdminCheckList", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateIRBAdminCheckList(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateIRBAdminCheckList(vo); 
+		return vo;
+	}
 }

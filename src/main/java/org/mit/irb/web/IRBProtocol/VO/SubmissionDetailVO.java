@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.mit.irb.web.IRBProtocol.pojo.AdminCheckListDetail;
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewComment;
 
@@ -49,7 +50,7 @@ public class SubmissionDetailVO {
 	private ArrayList<HashMap<String, Object>> recomendedActionType;
 	private ArrayList<HashMap<String, Object>> scheduleDates;
 	
-	private ArrayList<HashMap<String, Object>> irbAdminCheckList;
+	private List<AdminCheckListDetail> irbAdminCheckList;
 	private ArrayList<HashMap<String, Object>> irbAdminAttachmentList;
 	private ArrayList<HashMap<String, Object>> irbAdminCommentList;
 	private ArrayList<HashMap<String, Object>> submissionHistory;
@@ -65,6 +66,13 @@ public class SubmissionDetailVO {
 	private String commMinutesScheduleId;
 	private List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments;
 	
+	
+	public List<AdminCheckListDetail> getIrbAdminCheckList() {
+		return irbAdminCheckList;
+	}
+	public void setIrbAdminCheckList(List<AdminCheckListDetail> irbAdminCheckList) {
+		this.irbAdminCheckList = irbAdminCheckList;
+	}
 	public String getSubmissionQualifierCode() {
 		return submissionQualifierCode;
 	}
@@ -292,12 +300,6 @@ public class SubmissionDetailVO {
 	}
 	public void setSubmissionId(Integer submissionId) {
 		this.submissionId = submissionId;
-	}
-	public ArrayList<HashMap<String, Object>> getIrbAdminCheckList() {
-		return irbAdminCheckList;
-	}
-	public void setIrbAdminCheckList(ArrayList<HashMap<String, Object>> irbAdminCheckList) {
-		this.irbAdminCheckList = irbAdminCheckList;
 	}
 	public List<IRBReviewComment> getIrbAdminCommentAttachment() {
 		return irbAdminCommentAttachment;

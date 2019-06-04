@@ -90,4 +90,40 @@ public interface IRBActionsService {
 	 * @return List of Comments,Attachments and Review CheckList of given submission
 	 */
 	SubmissionDetailVO getIRBAdminReviewDetails(SubmissionDetailVO vo);
+	/**
+	 * @param vo
+	 * @return submission basic details and list of committee reviewers
+	 */
+	SubmissionDetailVO getSubmissionBasicDetails(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	SubmissionDetailVO getIRBAdminReviewers(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return update IRB Admin Review comment
+	 */
+	SubmissionDetailVO updateIRBAdminComment(SubmissionDetailVO vo);
+
+	/**
+	 * @param submissionDetailVO
+	 * @param files
+	 * @return save IRB Admin Review Attachments
+	 */
+	SubmissionDetailVO updateIRBAdminAttachments(SubmissionDetailVO submissionDetailVO, MultipartFile[] files);
+
+	/**
+	 * @param vo
+	 * @return update voting details from committee
+	 */
+	SubmissionDetailVO updateCommitteeVotingDetail(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return update submission Details
+	 */
+	SubmissionDetailVO updateBasicSubmissionDetail(SubmissionDetailVO vo);
 }

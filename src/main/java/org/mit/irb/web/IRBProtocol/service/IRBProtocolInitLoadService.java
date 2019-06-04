@@ -1,6 +1,8 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import java.util.concurrent.Future;
+
+import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
@@ -115,5 +117,27 @@ public interface IRBProtocolInitLoadService {
 	public Future<SubmissionDetailVO> loadIRBAdminComments(SubmissionDetailVO submissionDetailvo);
 
 	public Future<SubmissionDetailVO> loadIRBAdminAttachments(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadIRBAdminCHeckList(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadCommitteeRewiewType(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> fetchsubmissionBasicDetail(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> fetchCommitteeReviewers(SubmissionDetailVO submissionDetailvo);
+
+	public Future<SubmissionDetailVO> loadrecomendedActionType(SubmissionDetailVO submissionDetailvo);
+
+	public Future<IRBActionsVO> getSubmissionTypeQulifier(IRBActionsVO vo);
+
+	public Future<IRBActionsVO> getScheduleDates(IRBActionsVO vo, String committeeId);
+
+	public Future<IRBActionsVO> getCommitteeList(IRBActionsVO vo);
+
+	public Future<IRBActionsVO> getRiskLevel(IRBActionsVO vo);
+
+	public Future<IRBActionsVO> getExpeditedApprovalCheckList(IRBActionsVO vo);
+
+	public Future<IRBActionsVO> getExpeditedCannedComments(IRBActionsVO vo);
 
 }

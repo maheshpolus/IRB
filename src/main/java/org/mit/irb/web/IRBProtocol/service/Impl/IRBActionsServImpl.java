@@ -2,6 +2,7 @@ package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
@@ -9,6 +10,8 @@ import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.IRBReviewAttachment;
+import org.mit.irb.web.IRBProtocol.pojo.IRBReviewComment;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,20 +204,24 @@ public class IRBActionsServImpl implements IRBActionsService {
 
 	@Override
 	public IRBActionsVO getActionLookup(IRBActionsVO vo) {
-		ArrayList<HashMap<String, Object>> renewalModules = irbActionsDao.iterateAmendRenewalModule(vo);	
-		vo.setModuleAvailableForAmendment(renewalModules);
-		ArrayList<HashMap<String, Object>> submissionTypeQulifier = irbActionsDao.getSubmissionTypeQulifier();
-		vo.setNotifyTypeQualifier(submissionTypeQulifier);	
-		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(null);
-		vo.setScheduleDates(scheduleDates);	
-		ArrayList<HashMap<String, Object>> committeeList = irbActionsDao.getCommitteeList();
-		vo.setCommitteeList(committeeList);
-		ArrayList<HashMap<String, Object>> riskLevel = irbActionsDao.getRiskLevel();
-		vo.setRiskLevel(riskLevel);
-		ArrayList<HashMap<String, Object>> expeditedApprovalCheckList = irbActionsDao.getExpeditedApprovalCheckList();
-		vo.setExpeditedApprovalCheckList(expeditedApprovalCheckList);
-		ArrayList<HashMap<String, Object>> expeditedCannedComments = irbActionsDao.getExpeditedCannedComments();
-		vo.setExpeditedCannedComments(expeditedCannedComments);
+		try{		 
+			 ArrayList<HashMap<String, Object>> renewalModules = irbActionsDao.iterateAmendRenewalModule(vo);	
+			 vo.setModuleAvailableForAmendment(renewalModules);			    
+			 Future<IRBActionsVO> submissionTypeQulifier = initLoadService.getSubmissionTypeQulifier(vo);			 		
+			 Future<IRBActionsVO> scheduleDates = initLoadService.getScheduleDates(vo,null);			
+			 Future<IRBActionsVO> committeeList = initLoadService.getCommitteeList(vo);				
+			 Future<IRBActionsVO> riskLevel = initLoadService.getRiskLevel(vo);			 	
+			 Future<IRBActionsVO> expeditedApprovalCheckList = initLoadService.getExpeditedApprovalCheckList(vo);			 
+			 Future<IRBActionsVO> expeditedCannedComments = initLoadService.getExpeditedCannedComments(vo);
+			 vo = submissionTypeQulifier.get();	
+			 vo = scheduleDates.get();
+			 vo = committeeList.get();
+			 vo = riskLevel.get();	
+			 vo = expeditedApprovalCheckList.get();		
+			 vo = expeditedCannedComments.get();		
+		}catch (Exception e) {
+			logger.info("Exception in getActionLookup:" + e);
+		}
 		return vo;	
 	}
 
@@ -224,19 +231,6 @@ public class IRBActionsServImpl implements IRBActionsService {
 		ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(committeeId);
 		vo.setScheduleDates(scheduleDates);	
 		return vo;	
-	}
-
-	@Override
-	public SubmissionDetailVO getCommitteeList(SubmissionDetailVO submissionDetailvo) {
-		SubmissionDetailVO subDetailvo = new SubmissionDetailVO();
-		try{
-			ArrayList<HashMap<String, Object>> committeeList = irbActionsDao.getCommitteeList();
-		} catch (Exception e) {
-			submissionDetailvo.setSuccessCode(false);
-			submissionDetailvo.setSuccessMessage("getCommitteeList Failed"+e);
-			logger.info("Exception in getAmendRenwalSummary:" + e);
-		}
-		return null;
 	}
 	
 	@Override
@@ -282,7 +276,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			submissionDetailvo.setSuccessMessage("updateIRBAdminReviewer Failed"+e);
 			logger.info("Exception in updateIRBAdminReviewer:" + e);
 		}
-		return null;
+		return submissionDetailvo;
 	}
 
 	@Override
@@ -294,12 +288,16 @@ public class IRBActionsServImpl implements IRBActionsService {
 			 Future<SubmissionDetailVO> typeQualifierList = initLoadService.loadTypeQualifierList(submissionDetailvo);
 			 Future<SubmissionDetailVO> irbAdminRewiewType = initLoadService.loadIRBAdminRewiewType(submissionDetailvo);
 			 Future<SubmissionDetailVO> irbAdminList = initLoadService.loadIRBAdminList(submissionDetailvo);
+			 Future<SubmissionDetailVO> committeeRewiewType = initLoadService.loadCommitteeRewiewType(submissionDetailvo);
+			 Future<SubmissionDetailVO> recomendedActionType = initLoadService.loadrecomendedActionType(submissionDetailvo);
 			 submissionDetailvo = submissionTypes.get();
 			 submissionDetailvo = submissionRewiewType.get();
 			 submissionDetailvo = committeeList.get();
 			 submissionDetailvo = typeQualifierList.get();
 			 submissionDetailvo = irbAdminRewiewType.get();
 			 submissionDetailvo = irbAdminList.get();
+			 submissionDetailvo = committeeRewiewType.get();
+			 submissionDetailvo = recomendedActionType.get();
 			 submissionDetailvo.setSuccessCode(true);
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
@@ -342,13 +340,172 @@ public class IRBActionsServImpl implements IRBActionsService {
 		try{
 			Future<SubmissionDetailVO> irbAdminComments = initLoadService.loadIRBAdminComments(submissionDetailvo);
 			Future<SubmissionDetailVO> irbAdminAttachments = initLoadService.loadIRBAdminAttachments(submissionDetailvo);
+			Future<SubmissionDetailVO> irbAdminCheckList = initLoadService.loadIRBAdminCHeckList(submissionDetailvo);
 			submissionDetailvo = irbAdminComments.get();
 		    submissionDetailvo = irbAdminAttachments.get();
+		    submissionDetailvo = irbAdminCheckList.get();
+		    List<IRBReviewComment> irbAdminCommentAttachment = iterateCommentAndAttachment(submissionDetailvo);
+		    submissionDetailvo.setIrbAdminCommentAttachment(irbAdminCommentAttachment);
+		    submissionDetailvo.setSuccessCode(true);
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
-			submissionDetailvo.setSuccessMessage("getSubmissionHistory Failed"+e);
-			logger.info("Exception in getSubmissionHistory:" + e);
+			submissionDetailvo.setSuccessMessage("getIRBAdminReviewDetails Failed"+e);
+			logger.info("Exception in getIRBAdminReviewDetails:" + e);
 		}
 		return submissionDetailvo;
+	}
+
+	private List<IRBReviewComment> iterateCommentAndAttachment(SubmissionDetailVO submissionDetailvo) {
+		List<IRBReviewComment> irbReviewComments = new ArrayList<IRBReviewComment>();
+		try{
+		 for(HashMap<String, Object> comment :submissionDetailvo.getIrbAdminCommentList()){
+		    	IRBReviewComment irbReviewComment = new IRBReviewComment();
+		    	irbReviewComment.setAdminReviewId(Integer.parseInt(comment.get("ADMIN_REVIEWER_ID").toString()));
+		    	irbReviewComment.setSubmissionId(Integer.parseInt(comment.get("SUBMISSION_ID").toString()));
+		    	irbReviewComment.setSequenceNumber(Integer.parseInt(comment.get("SEQUENCE_NUMBER").toString()));
+		    	irbReviewComment.setCommentDescription(comment.get("COMMENT_DESCRIPTION").toString());
+		    	irbReviewComment.setProtocolNumber(comment.get("PROTOCOL_NUMBER").toString());
+		    	irbReviewComment.setUdpateUser(comment.get("UPDATE_USER").toString());
+		    	irbReviewComment.setFullName(comment.get("FULL_NAME").toString());
+		    	irbReviewComment.setCommentId(Integer.parseInt(comment.get("COMMENT_ID").toString()));
+		    	irbReviewComment.setUpdateTimestamp(comment.get("UPDATE_TIMESTAMP").toString());
+		    	irbReviewComment.setProtocolId(Integer.parseInt(comment.get("PROTOCOL_ID").toString()));
+		    	if(comment.get("ATTACHMENT_ID") != null){
+		    		List<IRBReviewAttachment> irbReviewAttachments = new ArrayList<IRBReviewAttachment>();
+		    		irbReviewComment.setAttachmentId(Integer.parseInt(comment.get("ATTACHMENT_ID").toString()));
+		    		for(HashMap<String, Object> attachment : submissionDetailvo.getIrbAdminAttachmentList()){
+		    			if(//irbReviewComment.getAttachmentId() == Integer.parseInt(attachment.get("ATTACHMENT_ID").toString()) &&
+		    					irbReviewComment.getCommentId() == Integer.parseInt(attachment.get("COMMENT_ID").toString())){
+		    				IRBReviewAttachment irbReviewAttachment = new IRBReviewAttachment();
+		    				irbReviewAttachment.setAdminReviewId(Integer.parseInt(attachment.get("ADMIN_REVIEWER_ID").toString()));
+		    				irbReviewAttachment.setAttachmentId(Integer.parseInt(attachment.get("ATTACHMENT_ID").toString()));
+		    				irbReviewAttachment.setCommentId(Integer.parseInt(attachment.get("COMMENT_ID").toString()));
+		    				irbReviewAttachment.setDescription(attachment.get("DESCRIPTION").toString());
+		    				//irbReviewAttachment.setFileDataId(Integer.parseInt(attachment.get("FILE_DATA_ID").toString()));
+		    				//irbReviewAttachment.setFileName(attachment.get("FILE_NAME").toString());
+		    				irbReviewAttachment.setFullName(attachment.get("FULL_NAME").toString());
+		    				//irbReviewAttachment.setMimeType(attachment.get("MIME_TYPE").toString());
+		    				irbReviewAttachment.setUpdateTimeStamp(attachment.get("UPDATE_TIMESTAMP").toString());
+		    				irbReviewAttachment.setUpdateUser(attachment.get("UPDATE_USER").toString());
+		    				irbReviewAttachments.add(irbReviewAttachment);
+		    			}		   		    			
+		    		}  
+		    		irbReviewComment.setReviewAttachments(irbReviewAttachments);
+		    	}
+		    	irbReviewComments.add(irbReviewComment);
+		    }
+		 submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("iterateCommentAndAttachment Failed "+e);
+			logger.info("Exception in iterateCommentAndAttachment:" + e);
+		}
+		return irbReviewComments;
+	}
+
+	@Override
+	public SubmissionDetailVO getSubmissionBasicDetails(SubmissionDetailVO submissionDetailvo) {
+		try{
+			Future<SubmissionDetailVO> submissionDetail = initLoadService.fetchsubmissionBasicDetail(submissionDetailvo);
+			Future<SubmissionDetailVO> committeeReviewers = initLoadService.fetchCommitteeReviewers(submissionDetailvo);
+			submissionDetailvo = submissionDetail.get();
+			submissionDetailvo = committeeReviewers.get();
+			if(submissionDetailvo.getSubmissionDetail().get("COMMITTEE_ID") == null){
+				Future<SubmissionDetailVO> committeeList = initLoadService.loadCommitteeList(submissionDetailvo);
+				submissionDetailvo = committeeList.get();
+			}else {
+				if(submissionDetailvo.getSubmissionDetail().get("SCHEDULE_DATE") != null){
+					submissionDetailvo.setSelectedDate(submissionDetailvo.getSubmissionDetail().get("SCHEDULE_DATE").toString());
+					ArrayList<HashMap<String, Object>> committeeMembers = irbActionsDao.fetchCommitteeMembers(submissionDetailvo);
+					submissionDetailvo.setCommitteeMemberList(committeeMembers);
+				}else {
+					ArrayList<HashMap<String, Object>> scheduleDates = irbActionsDao.getScheduleDates(submissionDetailvo.getSubmissionDetail().get("COMMITTEE_ID").toString());
+					submissionDetailvo.setScheduleDates(scheduleDates);
+				}
+			}
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getSubmissionBasicDetails Failed"+e);
+			logger.info("Exception in getSubmissionBasicDetails:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO getIRBAdminReviewers(SubmissionDetailVO submissionDetailvo) {
+		try{
+			ArrayList<HashMap<String, Object>> irbAdminReviewerList = irbActionsDao.fetchIRBAdminReviewers(submissionDetailvo);
+			submissionDetailvo.setIrbAdminsReviewers(irbAdminReviewerList);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("getIRBAdminReviewers Failed"+e);
+			logger.info("Exception in getIRBAdminReviewers:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO updateIRBAdminComment(SubmissionDetailVO submissionDetailvo) {
+		try{
+			irbActionsDao.updateIRBAdminComment(submissionDetailvo);
+			submissionDetailvo = getIRBAdminReviewDetails(submissionDetailvo);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("updateIRBAdminComment Failed"+e);
+			logger.info("Exception in updateIRBAdminComment:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO updateIRBAdminAttachments(SubmissionDetailVO submissionDetailvo, MultipartFile[] files) {
+		try{
+			irbActionsDao.updateIRBAdminAttachment(submissionDetailvo,files);
+			submissionDetailvo = getIRBAdminReviewDetails(submissionDetailvo);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("updateIRBAdminAttachments Failed"+e);
+			logger.info("Exception in updateIRBAdminAttachments:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO updateCommitteeVotingDetail(SubmissionDetailVO submissionDetailvo) {
+		try{
+			irbActionsDao.updateSubmissionDetail(submissionDetailvo);
+			HashMap<String, Object> committeeVotingDetails = irbActionsDao.fetchCommitteeVotingDetails(submissionDetailvo);
+			submissionDetailvo.setCommitteeVotingDetails(committeeVotingDetails);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("updateCommitteeVotingDetail Failed"+e);
+			logger.info("Exception in updateCommitteeVotingDetail:" + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO updateBasicSubmissionDetail(SubmissionDetailVO submissionDetailvo) {
+		try{
+			irbActionsDao.updateSubmissionDetail(submissionDetailvo);
+			submissionDetailvo = getSubmissionBasicDetails(submissionDetailvo);
+			submissionDetailvo.setSuccessCode(true);
+		} catch (Exception e) {
+			submissionDetailvo.setSuccessCode(false);
+			submissionDetailvo.setSuccessMessage("updateBasicSubmissionDetail Failed "+e);
+			logger.info("Exception in updateBasicSubmissionDetail : " + e);
+		}
+		return submissionDetailvo;
+	}
+
+	@Override
+	public SubmissionDetailVO getCommitteeList(SubmissionDetailVO vo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

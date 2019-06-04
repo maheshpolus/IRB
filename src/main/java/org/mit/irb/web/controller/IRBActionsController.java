@@ -136,4 +136,53 @@ public class IRBActionsController {
 		vo = irbActionsService.getIRBAdminReviewDetails(vo); 
 		return vo;
 	}
+	@RequestMapping(value = "/getSubmissionBasicDetails", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getSubmissionBasicDetails(@RequestBody SubmissionDetailVO vo,HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getSubmissionBasicDetails(vo);  
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateIRBAdminComment", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateIRBAdminComment(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateIRBAdminComment(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateIRBAdminAttachments", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateIRBAdminAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson, HttpServletRequest request,HttpServletResponse response)
+	{
+		SubmissionDetailVO submissionDetailVO=new SubmissionDetailVO();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			submissionDetailVO = mapper.readValue(formDataJson,SubmissionDetailVO.class);
+		} catch (Exception e) {			
+			e.printStackTrace();
+		} 
+		submissionDetailVO = irbActionsService.updateIRBAdminAttachments(submissionDetailVO,files); 
+		return submissionDetailVO;
+	}
+	
+	@RequestMapping(value = "/updateCommitteeVotingDetail", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateCommitteeVotingDetail(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateCommitteeVotingDetail(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateBasicSubmissionDetail", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateBasicSubmissionDetail(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateBasicSubmissionDetail(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/getIRBAdminReviewers", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getIRBAdminReviewers(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getIRBAdminReviewers(vo); 
+		return vo;
+	}
 }

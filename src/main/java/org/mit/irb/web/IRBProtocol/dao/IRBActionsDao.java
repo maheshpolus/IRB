@@ -70,9 +70,7 @@ public interface IRBActionsDao {
 
 	IRBActionsVO grantExceptionAdminActions(IRBActionsVO vo);
 
-	IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo, MultipartFile[] files);
-
-	ArrayList<HashMap<String, Object>> getSubmissionTypeQulifier();
+	IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo, MultipartFile[] files);	
 
 	IRBActionsVO approvedAdminActions(IRBActionsVO vo);
 
@@ -87,18 +85,12 @@ public interface IRBActionsDao {
 	IRBActionsVO administrativeCorrectionAdminActions(IRBActionsVO vo);
 
 	ArrayList<HashMap<String, Object>> getScheduleDates(String committeeId);
-
+	
 	ArrayList<HashMap<String, Object>> getCommitteeList();
-
-	ArrayList<HashMap<String, Object>> getRiskLevel();
-
-	ArrayList<HashMap<String, Object>> getExpeditedApprovalCheckList();
 
 	IRBActionsVO adandonAdminActions(IRBActionsVO vo, MultipartFile[] files);
 
 	IRBActionsVO undoLastActionAdminActions(IRBActionsVO vo);
-
-	ArrayList<HashMap<String, Object>> getExpeditedCannedComments();
 
 	ArrayList<HashMap<String, Object>> getIRBAdminList();
 
@@ -111,4 +103,16 @@ public interface IRBActionsDao {
 	ArrayList<HashMap<String, Object>> fetchCommitteeMembers(SubmissionDetailVO submissionDetailvo);
 
 	ArrayList<HashMap<String, Object>> fetchSubmissionHistory(SubmissionDetailVO submissionDetailvo);
+
+	void updateIRBAdminComment(SubmissionDetailVO submissionDetailvo);
+
+	void updateIRBAdminAttachment(SubmissionDetailVO submissionDetailvo, MultipartFile[] files);
+
+	HashMap<String, Object> fetchCommitteeVotingDetails(SubmissionDetailVO submissionDetailvo);
+
+	void updateSubmissionDetail(SubmissionDetailVO submissionDetailvo);
+
+	void updateCommitteeReviewComments(SubmissionDetailVO submissionDetailVO);
+
+	void updateCommitteeReviewerAttachments(MultipartFile[] files, SubmissionDetailVO submissionDetailVO);
 }

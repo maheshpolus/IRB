@@ -19,6 +19,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
+import org.mit.irb.web.IRBProtocol.pojo.AdminCheckListDetail;
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
@@ -477,11 +478,32 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> irbAdmincheckList = dbEngine.executeProcedure(inputParam,"GET_IRB_ADMIN_REVIEW_CHECKLIST",outputParam);
-			submissionDetailvo.setIrbAdminCheckList(irbAdmincheckList);
+			List<AdminCheckListDetail> adminCheckListDetail = iterateCheckList(irbAdmincheckList);
+			submissionDetailvo.setIrbAdminCheckList(adminCheckListDetail);
 		}catch (Exception e) {
 			logger.info("Exception in loadIRBAdminAttachments:" + e);
 		}
 		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	private List<AdminCheckListDetail> iterateCheckList(ArrayList<HashMap<String, Object>> irbAdmincheckList) {
+		List<AdminCheckListDetail> adminCheckListDetails = new ArrayList<AdminCheckListDetail>();
+		try{
+			for(HashMap<String, Object> admincheckList : irbAdmincheckList){
+				AdminCheckListDetail adminCheckListDetail = new AdminCheckListDetail();
+				adminCheckListDetail.setAdminCheckListId(admincheckList.get("ADMIN_CHKLST_ID") == null ? null : Integer.parseInt(admincheckList.get("ADMIN_CHKLST_ID").toString()));
+				adminCheckListDetail.setGroupName(admincheckList.get("GROUP_NAME") == null ? null : admincheckList.get("GROUP_NAME").toString());
+				adminCheckListDetail.setDescription(admincheckList.get("DESCRIPTION").toString());
+				adminCheckListDetail.setAdminRevChecklistCode(Integer.parseInt(admincheckList.get("ADMIN_REV_CHKLST_CODE").toString()));
+				adminCheckListDetail.setStatusFlag(admincheckList.get("STATUS_FLAG").toString() == "N" ? false : true);
+				adminCheckListDetail.setUpdateTimestamp(admincheckList.get("UPDATE_TIMESTAMP") == null ? null : admincheckList.get("UPDATE_TIMESTAMP").toString());
+				adminCheckListDetail.setUpdateUser(admincheckList.get("UPDATE_USER") == null ? null :admincheckList.get("UPDATE_USER").toString());
+				adminCheckListDetails.add(adminCheckListDetail);
+			}
+		}catch (Exception e) {
+			logger.info("Exception in iterateCheckList : " + e);
+		}
+		return adminCheckListDetails;
 	}
 
 	@Async

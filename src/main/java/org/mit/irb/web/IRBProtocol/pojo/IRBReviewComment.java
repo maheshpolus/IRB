@@ -11,11 +11,19 @@ public class IRBReviewComment {
 	private String fullName;
 	private Integer commentId;
 	private Integer adminReviewId;
-	private Integer attachmentId;
 	private String updateTimestamp;
 	private Integer protocolId;
+	private String actionType;
 	private List<IRBReviewAttachment> reviewAttachments;
 	
+	public String getActionType() {
+		return actionType;
+	}
+
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
+	}
+
 	public Integer getSubmissionId() {
 		return submissionId;
 	}
@@ -72,14 +80,6 @@ public class IRBReviewComment {
 		this.adminReviewId = adminReviewId;
 	}
 
-	public Integer getAttachmentId() {
-		return attachmentId;
-	}
-
-	public void setAttachmentId(Integer attachmentId) {
-		this.attachmentId = attachmentId;
-	}
-
 	public String getUpdateTimestamp() {
 		return updateTimestamp;
 	}
@@ -111,5 +111,4 @@ public class IRBReviewComment {
 	public void setCommentDescription(String commentDescription) {
 		this.commentDescription = commentDescription;
 	}
-
 }

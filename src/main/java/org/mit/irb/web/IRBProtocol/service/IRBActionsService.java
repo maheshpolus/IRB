@@ -126,4 +126,10 @@ public interface IRBActionsService {
 	 * @return update submission Details
 	 */
 	SubmissionDetailVO updateBasicSubmissionDetail(SubmissionDetailVO vo);
+
+	/**
+	 * @param vo
+	 * @return update IRB Admin checkList
+	 */
+	SubmissionDetailVO updateIRBAdminCheckList(SubmissionDetailVO vo);
 }

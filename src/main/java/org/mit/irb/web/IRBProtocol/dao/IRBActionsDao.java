@@ -104,7 +104,7 @@ public interface IRBActionsDao {
 
 	ArrayList<HashMap<String, Object>> fetchSubmissionHistory(SubmissionDetailVO submissionDetailvo);
 
-	void updateIRBAdminComment(SubmissionDetailVO submissionDetailvo);
+	Integer updateIRBAdminComment(SubmissionDetailVO submissionDetailvo);
 
 	void updateIRBAdminAttachment(SubmissionDetailVO submissionDetailvo, MultipartFile[] files);
 
@@ -115,4 +115,6 @@ public interface IRBActionsDao {
 	void updateCommitteeReviewComments(SubmissionDetailVO submissionDetailVO);
 
 	void updateCommitteeReviewerAttachments(MultipartFile[] files, SubmissionDetailVO submissionDetailVO);
+
+	void updateIRBAdminCheckList(SubmissionDetailVO submissionDetailvo);
 }

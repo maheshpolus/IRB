@@ -174,8 +174,8 @@
                         </div>
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label>Comments</label>
-                            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Comments"></textarea>
+                            <label>Reason to perform the Action</label>
+                            <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason to perform Action"></textarea>
                           </div>
 
                         </div>
@@ -224,7 +224,7 @@
                             <div class="col-md-5">
                               <div class="form-group">
                                 <label>Comments</label>
-                                <textarea class="form-control txt-area-fnt" [(ngModel)]="riskLevelObject.comment" placeholder="Comment"></textarea>
+                                <textarea class="form-control txt-area-fnt" [(ngModel)]="riskLevelObject.comment" placeholder="Comments"></textarea>
                               </div>
                             </div>
                             <div class="col-md-1 add-btn-1">
@@ -280,9 +280,9 @@
                           <div class="row mr-0 ml-0 padding-exempt">
                             <div class="col-md-10">
                               <div class="form-group">
-                                <label>Comments</label>
+                                <label>Write Your Review Comments</label>
                                 <div class="input-group date-pickr-1 mb-3">
-                                  <textarea class="form-control txt-area-fnt" [(ngModel)]="commentObject.comments" placeholder="Comment"></textarea>
+                                  <textarea class="form-control txt-area-fnt" [(ngModel)]="commentObject.comments" placeholder="Enter your Review Comments"></textarea>
                                   <div *ngIf="currentActionPerformed?.ACTION_CODE == '205'" class="input-group-append input-span-1" title="Search For Canned comments" data-target="#cannedCommentsModal" data-toggle="modal">
                                     <i class="fa fa-search icon-center"></i>
                                   </div>
@@ -902,10 +902,10 @@
 
           <div class="col-md-12">
             <div class="form-group">
-              <label *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303' && currentActionPerformed?.ACTION_CODE != '113'">Comments</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303' && currentActionPerformed?.ACTION_CODE != '113'">Reason to Perform the Action</label>
               <label *ngIf="currentActionPerformed?.ACTION_CODE == '992'">Reason To Delete</label>
               <label *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</label>
-              <label *ngIf="currentActionPerformed?.ACTION_CODE == '113'">Administrative Correction Comments</label>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '113'">Reason to Perform the Action</label>
               <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
             </div>
           </div>
@@ -1134,7 +1134,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Comments</label>
+            <label>Reason to Perform Action</label>
             <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
           </div>
 

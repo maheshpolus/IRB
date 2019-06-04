@@ -197,7 +197,7 @@
                   <label class="label-width"> Review Type
                     <span class="mandatory">*</span>
                   </label>
-                  <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [class.poping-border]="isEditIRBReviewer"
+                  <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect"
                     [(ngModel)]="adminReviewer.reviewTypeCode">
                     <option selected value=null>Please Select</option>
                     <option *ngFor="let type of irbAdminsReviewerType" value="{{type.REVIEW_TYPE_CODE}}">{{type.DESCRIPTION}}</option>
@@ -209,18 +209,15 @@
                   <label class="label-width">Administrators
                     <span class="mandatory">*</span>
                   </label>
-                  <ng2-completer class="mr-sm-2 select-notify-popup collaborator-holder" [class.normal-border]="!isEditIRBReviewer" [datasource]="adminListDataSource"
+                  <ng2-completer class="mr-sm-2 select-notify-popup isEditIRBReviewer" [datasource]="adminListDataSource"
                     [minSearchLength]="0" [placeholder]="'Search IRB Admin'" [openOnFocus]="true" [inputClass]="'ng-pristine ng-valid ng-touched'"
                     [(ngModel)]="adminReviewer.personName" (selected)="setAdmin($event)">
                   </ng2-completer>
                 </div>
               </div>
               <div class="col-md-1 add-btn-1">
-                <button title="Add" *ngIf="!isEditIRBReviewer" (click)="addAdminReviwever('I')" type="button" class="btn btn-success">
+                <button title="Add" (click)="addAdminReviwever('I')" type="button" class="btn btn-success">
                   <i class="fa fa-plus" aria-hidden="true"></i>
-                </button>
-                <button title="Save" *ngIf="isEditIRBReviewer" (click)="addAdminReviwever('U')" type="button" class="btn btn-success">
-                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
@@ -241,18 +238,34 @@
                     </thead>
                     <tbody class="tbody-font-size">
                       <tr *ngFor="let irbAdminsReviewer of submissionVo.irbAdminsReviewers; let i=index" [class.poping-border]="i == IRBReviweverSelectedRow">
-                        <td> {{irbAdminsReviewer.REVIEW_TYPE}}</td>
+                        <td *ngIf="i != IRBReviweverSelectedRow"> {{irbAdminsReviewer.REVIEW_TYPE}}</td>
+                        <td *ngIf="i == IRBReviweverSelectedRow">
+                            <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [class.poping-border]="isEditIRBReviewer"
+                            [(ngModel)]="editadminReviewer.reviewTypeCode">
+                            <option *ngFor="let type of irbAdminsReviewerType" value="{{type.REVIEW_TYPE_CODE}}">{{type.DESCRIPTION}}</option>
+                          </select>
+                        </td>
                         <td>{{irbAdminsReviewer.FULL_NAME}}</td>
-                        <td>
+                        <td *ngIf="i != IRBReviweverSelectedRow">
                           <span *ngIf="irbAdminsReviewer.STATUS_FLAG=='Y'">Completed</span>
                           <span *ngIf="irbAdminsReviewer.STATUS_FLAG=='N'">
-                            <button type="button" class="btn btn-outline-success border-button">Mark Complete</button>
+                            <button type="button" class="btn btn-outline-success border-button" (click)="markReviewComplete(irbAdminsReviewer)">Mark Complete</button>
                           </span>
                         </td>
+                        <td *ngIf="i == IRBReviweverSelectedRow">
+                            <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [class.poping-border]="isEditIRBReviewer"
+                            [(ngModel)]="editadminReviewer.statusFlag">
+                            <option value="N">In Progress</option>
+                            <option value="Y">Completed</option>
+                          </select>
+                        </td>
                         <td class="action-btn-list">
-                          <button title="Edit" (click)="editIRBReviewer(irbAdminsReviewer,i)" type="button" class="btn btn-primary edit-btn-1">
+                          <button *ngIf="i != IRBReviweverSelectedRow" title="Edit" (click)="editIRBReviewer(irbAdminsReviewer,i)" type="button" class="btn btn-primary edit-btn-1">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                           </button>
+                          <button *ngIf="i == IRBReviweverSelectedRow" title="Save" (click)="saveOrUpdateAdminReviwever(editadminReviewer)" type="button" class="btn btn-primary edit-btn-1">
+                              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
                           <button title="Delete" (click)="deleteIRBAdmin(irbAdminsReviewer)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
                             data-target="#deleteAdminDetails">
                             <i class="fa fa-trash" aria-hidden="true"></i>
@@ -270,12 +283,18 @@
                 <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='IRBCOMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='IRBCOMMENTS')}">
                   <i class="fa fa-commenting-o pr-8" aria-hidden="true"></i>Review Comments & Attachments</button>
                 <button type="button" class="btn icon_tab" (click)="tabSelected='CHECKLIST'" [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}">
-                  <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Checklist</button>
+                    <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Checklist</button>
                 <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='IRBHISTORY'" [ngClass]="{icon_tab_active:(tabSelected=='IRBHISTORY')}">
-                  <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Submission History</button>
+                    <i class="fa fa-history pr-8" aria-hidden="true"></i>Submission History</button>
                 <span *ngIf="tabSelected=='IRBCOMMENTS'" class="filterLink mt-10">
                   <a class="pointer">Show All</a>
                 </span>
+                <span *ngIf="tabSelected=='CHECKLIST'" class="filterLink mt-10">
+                    <select>
+                      <option>dsf</option>
+                      <option>dsf</option>
+                    </select>
+                  </span>
               </div>
             </div>
 
@@ -298,25 +317,49 @@
                   </button>
                 </div>
               </div>
+              <div class="row mr-0 ml-0">
+                  <div class="col-md-10">
+                    	<h4 class="borderBoxHeading pointer" data-toggle="modal" data-target="#attachmentModal">
+                          <i class="fa fa-paperclip" aria-hidden="true"></i> Add Attachment
+                      </h4>
+                  </div>
+              </div>
+              <ng-container *ngIf="submissionVo?.irbAdminCommentAttachment != null && submissionVo?.irbAdminCommentAttachment.length > 0">
+              <ul class="comments" *ngFor="let commentGroupObj of submissionVo.irbAdminCommentAttachment">
+                  <a>{{commentGroupObj?.fullName}}</a>
+                  <span>{{commentGroupObj?.actionType}} - </span>
+                  <span>{{commentGroupObj?.updateTimestamp}}</span>
+                  <br *ngIf="commentGroupObj.fileName != null">
+                  <p [innerHTML]="commentGroupObj.commentDescription" *ngIf="commentGroupObj.commentDescription != null"></p>
+                  <div *ngIf="commentGroupObj.attachments != null">
+                    <div *ngFor="let value of commentGroupObj.attachments">
+                      <a class="attachIcon iconCursor"
+                        (click)="downloadAttachment(value.attachmentId)">
+                        {{value?.fileName}} </a>
+                    </div>
+                  </div>
+                  <hr>
+                </ul>
+              </ng-container>
             </div>
 
 
 
-            <div class="mb-15 person-modal-scroll" *ngIf="tabSelected=='CHECKLIST'">
+            <div class="mb-15 review-modal-height" *ngIf="tabSelected=='CHECKLIST'">
               <div class="row mr-0 ml-0 padding-exempt" *ngFor="let checkList of submissionVo?.irbAdminCheckList; let i=index">
 
                 <div class="col-md-1">
                   <input class="align-center mt-10" type="checkbox" [(ngModel)]="isCheckListChecked[i]" />
                 </div>
                 <div class="col-md-9 text-justify">
-                  {{checkList?.DESCRIPTION}}
+                  {{checkList?.description}}
                   <i aria-hidden="true" [ngClass]="(showCheckListComment[i]==true)?'fa fa-angle-double-up':'fa fa-angle-double-down'" title="More info"
                     (click)="showCheckListComment[i] = !showCheckListComment[i]"></i>
 
-                  <textarea *ngIf="showCheckListComment[i]==true" class="form-control txt-area-fnt" placeholder="Add comments if any..."></textarea>
+                  <textarea *ngIf="showCheckListComment[i]==true" class="form-control txt-area-fnt mt-10" placeholder="Add comments if any..."></textarea>
                 </div>
-                <div class="col-md-2">
-                  Updated by {{checkList?.UPDATE_USER}} on {{checkList?.UPDATE_TIMESTAMP}}
+                <div class="col-md-2" *ngIf="checkList?.UPDATE_USER != null">
+                  <i class="tbody-font-size">Updated by {{checkList?.updateUser}} on {{checkList?.updateTimestamp}}</i>
                 </div>
               </div>
             </div>
@@ -333,3 +376,69 @@
 
   </div>
 </div>
+
+
+<!-- Add Attachment Modal-->
+<div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="helpModalCenterTitle" aria-hidden="true"
+data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog modal-full" role="document">
+  <div class="modal-content">
+    <div class="modal-header popup-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">Add Attachment</h5>
+      <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="clearAttachmentPopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body modal-popup">
+      <div class="modal-padding">
+        <div class="alert alert-danger " *ngIf="!isMandatoryFilled">
+          Please fill all mandatory fields marked
+          <strong>*</strong>
+        </div>
+        <div class="alert alert-danger " *ngIf="multipleFile">
+          Cannot Add Multiple Files
+        </div>
+        <div class="row col-12 form-group">
+          <!-- <div class="col-4 apprve-date">
+            <h4>*Type</h4>
+            <select [class.poping-border]="isAttachmentedit" class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode"
+              (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
+              <option value=null selected>Please Select</option>
+              <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">{{attachmentType.description}}</option>
+            </select>
+          </div> -->
+          <div class="col-8 apprve-date">
+            <h4 class="ml-10">*Description</h4>
+            <textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding" [(ngModel)]="attachmentDescription"
+              placeholder="Description"></textarea>
+          </div>
+        </div>
+        <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
+          <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
+          </button>
+          <input type="file" #file (change)="onChange(file.files)" id="addAttach" style="display: none" />
+          <div style="color: #a92034; margin-left: 10px;  margin-top: 40px;">OR Drop files here
+          </div>
+        </file-drop>
+        <div class="filechip">
+          <span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+            <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
+          </span>
+        </div>
+        <div class="filechip" *ngIf="isReplaceAttachment">
+          <span>{{ fileName }}
+            <i title="Replace Attachment" class="fa fa-close pdf" (click)="replaceAttachment()"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
+      <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="!isAttachmentEdit"
+        aria-label="Close" (click)="addAttachments(attachmentDescription)">Add</button>
+      <button title="Save Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isAttachmentEdit"
+        aria-label="Close" (click)="saveEditedattachments()">Save</button>
+    </section>
+  </div>
+</div>
+</div>
+<!--Add Attachment modal ends-->

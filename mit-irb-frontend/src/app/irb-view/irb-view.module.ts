@@ -4,6 +4,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { FileDropModule } from 'ngx-file-drop';
 
 import { IrbOverviewComponent } from './irb-overview/irb-overview.component';
 import { IrbHeaderDetailComponent } from './irb-header-detail/irb-header-detail.component';
@@ -30,6 +31,7 @@ import { IrbSubmissionDetailComponent } from './irb-submission-detail/irb-submis
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     Ng2CompleterModule,
+    FileDropModule,
     NgbModule.forRoot()
   ],
   declarations: [IrbOverviewComponent, IrbHeaderDetailComponent,

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class IrbViewService {
-
+  formData = new FormData();
   constructor(private _http: HttpClient) { }
 
   getIrbHeaderDetails(params) {
@@ -102,5 +102,15 @@ getSubmissionBasicDetails(params) {
 updateIRBAdminComment(params) {
     return this._http.post('/mit-irb/updateIRBAdminComment', params);
 }
+
+updateIRBAdminAttachments(reqstObject: Object, uploadedFile) {
+    this.formData.delete('files');
+    this.formData.delete('formDataJson');
+    for (let i = 0; i < uploadedFile.length; i++) {
+      this.formData.append('files', uploadedFile[i]);
+    }
+    this.formData.append('formDataJson', JSON.stringify(reqstObject));
+    return this._http.post('/mit-irb/updateIRBAdminAttachments', this.formData);
+  }
 
 }

@@ -2647,3 +2647,31 @@ input:disabled,textarea:disabled{
     line-height: 10px;
     font-size: 14px;
  }
+ .comments {
+    margin: 10px auto;
+}
+
+.comments li {
+    border-bottom: 1px #D9D9D9 solid;
+    padding: 5px 0 10px;
+    font-size: .85em;
+}
+ .comments span {
+    /* border-bottom: 1px #D9D9D9 solid; */
+    padding: 5px 0 10px;
+    font-size: .85em;
+} 
+
+.comments div {
+    color: #6A6A6A;
+}
+
+.comments a {
+    color: #a92034 !important;
+    font-weight: bold;
+}
+
+.comments p {
+    padding: 0;
+    margin: 2px auto 0;
+}

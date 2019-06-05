@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBActionsDao {
@@ -117,4 +118,14 @@ public interface IRBActionsDao {
 	void updateCommitteeReviewerAttachments(MultipartFile[] files, SubmissionDetailVO submissionDetailVO);
 
 	void updateIRBAdminCheckList(SubmissionDetailVO submissionDetailvo);
+	
+	ArrayList<HashMap<String, Object>> getSubmissionCommitteeList(SubmissionDetailVO vo);
+
+	void updateCommitteeReviewers(SubmissionDetailVO vo);
+	
+	ArrayList<HashMap<String, Object>> getCommitteeReviewerCommentsandAttachment(SubmissionDetailVO submissionDetailVO);
+
+	ArrayList<HashMap<String, Object>> fetchCommitteeReviewers(SubmissionDetailVO vo);
+
+	ResponseEntity<byte[]> downloadCommitteeFileData(String fileDataId);
 }

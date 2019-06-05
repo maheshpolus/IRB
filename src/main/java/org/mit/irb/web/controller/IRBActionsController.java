@@ -9,8 +9,10 @@ import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -191,5 +193,61 @@ public class IRBActionsController {
 	{
 		vo = irbActionsService.updateIRBAdminCheckList(vo); 
 		return vo;
+	}
+
+	@RequestMapping(value = "/updateCommitteeReviewers", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateCommitteeReviewers(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateCommitteeReviewers(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/loadCommitteeMembers", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO loadCommitteeMembers(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.loadCommitteeMembers(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/loadCommitteeReviewerDetails", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO loadCommitteeReviewerDetails(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.loadCommitteeReviewerDetails(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateCommitteeReviewerComments", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateCommitteeReviewerComments(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.updateCommitteeReviewerComments(vo); 
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateCommitteeReviewerAttachments", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO updateCommitteeReviewerAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson, HttpServletRequest request,HttpServletResponse response)
+	{
+		SubmissionDetailVO submissionDetailVO=new SubmissionDetailVO();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			submissionDetailVO = mapper.readValue(formDataJson,SubmissionDetailVO.class);
+		} catch (Exception e) {			
+			e.printStackTrace();
+		} 
+		submissionDetailVO = irbActionsService.updateCommitteeReviewerAttachments(submissionDetailVO,files); 
+		return submissionDetailVO;
+	}
+	
+	@RequestMapping(value = "/downloadCommitteeFileData", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadCommitteeFileData(HttpServletResponse response,
+			@RequestHeader("fileDataId") String fileDataId) {
+		return irbActionsService.downloadCommitteeFileData(fileDataId);
+	}
+	
+	
+	@RequestMapping(value = "/downloadAdminRevAttachment", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadAdminRevAttachment(HttpServletResponse response,
+			@RequestHeader("attachmentId") String attachmentId) {
+		return irbActionsService.downloadAdminRevAttachment(attachmentId);
 	}
 }

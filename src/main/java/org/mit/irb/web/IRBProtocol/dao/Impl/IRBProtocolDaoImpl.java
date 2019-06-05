@@ -1764,4 +1764,35 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		} 
 		return result.get(0);
 	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadAdminRevAttachment(String attachmentId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			inParam.add(new InParameter("AV_ATTACHMENT_ID", DBEngineConstants.TYPE_STRING, attachmentId));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "GET_IRB_DOWNLOAD_ADMIN_RVW_ATT",
+					outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("DATA");
+				byte[] data = byteArrayOutputStream.toByteArray();
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType(hmResult.get("MIME_TYPE").toString()));
+				String filename = hmResult.get("FILE_NAME").toString();
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(data.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in downloadAttachments method:" + e);
+		}
+		return attachmentData;
+	}
 }

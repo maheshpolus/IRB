@@ -8,6 +8,7 @@ public class AdminCheckListDetail {
 	private String updateUser;
 	private String updateTimestamp;
 	private Integer adminCheckListId;
+	private String userDescription;
 	private String actype;
 	
 	public Integer getAdminCheckListId() {
@@ -57,5 +58,11 @@ public class AdminCheckListDetail {
 	}
 	public void setUpdateTimestamp(String updateTimestamp) {
 		this.updateTimestamp = updateTimestamp;
+	}
+	public String getUserDescription() {
+		return userDescription;
+	}
+	public void setUserDescription(String userDescription) {
+		this.userDescription = userDescription;
 	}
 }

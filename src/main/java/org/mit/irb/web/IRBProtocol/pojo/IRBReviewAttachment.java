@@ -12,7 +12,29 @@ public class IRBReviewAttachment {
 	private String mimeType;
 	private String updateTimeStamp;
 	private String actionType;
+	private String publicFlag;
+	private String personId;
+	private Integer actionCode;
+	private String acType;
 	
+	public Integer getActionCode() {
+		return actionCode;
+	}
+	public void setActionCode(Integer actionCode) {
+		this.actionCode = actionCode;
+	}
+	public String getPersonId() {
+		return personId;
+	}
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
+	public String getPublicFlag() {
+		return publicFlag;
+	}
+	public void setPublicFlag(String publicFlag) {
+		this.publicFlag = publicFlag;
+	}
 	public String getDescription() {
 		return description;
 	}
@@ -78,6 +100,12 @@ public class IRBReviewAttachment {
 	}
 	public void setActionType(String actionType) {
 		this.actionType = actionType;
+	}
+	public String getAcType() {
+		return acType;
+	}
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 
 }

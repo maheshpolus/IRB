@@ -5,6 +5,7 @@ public class IRBCommitteeReviewerComments {
 	private String comments;
 	private String flag;
 	private String contingencyCode;
+	private String letterFlag;
 	
 	public String getCommitteeScheduleMinutesId() {
 		return committeeScheduleMinutesId;
@@ -29,5 +30,11 @@ public class IRBCommitteeReviewerComments {
 	}
 	public void setFlag(String flag) {
 		this.flag = flag;
+	}
+	public String getLetterFlag() {
+		return letterFlag;
+	}
+	public void setLetterFlag(String letterFlag) {
+		this.letterFlag = letterFlag;
 	}
 }

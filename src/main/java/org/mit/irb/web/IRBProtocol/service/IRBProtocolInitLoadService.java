@@ -140,4 +140,6 @@ public interface IRBProtocolInitLoadService {
 
 	public Future<IRBActionsVO> getExpeditedCannedComments(IRBActionsVO vo);
 
+	public Future<SubmissionDetailVO> getScheduleDates(SubmissionDetailVO submissionDetailvo, String committeeId);
+
 }

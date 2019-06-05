@@ -493,11 +493,12 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 				AdminCheckListDetail adminCheckListDetail = new AdminCheckListDetail();
 				adminCheckListDetail.setAdminCheckListId(admincheckList.get("ADMIN_CHKLST_ID") == null ? null : Integer.parseInt(admincheckList.get("ADMIN_CHKLST_ID").toString()));
 				adminCheckListDetail.setGroupName(admincheckList.get("GROUP_NAME") == null ? null : admincheckList.get("GROUP_NAME").toString());
-				adminCheckListDetail.setDescription(admincheckList.get("DESCRIPTION").toString());
+				adminCheckListDetail.setDescription(admincheckList.get("CHKLST_DESC").toString());
 				adminCheckListDetail.setAdminRevChecklistCode(Integer.parseInt(admincheckList.get("ADMIN_REV_CHKLST_CODE").toString()));
-				adminCheckListDetail.setStatusFlag(admincheckList.get("STATUS_FLAG").toString() == "N" ? false : true);
+				adminCheckListDetail.setStatusFlag(admincheckList.get("STATUS_FLAG").equals("N") ? false : true);
 				adminCheckListDetail.setUpdateTimestamp(admincheckList.get("UPDATE_TIMESTAMP") == null ? null : admincheckList.get("UPDATE_TIMESTAMP").toString());
 				adminCheckListDetail.setUpdateUser(admincheckList.get("UPDATE_USER") == null ? null :admincheckList.get("UPDATE_USER").toString());
+				adminCheckListDetail.setUserDescription(admincheckList.get("USER_DESCRIPTION") == null ? null :admincheckList.get("USER_DESCRIPTION").toString());
 				adminCheckListDetails.add(adminCheckListDetail);
 			}
 		}catch (Exception e) {
@@ -646,5 +647,21 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		}
 		vo.setExpeditedCannedComments(expeditedCannedComments);
 		return new AsyncResult<>(vo);
+	}
+	
+	@Override
+	public Future<SubmissionDetailVO> getScheduleDates(SubmissionDetailVO submissionDetailvo, String committeeId) {
+		ArrayList<HashMap<String, Object>> scheduleDates = null;														
+		try {
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,committeeId));
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			scheduleDates=dbEngine.executeProcedure(inputParam,"GET_IRB_SCHEDULE_DATE",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getScheduleDates:" + e);	
+		}
+		submissionDetailvo.setScheduleDates(scheduleDates);		
+		return new AsyncResult<>(submissionDetailvo);
 	}
 }

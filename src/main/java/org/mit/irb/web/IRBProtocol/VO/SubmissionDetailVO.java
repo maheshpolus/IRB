@@ -36,6 +36,10 @@ public class SubmissionDetailVO {
 	private Integer submissionTypeCode;
 	private Integer sceduleId;
 	private String submissionQualifierCode;
+	private String submissionType;
+	private String submissionReviewType;
+	private String committeeName;
+	private Integer scheduleId;
 	
 	private ArrayList<HashMap<String, Object>> irbAdminsList;
 	private ArrayList<HashMap<String, Object>> irbAdminsReviewers;
@@ -59,12 +63,20 @@ public class SubmissionDetailVO {
 	private HashMap<String, Object> submissionDetail;
 	private HashMap<String, Object> committeeVotingDetails;
 	private List<IRBReviewComment> irbAdminCommentAttachment;
-	
+	private ArrayList<HashMap<String, Object>> committeeReviewerCommentsandAttachment;
+
 	private String flag;
 	private String attachmentDescription;
 	private Integer reviewerAttachmentId;
 	private String commMinutesScheduleId;
 	private List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments;
+	private Integer protocolReviewerId;
+	private Integer selectedRecommendedAction;
+	private Integer committeeMemberOnlineReviewerId;
+	private String committeeReviewerStatusCode;
+	private String committeeMemberDueDate;
+	private String committeeMemberAssignedDate;
+	private String committeeReviewerTypeCode;
 	
 	
 	public List<AdminCheckListDetail> getIrbAdminCheckList() {
@@ -384,5 +396,78 @@ public class SubmissionDetailVO {
 	}
 	public void setIrbCommitteeReviewerComments(List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments) {
 		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
+	}
+	public String getSubmissionType() {
+		return submissionType;
+	}
+	public void setSubmissionType(String submissionType) {
+		this.submissionType = submissionType;
+	}
+	public String getSubmissionReviewType() {
+		return submissionReviewType;
+	}
+	public void setSubmissionReviewType(String submissionReviewType) {
+		this.submissionReviewType = submissionReviewType;
+	}
+	public String getCommitteeName() {
+		return committeeName;
+	}
+	public void setCommitteeName(String committeeName) {
+		this.committeeName = committeeName;
+	}
+	public Integer getScheduleId() {
+		return scheduleId;
+	}
+	public void setScheduleId(Integer scheduleId) {
+		this.scheduleId = scheduleId;
+	}
+	public ArrayList<HashMap<String, Object>> getCommitteeReviewerCommentsandAttachment() {
+		return committeeReviewerCommentsandAttachment;
+	}
+	public void setCommitteeReviewerCommentsandAttachment(
+			ArrayList<HashMap<String, Object>> committeeReviewerCommentsandAttachment) {
+		this.committeeReviewerCommentsandAttachment = committeeReviewerCommentsandAttachment;
+	}
+	public Integer getProtocolReviewerId() {
+		return protocolReviewerId;
+	}
+	public void setProtocolReviewerId(Integer protocolReviewerId) {
+		this.protocolReviewerId = protocolReviewerId;
+	}
+	public Integer getSelectedRecommendedAction() {
+		return selectedRecommendedAction;
+	}
+	public void setSelectedRecommendedAction(Integer selectedRecommendedAction) {
+		this.selectedRecommendedAction = selectedRecommendedAction;
+	}
+	public Integer getCommitteeMemberOnlineReviewerId() {
+		return committeeMemberOnlineReviewerId;
+	}
+	public void setCommitteeMemberOnlineReviewerId(Integer committeeMemberOnlineReviewerId) {
+		this.committeeMemberOnlineReviewerId = committeeMemberOnlineReviewerId;
+	}
+	public String getCommitteeReviewerStatusCode() {
+		return committeeReviewerStatusCode;
+	}
+	public void setCommitteeReviewerStatusCode(String committeeReviewerStatusCode) {
+		this.committeeReviewerStatusCode = committeeReviewerStatusCode;
+	}
+	public String getCommitteeMemberDueDate() {
+		return committeeMemberDueDate;
+	}
+	public void setCommitteeMemberDueDate(String committeeMemberDueDate) {
+		this.committeeMemberDueDate = committeeMemberDueDate;
+	}
+	public String getCommitteeMemberAssignedDate() {
+		return committeeMemberAssignedDate;
+	}
+	public void setCommitteeMemberAssignedDate(String committeeMemberAssignedDate) {
+		this.committeeMemberAssignedDate = committeeMemberAssignedDate;
+	}
+	public String getCommitteeReviewerTypeCode() {
+		return committeeReviewerTypeCode;
+	}
+	public void setCommitteeReviewerTypeCode(String committeeReviewerTypeCode) {
+		this.committeeReviewerTypeCode = committeeReviewerTypeCode;
 	}
 }

@@ -120,10 +120,10 @@ public class CommitteeServiceImpl implements CommitteeService {
 		    List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
 			if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
 				for (CommitteeMemberships membership : committeeMemberships) {
-					if (membership.getNonEmployeeFlag() && membership.getRolodexId() != null) {
+					if (membership.getNonEmployeeFlag()) {
 						Rolodex rolodex = committeeDao.getRolodexById(membership.getRolodexId());
 						membership.setRolodex(rolodex);
-					} else if(membership.getPersonId() != null) {
+					} else {
 						PersonDetailsView personDetails = committeeDao.getPersonDetailsById(membership.getPersonId());
 						membership.setPersonDetails(personDetails);
 					}

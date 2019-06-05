@@ -912,10 +912,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			updateReviewComments(vo);			
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("SMRR successful");	
+		    vo.setSuccessMessage("Specific Minor Revisions Required successful");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
-			vo.setSuccessMessage("SMRR Failed");
+			vo.setSuccessMessage("Specific Minor Revisions Required Failed");
 			e.printStackTrace();
 			logger.info("Exception in SMRRAdminActions:" + e);	
 		}
@@ -930,10 +930,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			updateReviewComments(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
-		    vo.setSuccessMessage("SRR successfully");	
+		    vo.setSuccessMessage("Substantive Revisions Required successful");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
-			vo.setSuccessMessage("SRR Failed");
+			vo.setSuccessMessage("Substantive Revisions Required Failed");
 			e.printStackTrace();
 			logger.info("Exception in SRRAdminActions:" + e);	
 		}
@@ -1027,12 +1027,14 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
 		java.util.Date utilDate = null;
 		java.sql.Date sqlDate= null;
+		if(date != null){
 		try{
 			utilDate = sdf.parse(date);
 			sqlDate = new java.sql.Date(utilDate.getTime());
 		}catch (Exception e) {
 			logger.info("Exception in generateSqlActionDate:" + e);
 		}
+	  }
 		return sqlDate;
 	}
 	
@@ -1270,7 +1272,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try{
 			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();	
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getCommitteeId()));
+			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getCommitteeId()));
 			inputParam.add(new InParameter("AV_SCEDULE_DATE", DBEngineConstants.TYPE_DATE, generateSqlDate(submissionDetailvo.getSelectedDate())));
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			irbCommitteeMembers = dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_MEMBERS",outputparam);
@@ -1312,6 +1314,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_COMMENT_DESCRIPTION", DBEngineConstants.TYPE_STRING,submissionDetailvo.getComment()));
 			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getUpdateUser()));
 			inputParam.add(new InParameter("AV_PUBLIC_FLAG", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPublicFLag()));
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonID().toString()));
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTO_ADMIN_REVW_CMMNT",outputparam);
 			if(result != null && !result.isEmpty()){
@@ -1327,8 +1330,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public void updateIRBAdminAttachment(SubmissionDetailVO submissionDetailvo, MultipartFile[] files) {
 		try{
-			ArrayList<InParameter> inputParam =  new ArrayList<InParameter>();;
-			for (int i = 0; i < files.length; i++) {			
+			for (int i = 0; i < files.length; i++) {
+				ArrayList<InParameter> inputParam =  new ArrayList<InParameter>();
 				inputParam.add(new InParameter("AV_ATTACHMENT_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getAttachmentId()));
 				inputParam.add(new InParameter("AV_ADMIN_REVIEWER_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getAdminReviewId()));
 				inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getProtocolNumber()));
@@ -1342,6 +1345,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_COMMENT_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getCommentId()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,submissionDetailvo.getAcType()));
 				inputParam.add(new InParameter("AV_DATA", DBEngineConstants.TYPE_BLOB,files[i].getBytes()));			
+				inputParam.add(new InParameter("AV_PUBLIC_FLAG", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPublicFLag()));
+				inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonID().toString()));
 				dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTO_ADMIN_RVW_ATTMNT");
 			}
 		} catch (Exception e) {
@@ -1358,7 +1363,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> votingDetails  = dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_VOTING_DTLS",outputparam);
-			committeeVotingDetails = votingDetails.get(0);
+			if(votingDetails != null){
+				committeeVotingDetails = votingDetails.get(0);
+			}
 		} catch (Exception e) {
 			logger.info("Exception in updateCommitteeVoting:" + e);	
 		}	
@@ -1368,7 +1375,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public void updateSubmissionDetail(SubmissionDetailVO submissionDetailvo) {
 		try{
-			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();	
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
 			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionTypeCode()));
@@ -1381,8 +1387,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_NO_VOTE_COUNT", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getNoVotingCount()));
 			inputParam.add(new InParameter("AV_ABSTAINER_COUNT", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getAbstainCount()));
 			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getUpdateUser()));
-			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			dbEngine.executeProcedure(inputParam,"upd_irb_submission_details",outputparam);
+			dbEngine.executeProcedure(inputParam,"upd_irb_submission_details");
 		} catch (Exception e) {
 			logger.info("Exception in updateSubmissionDetail:" + e);	
 		}		
@@ -1402,10 +1407,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_STRING,vo.getSubmissionId()));
 				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSubmissionNumber()));
 				inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getComments()));
-				inputParam.add(new InParameter("AV_PRIVATE_COMMENT_FLAG", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getFlag()));
+				inputParam.add(new InParameter("AV_INCLUDE_IN_MINUTES", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getFlag()));
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getContingencyCode()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
-				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));			
+				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));	
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,null));			
 			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1430,7 +1436,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PRIVATE_FLAG", DBEngineConstants.TYPE_STRING,"Y"));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_ATTACHMENT", DBEngineConstants.TYPE_BLOB,files[i].getBytes()));
-				inputParam.add(new InParameter("AV_FILE_DATA_ID ", DBEngineConstants.TYPE_STRING,null));
 				inputParam.add(new InParameter("AV_TYPE ", DBEngineConstants.TYPE_STRING,"I"));			
 				dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_ATTACHMENTS");
 			}
@@ -1469,11 +1474,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_STRING,submissionDetailVO.getSubmissionId()));
 				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSubmissionNumber()));
 				inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,irbCommitteeReviewerCommentList.getComments()));
-				inputParam.add(new InParameter("AV_PRIVATE_COMMENT_FLAG", DBEngineConstants.TYPE_STRING,irbCommitteeReviewerCommentList.getFlag()));
+				inputParam.add(new InParameter("AV_INCLUDE_IN_MINUTES", DBEngineConstants.TYPE_STRING,irbCommitteeReviewerCommentList.getFlag()));
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbCommitteeReviewerCommentList.getContingencyCode()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,submissionDetailVO.getAcType()));			
-			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbCommitteeReviewerCommentList.getLetterFlag()));			
+				dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
 			}			
@@ -1498,7 +1504,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PRIVATE_FLAG", DBEngineConstants.TYPE_STRING,submissionDetailVO.getFlag()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getUpdateUser()));
 				inputParam.add(new InParameter("AV_ATTACHMENT", DBEngineConstants.TYPE_BLOB,files[i].getBytes()));
-				inputParam.add(new InParameter("AV_FILE_DATA_ID ", DBEngineConstants.TYPE_STRING,null));
 				inputParam.add(new InParameter("AV_TYPE ", DBEngineConstants.TYPE_STRING,submissionDetailVO.getAcType()));			
 				dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_ATTACHMENTS");
 			}
@@ -1511,49 +1516,129 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public void updateIRBAdminCheckList(SubmissionDetailVO submissionDetailvo) {
 		try{
 			for(AdminCheckListDetail checkListDetail : submissionDetailvo.getIrbAdminCheckList()){
-				ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-				inputParam.add(new InParameter("AV_ADMIN_CHKLST_ID", DBEngineConstants.TYPE_INTEGER,checkListDetail.getAdminCheckListId()));
-				inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getProtocolId()));
-				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
-				inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getProtocolNumber()));
-				inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSequenceNumber()));
-				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionNumber()));
-				inputParam.add(new InParameter("AV_ADMIN_REV_CHKLST_CODE", DBEngineConstants.TYPE_INTEGER,checkListDetail.getAdminRevChecklistCode()));
-				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,checkListDetail.getUpdateUser()));
-				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,checkListDetail.getActype()));
-				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,checkListDetail.getDescription()));		
-			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
-			}
+				if(checkListDetail.getActype() != null){
+					ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+					inputParam.add(new InParameter("AV_ADMIN_CHKLST_ID", DBEngineConstants.TYPE_INTEGER,checkListDetail.getAdminCheckListId()));
+					inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getProtocolId()));
+					inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
+					inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getProtocolNumber()));
+					inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSequenceNumber()));
+					inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionNumber()));
+					inputParam.add(new InParameter("AV_ADMIN_REV_CHKLST_CODE", DBEngineConstants.TYPE_INTEGER,checkListDetail.getAdminRevChecklistCode()));
+					inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getUpdateUser()));
+					inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,checkListDetail.getActype()));
+					inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,checkListDetail.getUserDescription()));
+					inputParam.add(new InParameter("av_status_flag", DBEngineConstants.TYPE_STRING,checkListDetail.getStatusFlag() == true ? "Y":"N"));
+					
+					dbEngine.executeProcedure(inputParam,"UPD_IRB_ADMIN_CHECKLIST");
+				}
+			} 
 		} catch (Exception e) {
 			logger.info("Exception in updateIRBAdminCheckList method" + e);
 		}		
 	}
 	
-	/*public ArrayList<HashMap<String, Object>> getCommitteeReviewerComments(SubmissionDetailVO submissionDetailVO){
-		ArrayList<HashMap<String, Object>> committeeReviewerComments = null;
+	@Override
+	public ArrayList<HashMap<String, Object>> getCommitteeReviewerCommentsandAttachment(SubmissionDetailVO submissionDetailVO){
+		ArrayList<HashMap<String, Object>> committeeReviewerCommentsandAttachment = null;
 		try {
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSubmissionId()));
 			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			committeeReviewerComments=dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_REVW_COMMNTS",outputparam);
+			committeeReviewerCommentsandAttachment=dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_REVIWR_ATMNT",outputparam);
 		} catch (Exception e) {
-			logger.info("Exception in getCommitteeReviewerComments:" + e);
+			logger.info("Exception in getCommitteeReviewerCommentsandAttachment:" + e);
 		}
-	    return committeeReviewerComments;
+	    return committeeReviewerCommentsandAttachment;
+
 	}
-	
-	public ArrayList<HashMap<String, Object>> getCommitteeReviewerAttachments(SubmissionDetailVO submissionDetailVO){
-		ArrayList<HashMap<String, Object>> committeeReviewerComments = null;
+
+	@Override
+
+	public ArrayList<HashMap<String, Object>> getSubmissionCommitteeList(SubmissionDetailVO vo) {
+		ArrayList<HashMap<String, Object>> committeeList = null;														
 		try {
-			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSubmissionId()));
+
+
 			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
-			committeeReviewerComments=dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_REVW_COMMNTS",outputparam);
+			committeeList = dbEngine.executeProcedure("GET_IRB_COMMITTEE_DETAILS",outputparam);
 		} catch (Exception e) {
-			logger.info("Exception in getCommitteeReviewerComments:" + e);
+			logger.info("Exception in getCommitteeList:" + e);	
 		}
-	    return committeeReviewerComments;
-	}*/
+		return committeeList;
+	}
+
+	@Override
+	public void updateCommitteeReviewers(SubmissionDetailVO submissionDetailVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_PROTOCOL_REVIEWER_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getProtocolReviewerId()));
+			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getProtocolId()));
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSubmissionId()));
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getProtocolNumber()));
+			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSequenceNumber()));
+			inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSubmissionNumber()));
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,String.valueOf(submissionDetailVO.getPersonID())));
+			inputParam.add(new InParameter("AV_REVIEWER_TYPE_CODE", DBEngineConstants.TYPE_STRING,submissionDetailVO.getCommitteeReviewerTypeCode()));
+			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getUpdateUser()));
+			inputParam.add(new InParameter("AV_DUE_DATE", DBEngineConstants.TYPE_DATE,generateSqlDate(submissionDetailVO.getCommitteeMemberDueDate())));
+			inputParam.add(new InParameter("AV_ASSIGNED_DATE", DBEngineConstants.TYPE_DATE,generateSqlDate(submissionDetailVO.getCommitteeMemberAssignedDate())));			
+			inputParam.add(new InParameter("AV_RECOMEND_ACTION", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSelectedRecommendedAction()));
+			inputParam.add(new InParameter("AV_PROTOCOL_ONLN_RVW_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getCommitteeMemberOnlineReviewerId()));
+			inputParam.add(new InParameter("AV_PROTO_ONLN_RVW_STATUS_CODE", DBEngineConstants.TYPE_STRING,submissionDetailVO.getCommitteeReviewerStatusCode()));		
+			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,submissionDetailVO.getAcType()));
+			inputParam.add(new InParameter("AV_STATUS_FLAG", DBEngineConstants.TYPE_STRING,submissionDetailVO.getStatusFlag()));		
+			dbEngine.executeProcedure(inputParam,"UPD_IRB_COMMITTE_REVIEWERS");
+		} catch (Exception e) {
+		logger.info("Exception in updateCommitteeReviewers:" + e);	
+		}	
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> fetchCommitteeReviewers(SubmissionDetailVO vo) {
+		ArrayList<HashMap<String, Object>> committeeReviwer = null;
+		try{
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();	
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getSubmissionId()));
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			committeeReviwer = dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_REVIEWRES",outputparam);
+		}catch (Exception e) {
+			logger.info("Exception in fetchsubmissionBasicDetail: " + e);
+		}
+		return committeeReviwer;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadCommitteeFileData(String fileDataId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			ArrayList<InParameter> inParam = new ArrayList<>();
+			ArrayList<OutParameter> outParam = new ArrayList<>();
+			inParam.add(new InParameter("AV_REVIEWER_ATTACHMENT_ID", DBEngineConstants.TYPE_STRING, fileDataId));
+			outParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inParam, "get_irb_download_comm_rvw_att",
+					outParam);
+			if (result != null && !result.isEmpty()) {
+				HashMap<String, Object> hmResult = result.get(0);
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				byteArrayOutputStream = (ByteArrayOutputStream) hmResult.get("DATA");
+				byte[] data = byteArrayOutputStream.toByteArray();
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType(hmResult.get("CONTENT_TYPE").toString()));
+				String filename = hmResult.get("FILE_NAME").toString();
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(data.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in downloadFileData method:" + e);
+		}
+		return attachmentData;
+	}
 }

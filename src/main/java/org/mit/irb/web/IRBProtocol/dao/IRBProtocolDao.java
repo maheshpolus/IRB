@@ -107,4 +107,6 @@ public interface IRBProtocolDao {
 			Integer nextGroupActionId);
 	
 	HashMap<String, Object> getIRBProtocolDetail(String protocolNumber);
+
+	ResponseEntity<byte[]> downloadAdminRevAttachment(String attachmentId);
 }

@@ -14,8 +14,35 @@ public class IRBReviewComment {
 	private String updateTimestamp;
 	private Integer protocolId;
 	private String actionType;
+	private String publicFlag;
+	private String personId;
+	private Integer actionCode;
 	private List<IRBReviewAttachment> reviewAttachments;
 	
+	public Integer getActionCode() {
+		return actionCode;
+	}
+
+	public void setActionCode(Integer actionCode) {
+		this.actionCode = actionCode;
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
+
+	public String getPublicFlag() {
+		return publicFlag;
+	}
+
+	public void setPublicFlag(String publicFlag) {
+		this.publicFlag = publicFlag;
+	}
+
 	public String getActionType() {
 		return actionType;
 	}

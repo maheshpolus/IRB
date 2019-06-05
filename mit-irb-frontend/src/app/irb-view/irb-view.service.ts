@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class IrbViewService {
@@ -112,5 +112,50 @@ updateIRBAdminAttachments(reqstObject: Object, uploadedFile) {
     this.formData.append('formDataJson', JSON.stringify(reqstObject));
     return this._http.post('/mit-irb/updateIRBAdminAttachments', this.formData);
   }
+
+  getSubmissionHistory(params) {
+    return this._http.post('/mit-irb/getSubmissionHistory', params);
+}
+
+updateIRBAdminCheckList(params) {
+    return this._http.post('/mit-irb/updateIRBAdminCheckList', params);
+}
+
+downloadAdminRevAttachment(attachmentId) {
+    return this._http.get('/mit-irb/downloadAdminRevAttachment', {
+        headers: new HttpHeaders().set('attachmentId', attachmentId.toString()),
+        responseType: 'blob'
+    });
+}
+
+getCommitteeScheduledDates(committeeId) {
+    const params = new HttpParams().set('committeeId', committeeId);
+      return this._http.post('/mit-irb/getCommitteeScheduledDates', params);
+  }
+
+  updateBasicSubmissionDetail(params) {
+    return this._http.post('/mit-irb/updateBasicSubmissionDetail', params);
+  }
+  loadCommitteeMembers(params) {
+    return this._http.post('/mit-irb/loadCommitteeMembers', params);
+  }
+  updateCommitteeReviewers(params) {
+        return this._http.post('/mit-irb/updateCommitteeReviewers', params);
+  }
+  updateCommitteeVotingDetail(params) {
+    return this._http.post('/mit-irb/updateCommitteeVotingDetail', params);
+  }
+  updateCommitteeReviewerAttachments(reqstObject: Object, uploadedFile) {
+    this.formData.delete('files');
+    this.formData.delete('formDataJson');
+    for (let i = 0; i < uploadedFile.length; i++) {
+      this.formData.append('files', uploadedFile[i]);
+    }
+    this.formData.append('formDataJson', JSON.stringify(reqstObject));
+    return this._http.post('/mit-irb/updateCommitteeReviewerAttachments', this.formData);
+  }
+loadCommitteeReviewerDetails(params) {
+    return this._http.post('/mit-irb/loadCommitteeReviewerDetails', params);
+}
 
 }

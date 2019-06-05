@@ -154,7 +154,7 @@
 			<i class="fa fa-history" aria-hidden="true"></i>History
 		</button>
 
-		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
+		<button *ngIf="userDTO.role=='ADMIN' || userDTO.role=='CHAIR'" class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
 		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSubmissionDetails')">
 			<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
 		</button>

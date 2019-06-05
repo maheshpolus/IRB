@@ -2583,7 +2583,7 @@ input:disabled,textarea:disabled{
 }
 .select-notify-popup {
     display: inline-block;
-    width: 66%;
+    width: 66% !important;
 }
 .pr-8 {
     padding-right: 8px;
@@ -2674,4 +2674,8 @@ input:disabled,textarea:disabled{
 .comments p {
     padding: 0;
     margin: 2px auto 0;
+}
+.complete-label {
+    color: #31a745;
+    margin-left: 25px;
 }

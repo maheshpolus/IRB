@@ -158,4 +158,17 @@ loadCommitteeReviewerDetails(params) {
     return this._http.post('/mit-irb/loadCommitteeReviewerDetails', params);
 }
 
+getPastSubmission(params) {
+    return this._http.post('/mit-irb/getPastSubmission', params);
+}
+updateCommitteeReviewerComments(params) {
+    return this._http.post('/mit-irb/updateCommitteeReviewerComments', params);
+}
+downloadCommitteeFileData(attachmentId) {
+    return this._http.get('/mit-irb/downloadCommitteeFileData', {
+        headers: new HttpHeaders().set('fileDataId', attachmentId.toString()),
+        responseType: 'blob'
+    });
+}
+
 }

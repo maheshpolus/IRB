@@ -348,17 +348,17 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '209' ||
       this.currentActionPerformed.ACTION_CODE === '211' || this.currentActionPerformed.ACTION_CODE === '212' ||
       this.currentActionPerformed.ACTION_CODE === '207' || this.currentActionPerformed.ACTION_CODE === '301' ||
-      this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '201' ||
-      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '206' ||
-      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '204'
-      || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '203' ||
-      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '113' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '910' ||
-      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' || this.currentActionPerformed.ACTION_CODE === '119') {
+      this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE === '201' ||
+      this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '206' ||
+      this.currentActionPerformed.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE === '204'
+      || this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ||
+      this.currentActionPerformed.ACTION_CODE === '113' || this.currentActionPerformed.ACTION_CODE === '910' ||
+      this.currentActionPerformed.ACTION_CODE === '208' || this.currentActionPerformed.ACTION_CODE === '119') {
       this.IRBActionsVO.actionDate = this.IRBActionsVO.actionDate != null ?
         this.GetFormattedDate(this.IRBActionsVO.actionDate) : null;
     }
-    if (this.currentActionPerformed.ACTION_CODE === '206' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' ||
-      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '205') {
+    if (this.currentActionPerformed.ACTION_CODE === '206' || this.currentActionPerformed.ACTION_CODE === '208' ||
+      this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '205') {
       this.IRBActionsVO.approvalDate = this.IRBActionsVO.approvalDate != null ?
         this.GetFormattedDate(this.IRBActionsVO.approvalDate) : null;
     }
@@ -366,8 +366,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.IRBActionsVO.approvalDate = this.IRBActionsVO.decisionDate != null ?
         this.GetFormattedDate(this.IRBActionsVO.decisionDate) : null;
     }
-    if (this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '208' ||
-      this.currentActionPerformed.ACTION_CODE.ACTION_CODE === '205') {
+    if (this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '208' ||
+      this.currentActionPerformed.ACTION_CODE === '205') {
       this.IRBActionsVO.approvalDate = this.IRBActionsVO.expirationDate != null ?
         this.GetFormattedDate(this.IRBActionsVO.expirationDate) : null;
     }

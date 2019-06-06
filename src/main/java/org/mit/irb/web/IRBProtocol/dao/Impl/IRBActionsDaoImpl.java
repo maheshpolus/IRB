@@ -1641,4 +1641,21 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		}
 		return attachmentData;
 	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getPastSubmission(SubmissionDetailVO vo) {
+		ArrayList<HashMap<String, Object>> pastsubmissionList = null;	
+		try{
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();	
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
+			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolId()));
+			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			pastsubmissionList = dbEngine.executeProcedure(inputParam,"get_irb_past_submision_history",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getPastSubmission method:" + e);
+		}
+		return pastsubmissionList;
+	}
 }

@@ -128,4 +128,6 @@ public interface IRBActionsDao {
 	ArrayList<HashMap<String, Object>> fetchCommitteeReviewers(SubmissionDetailVO vo);
 
 	ResponseEntity<byte[]> downloadCommitteeFileData(String fileDataId);
+
+	ArrayList<HashMap<String, Object>> getPastSubmission(SubmissionDetailVO vo);
 }

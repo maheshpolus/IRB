@@ -724,4 +724,18 @@ public class IRBActionsServImpl implements IRBActionsService {
 		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadAdminRevAttachment(attachmentId);
 		return attachments;
 	}
+
+	@Override
+	public SubmissionDetailVO getPastSubmission(SubmissionDetailVO vo) {
+		try{
+			ArrayList<HashMap<String, Object>> pastsubmission = irbActionsDao.getPastSubmission(vo);
+			vo.setPastSubmission(pastsubmission);
+			vo.setSuccessCode(true);
+		} catch (Exception e) {
+			vo.setSuccessCode(false);
+			vo.setSuccessMessage("getPastSubmission Failed"+e);
+			logger.info("Exception in getPastSubmission:" + e);
+		}
+		return vo;
+	}
 }

@@ -55,6 +55,7 @@ public class SubmissionDetailVO {
 	private ArrayList<HashMap<String, Object>> scheduleDates;
 	
 	private List<AdminCheckListDetail> irbAdminCheckList;
+	private ArrayList<HashMap<String, Object>> pastSubmission;
 	private ArrayList<HashMap<String, Object>> irbAdminAttachmentList;
 	private ArrayList<HashMap<String, Object>> irbAdminCommentList;
 	private ArrayList<HashMap<String, Object>> submissionHistory;
@@ -78,7 +79,12 @@ public class SubmissionDetailVO {
 	private String committeeMemberAssignedDate;
 	private String committeeReviewerTypeCode;
 	
-	
+	public ArrayList<HashMap<String, Object>> getPastSubmission() {
+		return pastSubmission;
+	}
+	public void setPastSubmission(ArrayList<HashMap<String, Object>> pastSubmission) {
+		this.pastSubmission = pastSubmission;
+	}
 	public List<AdminCheckListDetail> getIrbAdminCheckList() {
 		return irbAdminCheckList;
 	}

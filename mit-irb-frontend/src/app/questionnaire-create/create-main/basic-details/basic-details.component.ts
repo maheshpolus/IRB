@@ -23,7 +23,7 @@ export class BasicDetailsComponent implements OnInit {
   }
   getSubmoduleItemName(code) {
     const label = Constants.subModuleList.find(list => {
-       return (list.subModuleId ===  parseInt(code, 10)); });
+      return (list.subModuleId === parseInt(code, 10) && list.moduleId === 7); });
        return label ? label.label : '';
   }
   /**

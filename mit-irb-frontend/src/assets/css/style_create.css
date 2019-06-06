@@ -265,6 +265,12 @@ ul.sb-results-dropdown-menu > li:last-child {
    color: #a91f34;
    font-size: 20px;
 }
+.navbar-pg3 h6
+{
+   position: absolute;
+   right: 52px;
+   top: 0px;
+}
 .navbar-pg3 .nav-link
 {
     color:#000;
@@ -2677,5 +2683,4 @@ input:disabled,textarea:disabled{
 }
 .complete-label {
     color: #31a745;
-    margin-left: 25px;
 }

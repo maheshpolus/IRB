@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ISubscription } from 'rxjs/Subscription';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { IrbViewService } from '../irb-view.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
@@ -30,12 +32,17 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   adminReviewer: any = {};
   editadminReviewer: any = {};
   adminReviewerComment: any = {};
+  selectedPastSubmission: any = {};
   submissionVo: any = {};
   isEditIRBReviewer = false;
   IRBReviweverSelectedRow = null;
+  showCheckList = null;
   publicFLag = false;
+  adminPanelValidation = false;
   tabSelected = 'IRBCOMMENTS';
   showReviewsOf = 'All Administrative Reviewers';
+  validationTextadmin = null;
+  viewMode = false;
 
   uploadedFile: File[] = [];
   files: UploadFile[] = [];
@@ -72,22 +79,31 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   protocolReviewerEdit: any = {};
   submissionDate = null;
   votingComments: any = {};
+  protocolReviewComments: any = {};
   committeeReviewers: any = [];
+  committeeReviewerCommentsandAttachment = [];
   isEditProtocolReviewer = false;
+  minuteFlag = false;
+  letterFlag = false;
   protocolReviewerSelectedRow = null;
+  showProtocolReviewsOf = 'All Protocol Reviewers';
+  attachmentDescription = '';
+  tabSelectedCommittee: string;
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
 
   private $subscription: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
     private _irbViewService: IrbViewService, private _completerService: CompleterService,
-    private _sharedDataService: SharedDataService) { }
+    private _sharedDataService: SharedDataService, private _spinner: NgxSpinnerService, public toastr: ToastsManager) {
+      this.adminReviewer.reviewTypeCode = null;
+    }
 
   ngOnInit() {
     this.getLookUpData();
     this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
       if (data !== undefined && data != null) {
-        this.headerDetails = data;
+        this.headerDetails = Object.assign({}, data);
         this.getIRBAdminReviewers();
         this.getIRBAdminReviewDetails();
         this.getSubmissionBasicDetails();
@@ -129,6 +145,46 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  getPastSubmission() {
+    const reqstObj = {
+      protocolNumber: this.headerDetails.PROTOCOL_NUMBER,
+      protocolId: this.headerDetails.PROTOCOL_ID,
+      sequenceNumber: this.headerDetails.SEQUENCE_NUMBER
+    };
+    this._irbViewService.getPastSubmission(reqstObj).subscribe(data => {
+      const result: any = data || [];
+      this.submissionVo.pastSubmission = result.pastSubmission != null ? result.pastSubmission : [];
+    });
+  }
+
+  loadPastSubmissionById(submission) {
+    document.getElementById('pastSubCloseButton').click();
+    this.selectedPastSubmission = submission;
+    this.headerDetails.SUBMISSION_ID = submission.SUBMISSION_ID;
+    this.headerDetails.SUBMISSION_DATE = submission.SUBMISSION_DATE;
+    this.headerDetails.SUBMITTED_USER = submission.SUBMITTED_USER;
+    this.getIRBAdminReviewers();
+    this.getIRBAdminReviewDetails();
+    this.getSubmissionBasicDetails();
+    this.getSubmissionHistory();
+    this.loadCommitteeReviewerDetails();
+    this.viewMode = true;
+  }
+
+  showCurrentSubmission() {
+    this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
+      if (data !== undefined && data != null) {
+        this.headerDetails = Object.assign({}, data);
+        this.getIRBAdminReviewers();
+        this.getIRBAdminReviewDetails();
+        this.getSubmissionBasicDetails();
+        this.getSubmissionHistory();
+        this.loadCommitteeReviewerDetails();
+        this.viewMode = false;
+      }
+    });
+  }
+
   getIRBAdminReviewers() {
     const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
     this._irbViewService.getIRBAdminReviewers(reqstObj).subscribe(data => {
@@ -151,7 +207,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   getSubmissionBasicDetails() {
     const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
+    this._spinner.show();
     this._irbViewService.getSubmissionBasicDetails(reqstObj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
       this.submissionVo.committeeMemberList = result.committeeMemberList;
       this.submissionVo.committeeList = result.committeeList;
@@ -159,7 +217,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       this.submissionVo.committeeReviewers = result.committeeReviewers;
       this.submissionVo.reviewTypeCode = result.reviewTypeCode;
       this.submissionVo.sceduleId = result.sceduleId;
-      this.submissionVo.scheduleDates = result.scheduleDates;
+      this.submissionVo.scheduleDates = result.scheduleDates != null ? result.scheduleDates : [];
       this.submissionVo.selectedDate = result.selectedDate;
       this.submissionVo.submissionDetail = result.submissionDetail;
       this.submissionVo.submissionId = result.submissionId;
@@ -171,7 +229,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
 
 
-      this.scheduleList = result.scheduleDates;
+      this.scheduleList = result.scheduleDates != null ? result.scheduleDates : [];
       this.committeeList = result.committeeList != null ? result.committeeList : [];
       this.committeeID = this.submissionVo.committeeId != null ? this.submissionVo.committeeId :
         (this.committeeList.length > 0 ? this.committeeList[0].COMMITTEE_ID : null);
@@ -189,15 +247,23 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   addAdminReviwever(mode) {
-    this.adminReviewer.acType = mode;
-    this.adminReviewer.statusFlag = 'N';
-    this.adminReviewer.submissionId = this.headerDetails.SUBMISSION_ID;
-    this.adminReviewer.protocolId = this.headerDetails.PROTOCOL_ID;
-    this.adminReviewer.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
-    this.adminReviewer.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
-    this.adminReviewer.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
-    this.adminReviewer.updateUser = this.userDTO.userName;
-    this.saveOrUpdateAdminReviwever(this.adminReviewer);
+    this.adminPanelValidation = false;
+    if (this.submissionVo.irbAdminsReviewers != null && this.submissionVo.irbAdminsReviewers.length > 0) {
+      const exist = this.submissionVo.irbAdminsReviewers.filter(x => x.PERSON_ID === this.adminReviewer.personID);
+      this.adminPanelValidation = exist.length === 0 ? false : true;
+      this.validationTextadmin = 'Admin already added!';
+    }
+    if (!this.adminPanelValidation) {
+      this.adminReviewer.acType = mode;
+      this.adminReviewer.statusFlag = 'N';
+      this.adminReviewer.submissionId = this.headerDetails.SUBMISSION_ID;
+      this.adminReviewer.protocolId = this.headerDetails.PROTOCOL_ID;
+      this.adminReviewer.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
+      this.adminReviewer.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
+      this.adminReviewer.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
+      this.adminReviewer.updateUser = this.userDTO.userName;
+      this.saveOrUpdateAdminReviwever(this.adminReviewer);
+    }
   }
 
   editIRBReviewer(item, index) {
@@ -242,12 +308,21 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   saveOrUpdateAdminReviwever(requestObj) {
+    this._spinner.show();
     this._irbViewService.updateIRBAdminReviewer(requestObj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
       this.submissionVo.irbAdminsReviewers = result.irbAdminsReviewers;
       this.adminReviewer = {};
       this.IRBReviweverSelectedRow = null;
       this.isEditIRBReviewer = false;
+      this.submissionVo.successCode = result.successCode;
+        this.submissionVo.successMessage = result.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Save Adminstrative Reviewer', null, { toastLife: 2000 });
+        }
     });
   }
 
@@ -262,12 +337,22 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.adminReviewerComment.publicFLag = this.publicFLag === true ? 'Y' : 'N';
     this.adminReviewerComment.updateUser = this.userDTO.userName;
     this.adminReviewerComment.personID = this.userDTO.personID;
+    this._spinner.show();
     this._irbViewService.updateIRBAdminComment(this.adminReviewerComment).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
+      this.irbAdminCommentAttachmentBackUp = Object.assign([], result.irbAdminCommentAttachment);
       this.submissionVo.irbAdminCommentAttachment = result.irbAdminCommentAttachment;
       this.showReviewsOf = 'All Administrative Reviewers';
       this.adminReviewerComment = {};
       this.publicFLag = false;
+      this.submissionVo.successCode = result.successCode;
+        this.submissionVo.successMessage = result.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Save Adminstrative Reviewer Comment', null, { toastLife: 2000 });
+        }
     });
   }
 
@@ -328,15 +413,25 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     reqstObj.updateUser = this.userDTO.userName;
     reqstObj.personID = this.userDTO.personID;
     reqstObj.comment = attachmentDescription;
+    this._spinner.show();
     this._irbViewService.updateIRBAdminAttachments(reqstObj, this.uploadedFile).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
       document.getElementById('closeButton').click();
       this.submissionVo.irbAdminCommentAttachment = result.irbAdminCommentAttachment;
       this.showReviewsOf = 'All Administrative Reviewers';
+      this.submissionVo.successCode = result.successCode;
+        this.submissionVo.successMessage = result.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Save Attachments', null, { toastLife: 2000 });
+        }
     });
   }
 
   downloadAdminRevAttachment(attachment) {
+    this._spinner.show();
     this._irbViewService.downloadAdminRevAttachment(attachment.attachmentId).subscribe(data => {
       const a = document.createElement('a');
       const blob = new Blob([data], { type: data.type });
@@ -344,12 +439,14 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       a.download = attachment.fileName;
       document.body.appendChild(a);
       a.click();
+      this._spinner.hide();
     });
   }
 
   clearAttachmentPopup() {
     this.uploadedFile = [];
     this.publicFLag = false;
+    this.attachmentDescription = '';
   }
 
   showReviewById(irbAdminsReviewer) {
@@ -397,9 +494,19 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     reqstObj.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
     reqstObj.irbAdminCheckList = this.submissionVo.irbAdminCheckList;
     reqstObj.updateUser = this.userDTO.userName;
+    this._spinner.show();
     this._irbViewService.updateIRBAdminCheckList(reqstObj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
+      this.irbAdminCheckListBackUp = Object.assign([], result.irbAdminCheckList);
       this.submissionVo.irbAdminCheckList = result.irbAdminCheckList;
+      this.submissionVo.successCode = result.successCode;
+        this.submissionVo.successMessage = result.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Update Checklist', null, { toastLife: 2000 });
+        }
     });
   }
 
@@ -407,9 +514,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   // Add Commitee methods here only
   getScheduleLookUp(committeId) {
+    this._spinner.show();
     this._irbViewService.getCommitteeScheduledDates(committeId).subscribe((data: any) => {
+      this._spinner.hide();
       this.scheduleList = data.scheduleDates != null ? data.scheduleDates : [];
-      this.scheduleID = this.scheduleList != null ? this.scheduleList[0].SCHEDULE_ID : null;
+      this.scheduleID = this.scheduleList.length > 0 ? this.scheduleList[0].SCHEDULE_ID : null;
     });
   }
 
@@ -421,9 +530,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
       this.submissionVo.committeeId = this.committeeID;
       this.submissionVo.sceduleId = this.scheduleID;
+      this._spinner.show();
       this._irbViewService.updateBasicSubmissionDetail(this.submissionVo).subscribe((data: any) => {
         // this.submissionVo = data;
         const result: any = data;
+        this._spinner.hide();
         this.submissionVo.committeeMemberList = result.committeeMemberList;
         this.submissionVo.committeeList = result.committeeList;
         this.submissionVo.committeeName = result.committeeName;
@@ -439,12 +550,20 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
         this.submissionVo.submissionType = result.submissionType;
         this.submissionVo.submissionTypeCode = result.submissionTypeCode;
         this.submissionVo.successCode = result.successCode;
+        this.submissionVo.successMessage = result.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Save Submission Details', null, { toastLife: 2000 });
+        }
       });
     }
   }
   loadCommitteeMembers(scheduleId) {
     let scheduleDate;
+    this._spinner.show();
     this.scheduleList.forEach(schedule => {
+      this._spinner.hide();
       if (schedule.SCHEDULE_ID.toString() === scheduleId) {
         scheduleDate = this.GetFormattedDate(new Date(schedule.SCHEDULED_DATE));
       }
@@ -507,12 +626,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   deleteProtocolReviewer(reviewer) {
-    // this.protocolReviewerEdit.protocolId = this.headerDetails.PROTOCOL_ID;
     this.protocolReviewerEdit.submissionId = this.headerDetails.SUBMISSION_ID;
-    // this.protocolReviewerEdit.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
-    // this.protocolReviewerEdit.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
-    // this.protocolReviewerEdit.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
-    // this.protocolReviewerEdit.updateUser = this.userDTO.userName;
     this.protocolReviewerEdit.protocolReviewerId = reviewer.PROTOCOL_REVIEWER_ID;
     this.protocolReviewerEdit.committeeMemberOnlineReviewerId = reviewer.PROTOCOL_ONLN_RVW_ID;
     this.saveProtocolReviewer(this.protocolReviewerEdit, 'D');
@@ -525,7 +639,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       protocolReviewer.committeeMemberDueDate = protocolReviewer.committeeMemberDueDate != null ?
         this.GetFormattedDate(protocolReviewer.committeeMemberDueDate) : null;
     }
+    this._spinner.show();
     this._irbViewService.updateCommitteeReviewers(protocolReviewer).subscribe((data: any) => {
+      this._spinner.hide();
       this.committeeReviewers = data.committeeReviewers != null ? data.committeeReviewers : [];
       if (mode === 'I') {
         this.protocolReviewer.personID = null;
@@ -535,6 +651,13 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
         this.protocolReviewerEdit = {};
         this.protocolReviewerSelectedRow = null;
       }
+      this.submissionVo.successCode = data.successCode;
+        this.submissionVo.successMessage = data.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to save Protocol Reviewer', null, { toastLife: 2000 });
+        }
     });
   }
 
@@ -548,18 +671,24 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.protocolReviewer.personID = event.originalObject.PERSON_ID;
   }
   saveVotingComments() {
-    this.votingComments.submissionId = this.headerDetails.SUBMISSION_ID;
-    this.votingComments.submissionTypeCode = this.submissionVo.submissionTypeCode;
-    this.votingComments.reviewTypeCode = this.submissionVo.reviewTypeCode;
-    this.votingComments.sceduleId = this.submissionVo.sceduleId;
-    this.votingComments.committeeId = this.submissionVo.committeeId;
-    this.votingComments.submissionQualifierCode = this.submissionVo.submissionQualifierCode;
-    this.votingComments.updateUser = this.userDTO.userName;
-    this._irbViewService.updateCommitteeVotingDetail(this.votingComments).subscribe((data: any) => {
-      this.votingComments.comment = data.comment;
-      this.votingComments.abstainCount = data.abstainCount;
-      this.votingComments.noVotingCount = data.noVotingCount;
-      this.votingComments.yesVotingCount = data.yesVotingCount;
+    this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
+    this.submissionVo.sceduleId = this.scheduleID;
+    this.submissionVo.committeeId = this.committeeID;
+    this.submissionVo.updateUser = this.userDTO.userName;
+    this._spinner.show();
+    this._irbViewService.updateCommitteeVotingDetail(this.submissionVo).subscribe((data: any) => {
+      this._spinner.hide();
+      this.submissionVo.comment = data.comment;
+      this.submissionVo.abstainCount = data.abstainCount;
+      this.submissionVo.noVotingCount = data.noVotingCount;
+      this.submissionVo.yesVotingCount = data.yesVotingCount;
+      this.submissionVo.successCode = data.successCode;
+        this.submissionVo.successMessage = data.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Voting Details', null, { toastLife: 2000 });
+        }
     });
   }
 
@@ -571,24 +700,92 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     reqstObj.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
     reqstObj.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
     reqstObj.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
-    reqstObj.publicFLag = 'N';
+    reqstObj.flag = this.publicFLag === true ? 'Y' : 'N';
     reqstObj.updateUser = this.userDTO.userName;
-    reqstObj.comment = attachmentComment;
-    this._irbViewService.updateCommitteeReviewerAttachments(reqstObj, this.uploadedFile).subscribe(data => {
-      const result: any = data || [];
-      // this.submissionVo.irbAdminCommentAttachment  = result.irbAdminCommentAttachment;
+    reqstObj.attachmentDescription = attachmentComment;
+    this._spinner.show();
+    this._irbViewService.updateCommitteeReviewerAttachments(reqstObj, this.uploadedFile).subscribe((data: any) => {
+      this._spinner.hide();
+      this.submissionVo.committeeReviewerCommentsandAttachment = data.committeeReviewerCommentsandAttachment != null ?
+    data.committeeReviewerCommentsandAttachment : [];
+      document.getElementById('closeButton').click();
+      this.submissionVo.successCode = data.successCode;
+        this.submissionVo.successMessage = data.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Save Attachment', null, { toastLife: 2000 });
+        }
     });
   }
 
   loadCommitteeReviewerDetails() {
-    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
+    this.showProtocolReviewsOf = 'All Protocol Reviewers';
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
     this._irbViewService.loadCommitteeReviewerDetails(reqstObj).subscribe(data => {
       const result: any = data || [];
       // this.submissionVo.irbAdminsReviewers = result.irbAdminsReviewers;
-      this.votingComments.comment = result.comment;
-      this.votingComments.abstainCount = result.abstainCount;
-      this.votingComments.noVotingCount = result.noVotingCount;
-      this.votingComments.yesVotingCount = result.yesVotingCount;
+      this.submissionVo.comment = result.comment;
+      this.submissionVo.abstainCount = result.abstainCount;
+      this.submissionVo.noVotingCount = result.noVotingCount;
+      this.submissionVo.yesVotingCount = result.yesVotingCount;
+      this.submissionVo.committeeReviewerCommentsandAttachment = result.committeeReviewerCommentsandAttachment != null ?
+                                                                result.committeeReviewerCommentsandAttachment : [];
+     this.committeeReviewerCommentsandAttachment = Object.assign([], this.submissionVo.committeeReviewerCommentsandAttachment);
     });
+  }
+
+  addProtocolReviewComments(mode) {
+  this.submissionVo.acType = mode;
+  this.submissionVo.protocolId = this.headerDetails.PROTOCOL_ID;
+  this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
+  this.submissionVo.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
+  this.submissionVo.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
+  this.submissionVo.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
+  this.submissionVo.updateUser = this.userDTO.userName;
+  this.protocolReviewComments.flag = this.minuteFlag === true ? 'Y' : 'N';
+  this.protocolReviewComments.letterFlag  = this.letterFlag === true ? 'Y' : 'N';
+  this.protocolReviewComments.commMinutesScheduleId = null;
+  this.protocolReviewComments.contingencyCode = null;
+  this.submissionVo.irbCommitteeReviewerComments = this.protocolReviewComments;
+  this._spinner.show();
+  this._irbViewService.updateCommitteeReviewerComments(this.submissionVo).subscribe((data: any) => {
+    this._spinner.hide();
+    this.submissionVo.committeeReviewerCommentsandAttachment = data.committeeReviewerCommentsandAttachment != null ?
+    data.committeeReviewerCommentsandAttachment : [];
+    this.submissionVo.successCode = data.successCode;
+        this.submissionVo.successMessage = data.successMessage;
+        if (this.submissionVo.successCode === true) {
+          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+        } else {
+          this.toastr.error('Failed to Save Committee Review Comments', null, { toastLife: 2000 });
+        }
+    this.letterFlag = false;
+    this.minuteFlag = false;
+    this.protocolReviewComments.comments = '';
+  });
+  }
+  downloadCommitteReviwerAttachment(attachment) {
+    this._spinner.show();
+    this._irbViewService.downloadCommitteeFileData(attachment.REVIEWER_ATTACHMENT_ID).subscribe(data => {
+      const a = document.createElement('a');
+      const blob = new Blob([data], { type: data.type });
+      a.href = URL.createObjectURL(blob);
+      a.download = attachment.FILE_NAME;
+      document.body.appendChild(a);
+      this._spinner.hide();
+      a.click();
+    });
+  }
+
+  showProtocolReviewerCommentsById(protocolReviewer) {
+    this.showProtocolReviewsOf = protocolReviewer.FULL_NAME;
+    this.submissionVo.committeeReviewerCommentsandAttachment =
+      this.committeeReviewerCommentsandAttachment.filter(x => x.PERSON_ID === protocolReviewer.PERSON_ID);
+  }
+
+  expandProtocolReviwers() {
+    this.isExpanded = !this.isExpanded;
+    this.tabSelectedCommittee =  this.isExpanded === true ? 'PROTOCOL_COMMENTS' : '';
   }
 }

@@ -504,6 +504,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			irbActionsDao.updateIRBAdminComment(submissionDetailvo);
 			submissionDetailvo = getIRBAdminReviewDetails(submissionDetailvo);
 			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("Comment saved successfully");
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
 			submissionDetailvo.setSuccessMessage("updateIRBAdminComment Failed"+e);
@@ -520,6 +521,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			irbActionsDao.updateIRBAdminAttachment(submissionDetailvo,files);
 			submissionDetailvo = getIRBAdminReviewDetails(submissionDetailvo);
 			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("Attachments saved succesfully");
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
 			submissionDetailvo.setSuccessMessage("updateIRBAdminAttachments Failed"+e);
@@ -541,6 +543,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			}
 			submissionDetailvo.setCommitteeVotingDetails(committeeVotingDetails);
 			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("Voting details saved successfully");
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
 			submissionDetailvo.setSuccessMessage("updateCommitteeVotingDetail Failed"+e);
@@ -594,6 +597,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 				}
 			}	
 			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("Submission details saved successfully");
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
 			submissionDetailvo.setSuccessMessage("updateBasicSubmissionDetail Failed "+e);
@@ -623,6 +627,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			ArrayList<HashMap<String, Object>> committeeReviewers = irbActionsDao.fetchCommitteeReviewers(vo);
 			vo.setCommitteeReviewers(committeeReviewers);
 			vo.setSuccessCode(true);
+			vo.setSuccessMessage("Committee reviewers saved successfully");
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("getCommitteeList Failed"+e);
@@ -674,6 +679,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			ArrayList<HashMap<String, Object>> committeeReviewerCommentsandAttachment = irbActionsDao.getCommitteeReviewerCommentsandAttachment(vo);
 			vo.setCommitteeReviewerCommentsandAttachment(committeeReviewerCommentsandAttachment);
 			vo.setSuccessCode(true);
+			vo.setSuccessMessage("Comments saved successfully");
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("updateCommitteeReviewerComments Failed"+e);
@@ -690,6 +696,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			Future<SubmissionDetailVO> irbAdminCheckList = initLoadService.loadIRBAdminCHeckList(submissionDetailvo);
 		    submissionDetailvo = irbAdminCheckList.get();
 			submissionDetailvo.setSuccessCode(true);
+			submissionDetailvo.setSuccessMessage("Checklist saved successfully");
 		} catch (Exception e) {
 			submissionDetailvo.setSuccessCode(false);
 			submissionDetailvo.setSuccessMessage("updateIRBAdminCheckList Failed "+e);
@@ -705,6 +712,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 			ArrayList<HashMap<String, Object>> committeeReviewerCommentsandAttachment = irbActionsDao.getCommitteeReviewerCommentsandAttachment(vo);
 			vo.setCommitteeReviewerCommentsandAttachment(committeeReviewerCommentsandAttachment);
 			vo.setSuccessCode(true);
+			vo.setSuccessMessage("Attachments saved successfully");
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
 			vo.setSuccessMessage("updateCommitteeReviewerAttachments Failed"+e);

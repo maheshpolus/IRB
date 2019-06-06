@@ -70,7 +70,7 @@ public class SubmissionDetailVO {
 	private String attachmentDescription;
 	private Integer reviewerAttachmentId;
 	private String commMinutesScheduleId;
-	private List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments;
+	private IRBCommitteeReviewerComments irbCommitteeReviewerComments;
 	private Integer protocolReviewerId;
 	private Integer selectedRecommendedAction;
 	private Integer committeeMemberOnlineReviewerId;
@@ -396,13 +396,7 @@ public class SubmissionDetailVO {
 	}
 	public void setCommMinutesScheduleId(String commMinutesScheduleId) {
 		this.commMinutesScheduleId = commMinutesScheduleId;
-	}
-	public List<IRBCommitteeReviewerComments> getIrbCommitteeReviewerComments() {
-		return irbCommitteeReviewerComments;
-	}
-	public void setIrbCommitteeReviewerComments(List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments) {
-		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
-	}
+	}	
 	public String getSubmissionType() {
 		return submissionType;
 	}
@@ -475,5 +469,11 @@ public class SubmissionDetailVO {
 	}
 	public void setCommitteeReviewerTypeCode(String committeeReviewerTypeCode) {
 		this.committeeReviewerTypeCode = committeeReviewerTypeCode;
+	}
+	public IRBCommitteeReviewerComments getIrbCommitteeReviewerComments() {
+		return irbCommitteeReviewerComments;
+	}
+	public void setIrbCommitteeReviewerComments(IRBCommitteeReviewerComments irbCommitteeReviewerComments) {
+		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
 	}
 }

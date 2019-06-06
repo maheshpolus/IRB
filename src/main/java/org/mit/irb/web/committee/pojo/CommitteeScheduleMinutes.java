@@ -80,14 +80,14 @@ public class CommitteeScheduleMinutes implements Serializable {
 	@Column(name = "SUBMISSION_NUMBER")
 	private Integer submissionNumber;
 
-	@Column(name = "PRIVATE_COMMENT_FLAG")   //need to chk with string
+	@Column(name = "INCLUDE_IN_MINUTES")   //need to chk with string
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean privateCommentFlag;
 
 	@Column(name = "MINUTE_ENTRY")   //need to check long data type
 	private String minuteEntry;
 
-	@Column(name = "FINAL_FLAG")
+	@Column(name = "INCLUDE_IN_LETTER")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean finalFlag;
 

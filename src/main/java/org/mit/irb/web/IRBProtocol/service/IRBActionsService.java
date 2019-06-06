@@ -173,4 +173,10 @@ public interface IRBActionsService {
 	 * @return download attachment for reviewer
 	 */
 	ResponseEntity<byte[]> downloadAdminRevAttachment(String attachmentId);
+
+	/**
+	 * @param vo
+	 * @return 
+	 */
+	SubmissionDetailVO getPastSubmission(SubmissionDetailVO vo);
 }

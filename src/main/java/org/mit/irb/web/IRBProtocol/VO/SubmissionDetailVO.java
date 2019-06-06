@@ -55,6 +55,7 @@ public class SubmissionDetailVO {
 	private ArrayList<HashMap<String, Object>> scheduleDates;
 	
 	private List<AdminCheckListDetail> irbAdminCheckList;
+	private ArrayList<HashMap<String, Object>> pastSubmission;
 	private ArrayList<HashMap<String, Object>> irbAdminAttachmentList;
 	private ArrayList<HashMap<String, Object>> irbAdminCommentList;
 	private ArrayList<HashMap<String, Object>> submissionHistory;
@@ -69,7 +70,7 @@ public class SubmissionDetailVO {
 	private String attachmentDescription;
 	private Integer reviewerAttachmentId;
 	private String commMinutesScheduleId;
-	private List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments;
+	private IRBCommitteeReviewerComments irbCommitteeReviewerComments;
 	private Integer protocolReviewerId;
 	private Integer selectedRecommendedAction;
 	private Integer committeeMemberOnlineReviewerId;
@@ -78,7 +79,12 @@ public class SubmissionDetailVO {
 	private String committeeMemberAssignedDate;
 	private String committeeReviewerTypeCode;
 	
-	
+	public ArrayList<HashMap<String, Object>> getPastSubmission() {
+		return pastSubmission;
+	}
+	public void setPastSubmission(ArrayList<HashMap<String, Object>> pastSubmission) {
+		this.pastSubmission = pastSubmission;
+	}
 	public List<AdminCheckListDetail> getIrbAdminCheckList() {
 		return irbAdminCheckList;
 	}
@@ -390,13 +396,7 @@ public class SubmissionDetailVO {
 	}
 	public void setCommMinutesScheduleId(String commMinutesScheduleId) {
 		this.commMinutesScheduleId = commMinutesScheduleId;
-	}
-	public List<IRBCommitteeReviewerComments> getIrbCommitteeReviewerComments() {
-		return irbCommitteeReviewerComments;
-	}
-	public void setIrbCommitteeReviewerComments(List<IRBCommitteeReviewerComments> irbCommitteeReviewerComments) {
-		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
-	}
+	}	
 	public String getSubmissionType() {
 		return submissionType;
 	}
@@ -469,5 +469,11 @@ public class SubmissionDetailVO {
 	}
 	public void setCommitteeReviewerTypeCode(String committeeReviewerTypeCode) {
 		this.committeeReviewerTypeCode = committeeReviewerTypeCode;
+	}
+	public IRBCommitteeReviewerComments getIrbCommitteeReviewerComments() {
+		return irbCommitteeReviewerComments;
+	}
+	public void setIrbCommitteeReviewerComments(IRBCommitteeReviewerComments irbCommitteeReviewerComments) {
+		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
 	}
 }

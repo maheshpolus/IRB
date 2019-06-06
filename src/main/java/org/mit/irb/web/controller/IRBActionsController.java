@@ -250,4 +250,11 @@ public class IRBActionsController {
 			@RequestHeader("attachmentId") String attachmentId) {
 		return irbActionsService.downloadAdminRevAttachment(attachmentId);
 	}
+	
+	@RequestMapping(value = "/getPastSubmission", method = RequestMethod.POST)
+	public @ResponseBody SubmissionDetailVO getPastSubmission(@RequestBody SubmissionDetailVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbActionsService.getPastSubmission(vo); 
+		return vo;
+	}
 }

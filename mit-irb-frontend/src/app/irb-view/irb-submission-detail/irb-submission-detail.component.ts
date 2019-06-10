@@ -53,7 +53,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   scheduleList: any = [];
   committeeReviewTypes = [];
   invalidData = {
-    invalidBasicDetails: false, invalidProtocolReviewer: false
+    invalidBasicDetails: false, invalidProtocolReviewer: false, invalidReviewer: false
   };
   committeeMemberList: any = [];
   recomendedActionType: any = [];
@@ -86,9 +86,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   minuteFlag = false;
   letterFlag = false;
   protocolReviewerSelectedRow = null;
+  reviewedBy = null;
   showProtocolReviewsOf = 'All Protocol Reviewers';
   attachmentDescription = '';
   tabSelectedCommittee: string;
+  warningMessage: string;
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
 
@@ -576,14 +578,28 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   addProtocolReviewer() {
-    this.protocolReviewer.protocolId = this.headerDetails.PROTOCOL_ID;
-    this.protocolReviewer.protocolId = this.headerDetails.PROTOCOL_ID;
-    this.protocolReviewer.submissionId = this.headerDetails.SUBMISSION_ID;
-    this.protocolReviewer.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
-    this.protocolReviewer.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
-    this.protocolReviewer.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
-    this.protocolReviewer.updateUser = this.userDTO.userName;
-    this.saveProtocolReviewer(this.protocolReviewer, 'I');
+    if (this.protocolReviewer.committeeReviewerTypeCode == null || this.protocolReviewer.committeeReviewerTypeCode === 'null' ||
+    this.protocolReviewer.personID == null ) {
+      this.invalidData.invalidProtocolReviewer = true;
+      this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
+    } else {
+      this.invalidData.invalidProtocolReviewer = false;
+        const index = (this.committeeReviewers != null && this.committeeReviewers.length > 0) ?
+        this.committeeReviewers.findIndex(item => item.PERSON_ID === this.protocolReviewer.personID) : -1;
+        if (index !== -1) {
+          this.invalidData.invalidReviewer = true;
+          this.warningMessage = 'Protocol Reviewer Already Added!';
+        } else {
+      this.invalidData.invalidReviewer = false;
+      this.protocolReviewer.protocolId = this.headerDetails.PROTOCOL_ID;
+      this.protocolReviewer.submissionId = this.headerDetails.SUBMISSION_ID;
+      this.protocolReviewer.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
+      this.protocolReviewer.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
+      this.protocolReviewer.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
+      this.protocolReviewer.updateUser = this.userDTO.userName;
+      this.saveProtocolReviewer(this.protocolReviewer, 'I');
+      }
+    }
   }
 
   editProtocolReviewer(reviewer, index) {
@@ -700,14 +716,17 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     reqstObj.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
     reqstObj.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
     reqstObj.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
+    reqstObj.personID = this.userDTO.personID;
     reqstObj.flag = this.publicFLag === true ? 'Y' : 'N';
-    reqstObj.updateUser = this.userDTO.userName;
+    reqstObj.updateUser = this.reviewedBy;
     reqstObj.attachmentDescription = attachmentComment;
     this._spinner.show();
     this._irbViewService.updateCommitteeReviewerAttachments(reqstObj, this.uploadedFile).subscribe((data: any) => {
       this._spinner.hide();
       this.submissionVo.committeeReviewerCommentsandAttachment = data.committeeReviewerCommentsandAttachment != null ?
     data.committeeReviewerCommentsandAttachment : [];
+    this.committeeReviewerCommentsandAttachment = Object.assign([], this.submissionVo.committeeReviewerCommentsandAttachment);
+    this.reviewedBy = this.userDTO.userName;
       document.getElementById('closeButton').click();
       this.submissionVo.successCode = data.successCode;
         this.submissionVo.successMessage = data.successMessage;
@@ -742,7 +761,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   this.submissionVo.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
   this.submissionVo.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
   this.submissionVo.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
-  this.submissionVo.updateUser = this.userDTO.userName;
+  this.submissionVo.personID = this.userDTO.personID;
+  this.submissionVo.updateUser = this.reviewedBy;
   this.protocolReviewComments.flag = this.minuteFlag === true ? 'Y' : 'N';
   this.protocolReviewComments.letterFlag  = this.letterFlag === true ? 'Y' : 'N';
   this.protocolReviewComments.commMinutesScheduleId = null;
@@ -753,6 +773,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this._spinner.hide();
     this.submissionVo.committeeReviewerCommentsandAttachment = data.committeeReviewerCommentsandAttachment != null ?
     data.committeeReviewerCommentsandAttachment : [];
+    this.committeeReviewerCommentsandAttachment = Object.assign([], this.submissionVo.committeeReviewerCommentsandAttachment);
+    this.reviewedBy = this.userDTO.userName;
     this.submissionVo.successCode = data.successCode;
         this.submissionVo.successMessage = data.successMessage;
         if (this.submissionVo.successCode === true) {
@@ -787,5 +809,6 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   expandProtocolReviwers() {
     this.isExpanded = !this.isExpanded;
     this.tabSelectedCommittee =  this.isExpanded === true ? 'PROTOCOL_COMMENTS' : '';
+    this.reviewedBy = this.userDTO.userName;
   }
 }

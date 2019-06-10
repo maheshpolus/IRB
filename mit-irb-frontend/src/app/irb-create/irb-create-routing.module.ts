@@ -13,7 +13,7 @@ import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-de
 
 const routes: Routes = [
   {
-    path: '', component: IrbCreateHeaderComponent,
+    path: '', component: IrbCreateHeaderComponent, resolve: { irb: DashboardResolverService },
     children: [
       { path: '', redirectTo: 'irbHome', pathMatch: 'full' },
       { path: '', component: IrbEditComponent },

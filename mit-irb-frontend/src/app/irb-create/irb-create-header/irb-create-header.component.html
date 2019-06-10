@@ -37,7 +37,7 @@
 							</div> -->
 
 
-							<div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">
+							<div *ngIf="generalInfo.protocolType != null" class="col-md-3 col-sm-6 col-12">
 									<span class="active-en" [ngClass]="{
 											'active-status': (generalInfo?.protocolStatus?.protocolStatusCode=='200'||
 															 generalInfo?.protocolStatus?.protocolStatusCode== '201'||
@@ -69,9 +69,20 @@
 															generalInfo?.protocolStatus?.protocolStatusCode== '308'||
 															generalInfo?.protocolStatus?.protocolStatusCode== '311')}">{{generalInfo?.protocolStatus?.description}}</span>
 									<!-- <i class="fa fa-exclamation-triangle ml-10" *ngIf="irbHeaderDetails?.IS_NEW_RULE=='N'" title="Follows OLD-RULE" aria-hidden="true"></i> -->
+									<div style="margin-top: 30px">
+										<p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null">
+											COUHES Admin :
+											<span>{{generalInfo?.protocolSubmissionStatuses?.assigneePersonName}}</span>
+											<button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo.protocolStatus.protocolStatusCode !== '100'" type="button" class="btn admin-label" (click)="openAssignPopUp('U')">
+												<i class="fa fa-pencil" aria-hidden="true"> Reassign</i>
+											</button>
+										</p>
+										<p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId == null">
+										<button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo.protocolStatus.protocolStatusCode !== '100'" type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
+											<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin</button>
+										</p>
+									</div>
 								</div>
-
-
 							<div class="i-icon-top">
 								<span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne"
 								 aria-expanded="false" aria-controls="collapseOne"> </span>

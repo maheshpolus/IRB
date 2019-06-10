@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { IrbCreateService } from '../irb-create.service';
+import { AssignModalComponent } from '../../common/assign-modal/assign-modal.component';
 
 @Component({
   selector: 'app-irb-create-header',
@@ -17,6 +19,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   protocolId = null;
   commonVo: any = {};
   generalInfo: any = {};
+  userDTO: any = {};
   isExpanded: boolean;
   isCreateNewProtocol = false;
   private $subscription1: ISubscription;
@@ -25,7 +28,8 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _irbCreateService: IrbCreateService,
-    private _spinner: NgxSpinnerService) {
+    private _spinner: NgxSpinnerService,
+    private modalService: NgbModal) {
       this._router.events.subscribe((evt: any) => {
         if (evt instanceof NavigationEnd) {
           if (evt.url === '/irb/irb-create/irbHome?protocolNumber=' + this.protocolNumber + '&protocolId=' + this.protocolId) {
@@ -40,6 +44,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
      }
 
   ngOnInit() {
+    this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this.$subscription1 = this._sharedDataService.generalInfoVariable.subscribe(generalInfo => {
       if (generalInfo !== undefined) {
         this.generalInfo = generalInfo;
@@ -121,5 +126,34 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
       } else {
         return false;
       }
+    }
+
+    openAssignPopUp(mode) {
+      const modalRef = this.modalService.open(AssignModalComponent, {
+        size: 'lg',
+        windowClass: 'assignAdminModal', backdrop: 'static',
+      });
+      const protocoldetails: any = {};
+      protocoldetails.ASSIGNEE_PERSON_ID = this.generalInfo.protocolSubmissionStatuses.assigneePersonId;
+      protocoldetails.PROTOCOL_NUMBER = this.generalInfo.protocolNumber;
+      protocoldetails.PROTOCOL_ID = this.generalInfo.protocolId;
+      protocoldetails.SUBMISSION_ID = this.generalInfo.protocolSubmissionStatuses.submission_Id;
+      protocoldetails.SUBMISSION_NUMBER = this.generalInfo.protocolSubmissionStatuses.submissionNumber;
+      protocoldetails.SEQUENCE_NUMBER = this.generalInfo.protocolSubmissionStatuses.sequenceNumber;
+       modalRef.componentInstance.protocoldetails = protocoldetails;
+       modalRef.componentInstance.mode = mode;
+       modalRef.componentInstance.userDTO = this.userDTO;
+      modalRef.componentInstance.passEntry.subscribe((receivedEntry) => {
+        this.generalInfo.protocolSubmissionStatuses.protocolSubmissionStatus.description = receivedEntry.SUBMISSION_STATUS;
+        this.generalInfo.protocolSubmissionStatuses.protocolSubmissionStatus.protocolSubmissionStatusCode =
+                                                                                receivedEntry.SUBMISSION_STATUS_CODE;
+        this.generalInfo.protocolSubmissionStatuses.submission_Id = receivedEntry.SUBMISSION_ID;
+        this.generalInfo.protocolSubmissionStatuses.sequenceNumber =  receivedEntry.SEQUENCE_NUMBER;
+        this.generalInfo.protocolSubmissionStatuses.assigneePersonName = receivedEntry.ASSIGNEE_PERSON;
+        this.generalInfo.protocolSubmissionStatuses.assigneePersonId = receivedEntry.ASSIGNEE_PERSON_ID;
+        this.generalInfo.protocolSubmissionStatuses.submissionNumber = receivedEntry.SUBMISSION_NUMBER;
+        this.commonVo.generalInfo = this.generalInfo;
+       this._sharedDataService.setCommonVo(this.commonVo);
+        });
     }
 }

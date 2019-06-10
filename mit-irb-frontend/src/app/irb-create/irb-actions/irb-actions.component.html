@@ -905,8 +905,8 @@
               <label *ngIf="currentActionPerformed?.ACTION_CODE != '992' && currentActionPerformed?.ACTION_CODE != '303' && currentActionPerformed?.ACTION_CODE != '113'">Reason to Perform Action</label>
               <label *ngIf="currentActionPerformed?.ACTION_CODE == '992'">Reason To Delete</label>
               <label *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</label>
-              <label *ngIf="currentActionPerformed?.ACTION_CODE == '113'">Reason to Perform the Action</label>
-              <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea>
+              <label *ngIf="currentActionPerformed?.ACTION_CODE == '113'">Reason to Perform Action</label>
+              <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason to Perform Action"></textarea>
             </div>
           </div>
           <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '212'">

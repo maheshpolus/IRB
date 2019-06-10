@@ -94,6 +94,11 @@
                             <i>Add reviewers by selecting type and Reviewer</i>
                           </div>
                         </div>
+                        <div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidProtocolReviewer == true || this.invalidData.invalidReviewer == true">
+                            <div class="alert alert-danger " [innerHTML]="warningMessage">
+                        
+                            </div>
+                          </div>
       
                         <div class="col-12  search-eidted-p mb15" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                           <div class="row">
@@ -110,7 +115,9 @@
                             </div>
                             <div class="col-md-4 pl-0 pr-0">
                               <div class="form-group">
-                                <label class="label-width">Reviewers</label>
+                                <label class="label-width">Reviewers
+                                <span class="mandatory">*</span>
+                              </label>
                                 <!-- <select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [(ngModel)]="protocolReviewer.personId">
                                   <option selected value=null>Please Select</option>
                                   <option *ngFor="let member of committeeMemberList" value="{{type.COMM_MEMBERSHIP_ID}}">{{member.PERSON_NAME}}</option>
@@ -240,11 +247,22 @@
                   
                   <div *ngIf="tabSelectedCommittee == 'PROTOCOL_COMMENTS'">
                       <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
-                        <div class="col-md-7">
+                        <div class="col-md-12 mb-15">
                           <div class="form-group">
                             <textarea rows="4" class="form-control txt-area-fnt" placeholder="Write your review comments...." [(ngModel)]="protocolReviewComments.comments"></textarea>
                           </div>
                         </div>
+                        <div class="col-md-6 pl-0 pr-0 ml-15">
+                            <div class="form-group">
+                              <label class="label-width">Reviewed By:</label>
+                              <select class="custom-select  mr-sm-2 select-notify-popup" [disabled]="userDTO.role=='PI' || userDTO.role=='DEPT_ADMIN' || viewMode==true" id="inlineFormCustomSelect" [(ngModel)]="reviewedBy">
+                                
+                                  <option value='Committee'>Committee</option>
+                                <option value="{{userDTO.userName}}">{{userDTO?.fullName}}</option>
+                                <option *ngFor="let person of committeeReviewers" value="{{person.USER_NAME}}">{{person.FULL_NAME}}</option>
+                              </select>
+                            </div>
+                          </div>
                         <div class="col-md-2 mt-12">
                           <input type="checkbox" [(ngModel)]="minuteFlag" /> Include in Minutes
                         </div>
@@ -255,7 +273,7 @@
                           <button title="Add" type="button" class="btn btn-success" (click)="addProtocolReviewComments('I')">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                           </button>
-                        </div>
+                      </div>
                       </div>
                       <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                           <div class="col-md-10">
@@ -667,10 +685,20 @@
               <textarea rows="1" cols="2" class="form-control txt-area-fnt modal-table-padding" [(ngModel)]="attachmentDescription"
                 placeholder="Description"></textarea>
             </div>
-            <div class="col-1"></div>
+            <div class="col-3" *ngIf="isReviewerAttachment == true">
+                <div class="form-group">
+                    <label>Reviewed By</label>
+                    <select class="custom-select  mr-sm-2" [disabled]="userDTO.role=='PI' || userDTO.role=='DEPT_ADMIN' || viewMode==true" id="inlineFormCustomSelect" [(ngModel)]="reviewedBy">
+                        <option value='Committee'>Committee</option> 
+                      <option value="{{userDTO.userName}}">{{userDTO?.fullName}}</option>
+                        <option *ngFor="let person of committeeReviewers" value="{{person.USER_NAME}}">{{person.FULL_NAME}}</option>
+                    </select>
+                  </div>
+              </div>
             <div class="col-2 mt-12">
                 <input class="checkbox-label" type="checkbox" [(ngModel)]="publicFLag" /> Public
             </div>
+            
           </div>
           <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
             <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files

@@ -73,16 +73,18 @@
 													irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
 							<i class="fa fa-exclamation-triangle ml-10" *ngIf="irbHeaderDetails?.IS_NEW_RULE=='N'" title="Follows OLD-RULE" aria-hidden="true"></i>
 							
-							<div style="margin-top: 30px" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100'">
+							<div style="margin-top: 30px">
 								<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null">
 									COUHES Admin :
 									<span>{{irbHeaderDetails?.ASSIGNEE_PERSON}}</span>
-									<button type="button" class="btn admin-label" (click)="openAssignPopUp('up-arrow')">
+									<button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100'" type="button" class="btn admin-label" (click)="openAssignPopUp('U')">
 										<i class="fa fa-pencil" aria-hidden="true"> Reassign</i>
 									</button>
 								</p>
-								<button *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null" type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
+								<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null">
+								<button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100'" type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
 									<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin</button>
+								</p>
 							</div>
 						</div>
 

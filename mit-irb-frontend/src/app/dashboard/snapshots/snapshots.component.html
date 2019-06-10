@@ -63,7 +63,8 @@
 						<i class="fa fa-check-square-o"></i>Start Exempt Evaluation
 					</a>
 				</li>
-				<li *ngIf="result.canCreateProtocol">
+				<!-- <li *ngIf="result.canCreateProtocol"> -->
+				<li>
 					<a class="pdf" (click)="goToCreateProtocol()">
 						<i class="fa fa-plus"></i>Create Protocol
 					</a>
@@ -144,6 +145,13 @@
 				<li>
 						<a class="pdf" (click)="goToCommittee()">
 							<i class="fa fa-plus"></i>Create Committee</a>
+				</li>
+
+				<!-- <li *ngIf="result.canCreateProtocol"> -->
+				<li>
+					<a class="pdf" (click)="goToCreateProtocol()">
+						<i class="fa fa-plus"></i>Create Protocol
+					</a>
 				</li>
 				
 				<!-- <li>

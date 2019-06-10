@@ -92,6 +92,12 @@ public class ProtocolSubmissionStatuses {
 	@Column(name = "SCHEDULE_ID")
 	Integer scheduleId;
 
+	@Column(name = "ASSIGNEE_PERSON_ID")
+	String assigneePersonId;
+	
+	@Column(name = "ASSIGNEE_PERSON_NAME")
+	String assigneePersonName;
+	
 	public Integer getSubmission_Id() {
 		return submission_Id;
 	}
@@ -274,5 +280,21 @@ public class ProtocolSubmissionStatuses {
 
 	public void setProtocolSubmissionStatus(ProtocolSubmissionStatus protocolSubmissionStatus) {
 		this.protocolSubmissionStatus = protocolSubmissionStatus;
+	}
+
+	public String getAssigneePersonId() {
+		return assigneePersonId;
+	}
+
+	public void setAssigneePersonId(String assigneePersonId) {
+		this.assigneePersonId = assigneePersonId;
+	}
+
+	public String getAssigneePersonName() {
+		return assigneePersonName;
+	}
+
+	public void setAssigneePersonName(String assigneePersonName) {
+		this.assigneePersonName = assigneePersonName;
 	}
 }

@@ -1,0 +1,217 @@
+<!-- RISK LEVEL - START -->
+<div class="top-distance" *ngIf="isGeneralInfoSaved && generalInfo.protocolStatusCode != 100">
+  <div class="card history-card border-radius-1">
+    <div class="card-header history-header">
+      <nav class="nav navbar-pg3">
+        <h5>Risk Level</h5>
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </nav>
+    </div>
+    <div class="card-body card-paddng">
+      <!-- <div class="col-12  search-eidted-p padding-15">
+        <div class="alert alert-danger ">
+          Please fill all mandatory fields marked
+          <strong>*</strong>
+        </div>
+      </div> -->
+      <div class="col-12 search-eidted-p padding-15" *ngIf="isRiskLevelEditable">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Type
+                <span class="mandatory">*</span>
+              </label>
+              <select class="custom-select" [(ngModel)]="protocolRiskLevel.riskLevelCode" (ngModelChange)="setRiskLevelDescription('RISK',protocolRiskLevel.riskLevelCode)">
+                <option value=null selected>Please Select</option>
+                <option *ngFor="let level of riskLevelType" value="{{level.riskLevelCode}}">{{level.description}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Date Assigned</label>
+              <div class="input-group date-pickr-1 mb-3">
+                <input type="text" class="form-control" [(ngModel)]="protocolRiskLevel.date" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
+
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                </div>
+                <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <label>Comments</label>
+              <textarea class="form-control txt-area-fnt" rows="1" [(ngModel)]="protocolRiskLevel.comment" placeholder="Comments"></textarea>
+            </div>
+          </div>
+          <div class="col-md-1 add-btn-1">
+            <button title="Add" type="button" class="btn btn-success mt-33" (click)="addRiskLevel()">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 users-list-tbl">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr" *ngIf="protocolRiskLevelList?.length > 0">
+              <thead class="tbl-head-clr thead-font-size">
+                <tr>
+                  <th scope="col">Risk Level</th>
+                  <th scope="col">Date Assigned</th>
+                  <th scope="col">Comments</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="tbody-font-size">
+                <tr *ngFor="let item of protocolRiskLevelList let k=index" [class.poping-border]="k == subjectEditIndex">
+                  <td>{{item.riskLevel?.description}}</td>
+                  <td>{{item.dateAssigned}}</td>
+                  <td>{{item.comments}}</td>
+                  <td class="action-btn-list">
+                    <button *ngIf="isSubjectEditable" title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editSubjectDetails(item,k)">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button *ngIf="isSubjectEditable" title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteSubjectDetails(k)"
+                      data-toggle="modal" data-target="#deleteSubjectDetails">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- RISK LEVEL - END -->
+
+
+<!-- FDA RISK LEVEL  - START-->
+
+<div class="top-distance" *ngIf="isGeneralInfoSaved && generalInfo.protocolStatusCode != 100">
+  <div class="card history-card border-radius-1">
+    <div class="card-header history-header">
+      <nav class="nav navbar-pg3">
+        <h5>FDA Risk Level</h5>
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </nav>
+    </div>
+    <div class="card-body card-paddng">
+      <!-- <div class="col-12  search-eidted-p padding-15">
+        <div class="alert alert-danger ">
+          Please fill all mandatory fields marked
+          <strong>*</strong>
+        </div>
+      </div> -->
+      <div class="col-12 search-eidted-p padding-15" *ngIf="isRiskLevelEditable">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Type
+                <span class="mandatory">*</span>
+              </label>
+              <select class="custom-select" [(ngModel)]="protocolFDARiskLevel.riskLevelCode" (ngModelChange)="setRiskLevelDescription('RISK',protocolFDARiskLevel.riskLevelCode)">
+                <option value=null selected>Please Select</option>
+                <option *ngFor="let level of fdaRiskLevelType" value="{{level.riskLevelCode}}">{{level.description}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Date Assigned</label>
+              <div class="input-group date-pickr-1 mb-3">
+                <input type="text" class="form-control" [(ngModel)]="protocolFDARiskLevel.date" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
+                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
+
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                </div>
+                <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <label>Comments</label>
+              <textarea class="form-control txt-area-fnt" rows="1" [(ngModel)]="protocolFDARiskLevel.comment" placeholder="Comments"></textarea>
+            </div>
+          </div>
+          <div class="col-md-1 add-btn-1">
+            <button title="Add" type="button" class="btn btn-success mt-33" (click)="addFDARiskLevel()">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 users-list-tbl">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr" *ngIf="protocolFDARiskLevelList?.length > 0">
+              <thead class="tbl-head-clr thead-font-size">
+                <tr>
+                  <th scope="col">Type</th>
+                  <th scope="col">Age Group</th>
+                  <th scope="col">Count</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="tbody-font-size">
+                <tr *ngFor="let item of protocolFDARiskLevelList let k=index" [class.poping-border]="k == subjectEditIndex">
+                  <td>{{item.protocolSubjectTypes?.description}}</td>
+                  <td>{{item.ageGroups?.ageGroup}}</td>
+                  <td>{{item.subjectCount}}</td>
+                  <td title="{{item.description}}">{{item.description| slice:0:25}}
+                    <span *ngIf="item.description != null && item.description.length > 25">
+                      ...</span>
+                  </td>
+                  <td class="action-btn-list">
+                    <button *ngIf="isSubjectEditable" title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editSubjectDetails(item,k)">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button *ngIf="isSubjectEditable" title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteSubjectDetails(k)"
+                      data-toggle="modal" data-target="#deleteSubjectDetails">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FDA RISK LEVEL - END -->
+
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteSubjectDetails" tabindex="-1" role="dialog"
+  aria-labelledby="deleteModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
+        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveSubjectDetails('DELETE')" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

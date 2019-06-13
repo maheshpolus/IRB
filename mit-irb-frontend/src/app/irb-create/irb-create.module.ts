@@ -26,6 +26,7 @@ import { ProtocolUnitsComponent } from './irb-edit/protocol-units/protocol-units
 import { AdministratorContactComponent } from './irb-edit/administrator-contact/administrator-contact.component';
 import { SubmissionDetailsComponent } from './irb-create-histroy/submission-details/submission-details.component';
 import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-details.component';
+import { RiskLevelsComponent } from './irb-edit/risk-levels/risk-levels.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,7 @@ import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-de
     FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
     IrbQuestionnaireListComponent,
     ProtocolUnitsComponent,
-    AdministratorContactComponent, SubmissionDetailsComponent, IrbSummaryDetailsComponent],
+    AdministratorContactComponent, SubmissionDetailsComponent, IrbSummaryDetailsComponent, RiskLevelsComponent],
     exports: [IrbActionsComponent, IrbSummaryDetailsComponent]
 })
 export class IrbCreateModule { }

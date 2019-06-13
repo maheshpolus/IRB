@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <div class="row">
     <!--collapse-->
-    <div class="col-12 bottom-space-20">
+    <div class="col-12 bottom-space-20" id="actionListPanel">
       <div class="card coll-card-q border-radius-1">
         <div class="card-header history-header">
           <nav class="nav navbar-pg3">
@@ -184,9 +184,12 @@
                               <button type="button" class="btn btn-outline-secondary icon_tab" *ngIf="currentActionPerformed.ACTION_CODE == '200' || currentActionPerformed.ACTION_CODE == '205' || currentActionPerformed.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '304' ||
                               currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '202' ||  currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' ||
                               currentActionPerformed.ACTION_CODE == '301' || currentActionPerformed.ACTION_CODE == '302' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed?.ACTION_CODE == '208' || currentActionPerformed?.ACTION_CODE == '207'" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}"><i class="fa fa-commenting-o pr-8"  aria-hidden="true" ></i>Review Comments</button>
-                            <button type="button" class="btn icon_tab" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
+                            <button type="button" class="btn 9" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
                               [ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}">
                               <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>
+                              <!-- <button type="button" class="btn icon_tab" (click)="tabSelected='FDARISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
+                              [ngClass]="{icon_tab_active:(tabSelected=='FDARISKLEVEL')}">
+                              <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>FDA Risk Level</button> -->
                             <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='CHECKLIST'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'"
                               [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}">
                               <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Checklist</button>
@@ -196,13 +199,17 @@
                           </div>
                         </div>
                         <div *ngIf="tabSelected=='RISKLEVEL'">
+                            <div class="col-12  search-eidted-p padding-15">
+                                <div class="alert alert-danger " *ngIf="isMultipleRiskLevel"> You can add only one Risk Level. Please Delete the existing Risk Level.
+                                </div>
+                              </div>
                           <div class="row mr-0 ml-0">
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label>Risk Level</label>
-                                <select class="custom-select" [(ngModel)]="riskLevelObject.riskLevelCode" (ngModelChange)="setRiskLevelDescription(riskLevelObject.riskLevelCode)">
+                                <select class="custom-select" [(ngModel)]="riskLevelDetail.riskLevelCode">
                                   <option value=null selected>Please Select</option>
-                                  <option *ngFor="let level of riskLevel" value="{{level.RISK_LEVEL_CODE}}">{{level.DESCRIPTION}}</option>
+                                  <option *ngFor="let level of riskLevelType" value="{{level.RISK_LEVEL_CODE}}">{{level.DESCRIPTION}}</option>
                                 </select>
                               </div>
                             </div>
@@ -210,7 +217,7 @@
                               <div class="form-group">
                                 <label>Date Assigned</label>
                                 <div class="input-group date-pickr-1 mb-3">
-                                  <input type="text" class="form-control" [(ngModel)]="riskLevelObject.date" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
+                                  <input type="text" class="form-control" [(ngModel)]="riskLevelDetail.riskLevelDateAssigned" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
                                   <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
 
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -218,21 +225,51 @@
                                   </div>
                                   <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
                                 </div>
-                                <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
                               </div>
                             </div>
                             <div class="col-md-5">
                               <div class="form-group">
                                 <label>Comments</label>
-                                <textarea class="form-control txt-area-fnt" [(ngModel)]="riskLevelObject.comment" placeholder="Comments"></textarea>
+                                <textarea class="form-control txt-area-fnt" rows="1" [(ngModel)]="riskLevelDetail.riskLevelComment" placeholder="Comments"></textarea>
                               </div>
                             </div>
-                            <div class="col-md-1 add-btn-1">
-                              <button title="Add" type="button" class="btn btn-success mt-33" (click)="addRiskLevel(riskLevelObject)">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                              </button>
-                            </div>
                           </div>
+                          <div class="row mr-0 ml-0">
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label>FDA Risk Level</label>
+                                  <select class="custom-select" [(ngModel)]="riskLevelDetail.fdaRiskLevelCode">
+                                    <option value=null selected>Please Select</option>
+                                    <option *ngFor="let level of fdaRiskLevelType" value="{{level.FDA_RISK_LEVEL_CODE}}">{{level.DESCRIPTION}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label>Date Assigned</label>
+                                  <div class="input-group date-pickr-1 mb-3">
+                                    <input type="text" class="form-control" [(ngModel)]="riskLevelDetail.fdariskLevelDateAssigned" [owlDateTime]="dateAssignedFDA" placeholder="mm/dd/yyyy">
+                                    <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssignedFDA">
+  
+                                      <i class="fa fa-calendar" aria-hidden="true"></i>
+  
+                                    </div>
+                                    <owl-date-time [pickerType]="'calendar'" #dateAssignedFDA></owl-date-time>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-5">
+                                <div class="form-group">
+                                  <label>Comments</label>
+                                  <textarea class="form-control txt-area-fnt" rows="1" [(ngModel)]="riskLevelDetail.fdaRiskLevelComment" placeholder="Comments"></textarea>
+                                </div>
+                              </div>
+                              <!-- <div class="col-md-1 add-btn-1">
+                                <button title="Add" type="button" class="btn btn-success mt-33" (click)="addFDARiskLevel()">
+                                  <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+                              </div> -->
+                            </div>
                           <div class="col-md-12 users-list-tbl" *ngIf="riskLevelList?.length > 0 && riskLevelList != null">
                             <div class="row">
                               <div class="table-responsive">
@@ -262,6 +299,78 @@
                             </div>
                           </div>
                         </div>
+
+
+                        <!-- <div *ngIf="tabSelected=='FDARISKLEVEL'">
+                            <div class="col-12  search-eidted-p padding-15">
+                                <div class="alert alert-danger " *ngIf="isMultipleFDARiskLevel"> You can add only one FDA Risk Level. Please Delete the existing FDA Risk Level.
+                                </div>
+                              </div>
+                          <div class="row mr-0 ml-0">
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label>FDA Risk Level</label>
+                                <select class="custom-select" [(ngModel)]="FDAriskLevelObject.riskLevelCode" (ngModelChange)="setRiskLevelDescription('FDA',FDAriskLevelObject.riskLevelCode)">
+                                  <option value=null selected>Please Select</option>
+                                  <option *ngFor="let level of fdaRiskLevelType" value="{{level.FDA_RISK_LEVEL_CODE}}">{{level.DESCRIPTION}}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label>Date Assigned</label>
+                                <div class="input-group date-pickr-1 mb-3">
+                                  <input type="text" class="form-control" [(ngModel)]="FDAriskLevelObject.date" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
+                                  <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
+
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+
+                                  </div>
+                                  <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-5">
+                              <div class="form-group">
+                                <label>Comments</label>
+                                <textarea class="form-control txt-area-fnt" rows="1" [(ngModel)]="FDAriskLevelObject.comment" placeholder="Comments"></textarea>
+                              </div>
+                            </div>
+                            <div class="col-md-1 add-btn-1">
+                              <button title="Add" type="button" class="btn btn-success mt-33" (click)="addFDARiskLevel()">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="col-md-12 users-list-tbl" *ngIf="fdaRiskLevelList?.length > 0 && fdaRiskLevelList != null">
+                            <div class="row">
+                              <div class="table-responsive">
+                                <table class="table table-striped tbl-p-clr">
+                                  <thead class="tbl-head-clr thead-font-size">
+                                    <tr>
+                                      <th width="40%" scope="col">Risk Level</th>
+                                      <th scope="col">Date assigned</th>
+                                      <th width="40%" scope="col">Comments</th>
+                                      <th width="5%" scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="tbody-font-size">
+                                    <tr *ngFor="let riskLevel of fdaRiskLevelList let i = index">
+                                      <td width="40%">{{riskLevel?.riskLevelDescription}}</td>
+                                      <td>{{(riskLevel.date == '' || riskLevel.date == null) ? '' : riskLevel?.date | date: 'MM/dd/yyyy'}}</td>
+                                      <td width="40%">{{riskLevel?.comment}}</td>
+                                      <td class="action-btn-list">
+                                        <button title="Delete" (click)="deleteFDARiskLevel(i)" type="button" class="btn btn-primary delete-btn-1">
+                                          <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div> -->
 
 
                         <div class="mb-15" *ngIf="tabSelected=='CHECKLIST'">
@@ -349,8 +458,8 @@
                           </div>
                         </div>
                         <div class="btn-row-med text-center padding-exempt">
-                          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">Save</button>
-                          <button id="dismissModal" class="btn tab_btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+                          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{currentActionPerformed?.ACTION_NAME}}</button>
+                          <button id="dismissModal" class="btn tab_btn" (click)="cancelActionPerform()">Cancel</button>
 
                         </div>
                       </div>

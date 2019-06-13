@@ -107,7 +107,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   show_current_tab(current_tab) {
     if (this.protocolNumber !== null && this.protocolId !== null) {
       this._router.navigate(['/irb/irb-create/' + current_tab],
-        { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId } });
+        { queryParamsHandling: 'merge', queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId } });
     }
   }
   toggle() {

@@ -31,11 +31,11 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   checkListSelectedCodes: any = [];
   expeditedCheckList: any = [];
   notifyTypeQualifier: any = [];
-  riskLevelList: any = [];
   commentList: any = [];
   scheduleDateList: any = [];
   committeeList: any = [];
-  riskLevel: any = [];
+  riskLevelType: any = [];
+  fdaRiskLevelType = [];
   personnelInfoList = [];
   leadUnitList = [];
   personActionsList = [];
@@ -52,11 +52,17 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   isIncludedInAgenda = false;
   isPrivate = true;
 
-  riskLevelObject = {
+  riskLevelDetail = {
     riskLevelCode: null,
-    comment: '',
-    date: null,
-    riskLevelDescription: ''
+    fdaRiskLevelCode: null,
+    riskLevelDateAssigned: null,
+    fdariskLevelDateAssigned: null,
+    riskLevelComment: null,
+    fdaRiskLevelComment: null,
+    submissionId: null,
+    protocolId: null,
+    protocolNumber: null,
+    updateUser: null
   };
 
   commentObject = {
@@ -151,6 +157,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.IRBActionsVO.sequenceNumber = this.commonVo.SEQUENCE_NUMBER;
           this.IRBActionsVO.submissionNumber = this.commonVo.SUBMISSION_NUMBER;
           this.IRBActionsVO.submissionId = this.commonVo.SUBMISSION_ID;
+          this.IRBActionsVO.protocolNumber = this.protocolNumber;
+          this.IRBActionsVO.protocolId = this.protocolId;
           this.getAvailableActions();
         }
       });
@@ -188,7 +196,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.moduleAvailableForAmendment = data.moduleAvailableForAmendment != null ? data.moduleAvailableForAmendment : [];
       this.notifyTypeQualifier = data.notifyTypeQualifier != null ? data.notifyTypeQualifier : [];
       this.expeditedCheckList = data.expeditedApprovalCheckList != null ? data.expeditedApprovalCheckList : [];
-      this.riskLevel = data.riskLevel != null ? data.riskLevel : [];
+      this.riskLevelType = data.riskLevelType != null ? data.riskLevelType : [];
+      this.fdaRiskLevelType = data.fdaRiskLevelType != null ? data.fdaRiskLevelType : [];
       this.committeeList = data.committeeList != null ? data.committeeList : [];
       this.selectedCommitteeId = this.committeeList[0].COMMITTEE_ID;
       this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
@@ -207,7 +216,6 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   openActionDetails(action) {
     this.currentActionPerformed = action;
     this.uploadedFile = [];
-    this.riskLevelList = [];
     this.commentList = [];
     if (action.ACTION_CODE === '101') { // Submit
       document.getElementById('submitModalBtn').click();
@@ -244,20 +252,20 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     } else if (action.ACTION_CODE === '206') {
       this.IRBActionsVO.actionDate = new Date();
       // grant exemption, approved, response approval <-- Approval date
-        this.IRBActionsVO.approvalDate = new Date();
-        this.actionButtonName = 'Assign';
+      this.IRBActionsVO.approvalDate = new Date();
+      this.actionButtonName = 'Assign';
       // In Agenda, Grant Exemption, IRB review not required, Approved, SMR, SRR, response approval
       document.getElementById('commentDatesModalBtn').click();
     } else if (action.ACTION_CODE === '200' || action.ACTION_CODE === '205' ||
       action.ACTION_CODE === '204' || action.ACTION_CODE === '202' || action.ACTION_CODE === '301' || action.ACTION_CODE === '302' ||
       action.ACTION_CODE === '203' || action.ACTION_CODE === '304' || action.ACTION_CODE === '209' || action.ACTION_CODE === '201' ||
       action.ACTION_CODE === '210' || action.ACTION_CODE === '208' || action.ACTION_CODE === '207') {
-        setTimeout(() => {
+      setTimeout(() => {
         const id = document.getElementById('actionScreen');
-                if (id) {
-                    id.scrollIntoView({behavior : 'smooth'});
-      }
-    }, 300);
+        if (id) {
+          id.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
       this.IRBActionsVO.actionDate = new Date();
       this.tabSelected = 'COMMENTS';
       if (action.ACTION_CODE === '200' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
@@ -284,6 +292,14 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     // }
 
 
+  }
+
+  cancelActionPerform() {
+    const id = document.getElementById('actionListPanel');
+    if (id) {
+      id.scrollIntoView({ behavior: 'smooth' });
+    }
+    this.currentActionPerformed = {};
   }
 
   performAction() {
@@ -316,12 +332,17 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 
         // create amendment, create renewal, withdrawn, copy protocol
         if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102' ||
-          this.currentActionPerformed.ACTION_CODE === '303' || this.currentActionPerformed.ACTION_CODE === '911' ||
-          this.currentActionPerformed.ACTION_CODE === '113') {
-          this._router.navigate(['/irb/dashboard']);
+          this.currentActionPerformed.ACTION_CODE === '303' || this.currentActionPerformed.ACTION_CODE === '911') {
+         // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-create/irbHome'],
             { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber, protocolId: this.IRBActionsResult.protocolId } });
         }
+        // Administartive correction
+        if (this.currentActionPerformed.ACTION_CODE === '113') {
+            this._router.navigate(['/irb/irb-create/irbHome'],
+            { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber,
+              protocolId: this.IRBActionsResult.protocolId, isAdminCorrection : true } });
+          }
 
         // delete protocol
         if (this.currentActionPerformed.ACTION_CODE === '992') {
@@ -363,12 +384,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         this.GetFormattedDate(this.IRBActionsVO.approvalDate) : null;
     }
     if (this.currentActionPerformed.ACTION_CODE === '210') {
-      this.IRBActionsVO.approvalDate = this.IRBActionsVO.decisionDate != null ?
+      this.IRBActionsVO.decisionDate = this.IRBActionsVO.decisionDate != null ?
         this.GetFormattedDate(this.IRBActionsVO.decisionDate) : null;
     }
     if (this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '208' ||
       this.currentActionPerformed.ACTION_CODE === '205') {
-      this.IRBActionsVO.approvalDate = this.IRBActionsVO.expirationDate != null ?
+      this.IRBActionsVO.expirationDate = this.IRBActionsVO.expirationDate != null ?
         this.GetFormattedDate(this.IRBActionsVO.expirationDate) : null;
     }
     if (this.currentActionPerformed.ACTION_CODE === '212' || this.currentActionPerformed.ACTION_CODE === '200' ||
@@ -376,7 +397,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.IRBActionsVO.selectedCommitteeId = this.selectedCommitteeId;
     }
     if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205' ||
-    this.currentActionPerformed.ACTION_CODE === '208') {
+      this.currentActionPerformed.ACTION_CODE === '208') {
       this.IRBActionsVO.selectedScheduleId = this.selectedScheduleId;
     }
     if (this.currentActionPerformed.ACTION_CODE === '205') {
@@ -385,16 +406,22 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     if (this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
       this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '202' ||
        this.currentActionPerformed.ACTION_CODE === '208' ||
-      this.currentActionPerformed.ACTION_CODE === '304') {
-      this.IRBActionsVO.riskLevelList = this.riskLevelList;
+      this.currentActionPerformed.ACTION_CODE === '304') {debugger
+        // this.IRBActionsVO.riskLevelList = this.riskLevelList;
+        // this.IRBActionsVO.fdaRiskLevelList = this.fdaRiskLevelList;
+        this.IRBActionsVO.riskLevelDetail = this.riskLevelDetail;
+        this.IRBActionsVO.riskLevelDetail.riskLevelDateAssigned = this.riskLevelDetail.riskLevelDateAssigned != null ?
+           this.GetFormattedDate(this.riskLevelDetail.riskLevelDateAssigned) : null;
+        this.IRBActionsVO.riskLevelDetail.fdariskLevelDateAssigned = this.riskLevelDetail.fdariskLevelDateAssigned != null ?
+           this.GetFormattedDate(this.riskLevelDetail.fdariskLevelDateAssigned) : null;
     }
     if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205' ||
-    this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '202' ||
-    this.currentActionPerformed.ACTION_CODE === '301' || this.currentActionPerformed.ACTION_CODE === '302' ||
-    this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '304' ||
-    this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '201' ||
-    this.currentActionPerformed.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE === '208' ||
-    this.currentActionPerformed.ACTION_CODE === '207') {
+      this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '202' ||
+      this.currentActionPerformed.ACTION_CODE === '301' || this.currentActionPerformed.ACTION_CODE === '302' ||
+      this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '304' ||
+      this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '201' ||
+      this.currentActionPerformed.ACTION_CODE === '210' || this.currentActionPerformed.ACTION_CODE === '208' ||
+      this.currentActionPerformed.ACTION_CODE === '207') {
       this.IRBActionsVO.irbActionsReviewerComments = this.commentList;
     }
   }
@@ -477,25 +504,6 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         this.selectedScheduleId = this.scheduleDateList[0].SCHEDULE_ID;
       }
     });
-  }
-
-  addRiskLevel(risklevelObject) {
-    this.riskLevelObject.date = this.riskLevelObject.date != null ?
-      this.GetFormattedDate(this.riskLevelObject.date) : null;
-    this.riskLevelList.push(risklevelObject);
-    this.riskLevelObject = {
-      riskLevelCode: null,
-      comment: '',
-      date: null,
-      riskLevelDescription: ''
-    };
-  }
-  setRiskLevelDescription(riskLevelCode) {
-    const index = this.riskLevel.findIndex(item => item.RISK_LEVEL_CODE === riskLevelCode);
-    this.riskLevelObject.riskLevelDescription = this.riskLevel[index].DESCRIPTION;
-  }
-  deleteRiskLevel(index) {
-    this.riskLevelList.splice(index, 1);
   }
 
   addReviewComments(commentObject, isPrivate) {

@@ -1,7 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import { SharedDataService } from '../../../common/service/shared-data.service';
+import { IrbCreateService } from '../../irb-create.service';
 
 @Component({
   selector: 'app-risk-levels',
@@ -25,8 +28,8 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
   isRiskLevelEditable = false;
 
   private $subscription1: ISubscription;
-  constructor(private _activatedRoute: ActivatedRoute,
-    private _sharedDataService: SharedDataService) { }
+  constructor(private _irbCreateService: IrbCreateService, private _activatedRoute: ActivatedRoute,
+    private _sharedDataService: SharedDataService, private _spinner: NgxSpinnerService,) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
@@ -58,12 +61,28 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
     this.riskLevelType = this.commonVo.riskLevelType;
     this.fdaRiskLevelType = this.commonVo.fdaRiskLevelType;
     // Look up Data - End
-    this.generalInfo = this.commonVo.generalInfo;
+    this.generalInfo = this.commonVo.generalInfo != null ? this.commonVo.generalInfo : {};
     this.protocolRiskLevel = this.commonVo.protocolRiskLevel != null ? this.commonVo.protocolRiskLevel : {};
     this.protocolRiskLevelList = this.commonVo.protocolRiskLevelList != null ? this.commonVo.protocolRiskLevelList : [];
 
     this.protocolFDARiskLevel = this.commonVo.protocolFDARiskLevel != null ? this.commonVo.protocolFDARiskLevel : {};
     this.protocolFDARiskLevelList = this.commonVo.protocolFDARiskLevelList != null ? this.commonVo.protocolFDARiskLevelList : [];
   }
+
+
+  saveGeneralInfo() {
+    this.commonVo.generalInfo = this.generalInfo;
+    this._spinner.show();
+    this._irbCreateService.updateProtocolGeneralInfo(this.commonVo).subscribe(
+      data => {
+       const result: any = data;
+        this._spinner.hide();
+        this.generalInfo = result.generalInfo;
+        this.commonVo.generalInfo = result.generalInfo;
+        this._sharedDataService.setCommonVo(this.commonVo);
+        this._sharedDataService.setGeneralInfo(this.generalInfo);
+      });
+  }
+
 
 }

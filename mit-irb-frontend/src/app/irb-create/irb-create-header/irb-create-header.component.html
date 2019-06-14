@@ -10,7 +10,7 @@
 				<div class="row">
 					<div class="col-12 apprve-date">
 						<div class="row">
-							<div class="col-md-6 col-sm-6 col-12">
+							<div class="col-md-5 col-sm-6 col-12">
 								<h4>
 									IRB # :
 									<span>{{generalInfo?.protocolNumber}}</span>
@@ -20,9 +20,11 @@
 									<span>{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}</span>
 									<br /> Title :
 									<span>{{generalInfo?.protocolTitle}}</span>
+									<br /> Risk Level :
+									<span>{{generalInfo?.riskLevel?.description}}</span>
 								</p>
 							</div>
-							<div class="col-md-3 col-sm-6 col-12">
+							<div class="col-md-4 col-sm-6 col-12">
 								<p>
 									Protocol Type :
 									<span>{{generalInfo?.protocolType?.description}}</span>
@@ -30,6 +32,8 @@
 									<span>{{generalInfo?.protocolSubmissionStatuses?.protocolSubmissionStatus?.description}}</span>
 									<br /> PI :
 									<span>{{piName}}</span>
+									<br /> FDA Risk Level :
+									<span>{{generalInfo?.fdaRiskLevel?.description}}</span>
 								</p>
 							</div>
 							<!-- <div *ngIf="generalInfo.protocolType != null" class="col-md-2 col-sm-6 col-12">

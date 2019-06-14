@@ -22,6 +22,8 @@ import org.mit.irb.web.IRBProtocol.dao.IRBProtocolInitLoadDao;
 import org.mit.irb.web.IRBProtocol.pojo.AdminCheckListDetail;
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.FDARiskLevel;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolFundingSourceTypes;
@@ -31,6 +33,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType;
+import org.mit.irb.web.IRBProtocol.pojo.RiskLevel;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
@@ -608,7 +611,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 	}
 
 	@Async
-	public Future<IRBActionsVO> getRiskLevel(IRBActionsVO vo) {
+	public Future<IRBActionsVO> getRiskLevelType(IRBActionsVO vo) {
 		ArrayList<HashMap<String, Object>> riskLevel = null;														
 		try {
 			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
@@ -617,7 +620,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		} catch (Exception e) {
 			logger.info("Exception in getRiskLevel:" + e);	
 		}
-		vo.setRiskLevel(riskLevel);
+		vo.setRiskLevelType(riskLevel);
 		return new AsyncResult<>(vo);
 	}
 
@@ -663,5 +666,79 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 		}
 		submissionDetailvo.setScheduleDates(scheduleDates);		
 		return new AsyncResult<>(submissionDetailvo);
+	}
+
+	@Async
+	public Future<IRBProtocolVO> loadRiskLevelTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(RiskLevel.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("description"), "description");
+		projList.add(Projections.property("riskLevelCode"), "riskLevelCode");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(RiskLevel.class));
+		criteria.addOrder(Order.asc("description"));
+		List<RiskLevel> riskLevelType = criteria.list();
+		irbProtocolVO.setRiskLevelType(riskLevelType);
+		session.flush();
+		return new AsyncResult<>(irbProtocolVO);
+	}
+
+	@Override
+	public Future<IRBProtocolVO> loadFDARiskLevelTypes(IRBProtocolVO irbProtocolVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(FDARiskLevel.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("description"), "description");
+		projList.add(Projections.property("fdaRiskLevelCode"), "fdaRiskLevelCode");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(FDARiskLevel.class));
+		criteria.addOrder(Order.asc("description"));
+		List<FDARiskLevel> fdaRiskLevelType = criteria.list();
+		irbProtocolVO.setFdaRiskLevelType(fdaRiskLevelType);
+		session.flush();
+		return new AsyncResult<>(irbProtocolVO);
+	}
+
+	@Async
+	public Future<IRBActionsVO> getFDARiskLevelType(IRBActionsVO vo) {
+		ArrayList<HashMap<String, Object>> fdaRiskLevel = null;														
+		try {
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();						
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			fdaRiskLevel = dbEngine.executeProcedure("get_irb_fda_risk_level",outputparam);
+		} catch (Exception e) {
+			logger.info("Exception in getFDARiskLevel:" + e);	
+		}
+		vo.setFdaRiskLevelType(fdaRiskLevel);
+		return new AsyncResult<>(vo);
+	}
+
+	@Async
+	public Future<IRBActionsVO> getPreviousRiskLevel(IRBActionsVO vo) {
+		try{
+			ArrayList<InParameter> inputParam = new ArrayList<InParameter>();
+			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();	
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
+			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+			ArrayList<HashMap<String, Object>> previousRiskLevel = dbEngine.executeProcedure(inputParam,"GET_IRB_PROTO_PREV_RISK_LEVEL",outputparam);
+			vo.setRiskLevelDetail(iterateRiskLevel(previousRiskLevel));
+		} catch (Exception e) {
+			logger.info("Exception in getPreviousRiskLevel:" + e);	
+		}
+		return new AsyncResult<>(vo);
+	}
+
+	private IRBProtocolRiskLevel iterateRiskLevel(ArrayList<HashMap<String, Object>> hashMap) {
+		IRBProtocolRiskLevel protocolRiskLevel = new IRBProtocolRiskLevel();
+		try{
+			protocolRiskLevel.setFdaRiskLevelCode(hashMap.get(0).get("FDA_RISK_LEVEL_CODE") != null ? hashMap.get(0).get("FDA_RISK_LEVEL_CODE").toString() : null);
+			protocolRiskLevel.setFdaRiskLevelComment(hashMap.get(0).get("FDA_RISK_LVL_COMMENTS") != null ? hashMap.get(0).get("FDA_RISK_LVL_COMMENTS").toString() : null);
+			protocolRiskLevel.setFdariskLevelDateAssigned(hashMap.get(0).get("FDA_RISK_LVL_DATE_ASSIGNED") != null ? hashMap.get(0).get("FDA_RISK_LVL_DATE_ASSIGNED").toString() : null);
+			protocolRiskLevel.setRiskLevelCode(hashMap.get(0).get("RISK_LEVEL_CODE") != null ? hashMap.get(0).get("RISK_LEVEL_CODE").toString() : null);
+			protocolRiskLevel.setRiskLevelComment(hashMap.get(0).get("RISK_LEVEL_COMMENTS") != null ? hashMap.get(0).get("RISK_LEVEL_COMMENTS").toString() : null);
+			protocolRiskLevel.setRiskLevelDateAssigned(hashMap.get(0).get("RISK_LEVEL_DATE_ASSIGNED") != null ?hashMap.get(0).get("RISK_LEVEL_DATE_ASSIGNED").toString() : null);
+		} catch (Exception e) {
+			logger.info("Exception in iterateRiskLevel:" + e);	
+		}
+		return protocolRiskLevel;
 	}
 }

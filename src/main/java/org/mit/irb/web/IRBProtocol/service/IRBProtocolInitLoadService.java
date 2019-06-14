@@ -134,7 +134,7 @@ public interface IRBProtocolInitLoadService {
 
 	public Future<IRBActionsVO> getCommitteeList(IRBActionsVO vo);
 
-	public Future<IRBActionsVO> getRiskLevel(IRBActionsVO vo);
+	public Future<IRBActionsVO> getRiskLevelType(IRBActionsVO vo);
 
 	public Future<IRBActionsVO> getExpeditedApprovalCheckList(IRBActionsVO vo);
 
@@ -142,4 +142,11 @@ public interface IRBProtocolInitLoadService {
 
 	public Future<SubmissionDetailVO> getScheduleDates(SubmissionDetailVO submissionDetailvo, String committeeId);
 
+	public Future<IRBProtocolVO> loadRiskLevelTypes(IRBProtocolVO irbProtocolVO);
+
+	public Future<IRBProtocolVO> loadFDARiskLevelTypes(IRBProtocolVO irbProtocolVO);
+
+	public Future<IRBActionsVO> getFDARiskLevelType(IRBActionsVO vo);
+
+	public Future<IRBActionsVO> getPreviousRiskLevel(IRBActionsVO vo);
 }

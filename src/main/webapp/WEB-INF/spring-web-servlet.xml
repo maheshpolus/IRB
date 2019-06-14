@@ -66,6 +66,8 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachementStatus</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.RiskLevel</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.FDARiskLevel</value>
 				
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType</value>							

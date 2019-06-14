@@ -53,7 +53,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   scheduleList: any = [];
   committeeReviewTypes = [];
   invalidData = {
-    invalidBasicDetails: false, invalidProtocolReviewer: false, invalidReviewer: false
+    invalidBasicDetails: false, invalidProtocolReviewer: false, invalidReviewer: false,
+    invalidReviewComments: false
   };
   committeeMemberList: any = [];
   recomendedActionType: any = [];
@@ -83,8 +84,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   committeeReviewers: any = [];
   committeeReviewerCommentsandAttachment = [];
   isEditProtocolReviewer = false;
-  minuteFlag = false;
-  letterFlag = false;
+  minuteFlag = true;
+  letterFlag = true;
   protocolReviewerSelectedRow = null;
   reviewedBy = null;
   showProtocolReviewsOf = 'All Protocol Reviewers';
@@ -755,6 +756,10 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   addProtocolReviewComments(mode) {
+  if (this.minuteFlag === false && this.letterFlag === false) {
+    this.invalidData.invalidReviewComments = true;
+  } else {
+    this.invalidData.invalidReviewComments = false;
   this.submissionVo.acType = mode;
   this.submissionVo.protocolId = this.headerDetails.PROTOCOL_ID;
   this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
@@ -782,10 +787,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
         } else {
           this.toastr.error('Failed to Save Committee Review Comments', null, { toastLife: 2000 });
         }
-    this.letterFlag = false;
-    this.minuteFlag = false;
+    this.letterFlag = true;
+    this.minuteFlag = true;
     this.protocolReviewComments.comments = '';
   });
+}
   }
   downloadCommitteReviwerAttachment(attachment) {
     this._spinner.show();

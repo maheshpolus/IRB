@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpClient } from '@angular/common/http';
+import { ISubscription } from 'rxjs/Subscription';
 
 import { IrbViewService } from '../irb-view.service';
-
+import { SharedDataService } from '../../common/service/shared-data.service';
 @Component({
   selector: 'app-irb-overview',
   templateUrl: './irb-overview.component.html',
   styleUrls: ['./irb-overview.component.css']
 })
 
-export class IrbOverviewComponent implements OnInit {
+export class IrbOverviewComponent implements OnInit, OnDestroy {
 
     showpersonDataList = false;
     noIrbPersons = false;
@@ -37,6 +38,7 @@ export class IrbOverviewComponent implements OnInit {
     trainingComments: any = [];
     irbPersonDetailedList: any;
     result: any;
+    irbHeaderDetails: any = {};
 
     trainingCompleted: string;
     PROTOCOL_PERSONNEL_INFO: string;
@@ -54,9 +56,10 @@ export class IrbOverviewComponent implements OnInit {
             protocolNumber: '',
             avPersonId: ''
     };
+    private $subscription1: ISubscription;
 
   constructor( private _irbViewService: IrbViewService, private _activatedRoute: ActivatedRoute,
-                private _spinner: NgxSpinnerService, private _http: HttpClient) { }
+                private _spinner: NgxSpinnerService, private _http: HttpClient, private _sharedDataService: SharedDataService) { }
 
   /** sets requestObject and calls all the functions */
   ngOnInit() {
@@ -71,6 +74,12 @@ export class IrbOverviewComponent implements OnInit {
                 this.PROTOCOL_SPECIAL_REVIEW_INFO = property_config.PROTOCOL_SPECIAL_REVIEW_INFO;
             }
         });
+        this.$subscription1 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
+            if (data !== undefined && data != null) {
+                this.irbHeaderDetails = data;
+                console.log(this.irbHeaderDetails);
+            }
+        });
       this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
       this.loadPersonalDetails();
       this.loadFundingDetails();
@@ -80,6 +89,12 @@ export class IrbOverviewComponent implements OnInit {
       this.loadAdminstrativeContactDetails();
       this.loadProtocolUnitDetails();
   }
+
+  ngOnDestroy() {
+    if (this.$subscription1) {
+      this.$subscription1.unsubscribe();
+    }
+}
 
   /**calls service to load person details of protocol */
   loadPersonalDetails() {

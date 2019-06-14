@@ -17,7 +17,7 @@
 			<div class="row">
 				<div class="col-12 apprve-date">
 					<div class="row">
-						<div class="col-md-6 col-sm-6 col-12">
+						<div class="col-md-5 col-sm-6 col-12">
 							<h4>
 								IRB # :
 								<span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span>
@@ -26,17 +26,19 @@
 								Expiration Date :
 								<span>{{irbHeaderDetails?.EXPIRATION_DATE | date: 'MM/dd/yyyy'}}</span>
 								<br /> Title :
-								<span>{{irbHeaderDetails?.TITLE}} </span>
+								<span>{{irbHeaderDetails?.TITLE}} </span><br /> Risk Level :
+								<span>{{irbHeaderDetails?.RISK_LEVEL}} </span>
 							</p>
 						</div>
-						<div class="col-md-3 col-sm-6 col-12">
+						<div class="col-md-4 col-sm-6 col-12">
 							<p>
 								Protocol Type :
 								<span>{{irbHeaderDetails?.PROTOCOL_TYPE}}</span>
 								<br /> Submission Status :
 								<span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span>
 								<br /> PI :
-								<span>{{irbHeaderDetails?.PI_NAME}}</span>
+								<span>{{irbHeaderDetails?.PI_NAME}}</span><br /> FDA Risk Level :
+								<span>{{irbHeaderDetails?.FDA_RISK_LEVEL}} </span>
 							</p>
 						</div>
 

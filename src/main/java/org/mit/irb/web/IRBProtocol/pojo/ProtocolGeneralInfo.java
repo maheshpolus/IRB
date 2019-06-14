@@ -8,7 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,8 +17,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -99,6 +96,24 @@ public class ProtocolGeneralInfo {
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+	
+	@Column(name = "RISK_LEVEL_CODE")
+	private String riskLevelCode;
+	
+	@Column(name = "RISK_LEVEL_COMMENTS")
+	private String riskLevelComments;
+	
+	@Column(name = "RISK_LVL_DATE_ASSIGNED")
+	private Date riskLvlDateAssigned;
+	
+	@Column(name = "FDA_RISK_LVL_DATE_ASSIGNED")
+	private Date fdaRiskLvlDateAssigned;
+	
+	@Column(name = "FDA_RISK_LEVEL_CODE")
+	private String fdaRiskLevelCode;
+	
+	@Column(name = "FDA_RISK_LVL_COMMENTS")
+	private String fdaRiskLevelComments;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_FK1"), name = "PROTOCOL_TYPE_CODE", referencedColumnName = "PROTOCOL_TYPE_CODE", insertable = false, updatable = false)
@@ -120,8 +135,33 @@ public class ProtocolGeneralInfo {
 	@OneToMany(mappedBy = "protocolGeneralInfo", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolLeadUnits> protocolUnits;
 	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_FK3"), name = "FDA_RISK_LEVEL_CODE", referencedColumnName = "FDA_RISK_LEVEL_CODE", insertable = false, updatable = false)
+	private FDARiskLevel fdaRiskLevel;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_FK4"), name = "RISK_LEVEL_CODE", referencedColumnName = "RISK_LEVEL_CODE", insertable = false, updatable = false)
+	private RiskLevel riskLevel;
+
 	@Transient
 	ProtocolSubmissionStatuses protocolSubmissionStatuses;
+	
+	
+	public FDARiskLevel getFdaRiskLevel() {
+		return fdaRiskLevel;
+	}
+
+	public void setFdaRiskLevel(FDARiskLevel fdaRiskLevel) {
+		this.fdaRiskLevel = fdaRiskLevel;
+	}
+
+	public RiskLevel getRiskLevel() {
+		return riskLevel;
+	}
+
+	public void setRiskLevel(RiskLevel riskLevel) {
+		this.riskLevel = riskLevel;
+	}
 	
 	public List<ProtocolLeadUnits> getProtocolUnits() {
 		return protocolUnits;
@@ -337,5 +377,53 @@ public class ProtocolGeneralInfo {
 
 	public void setProtocolSubmissionStatuses(ProtocolSubmissionStatuses protocolSubmissionStatuses) {
 		this.protocolSubmissionStatuses = protocolSubmissionStatuses;
+	}
+
+	public String getRiskLevelCode() {
+		return riskLevelCode;
+	}
+
+	public void setRiskLevelCode(String riskLevelCode) {
+		this.riskLevelCode = riskLevelCode;
+	}
+
+	public String getRiskLevelComments() {
+		return riskLevelComments;
+	}
+
+	public void setRiskLevelComments(String riskLevelComments) {
+		this.riskLevelComments = riskLevelComments;
+	}
+
+	public Date getRiskLvlDateAssigned() {
+		return riskLvlDateAssigned;
+	}
+
+	public void setRiskLvlDateAssigned(Date riskLvlDateAssigned) {
+		this.riskLvlDateAssigned = riskLvlDateAssigned;
+	}
+
+	public Date getFdaRiskLvlDateAssigned() {
+		return fdaRiskLvlDateAssigned;
+	}
+
+	public void setFdaRiskLvlDateAssigned(Date fdaRiskLvlDateAssigned) {
+		this.fdaRiskLvlDateAssigned = fdaRiskLvlDateAssigned;
+	}
+
+	public String getFdaRiskLevelCode() {
+		return fdaRiskLevelCode;
+	}
+
+	public void setFdaRiskLevelCode(String fdaRiskLevelCode) {
+		this.fdaRiskLevelCode = fdaRiskLevelCode;
+	}
+
+	public String getFdaRiskLevelComments() {
+		return fdaRiskLevelComments;
+	}
+
+	public void setFdaRiskLevelComments(String fdaRiskLevelComments) {
+		this.fdaRiskLevelComments = fdaRiskLevelComments;
 	}
 }

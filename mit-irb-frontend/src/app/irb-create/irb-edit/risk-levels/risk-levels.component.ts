@@ -62,6 +62,11 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
     this.fdaRiskLevelType = this.commonVo.fdaRiskLevelType;
     // Look up Data - End
     this.generalInfo = this.commonVo.generalInfo != null ? this.commonVo.generalInfo : {};
+    this.generalInfo.riskLvlDateAssigned = this.generalInfo.riskLvlDateAssigned != null ?
+      this.GetFormattedDateFromString(this.generalInfo.riskLvlDateAssigned) : null;
+      this.generalInfo.fdaRiskLvlDateAssigned = this.generalInfo.fdaRiskLvlDateAssigned != null ?
+      this.GetFormattedDateFromString(this.generalInfo.fdaRiskLvlDateAssigned) : null;
+
     this.protocolRiskLevel = this.commonVo.protocolRiskLevel != null ? this.commonVo.protocolRiskLevel : {};
     this.protocolRiskLevelList = this.commonVo.protocolRiskLevelList != null ? this.commonVo.protocolRiskLevelList : [];
 
@@ -71,6 +76,11 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
 
 
   saveGeneralInfo() {
+    this.generalInfo.stringRiskLvlDate = this.generalInfo.riskLvlDateAssigned != null ?
+        this.GetFormattedDate(this.generalInfo.riskLvlDateAssigned) : null;
+    this.generalInfo.stringFDARiskLvlDate = this.generalInfo.fdaRiskLvlDateAssigned != null ?
+        this.GetFormattedDate(this.generalInfo.fdaRiskLvlDateAssigned) : null;
+
     this.commonVo.generalInfo = this.generalInfo;
     this._spinner.show();
     this._irbCreateService.updateProtocolGeneralInfo(this.commonVo).subscribe(
@@ -83,6 +93,29 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
         this._sharedDataService.setGeneralInfo(this.generalInfo);
       });
   }
+
+
+  /**
+   * @param  {} currentDate - date to be conveted
+   * convert the date to string with format mm-dd-yyyy
+   */
+  GetFormattedDate(currentDate) {
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+    const year = currentDate.getFullYear();
+    return month + '-' + day + '-' + year;
+  }
+
+  /**
+   * @param  {} currentDate - input in format yyyy-mon-dd
+   */
+  GetFormattedDateFromString(currentDate) {
+    const res = currentDate.split('-');
+    const year = parseInt(res[0], 10);
+    const month = parseInt(res[1], 10);
+    const day = parseInt(res[2], 10);
+    return new Date(year, month - 1, day);
+}
 
 
 }

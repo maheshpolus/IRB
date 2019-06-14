@@ -195,6 +195,10 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.collaboratorEditIndex = index;
     this.isCollaboratorInfoEdit = true;
     this.protocolCollaborator = Object.assign({}, item);
+    this.protocolCollaborator.approvalDate = this.protocolCollaborator.approvalDate != null ?
+      this.GetFormattedDateFromString(this.protocolCollaborator.approvalDate) : null;
+    this.protocolCollaborator.expirationDate = this.protocolCollaborator.expirationDate != null ?
+      this.GetFormattedDateFromString(this.protocolCollaborator.expirationDate) : null;
     this.collaboratorName = this.protocolCollaborator.collaboratorNames.organizationName;
   }
 
@@ -208,6 +212,12 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   saveCollaboratorDetails(mode) {
+
+    this.protocolCollaborator.stringApprovalDate = this.protocolCollaborator.approvalDate != null ?
+    this.GetFormattedDate(this.protocolCollaborator.approvalDate) : null;
+    this.protocolCollaborator.stringExpirationDate = this.protocolCollaborator.expirationDate != null ?
+    this.GetFormattedDate(this.protocolCollaborator.expirationDate) : null;
+
     if (mode !== 'DELETE') {
       this.protocolCollaborator.updateTimestamp = new Date();
       this.protocolCollaborator.updateUser = this.userDTO.userName;
@@ -231,6 +241,28 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.commonVo.protocolCollaboratorList = this.protocolCollaboratorList;
       });
   }
+
+  /**
+   * @param  {} currentDate - date to be conveted
+   * convert the date to string with format mm-dd-yyyy
+   */
+  GetFormattedDate(currentDate) {
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+    const year = currentDate.getFullYear();
+    return month + '-' + day + '-' + year;
+  }
+
+  /**
+   * @param  {} currentDate - input in format yyyy-mon-dd
+   */
+  GetFormattedDateFromString(currentDate) {
+    const res = currentDate.split('-');
+    const year = parseInt(res[0], 10);
+    const month = parseInt(res[1], 10);
+    const day = parseInt(res[2], 10);
+    return new Date(year, month - 1, day);
+}
 
   setCollaboratorPersonDetails(item) {
     this.iconValue = -1;

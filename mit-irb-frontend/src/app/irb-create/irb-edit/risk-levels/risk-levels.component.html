@@ -13,7 +13,6 @@
           <div class="col-md-3">
             <div class="form-group">
               <label>Risk Level
-                <span class="mandatory">*</span>
               </label>
               <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelCode">
                 <option value=null selected>Please Select</option>
@@ -49,7 +48,6 @@
           <div class="col-md-3">
             <div class="form-group">
               <label>FDA Risk Level{{generalInfo.fdaRiskLevelCode}}
-                <span class="mandatory">*</span>
               </label>
               <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelCode">
                 <option value=null selected>Please Select</option>

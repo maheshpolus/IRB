@@ -147,10 +147,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.IRBActionsVO.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
           this.IRBActionsVO.submissionNumber = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
             this.commonVo.generalInfo.protocolSubmissionStatuses.submissionNumber;
-          this.getAvailableActions();
-        }
-      });
-    } else {
+              this.IRBActionsVO.protocolNumber = this.commonVo.generalInfo.protocolNumber;
+            this.IRBActionsVO.protocolId = this.commonVo.generalInfo.protocolId;
+            this.getAvailableActions();
+          }
+        });
+      } else {
       this.$subscription2 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(commonVo => {
         if (commonVo !== undefined && commonVo != null) {
           this.commonVo = commonVo;
@@ -194,19 +196,37 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
   }
   getActionLookup() {
-    this._irbCreateService.getActionLookup(this.IRBActionsVO).subscribe((data: any) => {
-      this.moduleAvailableForAmendment = data.moduleAvailableForAmendment != null ? data.moduleAvailableForAmendment : [];
-      this.notifyTypeQualifier = data.notifyTypeQualifier != null ? data.notifyTypeQualifier : [];
-      this.expeditedCheckList = data.expeditedApprovalCheckList != null ? data.expeditedApprovalCheckList : [];
-      this.riskLevelType = data.riskLevelType != null ? data.riskLevelType : [];
-      this.fdaRiskLevelType = data.fdaRiskLevelType != null ? data.fdaRiskLevelType : [];
-      this.committeeList = data.committeeList != null ? data.committeeList : [];
-      this.selectedCommitteeId = this.committeeList[0].COMMITTEE_ID;
-      this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
-      this.selectedScheduleId = this.scheduleDateList.length > 0 ? this.scheduleDateList[0].SCHEDULE_ID : null;
-      this.cannedCommentList = data.expeditedCannedComments != null ? data.expeditedCannedComments : [];
-    });
-  }
+      this._irbCreateService.getActionLookup(this.IRBActionsVO).subscribe((data: any) => {
+        if (data.riskLevelDetail != null) {
+          this.riskLevelDetail = data.riskLevelDetail;
+          this.riskLevelDetail.riskLevelDateAssigned = this.riskLevelDetail.riskLevelDateAssigned != null ?
+            this.GetFormattedDateFromString(this.riskLevelDetail.riskLevelDateAssigned) : null;
+            this.riskLevelDetail.fdariskLevelDateAssigned = this.riskLevelDetail.fdariskLevelDateAssigned != null ?
+            this.GetFormattedDateFromString(this.riskLevelDetail.fdariskLevelDateAssigned) : null;
+        }
+        this.moduleAvailableForAmendment = data.moduleAvailableForAmendment != null ? data.moduleAvailableForAmendment : [];
+        this.notifyTypeQualifier = data.notifyTypeQualifier != null ? data.notifyTypeQualifier : [];
+        this.expeditedCheckList = data.expeditedApprovalCheckList != null ? data.expeditedApprovalCheckList : [];
+        this.riskLevelType = data.riskLevelType != null ? data.riskLevelType : [];
+        this.fdaRiskLevelType = data.fdaRiskLevelType != null ? data.fdaRiskLevelType : [];
+        this.committeeList = data.committeeList != null ? data.committeeList : [];
+        this.selectedCommitteeId = this.committeeList[0].COMMITTEE_ID;
+        this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
+        this.selectedScheduleId = this.scheduleDateList.length > 0 ? this.scheduleDateList[0].SCHEDULE_ID : null;
+        this.cannedCommentList = data.expeditedCannedComments != null ? data.expeditedCannedComments : [];
+      });
+    }
+  
+  /**
+   * @param  {} currentDate - input in format yyyy-mon-dd
+   */
+  GetFormattedDateFromString(currentDate) {
+    const res = currentDate.split('-');
+    const year = parseInt(res[0], 10);
+    const month = parseInt(res[1], 10);
+    const day = parseInt(res[2], 10);
+    return new Date(year, month - 1, day);
+}
 
   setActionIcons() {
     this._spinner.hide();

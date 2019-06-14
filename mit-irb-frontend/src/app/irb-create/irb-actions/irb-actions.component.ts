@@ -49,8 +49,9 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   selectedCommitteeId: string;
   tabSelected: string;
   selectedScheduleId: string;
-  isIncludedInAgenda = false;
-  isPrivate = true;
+  minuteFlag = true;
+  letterFlag = true;
+  publicFlag = false;
 
   riskLevelDetail = {
     riskLevelCode: null,
@@ -68,6 +69,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   commentObject = {
     comments: '',
     flag: 'Y',
+    letterFlag: 'Y',
     contingencyCode: ''
   };
 
@@ -80,7 +82,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   private $subscription2: ISubscription;
 
   invalidData = {
-    noPiExists: true, noLeadUnit: true
+    noPiExists: true, noLeadUnit: true, invalidReviewComments: false
   };
 
 
@@ -268,9 +270,6 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       }, 300);
       this.IRBActionsVO.actionDate = new Date();
       this.tabSelected = 'COMMENTS';
-      if (action.ACTION_CODE === '200' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
-        this.isIncludedInAgenda = true;
-      }
       if (action.ACTION_CODE === '205' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
         this.IRBActionsVO.expirationDate = new Date();
         const todayDate = new Date();
@@ -303,6 +302,15 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   }
 
   performAction() {
+    if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205' ||
+    this.currentActionPerformed.ACTION_CODE === '204' ||
+    this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '203' ||
+    this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '208') {
+      if (this.commentObject.comments != null || this.commentObject.comments !== '') {
+        this.addReviewComments(this.commentObject);
+      }
+    }
+    if (this.invalidData.invalidReviewComments === false) {
     this.setActionVO();
     this._spinner.show();
     this._irbCreateService.performProtocolActions(this.IRBActionsVO, this.uploadedFile).subscribe(data => {
@@ -358,6 +366,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       }
     );
   }
+}
 
   setActionVO() {
     this.IRBActionsVO.acType = 'I';
@@ -424,6 +433,14 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.currentActionPerformed.ACTION_CODE === '207') {
       this.IRBActionsVO.irbActionsReviewerComments = this.commentList;
     }
+    if (this.currentActionPerformed.ACTION_CODE === '103') {
+      this.IRBActionsVO.moduleAvailableForAmendment = this.moduleAvailableForAmendment;
+    }
+   if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '209' ||
+   this.currentActionPerformed.ACTION_CODE === '201' || this.currentActionPerformed.ACTION_CODE === '301' ||
+   this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE === '210') {
+    this.IRBActionsVO.publicFlag = this.publicFlag === true ? 'Y' : 'N';
+   }
   }
 
   /**
@@ -506,15 +523,24 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  addReviewComments(commentObject, isPrivate) {
-    commentObject.flag = isPrivate === true ? 'Y' : 'N';
+  addReviewComments(commentObject) {
+    if (this.minuteFlag === false && this.letterFlag === false) {
+      this.invalidData.invalidReviewComments = true;
+    } else {
+    this.invalidData.invalidReviewComments = false;
+    commentObject.flag = this.minuteFlag === true ? 'Y' : 'N';
+    commentObject.letterFlag = this.letterFlag === true ? 'Y' : 'N';
     this.commentList.push(commentObject);
     this.commentObject = {
       comments: '',
       flag: 'Y',
+      letterFlag: 'Y',
       contingencyCode: ''
     };
+    this.letterFlag = true;
+    this.minuteFlag = true;
   }
+}
   deleteReviewComments(index) {
     this.commentList.splice(index, 1);
   }

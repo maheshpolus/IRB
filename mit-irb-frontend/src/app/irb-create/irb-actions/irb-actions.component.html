@@ -131,19 +131,19 @@
                             </div>
                           </div>
 
-                          <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
+                          <!-- <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
                             <div class="form-group">
-                              <!-- <label> Include in Agenda</label> -->
+                               <label> Include in Agenda</label> 
                               <div class="mt-33">
                                 <input type="checkbox" [(ngModel)]="isIncludedInAgenda" />
                                 <span class="checkbox-label">Include in Agenda</span>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                           <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
                             <div class="form-group">
                               <label>Committee</label>
-                              <select class="custom-select" id="inlineFormCustomSelect" [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedCommitteeId"
+                              <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedCommitteeId"
                                 (ngModelChange)="getScheduleDate(selectedCommitteeId)">
                                 <option *ngFor="let committee of committeeList" [value]="committee.COMMITTEE_ID">{{committee.COMMITTEE_NAME}}</option>
                               </select>
@@ -152,7 +152,7 @@
                           <div class="col-md-3" *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
                             <div class="form-group">
                               <label>Schedule Date</label>
-                              <select class="custom-select" id="inlineFormCustomSelect" [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedScheduleId">
+                              <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedScheduleId">
                                 <option value=null selected>Please Select</option>
                                 <option *ngFor="let scheduleDate of scheduleDateList" value="{{scheduleDate.SCHEDULE_ID}}">{{scheduleDate.SCHEDULE_ID}}, {{(scheduleDate.SCHEDULED_DATE == '' || scheduleDate.SCHEDULED_DATE
                                   == null) ? '' : scheduleDate.SCHEDULED_DATE | date: 'MM/dd/yyyy'}}, {{ (scheduleDate.TIME
@@ -184,12 +184,12 @@
                               <button type="button" class="btn btn-outline-secondary icon_tab" *ngIf="currentActionPerformed.ACTION_CODE == '200' || currentActionPerformed.ACTION_CODE == '205' || currentActionPerformed.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '304' ||
                               currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '202' ||  currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' ||
                               currentActionPerformed.ACTION_CODE == '301' || currentActionPerformed.ACTION_CODE == '302' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed?.ACTION_CODE == '208' || currentActionPerformed?.ACTION_CODE == '207'" (click)="tabSelected='COMMENTS'" [ngClass]="{icon_tab_active:(tabSelected=='COMMENTS')}"><i class="fa fa-commenting-o pr-8"  aria-hidden="true" ></i>Review Comments</button>
-                            <button type="button" class="btn 9" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
+                            <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
                               [ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}">
                               <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>
-                              <!-- <button type="button" class="btn icon_tab" (click)="tabSelected='FDARISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
-                              [ngClass]="{icon_tab_active:(tabSelected=='FDARISKLEVEL')}">
-                              <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>FDA Risk Level</button> -->
+                              <button type="button"  class="btn btn-outline-secondary icon_tab" (click)="tabSelected='VOTES'" *ngIf="currentActionPerformed?.ACTION_CODE == '304'|| currentActionPerformed?.ACTION_CODE == '204'"
+                              [ngClass]="{icon_tab_active:(tabSelected=='VOTES')}">
+                              <i class="fa fa-thumbs-o-up pr-8" aria-hidden="true"></i>Voting Details</button>
                             <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='CHECKLIST'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'"
                               [ngClass]="{icon_tab_active:(tabSelected=='CHECKLIST')}">
                               <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Checklist</button>
@@ -457,11 +457,73 @@
 
                           </div>
                         </div>
-                        <div class="btn-row-med text-center padding-exempt">
-                          <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{currentActionPerformed?.ACTION_NAME}}</button>
-                          <button id="dismissModal" class="btn tab_btn" (click)="cancelActionPerform()">Cancel</button>
-
+                        <div class="mb-15" *ngIf="tabSelected=='VOTES'">
+                            <div class="col-12  search-eidted-p padding-15">
+                                <div class="row mb15">
+                               
+              
+                              <div class="col-md-2">
+                                  <div class="form-group">
+                                      <label>Vote Count: 
+                                      </label>
+                                      
+                                      </div>
+                                      
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="label-width"> Yes: 
+                                            </label>
+                                            <input type="number"  [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.yesVoteCount" min="0" class="form-control font-size-13 select-notify-popup" >
+                                            </div>
+                                            
+                                          </div>
+                                          <div class="col-md-2">
+                                              <div class="form-group">
+                                                  <label class="label-width"> No: 
+                                                  </label>
+                                                  <input type="number"  [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.noVoteCount" min="0" class="form-control font-size-13 select-notify-popup" >
+                                                  </div>
+                                                  
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="label-width"> Abstained: 
+                                                        </label>
+                                                        <input  [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.abstainerCount" min="0" class="form-control font-size-13 select-notify-popup" >
+                                                        </div>
+                                                        
+                                                      </div>
+                              </div>
+                              <div class="row mb15">
+                               
+              
+                                  <div class="col-md-2">
+                                      <div class="form-group">
+                                          <label>Comments: 
+                                          </label>
+                                          
+                                          </div>
+                                  </div>
+                                  <div class="col-md-10">
+                                      <div class="form-group">
+                                          <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.votingComments" placeholder="Comments"></textarea>
+                                          
+                                          </div>
+                                  </div>
+                                  </div>
+                                  <div class="mb-15 float-right">
+                                      <button type="button margin-class float-right" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false" class="btn btn-success" (click)="saveVotingComments()">Save
+                                      </button>
+                                      </div>
+                              </div>
+              
                         </div>
+                        <div class="btn-row-med text-center padding-exempt">
+                            <button type="button margin-class" class="btn btn-primary tab_btn" (click)="performAction()" data-dismiss="modal">{{currentActionPerformed?.ACTION_NAME}}</button>
+                            <button id="dismissModal" class="btn tab_btn" (click)="cancelActionPerform()">Cancel</button>
+  
+                          </div>
                       </div>
                     </div>
                   </div>

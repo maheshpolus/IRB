@@ -262,21 +262,39 @@
 						</div>
 						<div class="col-12 card-list-med funding-card ovr-flw" *ngIf="noIrbSubjects==false">
 							<div class="row" [ngClass]="{'row-line':i!=0}" *ngFor="let sub of irbSubjects;let i= index">
-								<div class="col-3">
+								<div class="col-2">
 									<div class="hospital_plus_ico">
 										<i class="fa fa-plus-square" aria-hidden="true"></i>
 									</div>
 								</div>
-								<div class="col-7 card-desc">
+								<div class="col-5 card-desc">
 									<h6 class="sub-head">
 										Type:
 										<span>{{sub.VULNERABLE_SUBJECT}}</span>
 									</h6>
 									<h6 class="sub-head">
-										Count:
-										<span>{{sub.SUBJECT_COUNT}}</span>
+										Maximum Age:
+										<span>{{sub.MAX_AGE}}</span>
 									</h6>
 								</div>
+								<div class="col-5 card-desc">
+										<h6 class="sub-head">
+											Minimum Age:
+											<span>{{sub.MIN_AGE}}</span>
+										</h6>
+										<h6 class="sub-head">
+											Count:
+											<span>{{sub.SUBJECT_COUNT}}</span>
+										</h6>
+									</div>
+									<div class="col-2 card-desc">
+										</div>
+										<div class="col-10 card-desc">
+												<h6 class="sub-head">
+														Description:
+														<span>{{sub.DESCRIPTION}}</span>
+													</h6>
+											</div>
 							</div>
 						</div>
 						<div class="col-12 card-list-no-data" *ngIf="noIrbSubjects">
@@ -529,7 +547,7 @@
 <div class="container-fluid">
 	<section class="row section-margin">
 		<!--collapse-->
-		<div class="col-12">
+		<div class="col-6">
 			<div class="row" class="card-spcl-padding">
 				<div class="col-12 card-head-med">
 					<div class="row">
@@ -554,6 +572,111 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="col-6">
+				<div class="shadow-card">
+					<div class="col-12 card-head-med">
+						<div class="row">
+							<div class="col-11">
+								<h6>Risk Level</h6>
+							</div>
+							<div class="col-1">
+								<i class=" fa fa-info-circle" tabindex="0"></i>
+								<!-- <i class="fa fa-info-circle" title="{{PROTOCOL_FUNDING_SOURCE_INFO}}" aria-hidden="true"></i> -->
+							</div>
+						</div>
+					</div>
+					<div class="col-12 card-list-med">
+											<h6 class="borderBoxHeading mr-10 ml-10 pl-0">
+													<span >Risk Level</span>
+
+											</h6>
+											
+											<div class="row">
+								<div class="col-12">
+										<div class="row padding-row">
+											
+											<div class="col-md-7 col-sm-6 co-12 card-desc">
+												<p>
+													Type:
+													<span>{{irbHeaderDetails?.RISK_LEVEL}}</span>
+												</p>
+		
+		
+											</div>
+											<div class="col-md-5 col-sm-6 co-12 card-desc">
+												<p>
+													Date Assigned:
+													<span>{{irbHeaderDetails?.RISK_LVL_DATE_ASSIGNED}}</span>
+												</p>
+											</div>
+										</div>
+										<div class="row padding-row card-desc">
+											<div class="col-md-12 col-sm-6 co-12">
+		
+												<p>
+													Description:
+													<span>{{irbHeaderDetails?.RISK_LEVEL_COMMENTS}}</span>
+												</p>
+											</div>
+										</div>
+									</div>
+									
+									</div>
+									</div>
+
+									<div class="col-12 card-list-med">
+											<h6 class="borderBoxHeading mr-10 ml-10 pl-0">
+													<span >FDA Risk Level</span>
+
+											</h6>
+											
+											<div class="row">
+								<div class="col-12">
+										<div class="row padding-row">
+											
+											<div class="col-md-7 col-sm-6 co-12 card-desc">
+												<p>
+													Type:
+													<span>{{irbHeaderDetails?.FDA_RISK_LEVEL}}</span>
+												</p>
+		
+		
+											</div>
+											<div class="col-md-5 col-sm-6 co-12 card-desc">
+												<p>
+													Date Assigned:
+													<span>{{irbHeaderDetails?.FDA_RISK_LVL_DATE_ASSIGNED}}</span>
+												</p>
+											</div>
+										</div>
+										<div class="row padding-row">
+											<div class="col-md-12 col-sm-6 co-12 card-desc">
+		
+												<p>
+													Description:
+													<span>{{irbHeaderDetails?.FDA_RISK_LVL_COMMENTS}}</span>
+												</p>
+											</div>
+										</div>
+									</div>
+									
+									</div>
+									</div>
+									
+
+									
+			
+							
+
+
+					
+					<!-- <div class="col-12 card-list-no-data" *ngIf="noAdminContacts">
+						<div class="col-12">No Administrative Contact details found</div>
+					</div> -->
+				</div>
+			</div>
+
 	</section>
 </div>
 <!--Colloborator person modal-->

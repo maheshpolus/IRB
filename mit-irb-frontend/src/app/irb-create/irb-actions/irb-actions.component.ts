@@ -406,7 +406,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     if (this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
       this.currentActionPerformed.ACTION_CODE === '203' || this.currentActionPerformed.ACTION_CODE === '202' ||
        this.currentActionPerformed.ACTION_CODE === '208' ||
-      this.currentActionPerformed.ACTION_CODE === '304') {debugger
+      this.currentActionPerformed.ACTION_CODE === '304') {
         // this.IRBActionsVO.riskLevelList = this.riskLevelList;
         // this.IRBActionsVO.fdaRiskLevelList = this.fdaRiskLevelList;
         this.IRBActionsVO.riskLevelDetail = this.riskLevelDetail;

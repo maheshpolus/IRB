@@ -1690,9 +1690,9 @@ color: #5e5e5e !important;
 {
 color: #FA7440 !important;
 }
-.edit-color
+.icon-color
 {
-    color:#de9306!important;
+    color:#6d6d6c!important;
 }
 .ml-550
 {
@@ -2616,7 +2616,7 @@ input:disabled,textarea:disabled{
 }
 .icon_tab {
     border: none !important;
-    background-color: #fff4f4 !important;
+    background-color: #ffeeee !important;
     border-radius: unset !important;
     font-size: 0.9rem !important;
     padding: 0.5rem 1rem !important;
@@ -2682,8 +2682,12 @@ input:disabled,textarea:disabled{
     margin: 2px auto 0;
 }
 .complete-label {
-    color: #31a745;
+    color: #31a745 !important;
 }
 .ml-15 {
     margin-left: 15px; 
+}
+.version-icon {
+    width: 19px;
+    padding-bottom: 6px;
 }

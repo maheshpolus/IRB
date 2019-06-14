@@ -108,9 +108,12 @@ export class SubjectsComponent implements OnInit, OnDestroy {
   }
 
   addSubjectDetails(mode) {
-    if (this.protocolSubject.vulnerableSubjectTypeCode != null && this.protocolSubject.vulnerableSubjectTypeCode !== undefined
-      && this.protocolSubject.subjectCount != null && this.protocolSubject.subjectCount !== undefined
-      && this.protocolSubject.ageGroupCode != null && this.protocolSubject.ageGroupCode !== undefined) {
+    if (this.protocolSubject.vulnerableSubjectTypeCode != null && this.protocolSubject.vulnerableSubjectTypeCode !== undefined &&
+      this.protocolSubject.vulnerableSubjectTypeCode !== 'null'
+      && this.protocolSubject.subjectCount != null && this.protocolSubject.subjectCount !== undefined &&
+      this.protocolSubject.subjectCount !== '' && this.protocolSubject.minAge != null && this.protocolSubject.minAge !== ''
+       && this.protocolSubject.maxAge != null && this.protocolSubject.maxAge !== '' &&
+      this.protocolSubject.minAge !== undefined && this.protocolSubject.maxAge !== undefined) {
       this.invalidData.invalidSubjectInfo = false;
       this.saveSubjectDetails(mode);
     } else {

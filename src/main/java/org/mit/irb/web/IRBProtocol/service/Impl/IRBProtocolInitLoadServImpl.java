@@ -730,12 +730,14 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 	private IRBProtocolRiskLevel iterateRiskLevel(ArrayList<HashMap<String, Object>> hashMap) {
 		IRBProtocolRiskLevel protocolRiskLevel = new IRBProtocolRiskLevel();
 		try{
-			protocolRiskLevel.setFdaRiskLevelCode(hashMap.get(0).get("FDA_RISK_LEVEL_CODE") != null ? hashMap.get(0).get("FDA_RISK_LEVEL_CODE").toString() : null);
-			protocolRiskLevel.setFdaRiskLevelComment(hashMap.get(0).get("FDA_RISK_LVL_COMMENTS") != null ? hashMap.get(0).get("FDA_RISK_LVL_COMMENTS").toString() : null);
-			protocolRiskLevel.setFdariskLevelDateAssigned(hashMap.get(0).get("FDA_RISK_LVL_DATE_ASSIGNED") != null ? hashMap.get(0).get("FDA_RISK_LVL_DATE_ASSIGNED").toString() : null);
-			protocolRiskLevel.setRiskLevelCode(hashMap.get(0).get("RISK_LEVEL_CODE") != null ? hashMap.get(0).get("RISK_LEVEL_CODE").toString() : null);
-			protocolRiskLevel.setRiskLevelComment(hashMap.get(0).get("RISK_LEVEL_COMMENTS") != null ? hashMap.get(0).get("RISK_LEVEL_COMMENTS").toString() : null);
-			protocolRiskLevel.setRiskLevelDateAssigned(hashMap.get(0).get("RISK_LEVEL_DATE_ASSIGNED") != null ?hashMap.get(0).get("RISK_LEVEL_DATE_ASSIGNED").toString() : null);
+			if(hashMap != null && !hashMap.isEmpty()){
+				protocolRiskLevel.setFdaRiskLevelCode(hashMap.get(0).get("FDA_RISK_LEVEL_CODE") != null ? hashMap.get(0).get("FDA_RISK_LEVEL_CODE").toString() : null);
+				protocolRiskLevel.setFdaRiskLevelComment(hashMap.get(0).get("FDA_RISK_LVL_COMMENTS") != null ? hashMap.get(0).get("FDA_RISK_LVL_COMMENTS").toString() : null);
+				protocolRiskLevel.setFdariskLevelDateAssigned(hashMap.get(0).get("FDA_RISK_LVL_DATE_ASSIGNED") != null ? hashMap.get(0).get("FDA_RISK_LVL_DATE_ASSIGNED").toString() : null);
+				protocolRiskLevel.setRiskLevelCode(hashMap.get(0).get("RISK_LEVEL_CODE") != null ? hashMap.get(0).get("RISK_LEVEL_CODE").toString() : null);
+				protocolRiskLevel.setRiskLevelComment(hashMap.get(0).get("RISK_LEVEL_COMMENTS") != null ? hashMap.get(0).get("RISK_LEVEL_COMMENTS").toString() : null);
+				protocolRiskLevel.setRiskLevelDateAssigned(hashMap.get(0).get("RISK_LVL_DATE_ASSIGNED") != null ?hashMap.get(0).get("RISK_LVL_DATE_ASSIGNED").toString() : null);
+			}	
 		} catch (Exception e) {
 			logger.info("Exception in iterateRiskLevel:" + e);	
 		}

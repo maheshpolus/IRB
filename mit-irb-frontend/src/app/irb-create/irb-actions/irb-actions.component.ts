@@ -49,8 +49,9 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   selectedCommitteeId: string;
   tabSelected: string;
   selectedScheduleId: string;
-  isIncludedInAgenda = false;
-  isPrivate = true;
+  minuteFlag = true;
+  letterFlag = true;
+  publicFlag = false;
 
   riskLevelDetail = {
     riskLevelCode: null,
@@ -68,6 +69,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   commentObject = {
     comments: '',
     flag: 'Y',
+    letterFlag: 'Y',
     contingencyCode: ''
   };
 
@@ -80,7 +82,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   private $subscription2: ISubscription;
 
   invalidData = {
-    noPiExists: true, noLeadUnit: true
+    noPiExists: true, noLeadUnit: true, invalidReviewComments: false
   };
 
 
@@ -145,10 +147,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.IRBActionsVO.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
           this.IRBActionsVO.submissionNumber = this.commonVo.generalInfo.protocolSubmissionStatuses == null ? null :
             this.commonVo.generalInfo.protocolSubmissionStatuses.submissionNumber;
-          this.getAvailableActions();
-        }
-      });
-    } else {
+              this.IRBActionsVO.protocolNumber = this.commonVo.generalInfo.protocolNumber;
+            this.IRBActionsVO.protocolId = this.commonVo.generalInfo.protocolId;
+            this.getAvailableActions();
+          }
+        });
+      } else {
       this.$subscription2 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(commonVo => {
         if (commonVo !== undefined && commonVo != null) {
           this.commonVo = commonVo;
@@ -192,19 +196,37 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
   }
   getActionLookup() {
-    this._irbCreateService.getActionLookup(this.IRBActionsVO).subscribe((data: any) => {
-      this.moduleAvailableForAmendment = data.moduleAvailableForAmendment != null ? data.moduleAvailableForAmendment : [];
-      this.notifyTypeQualifier = data.notifyTypeQualifier != null ? data.notifyTypeQualifier : [];
-      this.expeditedCheckList = data.expeditedApprovalCheckList != null ? data.expeditedApprovalCheckList : [];
-      this.riskLevelType = data.riskLevelType != null ? data.riskLevelType : [];
-      this.fdaRiskLevelType = data.fdaRiskLevelType != null ? data.fdaRiskLevelType : [];
-      this.committeeList = data.committeeList != null ? data.committeeList : [];
-      this.selectedCommitteeId = this.committeeList[0].COMMITTEE_ID;
-      this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
-      this.selectedScheduleId = this.scheduleDateList.length > 0 ? this.scheduleDateList[0].SCHEDULE_ID : null;
-      this.cannedCommentList = data.expeditedCannedComments != null ? data.expeditedCannedComments : [];
-    });
-  }
+      this._irbCreateService.getActionLookup(this.IRBActionsVO).subscribe((data: any) => {
+        if (data.riskLevelDetail != null) {
+          this.riskLevelDetail = data.riskLevelDetail;
+          this.riskLevelDetail.riskLevelDateAssigned = this.riskLevelDetail.riskLevelDateAssigned != null ?
+            this.GetFormattedDateFromString(this.riskLevelDetail.riskLevelDateAssigned) : null;
+            this.riskLevelDetail.fdariskLevelDateAssigned = this.riskLevelDetail.fdariskLevelDateAssigned != null ?
+            this.GetFormattedDateFromString(this.riskLevelDetail.fdariskLevelDateAssigned) : null;
+        }
+        this.moduleAvailableForAmendment = data.moduleAvailableForAmendment != null ? data.moduleAvailableForAmendment : [];
+        this.notifyTypeQualifier = data.notifyTypeQualifier != null ? data.notifyTypeQualifier : [];
+        this.expeditedCheckList = data.expeditedApprovalCheckList != null ? data.expeditedApprovalCheckList : [];
+        this.riskLevelType = data.riskLevelType != null ? data.riskLevelType : [];
+        this.fdaRiskLevelType = data.fdaRiskLevelType != null ? data.fdaRiskLevelType : [];
+        this.committeeList = data.committeeList != null ? data.committeeList : [];
+        this.selectedCommitteeId = this.committeeList[0].COMMITTEE_ID;
+        this.scheduleDateList = data.scheduleDates != null ? data.scheduleDates : [];
+        this.selectedScheduleId = this.scheduleDateList.length > 0 ? this.scheduleDateList[0].SCHEDULE_ID : null;
+        this.cannedCommentList = data.expeditedCannedComments != null ? data.expeditedCannedComments : [];
+      });
+    }
+  
+  /**
+   * @param  {} currentDate - input in format yyyy-mon-dd
+   */
+  GetFormattedDateFromString(currentDate) {
+    const res = currentDate.split('-');
+    const year = parseInt(res[0], 10);
+    const month = parseInt(res[1], 10);
+    const day = parseInt(res[2], 10);
+    return new Date(year, month - 1, day);
+}
 
   setActionIcons() {
     this._spinner.hide();
@@ -268,9 +290,6 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       }, 300);
       this.IRBActionsVO.actionDate = new Date();
       this.tabSelected = 'COMMENTS';
-      if (action.ACTION_CODE === '200' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
-        this.isIncludedInAgenda = true;
-      }
       if (action.ACTION_CODE === '205' || action.ACTION_CODE === '204' || action.ACTION_CODE === '208') {
         this.IRBActionsVO.expirationDate = new Date();
         const todayDate = new Date();
@@ -303,6 +322,15 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   }
 
   performAction() {
+    if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '205' ||
+    this.currentActionPerformed.ACTION_CODE === '204' ||
+    this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '203' ||
+    this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '208') {
+      if (this.commentObject.comments != null || this.commentObject.comments !== '') {
+        this.addReviewComments(this.commentObject);
+      }
+    }
+    if (this.invalidData.invalidReviewComments === false) {
     this.setActionVO();
     this._spinner.show();
     this._irbCreateService.performProtocolActions(this.IRBActionsVO, this.uploadedFile).subscribe(data => {
@@ -358,6 +386,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       }
     );
   }
+}
 
   setActionVO() {
     this.IRBActionsVO.acType = 'I';
@@ -424,6 +453,14 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       this.currentActionPerformed.ACTION_CODE === '207') {
       this.IRBActionsVO.irbActionsReviewerComments = this.commentList;
     }
+    if (this.currentActionPerformed.ACTION_CODE === '103') {
+      this.IRBActionsVO.moduleAvailableForAmendment = this.moduleAvailableForAmendment;
+    }
+   if (this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '209' ||
+   this.currentActionPerformed.ACTION_CODE === '201' || this.currentActionPerformed.ACTION_CODE === '301' ||
+   this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE === '210') {
+    this.IRBActionsVO.publicFlag = this.publicFlag === true ? 'Y' : 'N';
+   }
   }
 
   /**
@@ -506,15 +543,24 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  addReviewComments(commentObject, isPrivate) {
-    commentObject.flag = isPrivate === true ? 'Y' : 'N';
+  addReviewComments(commentObject) {
+    if (this.minuteFlag === false && this.letterFlag === false) {
+      this.invalidData.invalidReviewComments = true;
+    } else {
+    this.invalidData.invalidReviewComments = false;
+    commentObject.flag = this.minuteFlag === true ? 'Y' : 'N';
+    commentObject.letterFlag = this.letterFlag === true ? 'Y' : 'N';
     this.commentList.push(commentObject);
     this.commentObject = {
       comments: '',
       flag: 'Y',
+      letterFlag: 'Y',
       contingencyCode: ''
     };
+    this.letterFlag = true;
+    this.minuteFlag = true;
   }
+}
   deleteReviewComments(index) {
     this.commentList.splice(index, 1);
   }

@@ -66,8 +66,11 @@
                     </div>
                     <div id="collapseTwo" class="collapse show">
                       <div class="card-body qs-bdy background-white padding0 tbl-list1">
+                          <div class="alert alert-danger mr-15 ml-15" *ngIf="invalidData.invalidReviewComments">
+                              Please Choose either Include in Minutes or Include in Letter while adding Review Comments
+                            </div>
                         <div class="row ml-0 mr-0">
-
+                            
                           <div class="col-md-4" *ngIf="currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '208' ">
                             <div class="form-group">
                               <label>Approval Date</label>
@@ -187,7 +190,7 @@
                             <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='RISKLEVEL'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '304' || currentActionPerformed?.ACTION_CODE == '203' || currentActionPerformed?.ACTION_CODE == '202'|| currentActionPerformed?.ACTION_CODE == '208'"
                               [ngClass]="{icon_tab_active:(tabSelected=='RISKLEVEL')}">
                               <i class="fa fa-exclamation-triangle pr-8" aria-hidden="true"></i>Risk Level</button>
-                              <button type="button"  class="btn btn-outline-secondary icon_tab" (click)="tabSelected='VOTES'" *ngIf="currentActionPerformed?.ACTION_CODE == '304'|| currentActionPerformed?.ACTION_CODE == '204'"
+                              <button type="button"  class="btn btn-outline-secondary icon_tab" (click)="tabSelected='VOTES'" *ngIf="currentActionPerformed?.ACTION_CODE == '304'|| currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed?.ACTION_CODE == '205'"
                               [ngClass]="{icon_tab_active:(tabSelected=='VOTES')}">
                               <i class="fa fa-thumbs-o-up pr-8" aria-hidden="true"></i>Voting Details</button>
                             <button type="button" class="btn btn-outline-secondary icon_tab" (click)="tabSelected='CHECKLIST'" *ngIf="currentActionPerformed?.ACTION_CODE == '205'"
@@ -386,8 +389,10 @@
                           </div>
                         </div>
                         <div class="mb-15" *ngIf="tabSelected=='COMMENTS'">
+                            
                           <div class="row mr-0 ml-0 padding-exempt">
-                            <div class="col-md-10">
+                             
+                            <div class="col-md-7">
                               <div class="form-group">
                                 <label>Write Your Review Comments</label>
                                 <div class="input-group date-pickr-1 mb-3">
@@ -400,12 +405,14 @@
                               </div>
                             </div>
 
-                            <div class="icon-center">
-                              <input type="checkbox" [(ngModel)]="isPrivate" />
-                              <span class="checkbox-label">Private</span>
-                            </div>
+                            <div class="col-md-2 mt-33">
+                                <input type="checkbox" [(ngModel)]="minuteFlag" /> Include in Minutes
+                              </div>
+                              <div class="col-md-2 mt-33">
+                                  <input type="checkbox" [(ngModel)]="letterFlag" /> Include in Letter
+                                </div>
                             <div class="col-md-1 add-btn-1">
-                              <button title="Add" type="button" class="btn btn-success mt-33" (click)="addReviewComments(commentObject,isPrivate)">
+                              <button title="Add" type="button" class="btn btn-success mt-33" (click)="addReviewComments(commentObject)">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                               </button>
                             </div>
@@ -418,7 +425,8 @@
                                   <thead class="tbl-head-clr thead-font-size">
                                     <tr>
                                       <th width="70%"scope="col">Comments</th>
-                                      <th scope="col">Private</th>
+                                      <th scope="col">Include in Minutes</th>
+                                      <th scope="col">Include in Letter</th>
                                       <th width="5%" scope="col">Action</th>
                                     </tr>
                                   </thead>
@@ -426,6 +434,7 @@
                                     <tr *ngFor =" let comment of commentList; let i= index">
                                       <td>{{comment?.comments}}</td>
                                       <td>{{comment?.flag == 'Y' ? 'Yes' : 'No'}}</td>
+                                      <td>{{comment?.letterFlag == 'Y' ? 'Yes' : 'No'}}</td>
                                       <td class="action-btn-list">
                                           <button title="Delete" (click)="deleteReviewComments(i)" type="button" class="btn btn-primary delete-btn-1">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
@@ -441,6 +450,22 @@
                         </div>
                         <div class="mb-15" *ngIf="tabSelected=='ATTACHMENT'">
                           <div class="col-md-12 mr-0 ml-0">
+                              <div class="row mr-0 ml-0 padding-exempt">
+                                  <div class="col-md-10">
+                                    <div class="form-group">
+                                      <label>Description</label>
+                                      <div class="input-group date-pickr-1 mb-3">
+                                        <textarea class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.attachmentDescription" placeholder="Description"></textarea>
+                                        <!-- <textarea rows="1" class="form-control txt-area-fnt" [(ngModel)]="IRBActionsVO.comment" placeholder="Reason"></textarea> -->
+                                      </div>
+                                    </div>
+                                  </div>
+      
+                                  <div class="col-md-2 mt-33">
+                                      <input type="checkbox" [(ngModel)]="publicFlag" /> Public
+                                    </div>
+      
+                                </div>
 
                             <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
                               <button title="Choose Files" class="btnSkin btnSkinPrimary mt-40" (click)="triggerAdd()">Choose Files
@@ -490,7 +515,7 @@
                                                     <div class="form-group">
                                                         <label class="label-width"> Abstained: 
                                                         </label>
-                                                        <input  [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.abstainerCount" min="0" class="form-control font-size-13 select-notify-popup" >
+                                                        <input  type="number" [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.abstainerCount" min="0" class="form-control font-size-13 select-notify-popup" >
                                                         </div>
                                                         
                                                       </div>

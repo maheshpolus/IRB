@@ -199,7 +199,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   getIRBAdminReviewDetails() {
     this.showReviewsOf = 'All Administrative Reviewers';
     const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
+    this._spinner.show();
     this._irbViewService.getIRBAdminReviewDetails(reqstObj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
       this.irbAdminCheckListBackUp = Object.assign([], result.irbAdminCheckList);
       this.irbAdminCommentAttachmentBackUp = Object.assign([], result.irbAdminCommentAttachment);

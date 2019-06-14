@@ -106,10 +106,10 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     if (this.generalInfo.prtocolDescription != null) {
       this.remainingChar(this.generalInfo.prtocolDescription.length); // Calculating description length
     }
-    this.generalInfo.protocolStartDate =
-      this.commonVo.generalInfo.protocolStartDate != null ? new Date(this.commonVo.generalInfo.protocolStartDate) : null;
-    this.commonVo.generalInfo.protocolEndDate =
-      this.commonVo.generalInfo.protocolEndDate != null ? new Date(this.commonVo.generalInfo.protocolEndDate) : null;
+    this.generalInfo.protocolStartDate = this.commonVo.generalInfo.protocolStartDate != null ?
+      this.GetFormattedDateFromString(this.commonVo.generalInfo.protocolStartDate) : null;
+    this.commonVo.generalInfo.protocolEndDate = this.commonVo.generalInfo.protocolEndDate != null ?
+      this.GetFormattedDateFromString(this.commonVo.generalInfo.protocolEndDate) : null;
     if (this.generalInfo.protocolId == null) {
       this.generalInfo.protocolStatusCode = 100;
       this.generalInfo.protocolStatus = { description: 'In Progress', protocolStatusCode: 100 };
@@ -212,6 +212,13 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.generalInfo.protocolUnits[0].updateUser = this.userDTO.userName;
         this.generalInfo.protocolUnits[0].updateTimestamp = new Date();
       }
+
+      // Formating dates and setting it to transient fileds
+      this.generalInfo.aniticipatedStartDate = this.generalInfo.protocolStartDate != null ?
+        this.GetFormattedDate(this.generalInfo.protocolStartDate) : null;
+        this.generalInfo.aniticipatedEndDate = this.generalInfo.protocolEndDate != null ?
+        this.GetFormattedDate(this.generalInfo.protocolEndDate) : null;
+
       this.generalInfo.updateTimestamp = new Date();
       this.generalInfo.updateUser = this.userDTO.userName;
       this.commonVo.generalInfo = this.generalInfo;
@@ -263,6 +270,27 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       return false;
     }
   }
+
+  /**
+   * @param  {} currentDate - date to be conveted
+   * convert the date to string with format mm-dd-yyyy
+   */
+  GetFormattedDate(currentDate) {
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+    const year = currentDate.getFullYear();
+    return month + '-' + day + '-' + year;
+  }
+  /**
+   * @param  {} currentDate - input in format yyyy-mon-dd
+   */
+  GetFormattedDateFromString(currentDate) {
+    const res = currentDate.split('-');
+    const year = parseInt(res[0], 10);
+    const month = parseInt(res[1], 10);
+    const day = parseInt(res[2], 10);
+    return new Date(year, month - 1, day);
+}
 
   /**fetches elastic search results
        * @param searchString - string enterd in the input field

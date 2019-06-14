@@ -3,9 +3,11 @@ package org.mit.irb.web.IRBProtocol.dao.Impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -554,6 +556,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			generalInfo.setCreateTimestamp(generalInfo.getUpdateTimestamp()); //since when creating a protocol both created user and updated user is same
 			generalInfo.setCreateUser(generalInfo.getUpdateUser());
 			generalInfo.setIsCancelled("N");
+			generalInfo.setProtocolStartDate(generateSqlDate(generalInfo.getAniticipatedStartDate()));
+			generalInfo.setProtocolEndDate(generateSqlDate(generalInfo.getAniticipatedEndDate()));
 			List<ProtocolPersonnelInfo> protocolPersonnelInfoList = new ArrayList<ProtocolPersonnelInfo>();
 			//ProtocolPersonnelInfo personnelInfo = generalInfo.getPersonnelInfos().get(0);
 			ProtocolPersonnelInfo protocolPersonnelInfo = new ProtocolPersonnelInfo();			
@@ -583,6 +587,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			vo.setAcType("I");
 			vo.setProtocolStatus(generalInfo.getProtocolStatusCode());
 		}
+		 generalInfo.setProtocolStartDate(generateSqlDate(generalInfo.getAniticipatedStartDate()));
+		 generalInfo.setProtocolEndDate(generateSqlDate(generalInfo.getAniticipatedEndDate()));
+		 generalInfo.setRiskLvlDateAssigned(generateSqlDate(generalInfo.getStringRiskLvlDate()));
+		 generalInfo.setFdaRiskLvlDateAssigned(generateSqlDate(generalInfo.getStringFDARiskLvlDate()));
 		 hibernateTemplate.saveOrUpdate(generalInfo);			
 		 irbProtocolVO.setGeneralInfo(generalInfo);
 		 if (vo.getAcType() != null){
@@ -595,6 +603,21 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return irbProtocolVO;
 	}
 
+	public Date generateSqlDate(String date){
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date utilDate = null;
+		java.sql.Date sqlDate= null;
+		if(date != null){
+		try{
+			utilDate = sdf.parse(date);
+			sqlDate = new java.sql.Date(utilDate.getTime());
+		}catch (Exception e) {
+			logger.info("Exception in generateSqlActionDate:" + e);
+		}
+	  }
+		return sqlDate;
+	}
+	
 	private Integer generateProtocolId() {
 		Integer protocolId=null;
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
@@ -854,6 +877,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			if(protocolCollaborator.getProtocolLocationId() == null){
 				protocolCollaborator.setProtocolLocationId(generateLocationId());
 			}
+			protocolCollaborator.setApprovalDate(generateSqlDate(protocolCollaborator.getStringApprovalDate()));
+			protocolCollaborator.setExpirationDate(generateSqlDate(protocolCollaborator.getStringExpirationDate()));
 			hibernateTemplate.saveOrUpdate(protocolCollaborator);
 		} else if (protocolCollaborator.getAcType().equals("D")) {
 			Session sessionDelPersons = hibernateTemplate.getSessionFactory().openSession();

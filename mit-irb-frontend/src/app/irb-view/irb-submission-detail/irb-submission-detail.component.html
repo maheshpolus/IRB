@@ -247,33 +247,32 @@
                   
                   <div *ngIf="tabSelectedCommittee == 'PROTOCOL_COMMENTS'">
                       <div class="alert alert-danger " *ngIf="invalidData.invalidReviewComments">
-                          Please fill all mandatory fields marked
+                          Please Choose either Include in Minutes or Include in Letter while adding Review Comments
                           <strong>*</strong>
                         </div>
                       <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
-                        
-                        <div class="col-md-12 mb-15">
+                          <div class="col-md-6 pl-0 pr-0 ml-15 mb-15">
+                              <div class="form-group">
+                                <label class="label-width">Reviewed By:</label>
+                                <select class="custom-select  mr-sm-2 select-notify-popup" [disabled]="userDTO.role=='PI' || userDTO.role=='DEPT_ADMIN' || viewMode==true" id="inlineFormCustomSelect" [(ngModel)]="reviewedBy">
+                                  
+                                    <option value='Committee'>Committee</option>
+                                  <option value="{{userDTO.userName}}">{{userDTO?.fullName}}</option>
+                                  <option *ngFor="let person of committeeReviewers" value="{{person.USER_NAME}}">{{person.FULL_NAME}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          <div class="col-md-2 mt-12 mb-15">
+                            <input type="checkbox" [(ngModel)]="minuteFlag" /> Include in Minutes
+                          </div>
+                          <div class="col-md-2 mt-12 mb-15">
+                              <input type="checkbox" [(ngModel)]="letterFlag" /> Include in Letter
+                            </div>
+                        <div class="col-md-10 mb-15">
                           <div class="form-group">
                             <textarea rows="4" class="form-control txt-area-fnt" placeholder="Write your review comments...." [(ngModel)]="protocolReviewComments.comments"></textarea>
                           </div>
                         </div>
-                        <div class="col-md-6 pl-0 pr-0 ml-15">
-                            <div class="form-group">
-                              <label class="label-width">Reviewed By:</label>
-                              <select class="custom-select  mr-sm-2 select-notify-popup" [disabled]="userDTO.role=='PI' || userDTO.role=='DEPT_ADMIN' || viewMode==true" id="inlineFormCustomSelect" [(ngModel)]="reviewedBy">
-                                
-                                  <option value='Committee'>Committee</option>
-                                <option value="{{userDTO.userName}}">{{userDTO?.fullName}}</option>
-                                <option *ngFor="let person of committeeReviewers" value="{{person.USER_NAME}}">{{person.FULL_NAME}}</option>
-                              </select>
-                            </div>
-                          </div>
-                        <div class="col-md-2 mt-12">
-                          <input type="checkbox" [(ngModel)]="minuteFlag" /> Include in Minutes
-                        </div>
-                        <div class="col-md-2 mt-12">
-                            <input type="checkbox" [(ngModel)]="letterFlag" /> Include in Letter
-                          </div>
                         <div class="col-md-1 add-btn-1">
                           <button title="Add" type="button" class="btn btn-success" (click)="addProtocolReviewComments('I')">
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -348,7 +347,7 @@
                                           <div class="form-group">
                                               <label class="label-width"> Abstained: 
                                               </label>
-                                              <input type="number" [disabled]="userDTO.role=='PI' || userDTO.role=='DEPT_ADMIN'|| viewMode==true" min="0" [(ngModel)]="submissionVo.abstainCount" class="form-control font-size-13 select-notify-popup" >
+                                              <input type="number" [disabled]="userDTO.role=='PI' || userDTO.role=='DEPT_ADMIN'|| viewMode==true" min="0" [(ngModel)]="submissionVo.abstainCount" min="0" class="form-control font-size-13 select-notify-popup" >
                                               </div>
                                               
                                             </div>

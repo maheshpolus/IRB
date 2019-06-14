@@ -58,24 +58,15 @@ public class ProtocolSubject {
 	@Column(name="CRITERIA")
 	private String criteria;
 	
-	@Column(name="AGE_GROUP_CODE")
-	private Integer ageGroupCode;
+	@Column(name="MIN_AGE")
+	private String minAge;
+	
+	@Column(name="MAX_AGE")
+	private String maxAge;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_SUBJECT_FK1"), name = "VULNERABLE_SUBJECT_TYPE_CODE", referencedColumnName = "VULNERABLE_SUBJECT_TYPE_CODE", insertable = false, updatable = false)
 	ProtocolSubjectTypes protocolSubjectTypes;
-	
-	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "SYS_C002823877"), name = "AGE_GROUP_CODE", referencedColumnName = "AGE_GROUP_CODE", insertable = false, updatable = false)
-	AgeGroups ageGroups;
-	
-	public Integer getAgeGroupCode() {
-		return ageGroupCode;
-	}
-
-	public void setAgeGroupCode(Integer ageGroupCode) {
-		this.ageGroupCode = ageGroupCode;
-	}
 	
 	public String getCriteria() {
 		return criteria;
@@ -90,14 +81,6 @@ public class ProtocolSubject {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public AgeGroups getAgeGroups() {
-		return ageGroups;
-	}
-
-	public void setAgeGroups(AgeGroups ageGroups) {
-		this.ageGroups = ageGroups;
 	}
 
 	public Integer getProtocolVulnerableSubId() {
@@ -178,6 +161,22 @@ public class ProtocolSubject {
 
 	public void setProtocolSubjectTypes(ProtocolSubjectTypes protocolSubjectTypes) {
 		this.protocolSubjectTypes = protocolSubjectTypes;
+	}
+
+	public String getMinAge() {
+		return minAge;
+	}
+
+	public void setMinAge(String minAge) {
+		this.minAge = minAge;
+	}
+
+	public String getMaxAge() {
+		return maxAge;
+	}
+
+	public void setMaxAge(String maxAge) {
+		this.maxAge = maxAge;
 	}
 }
 

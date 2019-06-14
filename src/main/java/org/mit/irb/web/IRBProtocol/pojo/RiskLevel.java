@@ -12,7 +12,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name="RISK_LEVEL")
+@Table(name="IRB_RISK_LEVEL")
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class RiskLevel {

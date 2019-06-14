@@ -41,15 +41,24 @@ public class IRBActionsVO {
 	private String expirationDate;
 	private ArrayList<HashMap<String, Object>> scheduleDates;
 	private ArrayList<HashMap<String, Object>> committeeList;
-	private ArrayList<HashMap<String, Object>> riskLevel;
+	private ArrayList<HashMap<String, Object>> riskLevelType;
+	private ArrayList<HashMap<String, Object>> fdaRiskLevelType;
 	private ArrayList<HashMap<String, Object>> expeditedApprovalCheckList;
 	private List<String> expeditedCheckListSelectedCode;
-	private List<IRBProtocolRiskLevel> riskLevelList;
+	private IRBProtocolRiskLevel riskLevelDetail;
 	private String selectedCommitteeId;
 	private String selectedScheduleId;	
 	private ArrayList<HashMap<String, Object>> expeditedCannedComments;
 	private List<IRBCommitteeReviewerComments> irbActionsReviewerComments;
-	
+
+	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
+		return fdaRiskLevelType;
+	}
+
+	public void setFdaRiskLevelType(ArrayList<HashMap<String, Object>> fdaRiskLevelType) {
+		this.fdaRiskLevelType = fdaRiskLevelType;
+	}
+
 	public ArrayList<HashMap<String, Object>> getPersonActionsList() {
 		return personActionsList;
 	}
@@ -298,14 +307,6 @@ public class IRBActionsVO {
 		this.committeeList = committeeList;
 	}
 
-	public ArrayList<HashMap<String, Object>> getRiskLevel() {
-		return riskLevel;
-	}
-
-	public void setRiskLevel(ArrayList<HashMap<String, Object>> riskLevel) {
-		this.riskLevel = riskLevel;
-	}
-
 	public ArrayList<HashMap<String, Object>> getExpeditedApprovalCheckList() {
 		return expeditedApprovalCheckList;
 	}
@@ -338,14 +339,6 @@ public class IRBActionsVO {
 		this.selectedScheduleId = selectedScheduleId;
 	}
 
-	public List<IRBProtocolRiskLevel> getRiskLevelList() {
-		return riskLevelList;
-	}
-
-	public void setRiskLevelList(List<IRBProtocolRiskLevel> riskLevelList) {
-		this.riskLevelList = riskLevelList;
-	}
-
 	public ArrayList<HashMap<String, Object>> getExpeditedCannedComments() {
 		return expeditedCannedComments;
 	}
@@ -368,5 +361,21 @@ public class IRBActionsVO {
 
 	public void setIrbActionsReviewerComments(List<IRBCommitteeReviewerComments> irbActionsReviewerComments) {
 		this.irbActionsReviewerComments = irbActionsReviewerComments;
+	}
+
+	public ArrayList<HashMap<String, Object>> getRiskLevelType() {
+		return riskLevelType;
+	}
+
+	public void setRiskLevelType(ArrayList<HashMap<String, Object>> riskLevelType) {
+		this.riskLevelType = riskLevelType;
+	}
+
+	public IRBProtocolRiskLevel getRiskLevelDetail() {
+		return riskLevelDetail;
+	}
+
+	public void setRiskLevelDetail(IRBProtocolRiskLevel riskLevelDetail) {
+		this.riskLevelDetail = riskLevelDetail;
 	}
 }

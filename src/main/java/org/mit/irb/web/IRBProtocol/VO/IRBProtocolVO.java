@@ -7,6 +7,7 @@ import java.util.List;
 import org.mit.irb.web.IRBProtocol.pojo.AgeGroups;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
+import org.mit.irb.web.IRBProtocol.pojo.FDARiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
@@ -27,6 +28,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType;
+import org.mit.irb.web.IRBProtocol.pojo.RiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.SponsorType;
 import org.mit.irb.web.committee.pojo.Unit;
@@ -40,6 +42,8 @@ public class IRBProtocolVO {
 	private ProtocolGeneralInfo generalInfo;
 	private List<ProtocolType> protocolType;
 	private List<SponsorType> sponsorType;
+	private List<RiskLevel> riskLevelType;
+	private List<FDARiskLevel> fdaRiskLevelType;
 	private List<ProtocolUnitType> protocolUnitType;
 	private List<ProtocolAdminContactType> protocolAdminContactType;
 	private List<ProtocolPersonRoleTypes> personRoleTypes;
@@ -79,6 +83,14 @@ public class IRBProtocolVO {
 	private String updateUser;
 	private ProtocolLeadUnits leadUnit;
 	
+	public List<FDARiskLevel> getFdaRiskLevelType() {
+		return fdaRiskLevelType;
+	}
+
+	public void setFdaRiskLevelType(List<FDARiskLevel> fdaRiskLevelType) {
+		this.fdaRiskLevelType = fdaRiskLevelType;
+	}
+
 	public ExemptFundingSource getExemptFundingSource() {
 		return exemptFundingSource;
 	}
@@ -413,5 +425,13 @@ public class IRBProtocolVO {
 
 	public void setLeadUnit(ProtocolLeadUnits leadUnit) {
 		this.leadUnit = leadUnit;
+	}
+
+	public List<RiskLevel> getRiskLevelType() {
+		return riskLevelType;
+	}
+
+	public void setRiskLevelType(List<RiskLevel> riskLevelType) {
+		this.riskLevelType = riskLevelType;
 	}
 }

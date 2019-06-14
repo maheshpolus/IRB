@@ -9,14 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.AdminCheckListDetail;
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
-import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
@@ -28,8 +32,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
@@ -37,6 +43,7 @@ import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 
 @Service(value = "irbActionsDao")
+@Transactional
 public class IRBActionsDaoImpl implements IRBActionsDao {
     DBEngine dbEngine;
 	
@@ -46,6 +53,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Autowired
 	IRBProtocolDao irbProtocolDao;
+	
+	@Autowired
+	HibernateTemplate hibernateTemplate;
 	
 	Logger logger = Logger.getLogger(IRBUtilDaoImpl.class.getName());
 
@@ -81,9 +91,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 
 	private ArrayList<HashMap<String, Object>> actionsAvaliableForUser(IRBActionsVO vo,ArrayList<HashMap<String, Object>> intialResult) {
-		String reviewTypeCode = null;
-		reviewTypeCode = vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
-		String currentProtocolSubmissionStatus = null;
+		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
 		if(intialResult !=null && !intialResult.isEmpty()){
 		for(int i=0;i<intialResult.size();i++)
         {
@@ -114,7 +122,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				 }
 				break;
 			case "204":
-			case "303":
+			case "304":
 			case "203":	
 			case "202":	
 				if(reviewTypeCode == null){
@@ -146,68 +154,13 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	private ProtocolSubmissionStatuses fetchSubmissionDetails(IRBActionsVO vo,ProtocolSubmissionStatuses protocolSubmissionStatuses) {
 		try{
-			Integer submissionId = Integer.parseInt(vo.getSubmissionId());
-			ArrayList<InParameter> inputparams  = new ArrayList<InParameter>();
-			ArrayList<OutParameter> outputParams = new ArrayList<OutParameter>();
-			inputparams.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));	
-			inputparams.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));	
-			inputparams.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionId));	
-			outputParams.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
-			ArrayList<HashMap<String, Object>> results = dbEngine.executeProcedure(inputparams,"GET_IRB_PROTO_ACTION_SUBMISSN",outputParams);
-			if(results != null && !results.isEmpty()){			
-				protocolSubmissionStatuses.setSubmission_Id(Integer.parseInt(results.get(0).get("SUBMISSION_ID").toString()));
-				protocolSubmissionStatuses.setProtocolNumber(results.get(0).get("PROTOCOL_NUMBER").toString());
-				protocolSubmissionStatuses.setProtocolId(Integer.parseInt(results.get(0).get("PROTOCOL_ID").toString()));
-				protocolSubmissionStatuses.setSubmissionNumber(Integer.parseInt(results.get(0).get("SUBMISSION_NUMBER").toString()));
-				if (results.get(0).get("SEQUENCE_NUMBER") != null) {
-					protocolSubmissionStatuses.setSequenceNumber(Integer.parseInt(results.get(0).get("SEQUENCE_NUMBER").toString()));
-				}			
-				if (results.get(0).get("COMMITTEE_ID") != null) {
-					protocolSubmissionStatuses.setCommitteeId(results.get(0).get("COMMITTEE_ID").toString());
-				}				
-				if (results.get(0).get("SUBMISSION_TYPE_CODE") != null) {
-					protocolSubmissionStatuses.setSubmissionTypeCode(results.get(0).get("SUBMISSION_TYPE_CODE").toString());
-				}
-				if (results.get(0).get("SUBMISSION_TYPE_QUAL_CODE") != null) {
-					protocolSubmissionStatuses.setSubmissionTypeQualCode(results.get(0).get("SUBMISSION_TYPE_QUAL_CODE").toString());
-				}
-				if (results.get(0).get("SUBMISSION_STATUS_CODE") != null) {
-					protocolSubmissionStatuses.setSubmissionStatusCode(results.get(0).get("SUBMISSION_STATUS_CODE").toString());
-				}
-				if (results.get(0).get("PROTOCOL_REVIEW_TYPE_CODE") != null) {
-					protocolSubmissionStatuses.setProtocolReviewTypeCode(results.get(0).get("PROTOCOL_REVIEW_TYPE_CODE").toString());
-				}			
-				if (results.get(0).get("COMMENTS") != null) {
-					protocolSubmissionStatuses.setComments(results.get(0).get("COMMENTS").toString());
-				}
-				if (results.get(0).get("YES_VOTE_COUNT") != null) {
-					protocolSubmissionStatuses.setYesVoteCount(Integer.parseInt(results.get(0).get("YES_VOTE_COUNT").toString()));
-				}
-				if (results.get(0).get("NO_VOTE_COUNT") != null) {
-					protocolSubmissionStatuses.setNoVoteCount(Integer.parseInt(results.get(0).get("NO_VOTE_COUNT").toString()));
-				}
-				if (results.get(0).get("ABSTAINER_COUNT") != null) {
-					protocolSubmissionStatuses.setAbstainerCount(Integer.parseInt(results.get(0).get("ABSTAINER_COUNT").toString()));
-				}
-				if (results.get(0).get("VOTING_COMMENTS") != null) {
-					protocolSubmissionStatuses.setVotingComments(results.get(0).get("VOTING_COMMENTS").toString());
-				}
-				if (results.get(0).get("UPDATE_USER") != null) {
-					protocolSubmissionStatuses.setUpdateUser(results.get(0).get("UPDATE_USER").toString());
-				}
-				if (results.get(0).get("RECUSED_COUNT") != null) {
-					protocolSubmissionStatuses.setRecusedCount(Integer.parseInt(results.get(0).get("RECUSED_COUNT").toString()));
-				}
-				if (results.get(0).get("IS_BILLABLE") != null) {
-					protocolSubmissionStatuses.setIsBillable(results.get(0).get("IS_BILLABLE").toString());
-				}
-				if (results.get(0).get("COMM_DECISION_MOTION_TYPE_CODE") != null) {
-					protocolSubmissionStatuses.setCommDecisionMotionTypeCode(results.get(0).get("COMM_DECISION_MOTION_TYPE_CODE").toString());
-				}
-				if (results.get(0).get("SCHEDULE_ID") != null) {
-					protocolSubmissionStatuses.setScheduleId(Integer.parseInt(results.get(0).get("SCHEDULE_ID").toString()));
-				}										
-			}	
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProtocolSubmissionStatuses> criteria = builder.createQuery(ProtocolSubmissionStatuses.class);
+			Root<ProtocolSubmissionStatuses> submissionRoot=criteria.from(ProtocolSubmissionStatuses.class);			
+			criteria.where(builder.equal(submissionRoot.get("submission_Id"),Integer.parseInt(vo.getSubmissionId())));
+			if(session.createQuery(criteria).getResultList() != null)
+			protocolSubmissionStatuses = session.createQuery(criteria).getResultList().get(0);					
 		}catch (Exception e) {
 			logger.info("Exception in getProtocolSubmissionDetails:" + e);		
 		}
@@ -646,7 +599,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
-			updateApprovalsRiskLevel(vo);
+			updateRiskLevelDetails(vo);
+			updateSubmissionDetail(vo);
 			updateReviewComments(vo);			
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
@@ -852,7 +806,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);						
 			//generateProtocolCorrespondence(vo);
-			updateApprovalsRiskLevel(vo);
+			updateRiskLevelDetails(vo);
+			updateSubmissionDetail(vo);
 			updateReviewComments(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Approved successfully");	
@@ -868,8 +823,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO SMRRAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);		
-			updateApprovalsRiskLevel(vo);
+			protocolActionSP(vo,null);
+			updateRiskLevelDetails(vo);
+			updateSubmissionDetail(vo);
 			updateReviewComments(vo);			
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
@@ -886,8 +842,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO SRRAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);		
-			updateApprovalsRiskLevel(vo);
+			protocolActionSP(vo,null);
+			updateRiskLevelDetails(vo);
+			updateSubmissionDetail(vo);
 			updateReviewComments(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
@@ -906,7 +863,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);	
 			updateExpeditedApprovalCheckList(vo);
-			updateApprovalsRiskLevel(vo);
+			updateRiskLevelDetails(vo);
+			updateSubmissionDetail(vo);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Expedited approval successfully");	
@@ -1136,29 +1094,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		});			
 	}
 	
-	private void updateApprovalsRiskLevel(IRBActionsVO vo) {				
-		List<IRBProtocolRiskLevel> irbProtocolRiskLevel=null;
-		irbProtocolRiskLevel =vo.getRiskLevelList();
-		if(irbProtocolRiskLevel !=null)
-			irbProtocolRiskLevel.forEach(riskLevelList ->{	
-			   try{
-				   ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-				   inputParam.add(new InParameter("AV_PROTOCOL_RISK_LEVELS_ID", DBEngineConstants.TYPE_INTEGER,null));
-				   inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolId()));
-				   inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
-				   inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
-				   inputParam.add(new InParameter("AV_RISK_LEVEL_CODE", DBEngineConstants.TYPE_STRING,riskLevelList.getRiskLevelCode()));
-				   inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,riskLevelList.getComment()));
-				   inputParam.add(new InParameter("AV_DATE_ASSIGNED", DBEngineConstants.TYPE_STRING,generateSqlDate(riskLevelList.getDate())));
-				   inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
-				   inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));
-				   dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTOCOL_RISK_LEVELS");	
-				} catch (Exception e) {		
-				  logger.info("Exception in updateExpeditedApprovalCheckList:" + e);	
-			    }
-		  });
-	 }
-	
 	@Override
 	public ArrayList<HashMap<String, Object>> getIRBAdminList() {
 		ArrayList<HashMap<String, Object>> irbAdminList = null;														
@@ -1316,12 +1251,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 
 	@Override
-	public HashMap<String, Object> fetchCommitteeVotingDetails(SubmissionDetailVO submissionDetailvo) {
+	public HashMap<String, Object> fetchCommitteeVotingDetails(Integer submissionId) {
 		HashMap<String, Object> committeeVotingDetails = null;
 		try{
 			ArrayList<OutParameter> outputparam = new ArrayList<OutParameter>();	
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionId));
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> votingDetails  = dbEngine.executeProcedure(inputParam,"GET_IRB_COMMITTEE_VOTING_DTLS",outputparam);
 			if(votingDetails != null){
@@ -1610,4 +1545,44 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		}
 		return pastsubmissionList;
 	}
+	
+	private void updateRiskLevelDetails(IRBActionsVO vo) {   
+        try{
+            ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+            inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolId()));
+            inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
+            inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
+            inputParam.add(new InParameter("AV_RISK_LEVEL_CODE", DBEngineConstants.TYPE_STRING,vo.getRiskLevelDetail().getRiskLevelCode()));
+            inputParam.add(new InParameter("AV_RISK_LVL_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getRiskLevelDetail().getRiskLevelComment()));
+            inputParam.add(new InParameter("AV_RISK_LVL_DATE_ASSIGNED", DBEngineConstants.TYPE_DATE,generateSqlDate(vo.getRiskLevelDetail().getRiskLevelDateAssigned())));
+            inputParam.add(new InParameter("AV_FDA_RISK_LEVEL_CODE", DBEngineConstants.TYPE_STRING,vo.getRiskLevelDetail().getFdaRiskLevelCode()));
+            inputParam.add(new InParameter("AV_FDA_LVL_COMMENTS", DBEngineConstants.TYPE_STRING,vo.getRiskLevelDetail().getFdaRiskLevelComment()));
+            inputParam.add(new InParameter("AV_FDA_LVL_DATE_ASSIGNED", DBEngineConstants.TYPE_DATE,generateSqlDate(vo.getRiskLevelDetail().getFdariskLevelDateAssigned())));       
+            inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
+            dbEngine.executeProcedure(inputParam,"upd_irb_protocol_risk_levels");        
+          } catch (Exception e) {                
+             logger.info("Exception in updateRiskLevelDetails:" + e);        
+          }         	   	
+		}
+	
+	public void updateSubmissionDetail(IRBActionsVO irbActionsVO) {
+		try{
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getSubmission_Id()));
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getSubmissionTypeCode()));
+			inputParam.add(new InParameter("AV_PROTOCOL_REVW_TYPE_CODE", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getProtocolReviewTypeCode()));
+			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getScheduleId()));
+			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getCommitteeId()));
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_QUAL_CODE", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getSubmissionTypeQualCode()));
+			inputParam.add(new InParameter("AV_COMMENTS", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getVotingComments()));
+			inputParam.add(new InParameter("AV_YES_VOTE_COUNT", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getYesVoteCount()));
+			inputParam.add(new InParameter("AV_NO_VOTE_COUNT", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getNoVoteCount()));
+			inputParam.add(new InParameter("AV_ABSTAINER_COUNT", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getAbstainerCount()));
+			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getUpdateUser()));
+			dbEngine.executeProcedure(inputParam,"upd_irb_submission_details");
+		} catch (Exception e) {
+			logger.info("Exception in updateSubmissionDetail:" + e);	
+		}		
+	}
+	
 }

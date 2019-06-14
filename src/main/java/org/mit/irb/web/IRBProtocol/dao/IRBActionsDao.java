@@ -109,7 +109,7 @@ public interface IRBActionsDao {
 
 	void updateIRBAdminAttachment(SubmissionDetailVO submissionDetailvo, MultipartFile[] files);
 
-	HashMap<String, Object> fetchCommitteeVotingDetails(SubmissionDetailVO submissionDetailvo);
+	HashMap<String, Object> fetchCommitteeVotingDetails(Integer submissionId);
 
 	void updateSubmissionDetail(SubmissionDetailVO submissionDetailvo);
 

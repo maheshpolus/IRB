@@ -211,15 +211,19 @@ public class IRBActionsServImpl implements IRBActionsService {
 			 Future<IRBActionsVO> submissionTypeQulifier = initLoadService.getSubmissionTypeQulifier(vo);			 		
 			 Future<IRBActionsVO> scheduleDates = initLoadService.getScheduleDates(vo,null);			
 			 Future<IRBActionsVO> committeeList = initLoadService.getCommitteeList(vo);				
-			 Future<IRBActionsVO> riskLevel = initLoadService.getRiskLevel(vo);			 	
+			 Future<IRBActionsVO> riskLevelType = initLoadService.getRiskLevelType(vo);
+			 Future<IRBActionsVO> fdaRiskLevelType = initLoadService.getFDARiskLevelType(vo);
+			 Future<IRBActionsVO> previousRiskLevel = initLoadService.getPreviousRiskLevel(vo);
 			 Future<IRBActionsVO> expeditedApprovalCheckList = initLoadService.getExpeditedApprovalCheckList(vo);			 
 			 Future<IRBActionsVO> expeditedCannedComments = initLoadService.getExpeditedCannedComments(vo);
 			 vo = submissionTypeQulifier.get();	
 			 vo = scheduleDates.get();
 			 vo = committeeList.get();
-			 vo = riskLevel.get();	
+			 vo = riskLevelType.get();	
+			 vo = fdaRiskLevelType.get();	
 			 vo = expeditedApprovalCheckList.get();		
-			 vo = expeditedCannedComments.get();		
+			 vo = expeditedCannedComments.get();
+			 vo = previousRiskLevel.get();
 		}catch (Exception e) {
 			logger.info("Exception in getActionLookup:" + e);
 		}
@@ -534,7 +538,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 	public SubmissionDetailVO updateCommitteeVotingDetail(SubmissionDetailVO submissionDetailvo) {
 		try{
 			irbActionsDao.updateSubmissionDetail(submissionDetailvo);
-			HashMap<String, Object> committeeVotingDetails = irbActionsDao.fetchCommitteeVotingDetails(submissionDetailvo);
+			HashMap<String, Object> committeeVotingDetails = irbActionsDao.fetchCommitteeVotingDetails(submissionDetailvo.getSubmissionId());
 			if(committeeVotingDetails != null && !committeeVotingDetails.isEmpty()){
 				submissionDetailvo.setComment(committeeVotingDetails.get("COMMENTS") == null ? null : committeeVotingDetails.get("COMMENTS").toString());
 				submissionDetailvo.setYesVotingCount(committeeVotingDetails.get("YES_VOTE_COUNT") == null ? null: Integer.parseInt(committeeVotingDetails.get("YES_VOTE_COUNT").toString()));
@@ -654,7 +658,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 	public SubmissionDetailVO loadCommitteeReviewerDetails(SubmissionDetailVO vo) {
 		try{
 			ArrayList<HashMap<String, Object>> committeeReviewerCommentsandAttachment = irbActionsDao.getCommitteeReviewerCommentsandAttachment(vo);
-			HashMap<String, Object> committeeVotingDetails = irbActionsDao.fetchCommitteeVotingDetails(vo);
+			HashMap<String, Object> committeeVotingDetails = irbActionsDao.fetchCommitteeVotingDetails(vo.getSubmissionId());
 			if(committeeVotingDetails != null && !committeeVotingDetails.isEmpty()){
 				vo.setComment(committeeVotingDetails.get("COMMENTS") == null ? null : committeeVotingDetails.get("COMMENTS").toString());
 				vo.setYesVotingCount(committeeVotingDetails.get("YES_VOTE_COUNT") == null ? null: Integer.parseInt(committeeVotingDetails.get("YES_VOTE_COUNT").toString()));

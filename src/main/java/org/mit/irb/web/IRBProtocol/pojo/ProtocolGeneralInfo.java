@@ -146,6 +146,33 @@ public class ProtocolGeneralInfo {
 	@Transient
 	ProtocolSubmissionStatuses protocolSubmissionStatuses;
 	
+	@Transient
+	private String aniticipatedStartDate;
+	
+	@Transient
+	private String aniticipatedEndDate;
+	
+	@Transient
+	private String stringRiskLvlDate;
+	
+	@Transient
+	private String stringFDARiskLvlDate;
+	
+	public String getAniticipatedStartDate() {
+		return aniticipatedStartDate;
+	}
+
+	public void setAniticipatedStartDate(String aniticipatedStartDate) {
+		this.aniticipatedStartDate = aniticipatedStartDate;
+	}
+
+	public String getAniticipatedEndDate() {
+		return aniticipatedEndDate;
+	}
+
+	public void setAniticipatedEndDate(String aniticipatedEndDate) {
+		this.aniticipatedEndDate = aniticipatedEndDate;
+	}
 	
 	public FDARiskLevel getFdaRiskLevel() {
 		return fdaRiskLevel;
@@ -425,5 +452,21 @@ public class ProtocolGeneralInfo {
 
 	public void setFdaRiskLevelComments(String fdaRiskLevelComments) {
 		this.fdaRiskLevelComments = fdaRiskLevelComments;
+	}
+
+	public String getStringRiskLvlDate() {
+		return stringRiskLvlDate;
+	}
+
+	public void setStringRiskLvlDate(String stringRiskLvlDate) {
+		this.stringRiskLvlDate = stringRiskLvlDate;
+	}
+
+	public String getStringFDARiskLvlDate() {
+		return stringFDARiskLvlDate;
+	}
+
+	public void setStringFDARiskLvlDate(String stringFDARiskLvlDate) {
+		this.stringFDARiskLvlDate = stringFDARiskLvlDate;
 	}
 }

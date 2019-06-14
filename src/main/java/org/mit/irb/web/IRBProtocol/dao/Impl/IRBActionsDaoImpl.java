@@ -498,8 +498,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_PROTO_AMEND_REN_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));	
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inputParam,"GET_IRB_PROTO_AMND_RENW_SUMARY",outputParam);
-			if(result.get(0).get("SUMMARY") != null){
-				amendRenewalSummary = result.get(0).get("SUMMARY").toString();
+			if(result != null){
+				amendRenewalSummary = result.get(0).get("SUMMARY") != null ? result.get(0).get("SUMMARY").toString() : null;
 			}
 		} catch (Exception e) {
 			logger.info("Exception in getAmendRenewalSummary method" + e);
@@ -803,10 +803,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
-		try {			
-			protocolActionSP(vo,null);						
-			//generateProtocolCorrespondence(vo);
+		try {	
 			updateRiskLevelDetails(vo);
+			protocolActionSP(vo,null);						
+			//generateProtocolCorrespondence(vo);			
 			updateSubmissionDetail(vo);
 			updateReviewComments(vo);
 			vo.setSuccessCode(true);
@@ -822,9 +822,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO SMRRAdminActions(IRBActionsVO vo) {
-		try {			
+		try {	
+			updateRiskLevelDetails(vo);	
 			protocolActionSP(vo,null);
-			updateRiskLevelDetails(vo);
 			updateSubmissionDetail(vo);
 			updateReviewComments(vo);			
 			//generateProtocolCorrespondence(vo);
@@ -841,9 +841,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO SRRAdminActions(IRBActionsVO vo) {
-		try {			
-			protocolActionSP(vo,null);
+		try {
 			updateRiskLevelDetails(vo);
+			protocolActionSP(vo,null);		
 			updateSubmissionDetail(vo);
 			updateReviewComments(vo);
 			//generateProtocolCorrespondence(vo);
@@ -860,11 +860,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo) {
-		try {			
-			protocolActionSP(vo,null);	
+		try {
 			updateExpeditedApprovalCheckList(vo);
 			updateRiskLevelDetails(vo);
 			updateSubmissionDetail(vo);
+			protocolActionSP(vo,null);				
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Expedited approval successfully");	
@@ -1273,7 +1273,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try{
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionTypeCode()));
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_STRING,String.valueOf(submissionDetailvo.getSubmissionTypeCode())));
 			inputParam.add(new InParameter("AV_PROTOCOL_REVW_TYPE_CODE", DBEngineConstants.TYPE_STRING,submissionDetailvo.getReviewTypeCode()));
 			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSceduleId()));
 			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getCommitteeId()));
@@ -1307,7 +1307,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getContingencyCode()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));	
-				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,null));			
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));			
 			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1326,10 +1326,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));
 				inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmission_Id()));
 				inputParam.add(new InParameter("AV_SUBMISSION_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getSubmissionNumber()));
-				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,null));
+				inputParam.add(new InParameter("AV_DESCRIPTION", DBEngineConstants.TYPE_STRING,vo.getAttachmentDescription()));
 				inputParam.add(new InParameter("AV_FILE_NAME", DBEngineConstants.TYPE_STRING,files[i].getOriginalFilename()));
 				inputParam.add(new InParameter("AV_MIME_TYPE", DBEngineConstants.TYPE_STRING, files[i].getContentType()));
-				inputParam.add(new InParameter("AV_PUBLIC_FLAG", DBEngineConstants.TYPE_STRING,"Y"));
+				inputParam.add(new InParameter("AV_PUBLIC_FLAG", DBEngineConstants.TYPE_STRING,vo.getPublicFlag()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_ATTACHMENT", DBEngineConstants.TYPE_BLOB,files[i].getBytes()));
 				inputParam.add(new InParameter("AV_TYPE ", DBEngineConstants.TYPE_STRING,"I"));			
@@ -1569,7 +1569,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try{
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getSubmission_Id()));
-			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getSubmissionTypeCode()));
+			inputParam.add(new InParameter("AV_SUBMISSION_TYPE_CODE", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getSubmissionTypeCode()));
 			inputParam.add(new InParameter("AV_PROTOCOL_REVW_TYPE_CODE", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getProtocolReviewTypeCode()));
 			inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,irbActionsVO.getProtocolSubmissionStatuses().getScheduleId()));
 			inputParam.add(new InParameter("AV_COMMITTEE_ID", DBEngineConstants.TYPE_STRING,irbActionsVO.getProtocolSubmissionStatuses().getCommitteeId()));

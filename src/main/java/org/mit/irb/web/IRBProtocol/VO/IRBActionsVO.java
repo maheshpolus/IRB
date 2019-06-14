@@ -48,9 +48,11 @@ public class IRBActionsVO {
 	private IRBProtocolRiskLevel riskLevelDetail;
 	private String selectedCommitteeId;
 	private String selectedScheduleId;	
+	private String publicFlag;
 	private ArrayList<HashMap<String, Object>> expeditedCannedComments;
 	private List<IRBCommitteeReviewerComments> irbActionsReviewerComments;
-
+	private String attachmentDescription;
+	
 	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
 	}
@@ -377,5 +379,21 @@ public class IRBActionsVO {
 
 	public void setRiskLevelDetail(IRBProtocolRiskLevel riskLevelDetail) {
 		this.riskLevelDetail = riskLevelDetail;
+	}
+
+	public String getAttachmentDescription() {
+		return attachmentDescription;
+	}
+
+	public void setAttachmentDescription(String attachmentDescription) {
+		this.attachmentDescription = attachmentDescription;
+	}
+
+	public String getPublicFlag() {
+		return publicFlag;
+	}
+
+	public void setPublicFlag(String publicFlag) {
+		this.publicFlag = publicFlag;
 	}
 }

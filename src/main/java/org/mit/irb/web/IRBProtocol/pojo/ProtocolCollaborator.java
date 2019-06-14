@@ -79,6 +79,28 @@ public class ProtocolCollaborator {
 	@OneToMany(mappedBy = "protocolCollaborator", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<ProtocolCollaboratorPersons> protocolCollaboratorPersons;
 	
+	@Transient
+	private String stringExpirationDate;
+	
+	@Transient
+	private String stringApprovalDate;
+	
+	public String getStringExpirationDate() {
+		return stringExpirationDate;
+	}
+
+	public void setStringExpirationDate(String stringExpirationDate) {
+		this.stringExpirationDate = stringExpirationDate;
+	}
+
+	public String getStringApprovalDate() {
+		return stringApprovalDate;
+	}
+
+	public void setStringApprovalDate(String stringApprovalDate) {
+		this.stringApprovalDate = stringApprovalDate;
+	}
+
 	public Integer getProtocolLocationId() {
 		return protocolLocationId;
 	}

@@ -77,7 +77,6 @@ export class IrbOverviewComponent implements OnInit, OnDestroy {
         this.$subscription1 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
             if (data !== undefined && data != null) {
                 this.irbHeaderDetails = data;
-                console.log(this.irbHeaderDetails);
             }
         });
       this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');

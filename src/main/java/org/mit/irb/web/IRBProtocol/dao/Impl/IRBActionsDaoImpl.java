@@ -277,6 +277,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			result=protocolActionSP(vo,null);	
 			vo.setProtocolNumber(result.get(0).get("PROTOCOL_NUMBER").toString());
 			vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			updateSummarryData(vo);
 		    vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Renewal created successfully");	
 		} catch (Exception e) {
@@ -810,6 +811,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			updateSubmissionDetail(vo);
 			updateReviewComments(vo);
 			vo.setSuccessCode(true);
+			if(vo.getProtocolNumber().length() > 10){				
+				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
+			}
 		    vo.setSuccessMessage("Approved successfully");	
 		} catch (Exception e) {
 			vo.setSuccessCode(false);
@@ -866,6 +870,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			updateSubmissionDetail(vo);
 			protocolActionSP(vo,null);				
 			//generateProtocolCorrespondence(vo);
+			if(vo.getProtocolNumber().length() > 10){				
+				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Expedited approval successfully");	
 		} catch (Exception e) {
@@ -882,6 +889,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		try {			
 			protocolActionSP(vo,null);						
 			//generateProtocolCorrespondence(vo);
+			if(vo.getProtocolNumber().length() > 10){				
+				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Response approval successful");	
 		} catch (Exception e) {

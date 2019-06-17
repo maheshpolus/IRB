@@ -54,9 +54,12 @@ export class IrbHeaderDetailComponent implements OnInit {
           this.PROTOCOL_BASIC_INFO = property_config.PROTOCOL_BASIC_INFO;
         }
       });
+      this._activatedRoute.queryParams.subscribe(params => {
+        this.requestObject.protocolNumber = params['protocolNumber'];
+      });
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this.isExpanded = false;
-    this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
+    // this.requestObject.protocolNumber = this._activatedRoute.snapshot.queryParamMap.get('protocolNumber');
     this.previousUrl = this._activatedRoute.snapshot.queryParamMap.get('from');
     this.loadHeaderDetails();
     if (this.isAmmendmentOrRenewal()) {

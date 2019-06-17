@@ -29,7 +29,7 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
 
   private $subscription1: ISubscription;
   constructor(private _irbCreateService: IrbCreateService, private _activatedRoute: ActivatedRoute,
-    private _sharedDataService: SharedDataService, private _spinner: NgxSpinnerService,) { }
+    private _sharedDataService: SharedDataService, private _spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
@@ -110,11 +110,31 @@ export class RiskLevelsComponent implements OnInit, OnDestroy {
    * @param  {} currentDate - input in format yyyy-mon-dd
    */
   GetFormattedDateFromString(currentDate) {
-    const res = currentDate.split('-');
-    const year = parseInt(res[0], 10);
-    const month = parseInt(res[1], 10);
-    const day = parseInt(res[2], 10);
-    return new Date(year, month - 1, day);
+    if (typeof currentDate === 'string' || currentDate instanceof String) {
+      const res = currentDate.split('-');
+      const year = parseInt(res[0], 10);
+      const month = parseInt(res[1], 10);
+      const day = parseInt(res[2], 10);
+      return new Date(year, month - 1, day);
+    } else  {
+      return currentDate;
+    }
+}
+
+riskLevelTypeChange(riskLevelCode) {
+  this.riskLevelType.forEach(type => {
+    if (type.riskLevelCode === riskLevelCode) {
+      this.generalInfo.riskLevel = { riskLevelCode: riskLevelCode, description: type.description };
+    }
+  });
+}
+
+fdaRiskLevelTypeChange(fdaRiskLevelCode) {
+  this.fdaRiskLevelType.forEach(type => {
+    if (type.fdaRiskLevelCode === fdaRiskLevelCode) {
+      this.generalInfo.fdaRiskLevel = { fdaRiskLevelCode: fdaRiskLevelCode, description: type.description };
+    }
+  });
 }
 
 

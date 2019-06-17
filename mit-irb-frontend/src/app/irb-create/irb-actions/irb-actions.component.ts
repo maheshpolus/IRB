@@ -216,7 +216,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         this.cannedCommentList = data.expeditedCannedComments != null ? data.expeditedCannedComments : [];
       });
     }
-  
+
   /**
    * @param  {} currentDate - input in format yyyy-mon-dd
    */
@@ -326,7 +326,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.currentActionPerformed.ACTION_CODE === '204' ||
     this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '203' ||
     this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '208') {
-      if (this.commentObject.comments != null || this.commentObject.comments !== '') {
+      if (this.commentObject.comments != null && this.commentObject.comments !== '') {
         this.addReviewComments(this.commentObject);
       }
     }
@@ -348,14 +348,17 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.currentActionPerformed.ACTION_CODE === '302' || this.currentActionPerformed.ACTION_CODE === '201' ||
           this.currentActionPerformed.ACTION_CODE === '300' || this.currentActionPerformed.ACTION_CODE === '213' ||
           this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '119' ||
-          this.currentActionPerformed.ACTION_CODE === '205' || this.currentActionPerformed.ACTION_CODE === '204' ||
           this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '910'
           || this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '210' ||
-          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ||
-          this.currentActionPerformed.ACTION_CODE === '208') {
+          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ) {
           // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-view/irbOverview'],
             { queryParams: { protocolNumber: this.protocolNumber } });
+        }
+        if (this.currentActionPerformed.ACTION_CODE === '204' || this.currentActionPerformed.ACTION_CODE === '205' ||
+        this.currentActionPerformed.ACTION_CODE === '208') {
+          this._router.navigate(['/irb/irb-view/irbOverview'],
+          { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber } });
         }
 
         // create amendment, create renewal, withdrawn, copy protocol

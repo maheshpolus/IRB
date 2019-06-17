@@ -14,7 +14,7 @@
             <div class="form-group">
               <label>Risk Level
               </label>
-              <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelCode">
+              <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelCode" (ngModelChange)="riskLevelTypeChange(generalInfo.riskLevelCode)">
                 <option value=null selected>Please Select</option>
                 <option *ngFor="let level of riskLevelType" value="{{level.riskLevelCode}}">{{level.description}}</option>
               </select>
@@ -47,9 +47,9 @@
         <div class="row">
           <div class="col-md-3">
             <div class="form-group">
-              <label>FDA Risk Level{{generalInfo.fdaRiskLevelCode}}
+              <label>FDA Risk Level
               </label>
-              <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelCode">
+              <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelCode" (ngModelChange)="fdaRiskLevelTypeChange(generalInfo.fdaRiskLevelCode)">
                 <option value=null selected>Please Select</option>
                 <option *ngFor="let level of fdaRiskLevelType" value="{{level.fdaRiskLevelCode}}">{{level.description}}</option>
               </select>

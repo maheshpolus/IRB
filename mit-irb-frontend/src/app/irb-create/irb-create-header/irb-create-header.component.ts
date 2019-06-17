@@ -88,7 +88,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
         this._spinner.hide();
         this.commonVo = data;
         this.generalInfo = this.commonVo.generalInfo;
-        this._sharedDataService.setCommonVo(this.commonVo);
+        this._sharedDataService.setCommonVo(Object.assign({}, this.commonVo));
         if (this.commonVo.generalInfo.personnelInfos != null && this.commonVo.generalInfo.personnelInfos.length > 0) {
           this.commonVo.generalInfo.personnelInfos.forEach(element => {
             if (element.protocolPersonRoleId === 'PI') {
@@ -134,26 +134,28 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
         windowClass: 'assignAdminModal', backdrop: 'static',
       });
       const protocoldetails: any = {};
-      protocoldetails.ASSIGNEE_PERSON_ID = this.generalInfo.protocolSubmissionStatuses.assigneePersonId;
-      protocoldetails.PROTOCOL_NUMBER = this.generalInfo.protocolNumber;
-      protocoldetails.PROTOCOL_ID = this.generalInfo.protocolId;
-      protocoldetails.SUBMISSION_ID = this.generalInfo.protocolSubmissionStatuses.submission_Id;
-      protocoldetails.SUBMISSION_NUMBER = this.generalInfo.protocolSubmissionStatuses.submissionNumber;
-      protocoldetails.SEQUENCE_NUMBER = this.generalInfo.protocolSubmissionStatuses.sequenceNumber;
-       modalRef.componentInstance.protocoldetails = protocoldetails;
-       modalRef.componentInstance.mode = mode;
-       modalRef.componentInstance.userDTO = this.userDTO;
-      modalRef.componentInstance.passEntry.subscribe((receivedEntry) => {
-        this.generalInfo.protocolSubmissionStatuses.protocolSubmissionStatus.description = receivedEntry.SUBMISSION_STATUS;
-        this.generalInfo.protocolSubmissionStatuses.protocolSubmissionStatus.protocolSubmissionStatusCode =
-                                                                                receivedEntry.SUBMISSION_STATUS_CODE;
-        this.generalInfo.protocolSubmissionStatuses.submission_Id = receivedEntry.SUBMISSION_ID;
-        this.generalInfo.protocolSubmissionStatuses.sequenceNumber =  receivedEntry.SEQUENCE_NUMBER;
-        this.generalInfo.protocolSubmissionStatuses.assigneePersonName = receivedEntry.ASSIGNEE_PERSON;
-        this.generalInfo.protocolSubmissionStatuses.assigneePersonId = receivedEntry.ASSIGNEE_PERSON_ID;
-        this.generalInfo.protocolSubmissionStatuses.submissionNumber = receivedEntry.SUBMISSION_NUMBER;
-        this.commonVo.generalInfo = this.generalInfo;
-       this._sharedDataService.setCommonVo(this.commonVo);
-        });
+      if (this.generalInfo != null && this.generalInfo.protocolSubmissionStatuses != null) {
+        protocoldetails.ASSIGNEE_PERSON_ID = this.generalInfo.protocolSubmissionStatuses.assigneePersonId;
+        protocoldetails.PROTOCOL_NUMBER = this.generalInfo.protocolNumber;
+        protocoldetails.PROTOCOL_ID = this.generalInfo.protocolId;
+        protocoldetails.SUBMISSION_ID = this.generalInfo.protocolSubmissionStatuses.submission_Id;
+        protocoldetails.SUBMISSION_NUMBER = this.generalInfo.protocolSubmissionStatuses.submissionNumber;
+        protocoldetails.SEQUENCE_NUMBER = this.generalInfo.protocolSubmissionStatuses.sequenceNumber;
+         modalRef.componentInstance.protocoldetails = protocoldetails;
+         modalRef.componentInstance.mode = mode;
+         modalRef.componentInstance.userDTO = this.userDTO;
+        modalRef.componentInstance.passEntry.subscribe((receivedEntry) => {
+          this.generalInfo.protocolSubmissionStatuses.protocolSubmissionStatus.description = receivedEntry.SUBMISSION_STATUS;
+          this.generalInfo.protocolSubmissionStatuses.protocolSubmissionStatus.protocolSubmissionStatusCode =
+                                                                                  receivedEntry.SUBMISSION_STATUS_CODE;
+          this.generalInfo.protocolSubmissionStatuses.submission_Id = receivedEntry.SUBMISSION_ID;
+          this.generalInfo.protocolSubmissionStatuses.sequenceNumber =  receivedEntry.SEQUENCE_NUMBER;
+          this.generalInfo.protocolSubmissionStatuses.assigneePersonName = receivedEntry.ASSIGNEE_PERSON;
+          this.generalInfo.protocolSubmissionStatuses.assigneePersonId = receivedEntry.ASSIGNEE_PERSON_ID;
+          this.generalInfo.protocolSubmissionStatuses.submissionNumber = receivedEntry.SUBMISSION_NUMBER;
+          this.commonVo.generalInfo = this.generalInfo;
+          this._sharedDataService.setCommonVo(Object.assign({}, this.commonVo));
+          });
+      }
+      }
     }
-}

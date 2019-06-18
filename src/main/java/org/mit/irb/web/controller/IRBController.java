@@ -310,12 +310,12 @@ public class IRBController {
 		return protocolVO;
 	}
 
-	@RequestMapping(value = "/loadIRBProtocolAttachmentsByProtocolNumber", method = RequestMethod.POST)
+	@RequestMapping(value = "/loadIRBProtocolAttachments", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
 		logger.info("Request for loadIRBProtocolAttachmentsByProtocolNumber");
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.loadIRBProtocolAttachmentsByProtocolNumber(irbProtocolVO.getProtocolNumber());
+		protocolVO = irbProtocolService.loadIRBProtocolAttachments(irbProtocolVO.getProtocolId());
 		return protocolVO;
 	}
 
@@ -351,7 +351,7 @@ public class IRBController {
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
 		logger.info("Request for loadCollaboratorPersonsAndAttachments");
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.loadCollaboratorPersonsAndAttachments(irbProtocolVO.getCollaboratorId());
+		protocolVO = irbProtocolService.loadCollaboratorPersonsAndAttachments(irbProtocolVO.getCollaboratorId(),irbProtocolVO.getProtocolId());
 		return protocolVO;
 	}
 
@@ -464,5 +464,32 @@ public class IRBController {
 			HttpServletResponse response, @RequestBody CommonVO vo) throws JsonProcessingException {
 		logger.info("loadProtocolHistoryActionComments");
 		return irbProtocolService.loadProtocolHistoryGroupComments(vo.getProtocolNumber(), vo.getActionId(), vo.getProtocolId(), vo.getNextGroupActionId());
+	}
+	
+	@RequestMapping(value = "/loadInternalProtocolAttachments", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO loadInternalProtocolAttachments(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) {
+		logger.info("Request for loadInternalAttachments");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO.setProtocolId(irbProtocolVO.getProtocolId());
+		protocolVO = irbProtocolService.loadInternalProtocolAttachments(protocolVO);
+		return protocolVO;
+	}
+	
+	@RequestMapping(value = "/loadPreviousProtocolAttachments", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO loadPreviousProtocolAttachments(HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.info("Request for loadPreviousProtocolAttachments");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		String documentId = request.getParameter("documentId");
+		protocolVO = irbProtocolService.loadPreviousProtocolAttachments(documentId);
+		return protocolVO;
+	}
+	
+	@RequestMapping(value = "/downloadInternalProtocolAttachments", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<byte[]> downloadInternalProtocolAttachments(HttpServletResponse response,
+			@RequestHeader("documentId") String documentId) {
+		logger.info("Request for downloadInternalProtocolAttachments");
+		return irbProtocolService.downloadInternalProtocolAttachments(documentId);
 	}
 }

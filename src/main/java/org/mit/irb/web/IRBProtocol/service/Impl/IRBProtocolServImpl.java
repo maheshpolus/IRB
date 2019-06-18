@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
@@ -28,6 +29,8 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
 @Service(value = "irbProtocolService")
@@ -105,7 +108,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	
 	@Override
 	public ResponseEntity<byte[]> downloadAttachments(String attachmentId) {
-		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadAttachments(attachmentId);
+		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadProtocolAttachments(attachmentId);
 		return attachments;
 	}
 
@@ -196,9 +199,22 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@Override
 	public IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson) {
-		IRBProtocolVO irbProtocolVO = null;
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();;
 		try {
-			irbProtocolVO = irbProtocolDao.addProtocolAttachments(files,formDataJson);
+			ObjectMapper mapper = new ObjectMapper();
+			IRBAttachmentProtocol attachmentProtocol = mapper.readValue(formDataJson, IRBAttachmentProtocol.class);
+			if(attachmentProtocol.getAcType().equals("I")){
+				irbProtocolVO = irbProtocolDao.addNewProtocolAttachment(files,attachmentProtocol);
+			}
+			else if(attachmentProtocol.getAcType().equals("U")){
+				irbProtocolVO = irbProtocolDao.editProtocolAttachment(files,attachmentProtocol);
+			}
+			else if(attachmentProtocol.getAcType().equals("D")){
+				irbProtocolVO = irbProtocolDao.deleteProtocolAttachment(attachmentProtocol);
+			}
+			else if(attachmentProtocol.getAcType().equals("R")){
+				irbProtocolVO = irbProtocolDao.replaceProtocolAttachment(files,attachmentProtocol);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,9 +223,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@SuppressWarnings("unused")
 	@Override
-	public IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber) {
+	public IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId) {
 		IRBProtocolVO irbProtocolVO = null;
-		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachmentsByProtocolNumber(protocolNumber);
+		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachments(protocolId);
 	}
 
 	@Override
@@ -267,11 +283,11 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	@Override
 	public IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) {
 		IRBProtocolVO irbProtocolVO = null;
-		try {
+	/*	try {
 			irbProtocolVO = irbProtocolDao.addCollaboratorAttachments(files,formDataJson);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		return irbProtocolVO;
 	}
 
@@ -283,11 +299,12 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	}
 
 	@Override
-	public IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId) {
+	public IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId, Integer protocolId) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO = irbProtocolDao.loadCollaboratorPersonsAndAttachments(collaboratorId);
+		irbProtocolVO = irbProtocolDao.loadCollaboratorPersonsAndAttachments(collaboratorId,protocolId);
 		return irbProtocolVO;
 	}
+
 
 	@Override
 	public IRBViewProfile loadProtocolHistoryActionComments(String protocolNumber,Integer protocolActionId, String protocolActionTypecode) {
@@ -405,5 +422,23 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			irbViewProfile.setIrbProtocolHistoryGroupComments(commentList);
 		}
 		return irbViewProfile;
+	}
+	
+	@Override
+	public IRBProtocolVO loadInternalProtocolAttachments(IRBProtocolVO irbProtocolVO ) {
+		irbProtocolVO = irbProtocolDao.loadInternalProtocolAttachments(irbProtocolVO);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadPreviousProtocolAttachments(String documentId) {
+		IRBProtocolVO irbProtocolVO = irbProtocolDao.loadPreviousProtocolAttachments(documentId);
+		return irbProtocolVO;
+	}
+
+	@Override
+	public ResponseEntity<byte[]>  downloadInternalProtocolAttachments(String documentId) {
+		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadInternalProtocolAttachments(documentId);
+		return attachments;
 	}
 }

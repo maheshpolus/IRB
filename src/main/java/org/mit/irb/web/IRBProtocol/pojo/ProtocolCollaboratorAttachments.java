@@ -53,7 +53,10 @@ public class ProtocolCollaboratorAttachments {
 	
 	@Column(name="UPDATE_USER")
 	private String updateUser;
-
+	
+	@Column(name = "CATEGORY_CODE")
+	private String categoryCode;
+	
 	@Transient
 	private String acType;
 	
@@ -182,5 +185,13 @@ public class ProtocolCollaboratorAttachments {
 
 	public void setTypeCode(String typeCode) {
 		this.typeCode = typeCode;
+	}
+
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 }

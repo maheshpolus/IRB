@@ -1,7 +1,5 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
-import java.sql.Blob;
-
 public class FileData {
 
 	private byte[] fileData;

@@ -152,7 +152,7 @@ public interface IRBProtocolService {
 	/**
 	 * @return list of attachments
 	 */
-	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
+	IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId);
 
 
 
@@ -187,9 +187,10 @@ public interface IRBProtocolService {
 
 	/**
 	 * @param collaboratorId
+	 * @param protocolId 
 	 * @return updated VO object with collaborator persons and attachments
 	 */
-	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
+	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId, Integer protocolId);
 
 	/**
 	 * download correspondence letter in history
@@ -273,4 +274,24 @@ public interface IRBProtocolService {
 	IRBViewProfile loadProtocolHistoryGroupComments(String protocolNumber, Integer protocolActionId, Integer protocolId,
 			Integer nextGroupActionId);
 
+
+	/**
+	 * @param protocolVO
+	 * @return internal protocol attachments
+	 */
+	IRBProtocolVO loadInternalProtocolAttachments(IRBProtocolVO protocolVO);
+
+
+	/**
+	 * @param documentId
+	 * @return list of previous versions of attachment
+	 */
+	IRBProtocolVO loadPreviousProtocolAttachments(String documentId);
+
+
+	/**
+	 * @param documentId
+	 * @return download internal attachment
+	 */
+	ResponseEntity<byte[]> downloadInternalProtocolAttachments(String documentId);
 }

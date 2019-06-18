@@ -39,6 +39,9 @@ public class IRBAttachementTypes implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
+	@Column(name = "CATEGORY_CODE")
+	private String categoryCode;
+	
 	public String getDescription() {
 		return description;
 	}
@@ -73,5 +76,13 @@ public class IRBAttachementTypes implements Serializable {
 
 	public void setTypeCode(String typeCode) {
 		this.typeCode = typeCode;
+	}
+
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 }

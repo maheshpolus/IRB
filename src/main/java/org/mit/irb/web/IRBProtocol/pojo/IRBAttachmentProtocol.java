@@ -60,8 +60,8 @@ public class IRBAttachmentProtocol {
 	private IRBAttachementStatus attachementStatus;
 
 	@ManyToOne(optional = true, cascade = { CascadeType.ALL })
-	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ATTACHMENT_PROTO_FK5"), name = "FILE_ID", referencedColumnName = "FILE_ID")
-	private ProtocolAttachments protocolAttachment;
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ATTACHMENT_PROTO_FK5"), name = "FILE_ID", referencedColumnName = "ID")
+	private IRBFileData protocolAttachmentData;
 
 	@Column(name = "CONTACT_NAME")
 	private String contactName;
@@ -76,7 +76,7 @@ public class IRBAttachmentProtocol {
 	private String comments;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private Date updateTimestamp;
+	private java.util.Date updateTimestamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
@@ -90,9 +90,43 @@ public class IRBAttachmentProtocol {
 	@Column(name = "ATTACHMENT_VERSION")
 	private Integer attachmentVersion;
 
+	@Column(name = "CATEGORY_CODE")
+	private String categoryCode;
+	
+	@Column(name = "FILE_NAME")
+	private String fileName;
+	
+	@Column(name = "MIME_TYPE")
+	private String mimeType;
+	
+	@Column(name="PROTOCOL_ATTACH_FLAG")
+	private String isProtocolAttachment;
+
 	@Transient
 	private String acType;
 	
+	@Transient
+	private Integer protocolId;
+	
+	@Transient
+	private Integer fileId;
+	
+	public IRBAttachmentProtocol(){
+	}
+
+	public IRBAttachmentProtocol(IRBFileData protocolAttachmentData, String comments, java.util.Date updateTimestamp,
+			String updateUser, Integer attachmentVersion, String categoryCode, String fileName, String mimeType) {
+		super();
+		this.protocolAttachmentData = protocolAttachmentData;
+		this.comments = comments;
+		this.updateTimestamp = updateTimestamp;
+		this.updateUser = updateUser;
+		this.attachmentVersion = attachmentVersion;
+		this.categoryCode = categoryCode;
+		this.fileName = fileName;
+		this.mimeType = mimeType;
+	}
+
 	public ProtocolGeneralInfo getProtocolGeneralInfo() {
 		return protocolGeneralInfo;
 	}
@@ -179,11 +213,11 @@ public class IRBAttachmentProtocol {
 		this.comments = comments;
 	}
 
-	public Date getUpdateTimestamp() {
+	public java.util.Date getUpdateTimestamp() {
 		return updateTimestamp;
 	}
 
-	public void setUpdateTimestamp(Date updateTimestamp) {
+	public void setUpdateTimestamp(java.util.Date updateTimestamp) {
 		this.updateTimestamp = updateTimestamp;
 	}
 
@@ -251,19 +285,67 @@ public class IRBAttachmentProtocol {
 		this.attachementStatus = attachementStatus;
 	}
 
-	public ProtocolAttachments getProtocolAttachment() {
-		return protocolAttachment;
-	}
-
-	public void setProtocolAttachment(ProtocolAttachments protocolAttachment) {
-		this.protocolAttachment = protocolAttachment;
-	}
-
 	public String getAcType() {
 		return acType;
 	}
 
 	public void setAcType(String acType) {
 		this.acType = acType;
+	}
+
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
+	}
+
+	public Integer getProtocolId() {
+		return protocolId;
+	}
+
+	public void setProtocolId(Integer protocolId) {
+		this.protocolId = protocolId;
+	}
+
+	public IRBFileData getProtocolAttachmentData() {
+		return protocolAttachmentData;
+	}
+
+	public void setProtocolAttachmentData(IRBFileData protocolAttachmentData) {
+		this.protocolAttachmentData = protocolAttachmentData;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	public Integer getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(Integer fileId) {
+		this.fileId = fileId;
+	}
+
+	public String getIsProtocolAttachment() {
+		return isProtocolAttachment;
+	}
+
+	public void setIsProtocolAttachment(String isProtocolAttachment) {
+		this.isProtocolAttachment = isProtocolAttachment;
 	}
 }

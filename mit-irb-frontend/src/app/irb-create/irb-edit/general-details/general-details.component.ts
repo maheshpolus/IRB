@@ -285,11 +285,15 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
    * @param  {} currentDate - input in format yyyy-mon-dd
    */
   GetFormattedDateFromString(currentDate) {
-    const res = currentDate.split('-');
-    const year = parseInt(res[0], 10);
-    const month = parseInt(res[1], 10);
-    const day = parseInt(res[2], 10);
-    return new Date(year, month - 1, day);
+    if (typeof currentDate === 'string' || currentDate instanceof String) {
+      const res = currentDate.split('-');
+      const year = parseInt(res[0], 10);
+      const month = parseInt(res[1], 10);
+      const day = parseInt(res[2], 10);
+      return new Date(year, month - 1, day);
+    } else  {
+      return currentDate;
+    }
 }
 
   /**fetches elastic search results

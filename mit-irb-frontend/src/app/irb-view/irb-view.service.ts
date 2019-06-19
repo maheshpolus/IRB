@@ -27,9 +27,9 @@ export class IrbViewService {
   getIrbPersonDetailedList(params) {
       return this._http.post('/mit-irb/getMITKCPersonInfo', params);
   }
-  getIrbAttachmentList(params) {
-      return this._http.post('/mit-irb/getAttachmentList', params);
-  }
+//   getIrbAttachmentList(params) {
+//       return this._http.post('/mit-irb/getAttachmentList', params);
+//   }
   downloadIrbAttachment(attachmentId) {
       return this._http.get('/mit-irb/downloadAttachment', {
           headers: new HttpHeaders().set('attachmentId', attachmentId.toString()),
@@ -167,6 +167,22 @@ updateCommitteeReviewerComments(params) {
 downloadCommitteeFileData(attachmentId) {
     return this._http.get('/mit-irb/downloadCommitteeFileData', {
         headers: new HttpHeaders().set('fileDataId', attachmentId.toString()),
+        responseType: 'blob'
+    });
+}
+getIrbAttachmentList(params) {
+  return this._http.post('/mit-irb/loadIRBProtocolAttachments', params);
+}
+loadInternalProtocolAttachments(params) {
+    return this._http.post('/mit-irb/loadInternalProtocolAttachments', params);
+  }
+  loadPreviousProtocolAttachments(documentId) {
+    const params = new HttpParams().set('documentId', documentId);
+      return this._http.post('/mit-irb/loadPreviousProtocolAttachments', params);
+  }
+  downloadInternalProtocolAttachments(attachmentId) {
+    return this._http.get('/mit-irb/downloadInternalProtocolAttachments', {
+        headers: new HttpHeaders().set('documentId', attachmentId.toString()),
         responseType: 'blob'
     });
 }

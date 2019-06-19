@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
-import org.mit.irb.web.IRBProtocol.pojo.PersonTraining;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
@@ -125,6 +125,29 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 		irbUtilDao.addTrainingComments(personTrainingComments);
 		ArrayList<HashMap<String, Object>> personTrainingComment = irbUtilDao.getPersonTrainingComment(personTrainingComments.getPersonTrainingId(),"1");
 		vo.setPersonnelTrainingComment(personTrainingComment);	
+		return vo;
+	}
+
+	@Override
+	public IRBPermissionVO checkUserPermission(IRBPermissionVO vo) {
+		try{
+			Boolean hasPermission = null;
+			for(String permission : vo.getPermissions()){
+				hasPermission = irbUtilDao.checkUserPermission(permission,vo.getDepartment(),vo.getUsername());
+				if(hasPermission == true){
+					break;
+				}
+			}
+			if(!hasPermission){
+				vo.setSuccessCode(hasPermission);
+				vo.setSuccessMessage("User do not have permission");
+			}else{
+				vo.setSuccessCode(true);
+				vo.setSuccessMessage("User has permission");
+			}
+		} catch (Exception e) {
+			logger.info("Exception in checkUserPermission:" + e);
+		}
 		return vo;
 	}	
 }

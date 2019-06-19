@@ -159,7 +159,7 @@
 		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
-	"/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber":{
+	"/mit-irb/loadIRBProtocolAttachments":{
 		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
@@ -578,6 +578,18 @@
 		"secure": false		
 	},
 	"/mit-irb/downloadCommitteeFileData": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/loadInternalProtocolAttachments": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/loadPreviousProtocolAttachments": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/downloadInternalProtocolAttachments": {
 		"target": "http://192.168.1.93:8082",
 		"secure": false		
 	}

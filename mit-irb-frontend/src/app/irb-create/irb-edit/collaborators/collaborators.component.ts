@@ -25,6 +25,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   result: any = {};
   protocolCollaborator: any = {};
   tempSaveCollaboratorPerson: any = {};
+  irbAttachmentProtocol: any = {};
   protocolCollaboratorSelected: any = {};
   protocolCollaboratorAttachments: any = {};
   tempSaveAttachment: any = {};
@@ -256,12 +257,19 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   /**
    * @param  {} currentDate - input in format yyyy-mon-dd
    */
+   /**
+   * @param  {} currentDate - input in format yyyy-mon-dd
+   */
   GetFormattedDateFromString(currentDate) {
-    const res = currentDate.split('-');
-    const year = parseInt(res[0], 10);
-    const month = parseInt(res[1], 10);
-    const day = parseInt(res[2], 10);
-    return new Date(year, month - 1, day);
+    if (typeof currentDate === 'string' || currentDate instanceof String) {
+      const res = currentDate.split('-');
+      const year = parseInt(res[0], 10);
+      const month = parseInt(res[1], 10);
+      const day = parseInt(res[2], 10);
+      return new Date(year, month - 1, day);
+    } else  {
+      return currentDate;
+    }
 }
 
   setCollaboratorPersonDetails(item) {
@@ -281,8 +289,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this._spinner.hide();
         this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList == null ?
           null : this.result.protocolCollaboratorAttachmentsList;
-        this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ? null : this.result.protocolCollaboratorPersons;
-        if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons !== undefined) {
+        this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ? [] : this.result.protocolCollaboratorPersons;
+        if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons.length > 0) {
           this.removePersonFromPersonInfo();
         }
       });
@@ -313,8 +321,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         data => {
           this.result = data;
           this.protocolCollaboratorPersons = this.result.protocolCollaboratorPersons == null ?
-            null : this.result.protocolCollaboratorPersons;
-          if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons !== undefined) {
+            [] : this.result.protocolCollaboratorPersons;
+          if (this.protocolCollaboratorPersons != null || this.protocolCollaboratorPersons.length > 0) {
             this.removePersonFromPersonInfo();
           }
           this.personsSelected = [];
@@ -350,33 +358,38 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     $('#addAttach').trigger('click');
   }
   /** Push the unique files choosen to uploaded file
-   * @param files- files choosen
-   */
-  onChange(files: FileList) {
-    this.fil = files;
-    for (let index = 0; index < this.fil.length; index++) {
-      this.uploadedFile.push(this.fil[index]);
-    }
-    this.changeRef.detectChanges();
+     * @param files- files choosen
+     */
+    onChange(files: FileList) {
+      // this.fil = files;
+      // for (let index = 0; index < this.fil.length; index++) {
+      //     this.uploadedFile.push(this.fil[index]);
+      // }
+      //  console.log(this.uploadedFile);
+      // this.changeRef.detectChanges();
+      this.uploadedFile = [];
+      // this.uploadedFile.push(this.fil[0]);
+      this.uploadedFile[0] = files[0];
   }
 
   /** Push the unique files dropped to uploaded file
   * @param files- files dropped
   */
   public dropped(event: UploadEvent) {
-    this.files = event.files;
-    for (const file of this.files) {
-      this.attachmentList.push(file);
-    }
-    for (const file of event.files) {
-      if (file.fileEntry.isFile) {
-        const fileEntry = file.fileEntry as FileSystemFileEntry;
-        fileEntry.file((info: File) => {
-          this.uploadedFile.push(info);
-          this.changeRef.detectChanges();
-        });
+      this.files = event.files;
+      for (const file of this.files) {
+          this.attachmentList.push(file);
       }
-    }
+      for (const file of event.files) {
+          if (file.fileEntry.isFile) {
+              const fileEntry = file.fileEntry as FileSystemFileEntry;
+              fileEntry.file((info: File) => {
+                  this.uploadedFile = [];
+                  this.uploadedFile.push(info);
+                  this.changeRef.detectChanges();
+              });
+          }
+      }
   }
   /**Remove an item from the uploded file
    * @param item-item to be removed
@@ -391,48 +404,90 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
   setAttachmentType(attachmentTypeCode) {
     this.attachmentTypes.forEach(attachmentType => {
-      if (attachmentType.typeCode === attachmentTypeCode) {
-        this.attachmentTypeDescription = attachmentType.description;
-      }
+        if (attachmentType.typeCode === attachmentTypeCode) {
+            this.attachmentTypeDescription = attachmentType.description;
+            this.irbAttachmentProtocol.categoryCode = attachmentType.categoryCode;
+        }
     });
-  }
+}
   addAttachments() {
     if (this.requestObject.attachmentTypeCode == null
       || this.requestObject.attachmentDescription === '' || this.uploadedFile.length === 0) {
       this.invalidData.invalidAttachmentInfo = true;
     } else {
       this.invalidData.invalidAttachmentInfo = false;
-      this.protocolCollaboratorAttachments = {
-        collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
-        protocolId: this.protocolCollaboratorSelected.protocolId,
-        protocolNumber: this.protocolCollaboratorSelected.protocolNumber,
-        sequenceNumber: 1,
-        description: this.requestObject.attachmentDescription,
-        updateTimestamp: new Date(),
-        createDate: new Date(),
-        updateUser: this.userDTO.userName,
-        acType: 'I'
+      // $('#attachmentModal').modal('toggle');
+      this.irbAttachmentProtocol.acType = 'I';
+      this.irbAttachmentProtocol.protocolNumber = this.protocolNumber;
+      this.irbAttachmentProtocol.protocolId = this.protocolId;
+      this.irbAttachmentProtocol.sequenceNumber = 1;
+      this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
+      this.irbAttachmentProtocol.documentId = 1;
+      this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;
+      this.irbAttachmentProtocol.updateTimestamp = new Date();
+      this.irbAttachmentProtocol.updateUser = this.userDTO.userName;
+      this.irbAttachmentProtocol.createTimestamp = new Date();
+      this.irbAttachmentProtocol.attachmentVersion = 1;
+      this.irbAttachmentProtocol.protocolGeneralInfo = this.generalInfo;
+      this.irbAttachmentProtocol.statusCode = 2;
+      this.irbAttachmentProtocol.isProtocolAttachment = 'N';
+      this.irbAttachmentProtocol.attachementStatus = {
+          statusCode: 2,
+          description: 'Complete'
+      };
+      this.irbAttachmentProtocol.attachmentType = {
+          typeCode: this.requestObject.attachmentTypeCode,
+          description: this.attachmentTypeDescription,
+      };
+      // this.irbAttachmentProtocol.protocolAttachmentData = {
+      //     sequenceNumber: 1,
+      //     updateTimestamp: new Date(),
+      //     updateUser: this.userDTO.userName
 
-      };
-      this.protocolCollaboratorAttachments.protocolAttachments = {
-        sequenceNumber: 1,
-        updateTimestamp: new Date(),
-        updateUser: this.userDTO.userName
+      // };
+      this._spinner.show();
+      this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
+          data => {
+              this.result = data;
+             this.protocolCollaboratorAttachmentsList = this.result.protocolAttachmentList;
+              this._spinner.hide();
+              // this.irbAttachment = data;
+             // this.isMandatoryFilled = true;
+              this.requestObject.attachmentTypeCode = null;
+              this.requestObject.attachmentDescription = '';
+              this.uploadedFile = [];
+          });
+      // this.protocolCollaboratorAttachments = {
+      //   collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
+      //   protocolId: this.protocolCollaboratorSelected.protocolId,
+      //   protocolNumber: this.protocolCollaboratorSelected.protocolNumber,
+      //   sequenceNumber: 1,
+      //   description: this.requestObject.attachmentDescription,
+      //   updateTimestamp: new Date(),
+      //   createDate: new Date(),
+      //   updateUser: this.userDTO.userName,
+      //   acType: 'I'
 
-      };
-      this.protocolCollaboratorAttachments.attachmentType = {
-        typeCode: this.requestObject.attachmentTypeCode,
-        description: this.attachmentTypeDescription
-      };
-      this.protocolCollaboratorAttachments.typeCode = this.requestObject.attachmentTypeCode;
-      this._irbCreateService.addCollaboratorAttachments(this.protocolCollaboratorAttachments, this.uploadedFile).subscribe(
-        data => {
-          this.result = data;
-          this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
-          this.uploadedFile = [];
-          this.requestObject.attachmentDescription = '';
-          this.requestObject.attachmentTypeCode = null;
-        });
+      // };
+      // this.protocolCollaboratorAttachments.protocolAttachments = {
+      //   sequenceNumber: 1,
+      //   updateTimestamp: new Date(),
+      //   updateUser: this.userDTO.userName
+
+      // };
+      // this.protocolCollaboratorAttachments.attachmentType = {
+      //   typeCode: this.requestObject.attachmentTypeCode,
+      //   description: this.attachmentTypeDescription
+      // };
+      // this.protocolCollaboratorAttachments.typeCode = this.requestObject.attachmentTypeCode;
+      // this._irbCreateService.addCollaboratorAttachments(this.protocolCollaboratorAttachments, this.uploadedFile).subscribe(
+      //   data => {
+      //     this.result = data;
+      //     this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
+      //     this.uploadedFile = [];
+      //     this.requestObject.attachmentDescription = '';
+      //     this.requestObject.attachmentTypeCode = null;
+      //   });
     }
   }
   tempSave(event, attachment) {
@@ -441,24 +496,25 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.tempSaveAttachment = attachment;
   }
   downloadAttachment(attachment) {
-    this._irbViewService.downloadIrbAttachment(attachment.protocolAttachments.fileId).subscribe(data => {
-      const a = document.createElement('a');
-      const blob = new Blob([data], { type: data.type });
-      a.href = URL.createObjectURL(blob);
-      a.download = attachment.protocolAttachments.fileName;
-      document.body.appendChild(a);
-      a.click();
+    this._irbCreateService.downloadIrbAttachment(attachment.protocolAttachmentData.fileId).subscribe(data => {
+        const a = document.createElement('a');
+        const blob = new Blob([data], { type: data.type });
+        a.href = URL.createObjectURL(blob);
+        a.download = attachment.fileName;
+        document.body.appendChild(a);
+        a.click();
 
     },
-      error => console.log('Error downloading the file.', error),
-      () => console.log('OK'));
-  }
+        error => console.log('Error downloading the file.', error),
+        () => console.log('OK'));
+}
   deleteAttachments() {
     this.tempSaveAttachment.acType = 'D';
-    this._irbCreateService.addCollaboratorAttachments(this.tempSaveAttachment, this.uploadedFile).subscribe(
+    this.tempSaveAttachment.protocolId = this.protocolId;
+    this._irbCreateService.addattachment(this.tempSaveAttachment, this.uploadedFile).subscribe(
       data => {
         this.result = data;
-        this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
+        this.protocolCollaboratorAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
         this.uploadedFile = [];
         this.requestObject.attachmentDescription = '';
       });
@@ -468,6 +524,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.protocolCollaboratorPersons = null;
     if (this.iconValue === index) {
       this.iconValue = -1;
+      this.protocolCollaboratorSelected = {};
     } else {
       this.iconValue = index;
       this.protocolCollaboratorSelected = Object.assign({}, item);
@@ -490,5 +547,4 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.protocolCollaborator.collaboratorNames = { organizationId: organizationId, organizationName: organizationName };
     this.isOrganizationSearch = false;
   }
-
 }

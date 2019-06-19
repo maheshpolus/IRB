@@ -232,4 +232,26 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		}	
 		return trainingId;
 	}
+
+	@Override
+	public Boolean checkUserPermission(String permission, String department, String username) {
+		Boolean hasPermission = false;
+		try{
+			ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
+			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
+			inputParam.add(new InParameter("AV_PERMISSION", DBEngineConstants.TYPE_STRING,permission));			
+			inputParam.add(new InParameter("AV_DEPARTMENT", DBEngineConstants.TYPE_STRING,department));	
+			inputParam.add(new InParameter("AV_USERNAME", DBEngineConstants.TYPE_STRING,username));			
+			outParam.add(new OutParameter("hasPermission",DBEngineConstants.TYPE_STRING));
+			ArrayList<HashMap<String,Object>> result = 
+					dbEngine.executeFunction(inputParam,"FN_IRB_GET_NEXT_PRSN_TRAING_ID",outParam);	
+			if(result != null && !result.isEmpty()){
+				HashMap<String,Object> hmResult = result.get(0);
+				hasPermission = hmResult.get("hasPermission").toString().equalsIgnoreCase("true") ? true : false;			
+			}
+		} catch (Exception e) {
+			logger.info("Exception in checkUserPermission method" + e);
+		}	
+		return hasPermission;
+	}
 }

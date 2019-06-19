@@ -144,7 +144,7 @@
                             <td>
                               <div class="filechipCollaboratorAttachment pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
                                 <span *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList" (click)="downloadAttachment(protocolCollaboratorAttachment)"
-                                  title="download">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}<i class="fa fa-download"></i>
+                                  title="download">{{protocolCollaboratorAttachment?.fileName}}<i class="fa fa-download"></i>
                                 </span>
                               </div>
                               <div class="label-font" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
@@ -349,7 +349,7 @@
                 <tr *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList">
                   <td>{{protocolCollaboratorAttachment?.attachmentType?.description}}</td>
                   <td>{{protocolCollaboratorAttachment?.description}}</td>
-                  <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.protocolAttachments?.fileName}}</td>
+                  <td style="width: 30%" class="padding-table-content">{{protocolCollaboratorAttachment?.fileName}}</td>
                   <td class="padding-table-content">{{protocolCollaboratorAttachment?.updateUser}} {{(protocolCollaboratorAttachment?.updateTimestamp ==='
                     ' || protocolCollaboratorAttachment.updateTimestamp ===null) ? ' ':(protocolCollaboratorAttachment.updateTimestamp
                     | date: 'MM/dd/yyyy')}}</td>

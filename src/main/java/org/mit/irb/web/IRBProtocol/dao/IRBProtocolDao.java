@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
+import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
@@ -58,17 +59,15 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
 
-	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson) throws JsonParseException, JsonMappingException, IOException;
-
-	IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(String protocolNumber);
+	IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId);
 
 	IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol, ProtocolGeneralInfo generalInfo);
 
-	IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) throws JsonParseException, JsonMappingException, IOException;
+//	IRBProtocolVO addCollaboratorAttachments(MultipartFile[] files, String formDataJson) throws JsonParseException, JsonMappingException, IOException;
 
 	IRBProtocolVO addCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons);
 
-	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId);
+	IRBProtocolVO loadCollaboratorPersonsAndAttachments(Integer collaboratorId, Integer protocolId);
 
 	ResponseEntity<byte[]> loadProtocolHistoryCorrespondanceLetter(Integer protocolActionId);
 
@@ -109,4 +108,20 @@ public interface IRBProtocolDao {
 	HashMap<String, Object> getIRBProtocolDetail(String protocolNumber);
 
 	ResponseEntity<byte[]> downloadAdminRevAttachment(String attachmentId);
+
+	IRBProtocolVO addNewProtocolAttachment(MultipartFile[] files, IRBAttachmentProtocol attachmentProtocol);
+
+	IRBProtocolVO editProtocolAttachment(MultipartFile[] files, IRBAttachmentProtocol attachmentProtocol);
+
+	IRBProtocolVO deleteProtocolAttachment(IRBAttachmentProtocol attachmentProtocol);
+
+	IRBProtocolVO replaceProtocolAttachment(MultipartFile[] files, IRBAttachmentProtocol attachmentProtocol);
+
+	IRBProtocolVO loadInternalProtocolAttachments(IRBProtocolVO irbProtocolVO);
+
+	IRBProtocolVO loadPreviousProtocolAttachments(String documentId);
+
+	ResponseEntity<byte[]> downloadProtocolAttachments(String attachmentId);
+
+	ResponseEntity<byte[]> downloadInternalProtocolAttachments(String documentId);
 }

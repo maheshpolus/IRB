@@ -32,4 +32,6 @@ public interface IRBUtilDao {
 	void updateTrainingAttachments(MultipartFile[] files, PersonTrainingAttachment jsonObj, String fileDataId);
 
 	Integer createPersonTrainingId();
+
+	Boolean checkUserPermission(String permission, String department, String username);
 }

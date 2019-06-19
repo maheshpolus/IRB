@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,13 @@ public class IRBUtilController {
 	public @ResponseBody IRBUtilVO addTrainingComments(@RequestBody IRBUtilVO vo,HttpServletRequest request,HttpServletResponse response)
 	{	
 		vo = irbUtilService.addTrainingComments(vo.getPersonTrainingComments());
+		return vo;
+	}
+	
+	@RequestMapping(value = "/checkUserPermission", method = RequestMethod.POST)
+	public @ResponseBody IRBPermissionVO checkUserPermission(@RequestBody IRBPermissionVO vo,HttpServletRequest request,HttpServletResponse response)
+	{	
+		vo = irbUtilService.checkUserPermission(vo);
 		return vo;
 	}
 	

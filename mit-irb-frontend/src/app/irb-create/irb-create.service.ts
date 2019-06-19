@@ -20,7 +20,7 @@ export class IrbCreateService {
   }
 
   getIrbAttachmentList(params) {
-    return this._http.post('/mit-irb/loadIRBProtocolAttachmentsByProtocolNumber', params);
+    return this._http.post('/mit-irb/loadIRBProtocolAttachments', params);
   }
 
   saveScienceOfProtocol(params) {
@@ -126,5 +126,24 @@ getActionLookup(param) {
 getCommitteeScheduledDates(committeeId) {
   const params = new HttpParams().set('committeeId', committeeId);
     return this._http.post('/mit-irb/getCommitteeScheduledDates', params);
+}
+loadInternalProtocolAttachments(params) {
+  return this._http.post('/mit-irb/loadInternalProtocolAttachments', params);
+}
+loadPreviousProtocolAttachments(documentId) {
+  const params = new HttpParams().set('documentId', documentId);
+    return this._http.post('/mit-irb/loadPreviousProtocolAttachments', params);
+}
+downloadIrbAttachment(attachmentId) {
+  return this._http.get('/mit-irb/downloadAttachment', {
+      headers: new HttpHeaders().set('attachmentId', attachmentId.toString()),
+      responseType: 'blob'
+  });
+}
+downloadInternalProtocolAttachments(attachmentId) {
+  return this._http.get('/mit-irb/downloadInternalProtocolAttachments', {
+      headers: new HttpHeaders().set('documentId', attachmentId.toString()),
+      responseType: 'blob'
+  });
 }
 }

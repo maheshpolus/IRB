@@ -10,6 +10,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ExemptFundingSource;
 import org.mit.irb.web.IRBProtocol.pojo.FDARiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
@@ -76,12 +77,14 @@ public class IRBProtocolVO {
 	private List<HashMap<String, Object>> committeList;
 	private List<HashMap<String, Object>> committeSchedulList;
 	private ProtocolRenewalDetails protocolRenewalDetails;
+	private List<IRBAttachmentProtocol> previousProtocolAttachmentList;
 	
 	private ExemptFundingSource exemptFundingSource;
 	private List<HashMap<String, Object>> exemptFundingSourceList;
 	private List<Unit> homeUnits;
 	private String updateUser;
 	private ProtocolLeadUnits leadUnit;
+	private List<IRBProtocolCorrespondence> internalProtocolAtachmentList;
 	
 	public List<FDARiskLevel> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
@@ -433,5 +436,21 @@ public class IRBProtocolVO {
 
 	public void setRiskLevelType(List<RiskLevel> riskLevelType) {
 		this.riskLevelType = riskLevelType;
+	}
+
+	public List<IRBAttachmentProtocol> getPreviousProtocolAttachmentList() {
+		return previousProtocolAttachmentList;
+	}
+
+	public void setPreviousProtocolAttachmentList(List<IRBAttachmentProtocol> previousProtocolAttachmentList) {
+		this.previousProtocolAttachmentList = previousProtocolAttachmentList;
+	}
+
+	public List<IRBProtocolCorrespondence> getInternalProtocolAtachmentList() {
+		return internalProtocolAtachmentList;
+	}
+
+	public void setInternalProtocolAtachmentList(List<IRBProtocolCorrespondence> internalProtocolAtachmentList) {
+		this.internalProtocolAtachmentList = internalProtocolAtachmentList;
 	}
 }

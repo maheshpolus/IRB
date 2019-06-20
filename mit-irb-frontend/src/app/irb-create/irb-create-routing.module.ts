@@ -10,6 +10,7 @@ import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-questionnaire-list.component';
 import { SubmissionDetailsComponent } from './irb-create-histroy/submission-details/submission-details.component';
 import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-details.component';
+import { IrbPermissionComponent } from './irb-permission/irb-permission.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'irbHome', component: IrbEditComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbCreateAttachment', component: IrbCreateAttachmentComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbHistory', component: IrbCreateHistroyComponent },
+      { path: 'irbPermission', component: IrbPermissionComponent , resolve: { irb: DashboardResolverService }},
       { path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent },
       { path: 'irbActions', component: IrbActionsComponent, resolve: { irb: DashboardResolverService } },
       { path: 'irbSummaryDetails', component: IrbSummaryDetailsComponent, resolve: { irb: DashboardResolverService } },

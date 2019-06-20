@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card history-card border-radius-1">
+        <div class="card-header history-header">
+          <nav class="nav navbar-pg3">
+            <h5>Permissions</h5>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </nav>
+        </div>
+        <div class="card-body card-paddng">
+          <div class="col-12  search-eidted-p padding-15">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Employee</label>
+                  <span class="mandatory">*</span>
+                  <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Type</label>
+                  <span class="mandatory">*</span>
+                  <select class="custom-select mr-sm-2" [(ngModel)]="protocolRolePerson.roleId" (ngModelChange)="setRole(protocolRolePerson.roleId)">
+                    <option selected value=null>Please Select</option>
+                    <option *ngFor="let role of protocolRoles" value="{{role.roleId}}">{{role.roleName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <button title="Save" (click)="addProtocolRolePerson()" type="button" class="btn btn-success mt-30">
+                  Assign
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="showPersonElasticBand">
+            <div class="col-12 band-s">
+              <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
+              <div class="row">
+                <div class="col-12">
+                  <label>Name:</label>
+                  <span>{{selectedPerson?.full_name}} (
+                    <span *ngIf="options.type == 'person'">{{selectedPerson?.person_id}}</span>
+                    <span *ngIf="options.type != 'person'">{{selectedPerson?.rolodex_id}}</span>)</span>
+                </div>
+                <div class="col-12">
+                  <label>Username:</label>
+                  <span>{{selectedPerson?.user_name}}</span>
+                  <label>Email:</label>
+                  <span>{{selectedPerson?.email_address}}</span>
+                  <label>Phone no:</label>
+                  <span>{{selectedPerson?.phone_number}}</span>
+                  <label>Title:</label>
+                  <span>{{selectedPerson?.title}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 users-list-tbl">
+            <div class="row">
+              <div class="table-responsive">
+                <table class="table table-striped tbl-p-clr">
+                  <thead class="tbl-head-clr thead-font-size">
+                    <tr>
+                      <th scope="col">Person Name</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="tbody-font-size">
+                    <ng-container *ngIf="protocolRolePersonList.length > 0">
+                    <tr *ngFor="let person of protocolRolePersonList">
+                      <td>{{person.personName}}</td>
+                      <td>{{person?.role?.roleName}}</td>
+                      <td class="action-btn-list">
+                        <button title="Delete" (click)="deletePermission(person)" type="button" class="btn btn-primary delete-btn-1">
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

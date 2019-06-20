@@ -146,4 +146,10 @@ downloadInternalProtocolAttachments(attachmentId) {
       responseType: 'blob'
   });
 }
+getProtocolPermissionDetails(param) {
+    return this._http.post('/mit-irb/getProtocolPermissionDetails', param);
+  }
+  updateProtocolPermission(param) {
+    return this._http.post('/mit-irb/updateProtocolPermission', param);
+  }
 }

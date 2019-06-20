@@ -5,7 +5,8 @@
         <div class="card history-card border-radius-1">
           <div class="card-header history-header">
             <nav class="nav navbar-pg3">
-              <h5>Summary Details</h5>
+              <h5 *ngIf="!isAmendment">Renewal Summary</h5>
+              <h5 *ngIf="isAmendment">Amendment Summary</h5>
               <i class="fa fa-info-circle" aria-hidden="true"></i>
             </nav>
           </div>
@@ -14,8 +15,8 @@
               <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                      <label *ngIf="!isAmendment ">Renewal Summary</label>
-                      <label *ngIf="isAmendment ">Amendment Summary</label>
+                      <!-- <label *ngIf="!isAmendment ">Renewal Summary</label>
+                      <label *ngIf="isAmendment ">Amendment Summary</label> -->
                       <textarea class="form-control txt-area-fnt mb-15"  rows="5" [(ngModel)]="irbSummaryVo.comment"
                       [placeholder]="isAmendment  == true ? 'Amendment Summary':'Renewal Summary'"  [disabled]="((isAmendment  == true && protocolStatus != '105') || (isAmendment  == false && protocolStatus != '106')) "></textarea>
                     </div>

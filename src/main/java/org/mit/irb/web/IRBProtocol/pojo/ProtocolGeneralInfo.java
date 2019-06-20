@@ -147,6 +147,9 @@ public class ProtocolGeneralInfo {
 	ProtocolSubmissionStatuses protocolSubmissionStatuses;
 	
 	@Transient
+	IRBProtocolPersonRoles irbProtocolPersonRoles;
+	
+	@Transient
 	private String aniticipatedStartDate;
 	
 	@Transient
@@ -468,5 +471,13 @@ public class ProtocolGeneralInfo {
 
 	public void setStringFDARiskLvlDate(String stringFDARiskLvlDate) {
 		this.stringFDARiskLvlDate = stringFDARiskLvlDate;
+	}
+
+	public IRBProtocolPersonRoles getIrbProtocolPersonRoles() {
+		return irbProtocolPersonRoles;
+	}
+
+	public void setIrbProtocolPersonRoles(IRBProtocolPersonRoles irbProtocolPersonRoles) {
+		this.irbProtocolPersonRoles = irbProtocolPersonRoles;
 	}
 }

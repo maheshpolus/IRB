@@ -234,7 +234,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
           }
           this.protocolNumber = this.result.generalInfo.protocolNumber;
           this._router.navigate(['/irb/irb-create/irbHome'], {
-            queryParams: {
+            queryParams: {queryParamsHandling: 'merge',
               protocolNumber: this.result.generalInfo.protocolNumber,
               protocolId: this.result.generalInfo.protocolId
             }

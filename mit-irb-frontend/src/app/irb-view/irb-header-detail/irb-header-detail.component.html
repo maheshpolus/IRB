@@ -20,7 +20,10 @@
 						<div class="col-md-5 col-sm-6 col-12">
 							<h4>
 								IRB # :
-								<span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}</span>
+								<span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}
+									<span class="btn btn-primary tab_btn btnactive" *ngIf="requestObject.protocolNumber.includes('R')">Renewal</span>
+									<span class="btn btn-primary tab_btn btnactive" *ngIf="requestObject.protocolNumber.includes('A')">Amendment</span>
+								</span>
 							</h4>
 							<p>
 								Expiration Date :
@@ -164,7 +167,9 @@
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']"
 		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
-			<i class="fa fa-file-text-o" aria-hidden="true"></i>Summary Details
+			<i class="fa fa-file-text-o" aria-hidden="true"></i>
+			<span *ngIf="requestObject.protocolNumber.includes('A')">Amendment Summary</span>
+			<span *ngIf="requestObject.protocolNumber.includes('R')">Renewal Summary</span>
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbActions']" [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
 		 routerLinkActive="btnactive" (click)="show_current_tab('irbActions')">

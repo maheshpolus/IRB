@@ -592,6 +592,14 @@
 	"/mit-irb/downloadInternalProtocolAttachments": {
 		"target": "http://192.168.1.93:8082",
 		"secure": false		
+	},
+		"/mit-irb/getProtocolPermissionDetails": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/updateProtocolPermission": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
 	}
 
 	

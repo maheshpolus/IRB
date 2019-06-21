@@ -3,7 +3,7 @@ package org.mit.irb.web.IRBProtocol.VO;
 import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
-import org.mit.irb.web.IRBProtocol.pojo.Role;
+import org.mit.irb.web.roles.pojo.Role;
 
 public class IRBPermissionVO {
 	//private List<String> permissions;

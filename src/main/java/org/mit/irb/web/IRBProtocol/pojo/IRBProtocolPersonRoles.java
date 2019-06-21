@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.mit.irb.web.roles.pojo.Role;
 
 @Entity
 @Table(name = "IRB_PROTOCOL_PERSON_ROLES")

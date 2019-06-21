@@ -1540,7 +1540,7 @@ form-check-label {
 }
 .mySkinDialog .modal-title {
 	font-size: 1.2em;
-	color: #00bcd4;
+	/* color: #00bcd4; */
 }
 
 .mySkinDialog p {

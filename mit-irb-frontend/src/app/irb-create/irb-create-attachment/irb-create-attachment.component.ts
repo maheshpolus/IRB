@@ -46,7 +46,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     direction = 1;
     attachmentEditedRow: number;
     attachmentSelectedRow: number;
-    column = 'updateTimestamp';
+    column = 'groupDescription';
     tabSelected = 'STUDY';
     requestObject = {
         protocolNumber: '',
@@ -98,7 +98,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.attachmentTypes.forEach(attachmentType => {
             if (attachmentType.typeCode === attachmentTypeCode) {
                 this.attachmentTypeDescription = attachmentType.description;
-                this.irbAttachmentProtocol.categoryCode = attachmentType.categoryCode;
+                this.irbAttachmentProtocol.subCategoryCode = attachmentType.subCategoryCode;
             }
         });
     }
@@ -106,7 +106,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     /**calls service to load Attachment list in protocol*/
     loadIrbAttachmentList() {
         this.tabSelected = 'STUDY';
-        this.column = 'updateTimestamp';
+        this.column = 'groupDescription';
         this.attachmentSelectedRow = null;
         this.attachmentEditedRow = null;
         this._spinner.show();
@@ -121,6 +121,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 } else {
                     this.generalInfo = this.result.protocolAttachmentList[0].protocolGeneralInfo;
                     this.irbAttachmentsList = this.result.protocolAttachmentList;
+                    this.setAttachmentTypeAndCategory();
                 }
             }
         },
@@ -213,7 +214,8 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                         } else {
                             this.noIrbAttachments = false;
                         }
-                        this.irbAttachmentsList = this.result.protocolAttachmentList;
+                        this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
+                        this.setAttachmentTypeAndCategory();
                         this._spinner.hide();
                         this.irbAttachment = data;
                     });
@@ -312,6 +314,10 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                     typeCode: this.requestObject.attachmentTypeCode,
                     description: this.attachmentTypeDescription,
                 };
+                this.irbAttachmentProtocol.attachmentSubCategory = {
+                    subCategoryCode: this.irbAttachmentProtocol.subCategoryCode,
+                    description: 'Study'
+                  };
                 // this.irbAttachmentProtocol.protocolAttachmentData = {
                 //     sequenceNumber: 1,
                 //     updateTimestamp: new Date(),
@@ -328,7 +334,8 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                         } else {
                             this.noIrbAttachments = false;
                         }
-                        this.irbAttachmentsList = this.result.protocolAttachmentList;
+                        this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
+                        this.setAttachmentTypeAndCategory();
                         this._spinner.hide();
                         this.irbAttachment = data;
                         this.isMandatoryFilled = true;
@@ -362,8 +369,8 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                     this.noIrbAttachments = true;
                 } else {
                     this.noIrbAttachments = false;
-                }
-                this.irbAttachmentsList = this.result.protocolAttachmentList;
+                }this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
+                this.setAttachmentTypeAndCategory();
                 this.irbAttachment = data;
             });
     }
@@ -426,6 +433,12 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this._irbCreateService.loadPreviousProtocolAttachments(attachments.documentId).subscribe((data: any) => {
             this._spinner.hide();
             this.previousProtocolAttachmentList = data.previousProtocolAttachmentList != null ? data.previousProtocolAttachmentList : [];
+        });
+    }
+    setAttachmentTypeAndCategory() {
+        this.irbAttachmentsList.forEach(attachment => {
+            attachment.attachmentTypeDescription = attachment.attachmentType.description;
+            attachment.groupDescription = attachment.attachmentSubCategory.description;
         });
     }
 }

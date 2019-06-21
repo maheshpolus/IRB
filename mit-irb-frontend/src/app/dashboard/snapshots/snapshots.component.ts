@@ -1,7 +1,10 @@
 import { Component, OnInit , Input} from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardService } from '../dashboard.service';
+import { SharedDataService } from '../../common/service/shared-data.service';
+import { PermissionWarningModalComponent } from '../../common/permission-warning-modal/permission-warning-modal.component';
 
 @Component({
   selector: 'app-snapshots',
@@ -20,7 +23,8 @@ export class SnapshotsComponent implements OnInit {
     };
     roleType: string;
 
-  constructor(private _dashboardService: DashboardService, private _router: Router ) { }
+  constructor(private _dashboardService: DashboardService, private _router: Router,
+    private modalService: NgbModal, private _sharedDataService: SharedDataService ) { }
 
   /** calls function to load snapshot details */
   ngOnInit() {
@@ -61,7 +65,26 @@ export class SnapshotsComponent implements OnInit {
    goToCreateProtocol() {
     this._router.navigate(['/irb/irb-create']);
 }
+
+
+
+openPermissionWarningModal(alertMessage) {
+  const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
+  modalRef.componentInstance.alertMessage = alertMessage;
+}
 goToCommittee() {
-    this._router.navigate(['/irb/committee'], {queryParams: {mode: 'create'}});
+    const requestObject = {
+        acType: 'C', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: null
+    };
+    this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
+    const hasPermission = data.successCode;
+    if (hasPermission) {
+        this._router.navigate(['/irb/committee'], {queryParams: {mode: 'create'}});
+    } else {
+    const alertMessage = 'You donot have permission to Maintain Committee';
+    this.openPermissionWarningModal(alertMessage);
+    }
+    });
+    }
 }
-}
+

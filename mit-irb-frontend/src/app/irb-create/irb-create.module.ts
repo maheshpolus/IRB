@@ -50,6 +50,6 @@ import { IrbPermissionComponent } from './irb-permission/irb-permission.componen
     IrbQuestionnaireListComponent,
     ProtocolUnitsComponent,
     AdministratorContactComponent, SubmissionDetailsComponent, IrbSummaryDetailsComponent, RiskLevelsComponent, IrbPermissionComponent],
-    exports: [IrbActionsComponent, IrbSummaryDetailsComponent]
+    exports: [IrbActionsComponent, IrbSummaryDetailsComponent, IrbPermissionComponent]
 })
 export class IrbCreateModule { }

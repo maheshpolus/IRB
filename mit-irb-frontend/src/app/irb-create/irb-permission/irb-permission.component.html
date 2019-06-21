@@ -9,7 +9,7 @@
           </nav>
         </div>
         <div class="card-body card-paddng">
-          <div class="col-12  search-eidted-p padding-15">
+          <div class="col-12  search-eidted-p padding-15" *ngIf="isEditMode">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -67,7 +67,7 @@
                     <tr>
                       <th scope="col">Person Name</th>
                       <th scope="col">Role</th>
-                      <th scope="col">Action</th>
+                      <th *ngIf="isEditMode" scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody class="tbody-font-size">
@@ -75,7 +75,7 @@
                     <tr *ngFor="let person of protocolRolePersonList">
                       <td>{{person.personName}}</td>
                       <td>{{person?.role?.roleName}}</td>
-                      <td class="action-btn-list">
+                      <td class="action-btn-list" *ngIf="isEditMode">
                         <button title="Delete" (click)="deletePermission(person)" type="button" class="btn btn-primary delete-btn-1">
                           <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
@@ -87,6 +87,9 @@
               </div>
             </div>
           </div>
+          <ng-container *ngIf="!isEditMode && protocolRolePersonList.length == 0">
+           <div class="text-center"> No Permissions Assigned</div>
+          </ng-container>
         </div>
       </div>
     </div>

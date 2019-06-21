@@ -111,7 +111,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         }
       }
     });
-    this._irbCreateService.getAttachmentTypes(null).subscribe(data => {
+    this._irbCreateService.loadCollaboratorAttachmentType().subscribe(data => {
       this.result = data;
       this.attachmentTypes = this.result.irbAttachementTypes;
     });
@@ -406,7 +406,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.attachmentTypes.forEach(attachmentType => {
         if (attachmentType.typeCode === attachmentTypeCode) {
             this.attachmentTypeDescription = attachmentType.description;
-            this.irbAttachmentProtocol.categoryCode = attachmentType.categoryCode;
+            this.irbAttachmentProtocol.subCategoryCode = attachmentType.subCategoryCode;
         }
     });
 }
@@ -438,7 +438,13 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.irbAttachmentProtocol.attachmentType = {
           typeCode: this.requestObject.attachmentTypeCode,
           description: this.attachmentTypeDescription,
+         // subCategoryCode: this.irbAttachmentProtocol.subCategoryCode
       };
+      this.irbAttachmentProtocol.attachmentSubCategory = {
+        subCategoryCode: this.irbAttachmentProtocol.subCategoryCode,
+        description: 'Enagaged Institutions'
+      };
+      this.irbAttachmentProtocol.protocolLocationId = this.protocolCollaboratorSelected.protocolLocationId;
       // this.irbAttachmentProtocol.protocolAttachmentData = {
       //     sequenceNumber: 1,
       //     updateTimestamp: new Date(),
@@ -449,7 +455,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
           data => {
               this.result = data;
-             this.protocolCollaboratorAttachmentsList = this.result.protocolAttachmentList;
+             this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList != null ?
+             this.result.protocolCollaboratorAttachmentsList : [];
               this._spinner.hide();
               // this.irbAttachment = data;
              // this.isMandatoryFilled = true;

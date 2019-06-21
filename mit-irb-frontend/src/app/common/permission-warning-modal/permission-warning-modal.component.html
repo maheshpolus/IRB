@@ -1,0 +1,14 @@
+<div class="modal-header popup-header" data-backdrop="static">
+    <h5 class="modal-title  text-center" id="exampleModalLabel">Access Denied</h5>
+    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body modal-popup">
+    <ul>
+  {{alertMessage}}
+    </ul>
+  </div>
+  <div class="modal-footer btn-row-med">
+    <button type="button margin-class" class="btn btn-primary tab_btn"  data-dismiss="modal" (click)="activeModal.dismiss('Cross click')">Ok</button>
+  </div>

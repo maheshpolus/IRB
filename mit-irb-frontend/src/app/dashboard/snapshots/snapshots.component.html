@@ -1,5 +1,5 @@
 <!-- Snapshot of PI -->
-<section class="row snapshot-responsive" *ngIf="roleType == 'PI' || roleType == 'DEPT_ADMIN'">
+<section class="row snapshot-responsive" *ngIf="roleType != 'ADMIN'">
 	
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards revision-req-card mt-12">
@@ -79,7 +79,7 @@
 </section>
 
 <!-- Snapshot of ADMIN -->
-<section class="row" *ngIf="roleType == 'ADMIN' || roleType == 'CHAIR'">
+<section class="row" *ngIf="roleType == 'ADMIN'">
 	<div class="col-md-3 col-sm-6 col-12">
 		<div class="col-12 top-cards">
 			<div class="media schedule-card-outer">

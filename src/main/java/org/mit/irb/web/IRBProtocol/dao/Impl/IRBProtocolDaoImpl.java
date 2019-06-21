@@ -34,6 +34,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
@@ -43,6 +44,8 @@ import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.IRBFileData;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
+import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.Proposal;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAttachments;
@@ -553,8 +556,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		IRBActionsVO vo = new IRBActionsVO();
 		ProtocolSubmissionStatuses status = new ProtocolSubmissionStatuses();
-		Session sessionUpdateGeneral = hibernateTemplate.getSessionFactory().openSession();
-		Transaction transactionUpdateGeneral = sessionUpdateGeneral.beginTransaction();
+		ProtocolPersonnelInfo protocolPersonnelInfo = new ProtocolPersonnelInfo();
 		if (generalInfo.getProtocolNumber() == null) {
 			generalInfo.setProtocolId(generateProtocolId());
 			generalInfo.setActive("Y");
@@ -563,19 +565,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			String protocolNUmber = generateProtocolNumber();
 			generalInfo.setProtocolNumber(protocolNUmber);
 			generalInfo.setSequenceNumber(1);
-			generalInfo.setCreateTimestamp(generalInfo.getUpdateTimestamp()); // since
-																				// when
-																				// creating
-																				// a
-																				// protocol
-																				// both
-																				// created
-																				// user
-																				// and
-																				// updated
-																				// user
-																				// is
-																				// same
+			generalInfo.setCreateTimestamp(generalInfo.getUpdateTimestamp()); // since when creating a protocol both created user and updated user is same
 			generalInfo.setCreateUser(generalInfo.getUpdateUser());
 			generalInfo.setIsCancelled("N");
 			generalInfo.setProtocolStartDate(generateSqlDate(generalInfo.getAniticipatedStartDate()));
@@ -583,7 +573,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			List<ProtocolPersonnelInfo> protocolPersonnelInfoList = new ArrayList<ProtocolPersonnelInfo>();
 			// ProtocolPersonnelInfo personnelInfo =
 			// generalInfo.getPersonnelInfos().get(0);
-			ProtocolPersonnelInfo protocolPersonnelInfo = new ProtocolPersonnelInfo();
 			protocolPersonnelInfo = generalInfo.getPersonnelInfos().get(0);
 			protocolPersonnelInfo.setProtocolPersonId(generatePersonId());
 			protocolPersonnelInfo.setProtocolGeneralInfo(generalInfo);
@@ -600,6 +589,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			protocolUnit.setSequenceNumber(1);
 			protocolUnit.setUnitTypeCode("1");
 			protocolUnitList.add(protocolUnit);
+			generalInfo.setLeadUnitNumber(protocolUnit.getUnitNumber());
 			generalInfo.setProtocolUnits(protocolUnitList);
 			status.setProtocolNumber(generalInfo.getProtocolNumber());
 			status.setProtocolId(generalInfo.getProtocolId());
@@ -624,9 +614,29 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
 			vo.setProtocolSubmissionStatuses(status);
 			irbAcionDao.updateActionStatus(vo);
+			IRBProtocolPersonRoles personRole = new IRBProtocolPersonRoles();
+			personRole.setProtocolId(generalInfo.getProtocolId());
+			personRole.setProtocolNumber(generalInfo.getProtocolNumber());
+			personRole.setSequenceNumber(1);
+			personRole.setRoleId(2);
+			personRole.setPersonId(protocolPersonnelInfo.getPersonId());
+			personRole.setPersonName(protocolPersonnelInfo.getPersonName());
+			personRole.setUpdateUser(generalInfo.getCreateUser());	
+			personRole.setAcType("U");
+			updateProtocolPermission(personRole);
+			if(!protocolPersonnelInfo.getPersonId().equals(generalInfo.getCreateUserId())){
+			IRBProtocolPersonRoles personRoles = new IRBProtocolPersonRoles();
+			personRoles.setAcType("U");
+			personRoles.setProtocolId(generalInfo.getProtocolId());
+			personRoles.setProtocolNumber(generalInfo.getProtocolNumber());
+			personRoles.setSequenceNumber(1);
+			personRoles.setRoleId(2);
+			personRoles.setPersonId(generalInfo.getCreateUserId());
+			personRoles.setPersonName(generalInfo.getCreateUserName());
+			personRoles.setUpdateUser(generalInfo.getCreateUser());
+			updateProtocolPermission(personRoles);
+			}
 		}
-		transactionUpdateGeneral.commit();
-		sessionUpdateGeneral.close();
 		return irbProtocolVO;
 	}
 
@@ -805,8 +815,18 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		personnelInfo.setSequenceNumber(generalInfo.getSequenceNumber());
 		if (personnelInfo.getAcType().equals("U")) {
 			personnelInfo.setIsActive("Y");
-			if (personnelInfo.getProtocolPersonId() == null) {
+			if (personnelInfo.getProtocolPersonId() == null) {				
 				personnelInfo.setProtocolPersonId(generatePersonId());
+				IRBProtocolPersonRoles assignRole = new IRBProtocolPersonRoles();
+				assignRole.setAcType("U");
+				assignRole.setProtocolId(generalInfo.getProtocolId());
+				assignRole.setProtocolNumber(generalInfo.getProtocolNumber());
+				assignRole.setSequenceNumber(1);
+				assignRole.setRoleId(2);
+				assignRole.setUpdateUser(generalInfo.getUpdateUser());	
+				assignRole.setPersonId(personnelInfo.getPersonId());;
+				assignRole.setPersonName(personnelInfo.getPersonName());
+				updateProtocolPermission(assignRole);
 			}
 			personnelInfo.setProtocolGeneralInfo(generalInfo);
 			Session sessionUpdatePersons = hibernateTemplate.getSessionFactory().openSession();
@@ -1344,81 +1364,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		Award award = (Award) queryAwardDetails.list().get(0);
 		return new AsyncResult<>(award);
 	}
-
-	/*
-	 * @Override public IRBProtocolVO addProtocolAttachments(MultipartFile[]
-	 * files, String formDataJson) throws JsonParseException,
-	 * JsonMappingException, IOException { IRBProtocolVO irbProtocolVO = new
-	 * IRBProtocolVO(); ObjectMapper mapper = new ObjectMapper();
-	 * IRBAttachmentProtocol attachmentProtocol = mapper.readValue(formDataJson,
-	 * IRBAttachmentProtocol.class); if
-	 * (attachmentProtocol.getAcType().equals("I")) { for (int i = 0; i <
-	 * files.length; i++) { IRBAttachmentProtocol irbAttachmentProtocol = new
-	 * IRBAttachmentProtocol();
-	 * irbAttachmentProtocol.setPaProtocolId(generatePaProtocolId());
-	 * irbAttachmentProtocol.setAttachementStatus(attachmentProtocol.
-	 * getAttachementStatus());
-	 * irbAttachmentProtocol.setAttachmentType(attachmentProtocol.
-	 * getAttachmentType());
-	 * irbAttachmentProtocol.setAttachmentVersion(attachmentProtocol.
-	 * getAttachmentVersion());
-	 * irbAttachmentProtocol.setCreateTimestamp(attachmentProtocol.
-	 * getCreateTimestamp());
-	 * irbAttachmentProtocol.setDescription(attachmentProtocol.getDescription())
-	 * ;
-	 * irbAttachmentProtocol.setDocumentId(attachmentProtocol.getDocumentId());
-	 * irbAttachmentProtocol.setProtocolGeneralInfo(attachmentProtocol.
-	 * getProtocolGeneralInfo());
-	 * irbAttachmentProtocol.setSequenceNumber(attachmentProtocol.
-	 * getSequenceNumber());
-	 * irbAttachmentProtocol.setProtocolNumber(attachmentProtocol.
-	 * getProtocolNumber());
-	 * irbAttachmentProtocol.setStatusCode(attachmentProtocol.getStatusCode());
-	 * irbAttachmentProtocol.setTypeCode(attachmentProtocol.getTypeCode());
-	 * irbAttachmentProtocol.setUpdateTimestamp(attachmentProtocol.
-	 * getUpdateTimestamp());
-	 * irbAttachmentProtocol.setUpdateUser(attachmentProtocol.getUpdateUser());
-	 * ProtocolAttachments attachments = new ProtocolAttachments();
-	 * attachments.setFileId(generateAttachmentFileId());
-	 * attachments.setContentType(files[i].getContentType());
-	 * attachments.setFileName(files[i].getOriginalFilename());
-	 * attachments.setFileData(files[i].getBytes());
-	 * attachments.setSequenceNumber(attachmentProtocol.getProtocolAttachment().
-	 * getSequenceNumber());
-	 * attachments.setUpdateTimestamp(attachmentProtocol.getProtocolAttachment()
-	 * .getUpdateTimestamp());
-	 * attachments.setUpdateUser(attachmentProtocol.getUpdateUser());
-	 * irbAttachmentProtocol.setProtocolAttachment(attachments);
-	 * hibernateTemplate.saveOrUpdate(irbAttachmentProtocol); } } else if
-	 * (attachmentProtocol.getAcType().equals("U")) { ProtocolAttachments
-	 * attachments = attachmentProtocol.getProtocolAttachment(); for (int i = 0;
-	 * i < files.length; i++) {
-	 * attachments.setContentType(files[i].getContentType());
-	 * attachments.setFileName(files[i].getOriginalFilename());
-	 * attachments.setFileData(files[i].getBytes());
-	 * attachments.setUpdateTimestamp(attachmentProtocol.getProtocolAttachment()
-	 * .getUpdateTimestamp());
-	 * attachments.setUpdateUser(attachmentProtocol.getUpdateUser()); }
-	 * hibernateTemplate.saveOrUpdate(attachmentProtocol); } else if
-	 * (attachmentProtocol.getAcType().equals("D")) { Query queryDeletAttachment
-	 * = hibernateTemplate.getSessionFactory().getCurrentSession()
-	 * .createQuery("delete from IRBAttachmentProtocol p where p.paProtocolId =:paProtocolId"
-	 * ); queryDeletAttachment.setInteger("paProtocolId",
-	 * attachmentProtocol.getPaProtocolId());
-	 * queryDeletAttachment.executeUpdate(); Query queryDeletProtocolAttachment
-	 * = hibernateTemplate.getSessionFactory().getCurrentSession()
-	 * .createQuery("delete from ProtocolAttachments p where p.fileId =:fileId"
-	 * ); queryDeletProtocolAttachment.setInteger("fileId",
-	 * attachmentProtocol.getProtocolAttachment().getFileId());
-	 * queryDeletProtocolAttachment.executeUpdate(); } Query query =
-	 * hibernateTemplate.getSessionFactory().getCurrentSession()
-	 * .createQuery("from IRBAttachmentProtocol p where p.protocolNumber =:protocolNumber"
-	 * ); query.setString("protocolNumber",
-	 * attachmentProtocol.getProtocolNumber());
-	 * irbProtocolVO.setProtocolAttachmentList(query.list()); return
-	 * irbProtocolVO; }
-	 */
-
+	
 	private int generateAttachmentFileId() {
 		int generatedId = 0;
 		try {
@@ -1439,25 +1385,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId) {
-		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from IRBAttachmentProtocol at"
-                             +" where at.protocolGeneralInfo.protocolId = :protocolId"
-                             +" and (at.documentId,at.attachmentVersion)"
-                             +" IN("
-                             +" select att.documentId,max(att.attachmentVersion)"
-                             +" from IRBAttachmentProtocol att"
-                             +" where att.protocolGeneralInfo.protocolId = :protocolId"
-                             +" group by att.protocolNumber,att.documentId"
-                             +" )");                             
-		query.setInteger("protocolId", protocolId);
-
-		irbProtocolVO.setProtocolAttachmentList(query.list());		
-		return irbProtocolVO;
-	}
-
-	@Override
 	public IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol,
 			ProtocolGeneralInfo generalInfo) {
 		if (scienceOfProtocol.getScientificId() == null) {
@@ -1469,86 +1396,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return irbProtocolVO;
 	}
 
-	/*
-	 * @Override public IRBProtocolVO addCollaboratorAttachments(MultipartFile[]
-	 * files, String formDataJson) throws JsonParseException,
-	 * JsonMappingException, IOException { IRBProtocolVO irbProtocolVO = new
-	 * IRBProtocolVO(); ObjectMapper mapper = new ObjectMapper();
-	 * ProtocolCollaboratorAttachments protocolCollaboratorAttachments =
-	 * mapper.readValue(formDataJson, ProtocolCollaboratorAttachments.class); if
-	 * (protocolCollaboratorAttachments.getAcType().equals("I")) { for (int i =
-	 * 0; i < files.length; i++) { ProtocolCollaboratorAttachments
-	 * irbCollaboratorAttachmentProtocol = new
-	 * ProtocolCollaboratorAttachments();
-	 * irbCollaboratorAttachmentProtocol.setCollaboratorAttachmentId(
-	 * getCollabAttachmentId()); irbCollaboratorAttachmentProtocol
-	 * .setCollaboratorId(protocolCollaboratorAttachments.getCollaboratorId());
-	 * irbCollaboratorAttachmentProtocol.setProtocolId(
-	 * protocolCollaboratorAttachments.getProtocolId());
-	 * irbCollaboratorAttachmentProtocol
-	 * .setProtocolNumber(protocolCollaboratorAttachments.getProtocolNumber());
-	 * irbCollaboratorAttachmentProtocol
-	 * .setSequenceNumber(protocolCollaboratorAttachments.getSequenceNumber());
-	 * irbCollaboratorAttachmentProtocol.setDescription(
-	 * protocolCollaboratorAttachments.getDescription());
-	 * irbCollaboratorAttachmentProtocol.setUpdateUser(
-	 * protocolCollaboratorAttachments.getUpdateUser());
-	 * irbCollaboratorAttachmentProtocol
-	 * .setUpdateTimestamp(protocolCollaboratorAttachments.getUpdateTimestamp())
-	 * ; irbCollaboratorAttachmentProtocol.setCreateDate(
-	 * protocolCollaboratorAttachments.getCreateDate());
-	 * irbCollaboratorAttachmentProtocol.setTypeCode(
-	 * protocolCollaboratorAttachments.getTypeCode());
-	 * irbCollaboratorAttachmentProtocol
-	 * .setAttachmentType(protocolCollaboratorAttachments.getAttachmentType());
-	 * ProtocolAttachments attachments = new ProtocolAttachments();
-	 * attachments.setFileId(generateAttachmentFileId());
-	 * attachments.setContentType(files[i].getContentType());
-	 * attachments.setFileName(files[i].getOriginalFilename());
-	 * attachments.setFileData(files[i].getBytes());
-	 * attachments.setSequenceNumber(
-	 * protocolCollaboratorAttachments.getProtocolAttachments().
-	 * getSequenceNumber()); attachments.setUpdateTimestamp(
-	 * protocolCollaboratorAttachments.getProtocolAttachments().
-	 * getUpdateTimestamp());
-	 * attachments.setUpdateUser(protocolCollaboratorAttachments.
-	 * getProtocolAttachments().getUpdateUser());
-	 * irbCollaboratorAttachmentProtocol.setProtocolAttachments(attachments);
-	 * hibernateTemplate.saveOrUpdate(irbCollaboratorAttachmentProtocol);
-	 * 
-	 * } } else if (protocolCollaboratorAttachments.getAcType().equals("U")) {
-	 * ProtocolAttachments attachments =
-	 * protocolCollaboratorAttachments.getProtocolAttachments(); for (int i = 0;
-	 * i < files.length; i++) {
-	 * attachments.setContentType(files[i].getContentType());
-	 * attachments.setFileName(files[i].getOriginalFilename());
-	 * attachments.setFileData(files[i].getBytes());
-	 * attachments.setUpdateTimestamp(
-	 * protocolCollaboratorAttachments.getProtocolAttachments().
-	 * getUpdateTimestamp());
-	 * attachments.setUpdateUser(protocolCollaboratorAttachments.
-	 * getProtocolAttachments().getUpdateUser());
-	 * 
-	 * } hibernateTemplate.saveOrUpdate(protocolCollaboratorAttachments); } else
-	 * if (protocolCollaboratorAttachments.getAcType().equals("D")) { Query
-	 * queryDeletAttachment =
-	 * hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
-	 * "delete from ProtocolCollaboratorAttachments p where p.collaboratorAttachmentId =:collaboratorAttachmentId"
-	 * ); queryDeletAttachment.setInteger("collaboratorAttachmentId",
-	 * protocolCollaboratorAttachments.getCollaboratorAttachmentId());
-	 * queryDeletAttachment.executeUpdate(); Query queryDeletProtocolAttachment
-	 * = hibernateTemplate.getSessionFactory().getCurrentSession()
-	 * .createQuery("delete from ProtocolAttachments p where p.fileId =:fileId"
-	 * ); queryDeletProtocolAttachment.setInteger("fileId",
-	 * protocolCollaboratorAttachments.getProtocolAttachments().getFileId());
-	 * queryDeletProtocolAttachment.executeUpdate(); } Query query =
-	 * hibernateTemplate.getSessionFactory().getCurrentSession()
-	 * .createQuery("from ProtocolCollaboratorAttachments p where p.collaboratorId =:collaboratorId"
-	 * ); query.setInteger("collaboratorId",
-	 * protocolCollaboratorAttachments.getCollaboratorId());
-	 * irbProtocolVO.setProtocolCollaboratorAttachmentsList(query.list());
-	 * return irbProtocolVO; }
-	 */
+	
 	@Override
 	public IRBProtocolVO addCollaboratorPersons(List<ProtocolCollaboratorPersons> protocolCollaboratorPersons) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
@@ -1590,14 +1438,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			e.printStackTrace();
 			logger.info("Exception in loadCollaboratorPersonsAndAttachments:" + e);
 		}
-		irbProtocolVO  = loadCollaboratorAttachments(irbProtocolVO,protocolId);
+		irbProtocolVO  = loadCollaboratorAttachments(irbProtocolVO,collaboratorId);
 		return irbProtocolVO;
 	}
 
-	private IRBProtocolVO loadCollaboratorAttachments(IRBProtocolVO irbProtocolVO,Integer protocolId){
+	private IRBProtocolVO loadCollaboratorAttachments(IRBProtocolVO irbProtocolVO,Integer protocolLocationId){
 		try{
-			Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolGeneralInfo.protocolId =:protocolId and p.isProtocolAttachment ='N'");
-			queryAttachment.setInteger("protocolId", protocolId);
+			Query queryAttachment = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachmentProtocol p where p.protocolLocationId =:protocolLocationId and p.subCategoryCode ='2'");
+			queryAttachment.setInteger("protocolLocationId", protocolLocationId);
 			irbProtocolVO.setProtocolCollaboratorAttachmentsList(queryAttachment.list());
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1925,6 +1773,24 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 	
 	@Override
+	public IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from IRBAttachmentProtocol at"
+                             +" where at.protocolGeneralInfo.protocolId = :protocolId"
+                             +" and (at.documentId,at.attachmentVersion)"
+                             +" IN("
+                             +" select att.documentId,max(att.attachmentVersion)"
+                             +" from IRBAttachmentProtocol att"
+                             +" where att.protocolGeneralInfo.protocolId = :protocolId"
+                             +" group by att.protocolNumber,att.documentId"
+                             +" )");                             
+		query.setInteger("protocolId", protocolId);
+		irbProtocolVO.setProtocolAttachmentList(query.list());		
+		return irbProtocolVO;
+	}
+	
+	@Override
 	public IRBProtocolVO addNewProtocolAttachment(MultipartFile[] files, IRBAttachmentProtocol attachmentProtocol) {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
 		try {
@@ -1943,9 +1809,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			if (attachmentProtocol.getIsProtocolAttachment().equals("Y")) {
 				irbProtocolVO = loadIRBProtocolAttachments(attachmentProtocol.getProtocolId());
 			} else {
-				irbProtocolVO = loadCollaboratorAttachments(irbProtocolVO, attachmentProtocol.getProtocolId());
+				irbProtocolVO = loadCollaboratorAttachments(irbProtocolVO, attachmentProtocol.getProtocolLocationId());
 			}
-			irbProtocolVO = loadIRBProtocolAttachments(attachmentProtocol.getProtocolId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2015,6 +1880,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		}
 		return irbProtocolVO;
 	}
+	
 	@Override
 	public IRBProtocolVO loadInternalProtocolAttachments(IRBProtocolVO irbProtocolVO) {
 		try{
@@ -2042,7 +1908,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			CriteriaQuery<IRBAttachmentProtocol> criteria = builder.createQuery(IRBAttachmentProtocol.class);
 			Root<IRBAttachmentProtocol> attachmentRoot=criteria.from(IRBAttachmentProtocol.class);		
 			criteria.multiselect(attachmentRoot.get("protocolAttachmentData"),attachmentRoot.get("comments"),attachmentRoot.get("updateTimestamp")
-					,attachmentRoot.get("updateUser"),attachmentRoot.get("attachmentVersion"),attachmentRoot.get("categoryCode"),attachmentRoot.get("fileName"),attachmentRoot.get("mimeType"));
+					,attachmentRoot.get("updateUser"),attachmentRoot.get("attachmentVersion"),attachmentRoot.get("subCategoryCode"),attachmentRoot.get("fileName"),attachmentRoot.get("mimeType"));
 			criteria.where(builder.equal(attachmentRoot.get("documentId"),documentId));
 			criteria.orderBy(builder.desc(attachmentRoot.get("updateTimestamp")));
 			List<IRBAttachmentProtocol> previousProtocolAttachmentList = session.createQuery(criteria).getResultList();		
@@ -2100,9 +1966,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 				byte[] byteArray = null;
 				byteArray = protocolAttachment.getFileData();				
 				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.parseMediaType(protocolAttachment.getMimeType()));
-				String filename = protocolAttachment.getFileName();
-				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentType(MediaType.parseMediaType("application/pdf"));
+				String filename ="COUHES_Connect_document_"+protocolAttachment.getProtocolNumber();
+				headers.setContentDispositionFormData(filename, "COUHES-Connect document "+protocolAttachment.getProtocolNumber());
 				headers.setContentLength(byteArray.length);
 				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 				headers.setPragma("public");
@@ -2114,4 +1980,62 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		}
 		return attachmentData;
 	}	
+	
+	private List loadQuestionnaireAttachments(IRBProtocolVO irbProtocolVO) {
+		List<IRBQuestionnaireAttachment> questionnaireAttachmentsList = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<IRBQuestionnaireAttachment> criteria = builder.createQuery(IRBQuestionnaireAttachment.class);
+			Root<IRBQuestionnaireAttachment> attachmentRoot=criteria.from(IRBQuestionnaireAttachment.class);					
+			criteria.where(builder.equal(attachmentRoot.get("protocolId"),irbProtocolVO.getProtocolId()));
+			criteria.orderBy(builder.desc(attachmentRoot.get("updateTimeStamp")));
+			questionnaireAttachmentsList = session.createQuery(criteria).getResultList();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in loadQuestionnaireAttachments method:" + e);
+		}
+		return questionnaireAttachmentsList;
+	}
+	@Override
+	public void updateProtocolPermission(IRBProtocolPersonRoles protocolRolePerson) {
+		try{
+			if(protocolRolePerson.getAcType().equals("U")){				
+				if(protocolRolePerson.getProtocolPersonRoleId() == null)
+				protocolRolePerson.setProtocolPersonRoleId(getProtocolPersonRoleId());					
+				hibernateTemplate.saveOrUpdate(protocolRolePerson);		
+			}		
+			if(protocolRolePerson.getAcType().equals("D")){
+				Query queryDeletRole = hibernateTemplate.getSessionFactory().getCurrentSession()
+						.createQuery("delete from IRBProtocolPersonRoles p where p.protocolPersonRoleId =:protocolPersonRoleId");
+				queryDeletRole.setInteger("protocolPersonRoleId",protocolRolePerson.getProtocolPersonRoleId() );
+				queryDeletRole.executeUpdate();			
+			}
+		} catch (Exception e) {
+			logger.info("Exception in updateProtocolPermission method:" + e);
+		}		
+	}
+	private Integer getProtocolPersonRoleId() {
+		Integer protocolPersonRoleId = null;
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("SELECT NVL(MAX(PROTO_PERSON_ROLE_ID),0)+1 FROM IRBProtocolPersonRoles");
+		if (!queryGeneral.list().isEmpty()) {
+			protocolPersonRoleId = Integer.parseInt(queryGeneral.list().get(0).toString());
+		}
+		return protocolPersonRoleId;
+	}
+
+	@Override
+	public List<IRBProtocolPersonRoles> loadProtocolPermissionPerson(IRBPermissionVO irbPermissionVO) {
+		List<IRBProtocolPersonRoles> irbProtocolPersonRoleList = null;
+		try{
+			Query queryProtocolRolePerson = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from IRBProtocolPersonRoles p where p.protocolId =:protocolId order by p.updateTimestamp DESC");
+			queryProtocolRolePerson.setInteger("protocolId", irbPermissionVO.getProtocolId());
+			irbProtocolPersonRoleList = queryProtocolRolePerson.list();
+		} catch (Exception e) {
+			logger.info("Exception in loadProtocolPermissionPerson method:" + e);
+		}
+		return irbProtocolPersonRoleList;
+	}
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
@@ -313,7 +314,7 @@ public class IRBController {
 	@RequestMapping(value = "/loadIRBProtocolAttachments", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO loadIRBProtocolAttachmentsByProtocolNumber(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
-		logger.info("Request for loadIRBProtocolAttachmentsByProtocolNumber");
+		logger.info("Request for loadIRBProtocolAttachments");
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
 		protocolVO = irbProtocolService.loadIRBProtocolAttachments(irbProtocolVO.getProtocolId());
 		return protocolVO;
@@ -491,5 +492,27 @@ public class IRBController {
 			@RequestHeader("documentId") String documentId) {
 		logger.info("Request for downloadInternalProtocolAttachments");
 		return irbProtocolService.downloadInternalProtocolAttachments(documentId);
+	}
+	
+	@RequestMapping(value = "/loadCollaboratorAttachmentType", method = RequestMethod.GET)
+	public @ResponseBody IRBProtocolVO loadCollaboratorAttachmentType(HttpServletRequest request)
+    {
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolInitLoadService.loadCollaboratorAttachmentType();
+		return protocolVO;
+	}
+	
+	@RequestMapping(value = "/getProtocolPermissionDetails", method = RequestMethod.POST)
+	public @ResponseBody IRBPermissionVO fetchProtocolPermissionLookup(@RequestBody IRBPermissionVO vo,HttpServletRequest request,HttpServletResponse response)
+	{	
+		vo = irbProtocolService.fetchProtocolPermissionDetails(vo);
+		return vo;
+	}
+	
+	@RequestMapping(value = "/updateProtocolPermission", method = RequestMethod.POST)
+	public @ResponseBody IRBPermissionVO updateProtocolPermission(@RequestBody IRBPermissionVO vo,HttpServletRequest request,HttpServletResponse response)
+	{	
+		vo = irbProtocolService.updateProtocolPermission(vo);
+		return vo;
 	}
 }

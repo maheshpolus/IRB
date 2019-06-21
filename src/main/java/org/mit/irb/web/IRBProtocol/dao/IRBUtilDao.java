@@ -33,5 +33,5 @@ public interface IRBUtilDao {
 
 	Integer createPersonTrainingId();
 
-	Boolean checkUserPermission(String permission, String department, String username);
+	Boolean checkUserPermission(Integer protocolId, String username,String acType, String department);
 }

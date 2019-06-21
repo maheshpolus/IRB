@@ -62,12 +62,6 @@ public class IRBProtocolCorrespondence {
 	
 	@Column(name="FINAL_FLAG_TIMESTAMP")
 	private Date finalFlagTimeStamp;
-	
-	@Column(name="FILE_NAME")
-	private String fileName;
-	
-	@Column(name="MIME_TYPE")
-	private String mimeType;
 
 	public Integer getProtocolCorrespondenceId() {
 		return protocolCorrespondenceId;
@@ -171,21 +165,5 @@ public class IRBProtocolCorrespondence {
 
 	public void setFinalFlagTimeStamp(Date finalFlagTimeStamp) {
 		this.finalFlagTimeStamp = finalFlagTimeStamp;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
 	}
 }

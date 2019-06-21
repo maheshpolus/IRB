@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -50,6 +51,9 @@ public class IRBProtocolPersonRoles {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTO_PERSON_ROLE_FK1"), name = "ROLE_ID", referencedColumnName = "ROLE_ID", insertable = false, updatable = false)
 	private Role role;
+	
+	@Transient
+	private String acType;
 	
 	public Integer getProtocolPersonRoleId() {
 		return protocolPersonRoleId;
@@ -129,5 +133,13 @@ public class IRBProtocolPersonRoles {
 
 	public void setPersonName(String personName) {
 		this.personName = personName;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 }

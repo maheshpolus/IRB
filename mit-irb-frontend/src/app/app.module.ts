@@ -48,6 +48,7 @@ import { FundingSourceModalService } from './common/funding-source-modal/funding
 import { AssignModalServiceService } from './common/assign-modal/assign-modal.service';
 import { PersonTrainingService } from './person-training/person-training.service';
 import { AssignModalComponent } from './common/assign-modal/assign-modal.component';
+import { PermissionWarningModalComponent } from './common/permission-warning-modal/permission-warning-modal.component';
 
 enableProdMode();
 
@@ -70,7 +71,8 @@ enableProdMode();
         ScheduleCardComponent,
         LogoutComponent,
         FundingSourceModalComponent,
-        AssignModalComponent
+        AssignModalComponent,
+        PermissionWarningModalComponent
 
     ],
     imports: [
@@ -95,7 +97,7 @@ enableProdMode();
         LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
         SharedDataService, FundingSourceModalService, AssignModalServiceService, PersonTrainingService,
         KeyPressEvent, HeaderService],
-        entryComponents: [FundingSourceModalComponent, AssignModalComponent],
+        entryComponents: [FundingSourceModalComponent, AssignModalComponent, PermissionWarningModalComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

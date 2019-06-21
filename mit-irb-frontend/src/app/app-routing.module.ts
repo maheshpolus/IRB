@@ -22,6 +22,7 @@ const appRoutes = [
             },
             { path: 'code-table', loadChildren: 'app/codetable/codetable.module#CodetableModule' },
             { path: 'training-maintenance', loadChildren: 'app/person-training/person-training.module#PersonTrainingModule' },
+            { path: 'role-maintainance', loadChildren: 'app/role-maintainance/role-maintainance.module#RoleMaintainanceModule' },
             { path: 'irb-create', loadChildren: 'app/irb-create/irb-create.module#IrbCreateModule' },
             { path: 'configure-questionnaire', loadChildren: 'app/questionnaire-create/create.module#CreateModule' },
             { path: 'irb-view', loadChildren: 'app/irb-view/irb-view.module#IrbViewModule' },

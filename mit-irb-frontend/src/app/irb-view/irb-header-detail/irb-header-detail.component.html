@@ -156,6 +156,9 @@
 		 routerLinkActive="btnactive" (click)="show_current_tab('irb_attachments')">
 			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
 		</button>
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbPermission']" [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}" routerLinkActive="btnactive" (click)="show_current_tab('irbPermission')">
+			 <i class="fa fa-key" aria-hidden="true"></i>Permissions
+			</button>
 		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
 		 routerLinkActive="btnactive" (click)="show_current_tab('irb_history')">
 			<i class="fa fa-history" aria-hidden="true"></i>History

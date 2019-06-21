@@ -234,20 +234,21 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 	}
 
 	@Override
-	public Boolean checkUserPermission(String permission, String department, String username) {
+	public Boolean checkUserPermission(Integer protocolId,String department, String personId,String acType) {
 		Boolean hasPermission = false;
 		try{
 			ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
-			inputParam.add(new InParameter("AV_PERMISSION", DBEngineConstants.TYPE_STRING,permission));			
-			inputParam.add(new InParameter("AV_DEPARTMENT", DBEngineConstants.TYPE_STRING,department));	
-			inputParam.add(new InParameter("AV_USERNAME", DBEngineConstants.TYPE_STRING,username));			
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,personId));			
+			inputParam.add(new InParameter("AV_UNIT_NUMBER", DBEngineConstants.TYPE_STRING,department));
+			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,protocolId));
+			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,acType));	
 			outParam.add(new OutParameter("hasPermission",DBEngineConstants.TYPE_STRING));
 			ArrayList<HashMap<String,Object>> result = 
-					dbEngine.executeFunction(inputParam,"FN_IRB_GET_NEXT_PRSN_TRAING_ID",outParam);	
+					dbEngine.executeFunction(inputParam,"FN_CHECK_USER_RIGHTS",outParam);	
 			if(result != null && !result.isEmpty()){
 				HashMap<String,Object> hmResult = result.get(0);
-				hasPermission = hmResult.get("hasPermission").toString().equalsIgnoreCase("true") ? true : false;			
+				hasPermission = hmResult.get("hasPermission").toString().equalsIgnoreCase("1") ? true : false;			
 			}
 		} catch (Exception e) {
 			logger.info("Exception in checkUserPermission method" + e);

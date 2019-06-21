@@ -17,7 +17,7 @@ public class PersonDetailsView implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "PERSON_ID")
-	private String prncplId;
+	private String personId;
 	
 	@Column(name = "FIRST_NAME")
 	private String firstName;
@@ -51,14 +51,6 @@ public class PersonDetailsView implements Serializable {
 
 	@Column(name = "ADDRESS_LINE_1")
 	private String addressLine1;
-
-	public String getPrncplId() {
-		return prncplId;
-	}
-
-	public void setPrncplId(String prncplId) {
-		this.prncplId = prncplId;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -151,4 +143,13 @@ public class PersonDetailsView implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
+
 }

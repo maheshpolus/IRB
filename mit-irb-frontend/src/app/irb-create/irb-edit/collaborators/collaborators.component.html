@@ -355,16 +355,17 @@
                     | date: 'MM/dd/yyyy')}}</td>
                   <td>
                     <ul class="actionButtonGroup padding-icons">
+                        <li>
+                            <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
+                              <i class="fa fa-download icon-color" aria-hidden="true"></i>
+                            </a>
+                          </li>
                       <li>
                         <a title="Delete Attachment" (click)="tempSave($event,protocolCollaboratorAttachment)" data-toggle="modal" data-target="#deleteAttachment">
                           <i class="fa fa-trash-o delete-color"></i>
                         </a>
                       </li>
-                      <li>
-                        <a (click)="downloadAttachment(protocolCollaboratorAttachment)" title="Download Attachment">
-                          <i class="fa fa-download download-color" aria-hidden="true"></i>
-                        </a>
-                      </li>
+                      
                     </ul>
                   </td>
                 </tr>

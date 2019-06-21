@@ -600,6 +600,58 @@
 	"/mit-irb/updateProtocolPermission": {
 		"target": "http://192.168.1.93:8082",
 		"secure": false		
+	},
+	"/mit-irb/unassignedRoleOfPerson": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/assignedRoleOfPerson": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/getUnitName": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/savePersonRoles": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/roleInformation": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/syncPersonRole": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/getPersonDetailById": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/findPersons": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/findDepartment": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/fetchAllRoles": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/getAssignedRole": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false		
+	},
+	"/mit-irb/loadCollaboratorAttachmentType": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false	
+	},
+	"/mit-irb/checkUserPermission": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false	
 	}
 
 	

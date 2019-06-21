@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class SharedDataService {
 
-  constructor() { }
+  constructor( private _http: HttpClient ) { }
 
   public generalInfo = new BehaviorSubject<any>({});
   generalInfoVariable = this.generalInfo.asObservable();
@@ -47,6 +48,9 @@ getViewProtocolDetails() {
 }
 setviewProtocolDetails(viewProtocolDetails: any) {
   this.viewProtocolDetails.next(viewProtocolDetails);
+}
+checkUserPermission(params) {
+  return this._http.post('/mit-irb/checkUserPermission', params);
 }
 
 }

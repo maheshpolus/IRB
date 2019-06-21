@@ -115,6 +115,9 @@ public class ProtocolGeneralInfo {
 	@Column(name = "FDA_RISK_LVL_COMMENTS")
 	private String fdaRiskLevelComments;
 
+	@Column(name = "LEAD_UNIT_NUMBER")
+	private String leadUnitNumber;
+	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTOCOL_FK1"), name = "PROTOCOL_TYPE_CODE", referencedColumnName = "PROTOCOL_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolType protocolType;
@@ -160,6 +163,12 @@ public class ProtocolGeneralInfo {
 	
 	@Transient
 	private String stringFDARiskLvlDate;
+	
+	@Transient
+	private String createUserId;
+	
+	@Transient
+	private String createUserName;
 	
 	public String getAniticipatedStartDate() {
 		return aniticipatedStartDate;
@@ -479,5 +488,29 @@ public class ProtocolGeneralInfo {
 
 	public void setIrbProtocolPersonRoles(IRBProtocolPersonRoles irbProtocolPersonRoles) {
 		this.irbProtocolPersonRoles = irbProtocolPersonRoles;
+	}
+
+	public String getLeadUnitNumber() {
+		return leadUnitNumber;
+	}
+
+	public void setLeadUnitNumber(String leadUnitNumber) {
+		this.leadUnitNumber = leadUnitNumber;
+	}
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
 	}
 }

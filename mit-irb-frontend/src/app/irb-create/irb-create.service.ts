@@ -152,4 +152,7 @@ getProtocolPermissionDetails(param) {
   updateProtocolPermission(param) {
     return this._http.post('/mit-irb/updateProtocolPermission', param);
   }
+  loadCollaboratorAttachmentType() {
+    return this._http.get('/mit-irb/loadCollaboratorAttachmentType');
+  }
 }

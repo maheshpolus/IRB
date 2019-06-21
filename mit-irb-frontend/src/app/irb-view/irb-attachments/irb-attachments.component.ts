@@ -21,7 +21,7 @@ export class IrbAttachmentsComponent implements OnInit {
     attachmentSelectedRow: number;
     versionAttachmentChoosen: any = {};
     direction = 1;
-    column = 'updateTimestamp';
+    column = 'groupDescription';
     tabSelected = 'STUDY';
 
     requestObject = {
@@ -68,7 +68,7 @@ export class IrbAttachmentsComponent implements OnInit {
     // }
     loadIrbAttachmentList() {
         this.tabSelected = 'STUDY';
-        this.column = 'updateTimestamp';
+        this.column = 'groupDescription';
         this.attachmentSelectedRow = null;
         this._spinner.show();
         const reqobj = {protocolId: this.requestObject.protocolId, protocolNumber: this.requestObject.protocolNumber};
@@ -81,6 +81,7 @@ export class IrbAttachmentsComponent implements OnInit {
                     this.noIrbAttachments = true;
                 } else {
                     this.irbAttachmentsList = this.result.protocolAttachmentList;
+                    this.setAttachmentTypeAndCategory();
                 }
             }
         },
@@ -140,6 +141,13 @@ export class IrbAttachmentsComponent implements OnInit {
         this.versionAttachmentChoosen = attachments;
         this._irbViewService.loadPreviousProtocolAttachments(attachments.documentId).subscribe((data: any) => {
             this.previousProtocolAttachmentList = data.previousProtocolAttachmentList != null ? data.previousProtocolAttachmentList : [];
+        });
+    }
+
+    setAttachmentTypeAndCategory() {
+        this.irbAttachmentsList.forEach(attachment => {
+            attachment.attachmentTypeDescription = attachment.attachmentType.description;
+            attachment.groupDescription = attachment.attachmentSubCategory.description;
         });
     }
 }

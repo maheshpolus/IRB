@@ -3,6 +3,7 @@ package org.mit.irb.web.IRBProtocol.service;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
@@ -294,4 +295,10 @@ public interface IRBProtocolService {
 	 * @return download internal attachment
 	 */
 	ResponseEntity<byte[]> downloadInternalProtocolAttachments(String documentId);
+
+
+	IRBPermissionVO fetchProtocolPermissionDetails(IRBPermissionVO vo);
+
+
+	IRBPermissionVO updateProtocolPermission(IRBPermissionVO vo);
 }

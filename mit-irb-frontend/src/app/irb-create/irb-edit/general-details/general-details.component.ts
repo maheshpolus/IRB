@@ -218,7 +218,8 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.GetFormattedDate(this.generalInfo.protocolStartDate) : null;
         this.generalInfo.aniticipatedEndDate = this.generalInfo.protocolEndDate != null ?
         this.GetFormattedDate(this.generalInfo.protocolEndDate) : null;
-
+        this.generalInfo.createUserId = this.userDTO.personID;
+        this.generalInfo.createUserName = this.userDTO.fullName;
       this.generalInfo.updateTimestamp = new Date();
       this.generalInfo.updateUser = this.userDTO.userName;
       this.commonVo.generalInfo = this.generalInfo;

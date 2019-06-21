@@ -19,24 +19,30 @@
 			</a>
 		</li>
 		<li routerLinkActive="active">
-			<a  href="#" [routerLink]="['/irb/configure-questionnaire']">
+			<a (click)="checkPermissionToGotoLink('Q')">
 				<!-- <i class="fa fa-tachometer"></i> -->
 				<i class="fa fa-question"></i>
 				<span>Configure questionnaire</span>
 			</a>
 		</li>
 		<li routerLinkActive="active">
-			<a href="#" [routerLink]="['/irb/code-table']">
+			<a (click)="checkPermissionToGotoLink('CT')">
 				<!-- <i class="fa fa-tachometer"></i> -->
 				<i class="fa fa-table"></i>
 				<span>Table Maintenance</span>
 			</a>
 		</li>
-		<li routerLinkActive="active">
-				<a href="#" [routerLink]="['/irb/training-maintenance']">
+		<li  routerLinkActive="active">
+				<a (click)="checkPermissionToGotoLink('T')">
 					<!-- <i class="fa fa-tachometer"></i> -->
 					<i class="fa fa-graduation-cap"></i>
 					<span>Training Maintenance</span>
+				</a>
+			</li>
+			<li routerLinkActive="active">
+				<a (click)="checkPermissionToGotoLink('R')">
+					<i class="fa fa-key" aria-hidden="true"></i>
+					<span>Role Mainitanace</span>
 				</a>
 			</li>
 	</ul>
@@ -56,7 +62,7 @@
 				</li>
 				<li>
 					<a>
-						<span class="userName">{{result?.fullName}}({{result?.role}})
+						<span class="userName">{{result?.fullName}}<span *ngIf="result?.role =='ADMIN'">({{result?.role}})</span>
 						</span>
 						<i class="fa fa-user pdf" title="Logout" (click)="logout()"></i>
 					</a>

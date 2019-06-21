@@ -40,7 +40,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 		} else {
 			PersonDetailsView personDetails = committeeDao.getPersonDetailsById(committeeVo.getPersonId());
 			membership.setPersonDetails(personDetails);
-			membership.setPersonId(personDetails.getPrncplId());
+			membership.setPersonId(personDetails.getPersonId());
 			membership.setPersonName(personDetails.getFullName());
 		}
 		membership.setMembershipId("0");

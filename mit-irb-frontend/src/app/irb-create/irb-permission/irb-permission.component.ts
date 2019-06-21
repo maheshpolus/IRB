@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { PiElasticService } from '../../common/service/pi-elastic.service';
@@ -9,7 +9,8 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 @Component({
   selector: 'app-irb-permission',
   templateUrl: './irb-permission.component.html',
-  styleUrls: ['./irb-permission.component.css']
+  styleUrls: ['./irb-permission.component.css'],
+  providers: [IrbCreateService]
 })
 export class IrbPermissionComponent implements OnInit, OnDestroy {
 
@@ -19,6 +20,7 @@ export class IrbPermissionComponent implements OnInit, OnDestroy {
   options: any = {};
   elasticPlaceHolder: string;
   showPersonElasticBand = false;
+  isEditMode = false;
   selectedPerson = {};
   protocolRolePerson: any = {};
   protocolId: null;
@@ -28,7 +30,7 @@ export class IrbPermissionComponent implements OnInit, OnDestroy {
   clearField: any = 'true';
   private $subscription1: ISubscription;
 
-  constructor(private _elasticsearchService: PiElasticService, private _sharedDataService: SharedDataService,
+  constructor(private _elasticsearchService: PiElasticService, private _router: Router, private _sharedDataService: SharedDataService,
     private _irbCreateService: IrbCreateService, private _activatedRoute: ActivatedRoute) {
 
     this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
@@ -59,7 +61,8 @@ export class IrbPermissionComponent implements OnInit, OnDestroy {
       this.protocolId = params['protocolId'];
       this.protocolNumber = params['protocolNumber'];
     });
-
+    const createOrViewPath = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
+    this.isEditMode = createOrViewPath === 'irb-create' ? true : false;
     this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
       this.commonVo = commonVo;
     });

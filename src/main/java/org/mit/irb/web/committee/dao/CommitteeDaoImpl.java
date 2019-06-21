@@ -177,7 +177,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(PersonDetailsView.class);
 		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.property("prncplId"), "prncplId");
+		projList.add(Projections.property("personId"), "personId");
 		projList.add(Projections.property("fullName"), "fullName");
 		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(PersonDetailsView.class));
 		criteria.addOrder(Order.asc("fullName"));

@@ -21,7 +21,7 @@
   <!--Assign Admin Section-->
   <div class="modal-header-label padding-15">
     <h4 class="popup-sub-head sub-head-width select-notify-popup">IRB Admin</h4>
-    <div class="display" *ngIf="userDTO.personID != protocoldetails.ASSIGNEE_PERSON_ID">
+    <div class="display" *ngIf="userDTO?.personID != protocoldetails?.ASSIGNEE_PERSON_ID">
       <input type="checkbox" [(ngModel)]="assignCheckbox" (ngModelChange)="assignMeAsAdmin()"/>
       <i> Assign Me as Admin</i>
     </div>

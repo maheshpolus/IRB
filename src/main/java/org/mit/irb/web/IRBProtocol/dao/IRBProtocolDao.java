@@ -1,14 +1,15 @@
 package org.mit.irb.web.IRBProtocol.dao;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
@@ -21,8 +22,6 @@ import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 public interface IRBProtocolDao {
 
@@ -124,4 +123,8 @@ public interface IRBProtocolDao {
 	ResponseEntity<byte[]> downloadProtocolAttachments(String attachmentId);
 
 	ResponseEntity<byte[]> downloadInternalProtocolAttachments(String documentId);
+	
+	void updateProtocolPermission(IRBProtocolPersonRoles protocolRolePerson);
+
+	List<IRBProtocolPersonRoles> loadProtocolPermissionPerson(IRBPermissionVO irbPermissionVO);
 }

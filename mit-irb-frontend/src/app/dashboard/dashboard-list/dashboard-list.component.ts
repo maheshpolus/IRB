@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
@@ -16,6 +17,8 @@ import { PiElasticService } from '../../common/service/pi-elastic.service';
 import { DashboardService } from '../dashboard.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
 import { KeyPressEvent } from '../../common/directives/keyPressEvent.component';
+import { PermissionWarningModalComponent } from '../../common/permission-warning-modal/permission-warning-modal.component';
+
 
 declare var $: any;
 @Component({
@@ -92,6 +95,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     IsElasticResultPI = false;
     IsElasticResultFS = false;
     protocol: string;
+    protocolId: string;
     protocolType: string;
     title: string;
     leadUnit: string;
@@ -121,6 +125,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         private _router: Router,
         private _sharedDataService: SharedDataService,
         public keyPressEvent: KeyPressEvent,
+        private modalService: NgbModal,
         private _spinner: NgxSpinnerService) {
         this.options.url = this._elasticsearchService.URL_FOR_ELASTIC;
         this.options.index = this._elasticsearchService.IRB_INDEX;
@@ -504,6 +509,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.expiry_date = result.obj.expiration_date;
         this.title = result.obj.title;
         this.status = result.obj.status;
+        this.protocolId = result.obj.document_id;
         this.elasticResultTab = true;
         this.searchTextModel = '';
     }
@@ -559,15 +565,18 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
      * @param protocolNumber -unique identifier of a protocol
      */
     openIrb(protocolNumber) {
-        const reqstobj = {'protocolNumber': protocolNumber, 'personId': this.userDTO.personID};
-        this._dashboardService.checkingPersonsRightToViewProtocol(reqstobj).subscribe(data => {
-            const response: any = data;
-            if (response.userHasRightToViewProtocol === 1) {
-                this._router.navigate(['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } });
-            } else {
-                document.getElementById('openWarningModalButton').click();
-            }
-        });
+        const requestObject = {
+            acType: 'V', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: this.protocolId
+        };
+        this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
+        const hasPermission = data.successCode;
+        if (hasPermission) {
+            this._router.navigate(['/irb/irb-view/irbOverview'], { queryParams: { protocolNumber: protocolNumber } });
+      } else {
+        const alertMessage = 'You donot have permission to View this protocol';
+        this.openPermissionWarningModal(alertMessage);
+      }
+      });
     }
 
     /**fetch protocolTypes to show in dropdown*/
@@ -853,5 +862,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
          this.requestObject.exemptFormfacultySponsorName = result.obj.full_name;
          this.IsElasticResultFS = false;
      }
+
+     openPermissionWarningModal(alertMessage) {
+         const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
+         modalRef.componentInstance.alertMessage = alertMessage;
+       }
 }
 

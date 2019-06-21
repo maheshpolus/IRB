@@ -51,7 +51,7 @@ public class IRBProtocolInitLoadDaoImpl implements IRBProtocolInitLoadDao{
 	@Override
 	public IRBProtocolVO loadAttachmentType() {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachementTypes");
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachementTypes where subCategoryCode ='1' ");
 		irbProtocolVO.setIrbAttachementTypes(query.list());
 		return irbProtocolVO;
 	}
@@ -101,6 +101,14 @@ public class IRBProtocolInitLoadDaoImpl implements IRBProtocolInitLoadDao{
 			e.printStackTrace();
 			logger.info("SQLException in loadCommitteeScheduleList:" + e);
 		}
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBProtocolVO loadCollaboratorAttachmentType() {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		Query query = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery("from IRBAttachementTypes where subCategoryCode ='2' ");
+		irbProtocolVO.setIrbAttachementTypes(query.list());
 		return irbProtocolVO;
 	}
 }

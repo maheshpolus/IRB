@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorPersons;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
@@ -267,6 +270,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			irbProtocolVO.setProtocolSubject(protocolSubject);
 			irbProtocolVO.setProtocolCollaborator(protocolCollaborator);
 			irbProtocolVO.setProtocolAdminContact(protocolAdminContact);
+			if(irbProtocolVO.getProtocolId() == null){
+				irbProtocolVO.getGeneralInfo().setIrbProtocolPersonRoles(new IRBProtocolPersonRoles());
+			}
 		} catch (Exception e) {
 			logger.error("Error in modifyProtocolDetails method : "+e.getMessage());
 		}
@@ -440,5 +446,31 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	public ResponseEntity<byte[]>  downloadInternalProtocolAttachments(String documentId) {
 		ResponseEntity<byte[]> attachments = irbProtocolDao.downloadInternalProtocolAttachments(documentId);
 		return attachments;
+	}
+
+	@Override
+	public IRBPermissionVO fetchProtocolPermissionDetails(IRBPermissionVO vo) {
+		try{
+			 Future<IRBPermissionVO> protocolpermission = initLoadService.loadProtocolPersonPermissions(vo);
+			 vo = protocolpermission.get();
+			 List<IRBProtocolPersonRoles> protocolRolePersonList = irbProtocolDao.loadProtocolPermissionPerson(vo);
+			 vo.setProtocolRolePersonList(protocolRolePersonList);
+			 vo.setProtocolRolePerson(new IRBProtocolPersonRoles());
+		}catch (Exception e) {
+			logger.error("Error in fetchProtocolPermissionLookup method : "+e.getMessage());
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBPermissionVO updateProtocolPermission(IRBPermissionVO irbPermissionVO) {
+		try{
+			irbProtocolDao.updateProtocolPermission(irbPermissionVO.getProtocolRolePerson());
+			List<IRBProtocolPersonRoles> protocolRolePersonList = irbProtocolDao.loadProtocolPermissionPerson(irbPermissionVO);
+			irbPermissionVO.setProtocolRolePersonList(protocolRolePersonList);
+		}catch (Exception e) {
+			logger.error("Error in updateProtocolPermission method : "+e.getMessage());
+		}
+		return irbPermissionVO;
 	}
 }

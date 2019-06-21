@@ -15,6 +15,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
@@ -34,6 +35,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubjectTypes;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolUnitType;
 import org.mit.irb.web.IRBProtocol.pojo.RiskLevel;
+import org.mit.irb.web.IRBProtocol.pojo.Role;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
@@ -742,5 +744,32 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 			logger.info("Exception in iterateRiskLevel:" + e);	
 		}
 		return protocolRiskLevel;
+	}
+
+	@Override
+	public IRBProtocolVO loadCollaboratorAttachmentType() {			
+		IRBProtocolVO irbProtocolVO = null;
+		irbProtocolVO = irbProtocolInitLoadDao.loadCollaboratorAttachmentType();
+		return irbProtocolVO;
+	}
+
+	@Async
+	public Future<IRBPermissionVO> loadProtocolPersonPermissions(IRBPermissionVO vo) {
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(Role.class);
+			ProjectionList projList = Projections.projectionList();
+			projList.add(Projections.property("roleId"), "roleId");
+			projList.add(Projections.property("roleName"), "roleName");
+			criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(Role.class));
+			criteria.add(Restrictions.lt("roleId", 3));   // Restrictions.eq("roleId",1)).add(Restrictions.eq("roleId",2));
+			criteria.addOrder(Order.asc("roleId"));
+			List<Role> role = criteria.list();
+			vo.setProtocolRoles(role);
+			session.flush();	
+		} catch (Exception e) {
+			logger.info("Exception in loadProtocolPersonPermissions:" + e);	
+		}
+		return new AsyncResult<>(vo);
 	}
 }

@@ -131,13 +131,8 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 	@Override
 	public IRBPermissionVO checkUserPermission(IRBPermissionVO vo) {
 		try{
-			Boolean hasPermission = null;
-			for(String permission : vo.getPermissions()){
-				hasPermission = irbUtilDao.checkUserPermission(permission,vo.getDepartment(),vo.getUsername());
-				if(hasPermission == true){
-					break;
-				}
-			}
+			Boolean hasPermission = null;			
+			hasPermission = irbUtilDao.checkUserPermission(vo.getProtocolId() ,vo.getDepartment(),vo.getPersonId(),vo.getAcType());						
 			if(!hasPermission){
 				vo.setSuccessCode(hasPermission);
 				vo.setSuccessMessage("User do not have permission");

@@ -162,11 +162,20 @@ public class LoginValidator extends BaseController {
 		} else if (maps.get("IS_IRB_DEPT_ADMIN").equals("Y")) {
 			role = "DEPT_ADMIN";
 			return role;
+		}else if(maps.get("IS_DEPT_VIEWER").equals("Y")){
+				role = "DEPT_VIEWER";
+				return role;
 		} else if (maps.get("IS_IRB_REVIEWER").equals("Y")) {
 			role = "REVIEWER";
 			return role;
 		} else if (maps.get("IS_IRB_PI").equals("Y")) {
 			role = "PI";
+			return role;		
+		}else if(maps.get("IS_AGGREGATOR").equals("Y")){
+			role = "AGGREGATOR";
+			return role;
+		}else if(maps.get("IS_PROTOCOL_VIEWER").equals("Y")){
+			role = "VIEWER";
 			return role;
 		}
 		return role;

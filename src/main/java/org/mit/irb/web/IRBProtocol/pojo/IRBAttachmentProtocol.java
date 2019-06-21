@@ -90,8 +90,12 @@ public class IRBAttachmentProtocol {
 	@Column(name = "ATTACHMENT_VERSION")
 	private Integer attachmentVersion;
 
-	@Column(name = "CATEGORY_CODE")
-	private String categoryCode;
+	@Column(name = "SUB_CATEGORY_CODE")
+	private String subCategoryCode;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ATTACHMENT_PROTO_FK6"), name = "SUB_CATEGORY_CODE", referencedColumnName = "SUB_CATEGORY_CODE", insertable = false, updatable = false)
+	private  IRBAttachmentSubCategory attachmentSubCategory;
 	
 	@Column(name = "FILE_NAME")
 	private String fileName;
@@ -100,7 +104,16 @@ public class IRBAttachmentProtocol {
 	private String mimeType;
 	
 	@Column(name="PROTOCOL_ATTACH_FLAG")
-	private String isProtocolAttachment;
+	private String isProtocolAttachment;	
+	
+	@Column(name="PROTOCOL_LOCATION_ID")
+	private Integer protocolLocationId;
+	
+	@Transient
+	private String attachmentTypeDescription;
+	
+	@Transient
+	private String groupDescription;
 
 	@Transient
 	private String acType;
@@ -115,14 +128,14 @@ public class IRBAttachmentProtocol {
 	}
 
 	public IRBAttachmentProtocol(IRBFileData protocolAttachmentData, String comments, java.util.Date updateTimestamp,
-			String updateUser, Integer attachmentVersion, String categoryCode, String fileName, String mimeType) {
+			String updateUser, Integer attachmentVersion, String subCategoryCode, String fileName, String mimeType) {
 		super();
 		this.protocolAttachmentData = protocolAttachmentData;
 		this.comments = comments;
 		this.updateTimestamp = updateTimestamp;
 		this.updateUser = updateUser;
 		this.attachmentVersion = attachmentVersion;
-		this.categoryCode = categoryCode;
+		this.subCategoryCode = subCategoryCode;
 		this.fileName = fileName;
 		this.mimeType = mimeType;
 	}
@@ -292,15 +305,7 @@ public class IRBAttachmentProtocol {
 	public void setAcType(String acType) {
 		this.acType = acType;
 	}
-
-	public String getCategoryCode() {
-		return categoryCode;
-	}
-
-	public void setCategoryCode(String categoryCode) {
-		this.categoryCode = categoryCode;
-	}
-
+	
 	public Integer getProtocolId() {
 		return protocolId;
 	}
@@ -347,5 +352,45 @@ public class IRBAttachmentProtocol {
 
 	public void setIsProtocolAttachment(String isProtocolAttachment) {
 		this.isProtocolAttachment = isProtocolAttachment;
+	}
+
+	public String getSubCategoryCode() {
+		return subCategoryCode;
+	}
+
+	public void setSubCategoryCode(String subCategoryCode) {
+		this.subCategoryCode = subCategoryCode;
+	}
+
+	public IRBAttachmentSubCategory getAttachmentSubCategory() {
+		return attachmentSubCategory;
+	}
+
+	public void setAttachmentSubCategory(IRBAttachmentSubCategory attachmentSubCategory) {
+		this.attachmentSubCategory = attachmentSubCategory;
+	}
+
+	public Integer getProtocolLocationId() {
+		return protocolLocationId;
+	}
+
+	public void setProtocolLocationId(Integer protocolLocationId) {
+		this.protocolLocationId = protocolLocationId;
+	}
+
+	public String getAttachmentTypeDescription() {
+		return attachmentTypeDescription;
+	}
+
+	public void setAttachmentTypeDescription(String attachmentTypeDescription) {
+		this.attachmentTypeDescription = attachmentTypeDescription;
+	}
+
+	public String getGroupDescription() {
+		return groupDescription;
+	}
+
+	public void setGroupDescription(String groupDescription) {
+		this.groupDescription = groupDescription;
 	}
 }

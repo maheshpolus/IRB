@@ -11,4 +11,6 @@ public interface IRBProtocolInitLoadDao {
 	IRBProtocolVO loadCommitteeList();
 
 	IRBProtocolVO loadCommitteeScheduleList();
+
+	IRBProtocolVO loadCollaboratorAttachmentType();
 }

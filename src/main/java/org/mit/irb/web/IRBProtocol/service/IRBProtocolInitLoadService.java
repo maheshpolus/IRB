@@ -3,6 +3,7 @@ package org.mit.irb.web.IRBProtocol.service;
 import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
@@ -149,4 +150,8 @@ public interface IRBProtocolInitLoadService {
 	public Future<IRBActionsVO> getFDARiskLevelType(IRBActionsVO vo);
 
 	public Future<IRBActionsVO> getPreviousRiskLevel(IRBActionsVO vo);
+
+	public IRBProtocolVO loadCollaboratorAttachmentType();
+
+	public Future<IRBPermissionVO> loadProtocolPersonPermissions(IRBPermissionVO vo);
 }

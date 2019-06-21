@@ -5,16 +5,21 @@ import java.sql.Date;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name="IRB_ATTACHMENT_CATEGORY")
+@Table(name="IRB_ATTACHMENT_SUB_CATEGORY")
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
-public class IRBAttachmentCategory {	
+public class IRBAttachmentSubCategory {	
+	@Id
+	@Column(name="SUB_CATEGORY_CODE")
+	private String subCategoryCode;
+	
 	@Column(name = "CATEGORY_CODE")
 	private String categoryCode;
 	
@@ -57,5 +62,13 @@ public class IRBAttachmentCategory {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public String getSubCategoryCode() {
+		return subCategoryCode;
+	}
+
+	public void setSubCategoryCode(String subCategoryCode) {
+		this.subCategoryCode = subCategoryCode;
 	}
 }

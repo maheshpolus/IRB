@@ -54,6 +54,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		try {
 			result = dBEngine.executeProcedure(inputParam, "GET_IRB_SUMMARY", outputParam);
 			if (result != null && !result.isEmpty()) {
+				if(personRoleType != null)
 				if(personRoleType.equals("PI") || personRoleType.equals("DEPT_ADMIN") || personRoleType.equals("AGGREGATOR") || personRoleType.equals("VIEWER") || personRoleType.equals("DEPT_VIEWER")){
 					getPiSnaspshots(profile, result);
 				}

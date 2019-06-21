@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ROLE_TYPE")
+@Table(name = "IRB_ROLE_TYPE")
 public class RoleType implements Serializable{
 
 	private static final long serialVersionUID = 1L;

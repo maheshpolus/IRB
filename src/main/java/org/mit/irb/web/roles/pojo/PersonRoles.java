@@ -19,7 +19,7 @@ import org.mit.irb.web.committee.view.PersonDetailsView;
 //import com.polus.fibicomp.person.pojo.Person;
 
 @Entity
-@Table(name = "PERSON_ROLES")
+@Table(name = "IRB_PERSON_ROLES_ASSIGN")
 public class PersonRoles implements Serializable{
 
 	
@@ -36,14 +36,14 @@ public class PersonRoles implements Serializable{
 	private String personId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ROLES_FK3"), name = "PERSON_ID", referencedColumnName = "PERSON_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PERSON_ROLES_ASSIGN_FK3"), name = "PERSON_ID", referencedColumnName = "PERSON_ID", insertable = false, updatable = false)
 	private PersonDetailsView person;
 	
 	@Column(name = "ROLE_ID")
 	private Integer roleId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ROLES_FK1"), name = "ROLE_ID", referencedColumnName = "ROLE_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PERSON_ROLES_ASSIGN_FK1"), name = "ROLE_ID", referencedColumnName = "ROLE_ID", insertable = false, updatable = false)
 	private Role role;
 
 	@Column(name = "UNIT_NUMBER")

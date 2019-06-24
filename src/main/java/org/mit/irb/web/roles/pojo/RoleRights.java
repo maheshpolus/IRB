@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "IRB_ROLE_RIGHTS")
+@Table(name = "ROLE_RIGHTS")
 public class RoleRights implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -29,11 +29,11 @@ public class RoleRights implements Serializable {
 	private Integer roleId;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ROLE_RIGHTS_FK1"), name = "ROLE_ID", referencedColumnName = "ROLE_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ROLE_RIGHTS_FK1"), name = "ROLE_ID", referencedColumnName = "ROLE_ID", insertable = false, updatable = false)
 	private Role role;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ROLE_RIGHTS_FK2"), name = "RIGHT_ID", referencedColumnName = "RIGHT_ID", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ROLE_RIGHTS_FK2"), name = "RIGHT_ID", referencedColumnName = "RIGHT_ID", insertable = false, updatable = false)
 	private Rights rights;
 
 	public Integer getRoleRightId() {

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 //import com.polus.fibicomp.grantcall.pojo.GrantCallStatus;
 
 @Entity
-@Table(name = "IRB_ROLE")
+@Table(name = "ROLE")
 public class Role implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
@@ -34,7 +34,7 @@ public class Role implements Serializable  {
 	private String roleTypeCode;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_ROLE_FK1"), name = "ROLE_TYPE_CODE", referencedColumnName = "ROLE_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ROLE_FK1"), name = "ROLE_TYPE_CODE", referencedColumnName = "ROLE_TYPE_CODE", insertable = false, updatable = false)
 	private RoleType roleType;
 
 	public Integer getRoleId() {

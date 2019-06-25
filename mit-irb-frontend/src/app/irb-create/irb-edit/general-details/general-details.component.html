@@ -1,127 +1,175 @@
 <!-- <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner> -->
-<div>
-  <div class="card history-card border-radius-1">
-    <div class="card-header history-header">
-      <nav class="nav navbar-pg3">
-        <h5>General</h5>
-        <i class="fa fa-info-circle" aria-hidden="true"></i>
-      </nav>
-    </div>
-    <div class="card-body card-paddng">
-      <div class="col-12  search-eidted-p padding-15">
-        <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo" [innerHTML]="warningMessage">
-        </div>
-      </div>
-      <div class="col-12  search-eidted-p padding-15">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="form-group ">
-              <label>Type
-                <span class="mandatory">*</span>
-              </label>
-              <select [disabled]="isGeneralInfoEditable == false" class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
-                <option selected value=null>Please Select</option>
-                <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>Anticipated Start Date</label>
-              <div class="input-group  mb-2">
-                <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
-                  (ngModelChange)="validateStartDate()">
-                <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-                <div class="input-group-append input-span-1" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="dt1">
-                  <!-- <span class="input-group-text"> -->
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                  <!-- </span> -->
-                </div>
-              </div>
-              <span *ngIf="invalidData.invalidStartDate" class="error">Start Date should be less than End Date</span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>Anticipated End Date</label>
-              <div class="input-group mb-2">
-                <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
-                  (ngModelChange)="validateEndDate()">
-                <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                <div class="input-group-append input-span-1" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="dt2">
-                  <!-- <span class="input-group-text"> -->
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                  <!-- </span> -->
-                </div>
-              </div>
-              <span *ngIf="invalidData.invalidEndDate" class="error">End Date should be greater than Start Date</span>
-            </div>
-          </div>
-        </div>
-        <div class="row" *ngIf="!isGeneralInfoSaved">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>PI
-                <span class="mandatory">*</span>
-              </label>
-              <input [attr.disabled]="isGeneralInfoEditable == false?' ': null" [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit" type="text"
-                class="form-control input-field-size" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
-                (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'PIDropDown')" />
-              <div class="sb-seachresults top-margin" id ="PIDropDown">
-                <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
-                  <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
-                    <span [innerHTML]="result.label"></span>
-                  </li>
-                </ul>
+<div class=" pushFixedHeaderFooter">
+    <section class="row nav_toggle">
+      <div class="card mt-5">
+
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom txt-large">General
+                <a class="tooltip float-right" href="#"> <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i> 
+                  <span class="tooltiptext-right"> 
+                      This section includes general information about your protocol.
+                      For additional resources, please click on the <i class="fas fa-question-circle"></i> on the top right-hand corner of your screen.
+                  </span>
+                </a>
+            </h4>
+
+            <div class="col-12  search-eidted-p padding-15 txt-medium">
+              <div class="alert alert-danger " *ngIf="invalidData.invalidGeneralInfo" [innerHTML]="warningMessage">
               </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Lead Unit
-                <span class="mandatory">*</span>
-              </label>
-              <!-- <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
-                [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
-                placeholder="Lead unit"></ng2-completer> -->
-                <input [disabled]="isGeneralInfoEditable == false" type="text"  class="form-control input-field-size" placeholder="Search Unit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="getUnitList()" (focus)="isLeadUnitSearch = true" (focusout)="isLeadUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')">
-                <div class="sb-seachresults top-margin research-dropDown-width " id="leadUnitDropDown">
-                  <ul class="sb-results-dropdown-menu" *ngIf="isLeadUnitSearch">
-                    <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" (click)="selectedUnit(result.unitName, result.unitNumber)"><span> {{result.unitNumber}} - {{result.unitName}}</span></li>
-                  </ul>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <span class="txt-medium text-secondary">Title
+                          <span class="mandatory">*</span>
+                        </span>
+                        <textarea [disabled]="isGeneralInfoEditable == false" class="form-control txt-area-fnt txt-small" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
+                        <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                          <p class="txt-small m-0">
+                            <i>Titles should be unique, avoid duplicating titles used in approved protocols.</i></p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                  <div class="row" *ngIf="!isGeneralInfoSaved">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <span class="text-secondary txt-medium">Principal Investigator
+                            <span class="mandatory">*</span>
+                          </span>
+                          <input [attr.disabled]="isGeneralInfoEditable == false?' ': null" [(ngModel)]="ProtocolPI.personName" (input)="clearSelectedPIdata()" [class.poping-border]="isPersonalInfoEdit" type="text"
+                            class="form-control input-field-size txt-small" placeholder="{{personPlaceHolder}}" [formControl]="personSearchText"
+                            (focus)="isElasticResultPerson = true" (focusout)="isElasticResultPerson = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'PIDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'PIDropDown')" />
+                          <div class="sb-seachresults top-margin" id ="PIDropDown">
+                            <ul class="sb-results-dropdown-menu1 search-position-fix-small box-shadow-1" *ngIf="isElasticResultPerson">
+                              <li *ngFor="let result of _results | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)" class="block">
+                                <a [innerHTML]="result.label"></a>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                            <p class="txt-small m-0">
+                              <i>Principal Investigators must have one of the following appointment types: Faculty, Senior Research Scientist, and Principal Research Scientist.</i></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <span class="txt-medium text-secondary">Lead Unit
+                            <span class="mandatory">*</span>
+                          </span>
+                          <!-- <ng2-completer [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="setPiLeadUnit(ProtocolPI.LeadUnitName)"
+                            [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0" class="input-field-size person-unit leadUnit-holder"
+                            placeholder="Lead unit"></ng2-completer> -->
+                            <input [disabled]="isGeneralInfoEditable == false" type="text"  class="form-control input-field-size txt-small" placeholder="Search Unit" [(ngModel)]="ProtocolPI.LeadUnitName" (ngModelChange)="getUnitList()" (focus)="isLeadUnitSearch = true" (focusout)="isLeadUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'leadUnitDropDown')">
+                            <div class="sb-seachresults top-margin research-dropDown-width " id="leadUnitDropDown">
+                              <ul class="sb-results-dropdown-menu1 search-position-fix-small box-shadow-1" *ngIf="isLeadUnitSearch">
+                                <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" class="block"
+                                  (click)="selectedUnit(result.unitName, result.unitNumber)">
+                                  <a> {{result.unitNumber}} - {{result.unitName}}</a>
+                                </li>
+                              </ul>
+                            </div>
+                          <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                            <p class="txt-small m-0">
+                              <i>Indicate which the lead department in which the research will take place.</i></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group ">
+                    <span class="txt-medium text-secondary">Type
+                      <span class="mandatory">*</span> 
+                    </span>
+                    <select [disabled]="isGeneralInfoEditable == false" class="txt-small form-control" id="inlineFormCustomSelect" [(ngModel)]="generalInfo.protocolTypeCode" (ngModelChange)="protocolTypeChange(generalInfo.protocolTypeCode)">
+                      <option selected value=null>Please Select</option>
+                      <option *ngFor="let type of protocolType" value="{{type.protocolTypeCode}}">{{type.description}}</option>
+                    </select>
+                    <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                      <p class="txt-small m-0">
+                        <i>Select a type from the options list.</i></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Anticipated Start Date</span>
+                    <div class="input-group">
+                      <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control txt-small" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolStartDate"
+                        (ngModelChange)="validateStartDate()">
+                      <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                      <div class="input-group-append" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="dt1">
+                        <span class="input-group-text">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                      <p class="txt-small m-0">
+                        <i>Research cannot commence before COUHES approval.</i></p>
+                    </div>
+                    <span *ngIf="invalidData.invalidStartDate" class="error txt-small">Start Date should be less than End Date</span>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Anticipated End Date
+                        
+                    </span>
+
+                    <div class="input-group">
+                      <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control txt-small" [owlDateTime]="dt2" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.protocolEndDate"
+                        (ngModelChange)="validateEndDate()">
+                      <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                      <div class="input-group-append" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="dt2">
+                        <span class="input-group-text">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                      <p class="txt-small m-0">
+                        <i>Indicate the conclusion of all research activities including data collection, analysis and publication.</i></p>
+                    </div>
+                    <span *ngIf="invalidData.invalidEndDate" class="error txt-small">End Date should be greater than Start Date</span>
+                  </div>
+                </div>
+              </div>
+              
+              
+              <div class="row bottom-margin">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Purpose of Study </span>
+                    <span class="sub-label"> ({{remainingLength}} characters left)</span>
+                    <textarea [disabled]="isGeneralInfoEditable == false" rows="5" class="form-control txt-small txt-area-fnt" maxlength="7500" id="purposeOfStudy"
+                      [(ngModel)]="generalInfo.prtocolDescription" (ngModelChange)="remainingChar(generalInfo.prtocolDescription.length)"></textarea>
+                    <div class="row alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                      <p class="txt-small m-0">
+                        <i>Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters.</i></p>
+                    </div>
+                    </div>
+                  
+                </div>
+              </div>
+              <div class="row bottom-margin">
+                <div class="col-md-2">
+                  <button *ngIf="isGeneralInfoEditable" type="button margin-class" class="btn btn-outline-success txt-small" (click)="saveGeneralInfo()">
+                    <span *ngIf="!isGeneralInfoSaved">Proceed</span>
+                    <span *ngIf="isGeneralInfoSaved">Save</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label>Title
-                <span class="mandatory">*</span>
-              </label>
-              <textarea [disabled]="isGeneralInfoEditable == false" class="form-control txt-area-fnt" placeholder="Title" [(ngModel)]="generalInfo.protocolTitle"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="row bottom-margin">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label>Purpose of Study </label>
-              <span class="sub-label"> ({{remainingLength}} characters left)</span>
-              <textarea [disabled]="isGeneralInfoEditable == false" rows="12" class="form-control txt-area-fnt" maxlength="7500" id="purposeOfStudy" placeholder="Please provide a concise statement of the background, nature and reasons for the proposed study. Use non-technical language that can be understood by non-scientist members of COUHES. This section cannot exceed 7500 characters."
-                [(ngModel)]="generalInfo.prtocolDescription" (ngModelChange)="remainingChar(generalInfo.prtocolDescription.length)"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="row bottom-margin">
-          <div class="col-md-2">
-            <button *ngIf="isGeneralInfoEditable" type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">
-              <span *ngIf="!isGeneralInfoSaved">Proceed</span>
-              <span *ngIf="isGeneralInfoSaved">Save</span>
-            </button>
+
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
-</div>
+

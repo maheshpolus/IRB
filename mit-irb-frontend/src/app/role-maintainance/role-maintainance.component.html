@@ -28,9 +28,9 @@
                             (blur)="isUnitSearchActive = false; unitResults = []" (ngModelChange)="fetchUnit(personUnitName)"
                             autocomplete="off" (keyup)="emptyValidationKeyup($event,roleSearchObject,'unitNumber')" class="form-control member_search"
                         />
-                        <a class="searchButton" (click)="personUnitName = null;roleSearchObject.unitNumber = null;">
+                        <!-- <a class="searchButton" (click)="personUnitName = null;roleSearchObject.unitNumber = null;">
                             <i [ngClass]="(personUnitName)? 'fa fa-times fa-med' : 'fa fa-search fa-med'"></i>
-                        </a>
+                        </a> -->
                         <div class="sb-seachresults" *ngIf="isUnitSearchActive">
                             <ul class="sb-results-dropdown-menu text-left">
                                 <li *ngFor="let result of unitResults" (mousedown)="personUnitName = result.unitName;roleSearchObject.unitNumber = result.unitNumber">
@@ -46,12 +46,12 @@
                     <div class="searchBox memberSearchBox">
                         <input [(ngModel)]="personRoleName" (ngModelChange)="findRoles(personRoleName);isPerson = false" (blur)="isSearchRoleActive = false"
                             placeholder="Search for a role with role name " class="form-control member_search ng-pristine ng-valid ng-touched">
-                        <a *ngIf="!personRoleName" class="searchButton">
+                        <!-- <a *ngIf="!personRoleName" class="searchButton">
                             <i class="fa fa-search"></i>
                         </a>
                         <a *ngIf="personRoleName" class="searchButton" (click)="personRoleName = null;isSearchRoleActive = false">
                             <i class="fa fa-close"></i>
-                        </a>
+                        </a> -->
                     </div>
                     <ul class="sb-results-dropdown-menu text-left" *ngIf="isSearchRoleActive">
                         <li *ngFor="let list of tempRoleResultList;" (mousedown)="personRoleName = list.roleName;roleSearchObject.roleId = list.roleId;isSearchRoleActive = false">
@@ -199,9 +199,12 @@
                                         </label>
                                     </span>
                                     <span class="dsp-blk">
-                                        <img *ngIf="list.descentFlag == 'Y' " (click)="setDescentType(list)" class="pointer align" src="assets/images/tree1.png"
+                                        <img *ngIf="list.descentFlag == 'Y' " (click)="setDescentType(list)" class="pointer align" src="/mit-irb/resources/dist/assets/images/tree1.png"
                                             aria-hidden="true">
-                                        <img *ngIf="list.descentFlag == 'N'" (click)="setDescentType(list)" class="pointer" src="assets/images/tree.png" aria-hidden="true">
+                                            <!-- <img *ngIf="list.descentFlag == 'Y' " (click)="setDescentType(list)" class="pointer align" src="assets/images/tree1.png"
+                                            aria-hidden="true"> -->
+                                        <img *ngIf="list.descentFlag == 'N'" (click)="setDescentType(list)" class="pointer" src="/mit-irb/resources/dist/assets/images/tree.png" aria-hidden="true">
+                                        <!-- <img *ngIf="list.descentFlag == 'N'" (click)="setDescentType(list)" class="pointer" src="assets/images/tree.png" aria-hidden="true"> -->
                                     </span>
                                     <span (click)="list.selected = !list.selected" class="dsp-blk label-name">
                                         <div id="visibleOrderId" class="font" draggable="false"> {{list?.roleName}}

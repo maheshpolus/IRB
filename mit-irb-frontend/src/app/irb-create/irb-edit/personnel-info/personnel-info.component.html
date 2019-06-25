@@ -1,531 +1,567 @@
-<div class="top-distance" *ngIf="isGeneralInfoSaved">
-  <div class="card history-card border-radius-1">
-    <div class="card-header history-header">
-      <nav class="nav navbar-pg3">
-        <h5>Protocol Personnel</h5>
-        <i class="fa fa-info-circle" aria-hidden="true"></i>
-      </nav>
-    </div>
-    <div class="card-body card-paddng">
-      <div class="col-12  search-eidted-p padding-15" *ngIf="invalidData.invalidPersonnelInfo">
-        <div class="alert alert-danger " [innerHTML]="warningMessage">
-        </div>
-      </div>
-      <div class="col-12  search-eidted-p" *ngIf="isPersonnelInfoEditable">
-        <div class="row">
-          <!-- <div class="col-md-4">
-            <div class="form-group">
-              <label>Role
-                <span class="mandatory">*</span>
-              </label>
-              <select [disabled] = "personnelInfo.personId === null" [class.poping-border]="isPersonalInfoEdit" [(ngModel)]="personnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId)"
-                class="custom-select mr-sm-2" id="customRoleSelect">
-                <option selected value="null">Please Select</option>
-                <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
-              </select>
-            </div>
-          </div> -->
-          <!-- <div class="col-md-4">
-            <div class="form-group">
-              <label>Title
-                <span class="mandatory">*</span>
-              </label>
-              <input [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.primaryTitle" class="form-control input-field-size"
-                placeholder="Title">
-            </div>
-          </div> -->
-        </div>
+<div class="pushFixedHeaderFooter mt-10" *ngIf="isGeneralInfoSaved">
+    <section class="row nav_toggle">
+      <div class="card mt-5">
 
-        <!-- <div class="col-md-4">
-            <div class="form-group">
-              <label>Email</label>
-              <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
-                placeholder="email-id">
-            </div>
-          </div> -->
-        <div class="row top-dis-15">
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Role
-                <span class="mandatory">*</span>
-              </label>
-              <select [(ngModel)]="personnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId,'ADD')"
-                class="custom-select mr-sm-2" id="customRoleSelect">
-                <option selected value="null">Please Select</option>
-                <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
-              </select>
-              <span *ngIf="invalidData.isPiExists" class="error">PI already exists please choose a different role</span>
-            </div>
-          </div>
-          <!-- <div class="col-md-4">
-            <div class="form-group">
-              <label>Lead unit
-                <span class="mandatory">*</span>
-              </label>
-              <ng2-completer [disabled]="personnelInfo.personId === null" [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit"
-                (ngModelChange)="setPersonLeadUnit(personLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
-                class="input-field-size person-unit" placeholder="Lead unit"></ng2-completer>
-            </div>
-          </div> -->
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Affiliation
-                <span class="mandatory">*</span>
-              </label>
-              <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="personnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
-                <option selected value="null">Please Select</option>
-                <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>Study Role
-                <!-- <span class="mandatory">*</span> -->
-              </label>
-              <input type="text"  class="form-control input-field-size" placeholder="Role Description"
-              [(ngModel)]="personnelInfo.description">
-              <!-- <textarea class="form-control txt-area-fnt" placeholder="Role Description" [(ngModel)]="personnelInfo.description"></textarea> -->
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="form-group">
-              <label>Obtained Consent
-                <!-- <span class="mandatory">*</span> -->
-              </label>
-              <div>
-                <input type="checkbox" class="align-center mt-10 checkbox-lg" [(ngModel)]="isObtainedConsent">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-11">
-            <div class="form-group">
-              <div class="form-check-inline">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="optradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
-                </label>
-              </div>
-              <div class="form-check-inline">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="optradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
-                </label>
-                <span class="mandatory">*</span>
-              </div>
-              <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text" class="form-control input-field-size"
-                placeholder="{{personPlaceHolder}}" [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
-                (focusout)="isElasticResultPerson = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'personSearch')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'personSearch')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'personSearch')"/>
-              <div class="sb-seachresults top-margin" id="personSearch">
-                <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
-                  <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)" (click)="selectedPersonResult(result)">
-                    <span [innerHTML]="result.label"></span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1 add-btn-1">
-            <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button" class="btn btn-success top-butn">
-              <i class="fa fa-plus" aria-hidden="true"></i>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">Protocol Personnel</h4>
 
-            </button>
-            <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
-                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                </button> -->
-          </div>
-        </div>
-        <div class="col-12" *ngIf="showPersonElasticBand">
-          <div class="row">
-            <div class="col-12 band-s">
-              <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
-              <div class="row">
-                <div class="col-12">
-                  <label>Name:</label>
-                  <span>{{selectedPerson?.full_name}} (<span *ngIf="personType != 'non-employee'">{{selectedPerson?.person_id}}</span><span *ngIf="personType == 'non-employee'">{{selectedPerson?.rolodex_id}}</span>)</span>
-                </div>
-                <div class="col-12">
-                  <label>Username:</label>
-                  <span>{{selectedPerson?.user_name}}</span>
-                  <label>Email:</label>
-                  <span>{{selectedPerson?.email_address}}</span>
-                  <label>Phone no:</label>
-                  <span>{{selectedPerson?.phone_number}}</span>
-                  <label>Title:</label>
-                  <span>{{selectedPerson?.title}}</span>
-                </div>
-              </div>
+            <div class="col-12  search-eidted-p padding-15 txt-medium" *ngIf="invalidData.invalidPersonnelInfo">
+              <div class="alert alert-danger " [innerHTML]="warningMessage"></div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="col-12" *ngIf="activePersonExist">
-        <div class="form-group">
-          <label>Active Persons</label>
-          <div class="text-right persons-header">
-              <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
-              <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
-          </div>
-        </div>
-      </div>
-      
-      <!-- <div class="col-12">
-        <div class="form-group">
-          <label>Active Persons</label>
-          </div>
-      </div> -->
-      <div class="col-md-12 users-list-tbl" *ngIf="activePersonExist">
-        <div class="row">
-          <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr" *ngIf="personalDataList?.length > 0">
-              <thead class="tbl-head-clr thead-font-size">
-                  <tr>
-                      <th scope="col">Role</th>
-                      <th scope="col" width="15%">Name</th>
-                      <th scope="col">Qualification</th>
-                      <th scope="col" width="15%">Study Role</th>
-                      <th scope="col">Affiliation</th>
-                      <th scope="col">Obtained Consent</th>
-                      <th scope="col">Training Completed</th>
-                      <th scope="col" width="12%">Action</th>
-                    </tr>
+            <div class="col-12  search-eidted-p" *ngIf="isPersonnelInfoEditable">
+                <div class="row">
+                    <div class="col-md-11">
+                      <div class="form-group">
+                        <div class="form-check-inline">
+                          <span class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="employee"
+                              [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span
+                              class="txt-medium text-secondary">Employee</span>
+                          </span>
+                        </div>
+                        <div class="form-check-inline">
+                          <span class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="non-employee"
+                              [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span
+                              class="txt-medium text-secondary">Non-Employee</span>
+                          </span>
+                          <span class="mandatory">*</span>
+                        </div>
+                        <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text"
+                          class="form-control input-field-size txt-small" placeholder="{{personPlaceHolder}}"
+                          [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
+                          (focusout)="isElasticResultPerson = false"
+                          (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'personSearch')"
+                          (keydown.arrowup)="keyPressEvent.onKeyDown($event,'personSearch')"
+                          (keydown.Enter)="keyPressEvent.onKeyDown($event,'personSearch')" />
+                        <div class="sb-seachresults top-margin" id="personSearch">
+                          <ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isElasticResultPerson">
+                            <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)"
+                              (click)="selectedPersonResult(result)" class="block">
+                              <a [innerHTML]="result.label"></a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 add-btn-1">
+                      <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button"
+                        class="btn top-butn">
+                        <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                      </button>
+                      <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
+                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                          </button> -->
+                    </div>
     
-              </thead>
-              <tbody class="tbody-font-size">
-                  <ng-container *ngFor="let item of personalDataList let i=index">
-                <tr *ngIf="item.isActive == 'Y' || item.isActive == null" [class.poping-border]="i == personalInfoSelectedRow">
-                  <td *ngIf="i != personalInfoSelectedRow">{{item.protocolPersonRoleTypes?.description}}</td>
-                  <td *ngIf="i == personalInfoSelectedRow">
-                    <select [(ngModel)]="editPersonnelInfo.protocolPersonRoleId" (ngModelChange)="setPersonRole(editPersonnelInfo.protocolPersonRoleId,'EDIT')"
-                      class="custom-select mr-sm-2" id="customRoleSelect">
-                      <!-- <option selected value="null">Please Select</option> -->
-                      <option *ngFor="let personRoleType of personRoleTypes" value="{{personRoleType.protocolPersonRoleId}}"  [disabled]="invalidData.isPiExistEdit == true && personRoleType.protocolPersonRoleId == 'PI'">{{personRoleType.description}}</option>
+                  </div>
+                  <div class="col-12" *ngIf="showPersonElasticBand">
+                      <div class="row">
+                        <div class="col-12 card search-card-view mb-2 mt-0 p-3">
+                          <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
+                          <div class="row">
+                            <div class="col-12">
+                              <span class="txt-medium text-secondary">Name:</span>
+                              <span class="txt-medium text-danger">{{selectedPerson?.full_name}} (<span *ngIf="personType != 'non-employee'">{{selectedPerson?.person_id}}</span><span *ngIf="personType == 'non-employee'">{{selectedPerson?.rolodex_id}}</span>)</span>
+                            </div>
+                            <div class="col-12">
+                              <span class="txt-medium text-secondary">Username:</span>
+                              <span class="txt-medium text-danger">{{selectedPerson?.user_name}}</span>
+                              <span class="txt-medium text-secondary">Email:</span>
+                              <span class="txt-medium text-danger">{{selectedPerson?.email_address}}</span>
+                              <span class="txt-medium text-secondary">Phone no:</span>
+                              <span class="txt-medium text-danger">{{selectedPerson?.phone_number}}</span>
+                              <span class="txt-medium text-secondary">Title:</span>
+                              <span class="txt-medium text-danger">{{selectedPerson?.title}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+    
+             
+
+              <!-- <div class="col-md-4">
+              <div class="form-group">
+                <label>Email</label>
+                <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
+                  placeholder="email-id">
+              </div>
+            </div> -->
+
+              <div class="row top-dis-15">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Role
+                      <span class="mandatory">*</span>
+                    </span>
+                    <select [(ngModel)]="personnelInfo.protocolPersonRoleId"
+                      (ngModelChange)="setPersonRole(personnelInfo.protocolPersonRoleId,'ADD')"
+                      class="custom-select mr-sm-2 form-control txt-small" id="customRoleSelect">
+                      <option selected value="null">Please Select</option>
+                      <option *ngFor="let personRoleType of personRoleTypes"
+                        value="{{personRoleType.protocolPersonRoleId}}">{{personRoleType.description}}</option>
                     </select>
-                  </td>
-                  <td  width="15%">
-                    <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item.personName}}</td>
-                  <td>{{item.educationLevel}}</td>
-
-                  <td width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}</td>
-                  <td *ngIf="i == personalInfoSelectedRow">
-                      <input type="text"  class="form-control input-field-size" placeholder="Role Description"
-                      [(ngModel)]="editPersonnelInfo.description">
-                    <!-- <textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea> -->
-                  </td>
-
-                  <td *ngIf="i != personalInfoSelectedRow">{{item.protocolAffiliationTypes?.description}}</td>
-                  <td *ngIf="i == personalInfoSelectedRow">
-                    <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="editPersonnelInfo.affiliationTypeCode" (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
-                      <!-- <option selected value="null">Please Select</option> -->
-                      <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">{{affiliation.description}}</option>
+                    <span *ngIf="invalidData.isPiExists" class="error txt-medium">PI already exists please choose a
+                      different role</span>
+                  </div>
+                </div>
+                <!-- <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Lead unit
+                          <span class="mandatory">*</span>
+                        </label>
+                        <ng2-completer [disabled]="personnelInfo.personId === null" [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit"
+                          (ngModelChange)="setPersonLeadUnit(personLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
+                          class="input-field-size person-unit" placeholder="Lead unit"></ng2-completer>
+                      </div>
+                    </div> -->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Affiliation
+                    </span>
+                    <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect"
+                      [(ngModel)]="personnelInfo.affiliationTypeCode"
+                      (ngModelChange)="setPersonAffiliation(personnelInfo.affiliationTypeCode,'ADD')">
+                      <option selected value="null">Please Select</option>
+                      <option *ngFor="let affiliation of affiliationTypes" value="{{affiliation.affiliationTypeCode}}">
+                        {{affiliation.description}}</option>
                     </select>
-                  </td>
-                  <td class="text-center" *ngIf="i != personalInfoSelectedRow">
-                      <i *ngIf="item.isObtainedConsent == 'Y'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
-                      <i *ngIf="item.isObtainedConsent == 'N'|| item.isObtainedConsent == null" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
-                    </td>
-                  <td *ngIf="i == personalInfoSelectedRow">
-                    <input type="checkbox" [(ngModel)]="isObtainedConsentEdit" class="align-center mt-10">
-                  </td>
-                  <td class="text-center">
-                      <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
-                      <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
-                  </td>
-                  <td class="action-btn-list" width="12%" *ngIf="isPersonnelInfoEditable">
-                    <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit" (click)="editPersonalDetails(item,i)" type="button"
-                      class="btn btn-primary edit-btn-1">
-                      <i class="fa fa-pencil" aria-hidden="true"></i>
-                    </button>
-                    <button *ngIf="isPersonalInfoEdit && i == personalInfoSelectedRow" title="Save" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')"
-                      type="button" class="btn btn-primary edit-btn-1">
-                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                    </button>
-                    <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
-                      <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                    <button title="Delete" (click)="deletePersonalDetails(i)" type="button" class="btn btn-primary delete-btn-1" data-toggle="modal"
-                      data-target="#deletePersonnelInfoDetails">
-                      <i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>
-                  </td>
-                  <td class="action-btn-list" width="10%" *ngIf="!isPersonnelInfoEditable">
-                      <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                      </button>
-                    </td>
-                </tr>
-                </ng-container>
-                <tr *ngIf="personalDataList.length==0">
-                  <td style="text-align: center" colspan="6">No Data</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Study Role
+                      <!-- <span class="mandatory">*</span> -->
+                    </span>
+                    <input type="text" class="form-control txt-small input-field-size" placeholder="Role Description"
+                      [(ngModel)]="personnelInfo.description">
+                    <!-- <textarea class="form-control txt-area-fnt" placeholder="Role Description" [(ngModel)]="personnelInfo.description"></textarea> -->
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <span class="txt-medium text-secondary">Obtaining Consent
+                      <!-- <span class="mandatory">*</span> -->
+                    </span>
+                    <div>
+                      <input type="checkbox" class="form-control txt-small align-center mt-10 checkbox-lg"
+                        [(ngModel)]="isObtainedConsent">
+                    </div>
+                  </div>
+                </div>
+              </div>
 
+              <!-- <div class="row">
+                <div class="col-md-11">
+                  <span class="txt-medium text-secondary">Qualification</span> <br>
+                  <textarea name="" id="" cols="30" rows="3" class="txt-small form-control mb-10"></textarea>
+                </div>
+              </div> -->
 
-
-
-      <div class="col-12" *ngIf="isAmmendment() && inActivePersonExist">
-          <div class="form-group">
-            <label>Inactive Persons</label>
-            <div class="text-right persons-header">
-                <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
-                <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
+              
             </div>
-          </div>
-        </div>
-      <!-- <div class="col-12">
-        <div class="form-group">
-          <label>Inactive Persons</label>
-        </div>
-      </div> -->
-      <div class="col-md-12 users-list-tbl" *ngIf="isAmmendment() && inActivePersonExist">
-        <div class="row">
-          <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr" *ngIf="personalDataList?.length > 0">
-              <thead class="tbl-head-clr thead-font-size">
-                  <tr>
-                      <th scope="col">Role</th>
-                      <th scope="col" width="15%">Name</th>
-                      <th scope="col">Qualification</th>
-                      <th scope="col" width="15%">Study Roles</th>
-                      <th scope="col">Affiliation</th>
-                      <th scope="col">Obtained Consent</th>
-                      <th scope="col">Training Completed</th>
-                      <th scope="col" width="12%">Action</th>
-                    </tr>
-              </thead>
-              <tbody class="tbody-font-size">
-                  <ng-container *ngFor="let item of personalDataList">
-                  <tr *ngIf="item.isActive == 'N'">
-                  <td>{{item.protocolPersonRoleTypes?.description}}</td>
-                  <td  width="15%">
-                    <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item.personName}}
-                  </td>
-                  <td>{{item.educationLevel}}</td>
-                  <td width="15%">{{item.description}}</td>
-                  <td >{{item.protocolAffiliationTypes?.description}}</td>
-                  <td class="text-center">
-                      <i *ngIf="item.isObtainedConsent == 'Y'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
-                      <i *ngIf="item.isObtainedConsent == 'N'|| item.isObtainedConsent == null" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
-                    </td>
-                  <td class="text-center">
-                      <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check" title="Complete" aria-hidden="true"></i>
-                      <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
-                  </td>
-                  <td class="action-btn-list" width="12%">
-                    <button title="View" type="button" class="btn btn-primary view-btn-1" data-toggle="modal" data-target="#personModal" (click)="loadPersonDetailedList(item)">
-                      <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                  </td>
-                </tr>
-                </ng-container>
-                <tr *ngIf="inActivePersonExist == false">
-                  <td style="text-align: center" colspan="6">No Data</td>
-                </tr>
-              </tbody>
-            </table>
+
+            <div class="col-12" *ngIf="activePersonExist">
+              
+              <div class="row alert-sp alert-warning mb-0">
+                <div class="txt-small m-0">
+                  <div>
+                    <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;</i>Employee &nbsp;
+                    <i class="fa fa-user-o" aria-hidden="true">&nbsp;</i>Non Employee
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="col-12">
+              <div class="form-group">
+                <label>Active Persons</label>
+                </div>
+            </div> -->
+
+            <div class="col-md-12 users-list-tbl" *ngIf="activePersonExist">
+              <div class="row">
+                <div class="w-100">
+                  <table class="table tbl-p-clr" *ngIf="personalDataList?.length > 0">
+                    <thead class="tbl-head-clr thead-font-size">
+                      <tr class="solid-bottom">
+                        <th scope="col" class="align-middle">Role</th>
+                        <th scope="col" class="align-middle" width="15%">Name</th>
+                        <!-- <th scope="col" class="align-middle">Qualification</th> -->
+                        <th scope="col" class="align-middle" width="15%">Study Role</th>
+                        <th scope="col" class="align-middle">Affiliation</th>
+                        <th scope="col" class="align-middle">Obtained Consent</th>
+                        <th scope="col" class="align-middle">Training Completed</th>
+                        <th scope="col" class="align-middle" width="12%">Action</th>
+                      </tr>
+
+                    </thead>
+                    <tbody class="tbody-font-size">
+                      <ng-container *ngFor="let item of personalDataList let i=index">
+                        <tr class="pull-up solid-bottom" *ngIf="item.isActive == 'Y' || item.isActive == null"
+                          [class.poping-border]="i == personalInfoSelectedRow">
+                          <td class="align-middle" *ngIf="i != personalInfoSelectedRow">
+                            {{item.protocolPersonRoleTypes?.description}}</td>
+                          <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
+                            <select [(ngModel)]="editPersonnelInfo.protocolPersonRoleId"
+                              (ngModelChange)="setPersonRole(editPersonnelInfo.protocolPersonRoleId,'EDIT')"
+                              class="custom-select mr-sm-2 form-control txt-small" id="customRoleSelect">
+                              <!-- <option selected value="null">Please Select</option> -->
+                              <option *ngFor="let personRoleType of personRoleTypes"
+                                value="{{personRoleType.protocolPersonRoleId}}"
+                                [disabled]="invalidData.isPiExistEdit == true && personRoleType.protocolPersonRoleId == 'PI'">
+                                {{personRoleType.description}}</option>
+                            </select>
+                          </td>
+                          <td class="align-middle" width="15%">
+                            <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'"
+                              aria-hidden="true"></i> {{item.personName}}</td>
+                          <!-- <td class="align-middle">{{item.educationLevel}}</td> -->
+
+                          <td class="align-middle" width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}
+                          </td>
+                          <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
+                            <input type="text" class="form-control input-field-size txt-small" placeholder="Role Description"
+                              [(ngModel)]="editPersonnelInfo.description">
+                            <!-- <textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea> -->
+                          </td>
+
+                          <td class="align-middle" *ngIf="i != personalInfoSelectedRow">
+                            {{item.protocolAffiliationTypes?.description}}</td>
+                          <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
+                            <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect"
+                              [(ngModel)]="editPersonnelInfo.affiliationTypeCode"
+                              (ngModelChange)="setPersonAffiliation(editPersonnelInfo.affiliationTypeCode,'EDIT')">
+                              <!-- <option selected value="null">Please Select</option> -->
+                              <option *ngFor="let affiliation of affiliationTypes"
+                                value="{{affiliation.affiliationTypeCode}}">
+                                {{affiliation.description}}</option>
+                            </select>
+                          </td>
+                          <td class="text-center align-middle" *ngIf="i != personalInfoSelectedRow">
+                            <i *ngIf="item.isObtainedConsent == 'Y'" class="training-complete-color fa fa-check"
+                              title="Complete" aria-hidden="true"></i>
+                            <i *ngIf="item.isObtainedConsent == 'N'|| item.isObtainedConsent == null"
+                              class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
+                          </td>
+                          <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
+                            <input type="checkbox" [(ngModel)]="isObtainedConsentEdit" class="align-center">
+                          </td>
+                          <td class="text-center align-middle">
+                            <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check"
+                              title="Complete" aria-hidden="true"></i>
+                            <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times"
+                              title="Not Complete" aria-hidden="true"></i>
+                          </td>
+                          <td class="action-btn-list align-middle" width="12%" *ngIf="isPersonnelInfoEditable">
+                            <button *ngIf="!isPersonalInfoEdit || i != personalInfoSelectedRow" title="Edit"
+                              (click)="editPersonalDetails(item,i)" type="button" class="btn mb-2">
+                              <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                            <button *ngIf="isPersonalInfoEdit && i == personalInfoSelectedRow" title="Save"
+                              (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn mb-2">
+                              <i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                            <button title="View" type="button" class="btn mb-2" data-toggle="modal" data-target="#personModal"
+                              (click)="loadPersonDetailedList(item)">
+                              <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                            <button title="Delete" (click)="deletePersonalDetails(i)" type="button" class="btn mb-2"
+                              data-toggle="modal" data-target="#deletePersonnelInfoDetails">
+                              <i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                          <td class="action-btn mb-2-list align-middle" width="10%" *ngIf="!isPersonnelInfoEditable">
+                            <button title="View" type="button" class="btn mb-2" data-toggle="modal" data-target="#personModal"
+                              (click)="loadPersonDetailedList(item)">
+                              <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <tr *ngIf="personalDataList.length==0">
+                        <td style="text-align: center" colspan="6">No Data</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12" *ngIf="isAmmendment() && inActivePersonExist">
+              <div class="form-group">
+                <span class="txt-medium text-secondary">Inactive Persons</span>
+                <div class="text-right persons-header txt-medium">
+                  <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;</i> Employee&nbsp;
+                  <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="col-12">
+                    <div class="form-group">
+                      <label>Inactive Persons</label>
+                    </div>
+                  </div> -->
+            <div class="col-md-12 users-list-tbl" *ngIf="isAmmendment() && inActivePersonExist">
+              <div class="row">
+                <div class="w-100">
+                  <table class="table tbl-p-clr" *ngIf="personalDataList?.length > 0">
+                    <thead class="tbl-head-clr thead-font-size">
+                      <tr class="solid-bottom">
+                        <th scope="col" class="align-middle">Role</th>
+                        <th scope="col" class="align-middle" width="15%">Name</th>
+                        <th scope="col" class="align-middle">Qualification</th>
+                        <th scope="col" class="align-middle" width="15%">Study Roles</th>
+                        <th scope="col" class="align-middle">Affiliation</th>
+                        <th scope="col" class="align-middle">Obtained Consent</th>
+                        <th scope="col" class="align-middle">Training Completed</th>
+                        <th scope="col" class="align-middle" width="12%">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="tbody-font-size">
+                      <ng-container *ngFor="let item of personalDataList">
+                        <tr *ngIf="item.isActive == 'N'" class="solid-bottom pull-up">
+                          <td class="align-middle">{{item.protocolPersonRoleTypes?.description}}</td>
+                          <td class="align-middle" width="15%">
+                            <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'"
+                              aria-hidden="true"></i> {{item.personName}}
+                          </td>
+                          <td class="align-middle">{{item.educationLevel}}</td>
+                          <td class="align-middle" width="15%">{{item.description}}</td>
+                          <td class="align-middle">{{item.protocolAffiliationTypes?.description}}</td>
+                          <td class="align-middle" class="text-center">
+                            <i *ngIf="item.isObtainedConsent == 'Y'" class="training-complete-color fa fa-check"
+                              title="Complete" aria-hidden="true"></i>
+                            <i *ngIf="item.isObtainedConsent == 'N'|| item.isObtainedConsent == null"
+                              class="training-incomplete-color fa fa-times" title="Not Complete" aria-hidden="true"></i>
+                          </td>
+                          <td class="text-center align-middle">
+                            <i *ngIf="item.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check"
+                              title="Complete" aria-hidden="true"></i>
+                            <i *ngIf="item.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times"
+                              title="Not Complete" aria-hidden="true"></i>
+                          </td>
+                          <td class="action-btn-list align-middle" width="12%">
+                            <button title="View" type="button" class="btn" data-toggle="modal" data-target="#personModal"
+                              (click)="loadPersonDetailedList(item)">
+                              <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <tr *ngIf="inActivePersonExist == false">
+                        <td style="text-align: center" colspan="6">No Data</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-    </div>
+    </section>
   </div>
-</div>
-<!-- modal -->
-<div class="modal fade bd-example-modal-lg" id="personModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header popup-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Person Details
-        </h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body modal-popup">
-        <div class="modal-header-label">
-          <h4 class="popup-sub-head">Basic</h4>
+  <!-- modal -->
+  <div class="modal fade bd-example-modal-lg" id="personModal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="modal-title txt-large thick" id="exampleModalLongTitle">Person Details
+          </h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <!-- section1 -->
-        <div class="modal-padding">
+        <div class="modal-body modal-popup ">
+          <div class="modal-header-label dotted-bottom">
+            <h4 class="popup-sub-head txt-medium">Basic</h4>
+          </div>
+          <!-- section1 -->
+          <div class="modal-padding">
+            <div class="row">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Name : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.FULL_NAME}}</span>
+
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for="">Email : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.EMAIL_ADDRESS}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Primary Title : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.PRIMARY_TITLE}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Address : </label> <span
+                  class="txt-medium text-danger">{{irbPersonDetailedList?.ADDRESS_LINE_1}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> City : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.CITY}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Country : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.COUNTRY_CODE}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Office Location : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.OFFICE_LOCATION}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Office Phone Number : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.OFFICE_PHONE }}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Postal Code : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.POSTAL_CODE}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- section2 -->
           <div class="row">
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Name : </label>
-              {{irbPersonDetailedList?.FULL_NAME}}
+            <div class="col-6">
+              <h4 class="popup-sub-head">Training -
+                <span *ngIf="trainingStatus=='COMPLETED'" class="text-danger"> Completed</span>
+                <span *ngIf="trainingStatus=='INCOMPLETE'" class="text-danger"> Not Completed</span>
+              </h4>
             </div>
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for="">Email : </label>
-              {{irbPersonDetailedList?.EMAIL_ADDRESS}}
-            </div>
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Primary Title : </label>
-              {{irbPersonDetailedList?.PRIMARY_TITLE}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Address : </label>{{irbPersonDetailedList?.ADDRESS_LINE_1}}
-            </div>
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> City : </label>
-              {{irbPersonDetailedList?.CITY}}
-            </div>
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Country : </label>
-              {{irbPersonDetailedList?.COUNTRY_CODE}}
+            <div class="col-6">
+              <!-- <a class="pdf a-right attachment-btn-position" *ngIf="userHasRightToEditTraining == 1" data-dismiss="modal" (click)="openTrainingMaintainence(null,'ADD')">
+              <i class="fa fa-plus icon-padding"></i>Add Training
+            </a> -->
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Office Location : </label>
-              {{irbPersonDetailedList?.OFFICE_LOCATION}}
-            </div>
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Office Phone Number : </label>
-              {{irbPersonDetailedList?.OFFICE_PHONE }}
-            </div>
-            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-              <label class="modal-label" for=""> Postal Code : </label>
-              {{irbPersonDetailedList?.POSTAL_CODE}}
-            </div>
-          </div>
-        </div>
-        <!-- section2 -->
-        <div class="row">
-        <div class ="col-6">
-          <h4 class="popup-sub-head">Training -
-            <span *ngIf="trainingStatus=='COMPLETED'"> Completed</span>
-            <span *ngIf="trainingStatus=='INCOMPLETE'"> Not Completed</span>
-          </h4>
-          </div>
-          <div class="col-6">
-                <!-- <a class="pdf a-right attachment-btn-position" *ngIf="userHasRightToEditTraining == 1" data-dismiss="modal" (click)="openTrainingMaintainence(null,'ADD')">
-                  <i class="fa fa-plus icon-padding"></i>Add Training
-                </a> -->
-                </div>
-                </div>
-        <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
-          <div class="popup-div">
-            <table id="trainingTable" class="table table-striped">
-              <thead class="popup-header">
-                <tr>
-                  <th class="table-align-head" scope="col">Description</th>
-                  <!-- <th scope="col">Score</th> -->
-                  <th scope="col">Expiration Date</th>
-                  <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
-                </tr>
-              </thead>
-              <tbody *ngFor="let info of irbPersonDetailedTraining; let l=index">
-                <tr>
-                  <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}
-                  </td>
-                  <!-- <td>{{info.SCORE}}</td> -->
-                  <td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}</td>
-                  <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
-                  <td class="action-btn-list">
+          <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
+            <div class="popup-div">
+              <table id="trainingTable" class="table">
+                <thead class="popup-header">
+                  <tr>
+                    <th class="table-align-head" scope="col">Description</th>
+                    <!-- <th scope="col">Score</th> -->
+                    <th scope="col">Expiration Date</th>
+                    <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
+                  </tr>
+                </thead>
+                <tbody *ngFor="let info of irbPersonDetailedTraining; let l=index" class="txt-medium">
+                  <tr class="solid-bottom">
+                    <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}
+                    </td>
+                    <!-- <td>{{info.SCORE}}</td> -->
+                    <td>
+                      {{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}
+                    </td>
+                    <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
+                    <td class="action-btn-list">
                       <!-- <button *ngIf="userHasRightToEditTraining == 1" (click)="openTrainingMaintainence(info,'EDIT')" data-dismiss="modal" title="Edit" type="button" class="btn btn-primary edit-btn-1" >
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                      </button> -->
-                      <button *ngIf="info?.attachment?.length > 0"  title="Attachments" (click)="showTrainingAttachments(l)" type="button" class="btn btn-primary view-btn-1" >
-                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button> -->
+                      <button *ngIf="info?.attachment?.length > 0" title="Attachments"
+                        (click)="showTrainingAttachments(l)" type="button" class="btn">
+                        <i class="fa fa-paperclip log-user-icon-lite" aria-hidden="true"></i>
                       </button>
-                      <button *ngIf="info?.comments?.length > 0" title="Comments" (click)="showTrainingComments(l)" type="button" class="btn btn-primary delete-btn-1">
-                        <i class="fa fa-comments" aria-hidden="true"></i>
+                      <button *ngIf="info?.comments?.length > 0" title="Comments" (click)="showTrainingComments(l)"
+                        type="button" class="btn">
+                        <i class="fa fa-comments log-user-icon-lite" aria-hidden="true"></i>
                       </button>
-                      
+
                     </td>
                   </tr>
 
 
 
                   <tr>
-										  <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
-											<div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
-											  <table id="trainingTable" class="table table-striped">
-												<tbody>
-												  <tr style="background-color: #f5f3f3!important">
-													<td width="15%" class="label-font">Attachments</td>
-													<td>
-													  <div class="filechipCollaboratorAttachment pdf" *ngIf="trainingAttachments?.length > 0">
-														<span title="download" *ngFor="let attachment of trainingAttachments" (click)="downloadAttachment(attachment)">{{attachment?.FILE_NAME}}<i class="fa fa-download"></i></span>
-													  </div>
-													</td>
-												  </tr>
-												 
-												</tbody>
-											  </table>
-											</div>
-										  </td>
-										</tr>
-										<tr>
-												<td colspan="12" class="hiddenRow padding0" *ngIf="commentIconValue==l">
-														<div style="background-color: #f5f3f3!important" id=comment+{{l}}>
-														  <table id="trainingTable" class="table table-striped">
-															<tbody>
-															  <tr style="background-color: #f5f3f3!important">
-																<td width="15%" class="label-font">Comments</td>
-																<td>
-																  <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
-																  </div> -->
-																  <ul *ngFor="let comment of trainingComments">
-																		<li title="{{comment?.COMMENT_DESCRIPTION}}">{{comment?.COMMENT_DESCRIPTION| slice:0:50}} <span *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50"> ...</span></li>
-																</ul>
-																</td>
-															  </tr>
-															 
-															</tbody>
-														  </table>
-														</div>
-													  </td>
-										  </tr>
+                    <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
+                      <div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
+                        <table id="trainingTable" class="table table-striped">
+                          <tbody>
+                            <tr style="background-color: #f5f3f3!important">
+                              <td width="15%" class="label-font align-middle">Attachments</td>
+                              <td>
+                                <div class=" pdf" *ngIf="trainingAttachments?.length > 0">
+                                  <span title="download" *ngFor="let attachment of trainingAttachments"
+                                    (click)="downloadAttachment(attachment)">{{attachment?.FILE_NAME}}<i
+                                      class="fa fa-download log-user-icon-lite"></i></span>
+                                </div>
+                              </td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="12" class="hiddenRow padding0" *ngIf="commentIconValue==l">
+                      <div style="background-color: #f5f3f3!important" id=comment+{{l}}>
+                        <table id="trainingTable" class="table table-striped">
+                          <tbody>
+                            <tr style="background-color: #f5f3f3!important">
+                              <td width="15%" class="label-font align-middle">Comments</td>
+                              <td>
+                                <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
+                                    </div> -->
+                                <ul *ngFor="let comment of trainingComments">
+                                  <li title="{{comment?.COMMENT_DESCRIPTION}}">
+                                    {{comment?.COMMENT_DESCRIPTION| slice:0:50}} <span
+                                      *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50">
+                                      ...</span></li>
+                                </ul>
+                              </td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
 
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+        <div class="modal-footer"></div>
       </div>
-      <div class="modal-footer"></div>
     </div>
   </div>
-</div>
-<!-- modal-end -->
-<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deletePersonnelInfoDetails" tabindex="-1"
-  role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content modal-text-color">
-      <div class="modal-header popup-header">
-        <h5 class="modal-title modal-text-color">Want to delete?</h5>
+  <!-- modal-end -->
+  <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deletePersonnelInfoDetails" tabindex="-1"
+    role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content modal-text-color">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="thick txt-large text-black mb-0 mt-1">Want to delete?</h5>
 
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>{{alertMessage}}</p>
-      </div>
-      <div class="modal-footer" *ngIf="this.commonVo.personnelInfo.protocolPersonRoleId != 'PI'">
-        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
-        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="savePersonalInfo(null, 'DELETE')" data-dismiss="modal">Yes</button>
-      </div>
-      <div class="modal-footer" *ngIf="this.commonVo.personnelInfo.protocolPersonRoleId == 'PI'">
-          <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">Ok</button>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body dotted-bottom">
+          <p class="txt-medium">{{alertMessage}}</p>
+        </div>
+        <div class="modal-footer p-2" *ngIf="this.commonVo.personnelInfo.protocolPersonRoleId != 'PI'">
+          <button type="button" class="btn btn-outline-danger txt-small" data-dismiss="modal" data-toggle="modal"
+            (click)="showDeletePopup = false">No</button>
+          <button type="button" class="btn btn-outline-success txt-small" (click)="savePersonalInfo(null, 'DELETE')"
+            data-dismiss="modal">Yes</button>
+        </div>
+        <div class="modal-footer p-2" *ngIf="this.commonVo.personnelInfo.protocolPersonRoleId == 'PI'">
+          <button type="button" class="btn btn-outline-success txt-small" data-dismiss="modal" data-toggle="modal"
+            (click)="showDeletePopup = false">Ok</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>

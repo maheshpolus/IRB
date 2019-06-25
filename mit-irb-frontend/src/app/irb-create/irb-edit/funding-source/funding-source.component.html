@@ -1,224 +1,285 @@
-<div class="top-distance" *ngIf="isGeneralInfoSaved">
-  <div class="card history-card border-radius-1">
-    <div class="card-header history-header">
-      <nav class="nav navbar-pg3">
-        <h5>Funding Source</h5>
-        <i class="fa fa-info-circle" aria-hidden="true"></i>
-      </nav>
-    </div>
-    <div class="card-body card-paddng">
-      <div class="col-12  search-eidted-p padding-15">
-        <div class="alert alert-danger " *ngIf="invalidData.invalidFundingInfo">
-          Please fill all mandatory fields marked
-          <strong>*</strong>
-        </div>
-      </div>
-      <div class="col-12 search-eidted-p padding-15" *ngIf="isFundingSourceEditable">
-        <div class="row">
+<!--     -----------  Tinu start here   ----------          -->
 
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>Funding Type
-                <span class="mandatory">*</span>
-              </label>
-              <select [class.poping-border]="isFundingInfoEdit" class="custom-select mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="fundingSource.fundingSourceTypeCode"
-                (ngModelChange)="setFundingSourceType(fundingSource.fundingSourceTypeCode)">
-                <option selected value="null">Please Select</option>
-                <option *ngFor="let fundingSource of protocolFundingSourceTypes" value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}</option>
-              </select>
+
+<!-- -------- tinu starts from here -------------- -->
+<div class="" *ngIf="isGeneralInfoSaved">
+    <div class="row cards-in">
+      <div class="col-12 mb-10">
+        <div class="card mt-5">
+  
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                 aria-labelledby="pills-home-tab">
+              <h4 class="card-hedding dotted-bottom">Funding Source
+              </h4>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>Source
-                <span class="mandatory">*</span>
-              </label>
-              <!-- Sponsor Search Box -->
-              <!-- <ng2-completer *ngIf="sourceType.typeCode == '1'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName" (change)="getSponsorList($event)"
-                (ngModelChange)="selectedSponsor(fundingSource.sourceName)" [datasource]="sponsorList" [minSearchLength]="0" (click)="getCompleteSponsorList()"
-                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
-                <!-- <div class="searchBox"> -->
-                <input type="text" *ngIf="sourceType.typeCode == '1'" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="{{sourceType.placeholder}}" [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getSponsorList()" (focus)="isSponsorFundingSearch = true" (focusout)="isSponsorFundingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'sponsorDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'sponsorDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'sponsorDropDown')">
-                <!-- <a href="#" class="searchButton" (click)="clearsearchBox($event)">
-                    <i [ngClass]="iconClass"></i>
-                    </a> -->
-                  <div class="sb-seachresults top-margin dropdown-width" id = "sponsorDropDown">
-                    <ul class="sb-results-dropdown-menu" *ngIf="isSponsorFundingSearch">
-                      <li *ngFor="let result of sponsorSearchResult" (mousedown)="selectedSponsor(result.sponsorName, result.sponsorCode)" (click)="selectedSponsor(result.sponsorName, result.sponsorCode)"><span [innerHTML]="result.sponsorName"></span></li>
-                    </ul>
+  
+          <div class="card-body card-paddng">
+            <div class="col-12  search-eidted-p">
+              <div class="alert alert-danger txt-medium " *ngIf="invalidData.invalidFundingInfo">
+                Please fill all mandatory fields marked
+                <strong>*</strong>
+              </div>
+            </div>
+            <div class="col-12 search-eidted-p" *ngIf="isFundingSourceEditable">
+              <div class="row">
+  
+                <div class="col-md-4">
+                  <div class="form-group">
+                        <span class="txt-medium txt-dark">Funding Type
+                          <span class="mandatory">*</span>
+                        </span>
+                    <select [class.poping-border]="isFundingInfoEdit" class="txt-small form-control"
+                            id="inlineFormCustomSelect" [(ngModel)]="fundingSource.fundingSourceTypeCode"
+                            (ngModelChange)="setFundingSourceType(fundingSource.fundingSourceTypeCode)">
+                      <option selected value="null">Please Select</option>
+                      <option *ngFor="let fundingSource of protocolFundingSourceTypes"
+                              value="{{fundingSource.fundingSourceTypeCode}}">{{fundingSource.description}}
+                      </option>
+                    </select>
                   </div>
-                  <!-- </div> -->
-
-              <!-- Unit Search Box -->
-              <!-- <ng2-completer *ngIf="sourceType.typeCode == '2'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
-                (ngModelChange)="selectedDepartment(fundingSource.sourceName)" [datasource]="protocolPersonLeadUnits" [minSearchLength]="0"
-                class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
-                <input type="text" *ngIf="sourceType.typeCode == '2'" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="{{sourceType.placeholder}}" [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getUnitList()" (focus)="isUnitSearch = true" (focusout)="isUnitSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'UnitDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'UnitDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'UnitDropDown')">
-														<div class="sb-seachresults top-margin dropdown-width" id="UnitDropDown">
-															<ul class="sb-results-dropdown-menu" *ngIf="isUnitSearch">
-															  <li *ngFor="let result of unitSearchResult" (mousedown)="selectedUnit(result.unitName, result.unitNumber)" (click)="selectedUnit(result.unitName, result.unitNumber)"><span> {{result.unitNumber}} - {{result.unitName}}</span></li>
-															</ul>
-														  </div>
-              <!-- Normal Input Field -->
-              <input *ngIf="sourceType.typeCode != '4' && sourceType.typeCode != '5' && sourceType.typeCode != '6' && sourceType.typeCode != '1' && sourceType.typeCode != '2'"
-                type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size"
-                placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
-              <!-- Award and Proposal Elastic field -->
-              <input *ngIf="sourceType.typeCode == '4' || sourceType.typeCode == '5' || sourceType.typeCode == '6'" placeholder="{{sourceType.placeholder}}"
-                [(ngModel)]="fundingSource.sourceName" [class.poping-border]="isFundingInfoEdit" type="text"
-                class="form-control input-field-size" [formControl]="elasticSearchText" (focus)="isElasticResultPerson = true"
-                (focusout)="isElasticResultPerson = false" />
-              <div class="sb-seachresults top-margin">
-                <ul class="sb-results-dropdown-menu" *ngIf="isElasticResultPerson">
-                  <li *ngFor="let result of _results | async" (mousedown)="selectedFundingSource(result,sourceType.typeCode)">
-                    <span [innerHTML]="result.label"></span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Description</label>
-              <input type="text" [class.poping-border]="isFundingInfoEdit" class="form-control input-field-size" placeholder="Description"
-                [(ngModel)]="fundingSource.description">
-            </div>
-          </div>
-          <div class="col-md-1 add-btn-1">
-            <button title="Add" *ngIf="!isFundingInfoEdit" type="button" class="btn btn-success top-butn" (click)="addFundingDetails('ADD')">
-              <i class="fa fa-plus" aria-hidden="true"></i>
-            </button>
-            <button title="Save" *ngIf="isFundingInfoEdit" type="button" class="btn btn-success top-butn" (click)="addFundingDetails('EDIT')">
-              <i class="fa fa-floppy-o" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 padding-030" *ngIf="showElasticBand" (click)="openKcFromElastic(sponsorDetails)">
-        <div class="row">
-          <div class="col-12 band-s">
-            <div class="col-12 padding0 close-bt" (click)="showElasticBand = false">X</div>
-            <div class="row" *ngIf="sourceType.typeCode =='6'">
-              <div class="col-12">
-                <label>Award#:</label>
-                <span>{{sponsorDetails?.award_number}}</span>
-              </div>
-              <div class="col-12">
-                <div class="row">
-                <div class="col-11">
-                <label>Acct#:</label>
-                <span>{{sponsorDetails?.account_number}}</span>
-                <label>Sponsor:</label>
-                <span>{{sponsorDetails?.sponsor_name}}</span>
-                <label>PI:</label>
-                <span>{{sponsorDetails?.pi_name}}</span>
-                <label>Lead Unit:</label>
-                <span>{{sponsorDetails?.lead_unit_name}}</span>
-              </div>
-              <div class="col-1 action-btn-list">
-                  <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcFromElastic(sponsorDetails)">
-                      <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-              </div>
-              </div>
-              </div>
-              <div class="col-12">
-                <label>Title:</label>
-                <span>{{sponsorDetails?.title}}</span>
-              </div>
-            </div>
-            <div class="row" *ngIf="sourceType.typeCode =='4' || sourceType.typeCode =='5'">
-              <div class="col-12">
-                  <label *ngIf="sourceType.typeCode =='5'">IP#:</label>
-                  <label *ngIf="sourceType.typeCode =='4'">Proposal Number#:</label>
-                <span>{{sponsorDetails?.proposal_number}}</span>
-              </div>
-              <div class="col-12">
-                <div class="row">
-                <div class="col-11">
-                <label>Sponsor:</label>
-                <span *ngIf="sourceType.typeCode =='4'">{{sponsorDetails?.sponsor}}</span>
-                <span *ngIf="sourceType.typeCode !='4'">{{sponsorDetails?.sponsor_name}}</span>
-                <label>PI:</label>
-                <span>{{sponsorDetails?.pi_name}}</span>
-                <label>Lead Unit:</label>
-                <span>{{sponsorDetails?.lead_unit_name}}</span>
                 </div>
-                <div class="col-1 action-btn-list">
-                    <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcFromElastic(sponsorDetails)">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                      </button>
+                <div class="col-md-4">
+                  <div class="form-group">
+                          <span class="txt-medium txt-dark">Source
+                          <span class="mandatory">*</span>
+                          </span>
+                    <!-- Sponsor Search Box -->
+                    <!-- <ng2-completer *ngIf="sourceType.typeCode == '1'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName" (change)="getSponsorList($event)"
+                      (ngModelChange)="selectedSponsor(fundingSource.sourceName)" [datasource]="sponsorList" [minSearchLength]="0" (click)="getCompleteSponsorList()"
+                      class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
+                    <!-- <div class="searchBox"> -->
+                    <input type="text" *ngIf="sourceType.typeCode == '1'" [class.poping-border]="isFundingInfoEdit"
+                           class="txt-small form-control" placeholder="{{sourceType.placeholder}}"
+                           [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getSponsorList()"
+                           (focus)="isSponsorFundingSearch = true" (focusout)="isSponsorFundingSearch = false"
+                           (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'sponsorDropDown')"
+                           (keydown.arrowup)="keyPressEvent.onKeyDown($event,'sponsorDropDown')"
+                           (keydown.Enter)="keyPressEvent.onKeyDown($event,'sponsorDropDown')">
+                    <!-- <a href="#" class="searchButton" (click)="clearsearchBox($event)">
+                        <i [ngClass]="iconClass"></i>
+                        </a> -->
+                    <div class="sb-seachresults top-margin dropdown-width" id="sponsorDropDown">
+                      <ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isSponsorFundingSearch">
+                        <li class="block p-2" *ngFor="let result of sponsorSearchResult"
+                            (mousedown)="selectedSponsor(result.sponsorName, result.sponsorCode)"
+                            (click)="selectedSponsor(result.sponsorName, result.sponsorCode)"><a
+                          [innerHTML]="result.sponsorName"></a></li>
+                      </ul>
+                    </div>
+                    <!-- </div> -->
+  
+                    <!-- Unit Search Box -->
+                    <!-- <ng2-completer *ngIf="sourceType.typeCode == '2'" [class.normal-border]="!isFundingInfoEdit" [(ngModel)]="fundingSource.sourceName"
+                      (ngModelChange)="selectedDepartment(fundingSource.sourceName)" [datasource]="protocolPersonLeadUnits" [minSearchLength]="0"
+                      class="input-field-size person-unit leadUnit-holder" placeholder="{{sourceType.placeholder}}"></ng2-completer> -->
+                    <input type="text" *ngIf="sourceType.typeCode == '2'" [class.poping-border]="isFundingInfoEdit"
+                           class="txt-small form-control" placeholder="{{sourceType.placeholder}}"
+                           [(ngModel)]="fundingSource.sourceName" (ngModelChange)="getUnitList()"
+                           (focus)="isUnitSearch = true" (focusout)="isUnitSearch = false"
+                           (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'UnitDropDown')"
+                           (keydown.arrowup)="keyPressEvent.onKeyDown($event,'UnitDropDown')"
+                           (keydown.Enter)="keyPressEvent.onKeyDown($event,'UnitDropDown')">
+                    <div class="sb-seachresults top-margin dropdown-width" id="UnitDropDown">
+                      <ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isUnitSearch">
+                        <li class="block p-2" *ngFor="let result of unitSearchResult"
+                            (mousedown)="selectedUnit(result.unitName, result.unitNumber)"
+                            (click)="selectedUnit(result.unitName, result.unitNumber)"><a> {{result.unitNumber}} -
+                          {{result.unitName}}</a></li>
+                      </ul>
+                    </div>
+                    <!-- Normal Input Field -->
+                    <input
+                      *ngIf="sourceType.typeCode != '4' && sourceType.typeCode != '5' && sourceType.typeCode != '6' && sourceType.typeCode != '1' && sourceType.typeCode != '2'"
+                      type="text" placeholder="{{sourceType.placeholder}}" [class.poping-border]="isFundingInfoEdit"
+                      class="txt-small form-control"
+                      placeholder="Source" [(ngModel)]="fundingSource.fundingSource">
+                    <!-- Award and Proposal Elastic field -->
+                    <input *ngIf="sourceType.typeCode == '4' || sourceType.typeCode == '5' || sourceType.typeCode == '6'"
+                           placeholder="{{sourceType.placeholder}}"
+                           [(ngModel)]="fundingSource.sourceName" [class.poping-border]="isFundingInfoEdit" type="text"
+                           class="txt-small form-control" [formControl]="elasticSearchText"
+                           (focus)="isElasticResultPerson = true"
+                           (focusout)="isElasticResultPerson = false"/>
+                    <div class="sb-seachresults top-margin">
+                      <ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isElasticResultPerson">
+                        <li class="block p-2" *ngFor="let result of _results | async"
+                            (mousedown)="selectedFundingSource(result,sourceType.typeCode)">
+                          <a [innerHTML]="result.label"></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <span class="txt-medium txt-dark">Description</span>
+                    <input type="text" [class.poping-border]="isFundingInfoEdit" class="txt-small form-control"
+                           placeholder="Description"
+                           [(ngModel)]="fundingSource.description">
+                  </div>
+                </div>
+                <div class="col-md-1 add-btn-1">
+                  <button title="Add" *ngIf="!isFundingInfoEdit" type="button" class="btn top-butn"
+                          (click)="addFundingDetails('ADD')">
+                    <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                  </button>
+                  <button title="Save" *ngIf="isFundingInfoEdit" type="button" class="btn top-butn"
+                          (click)="addFundingDetails('EDIT')">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                  </button>
                 </div>
               </div>
-              <div class="col-12">
-                <label>Title:</label>
-                <span>{{sponsorDetails?.title}}</span>
+            </div>
+            <div class="col-12 padding-030" *ngIf="showElasticBand" (click)="openKcFromElastic(sponsorDetails)">
+              <div class="row">
+                <div class="col-12 card search-card-view mb-2 mt-0 p-3">
+                  <div class="row" *ngIf="sourceType.typeCode =='6'">
+                    <div class="col-sm-12 col-md-12 col-lg-12 text-right" title="Remove"
+                         (click)="showElasticBand = false">
+                      <i aria-hidden="true" class="fa fa-times-circle btn-close"></i>
+                    </div>
+                    <div class="col-12">
+                      <span class="text-secondary txt-medium">Award#:</span>
+                      <span class="text-danger txt-medium">{{sponsorDetails?.award_number}}</span>
+                    </div>
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-11">
+                          <span class="text-secondary txt-medium">Acct#:</span>
+                          <span class="text-danger txt-medium">{{sponsorDetails?.account_number}}</span>
+                          <span class="text-secondary txt-medium">Sponsor:</span>
+                          <span class="text-danger txt-medium">{{sponsorDetails?.sponsor_name}}</span>
+                          <span class="text-secondary txt-medium">PI:</span>
+                          <span class="text-danger txt-medium">{{sponsorDetails?.pi_name}}</span>
+                          <span class="text-secondary txt-medium">Lead Unit:</span>
+                          <span class="text-danger txt-medium">{{sponsorDetails?.lead_unit_name}}</span>
+                        </div>
+                        <div class="col-1 action-btn-list">
+                          <button title="View" type="button" class="btn mb-3" (click)="openKcFromElastic(sponsorDetails)">
+                            <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <span class="text-secondary txt-medium">Title:</span>
+                      <span class="text-danger txt-medium">{{sponsorDetails?.title}}</span>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="sourceType.typeCode =='4' || sourceType.typeCode =='5'">
+                    <div class="col-12">
+                      <span class="text-secondary txt-medium" *ngIf="sourceType.typeCode =='5'">IP#:</span>
+                      <span class="text-secondary txt-medium" *ngIf="sourceType.typeCode =='4'">Proposal Number#:</span>
+                      <span class="text-danger txt-medium">{{sponsorDetails?.proposal_number}}</span>
+                    </div>
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-11">
+                          <span class="text-secondary txt-medium">Sponsor:</span>
+                          <span class="text-danger txt-medium" *ngIf="sourceType.typeCode =='4'">{{sponsorDetails?.sponsor}}</span>
+                          <span class="text-danger txt-medium" *ngIf="sourceType.typeCode !='4'">{{sponsorDetails?.sponsor_name}}</span>
+                          <span class="text-secondary txt-medium">PI:</span>
+                          <span class="text-danger txt-medium">{{sponsorDetails?.pi_name}}</span>
+                          <span class="text-secondary txt-medium">Lead Unit:</span>
+                          <span class="text-danger txt-medium">{{sponsorDetails?.lead_unit_name}}</span>
+                        </div>
+                        <div class="col-1 action-btn-list">
+                          <button title="View" type="button" class="btn mb-3"
+                                  (click)="openKcFromElastic(sponsorDetails)">
+                            <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <span class="text-secondary txt-medium">Title:</span>
+                      <span class="text-danger txt-medium">{{sponsorDetails?.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 users-list-tbl">
+              <div class="row">
+                <div class="w-100">
+                  <table class="table tbl-p-clr" *ngIf="protocolFundingSourceList?.length > 0">
+                    <thead class="tbl-head-clr thead-font-size">
+                    <tr class="solid-bottom">
+                      <th scope="col">Funding Type</th>
+                      <th scope="col">Source</th>
+                      <th scope="col">Funding Number/Code</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-font-size">
+                    <tr *ngFor="let item of protocolFundingSourceList let j=index"
+                        [class.poping-border]="j == fundingEditIndex" class="pull-up solid-bottom">
+                      <td class="align-middle">{{item.protocolFundingSourceTypes?.description}}</td>
+                      <td class="align-middle">{{item.sourceName}}</td>
+                      <td class="align-middle">{{item.fundingNumber}}</td>
+                      <td title="{{item.title}}" class="align-middle">{{item.title| slice:0:25}}<span
+                        *ngIf="item.title != null && item.title.length > 25"> ...</span></td>
+                      <td title="{{item.description}}" class="align-middle">{{item.description| slice:0:25}}<span
+                        *ngIf="item.description != null && item.description.length > 25"> ...</span></td>
+                      <td class="action-btn-list align-middle">
+                        <button *ngIf="isFundingSourceEditable" title="Edit" type="button"
+                                class="btn mb-3" (click)="editFundingDetails(item,j)">
+                          <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+                        </button>
+                        <button title="View" type="button" class="btn mb-3" (click)="openKcLink(item)">
+                          <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                        </button>
+                        <button *ngIf="isFundingSourceEditable" title="Delete" type="button"
+                                class="btn mb-3" (click)="deleteFundingDetails(j)" data-toggle="modal"
+                                data-target="#deleteFundingSourceDetails">
+                          <i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="col-md-12 users-list-tbl">
-        <div class="row">
-          <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr" *ngIf="protocolFundingSourceList?.length > 0">
-              <thead class="tbl-head-clr thead-font-size">
-                <tr>
-                  <th scope="col">Funding Type</th>
-                  <th scope="col">Source</th>
-                  <th scope="col">Funding Number/Code</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody class="tbody-font-size">
-                <tr *ngFor="let item of protocolFundingSourceList let j=index" [class.poping-border]="j == fundingEditIndex">
-                  <td>{{item.protocolFundingSourceTypes?.description}}</td>
-                  <td>{{item.sourceName}}</td>
-                  <td>{{item.fundingNumber}}</td>
-                  <td title="{{item.title}}">{{item.title| slice:0:25}}<span *ngIf="item.title != null && item.title.length > 25"> ...</span></td>
-                  <td title="{{item.description}}">{{item.description| slice:0:25}}<span *ngIf="item.description != null && item.description.length > 25"> ...</span></td>
-                  <td class="action-btn-list">
-                    <button *ngIf="isFundingSourceEditable" title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="editFundingDetails(item,j)">
-                      <i class="fa fa-pencil" aria-hidden="true"></i>
-                    </button>
-                    <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="openKcLink(item)">
-                      <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                    <button *ngIf="isFundingSourceEditable" title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="deleteFundingDetails(j)" data-toggle="modal" data-target="#deleteFundingSourceDetails">
-                      <i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  
         </div>
       </div>
     </div>
   </div>
-</div>
-<!--delete warning modal-->
-<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteFundingSourceDetails" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content modal-text-color">
-      <div class="modal-header popup-header">
-        <h5 class="modal-title modal-text-color">Want to delete?</h5>
-
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this item?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" data-toggle="modal" (click)="showDeletePopup = false">No</button>
-        <button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveFundingDetails('DELETE');" data-dismiss="modal">Yes</button>
+  
+  
+  <!--     -----------  Tinu ends here    ------------>
+  
+  <!--delete warning modal-->
+  <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeletePopup" id="deleteFundingSourceDetails" tabindex="-1"
+       role="dialog" aria-labelledby="deleteModalTitle"
+       aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content modal-text-color">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="thick txt-large text-black mb-0 mt-1">Want to delete?</h5>
+  
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body txt-medium dotted-bottom">
+          <p>Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer p-2">
+          <button type="button" class="btn btn-outline-danger txt-small" data-dismiss="modal" data-toggle="modal"
+                  (click)="showDeletePopup = false">No
+          </button>
+          <button type="button" class="btn btn-outline-success txt-small" (click)="saveFundingDetails('DELETE');"
+                  data-dismiss="modal">Yes
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  

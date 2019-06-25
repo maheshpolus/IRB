@@ -1,181 +1,323 @@
-<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading...">
+</ngx-spinner>
 <div class="headerPush">
 </div>
 <!-- <div class="row">
-	<div class="col-10"></div>
-	<div class="col-2 offset-md-4 exit-button">
+	  <div class="col-10"></div>
+	  <div class="col-2 offset-md-4 exit-button">
 		<button type="button" class="btn btn-warning" (click)="backClick($event)" title="Close">
-			<i class="fa fa-times">&nbsp;</i>Exit</button>
-	</div>
-</div> -->
-<div class="container-fluid position-relative" *ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
-	<div class="exit-button" (click)="backClick($event)" title="Close">
+		  <i class="fa fa-times">&nbsp;</i>Exit</button>
+	  </div>
+	</div> -->
+
+
+
+<!-- <div class="container-fluid position-relative" *ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
+	  <div class="exit-button" (click)="backClick($event)" title="Close">
 		<i class="fa fa-times mg-6">&nbsp;</i>
-	</div>
-	<section class="row sect-padding">
-		<div class="col-12 top-aprv-details">
-			<div class="row">
-				<div class="col-12 apprve-date">
-					<div class="row">
-						<div class="col-md-5 col-sm-6 col-12">
-							<h4>
-								IRB # :
-								<span>{{irbHeaderDetails?.PROTOCOL_NUMBER}}
-									<span class="btn btn-primary tab_btn btnactive" *ngIf="requestObject.protocolNumber.includes('R')">Renewal</span>
-									<span class="btn btn-primary tab_btn btnactive" *ngIf="requestObject.protocolNumber.includes('A')">Amendment</span>
-								</span>
-							</h4>
-							<p>
-								Expiration Date :
-								<span>{{irbHeaderDetails?.EXPIRATION_DATE | date: 'MM/dd/yyyy'}}</span>
-								<br /> Title :
-								<span>{{irbHeaderDetails?.TITLE}} </span><br /> Risk Level :
-								<span>{{irbHeaderDetails?.RISK_LEVEL}} </span>
-							</p>
-						</div>
-						<div class="col-md-4 col-sm-6 col-12">
-							<p>
-								Protocol Type :
-								<span>{{irbHeaderDetails?.PROTOCOL_TYPE}}</span>
-								<br /> Submission Status :
-								<span>{{irbHeaderDetails?.SUBMISSION_STATUS}}</span>
-								<br /> PI :
-								<span>{{irbHeaderDetails?.PI_NAME}}</span><br /> FDA Risk Level :
-								<span>{{irbHeaderDetails?.FDA_RISK_LEVEL}} </span>
-							</p>
+	  </div> -->
+
+<div class="container-fluid position-relative" *ngIf="irbHeaderDetails!=null && irbHeaderDetails!=undefined">
+
+
+	<section class="row sect-padding-top">
+		<div class="col-12 pad-rl-0">
+
+
+			<!-- ---------------------------------------------------- -->
+			<div class="card mt-5">
+				<div class="card-content">
+					<div class="card-body">
+						<div class="col-sm-12 col-md-12 col-lg-12 text-right" (click)="backClick($event)" title="Close">
+							<i class="fa fa-times-circle btn-close-lite" aria-hidden="true"></i>
 						</div>
 
-						<div class="col-md-3 col-sm-6 col-12">
-							<span class="active-en" [ngClass]="{
-									'active-status': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='200'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '201'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '202'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '901'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '400'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '401'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '203'),
-									'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='309'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='310'),
-									'pending-action': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '103'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='106'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='107'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE=='900'),
-									'revision-required': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='102'||
-													 irbHeaderDetails.PROTOCOL_STATUS_CODE== '104'),
-									'submitted' :   irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
-									'completed-closed': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='103'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '300'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '301'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '304'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '305'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '306'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '307'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '313'),
-								'suspended': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='302'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '308'||
-													irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">{{irbHeaderDetails?.PROTOCOL_STATUS}}</span>
-							<i class="fa fa-exclamation-triangle ml-10" *ngIf="irbHeaderDetails?.IS_NEW_RULE=='N'" title="Follows OLD-RULE" aria-hidden="true"></i>
-							
-							<div style="margin-top: 30px">
-								<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null">
-									COUHES Admin :
-									<span>{{irbHeaderDetails?.ASSIGNEE_PERSON}}</span>
-									<button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '105' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '106'" type="button" class="btn admin-label" (click)="openAssignPopUp('U')">
-										<i class="fa fa-pencil" aria-hidden="true"> Reassign</i>
-									</button>
-								</p>
-								<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null">
-								<button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '105' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '106'" type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
-									<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin</button>
-								</p>
+
+						<div class="row">
+							<div class="col-sm-6 col-md-3  col-lg-9">
+								<div class="row mb-5">
+										<div class="col-sm-6 col-md-3  col-lg-3">
+												<h5 class="txt-dark  txt-large">IRB # : <br><span
+														class="text-danger">{{irbHeaderDetails?.PROTOCOL_NUMBER}}
+																<span class="renewal" *ngIf="requestObject.protocolNumber.includes('R')">Renewal</span>
+																<span class="renewal" *ngIf="requestObject.protocolNumber.includes('A')">Amendment</span>
+															</span>
+												</h5>
+											</div>
+		
+											<div class="col-sm-6 col-md-3  col-lg-4">
+												<h5 class="txt-dark  txt-large">Protocol Type : <br><span
+														class="text-danger">{{irbHeaderDetails?.PROTOCOL_TYPE}}</span> </h5>
+											</div>
+		
+											<div class="col-sm-6 col-md-3  col-lg-2">
+												<h5 class="txt-dark  txt-large">Expiration Date : <br><span
+														class="text-danger">{{irbHeaderDetails?.EXPIRATION_DATE | date: 'MM/dd/yyyy'}}</span>
+												</h5>
+											</div>
+		
+											<div class="col-sm-6 col-md-4  col-lg-3">
+												<h5 class="txt-dark txt-large">PI : <br>
+													<span class="text-danger">{{irbHeaderDetails?.PI_NAME}}</span> </h5>
+											</div>
+
+								</div>
+								<!--end row-->
+
+								<div class="row mb-5">
+
+									<div class="col-sm-6 col-md-3  col-lg-7">
+										<h5 class="txt-dark txt-large">Title :<br>
+											<span class="text-danger">{{irbHeaderDetails?.TITLE}} </span> </h5>
+									</div>
+
+									<div class="col-sm-6 col-md-3 col-lg-5">
+										<h5 class="txt-dark txt-large">Submission Status :<br>
+											<span class="text-danger">{{irbHeaderDetails?.SUBMISSION_STATUS}}</span>
+										</h5>
+									</div>
+
+
+								</div>
+								<div class="row">
+
+									<div class="col-sm-6 col-md-6  col-lg-6">
+										<h5 class="txt-dark txt-large">Risk Level :<br>
+											<span class="text-danger">{{irbHeaderDetails?.RISK_LEVEL}}</span>
+										</h5>
+									</div>
+
+									<div class="col-sm-6 col-md-6  col-lg-6">
+										<h5 class="txt-dark txt-large">FDA Risk Level :<br>
+											<span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LEVEL}}</span>
+										</h5>
+									</div>
+								</div>
 							</div>
+
+							<div class="col-sm-6 col-md-3  col-lg-3">
+
+									<div class="row">
+										<div class="col-sm-6 col-md-3  col-lg-12">
+	
+											<h5 class="txt-dark txt-small">
+												<span class="active-on note green rounded" [ngClass]="{
+						  'active-status': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='200'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '201'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '202'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '901'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '400'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '401'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '203'),
+						  'in-drafts': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='309'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE=='310'),
+						  'pending-action': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='100'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '103'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE=='105'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE=='106'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE=='107'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE=='900'),
+						  'revision-required': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='102'||
+										   irbHeaderDetails.PROTOCOL_STATUS_CODE== '104'),
+						  'submitted' :   irbHeaderDetails.PROTOCOL_STATUS_CODE=='101',
+						  'completed-closed': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='103'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '300'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '301'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '304'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '305'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '306'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '307'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '313'),
+					  'suspended': (irbHeaderDetails.PROTOCOL_STATUS_CODE=='302'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '308'||
+										  irbHeaderDetails.PROTOCOL_STATUS_CODE== '311')}">
+	
+													{{irbHeaderDetails?.PROTOCOL_STATUS}}
+	
+													<!-- </span><i class=" fa fa-info-circle txt-float-r" tabindex="0" placement="left"
+								  ngbPopover="{{PROTOCOL_BASIC_INFO}}" #protocolBasicInfo="ngbPopover"
+								  (document:click)="protocolBasicInfo.close()" (click)="$event.stopPropagation()"
+								  container="body"></i> -->
+	
+												</span>
+	
+												<a class="tooltip float-right" > <i
+														class="fa fa-exclamation-circle text-secondary"
+														aria-hidden="true"></i>
+													<span class="tooltiptext-right">{{PROTOCOL_BASIC_INFO}}</span>
+												</a>
+	
+	
+											</h5>
+	
+	
+	
+										</div>
+									</div>
+	
+									<div class="row">
+	
+										<div class="col-sm-6 col-md-3 col-lg-12">
+												<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null"
+												class="txt-dark txt-large" style="margin-top: 9px;">
+												COUHES Admin :<br>
+												<span class="text-danger">{{irbHeaderDetails?.ASSIGNEE_PERSON}}</span><br>
+
+											</p>
+	
+											
+										</div>
+	
+									</div>
+									<div class="row">
+										<div class="col-sm-6 col-md-3 col-lg-12">
+	
+											<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID != null"
+												class="txt-dark txt-large">
+												<button
+													*ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '105' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '106'"
+													type="button" class="btn btn-blue btn-sm text-right" (click)="openAssignPopUp('U')">
+													<i class="fa fa-pencil" aria-hidden="true"></i>Reassign
+												</button>
+											</p>
+	
+											<p *ngIf="irbHeaderDetails.ASSIGNEE_PERSON_ID == null">
+												<button
+													*ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '100' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '105' && irbHeaderDetails?.PROTOCOL_STATUS_CODE !== '106'"
+													type="button" class="btn btn-blue btn-sm text-right" (click)="openAssignPopUp('I')">
+													<i class="fa fa-plus" aria-hidden="true"></i>Assign IRB Admin
+												</button>
+											</p>
+	
+										</div>
+									</div>
+	
+								</div>
+
+							<!-- now edit hrer-->
+
 						</div>
 
-						<div class="i-icon-top">
+						<div class="row flex-row-reverse">
+								<div class="i-icon-top icon-lite">
+									<span class="collapsed" (click)="toggle()"
+										[ngClass]="isExpanded==true?'fa fa-angle-up arrow-lite':'fa fa-angle-down arrow-lite'"
+										data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+										aria-controls="collapseOne"> </span>
+								</div>
+							</div>
+		
+							<!--end row-->
+							<div id="headingOne" class="">
+		
+								<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+									<div class="row protocol-top-lite apprve-date hr-line">
+		
+										<!-- <hr class="hr-line"> -->
+										<!-- ------------ -->
+										<div class="col-3">
+											<h5 class="txt-dark txt-medium">
+												Last Approval Date :
+												<span class="text-danger">
+													{{(irbHeaderDetails?.LAST_APPROVAL_DATE === ' ' || irbHeaderDetails?.LAST_APPROVAL_DATE === null ) ? ' ':(irbHeaderDetails?.LAST_APPROVAL_DATE	| date: 'MM/dd/yyyy')}}
+												</span>
+											</h5>
+										</div>
+										<div class="col-3">
+											<h5 class="txt-dark txt-medium">
+												Expected Start Date :
+												<span class="text-danger">
+													{{(irbHeaderDetails?.EXPECTED_START_DATE === ' ' || irbHeaderDetails?.EXPECTED_START_DATE === null ) ? ' ':(irbHeaderDetails?.EXPECTED_START_DATE	| date: 'MM/dd/yyyy')}}
+												</span>
+											</h5>
+										</div>
+										<div class="col-3">
+											<h5 class="txt-dark txt-medium">
+												Lead Unit :
+												<span class="text-danger">{{irbHeaderDetails?.UNIT_NAME}}</span>
+											</h5>
+										</div>
+										<div class="col-3">
+											<h5 class="txt-dark txt-medium">
+												Anticipated End Date :
+												<span class="text-danger">
+													{{(irbHeaderDetails?.ANTICICPATED_END_DATE === ' ' || irbHeaderDetails?.ANTICICPATED_END_DATE === null ) ? ' ':(irbHeaderDetails?.ANTICICPATED_END_DATE	| date: 'MM/dd/yyyy')}}
+												</span>
+											</h5>
+										</div>
+									</div>
+									<div class="row  protocol-top-lite apprve-date">
+										<div class="col-12">
+											<h5 class="txt-dark txt-medium">
+												Description :
+												<span class="text-danger">{{irbHeaderDetails.description}}</span>
+											</h5>
+										</div>
+									</div>
+		
+								</div>
+							</div></div>
+					<!-- <div class="i-icon-top"></div> -->
+					
 
-							<span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne"
-							 aria-expanded="false" aria-controls="collapseOne"> </span>
-						</div>
-						<div class="info-icon-header">
-							<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_BASIC_INFO}}" #protocolBasicInfo="ngbPopover"
-							 (document:click)="protocolBasicInfo.close()" (click)="$event.stopPropagation()" container="body"></i>
-						</div>
-					</div>
-				</div>
+				</div> <!-- card body closing -->
 			</div>
-			<div id="headingOne" class="expand-div">
-				<div id="collapseOne" class="collapse" aria-labelledby="headingOne" *ngIf="isExpanded == true">
-					<div class="row protocol-top apprve-date">
-						<hr class="hr-line">
-						<div class="col-6">
-							<p>
-								Last Approval Date :
-								<span>{{(irbHeaderDetails?.LAST_APPROVAL_DATE === ' ' || irbHeaderDetails?.LAST_APPROVAL_DATE === null ) ? ' ':(irbHeaderDetails?.LAST_APPROVAL_DATE
-									| date: 'MM/dd/yyyy')}}</span>
-								<br /> Expected Start Date :
-								<span>{{(irbHeaderDetails?.START_DATE === ' ' || irbHeaderDetails?.START_DATE === null ) ? ' ':(irbHeaderDetails?.START_DATE
-									| date: 'MM/dd/yyyy')}}</span>
-							</p>
-						</div>
-						<div class="col-6">
-							<p>
-								Lead Unit :
-								<span>{{irbHeaderDetails?.UNIT_NAME}}</span>
-								<br /> Anticipated End Date :
-								<span>{{(irbHeaderDetails?.END_DATE === ' ' || irbHeaderDetails?.END_DATE === null ) ? ' ':(irbHeaderDetails?.END_DATE
-									| date: 'MM/dd/yyyy')}}</span>
-							</p>
-						</div>
-					</div>
-					<div class="row  protocol-top apprve-date">
-						<div class="col-12">
-							<p>
-								Purpose of Study :
-								<span>{{irbHeaderDetails?.DESCRIPTION}}</span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
+
 		</div>
-	</section>
+
+		<!-- ---------------------------------------------------- -->
+
+
+
+
+
+
+       
+    </section>
 </div>
+
+
 <div class="container-fluid">
-	<section class="row btn-row-med sect-padding">
-		<button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
-		 (click)="show_current_tab('irb_overView')" routerLinkActive="btnactive">
+	<section class="row btn-row-med-lite sect-padding-lite bg-clr mt-10">
+		
+		<button class="btn btn-primary tab_btn" [routerLink]="['irbOverview']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber}" (click)="show_current_tab('irb_overView')"
+			routerLinkActive="nav-active">
 			<i class="fa fa-home" aria-hidden="true"></i>General
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit">
 			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Additional Forms
 		</button>
 		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
-		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']"  [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
-		 routerLinkActive="btnactive" (click)="show_current_tab('irb_attachments')">
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
+			routerLinkActive="nav-active" (click)="show_current_tab('irb_attachments')">
 			<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
 		</button>
 		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbPermission']" [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}" routerLinkActive="btnactive" (click)="show_current_tab('irbPermission')">
 			 <i class="fa fa-key" aria-hidden="true"></i>Permissions
-			</button>
-		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
-		 routerLinkActive="btnactive" (click)="show_current_tab('irb_history')">
+		</button>
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbHistory']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="nav-active"
+			(click)="show_current_tab('irb_history')">
 			<i class="fa fa-history" aria-hidden="true"></i>History
 		</button>
-
-		<button *ngIf="irbHeaderDetails?.PROTOCOL_STATUS_CODE != 100"  class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
-		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSubmissionDetails')">
+		<button *ngIf="irbHeaderDetails?.PROTOCOL_STATUS_CODE != 100" class="btn btn-primary tab_btn" type="submit"
+			[routerLink]="['irbSubmissionDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
+			routerLinkActive="nav-active" (click)="show_current_tab('irbSubmissionDetails')">
 			<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
 		</button>
-		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']"
-		 [queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irbSummaryDetails')">
-			<i class="fa fa-file-text-o" aria-hidden="true"></i>
-			<span *ngIf="requestObject.protocolNumber.includes('A')">Amendment Summary</span>
-			<span *ngIf="requestObject.protocolNumber.includes('R')">Renewal Summary</span>
-		</button>
-		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbActions']" [queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
-		 routerLinkActive="btnactive" (click)="show_current_tab('irbActions')">
+		<button class="btn btn-primary tab_btn" type="submit" *ngIf="isAmmendmentOrRenewal()"
+		[routerLink]="['irbSummaryDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
+		routerLinkActive="nav-active" (click)="show_current_tab('irbSummaryDetails')">
+		<i class="fa fa-file-text-o" aria-hidden="true"></i>
+		<span *ngIf="requestObject.protocolNumber.includes('A')">Amendment Summary</span>
+		<span *ngIf="requestObject.protocolNumber.includes('R')">Renewal Summary</span>
+	</button>
+
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbActions']"
+			[queryParams]="{protocolNumber :requestObject.protocolNumber, protocolId :irbHeaderDetails?.PROTOCOL_ID}"
+			routerLinkActive="nav-active" (click)="show_current_tab('irbActions')">
 			<i class="fa fa-cog" aria-hidden="true"></i>Actions
 		</button>
 
@@ -184,10 +326,10 @@
 <div>
 	<router-outlet></router-outlet>
 	<!-- <div class="row">
-		<div class="col-10"></div>
-		<div class="col-2 offset-md-4 exit-button">
-			<button type="button" class="btn btn-warning" (click)="backClick($event)" title="Close">
-				<i class="fa fa-times">&nbsp;</i>Exit</button>
-		</div>
-	</div> -->
+  <div class="col-10"></div>
+  <div class="col-2 offset-md-4 exit-button">
+	<button type="button" class="btn btn-warning" (click)="backClick($event)" title="Close">
+	  <i class="fa fa-times">&nbsp;</i>Exit</button>
+  </div>
+  </div> -->
 </div>

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "RIGHTS")
+@Table(name = "IRB_RIGHTS")
 public class Rights implements Serializable {
 
  

@@ -16,7 +16,7 @@
                     <label>Person Name:</label>
                     <div class="searchBox memberSearchBox m-left">
                         <app-elastic [options]="elasticSearchOptions" [placeHolder]="'Search for person with full name, user id, person id'" (selectedResult)="selectUserElasticResult($event)"
-                            [clearField]="clearField">
+                            [clearField]="clearField" (keyup)="emptyValidationKeyup($event,roleSearchObject,'personId')">
                         </app-elastic>
                     </div>
                 </div>
@@ -25,16 +25,16 @@
                     <label>Unit Name:</label>
                     <div class="searchBox memberSearchBox" appKeyboardListener>
                         <input id="role-unit" placeholder="Search here for Unit" [(ngModel)]="personUnitName" (focus)="fetchUnit(personUnitName);isPerson = false; isUnitSearchActive = true;"
-                            (blur)="isUnitSearchActive = false; unitResults = []" (ngModelChange)="fetchUnit(personUnitName)"
-                            autocomplete="off" (keyup)="emptyValidationKeyup($event,roleSearchObject,'unitNumber')" class="form-control member_search"
+                            (blur)="isUnitSearchActive = false; unitResults = []" (ngModelChange)="fetchUnit(personUnitName)" [disabled]="isRoleUnitDisable"
+                            autocomplete="off" (keyup)="emptyValidationKeyup($event,roleSearchObject,'unitNumber')" class="form-control member_search txt-small"
                         />
                         <!-- <a class="searchButton" (click)="personUnitName = null;roleSearchObject.unitNumber = null;">
                             <i [ngClass]="(personUnitName)? 'fa fa-times fa-med' : 'fa fa-search fa-med'"></i>
                         </a> -->
-                        <div class="sb-seachresults" *ngIf="isUnitSearchActive">
-                            <ul class="sb-results-dropdown-menu text-left">
-                                <li *ngFor="let result of unitResults" (mousedown)="personUnitName = result.unitName;roleSearchObject.unitNumber = result.unitNumber">
-                                    <span [innerHTML]="result.unitName"></span>
+                        <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" *ngIf="isUnitSearchActive">
+                            <ul class="sb-results-dropdown-menu1 search-position-fix-large box-shadow-1 p-0">
+                                <li class="block" *ngFor="let result of unitResults" (mousedown)="personUnitName = result.unitName;roleSearchObject.unitNumber = result.unitNumber">
+                                    <a [innerHTML]="result.unitName"></a>
                                 </li>
                             </ul>
                         </div>
@@ -44,12 +44,12 @@
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-2">
                     <label>Role:</label>
                     <div class="searchBox memberSearchBox">
-                        <input [(ngModel)]="personRoleName" (ngModelChange)="findRoles(personRoleName);isPerson = false" (blur)="isSearchRoleActive = false"
-                            placeholder="Search for a role with role name " class="form-control member_search ng-pristine ng-valid ng-touched">
+                        <input [(ngModel)]="personRoleName" (ngModelChange)="findRoles(personRoleName);isPerson = false" (blur)="isSearchRoleActive = false" [disabled]="isRoleUnitDisable"
+                            placeholder="Search for a role with role name " class="form-control member_search ng-pristine ng-valid ng-touched txt-small">
                         <!-- <a *ngIf="!personRoleName" class="searchButton">
                             <i class="fa fa-search"></i>
                         </a>
-                        <a *ngIf="personRoleName" class="searchButton" (click)="personRoleName = null;isSearchRoleActive = false">
+                        <a *ngIf="personRoleName" class="searchButton" (click)="personRoleName = null;isSearchRoleActive = false;roleSearchObject.roleId = null"">
                             <i class="fa fa-close"></i>
                         </a> -->
                     </div>
@@ -62,7 +62,7 @@
 
                 <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-2">
                     <button class="btn btn-primary btn-sm float-right mt-30" id="search-person-role" data-toggle="collapse" aria-expanded="false"
-                        (click)="roleUnitSearch();isRoleList = true;isPerson = false">Search</button>
+                        (click)="roleUnitSearch();isRoleList = true;">Search</button>
                 </div>
             </div>
         </div>

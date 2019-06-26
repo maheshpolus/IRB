@@ -46,15 +46,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-1 add-btn-1">
-                      <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button"
-                        class="btn top-butn">
-                        <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
-                      </button>
-                      <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
-                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                          </button> -->
-                    </div>
 
                   </div>
                   <div class="col-12" *ngIf="showPersonElasticBand">
@@ -157,8 +148,17 @@
               <div class="row">
                 <div class="col-md-11">
                   <span class="txt-medium text-secondary">Qualification</span> <br>
-                  <textarea name="" id="" cols="30" rows="3" class="txt-small form-control mb-10"></textarea>
+                  <textarea [(ngModel)]="personnelInfo.qualification" cols="30" rows="1" class="txt-small form-control mb-10"></textarea>
                 </div>
+                <div class="col-md-1 add-btn-1">
+                    <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button"
+                      class="btn top-butn">
+                      <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                    </button>
+                    <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
+                                          <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                        </button> -->
+                  </div>
               </div>
 
 
@@ -219,7 +219,11 @@
                           <td class="align-middle" width="15%">
                             <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'"
                               aria-hidden="true"></i> {{item.personName}}</td>
-                          <td class="align-middle">{{item.educationLevel}}</td>
+                          <td class="align-middle" *ngIf="i != personalInfoSelectedRow">{{item.qualification}}</td>
+                          <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
+                              <input type="text" class="form-control input-field-size txt-small" placeholder="Qualification"
+                              [(ngModel)]="editPersonnelInfo.qualification">
+                          </td>
 
                           <td class="align-middle" width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}
                           </td>

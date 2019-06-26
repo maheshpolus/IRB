@@ -8,7 +8,7 @@
     </a> -->
     <div id="overlay-elastic" class="overlay-elastic" (click)="hideSearchResults($event)"></div>
     <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" *ngIf = "active" >
-      <ul id="searchList" class="sb-results-dropdown-menu1 search-position-fix-small box-shadow-1"  >
+      <ul id="searchList" class="sb-results-dropdown-menu1 search-position-fix-small box-shadow-1 p-0"  >
         <li class="block" *ngFor="let result of results"
           (mousedown)="emitSelectedObject(result.value)"
           (keydown.enter) = "emitSelectedObject(result.value);"

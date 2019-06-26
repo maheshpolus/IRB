@@ -430,7 +430,6 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.irbAttachmentProtocol.attachmentVersion = 1;
       this.irbAttachmentProtocol.protocolGeneralInfo = this.generalInfo;
       this.irbAttachmentProtocol.statusCode = 2;
-      this.irbAttachmentProtocol.isProtocolAttachment = 'N';
       this.irbAttachmentProtocol.attachementStatus = {
           statusCode: 2,
           description: 'Complete'

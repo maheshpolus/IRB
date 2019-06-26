@@ -44,7 +44,8 @@
           
                       <!--         start           -->
                       <div>
-                        <a *ngIf="isAttachmentEditable && tabSelected=='STUDY'" class="pdf btn" data-toggle="modal"
+                        <a *ngIf="(isAttachmentEditable  && tabSelected == 'STUDY' && (protocolStatusCode == 100 || protocolStatusCode == 104 || protocolStatusCode == 105 || protocolStatusCode == 106
+                        || protocolStatusCode == 304 || protocolStatusCode == 107 || protocolStatusCode == 102 || protocolStatusCode == 103)) || (userDTO.role == 'ADMIN' && tabSelected == 'INTERNAL')" class="pdf btn" data-toggle="modal"
                           data-target="#attachmentModal" (click)="clearAttachmentPopup()"
                           style="float: right;margin-bottom: 10px;">
                           <i class="fa fa-plus-circle text-success"></i>
@@ -93,10 +94,10 @@
                                       aria-hidden="true"></i>
                                   </span>
                                 </th>
-                                <th width="15%" class="pointer" (click)="column = 'updateTimestamp';sortBy()">
+                                <th width="15%" class="pointer" (click)="column = 'updateTimeStamp';sortBy()">
                                   <span class="hvr-icon-down btn-sort txt-dark">
                                     Updated By
-                                    <i class="fa btn-orange hvr-icon" *ngIf="column == 'updateTimestamp'" (click)="sortBy();"
+                                    <i class="fa btn-orange hvr-icon" *ngIf="column == 'updateTimeStamp'" (click)="sortBy();"
                                       [ngClass]="(direction == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
                                       aria-hidden="true"></i>
                                   </span>
@@ -128,25 +129,28 @@
                                   {{attachments?.attachmentType?.description}}</td>
                               <td class="align-middle" width="20%" *ngIf="attachmentEditedRow != i">{{attachments?.description}}</td>
                                 <td width="15%" class="padding-table-content align-middle">{{attachments?.fileName}} </td>
-                                <td width="15%" class="padding-table-content align-middle">{{attachments?.updateUser}} {{(attachments?.updateTimestamp ===' ' || attachments.updateTimestamp
-                                          ===null) ? ' ':(attachments?.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
+                                <td width="15%" class="padding-table-content align-middle">{{attachments?.updateUser}} {{(attachments?.updateTimeStamp ===' ' || attachments.updateTimeStamp
+                                          ===null) ? ' ':(attachments?.updateTimeStamp | date: 'MM/dd/yyyy')}}</td>
                                 <td class="align-middle">
                                   <ul class="actionButtonGroup padding-icons">
           
-                                    <li *ngIf="isAttachmentEditable && attachmentEditedRow != i&& attachments?.attachmentSubCategory?.subCategoryCode == '1'"
+                                    <li *ngIf="isAttachmentEditable && attachmentEditedRow != i && attachments?.attachmentSubCategory?.subCategoryCode == '1' && (protocolStatusCode == 100 || protocolStatusCode == 104 || protocolStatusCode == 105
+                                    || protocolStatusCode == 304 || protocolStatusCode == 107 || protocolStatusCode == 102 || protocolStatusCode == 103) "
                                       (click)="editAttachments(attachments,i,false)" title="Edit Attachment">
                                       <a>
                                         <i class="fa fa-edit icon-color txt-medium log-user-icon-align-lite"></i>
                                       </a>
                                     </li>
-                                    <li *ngIf="isAttachmentEditable && attachmentEditedRow == i&& attachments?.attachmentSubCategory?.subCategoryCode == '1'" (click)="saveEditedattachments()"
+                                    <li *ngIf="isAttachmentEditable && attachmentEditedRow == i && attachments?.attachmentSubCategory?.subCategoryCode == '1' && (protocolStatusCode == 100 || protocolStatusCode == 104 || protocolStatusCode == 105
+                                    || protocolStatusCode == 304 || protocolStatusCode == 107 || protocolStatusCode == 102 || protocolStatusCode == 103) " (click)="saveEditedattachments()"
                                       title="Save Attachment">
                                       <a>
                                         <i class="fa fa fa-floppy-o txt-medium log-user-icon-align-lite"></i>
                                       </a>
                                     </li>
           
-                                    <li *ngIf="isAttachmentEditable && attachments?.attachmentSubCategory?.subCategoryCode == '1'" data-toggle="modal" data-target="#attachmentModal"
+                                    <li *ngIf="isAttachmentEditable  && attachments?.attachmentSubCategory?.subCategoryCode == '1' && (protocolStatusCode == 100 || protocolStatusCode == 104 || protocolStatusCode == 105
+                                    || protocolStatusCode == 304 || protocolStatusCode == 107 || protocolStatusCode == 102 || protocolStatusCode == 103) " data-toggle="modal" data-target="#attachmentModal"
                                       title="Replace Attachment" (click)="replaceAttachment(attachments,i)">
                                       <a>
                                         <i class="fa fa-retweet pointer icon-color txt-medium log-user-icon-align-lite"></i>
@@ -165,7 +169,8 @@
                                                   src="/mit-irb/resources/dist/assets/images/version-icons.png" />
                                       </a>
                                     </li>
-                                    <li *ngIf="isAttachmentEditable && attachments?.attachmentSubCategory?.subCategoryCode == '1'" title="Delete Attachment"
+                                    <li *ngIf="isAttachmentEditable && attachmentEditedRow != i && attachments?.attachmentSubCategory?.subCategoryCode == '1' && (protocolStatusCode == 100 || protocolStatusCode == 104 || protocolStatusCode == 105
+                                    || protocolStatusCode == 304 || protocolStatusCode == 107 || protocolStatusCode == 102 || protocolStatusCode == 103) " title="Delete Attachment"
                                       (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
                                       <a>
                                         <i class="fa fa-trash-o txt-medium log-user-icon-align-lite"></i>
@@ -184,29 +189,36 @@
                       </div>
           
                       <div class="col-12 mt-10" *ngIf="tabSelected=='INTERNAL'">
+                          
                         <div class="w-100" *ngIf="internalProtocolAtachmentList.length > 0">
+                            <h6 class="txt-dark">COUHES Connect Documents</h6>
                           <table class="table ">
-                            <thead class="popup-sub-header">
+                            <thead>
                               <tr class="solid-bottom">
-                                <th class="pointer" (click)="column = 'fileName';sortBy()">File
-                                  <i class="fa btn-orange hvr-icon" *ngIf="column == 'fileName'" (click)="sortBy();"
-                                    [ngClass]="(direction == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'" aria-hidden="true"></i>
-                                </th>
-                                <th class="pointer" (click)="column = 'updateTimeStamp';sortBy()">Updated By
-                                  <i class="fa btn-orange hvr-icon" *ngIf="column == 'updateTimeStamp'" (click)="sortBy();"
-                                    [ngClass]="(direction == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'" aria-hidden="true"></i>
-                                </th>
-                                <th scope="col">Action</th>
+                                <th class="pointer" (click)="columnSystem = 'fileName';sortBySystem()"><span class="hvr-icon-down btn-sort txt-dark">
+                                  File
+                                  <i class="fa btn-orange hvr-icon" *ngIf="columnSystem == 'fileName'" (click)="sortBySystem();"
+                                    [ngClass]="(directionSystem == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'" aria-hidden="true"></i>
+                                  </span>
+                                  </th>
+                                <th class="pointer" (click)="columnSystem = 'updateTimeStamp';sortBySystem()"><span class="hvr-icon-down btn-sort txt-dark">Updated By
+                                  <i class="fa btn-orange hvr-icon" *ngIf="columnSystem == 'updateTimeStamp'" (click)="sortBySystem();"
+                                    [ngClass]="(directionSystem == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'" aria-hidden="true"></i>
+                                  </span>
+                                  </th>
+                                <th scope="col">
+                                    <span class="hvr-icon-down btn-sort txt-dark">Action</span></th>
                               </tr>
                             </thead>
                             <tbody class="tdy-color">
                               <tr class="solid-bottom pull-up"
-                                *ngFor="let attachments of internalProtocolAtachmentList | orderBy: {property: column, direction: direction}; let i = index">
-                                <td class="padding-table-content align-middle">COUHES Connect Document</td>
-                                <td class="padding-table-content align-middle">{{attachments?.updateUser}} {{(attachments?.updateTimeStamp ===' ' || attachments.updateTimeStamp
+                                *ngFor="let attachments of internalProtocolAtachmentList | orderBy: {property: columnSystem, direction: directionSystem}; let i = index">
+                                <td class="padding-table-content align-middle txt-medium">{{attachments?.protocolCorrespondenceType?.description}}</td>
+                                <td class="padding-table-content align-middle txt-medium">{{attachments?.updateUser}} {{(attachments?.updateTimeStamp ===' ' || attachments.updateTimeStamp
                                             ===null) ? ' ':(attachments?.updateTimeStamp | date: 'MM/dd/yyyy')}}</td>
                                 <td class="align-middle">
                                   <ul class="actionButtonGroup padding-icons">
+                                    
           
                                     <li (click)="downloadInternalAttachment(attachments)" title="Download Attachment">
                                       <a>
@@ -220,7 +232,84 @@
                             </tbody>
                           </table>
                         </div>
-                        <div class="col-md-12" *ngIf="internalProtocolAtachmentList?.length == 0">
+
+                        <div class="w-100" *ngIf="irbAttachmentsList.length > 0">
+                          <h6 class="txt-dark">Other Documents</h6>
+                            <table class="table ">
+                              <thead>
+                                <tr class="solid-bottom">
+                                  
+                                    <th class="pointer" width="20%"(click)="columnUser = 'attachmentTypeDescription';sortByUser()">
+                                        <span class="hvr-icon-down btn-sort txt-dark">Type
+                                          <i class="fa btn-orange hvr-icon" *ngIf="columnUser == 'attachmentTypeDescription'" (click)="sortByUser();"
+                                            [ngClass]="(directionUser == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+                                            aria-hidden="true"></i>
+                                        </span>
+                                      </th>
+                                  <th class="pointer" (click)="columnUser = 'fileName';sortByUser()"><span class="hvr-icon-down btn-sort txt-dark">
+                                    File
+                                    <i class="fa btn-orange hvr-icon" *ngIf="columnUser == 'fileName'" (click)="sortByUser();"
+                                      [ngClass]="(directionUser == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'" aria-hidden="true"></i>
+                                    </span>
+                                    </th>
+                                  <th class="pointer" (click)="columnUser = 'updateTimeStamp';sortByUser()"><span class="hvr-icon-down btn-sort txt-dark">Updated By
+                                    <i class="fa btn-orange hvr-icon" *ngIf="columnUser == 'updateTimeStamp'" (click)="sortByUser();"
+                                      [ngClass]="(directionUser == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'" aria-hidden="true"></i>
+                                    </span>
+                                    </th>
+                                  <th scope="col">
+                                      <span class="hvr-icon-down btn-sort txt-dark">Action</span></th>
+                                </tr>
+                              </thead>
+                              <tbody class="tdy-color">
+                                <tr class="solid-bottom pull-up"
+                                  *ngFor="let attachment of irbAttachmentsList | orderBy: {property: columnUser, direction: directionUser}; let i = index"   [class.poping-border]="i == attachmentSelectedRow">
+                                  <td class="align-middle" width="20%" *ngIf="attachmentEditedRow == i"><select
+                                    [class.poping-border]="attachmentEditedRow == i" class="custom-select form-control txt-small mr-sm-2"
+                                    id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode"
+                                    (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
+                                    <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">
+                                      {{attachmentType.description}}</option>
+                                  </select></td>
+                                  <td class="align-middle" width="20%" *ngIf="attachmentEditedRow != i">
+                                      {{attachment?.attachmentType?.description}}</td>
+                                  <td class="padding-table-content align-middle">{{attachment?.fileName}}</td>
+                                  <td class="padding-table-content align-middle">{{attachment?.updateUser}} {{(attachment?.updateTimeStamp ===' ' || attachment.updateTimeStamp
+                                              ===null) ? ' ':(attachment?.updateTimeStamp | date: 'MM/dd/yyyy')}}</td>
+                                  <td class="align-middle">
+                                    <ul class="actionButtonGroup padding-icons">
+                                        <li *ngIf="userDTO.role == 'ADMIN' && attachmentEditedRow != i"
+                                          (click)="editAttachments(attachment,i,false)" title="Edit Attachment">
+                                          <a>
+                                            <i class="fa fa-edit icon-color txt-medium log-user-icon-align-lite"></i>
+                                          </a>
+                                        </li>
+                                        <li *ngIf="userDTO.role == 'ADMIN' && attachmentEditedRow == i" (click)="saveEditedattachments()"
+                                          title="Save Attachment">
+                                          <a>
+                                            <i class="fa fa fa-floppy-o txt-medium log-user-icon-align-lite"></i>
+                                          </a>
+                                        </li>
+              
+                                      <li (click)="downloadAttachment(attachment)" title="Download Attachment">
+                                        <a>
+                                          <i class="fa fa-download icon-color txt-medium log-user-icon-align-lite" aria-hidden="true"></i>
+                                        </a>
+                                      </li>
+
+                                      <li *ngIf="userDTO.role == 'ADMIN'"   (click)="tempSave($event,attachment)" data-toggle="modal" data-target="#deleteAttachment">
+                                      <a>
+                                        <i class="fa fa-trash-o txt-medium log-user-icon-align-lite"></i>
+                                      </a>
+                                    </li>
+                                    </ul>
+                                  </td>
+                                </tr>
+            
+                              </tbody>
+                            </table>
+                          </div>
+                        <div class="col-md-12" *ngIf="internalProtocolAtachmentList?.length == 0 && irbAttachmentsList.length == 0">
                           <p class="noAttachments">No Internal attachments associated with this protocol.</p>
                         </div>
                       </div>
@@ -309,11 +398,15 @@
                               id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode"
                               (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
                               <option value=null selected>Please Select</option>
-                              <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">
+                              <ng-container *ngFor="let attachmentType of attachmentTypes">
+                              <option *ngIf="tabSelected == 'STUDY' && requestObject?.protocolNumber?.includes('R') && (attachmentType?.typeCode == '9' || attachmentType?.typeCode == '24' || attachmentType?.typeCode == '25' || attachmentType?.typeCode == '26')" value="{{attachmentType.typeCode}}">
                                 {{attachmentType.description}}</option>
+                                <option *ngIf="tabSelected != 'STUDY'|| !(requestObject?.protocolNumber?.includes('R'))" value="{{attachmentType.typeCode}}">
+                                    {{attachmentType.description}}</option>
+                                    </ng-container>
                             </select>
                           </div>
-                          <div class="col-8 apprve-date">
+                          <div class="col-8 apprve-date" *ngIf="tabSelected == 'STUDY'">
                               <h6 class="txt-medium text-secondary">*Description</h6>
                             <textarea [class.poping-border]="isAttachmentReplace" rows="1" cols="2"
                               class="txt-small form-control modal-table-padding " placeholder="Description"
@@ -372,18 +465,18 @@
                       </div>
                       <div class="w-100" *ngIf="previousProtocolAttachmentList?.length > 0">
                         <table class="table ">
-                          <thead class="popup-sub-header">
+                          <thead>
                             <tr class="solid-bottom">
-                              <th>File</th>
-                              <th>Updated By</th>
-                              <th scope="col">Action</th>
+                              <th class="txt-dark">File</th>
+                              <th class="txt-dark">Updated By</th>
+                              <th  class="txt-dark" scope="col">Action</th>
                             </tr>
                           </thead>
                           <tbody class="tdy-color">
                             <tr class="solid-bottom pull-up" *ngFor="let attachments of previousProtocolAttachmentList; let i = index">
                               <td class="padding-table-content align-middle">{{attachments?.fileName}} </td>
-                              <td class="padding-table-content align-middle">{{attachments?.updateUser}} {{(attachments?.updateTimestamp ===' ' || attachments.updateTimestamp
-                                            ===null) ? ' ':(attachments?.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
+                              <td class="padding-table-content align-middle">{{attachments?.updateUser}} {{(attachments?.updateTimeStamp ===' ' || attachments.updateTimeStamp
+                                            ===null) ? ' ':(attachments?.updateTimeStamp | date: 'MM/dd/yyyy')}}</td>
                               <td class="align-middle">
                                 <ul class="actionButtonGroup padding-icons">
           

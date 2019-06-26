@@ -155,4 +155,13 @@ getProtocolPermissionDetails(param) {
   loadCollaboratorAttachmentType() {
     return this._http.get('/mit-irb/loadCollaboratorAttachmentType');
   }
+  saveOrUpdateInternalProtocolAttachments(internalAttachments: Object, uploadedFile) {
+    this.formData.delete('files');
+    this.formData.delete('formDataJson');
+    for (let i = 0; i < uploadedFile.length; i++) {
+      this.formData.append('files', uploadedFile[i]);
+    }
+    this.formData.append('formDataJson', JSON.stringify(internalAttachments));
+    return this._http.post('/mit-irb/saveOrUpdateInternalProtocolAttachments', this.formData);
+  }
 }

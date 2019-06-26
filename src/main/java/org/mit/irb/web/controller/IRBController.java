@@ -316,7 +316,7 @@ public class IRBController {
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
 		logger.info("Request for loadIRBProtocolAttachments");
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.loadIRBProtocolAttachments(irbProtocolVO.getProtocolId());
+		protocolVO = irbProtocolService.loadIRBProtocolAttachments(irbProtocolVO.getProtocolId(),irbProtocolVO.getProtocolNumber());
 		return protocolVO;
 	}
 
@@ -514,5 +514,15 @@ public class IRBController {
 	{	
 		vo = irbProtocolService.updateProtocolPermission(vo);
 		return vo;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdateInternalProtocolAttachments", method = RequestMethod.POST)
+	public @ResponseBody IRBProtocolVO saveOrUpdateInternalProtocolAttachments(
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson) {
+		logger.info("Request for saveOrUpdateInternalProtocolAttachments Modification");
+		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		protocolVO = irbProtocolService.saveOrUpdateInternalProtocolAttachments(files, formDataJson);
+		return protocolVO;
 	}
 }

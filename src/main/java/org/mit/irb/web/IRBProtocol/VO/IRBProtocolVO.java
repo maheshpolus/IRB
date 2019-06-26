@@ -85,6 +85,8 @@ public class IRBProtocolVO {
 	private String updateUser;
 	private ProtocolLeadUnits leadUnit;
 	private List<IRBProtocolCorrespondence> internalProtocolAtachmentList;
+	private ArrayList<HashMap<String, Object>> moduleAvailableForAmendment;
+	private List<IRBAttachementTypes> irbInternalAttachementTypes;
 	
 	public List<FDARiskLevel> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
@@ -452,5 +454,21 @@ public class IRBProtocolVO {
 
 	public void setInternalProtocolAtachmentList(List<IRBProtocolCorrespondence> internalProtocolAtachmentList) {
 		this.internalProtocolAtachmentList = internalProtocolAtachmentList;
+	}
+
+	public ArrayList<HashMap<String, Object>> getModuleAvailableForAmendment() {
+		return moduleAvailableForAmendment;
+	}
+
+	public void setModuleAvailableForAmendment(ArrayList<HashMap<String, Object>> moduleAvailableForAmendment) {
+		this.moduleAvailableForAmendment = moduleAvailableForAmendment;
+	}
+
+	public List<IRBAttachementTypes> getIrbInternalAttachementTypes() {
+		return irbInternalAttachementTypes;
+	}
+
+	public void setIrbInternalAttachementTypes(List<IRBAttachementTypes> irbInternalAttachementTypes) {
+		this.irbInternalAttachementTypes = irbInternalAttachementTypes;
 	}
 }

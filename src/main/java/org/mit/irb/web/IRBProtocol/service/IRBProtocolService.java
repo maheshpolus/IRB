@@ -151,9 +151,10 @@ public interface IRBProtocolService {
 	IRBProtocolVO addProtocolAttachments(MultipartFile[] files, String formDataJson);
 
 	/**
+	 * @param protocolNumber 
 	 * @return list of attachments
 	 */
-	IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId);
+	IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId, String protocolNumber);
 
 
 
@@ -297,8 +298,24 @@ public interface IRBProtocolService {
 	ResponseEntity<byte[]> downloadInternalProtocolAttachments(String documentId);
 
 
+	/**
+	 * @param vo
+	 * @return get protocol lvl permissions 
+	 */
 	IRBPermissionVO fetchProtocolPermissionDetails(IRBPermissionVO vo);
 
 
+	/**
+	 * @param vo
+	 * @return 
+	 */
 	IRBPermissionVO updateProtocolPermission(IRBPermissionVO vo);
+
+
+	/**
+	 * @param files
+	 * @param formDataJson
+	 * @return
+	 */
+	IRBProtocolVO saveOrUpdateInternalProtocolAttachments(MultipartFile[] files, String formDataJson);
 }

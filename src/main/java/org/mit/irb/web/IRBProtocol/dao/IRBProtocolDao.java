@@ -9,6 +9,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
@@ -58,7 +59,7 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO loadProtocolDetails(IRBProtocolVO irbProtocolVO);
 
-	IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId);
+	IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId, String protocolNumber);
 
 	IRBProtocolVO saveScienceOfProtocol(IRBProtocolVO irbProtocolVO, ScienceOfProtocol scienceOfProtocol, ProtocolGeneralInfo generalInfo);
 
@@ -127,4 +128,9 @@ public interface IRBProtocolDao {
 	void updateProtocolPermission(IRBProtocolPersonRoles protocolRolePerson);
 
 	List<IRBProtocolPersonRoles> loadProtocolPermissionPerson(IRBPermissionVO irbPermissionVO);
+
+	IRBProtocolVO deleteInternalProtocolAttachment(IRBProtocolCorrespondence internalProtocolAttachment);
+
+	IRBProtocolVO saveOrUpdateInternalProtocolAttachments(MultipartFile[] files,
+			IRBProtocolCorrespondence internalProtocolAttachment);
 }

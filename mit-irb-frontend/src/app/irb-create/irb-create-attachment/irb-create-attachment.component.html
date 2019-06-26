@@ -31,11 +31,11 @@
                         <li class="nav-item">
                           <a class="nav-link txt-small button-red-tab pointer" (click)="loadIrbAttachmentList()"
                             [ngClass]="{active:(tabSelected=='STUDY')}">
-                            <i class="fa fa-book pr-8" aria-hidden="true"></i>Study Attachments</a></li>
+                            <i class="fa fa-book pr-8" aria-hidden="true"></i>Study Attachments <span *ngIf="tabSelected == 'STUDY'">({{irbAttachmentsList?.length}})</span></a></li>
                         <li class="nav-item border-left1">
                           <a class="nav-link txt-small button-red-tab pointer" (click)="getInternalAttachment()"
                             [ngClass]="{active:(tabSelected=='INTERNAL')}">
-                            <i class="fa fa-file-text-o pr-8" aria-hidden="true"></i>Internal Attachments</a></li>
+                            <i class="fa fa-file-text-o pr-8" aria-hidden="true"></i>Internal Attachments <span *ngIf="tabSelected == 'INTERNAL'">({{internalProtocolAtachmentList?.length + irbAttachmentsList?.length}})</span></a></li>
           
           
                       </ul>

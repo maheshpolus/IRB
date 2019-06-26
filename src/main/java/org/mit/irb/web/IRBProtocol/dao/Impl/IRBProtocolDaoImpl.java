@@ -1947,10 +1947,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<IRBAttachmentProtocol> criteria = builder.createQuery(IRBAttachmentProtocol.class);
 			Root<IRBAttachmentProtocol> attachmentRoot=criteria.from(IRBAttachmentProtocol.class);		
-			criteria.multiselect(attachmentRoot.get("protocolAttachmentData"),attachmentRoot.get("comments"),attachmentRoot.get("updateTimestamp")
+			criteria.multiselect(attachmentRoot.get("protocolAttachmentData"),attachmentRoot.get("comments"),attachmentRoot.get("updateTimeStamp")
 					,attachmentRoot.get("updateUser"),attachmentRoot.get("attachmentVersion"),attachmentRoot.get("subCategoryCode"),attachmentRoot.get("fileName"),attachmentRoot.get("mimeType"));
 			criteria.where(builder.equal(attachmentRoot.get("documentId"),documentId));
-			criteria.orderBy(builder.desc(attachmentRoot.get("updateTimestamp")));
+			criteria.orderBy(builder.desc(attachmentRoot.get("updateTimeStamp")));
 			List<IRBAttachmentProtocol> previousProtocolAttachmentList = session.createQuery(criteria).getResultList();		
 			if(previousProtocolAttachmentList != null)
 				previousProtocolAttachmentList.remove(0);

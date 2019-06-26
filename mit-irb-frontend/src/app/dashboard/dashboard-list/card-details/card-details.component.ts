@@ -39,7 +39,7 @@ export class CardDetailsComponent  {
   if (hasPermission) {
      this._router.navigate( ['/irb/irb-create'], {queryParams: {protocolNumber: protocolNumber, protocolId: protocolId}});
 } else {
-  const alertMessage = 'You donot have permission to edit this protocol';
+  const alertMessage = 'You do not have permission to edit this protocol';
   this.openPermissionWarningModal(alertMessage);
 }
 });

@@ -109,7 +109,7 @@
 					<div class="card-body">
 						<div class="media d-flex">
 							<div class="media-body text-left">
-								<h2 class="info txt-orange"><span class="half-size">{{snapshots?.committeNamePrev}}</span>
+								<h2 class="info txt-orange"><span class="txt-large">{{snapshots?.committeNamePrev}}</span>
 									<span class="txt-ash txt-small"></span></h2>
 								<h6 class="txt-large" *ngIf="snapshots.scheduledDatePrev">{{snapshots?.scheduledDatePrev | date: 'MM/dd/yyyy'}} -
 									{{snapshots?.scheduledDayPrev}}</h6>
@@ -128,7 +128,7 @@
 					<div class="card-body">
 						<div class="media d-flex">
 							<div class="media-body text-left">
-								<h2 class="info txt-green"><span class="half-size">{{snapshots?.committeeNameNext}}</span>
+								<h2 class="info txt-orange"><span class="txt-large">{{snapshots?.committeeNameNext}}</span>
 									<span class="txt-ash txt-small"></span></h2>
 								<h6 class="txt-large" *ngIf="snapshots.scheduledDateNext">{{snapshots?.scheduledDateNext | date: 'MM/dd/yyyy'}} -
 									{{snapshots?.scheduledDayNext}}</h6>

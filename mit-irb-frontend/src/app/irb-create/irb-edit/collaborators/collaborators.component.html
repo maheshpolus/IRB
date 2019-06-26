@@ -86,7 +86,7 @@
                       <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
                     </button>
                     <button title="Save" *ngIf="isCollaboratorInfoEdit" (click)="addCollaboratorDetails('EDIT')" type="button" class="btn mt-3">
-                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                      <i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>
                     </button>
                   </div>
                 </div>
@@ -140,7 +140,7 @@
                                     <td></td>
                                     <td class="label-font align-middle">Persons</td>
                                     <td>
-                                      <div class="filechipCollaborator" *ngIf="protocolCollaboratorPersons?.length > 0">
+                                      <div class="engagedInstitute" *ngIf="protocolCollaboratorPersons?.length > 0">
                                         <span *ngFor="let person of protocolCollaboratorPersons">{{person?.personnelInfo?.personName}}</span>
                                       </div>
                                       <div class="label-font" *ngIf="protocolCollaboratorPersons?.length == 0">No persons Added</div>
@@ -150,9 +150,9 @@
                                     <td></td>
                                     <td class="label-font">Approval Letter</td>
                                     <td>
-                                      <div class="filechipCollaboratorAttachment pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
+                                      <div class="engagedInstituteAttachment pdf" *ngIf="protocolCollaboratorAttachmentsList?.length > 0">
                                         <span *ngFor="let protocolCollaboratorAttachment of protocolCollaboratorAttachmentsList" (click)="downloadAttachment(protocolCollaboratorAttachment)"
-                                          title="download">{{protocolCollaboratorAttachment?.fileName}}<i class="fa fa-download"></i>
+                                          title="download"><span class="txt-underline"><i class="fa fa-angle-double-right icon-engaged" style="padding-right: 5px;"></i>{{protocolCollaboratorAttachment?.fileName}}</span><i class="fa fa-download"></i>
                                         </span>
                                       </div>
                                       <div class="label-font" *ngIf="protocolCollaboratorAttachmentsList?.length == 0">No Approval letter attached</div>
@@ -220,10 +220,16 @@
         </div>
         <!-- section2 -->
         <div class="modal-header-label">
-          <h4 class="popup-sub-head sub-head-width">Persons</h4>
-          <a class="cursor-hover" (click)="isShowAddPerson = !isShowAddPerson">
-            <i class="fa fa-plus" aria-hidden="true"> Add Persons</i>
-          </a>
+          <div class="row">
+            <div class="col-6">
+                <h4 class="popup-sub-head sub-head-width">Persons</h4>
+            </div>
+            <div class="col-6">
+              <button style="float:right" (click)="isShowAddPerson = !isShowAddPerson" class="btn btn-outline-success txt-small mb-2">
+                <i class="fa fa-plus" aria-hidden="true"> </i> Add Persons
+              </button>
+            </div>
+          </div>
         </div>
         <div class="modal-padding">
           <div *ngIf="isShowAddPerson">
@@ -272,7 +278,7 @@
           </div>
           <div *ngIf="personalDataList == null || personalDataList?.length <= 0" class="alertMsg"><b>No more persons to Add.</b></div>
           </div>
-          <div class="popup-div" *ngIf="protocolCollaboratorPersons?.length != 0">
+          <div class="w-100" *ngIf="protocolCollaboratorPersons?.length != 0">
             <table class="table ">
               <thead class="popup-header">
                 <tr class="solid-bottom">
@@ -305,10 +311,16 @@
 
         <!-- section3 -->
         <div class="modal-header-label">
-          <h4 class="popup-sub-head sub-head-width">Attachments</h4>
-          <a class="cursor-hover" (click)="isShowAddAttachment = !isShowAddAttachment">
-            <i class="fa fa-plus" aria-hidden="true"> Add Attachments</i>
-          </a>
+          <div class="row">
+            <div class="col-6">
+                <h4 class="popup-sub-head sub-head-width">Attachments</h4>
+            </div>
+            <div class="col-6 text-right">
+              <button style="float:right" (click)="isShowAddAttachment = !isShowAddAttachment" class="btn btn-outline-success txt-small mb-2">
+                <i class="fa fa-plus" aria-hidden="true"> </i>Add Attachments
+              </button>
+            </div>
+          </div>
         </div>
         <div class="modal-padding">
           <div class="row mb-15" *ngIf="isShowAddAttachment">
@@ -350,7 +362,7 @@
                 aria-label="Close" (click)="addAttachments()">Add</button>
             </section>
           </div>
-          <div class="popup-div" *ngIf="protocolCollaboratorAttachmentsList?.length!=0">
+          <div class="w-100" *ngIf="protocolCollaboratorAttachmentsList?.length!=0">
             <table class="table">
               <thead class="popup-header">
                 <tr class="solid-bottom">
@@ -381,7 +393,7 @@
                           <i class="fa fa-trash-o delete-color"></i>
                         </a>
                       </li>
-                      
+
                     </ul>
                   </td>
                 </tr>

@@ -25,8 +25,8 @@
 
                   <div class="col-md-12 users-list-tbl">
                       <div class="row">
-                        <div class="table-responsive">
-                          <table class="table table-striped tbl-p-clr">
+                        <div class="w-100">
+                          <table class="table  tbl-p-clr">
                               <thead class="tbl-head-clr thead-font-size">
                                   <tr>
                                       <th scope="col">Name</th>
@@ -36,7 +36,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-font-size">
-                                    <tr *ngFor = "let questionnaire of applicableQuestionnaire">
+                                    <tr *ngFor = "let questionnaire of applicableQuestionnaire" class="pull-up solid-bottom">
                                         <td scope="row">{{questionnaire.QUESTIONNAIRE}}</td>
                                         <td>
                                           <span>No</span>
@@ -49,8 +49,8 @@
                                                                                                                            protocolId: protocolId,
                                                                                                                            ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
                                                                                                                           qnrId: questionnaire.QUESTIONNAIRE_ID}">
-                                                <button type="button" class="btn btn-outline-secondary" >
-                                                  <i class="fa fa-pencil"></i>
+                                                <button type="button" class="btn" >
+                                                  <i class="fa fa-pencil log-user-icon-lite"></i>
                                                 </button>
                                               </a>
       

@@ -90,14 +90,14 @@
 													
 													  <li (click)="downloadAttachment(attachments)" title="Download Attachment">
 														  <a>
-															<i class="fa fa-download icon-color" aria-hidden="true"></i>
+															<i class="fa fa-download icon-color txt-medium log-user-icon-align-lite" aria-hidden="true"></i>
 														  </a>
 														</li>
 														<li *ngIf="attachments?.attachmentSubCategory?.subCategoryCode == '1'">
 															<a id="prop-doc-version-btn" (click)="getVersion(attachments, i)" title="Click here to view file versions"
 															data-toggle="modal" data-target="#versionModal">
-															<!-- <img class="version-icon" src="assets/images/version-icons.png" aria-hidden="true"> -->
-															<img class="version-icon" src="/mit-irb/resources/dist/assets/images/version-icons.png"/>
+															<!-- <img class="versions-icon" src="assets/images/version-icons.png" aria-hidden="true"> -->
+															<img class="versions-icon" src="/mit-irb/resources/dist/assets/images/version-icons.png"/>
 															</a>
 														  </li>
 												  </ul>

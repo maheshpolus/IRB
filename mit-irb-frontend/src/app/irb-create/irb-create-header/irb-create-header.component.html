@@ -3,11 +3,11 @@
 	<div class=" pushFixedHeaderFooter">
 		<div class="headerPush"></div>
 		<div class="container-fluid position-relative">
-	
+
 			<div class="">
 				<section class="row sect-padding-top">
 					<div class="col-12 pad-rl-0">
-	
+
 						<div class="card mt-5">
 							<div class="card-content">
 								<div class="card-body">
@@ -15,142 +15,146 @@
 										title="Close">
 										<i class="fa fa-times-circle btn-close-lite" aria-hidden="true"></i>
 									</div>
-	
-									<div class="row mb-5">
-	
-										<div class="col-sm-6 col-md-3  col-lg-2">
-											<h5 class="txt-dark  txt-large">IRB # : <span
-													class="text-danger">{{generalInfo?.protocolNumber}}</span>
-													<span class="renewal" *ngIf="protocolNumber?.includes('R')">Renewal</span>
-													<span class="renewal" *ngIf="protocolNumber?.includes('A')">Amendment</span>
-											</h5>
-										</div>
-	
-										<div class="col-sm-6 col-md-3  col-lg-2">
-											<h5 class="txt-dark  txt-large">Protocol Type :
-												<span class="text-danger">{{generalInfo?.protocolType?.description}}
-												</span>
-											</h5>
-										</div>
-	
-										<div class="col-sm-6 col-md-3  col-lg-2">
-											<h5 class="txt-dark  txt-large">Expiration Date :
-												<span
-													class="text-danger">{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}
-												</span>
-											</h5>
-										</div>
-										<div class="col-sm-6 col-md-4  col-lg-3">
-											<h5 class="txt-dark txt-large">PI :
-												<span class="text-danger">{{piName}}
-												</span>
-											</h5>
-										</div>
-	
-	
-										<div *ngIf="generalInfo.protocolType != null" class="col-sm-6 col-md-3  col-lg-3">
-											<h5 class="txt-dark txt-small">
-												<span class="active-en note green rounded"
-													[ngClass]="{
-																			'active-status': (generalInfo?.protocolStatus?.protocolStatusCode=='200'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '201'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '202'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '901'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '400'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '401'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '203'),
-																			'in-drafts': (generalInfo?.protocolStatus?.protocolStatusCode=='309'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode=='310'),
-																			'pending-action': (generalInfo?.protocolStatus?.protocolStatusCode=='100'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '103'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode=='105'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode=='106'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode=='107'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode=='900'),
-																			'revision-required': (generalInfo?.protocolStatus?.protocolStatusCode=='102'||
-																							 generalInfo?.protocolStatus?.protocolStatusCode== '104'),
-																			'submitted' :   generalInfo?.protocolStatus?.protocolStatusCode=='101',
-																			'completed-closed': (generalInfo?.protocolStatus?.protocolStatusCode=='103'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '300'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '301'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '304'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '305'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '306'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '307'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '313'),
-																		'suspended': (generalInfo?.protocolStatus?.protocolStatusCode=='302'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '308'||
-																							generalInfo?.protocolStatus?.protocolStatusCode== '311')}">{{generalInfo?.protocolStatus?.description}}</span>
-											</h5>
-	
-	
-										</div>
-									</div>
-	
-									<div class="row mb-5">
-	
-										<div class="col-sm-6 col-md-3 col-lg-4">
-											<h5 class="txt-dark txt-large">Title :
-												<span class="text-danger">{{generalInfo?.protocolTitle}}</span>
-											</h5>
-										</div>
-	
-										<div class="col-sm-6 col-md-3  col-lg-5">
-											<h5 class="txt-dark txt-large">Submission Status :
-												<span
-													class="text-danger">{{generalInfo?.protocolSubmissionStatuses?.protocolSubmissionStatus?.description}}</span>
-											</h5>
-										</div>
-	
-										<div class="col-sm-6 col-md-3  col-lg-3">
-											<p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
-												class="txt-dark txt-large">
-												COUHES Admin :
-												<span>{{generalInfo?.protocolSubmissionStatuses?.assigneePersonName}}</span>
-												<button
-													*ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106'"
-													type="button" class="btn admin-label" (click)="openAssignPopUp('U')">
-													<i class="fa fa-pencil" aria-hidden="true"></i> Reassign
-												</button>
-											</p>
-											<p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId == null">
-												<button
-													*ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106'"
-													type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
-													<i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin
-												</button>
-											</p>
-										</div>
-	
-									</div>
-									<div class="row">
-	
-										<div class="col-sm-6 col-md-6  col-lg-6">
-											<h5 class="txt-dark txt-large">Risk Level :
-												<span>{{generalInfo?.riskLevel?.description}}</span>
-											</h5>
-										</div>
-										<div class="col-sm-6 col-md-6  col-lg-6">
-											<h5 class="txt-dark txt-large">FDA Risk Level :
-												<span>{{generalInfo?.fdaRiskLevel?.description}}</span>
-											</h5>
-										</div>
-									</div>
+
+                  <div class="row">
+                    <div class="col-sm-6 col-md-12  col-lg-12 row">
+                        <div class="col-sm-6 col-md-2  col-lg-2">
+                          <h5 class="txt-dark  txt-large">IRB # : <br> <span
+                              class="text-danger">{{generalInfo?.protocolNumber}}</span>
+                              <span class="renewal" *ngIf="protocolNumber?.includes('R')">Renewal</span>
+                              <span class="renewal" *ngIf="protocolNumber?.includes('A')">Amendment</span>
+                          </h5>
+                        </div>
+                        <div class="col-sm-6 col-md-2  col-lg-2">
+                          <h5 class="txt-dark  txt-large">Protocol Type : <br>
+                            <span class="text-danger">{{generalInfo?.protocolType?.description}}
+                            </span>
+                          </h5>
+                        </div>
+                        <div class="col-sm-6 col-md-2  col-lg-2">
+                          <h5 class="txt-dark  txt-large">Expiration Date : <br>
+                            <span
+                              class="text-danger">{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}
+                            </span>
+                          </h5>
+                        </div>
+                        <div class="col-sm-6 col-md-3  col-lg-3">
+                          <h5 class="txt-dark txt-large">PI : <br>
+                            <span class="text-danger">{{piName}}
+                            </span>
+                          </h5>
+                        </div>
+                        <div class="col-sm-6 col-md-3  col-lg-3" *ngIf="generalInfo.protocolType != null">
+                            <h5 class="txt-dark txt-small">
+                              <span class="active-en note green rounded"
+                                [ngClass]="{
+                                            'active-status': (generalInfo?.protocolStatus?.protocolStatusCode=='200'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '201'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '202'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '901'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '400'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '401'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '203'),
+                                            'in-drafts': (generalInfo?.protocolStatus?.protocolStatusCode=='309'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode=='310'),
+                                            'pending-action': (generalInfo?.protocolStatus?.protocolStatusCode=='100'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '103'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode=='105'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode=='106'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode=='107'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode=='900'),
+                                            'revision-required': (generalInfo?.protocolStatus?.protocolStatusCode=='102'||
+                                                      generalInfo?.protocolStatus?.protocolStatusCode== '104'),
+                                            'submitted' :   generalInfo?.protocolStatus?.protocolStatusCode=='101',
+                                            'completed-closed': (generalInfo?.protocolStatus?.protocolStatusCode=='103'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '300'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '301'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '304'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '305'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '306'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '307'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '313'),
+                                          'suspended': (generalInfo?.protocolStatus?.protocolStatusCode=='302'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '308'||
+                                                    generalInfo?.protocolStatus?.protocolStatusCode== '311')}">
+                                                    {{generalInfo?.protocolStatus?.description}}
+                                </span>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-12  col-lg-12 row">
+                        <div class="col-sm-6 col-md-2 col-lg-2">
+                          <h5 class="txt-dark txt-large">Submission Status : <br>
+                            <span
+                              class="text-danger">{{generalInfo?.protocolSubmissionStatuses?.protocolSubmissionStatus?.description}}</span>
+                          </h5>
+                        </div>
+
+                        <div class="col-sm-6 col-md-2 col-lg-2">
+                          <h5 class="txt-dark txt-large">Risk Level : <br>
+                            <span class="text-danger">{{generalInfo?.riskLevel?.description}}</span>
+                          </h5>
+                        </div>
+
+                        <div class="col-sm-6 col-md-2 col-lg-2">
+                          <h5 class="txt-dark txt-large">FDA Risk Level : <br>
+                            <span class="text-danger">{{generalInfo?.fdaRiskLevel?.description}}</span>
+                          </h5>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                          <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
+                            class="txt-dark txt-large">  <!-- COUHES changed to IRB Admin-->
+                            IRB Admin : <br>
+                            <span class="text-danger">{{generalInfo?.protocolSubmissionStatuses?.assigneePersonName}}</span>
+                          </p>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                          <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
+                          class="txt-dark txt-large">
+                            <button
+                              *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106'"
+                              type="button" class="btn admin-label" (click)="openAssignPopUp('U')">
+                              <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; Reassign
+                            </button>
+                          </p>
+                          <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId == null">
+                            <button
+                              *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106'"
+                              type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
+                              <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Assign IRB Admin
+                            </button>
+                          </p>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6 col-md-12  col-lg-12 row">
+                      <div class="col-sm-6 col-md-12  col-lg-12">
+                        <h5 class="txt-dark txt-large">Title : <br>
+                          <span class="text-danger">{{generalInfo?.protocolTitle}}</span>
+                        </h5>
+                      </div>
+                    </div>
+
+                  </div>
 									<div class="row flex-row-reverse">
 										<div class="i-icon-top icon-lite">
 											<span class="collapsed" (click)="toggle()"
 												[ngClass]="isExpanded==true?'fa fa-angle-up arrow-lite':'fa fa-angle-down arrow-lite'"
 												data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
-												aria-controls="collapseOne">
+												aria-controls="collapseOne" style="margin-bottom: 5px;">
 											</span>
 										</div>
 									</div>
-	
+
 									<div id="headingOne" class="">
-	
+
 										<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
 											<div class="row protocol-top-lite apprve-date hr-line">
-	
+
 												<div class="col-3">
 													<h5 class="txt-dark txt-medium">
 														Last Approval Date :
@@ -190,25 +194,25 @@
 													</h5>
 												</div>
 											</div>
-	
+
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-	
+
 					</div>
 				</section>
-	
+
 			</div>
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 			<section class="row btn-row-med-lite sect-padding-lite bg-clr mt-10">
-	
+
 				<button class="btn btn-primary tab_btn" [routerLink]="['irbHome']" (click)="show_current_tab('irbHome')"
 					routerLinkActive="nav-active">
 					<i class="fa fa-home" aria-hidden="true"></i>General
@@ -228,7 +232,7 @@
 					[disabled]="isCreateNewProtocol" (click)="show_current_tab('irbCreateAttachment')">
 					<i class="fa fa-paperclip" aria-hidden="true"></i>Attachments
 				</button>
-				<button class="btn btn-primary" type="submit" [routerLink]="['irbPermission']" routerLinkActive="btnactive" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
+				<button class="btn btn-primary" type="submit" [routerLink]="['irbPermission']" routerLinkActive="nav-active" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
 				[disabled]="isCreateNewProtocol" (click)="show_current_tab('irbPermission')">
 				<i class="fa fa-key" aria-hidden="true"></i>Permissions
 			   </button>
@@ -251,11 +255,10 @@
 					(click)="show_current_tab('irbActions')">
 					<i class="fa  fa-cog" aria-hidden="true"></i>Actions
 				</button>
-	
+
 			</section>
 		</div>
-	
+
 		<div>
 			<router-outlet></router-outlet>
 		</div>
-	

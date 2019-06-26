@@ -16,10 +16,10 @@
           <div class="card-body">
             <div class="row mb-5">
               <div class="col-sm-12 col-md-12 col-lg-12 text-right" *ngIf="isViewMode == false && requestObject?.irbExemptForm?.exemptFormID != null" (click)="returnToExemptList2($event)" title="Save and Close">
-                <i class="fa fa-times-circle btn-close" aria-hidden="true"></i>
+                <i class="fa fa-times-circle btn-close-lite-sr" aria-hidden="true"></i>
               </div>
               <div class="col-sm-12 col-md-12 col-lg-12 text-right" *ngIf="isViewMode != false || requestObject?.irbExemptForm?.exemptFormID == null || requestObject?.irbExemptForm?.exemptFormID == ''" (click)="returnToExemptList($event)" title="Close">
-                <i class="fa fa-times-circle btn-close" aria-hidden="true"></i>
+                <i class="fa fa-times-circle btn-close-lite-sr" aria-hidden="true"></i>
               </div>
 
               <div class="container-fluid">

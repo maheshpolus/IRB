@@ -112,55 +112,55 @@
                               <tr
                                 *ngFor="let attachments of irbAttachmentsList | orderBy: {property: column, direction: direction}; let i = index"
                                 [class.poping-border]="i == attachmentSelectedRow" class="solid-bottom pull-up">
-                                <td width="10%">{{attachments?.groupDescription}}</td> 
-                  <td width="20%" *ngIf="attachmentEditedRow == i"><select
+                                <td class="align-middle" width="10%">{{attachments?.groupDescription}}</td> 
+                  <td class="align-middle" width="20%" *ngIf="attachmentEditedRow == i"><select
                                     [class.poping-border]="attachmentEditedRow == i" class="custom-select form-control txt-small mr-sm-2"
                                     id="inlineFormCustomSelect" [(ngModel)]="requestObject.attachmentTypeCode"
                                     (ngModelChange)="setAttachmentType(requestObject.attachmentTypeCode)">
                                     <option *ngFor="let attachmentType of attachmentTypes" value="{{attachmentType.typeCode}}">
                                       {{attachmentType.description}}</option>
                                   </select></td>
-                                <td width="25%" *ngIf="attachmentEditedRow == i"> <textarea
+                                <td class="align-middle" width="25%" *ngIf="attachmentEditedRow == i"> <textarea
                                     [class.poping-border]="attachmentEditedRow == i"
                                     class="form-control txt-small txt-area-fnt modal-table-padding " placeholder="Description"
                                     [(ngModel)]="requestObject.attachmentDescription"></textarea></td>
-                                <td width="20%" *ngIf="attachmentEditedRow != i">
+                                <td class="align-middle" width="20%" *ngIf="attachmentEditedRow != i">
                                   {{attachments?.attachmentType?.description}}</td>
-                              <td width="20%" *ngIf="attachmentEditedRow != i">{{attachments?.description}}</td>
-                                <td width="15%" class="padding-table-content">{{attachments?.fileName}} </td>
-                                <td width="15%" class="padding-table-content">{{attachments?.updateUser}} {{(attachments?.updateTimestamp ===' ' || attachments.updateTimestamp
+                              <td class="align-middle" width="20%" *ngIf="attachmentEditedRow != i">{{attachments?.description}}</td>
+                                <td width="15%" class="padding-table-content align-middle">{{attachments?.fileName}} </td>
+                                <td width="15%" class="padding-table-content align-middle">{{attachments?.updateUser}} {{(attachments?.updateTimestamp ===' ' || attachments.updateTimestamp
                                           ===null) ? ' ':(attachments?.updateTimestamp | date: 'MM/dd/yyyy')}}</td>
-                                <td>
+                                <td class="align-middle">
                                   <ul class="actionButtonGroup padding-icons">
           
                                     <li *ngIf="isAttachmentEditable && attachmentEditedRow != i&& attachments?.attachmentSubCategory?.subCategoryCode == '1'"
                                       (click)="editAttachments(attachments,i,false)" title="Edit Attachment">
                                       <a>
-                                        <i class="fa fa-edit icon-color txt-medium log-user-icon-lite"></i>
+                                        <i class="fa fa-edit icon-color txt-medium log-user-icon-align-lite"></i>
                                       </a>
                                     </li>
                                     <li *ngIf="isAttachmentEditable && attachmentEditedRow == i&& attachments?.attachmentSubCategory?.subCategoryCode == '1'" (click)="saveEditedattachments()"
                                       title="Save Attachment">
                                       <a>
-                                        <i class="fa fa fa-floppy-o txt-medium log-user-icon-lite"></i>
+                                        <i class="fa fa fa-floppy-o txt-medium log-user-icon-align-lite"></i>
                                       </a>
                                     </li>
           
                                     <li *ngIf="isAttachmentEditable && attachments?.attachmentSubCategory?.subCategoryCode == '1'" data-toggle="modal" data-target="#attachmentModal"
                                       title="Replace Attachment" (click)="replaceAttachment(attachments,i)">
                                       <a>
-                                        <i class="fa fa-retweet pointer icon-color txt-medium log-user-icon-lite"></i>
+                                        <i class="fa fa-retweet pointer icon-color txt-medium log-user-icon-align-lite"></i>
                                       </a>
                                     </li>
                                     <li (click)="downloadAttachment(attachments)" title="Download Attachment">
                                       <a>
-                                        <i class="fa fa-download icon-color txt-medium log-user-icon-lite" aria-hidden="true"></i>
+                                        <i class="fa fa-download icon-color txt-medium log-user-icon-align-lite" aria-hidden="true"></i>
                                       </a>
                                     </li>
                                     <li  *ngIf="attachments?.attachmentSubCategory?.subCategoryCode == '1'">
                                       <a id="prop-doc-version-btn" (click)="getVersion(attachments, i)"
                                         title="Click here to view file versions" data-toggle="modal" data-target="#versionModal">
-                                       <!--  <img class="version-icon" src="assets/images/version-icons.png" aria-hidden="true">-->
+                                        <!-- <img class="versions-icon" src="assets/images/version-icons.png" aria-hidden="true"> -->
                                          <img class="version-icon"
                                                   src="/mit-irb/resources/dist/assets/images/version-icons.png" />
                                       </a>
@@ -168,7 +168,7 @@
                                     <li *ngIf="isAttachmentEditable && attachments?.attachmentSubCategory?.subCategoryCode == '1'" title="Delete Attachment"
                                       (click)="tempSave($event,attachments)" data-toggle="modal" data-target="#deleteAttachment">
                                       <a>
-                                        <i class="fa fa-trash-o txt-medium log-user-icon-lite"></i>
+                                        <i class="fa fa-trash-o txt-medium log-user-icon-align-lite"></i>
                                       </a>
                                     </li>
                                   </ul>
@@ -210,7 +210,7 @@
           
                                     <li (click)="downloadInternalAttachment(attachments)" title="Download Attachment">
                                       <a>
-                                        <i class="fa fa-download icon-color txt-medium log-user-icon-lite" aria-hidden="true"></i>
+                                        <i class="fa fa-download icon-color txt-medium log-user-icon-align-lite" aria-hidden="true"></i>
                                       </a>
                                     </li>
                                   </ul>
@@ -389,7 +389,7 @@
           
                                   <li (click)="downloadAttachment(attachments)" title="Download Attachment">
                                     <a>
-                                      <i class="fa fa-download icon-color txt-medium log-user-icon-lite" aria-hidden="true"></i>
+                                      <i class="fa fa-download icon-color txt-medium log-user-icon-align-lite" aria-hidden="true"></i>
                                     </a>
                                   </li>
                                 </ul>

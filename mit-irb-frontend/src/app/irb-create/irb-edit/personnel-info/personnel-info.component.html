@@ -55,7 +55,7 @@
                                             <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                           </button> -->
                     </div>
-    
+
                   </div>
                   <div class="col-12" *ngIf="showPersonElasticBand">
                       <div class="row">
@@ -80,8 +80,8 @@
                         </div>
                       </div>
                     </div>
-    
-             
+
+
 
               <!-- <div class="col-md-4">
               <div class="form-group">
@@ -91,7 +91,7 @@
               </div>
             </div> -->
 
-              <div class="row top-dis-15">
+              <div class="row">
                 <div class="col-md-3">
                   <div class="form-group">
                     <span class="txt-medium text-secondary">Role
@@ -154,18 +154,18 @@
                 </div>
               </div>
 
-              <!-- <div class="row">
+              <div class="row">
                 <div class="col-md-11">
                   <span class="txt-medium text-secondary">Qualification</span> <br>
                   <textarea name="" id="" cols="30" rows="3" class="txt-small form-control mb-10"></textarea>
                 </div>
-              </div> -->
+              </div>
 
-              
+
             </div>
 
             <div class="col-12" *ngIf="activePersonExist">
-              
+
               <div class="row alert-sp alert-warning mb-0">
                 <div class="txt-small m-0">
                   <div>
@@ -190,7 +190,7 @@
                       <tr class="solid-bottom">
                         <th scope="col" class="align-middle">Role</th>
                         <th scope="col" class="align-middle" width="15%">Name</th>
-                        <!-- <th scope="col" class="align-middle">Qualification</th> -->
+                        <th scope="col" class="align-middle">Qualification</th>
                         <th scope="col" class="align-middle" width="15%">Study Role</th>
                         <th scope="col" class="align-middle">Affiliation</th>
                         <th scope="col" class="align-middle">Obtained Consent</th>
@@ -219,7 +219,7 @@
                           <td class="align-middle" width="15%">
                             <i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'"
                               aria-hidden="true"></i> {{item.personName}}</td>
-                          <!-- <td class="align-middle">{{item.educationLevel}}</td> -->
+                          <td class="align-middle">{{item.educationLevel}}</td>
 
                           <td class="align-middle" width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}
                           </td>

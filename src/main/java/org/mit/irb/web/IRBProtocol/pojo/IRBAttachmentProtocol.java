@@ -76,7 +76,7 @@ public class IRBAttachmentProtocol {
 	private String comments;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private java.util.Date updateTimestamp;
+	private java.util.Date updateTimeStamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
@@ -101,10 +101,7 @@ public class IRBAttachmentProtocol {
 	private String fileName;
 	
 	@Column(name = "MIME_TYPE")
-	private String mimeType;
-	
-	@Column(name="PROTOCOL_ATTACH_FLAG")
-	private String isProtocolAttachment;	
+	private String mimeType;	
 	
 	@Column(name="PROTOCOL_LOCATION_ID")
 	private Integer protocolLocationId;
@@ -127,12 +124,12 @@ public class IRBAttachmentProtocol {
 	public IRBAttachmentProtocol(){
 	}
 
-	public IRBAttachmentProtocol(IRBFileData protocolAttachmentData, String comments, java.util.Date updateTimestamp,
+	public IRBAttachmentProtocol(IRBFileData protocolAttachmentData, String comments, java.util.Date updateTimeStamp,
 			String updateUser, Integer attachmentVersion, String subCategoryCode, String fileName, String mimeType) {
 		super();
 		this.protocolAttachmentData = protocolAttachmentData;
 		this.comments = comments;
-		this.updateTimestamp = updateTimestamp;
+		this.updateTimeStamp = updateTimeStamp;
 		this.updateUser = updateUser;
 		this.attachmentVersion = attachmentVersion;
 		this.subCategoryCode = subCategoryCode;
@@ -224,14 +221,6 @@ public class IRBAttachmentProtocol {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public java.util.Date getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(java.util.Date updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
 	}
 
 	public String getUpdateUser() {
@@ -345,15 +334,7 @@ public class IRBAttachmentProtocol {
 	public void setFileId(Integer fileId) {
 		this.fileId = fileId;
 	}
-
-	public String getIsProtocolAttachment() {
-		return isProtocolAttachment;
-	}
-
-	public void setIsProtocolAttachment(String isProtocolAttachment) {
-		this.isProtocolAttachment = isProtocolAttachment;
-	}
-
+	
 	public String getSubCategoryCode() {
 		return subCategoryCode;
 	}
@@ -392,5 +373,13 @@ public class IRBAttachmentProtocol {
 
 	public void setGroupDescription(String groupDescription) {
 		this.groupDescription = groupDescription;
+	}
+
+	public java.util.Date getUpdateTimeStamp() {
+		return updateTimeStamp;
+	}
+
+	public void setUpdateTimeStamp(java.util.Date updateTimeStamp) {
+		this.updateTimeStamp = updateTimeStamp;
 	}
 }

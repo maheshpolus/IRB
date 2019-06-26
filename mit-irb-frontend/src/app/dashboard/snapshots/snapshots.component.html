@@ -1,164 +1,181 @@
 <!-- Snapshot of PI -->
 <section class="row snapshot-responsive" *ngIf="roleType != 'ADMIN'">
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12">
+			<div class="card pull-up">
+				<div class="card-content">
+					<div class="card-body" (click)="expandedView('REVISION_REQ')">
+						<div class="media d-flex">
+							<div class="media-body text-left">
+								<h2 class="info txt-blue">{{snapshots?.revisionReqCount}} <span
+										class="txt-ash txt-small">Pending Actions</span></h2>
+								<h6 class="txt-large">Protocols/Exempt Studies</h6>
+							</div>
+							<div class="card-ico txt-blue">
+								<i class="fa fa-bar-chart" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 p-0">
+			<div class="card pull-up">
+				<div class="card-content">
+					<div class="card-body" (click)="expandedView('AMMEND_RENEW')">
+						<div class="media d-flex">
+							<div class="media-body text-left">
+								<h2 class="info txt-orange">{{snapshots?.ammendRenewCount}} <span
+										class="txt-ash txt-small">In Progress</span></h2>
+								<h6 class="txt-large">Amendments/Renewals</h6>
+							</div>
+							<div class="card-ico txt-orange">
+								<i class="fa fa-file-text-o" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0">
+			<div class="card pull-up">
+				<div class="card-content">
+					<div class="card-body" (click)="expandedView('AWAITING_RESP')">
+						<div class="media d-flex">
+							<div class="media-body text-left text-success">
+								<h2 class="info txt-success">{{snapshots?.awaitingRespCount}} <span
+										class="txt-ash txt-small">Awaiting </span></h2>
+								<h6 class="txt-large">IRB Response</h6>
+							</div>
+							<div class="card-ico text-success">
+								<i class="fa fa-envelope-open-o" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12">
+			<div class="card pull-up" style="height:116px;">
+				<div class="card-content">
+					<div class="card-body">
+						<ul>
+							<li>
+								<a href="javascript:void(0)" (click)="goToQuestionaire()">
+									<span class="pulse"></span>
+									<i class="fa fa-check-square-o pr-10"></i>Start Exempt Evaluation
+								</a>
+							</li>
+							<!-- <li *ngIf="result.canCreateProtocol"> -->
+							<li>
+								<a href="javascript:void(0)" (click)="goToCreateProtocol()">
+									<i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create Protocol
+								</a>
+							</li>
+							<!-- <li>
+							  <a routerLink='/irb/committee' [queryParams]="{mode:'create'}">
+								<i class="fa fa-calendar"></i>IRB Schedules</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 	
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards revision-req-card mt-12">
-			<div class="media top-card-outer" (click)="expandedView('REVISION_REQ')">
-				<div class="media-left card-icon1 circle2">
-					<a>
-						<i class="fa fa-file-text-o"></i>
-					</a>
-				</div>
-				<div class="media-body top-card-body cap2">
-					<h4 class="media-heading">{{snapshots?.revisionReqCount}}</h4>
-					<p>
-						Pending
-						<br>Actions
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards">
-			<div class="media top-card-outer mt-12" (click)="expandedView('AMMEND_RENEW')">
-				<div class="media-left card-icon1">
-					<a>
-						<i class="fa fa-file-text-o"></i>
-					</a>
-				</div>
-				<div class="media-body top-card-body">
-					<h4 class="media-heading">{{snapshots?.ammendRenewCount}}</h4>
-					<p>
-						Amendments/Renewals In
-						<br> Progress
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards">
-			<div class="media top-card-outer mt-12" (click)="expandedView('AWAITING_RESP')">
-				<div class="media-left card-icon1 circle3">
-					<a>
-						<i class="fa fa-file-text-o"></i>
-					</a>
-				</div>
-				<div class="media-body top-card-body cap3">
-					<h4 class="media-heading">{{snapshots?.awaitingRespCount}}</h4>
-					<p>
-						Awaiting IRB
-						<br>Response
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards link-card mt-12" style="height: 88%;">
-			<ul>
-				<li>
-					<a class="pdf" (click)="goToQuestionaire()">
-						<i class="fa fa-check-square-o"></i>Start Exempt Evaluation
-					</a>
-				</li>
-				<!-- <li *ngIf="result.canCreateProtocol"> -->
-				<li>
-					<a class="pdf" (click)="goToCreateProtocol()">
-						<i class="fa fa-plus"></i>Create Protocol
-					</a>
-				</li>
-				<!-- <li>
-					<a routerLink='/irb/committee' [queryParams]="{mode:'create'}">
-						<i class="fa fa-calendar"></i>IRB Schedules</a>
-				</li> -->
-			</ul>
-		</div>
-	</div>
-</section>
-
-<!-- Snapshot of ADMIN -->
-<section class="row" *ngIf="roleType == 'ADMIN'">
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards">
-			<div class="media schedule-card-outer">
-				<div class="media-left card-icon1">
-					<a>
-						<i class="fa fa-file-text-o"></i>
-					</a>
-				</div>
-				<div class="media-body top-card-body-schedule cap1">
-					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDatePrev | date: 'MM/dd/yyyy'}}</h4>
-					<p class="schedule-p">{{snapshots?.scheduledDayPrev}}</p>
-					<p class="schedule schedule-p">{{snapshots?.committeNamePrev}}</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards">
-			<div class="media schedule-card-outer">
-				<div class="media-left card-icon1 circle2">
-					<a>
-						<i class="fa fa-file-text-o"></i>
-					</a>
-				</div>
-				<div class="media-body top-card-body-schedule cap2">
-					<h4 class="media-heading schedule-heading">{{snapshots?.scheduledDateNext | date: 'MM/dd/yyyy'}}</h4>
-					<p class="schedule-p">{{snapshots?.scheduledDayNext}}</p>
-					<p class="schedule schedule-p">{{snapshots?.committeeNameNext}}</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-12" (click)="expandedView('ADMIN_PENDING')">
-			<div class="col-12 top-cards pointer">
-				<!-- <div class="media top-card-outer"
-					(click)="expandedView('REVISION_REQ')"> -->
-				<div class="media schedule-card-outer">
-					<div class="media-left card-icon1 circle3">
-						<a>
-							<i class="fa fa-file-text-o"></i>
-						</a>
+	<!-- Snapshot of ADMIN -->
+	<section class="row snapshot-responsive" *ngIf="roleType == 'ADMIN'">
+		<div class="headerPush"></div>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" (click)="expandedView('ADMIN_PENDING')">
+			<div class="card pull-up">
+				<div class="card-content">
+					<div class="card-body">
+						<div class="media d-flex">
+							<div class="media-body text-left">
+								<h2 class="info txt-blue">{{snapshots?.revisionReqCount}}
+									<span class="txt-ash txt-small">Pending responses</span></h2>
+								<h6 class="txt-large">Protocols/Exempt Studies</h6>
+							</div>
+							<div class="card-ico txt-blue">
+								<i class="fa fa-bar-chart" aria-hidden="true"></i>
+							</div>
+						</div>
 					</div>
-					<div class="media-body top-card-body-schedule cap3">
-						<h4 class="media-heading">{{snapshots?.revisionReqCount}}</h4>
-						<p>Pending responses</p>
-					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<div class="col-md-3 col-sm-6 col-12">
-		<div class="col-12 top-cards schedule-class link-card">
-			<ul>
-				<li>
-					<a class="pdf" (click)="goToQuestionaire()">
-						<i class="fa fa-check-square-o"></i>Start Exempt Evaluation
-					</a>
-				</li>
-				<li>
-					<a>
-						<i class="fa fa-check-square-o"></i>COUHES</a>
-				</li>
-				<li>
-						<a class="pdf" (click)="goToCommittee()">
-							<i class="fa fa-plus"></i>Create Committee</a>
-				</li>
-
-				<!-- <li *ngIf="result.canCreateProtocol"> -->
-				<li>
-					<a class="pdf" (click)="goToCreateProtocol()">
-						<i class="fa fa-plus"></i>Create Protocol
-					</a>
-				</li>
-				
-				<!-- <li>
-					<a class="pdf" routerLink='/irb/committee' [queryParams]="{mode:'create'}">
-						<i class="fa fa-plus"></i>Create Committee</a>
-				</li> -->
-			</ul>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12">
+			<div class="card pull-up">
+				<div class="card-content">
+					<div class="card-body">
+						<div class="media d-flex">
+							<div class="media-body text-left">
+								<h2 class="info txt-orange"><span class="txt-large">{{snapshots?.committeNamePrev}}</span>
+									<span class="txt-ash txt-small"></span></h2>
+								<h6 class="txt-large" *ngIf="snapshots.scheduledDatePrev">{{snapshots?.scheduledDatePrev | date: 'MM/dd/yyyy'}} -
+									{{snapshots?.scheduledDayPrev}}</h6>
+							</div>
+							<div class="card-ico txt-orange">
+								<i class="fa fa-calendar" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-</section>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 p-0">
+			<div class="card pull-up">
+				<div class="card-content">
+					<div class="card-body">
+						<div class="media d-flex">
+							<div class="media-body text-left">
+								<h2 class="info txt-orange"><span class="txt-large">{{snapshots?.committeeNameNext}}</span>
+									<span class="txt-ash txt-small"></span></h2>
+								<h6 class="txt-large" *ngIf="snapshots.scheduledDateNext">{{snapshots?.scheduledDateNext | date: 'MM/dd/yyyy'}} -
+									{{snapshots?.scheduledDayNext}}</h6>
+							</div>
+							<div class="card-ico txt-green">
+								<i class="fa fa-calendar" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12">
+			<div class="card pull-up" style="height:116px;">
+				<div class="card-content">
+					<div class="card-body txt-small" style="padding-top:11px;">
+						<ul>
+							<li>
+								<a href="javascript:void(0)" (click)="goToQuestionaire()">
+									<span class="pulse-admin"></span>
+									<i class="fa fa-check-square-o pr-10"></i>Start Exempt Evaluation
+								</a>
+							</li>
+							<!-- <li *ngIf="result.canCreateProtocol"> -->
+							<li>
+								<a href="javascript:void(0)">
+									<i class="fa fa-check-square-o pr-10 " aria-hidden="true"></i>COUHES
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0)" (click)="goToCommittee()">
+									<i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create Committee
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0)" (click)="goToCreateProtocol()">
+									<i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create Protocol
+								</a>
+							</li>
+							<!-- <li>
+								  <a routerLink='/irb/committee' [queryParams]="{mode:'create'}">
+								  <i class="fa fa-calendar"></i>IRB Schedules</a>
+								</li> -->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	

@@ -1,152 +1,186 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="container-fluid">
 	<div class="row">
+		
+
 		<div class="col-12">
-			<div class="card history-card">
-				<div class="card-header history-header">
-					<nav class="nav navbar-pg3">
-						<h5>History</h5>
-						<i class=" fa fa-info-circle" tabindex="0" placement="left" ngbPopover="{{PROTOCOL_HISTORY_INFO}}" #protocolHistoryInfo="ngbPopover"
-						 (document:click)="protocolHistoryInfo.close()" (click)="$event.stopPropagation()"></i>
-					</nav>
-				</div>
-
-				<div class="card-body card-paddng">
-					<!--Sorting in History-->
-					<div class="col-md-12 col-sm-12 sort-labels padding-10" *ngIf="!noHistoryList">
-						<div class="row">
-							<div class="col-md-12 col-sm-12 col-lg-12">
-								<div class="form-check form-check-inline sort-fields">
-									<label>SORT BY:</label>
-									<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'COMMENTS'}" (click)="sortField = 'COMMENTS';updateSortOrder()">ACTION
-										<i class="fa" *ngIf="sortField == 'COMMENTS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
-										 aria-hidden="true"></i>
-									</label>
-									<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'ACTION_DATE'}" (click)="sortField = 'ACTION_DATE';updateSortOrder()">ACTION DATE
-										<i class="fa" *ngIf="sortField == 'ACTION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
-										 aria-hidden="true"></i>
-									</label>
-									<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'APPROVAL_DATE'}" (click)="sortField = 'APPROVAL_DATE';updateSortOrder()">APPROVAL DATE
-										<i class="fa" *ngIf="sortField == 'APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
-										 aria-hidden="true"></i>
-									</label>
-									<label class="sort-fields-padding" [ngClass]="{'sort-field-selected': sortField == 'LAST_UPDATE_TIMESTAMP'}" (click)="sortField = 'LAST_UPDATE_TIMESTAMP';updateSortOrder()">UPDATED BY
-										<i class="fa" *ngIf="sortField == 'LAST_UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
-										 aria-hidden="true"></i>
-									</label>
+				<div class="row cards-in">
+					<div class="col-12 mb-10">
+						<div class="card mt-5">
+	
+							<div class="tab-content" id="pills-tabContent">
+								<div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+									aria-labelledby="pills-home-tab">
+									
+	
+									<div class="card-body card-paddng">
+											<!--Sorting in History-->
+											<!-- -------------------------------------------------------------------- -->
+						
+											<div class="col-md-12 col-sm-12 sort-labels" *ngIf="!noHistoryList">
+													<div class="row">
+															<div class="col-md-12 col-sm-12 col-lg-12" *ngIf="(lastClickedTab !== 'EXEMPT' && lastClickedTab !== 'COMMITTEE' && lastClickedTab !== 'SCHEDULE')">
+																	<div class="form-check form-check-inline sort-fields">
+																		<p class="txt-small mtb10-lite">Sort by : 
+						
+																				<a class="hvr-icon-down btn-sort btn-orange" [ngClass]="{'sort-field-selected': sortField == 'COMMENTS'}" (click)="sortField = 'COMMENTS';updateSortOrder()">
+																					Action
+																						<i class="fa fa-long-arrow-down hvr-icon text-lightash"  *ngIf="sortField == 'COMMENTS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
+																							 aria-hidden="true">
+																						</i>
+																				</a>
+						
+																				<a class="hvr-icon-down btn-sort btn-orange" [ngClass]="{'sort-field-selected': sortField == 'ACTION_DATE'}" (click)="sortField = 'ACTION_DATE';updateSortOrder()">
+																						Action Date
+																							<i class="fa fa-long-arrow-down hvr-icon text-lightash"  *ngIf="sortField == 'ACTION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
+																								 aria-hidden="true">
+																							</i>
+																				</a>
+						
+																				<a class="hvr-icon-down btn-sort btn-orange" [ngClass]="{'sort-field-selected': sortField == 'APPROVAL_DATE'}" (click)="sortField = 'APPROVAL_DATE';updateSortOrder()">
+																						Approval Date
+																							<i class="fa fa-long-arrow-down hvr-icon text-lightash"  *ngIf="sortField == 'APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
+																								 aria-hidden="true">
+																							</i>
+																				</a>
+						
+																				<a class="hvr-icon-down btn-sort btn-orange" [ngClass]="{'sort-field-selected': sortField == 'LAST_UPDATE_TIMESTAMP'}" (click)="sortField = 'LAST_UPDATE_TIMESTAMP';updateSortOrder()">
+																						Updated By
+																							<i class="fa fa-long-arrow-down hvr-icon text-lightash"  *ngIf="sortField == 'LAST_UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-arrow-up':'fa-arrow-down'"
+																								 aria-hidden="true">
+																							</i>
+																				</a>
+																			
+																		</p>
+																	</div>
+																	<div class="exp_colapse">
+																		<span class="align-right pointer" (click)="test()"> 
+																			<i class="fa fa-plus-circle icon-expand" aria-hidden="true"></i> Expand All </span>
+																			<span class="align-right pointer"> | </span> 
+																		<span class="align-right pointer" (click)="test1()">
+																			<i class="fa fa-minus-circle icon-collapse" aria-hidden="true"></i> Collapse All</span>
+																			
+																			</div>
+															</div>
+													</div>
+											</div>
+						
+											<!-- -------------------------------------------------------------------- -->
+											
+						
+											<div id="accordion">
+												<div class="card" *ngFor="let history of irbHistoryList | orderBy: {property: sortField, direction: sortOrder};let i=index">
+													<div class="card-header history-coll-header_lite plr-15 pointer" id="{{'heading' + i }}" (click)="toggle(i)" data-toggle="collapse"
+													 [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i">
+														<div class="row">
+															<!-- <div class="col-1 col-sm-1 col-md-1">
+																<i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'" (click)="toggle(i)"
+																data-toggle="collapse" [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i "></i>
+															</div> -->
+															<div class="col-3 col-sm-3 col-md-3">
+																<i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'"></i>
+																<p class="text-black history-coll-status">{{history.COMMENTS}}</p>
+															</div>
+															<div class="col-7">
+																<div class="history-label_lite">
+																	<p class="txt-dark txt-medium">Action Date:
+																		<span class="text-danger">{{(history.ACTION_DATE === '' || history.ACTION_DATE === null ) ? '':(history.ACTION_DATE | date: 'MM/dd/yyyy')}}
+																		</span>
+																	</p>
+																</div>
+																<div class="history-label_lite">
+																	<p class="txt-dark txt-medium">Submitted Date:
+																		<span class="text-danger">{{(history.SUBMISSION_DATE === '' || history.SUBMISSION_DATE === null ) ? '':(history.SUBMISSION_DATE | date:
+																			'MM/dd/yyyy')}}
+																		</span>
+																	</p>
+																</div>
+																<div class="history-label_lite">
+																	<p class="txt-dark txt-medium">Approval Date:
+																		<span class="text-danger"> {{(history.APPROVAL_DATE === '' || history.APPROVAL_DATE === null ) ? 'In Progress':(history.APPROVAL_DATE |
+																			date: 'MM/dd/yyyy')}}
+																		</span>
+																	</p>
+																</div>
+																<div class="history-label_lite">
+																	<p class="txt-dark txt-medium">Last updated By:
+																		<span class="text-danger">{{history.LAST_UPDATE_USER}} On {{(history.LAST_UPDATE_TIMESTAMP === ' ' || history.LAST_UPDATE_TIMESTAMP ===
+																			null ) ? ' ':(history.LAST_UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}
+																		</span>
+																	</p>
+																</div>
+															</div>
+															<div class="col-2 history-label_lite">
+																<ul class="icon-list-coll_lite btn-align-rght padding0">
+																	<li *ngIf="history.SUBMISSION_DATE != null" class="pointer" title="Submission Details" (click)="viewSubmissionDetails(history.PROTOCOL_NUMBER,history.COMMENTS)">
+																		<i class="fa fa-file-text-o" aria-hidden="true"></i>
+																	</li>
+																	<li style="cursor: none" title="Review Comments" disabled="true"
+																	(click)="setGroupComment(history,$event)">
+																		<i class="fa fa-comments" aria-hidden="true"></i>
+																	</li>
+																	<!-- <li style="cursor: none" title="Version Compare(Currently unavailable)" disabled="true">
+																		<i class="fa fa-clone" aria-hidden="true"></i>
+																	</li> -->
+																</ul>
+															</div>
+														</div>
+														<!-- <i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'" (click)="toggle(i)"
+														 data-toggle="collapse" [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i "></i> -->
+														 <div id="{{'collapse' + i }}" *ngIf="isExpanded[i]==true" class="active" [attr.aria-labelledby]="'heading' + i ">
+															<div class="card-body history-card-body plr-15 bg-color">
+																<div class="row list-of-his" [ngClass]="{'history-line':history.GROUP_DETAILS_LIST.length > 1 && history.GROUP_DETAILS_LIST.length-1 != j}"
+																 *ngFor="let group of history.GROUP_DETAILS_LIST; let j=index">
+																	<div class="col-12 col-sm-3 col-md-3">
+																		<ul>
+																			<li class="history-action">{{group.PROTOCOL_ACTION}}</li>
+																		</ul>
+																	</div>
+																	<div class="col-12 col-md-4 col-md-4">
+																		<ul style="margin-left: 16px;">
+																			<li>Updated By
+																				<span>{{group.UPDATE_USER_NAME}}</span> On
+																				<span>{{(group.ACTION_DATE === ' ' || group.ACTION_DATE === null ) ? ' ':(group.ACTION_DATE | date: 'MM/dd/yyyy')}}
+																				</span>
+																			</li>
+																		</ul>
+																	</div>
+																	<div class="col-12 col-sm-3 col-md-3">
+																		<!-- <ul>
+																			<li>Action Date : <span>{{(historyDet.ACTION_DATE === ' ' || historyDet.ACTION_DATE === null ) ? ' ':(historyDet.ACTION_DATE | date: 'MM/dd/yyyy')}}</span></li>
+																		</ul> -->
+																		<ul class="icon-list-coll_lite history-ul-pd">
+																			<!-- <li><i class="fa fa-question-circle-o" aria-hidden="true"></i></li> -->
+																			<li *ngIf="group.LETTER_FLAG == 'Y'" class="pointer" title="Download Correspondence letter" (click)="downloadCorrespondanceLetter(group.PROTOCOL_ACTION_ID,group.PROTO_CORRESP_TYPE)">
+																				<i class="fa fa-download" aria-hidden="true"></i>
+																			</li>
+																			<li *ngIf="group.MINUTES_FLAG == 'Y'" class="pointer" title="Review Comments" data-toggle="modal" data-target="#deletePersonnelInfoDetails"
+																			 (click)="getReviewComments(group.PROTOCOL_ACTION_ID,group.PROTOCOL_ACTION_TYPE_CODE)">
+																				<i class="fa fa-comments" aria-hidden="true"></i>
+																			</li>
+																		</ul>
+																	</div>
+																</div>
+															</div>
+														</div>
+														</div>
+						
+													
+												</div>
+												<div class="card-header history-coll-header card card-list-no-data noHistory" *ngIf="noHistoryList">
+													<div class="col-12">No history details found</div>
+												</div>
+											</div>
+										</div>
 								</div>
-								<label class="align-right pointer" (click)="test()">
-									<i class="fa fa-plus-circle" aria-hidden="true"></i> Expand All</label>
-								<label class="align-right pointer" (click)="test1()">
-									<i class="fa fa-minus-circle" aria-hidden="true"></i> Collapse All</label>
 							</div>
 						</div>
 					</div>
-					<div id="accordion">
-						<div class="card" *ngFor="let history of irbHistoryList | orderBy: {property: sortField, direction: sortOrder};let i=index">
-							<div class="card-header history-coll-header plr-15 pointer" id="{{'heading' + i }}" (click)="toggle(i)" data-toggle="collapse"
-							 [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i">
-								<div class="row">
-									<!-- <div class="col-1 col-sm-1 col-md-1">
-										<i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'" (click)="toggle(i)"
-										data-toggle="collapse" [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i "></i>
-									</div> -->
-									<div class="col-3 col-sm-3 col-md-3">
-										<i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'"></i>
-										<p>{{history.COMMENTS}}</p>
-									</div>
-									<div class="col-7">
-										<div class="history-label">
-											<p>Action Date:
-												<span>{{(history.ACTION_DATE === '' || history.ACTION_DATE === null ) ? '':(history.ACTION_DATE | date: 'MM/dd/yyyy')}}
-												</span>
-											</p>
-										</div>
-										<div class="history-label">
-											<p>Submitted Date:
-												<span>{{(history.SUBMISSION_DATE === '' || history.SUBMISSION_DATE === null ) ? '':(history.SUBMISSION_DATE | date:
-													'MM/dd/yyyy')}}
-												</span>
-											</p>
-										</div>
-										<div class="history-label">
-											<p>Approval Date:
-												<span>{{(history.APPROVAL_DATE === '' || history.APPROVAL_DATE === null ) ? 'In Progress':(history.APPROVAL_DATE |
-													date: 'MM/dd/yyyy')}}
-												</span>
-											</p>
-										</div>
-										<div class="history-label">
-											<p>Last updated By:
-												<span>{{history.LAST_UPDATE_USER}} On {{(history.LAST_UPDATE_TIMESTAMP === ' ' || history.LAST_UPDATE_TIMESTAMP ===
-													null ) ? ' ':(history.LAST_UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}
-												</span>
-											</p>
-										</div>
-									</div>
-									<div class="col-2 history-label">
-										<ul class="icon-list-coll btn-align-rght padding0">
-											<li *ngIf="history.SUBMISSION_DATE != null" class="pointer" title="Submission Details" (click)="viewSubmissionDetails(history.PROTOCOL_NUMBER,history.COMMENTS)">
-												<i class="fa fa-file-text-o" aria-hidden="true"></i>
-											</li>
-											<li style="cursor: none" title="Review Comments" disabled="true"
-											(click)="setGroupComment(history,$event)">
-												<i class="fa fa-comments" aria-hidden="true"></i>
-											</li>
-											<!-- <li style="cursor: none" title="Version Compare(Currently unavailable)" disabled="true">
-												<i class="fa fa-clone" aria-hidden="true"></i>
-											</li> -->
-										</ul>
-									</div>
-								</div>
-								<!-- <i class="btn btn-link history-link collapsed" [ngClass]="isExpanded[i]==true?'up-arrow':'down-arrow'" (click)="toggle(i)"
-								 data-toggle="collapse" [attr.data-target]="'#'+'collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i "></i> -->
-							</div>
-
-							<div id="{{'collapse' + i }}" *ngIf="isExpanded[i]==true" class="active" [attr.aria-labelledby]="'heading' + i ">
-								<div class="card-body history-card-body plr-15">
-									<div class="row list-of-his" [ngClass]="{'history-line':history.GROUP_DETAILS_LIST.length > 1 && history.GROUP_DETAILS_LIST.length-1 != j}"
-									 *ngFor="let group of history.GROUP_DETAILS_LIST; let j=index">
-										<div class="col-12 col-sm-3 col-md-3">
-											<ul>
-												<li class="history-action">{{group.PROTOCOL_ACTION}}</li>
-											</ul>
-										</div>
-										<div class="col-12 col-md-4 col-md-4">
-											<ul style="margin-left: -16px;">
-												<li>Updated By
-													<span>{{group.UPDATE_USER_NAME}}</span> On
-													<span>{{(group.ACTION_DATE === ' ' || group.ACTION_DATE === null ) ? ' ':(group.ACTION_DATE | date: 'MM/dd/yyyy')}}
-													</span>
-												</li>
-											</ul>
-										</div>
-										<div class="col-12 col-sm-3 col-md-3">
-											<!-- <ul>
-												<li>Action Date : <span>{{(historyDet.ACTION_DATE === ' ' || historyDet.ACTION_DATE === null ) ? ' ':(historyDet.ACTION_DATE | date: 'MM/dd/yyyy')}}</span></li>
-											</ul> -->
-											<ul class="icon-list-coll">
-												<!-- <li><i class="fa fa-question-circle-o" aria-hidden="true"></i></li> -->
-												<li *ngIf="group.LETTER_FLAG == 'Y'" class="pointer" title="Download Correspondence letter" (click)="downloadCorrespondanceLetter(group.PROTOCOL_ACTION_ID,group.PROTO_CORRESP_TYPE)">
-													<i class="fa fa-download" aria-hidden="true"></i>
-												</li>
-												<li *ngIf="group.MINUTES_FLAG == 'Y'" class="pointer" title="Review Comments" data-toggle="modal" data-target="#deletePersonnelInfoDetails"
-												 (click)="getReviewComments(group.PROTOCOL_ACTION_ID,group.PROTOCOL_ACTION_TYPE_CODE)">
-													<i class="fa fa-comments" aria-hidden="true"></i>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card-header history-coll-header card card-list-no-data noHistory" *ngIf="noHistoryList">
-							<div class="col-12">No history details found</div>
-						</div>
-					</div>
 				</div>
-			</div>
 		</div>
+
+		<!-- ---------  tinu ends at here    ------------- -->
+		
 	</div>
 
 	<!-- modal-end -->

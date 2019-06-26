@@ -1,11 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { IrbCreateService } from '../irb-create.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
-import { IrbViewService } from '../../irb-view/irb-view.service';
 
 declare var $: any;
 @Component({
@@ -22,12 +21,14 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     irbAttachmentProtocol: any = {};
     tempSaveAttachment: any = {};
     tempEditAttachment: any = {};
+    internalAttachment: any = {};
     commonVo: any = {};
     protocolCollaboratorAttachmentsList: any[] = [];
     result: any = {};
     irbAttachmentsList: any[] = [];
     internalProtocolAtachmentList: any = [];
     previousProtocolAttachmentList: any = [];
+    studyAttachmentTypes: any = [];
     attachmentTypes = [];
     uploadedFile: File[] = [];
     files: UploadFile[] = [];
@@ -42,11 +43,17 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     fil: FileList;
     generalInfo: any;
     attachmentTypeDescription: string;
+    protocolStatusCode: string;
+    createOrViewPath: string;
     fileName: string;
     direction = 1;
+    directionUser = 1;
+    directionSystem = 1;
     attachmentEditedRow: number;
     attachmentSelectedRow: number;
     column = 'groupDescription';
+    columnSystem: 'updateTimeStamp';
+    columnUser: 'updateTimeStamp';
     tabSelected = 'STUDY';
     requestObject = {
         protocolNumber: '',
@@ -56,8 +63,10 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         attachmentDescription: ''
     };
     private $subscription1: ISubscription;
+    private $subscription2: ISubscription;
 
     constructor(private _activatedRoute: ActivatedRoute,
+        private _router: Router,
         public changeRef: ChangeDetectorRef,
         private _irbCreateService: IrbCreateService, private _spinner: NgxSpinnerService,
         private _sharedDataService: SharedDataService) { }
@@ -69,25 +78,41 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this._activatedRoute.queryParams.subscribe(params => {
             this.requestObject.protocolId = params['protocolId'];
             this.requestObject.protocolNumber = params['protocolNumber'];
-          });
-        this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
-            if (commonVo !== undefined) {
-                this.commonVo = commonVo;
-                this.generalInfo = commonVo.generalInfo;
-                this.isAttachmentEditable =
-                this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.addModifyNoteAttachments : true;
-            }
         });
         this._irbCreateService.getAttachmentTypes(null).subscribe(data => {
             this.result = data;
-            this.attachmentTypes = this.result.irbAttachementTypes;
+            this.studyAttachmentTypes = this.result.irbAttachementTypes;
+            this.loadIrbAttachmentList();
         });
-        this.loadIrbAttachmentList();
+        this.createOrViewPath = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
+    if (this.createOrViewPath === 'irb-create') {
+        this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
+            if (commonVo !== undefined) {
+                this.commonVo = commonVo;
+                this.generalInfo = commonVo.generalInfo !== undefined ?
+                commonVo.generalInfo : { protocolId: this.requestObject.protocolId };
+                if (this.commonVo !== undefined && this. commonVo.generalInfo !== undefined && this.commonVo.generalInfo !== null) {
+                    this.protocolStatusCode = this.commonVo.generalInfo.protocolStatus.protocolStatusCode;
+            }
+        }
+        });
+    } else {
+            this.$subscription2 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(commonVo => {
+                if (commonVo !== undefined && commonVo != null) {
+                  this.protocolStatusCode = commonVo.PROTOCOL_STATUS_CODE;
+                  this.generalInfo = { protocolId: this.requestObject.protocolId };
+                }
+            });
+
+        }
     }
 
     ngOnDestroy() {
         if (this.$subscription1) {
             this.$subscription1.unsubscribe();
+        }
+        if (this.$subscription2) {
+            this.$subscription2.unsubscribe();
         }
     }
 
@@ -97,8 +122,8 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     setAttachmentType(attachmentTypeCode) {
         this.attachmentTypes.forEach(attachmentType => {
             if (attachmentType.typeCode === attachmentTypeCode) {
-                this.attachmentTypeDescription = attachmentType.description;
-                this.irbAttachmentProtocol.subCategoryCode = attachmentType.subCategoryCode;
+                    this.attachmentTypeDescription = attachmentType.description;
+                    this.irbAttachmentProtocol.subCategoryCode = attachmentType.subCategoryCode;
             }
         });
     }
@@ -107,20 +132,23 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     loadIrbAttachmentList() {
         this.tabSelected = 'STUDY';
         this.column = 'groupDescription';
+        this.attachmentTypes = this.studyAttachmentTypes;
         this.attachmentSelectedRow = null;
         this.attachmentEditedRow = null;
         this._spinner.show();
-        const reqobj = {protocolId: this.requestObject.protocolId, protocolNumber: this.requestObject.protocolNumber};
+        const reqobj = { protocolId: this.requestObject.protocolId, protocolNumber: this.requestObject.protocolNumber };
         this._irbCreateService.getIrbAttachmentList(reqobj).subscribe(data => {
             this.result = data || [];
             this._spinner.hide();
             if (this.result != null) {
-              //  this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
+                //  this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
                 if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
                     this.noIrbAttachments = true;
                 } else {
                     this.generalInfo = this.result.protocolAttachmentList[0].protocolGeneralInfo;
                     this.irbAttachmentsList = this.result.protocolAttachmentList;
+                    this.isAttachmentEditable =
+                    this.result.protocolRenewalDetails != null ? this.result.protocolRenewalDetails.addModifyNoteAttachments : true;
                     this.setAttachmentTypeAndCategory();
                 }
             }
@@ -149,33 +177,27 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             () => console.log('OK'));
     }
 
-    downloadInternalAttachment( attachment ) {
-        this._irbCreateService.downloadInternalProtocolAttachments( attachment.protocolCorrespondenceId ).subscribe( data => {
-            const a = document.createElement( 'a' );
-            const blob = new Blob( [data], { type: data.type } );
-            a.href = URL.createObjectURL( blob );
-            a.download = attachment.fileName;
+    downloadInternalAttachment(attachment) {
+        this._irbCreateService.downloadInternalProtocolAttachments(attachment.protocolCorrespondenceId).subscribe(data => {
+            const a = document.createElement('a');
+            const blob = new Blob([data], { type: data.type });
+            a.href = URL.createObjectURL(blob);
+            a.download = attachment.protocolCorrespondenceType.description;
             document.body.appendChild(a);
             a.click();
 
         },
-            error => console.log( 'Error downloading the file.'),
-            () => console.log( 'OK' ) );
+            error => console.log('Error downloading the file.'),
+            () => console.log('OK'));
     }
     /** To edit an Attachment
      * @param index-index of the edited attachment object
      * @param attachments-attachment object that is edited
      */
-    editAttachments(attachments, index, isCollaboratorEdit) {
-        // this.isCollaboratorEdit = isCollaboratorEdit;
-        // if (this.isCollaboratorEdit) {
-        // this.attachmentSelectedRowCollaborator = index;
-        // this.fileName = attachments.protocolAttachments.fileName;
-        // } else {
+    editAttachments(attachments, index) {
         this.attachmentEditedRow = index;
         this.attachmentSelectedRow = index;
         this.fileName = attachments.protocolAttachmentData.fileName;
-        // }
         this.requestObject.attachmentTypeCode = attachments.attachmentType.typeCode;
         this.requestObject.attachmentDescription = attachments.description;
         this.tempEditAttachment = attachments;
@@ -183,56 +205,37 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     }
 
     saveEditedattachments() {
-                // $('#attachmentModal').modal('toggle');
-                if (this.tempEditAttachment.acType === 'U') {
-
-                }
-                this.attachmentEditedRow = null;
-                this.attachmentSelectedRow = null;
-                // this.attachmentSelectedRowCollaborator = null;
-                this.isAttachmentReplace = false;
-                this.tempEditAttachment.protocolId = this.requestObject.protocolId;
-                this.tempEditAttachment.attachmentType = {
-                    typeCode: this.requestObject.attachmentTypeCode,
-                    description: this.attachmentTypeDescription == null ?
-                        this.tempEditAttachment.attachmentType.description : this.attachmentTypeDescription,
-                    updateTimestamp: this.tempEditAttachment.attachmentType.updateTimestamp,
-                    updateUser: this.tempEditAttachment.attachmentType.updateUser
-                };
-                this.tempEditAttachment.typeCode = this.requestObject.attachmentTypeCode;
-                this.tempEditAttachment.description = this.requestObject.attachmentDescription;
-                this.tempEditAttachment.updateTimestamp = new Date();
-                this.tempEditAttachment.updateUser = this.userDTO.userName;
-                this._spinner.show();
-                if (!this.isCollaboratorEdit) {
-                this._irbCreateService.addattachment(this.tempEditAttachment, this.uploadedFile).subscribe(
-                    data => {
-                        this.result = data;
-                        document.getElementById('closeAttachmentModal').click();
-                        if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
-                            this.noIrbAttachments = true;
-                        } else {
-                            this.noIrbAttachments = false;
-                        }
-                        this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
-                        this.setAttachmentTypeAndCategory();
-                        this._spinner.hide();
-                        this.irbAttachment = data;
-                    });
+        this.attachmentEditedRow = null;
+        this.attachmentSelectedRow = null;
+        this.isAttachmentReplace = false;
+        this.tempEditAttachment.protocolId = this.requestObject.protocolId;
+        this.tempEditAttachment.attachmentType = {
+            typeCode: this.requestObject.attachmentTypeCode,
+            description: this.attachmentTypeDescription == null ?
+                this.tempEditAttachment.attachmentType.description : this.attachmentTypeDescription,
+            updateTimeStamp: this.tempEditAttachment.attachmentType.updateTimeStamp,
+            updateUser: this.tempEditAttachment.attachmentType.updateUser
+        };
+        this.tempEditAttachment.typeCode = this.requestObject.attachmentTypeCode;
+        this.tempEditAttachment.description = this.requestObject.attachmentDescription;
+        this.tempEditAttachment.updateTimeStamp = new Date();
+        this.tempEditAttachment.updateUser = this.userDTO.userName;
+        this._spinner.show();
+        this._irbCreateService.addattachment(this.tempEditAttachment, this.uploadedFile).subscribe(
+            data => {
+                this.result = data;
+                document.getElementById('closeAttachmentModal').click();
+                if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
+                    this.noIrbAttachments = true;
                 } else {
-                this._irbCreateService.addCollaboratorAttachments(this.tempEditAttachment, this.uploadedFile).subscribe(
-                    data => {
-                     document.getElementById('closeAttachmentModal').click();
-                      this.result = data;
-                      this._spinner.hide();
-                      this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList;
-                      this.uploadedFile = [];
-                      this.requestObject.attachmentDescription = '';
-                      this.requestObject.attachmentTypeCode = null;
-                      this.isMandatoryFilled = true;
-                    });
+                    this.noIrbAttachments = false;
                 }
-            }
+                this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
+                this.setAttachmentTypeAndCategory();
+                this._spinner.hide();
+                this.irbAttachment = data;
+            });
+    }
 
     /** Push the unique files choosen to uploaded file
      * @param files- files choosen
@@ -287,20 +290,15 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             || this.requestObject.attachmentDescription === '' || this.uploadedFile.length === 0) {
             this.isMandatoryFilled = false;
         } else {
-            if (this.uploadedFile.length > 1) {
-                this.multipleFile = true;
-            } else {
                 this.multipleFile = false;
-                // $('#attachmentModal').modal('toggle');
                 this.irbAttachmentProtocol.acType = 'I';
-                this.irbAttachmentProtocol.isProtocolAttachment = 'Y';
                 this.irbAttachmentProtocol.protocolNumber = this.requestObject.protocolNumber;
                 this.irbAttachmentProtocol.protocolId = this.requestObject.protocolId;
                 this.irbAttachmentProtocol.sequenceNumber = 1;
                 this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
                 this.irbAttachmentProtocol.documentId = 1;
                 this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;
-                this.irbAttachmentProtocol.updateTimestamp = new Date();
+                this.irbAttachmentProtocol.updateTimeStamp = new Date();
                 this.irbAttachmentProtocol.updateUser = this.userDTO.userName;
                 this.irbAttachmentProtocol.createTimestamp = new Date();
                 this.irbAttachmentProtocol.attachmentVersion = 1;
@@ -317,18 +315,12 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.irbAttachmentProtocol.attachmentSubCategory = {
                     subCategoryCode: this.irbAttachmentProtocol.subCategoryCode,
                     description: 'Study'
-                  };
-                // this.irbAttachmentProtocol.protocolAttachmentData = {
-                //     sequenceNumber: 1,
-                //     updateTimestamp: new Date(),
-                //     updateUser: this.userDTO.userName
-
-                // };
+                };
                 this._spinner.show();
                 this._irbCreateService.addattachment(this.irbAttachmentProtocol, this.uploadedFile).subscribe(
                     data => {
                         this.result = data;
-                document.getElementById('closeAttachmentModal').click();
+                        document.getElementById('closeAttachmentModal').click();
                         if (this.result.protocolAttachmentList == null || this.result.protocolAttachmentList.length === 0) {
                             this.noIrbAttachments = true;
                         } else {
@@ -343,9 +335,24 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                         this.requestObject.attachmentDescription = '';
                         this.uploadedFile = [];
                     });
-            }
+            // } else {
+            //        this.internalAttachment = { protocolId: this.requestObject.protocolId,
+            //         protocolNumber: this.requestObject.protocolNumber, updateUser: this.userDTO.userName, updateTimeStamp: new Date(),
+            //         createUser: this.userDTO.userName, createTimeStamp: new Date(), acType: 'I'};
+            //         this.saveInternalAttachment();
+            // }
         }
     }
+
+
+    // saveInternalAttachment() {
+    //     this._irbCreateService.saveOrUpdateInternalProtocolAttachments(this.internalAttachment, this.uploadedFile).
+    //     subscribe( (data: any) => {
+    //         this.internalProtocolAtachmentList =
+    //         data.internalProtocolAtachmentList != null ? data.internalProtocolAtachmentList : [];
+    //     });
+
+    // }
 
     /** Save the attachment before confirming delete
      * @param attachment- attachment object to be deleted
@@ -369,7 +376,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                     this.noIrbAttachments = true;
                 } else {
                     this.noIrbAttachments = false;
-                }this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
+                } this.irbAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
                 this.setAttachmentTypeAndCategory();
                 this.irbAttachment = data;
             });
@@ -389,10 +396,17 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     sortBy() {
         this.direction = this.direction === 1 ? -1 : 1;
     }
+    sortByUser() {
+        this.directionUser = this.directionUser === 1 ? -1 : 1;
+    }
+
+    sortBySystem() {
+        this.directionSystem = this.directionSystem === 1 ? -1 : 1;
+    }
 
     triggerAdd() {
         document.getElementById('addAttach').click();
-       //  $('#addAttach').trigger('click');
+        //  $('#addAttach').trigger('click');
     }
 
     clearAttachmentPopup() {
@@ -400,7 +414,6 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.requestObject.attachmentDescription = null;
         this.attachmentEditedRow = null;
         this.attachmentSelectedRow = null;
-       // this.attachmentSelectedRowCollaborator = null;
         this.isAttachmentReplace = false;
         this.uploadedFile = [];
         this.isMandatoryFilled = true;
@@ -413,17 +426,23 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this.isAttachmentReplace = true;
         this.tempEditAttachment = attachments;
         this.tempEditAttachment.acType = 'R';
-       //  this.attachmentEditedRow = index;
-       this.attachmentSelectedRow = index;
+        this.attachmentSelectedRow = index;
     }
     getInternalAttachment() {
         this.tabSelected = 'INTERNAL';
-        this.column = 'updateTimeStamp';
+        this.columnSystem = 'updateTimeStamp';
+        this.columnUser = 'updateTimeStamp';
+        this.attachmentEditedRow = null;
+        this.attachmentSelectedRow = null;
         this._spinner.show();
-        const reqobj = {protocolId: this.requestObject.protocolId};
+        const reqobj = { protocolId: this.requestObject.protocolId };
         this._irbCreateService.loadInternalProtocolAttachments(reqobj).subscribe((data: any) => {
-         this._spinner.hide();
+            this._spinner.hide();
             this.internalProtocolAtachmentList = data.internalProtocolAtachmentList != null ? data.internalProtocolAtachmentList : [];
+            this.setInternalFilename();
+            this.attachmentTypes = data.irbInternalAttachementTypes != null ? data.irbInternalAttachementTypes : [];
+            this.irbAttachmentsList = data.protocolAttachmentList != null ?  data.protocolAttachmentList : [];
+            this.setAttachmentTypeAndCategory();
         });
     }
     getVersion(attachments, index) {
@@ -433,6 +452,11 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this._irbCreateService.loadPreviousProtocolAttachments(attachments.documentId).subscribe((data: any) => {
             this._spinner.hide();
             this.previousProtocolAttachmentList = data.previousProtocolAttachmentList != null ? data.previousProtocolAttachmentList : [];
+        });
+    }
+    setInternalFilename() {
+        this.internalProtocolAtachmentList.forEach(attachment => {
+            attachment.fileName = attachment.protocolCorrespondenceType.description;
         });
     }
     setAttachmentTypeAndCategory() {

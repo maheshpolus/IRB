@@ -9,6 +9,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
@@ -226,9 +227,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@SuppressWarnings("unused")
 	@Override
-	public IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId) {
+	public IRBProtocolVO loadIRBProtocolAttachments(Integer protocolId, String protocolNumber) {
 		IRBProtocolVO irbProtocolVO = null;
-		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachments(protocolId);
+		return irbProtocolVO = irbProtocolDao.loadIRBProtocolAttachments(protocolId,protocolNumber);
 	}
 
 	@Override
@@ -472,5 +473,22 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			logger.error("Error in updateProtocolPermission method : "+e.getMessage());
 		}
 		return irbPermissionVO;
+	}
+
+	@Override
+	public IRBProtocolVO saveOrUpdateInternalProtocolAttachments(MultipartFile[] files, String formDataJson) {
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			IRBProtocolCorrespondence internalProtocolAttachment = mapper.readValue(formDataJson, IRBProtocolCorrespondence.class);					
+		    if(internalProtocolAttachment.getAcType().equals("D")){
+				irbProtocolVO = irbProtocolDao.deleteInternalProtocolAttachment(internalProtocolAttachment);
+			}else if(internalProtocolAttachment.getAcType() != null){
+				irbProtocolVO = irbProtocolDao.saveOrUpdateInternalProtocolAttachments(files,internalProtocolAttachment);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return irbProtocolVO;
 	}
 }

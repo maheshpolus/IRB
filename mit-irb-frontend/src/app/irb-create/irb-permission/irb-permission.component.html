@@ -1,96 +1,114 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <div class="card history-card border-radius-1">
-        <div class="card-header history-header">
-          <nav class="nav navbar-pg3">
-            <h5>Permissions</h5>
-            <i class="fa fa-info-circle" aria-hidden="true"></i>
-          </nav>
-        </div>
-        <div class="card-body card-paddng">
-          <div class="col-12  search-eidted-p padding-15" *ngIf="isEditMode">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Employee</label>
-                  <span class="mandatory">*</span>
-                  <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+    <div class="row">
+  
+      <div class="col-12">
+        <div class="row cards-in">
+          <div class="col-12 mb-10">
+            <div class="card mt-5">
+  
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                  <h4 class="card-hedding dotted-bottom">Permissions
+                    <span style="float: right;">
+                      <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </span>
+                  </h4>
                 </div>
               </div>
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label>Type</label>
-                  <span class="mandatory">*</span>
-                  <select class="custom-select mr-sm-2" [(ngModel)]="protocolRolePerson.roleId" (ngModelChange)="setRole(protocolRolePerson.roleId)">
-                    <option selected value=null>Please Select</option>
-                    <option *ngFor="let role of protocolRoles" value="{{role.roleId}}">{{role.roleName}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-1">
-                <button title="Save" (click)="addProtocolRolePerson()" type="button" class="btn btn-success mt-30">
-                  Assign
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="col-12" *ngIf="showPersonElasticBand">
-            <div class="col-12 band-s">
-              <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
-              <div class="row">
-                <div class="col-12">
-                  <label>Name:</label>
-                  <span>{{selectedPerson?.full_name}} (
-                    <span *ngIf="options.type == 'person'">{{selectedPerson?.person_id}}</span>
-                    <span *ngIf="options.type != 'person'">{{selectedPerson?.rolodex_id}}</span>)</span>
-                </div>
-                <div class="col-12">
-                  <label>Username:</label>
-                  <span>{{selectedPerson?.user_name}}</span>
-                  <label>Email:</label>
-                  <span>{{selectedPerson?.email_address}}</span>
-                  <label>Phone no:</label>
-                  <span>{{selectedPerson?.phone_number}}</span>
-                  <label>Title:</label>
-                  <span>{{selectedPerson?.title}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 users-list-tbl">
-            <div class="row">
-              <div class="table-responsive">
-                <table class="table table-striped tbl-p-clr">
-                  <thead class="tbl-head-clr thead-font-size">
-                    <tr>
-                      <th scope="col">Person Name</th>
-                      <th scope="col">Role</th>
-                      <th *ngIf="isEditMode" scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody class="tbody-font-size">
-                    <ng-container *ngIf="protocolRolePersonList.length > 0">
-                    <tr *ngFor="let person of protocolRolePersonList">
-                      <td>{{person.personName}}</td>
-                      <td>{{person?.role?.roleName}}</td>
-                      <td class="action-btn-list" *ngIf="isEditMode">
-                        <button title="Delete" (click)="deletePermission(person)" type="button" class="btn btn-primary delete-btn-1">
-                          <i class="fa fa-trash" aria-hidden="true"></i>
+  
+              <div class="card-body card-paddng">
+                  <div class="col-12  search-eidted-p padding-15"  *ngIf="isEditMode">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <span class="txt-medium text-secondary">Employee</span>
+                          <span class="mandatory">*</span>
+                          <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <span class="txt-medium text-secondary">Type</span>
+                          <span class="mandatory">*</span>
+                          <select class="custom-select mr-sm-2 txt-small form-control" [(ngModel)]="protocolRolePerson.roleId" (ngModelChange)="setRole(protocolRolePerson.roleId)">
+                            <option selected value=null>Please Select</option>
+                            <option *ngFor="let role of protocolRoles" value="{{role.roleId}}">{{role.roleName}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <button title="Save" (click)="addProtocolRolePerson()" type="button" class="btn btn-outline-success txt-small mt-30">
+                          Assign
                         </button>
-                      </td>
-                    </tr>
-                  </ng-container>
-                  </tbody>
-                </table>
-              </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 mt-2" *ngIf="showPersonElasticBand">
+                    <div class="col-12 card search-card-view mb-2 mt-0 p-3 txt-medium">
+                      <div class="col-sm-12 col-md-12 col-lg-12 text-right" (click)="showPersonElasticBand = false"
+                        title="Close">
+                        <i class="fa fa-times-circle btn-close-lite" aria-hidden="true"></i>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <span class="txt-medium text-secondary">Name:</span>
+                          <span class="text-danger">{{selectedPerson?.full_name}} (
+                            <span *ngIf="options.type == 'person'">{{selectedPerson?.person_id}}</span>
+                            <span *ngIf="options.type != 'person'">{{selectedPerson?.rolodex_id}}</span>)</span>
+                        </div>
+                        <div class="col-12 mt-1">
+                          <span class="txt-medium text-secondary">Username:</span>
+                          <span class="text-danger">{{selectedPerson?.user_name}}</span>
+                          <span class="txt-medium text-secondary">Email:</span>
+                          <span class="text-danger">{{selectedPerson?.email_address}}</span>
+                          <span class="txt-medium text-secondary">Phone no:</span>
+                          <span class="text-danger">{{selectedPerson?.phone_number}}</span>
+                          <span class="txt-medium text-secondary">Title:</span>
+                          <span class="text-danger">{{selectedPerson?.title}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  <div class="col-md-12 users-list-tbl">
+                    <div class="row">
+                      <div class="w-100">
+                        <table class="table tbl-p-clr">
+                          <thead class="tbl-head-clr thead-font-size">
+                            <tr class="solid-bottom">
+                              <th scope="col">Person Name</th>
+                              <th scope="col">Role</th>
+                              <th scope="col"  *ngIf="isEditMode">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody class="tbody-font-size">
+                            <ng-container *ngIf="protocolRolePersonList.length > 0">
+                            <tr *ngFor="let person of protocolRolePersonList" class="solid-bottom pull-up">
+                              <td class="align-middle">{{person.personName}}</td>
+                              <td class="align-middle">{{person?.role?.roleName}}</td>
+                              <td class="action-btn-list"  *ngIf="isEditMode">
+                                <button title="Delete" (click)="deletePermission(person)" type="button" class="btn mb-2">
+                                  <i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </ng-container>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="!isEditMode && protocolRolePersonList.length == 0">
+                    <div class="text-center"> No Permissions Assigned</div>
+                   </ng-container>
+                </div>
+  
             </div>
           </div>
-          <ng-container *ngIf="!isEditMode && protocolRolePersonList.length == 0">
-           <div class="text-center"> No Permissions Assigned</div>
-          </ng-container>
         </div>
       </div>
+  
     </div>
   </div>
+  
+  

@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.ForeignKey;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -40,6 +44,10 @@ public class IRBProtocolCorrespondence {
 	@Column(name="PROTO_CORRESP_TYPE_CODE")
 	private String protoCorrespTypeCode;
 	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTO_CORRESPONDENCE_FK1"), name = "PROTO_CORRESP_TYPE_CODE", referencedColumnName = "PROTO_CORRESP_TYPE_CODE", insertable = false, updatable = false)
+	private IRBProtocolCorrespondenceType protocolCorrespondenceType;
+	
 	@Column(name="FINAL_FLAG")
 	private String finalFlag;
 	
@@ -62,6 +70,15 @@ public class IRBProtocolCorrespondence {
 	
 	@Column(name="FINAL_FLAG_TIMESTAMP")
 	private Date finalFlagTimeStamp;
+	
+	@Column(name="FILE_NAME")
+	private String fileName;
+	
+	@Column(name="CONTENT_TYPE")
+	private String contentType;
+	
+	@Transient
+	private String acType;
 
 	public Integer getProtocolCorrespondenceId() {
 		return protocolCorrespondenceId;
@@ -165,5 +182,37 @@ public class IRBProtocolCorrespondence {
 
 	public void setFinalFlagTimeStamp(Date finalFlagTimeStamp) {
 		this.finalFlagTimeStamp = finalFlagTimeStamp;
+	}
+
+	public IRBProtocolCorrespondenceType getProtocolCorrespondenceType() {
+		return protocolCorrespondenceType;
+	}
+
+	public void setProtocolCorrespondenceType(IRBProtocolCorrespondenceType protocolCorrespondenceType) {
+		this.protocolCorrespondenceType = protocolCorrespondenceType;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 }

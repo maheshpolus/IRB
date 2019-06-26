@@ -1,107 +1,108 @@
-<div *ngIf="!showBtn">
-	<div class="col-sm-12 p15">
-		
+<div *ngIf="!showBtn" class="col-12">
+    <div class="col-sm-12 p15">
+      <div class="row">
+        <ul class="nav nav-pills" role="tablist" style="background: none;">
+        <li class="nav-item">
+          <a class="nav-link active txt-small button-red-tab"
+          (click)="showData(userDTO.role,'PENDING')" [ngClass]="{active:(tabSelected=='PENDING')}">
+          <i class="fa fa-hourglass txt-large" aria-hidden="true"></i> Pending</a>
+        </li>
+        <li class="nav-item border-left1">
+          <a class="nav-link txt-small button-red-tab"
+          (click)="showData(userDTO.role,'STUDIES')" [ngClass]="{active:(tabSelected=='STUDIES')}">
+          <i class="fa fa-book txt-large mr-5" aria-hidden="true"></i>My Studies
+          </a>
+        </li>
+        <li class="nav-item border-left1">
+          <a class="nav-link txt-small button-red-tab"
+          (click)="showData(userDTO.role,'EN-ROUTE')" [ngClass]="{active:(tabSelected=='EN-ROUTE')}">
+          <i class="fa fa-sitemap txt-large mr-5" aria-hidden="true"></i>En-Route
+          </a>
+        </li>
+        <li class="nav-item border-left1" *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
+          <a class="nav-link txt-small button-red-tab"
+          (click)="showData(userDTO.role,'SUBMITTED')" [ngClass]="{active:(tabSelected=='SUBMITTED')}">
+          <i class="fa fa-check txt-large mr-5" aria-hidden="true"></i>Submitted
+          </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div *ngIf="!showBtn">
+      <div  id="top-exempt-card" class="main-list" *ngIf="paginatedExemptList!=null && paginatedExemptList!=undefined" [ngClass]="{'main-list': paginatedExemptList?.length >1}">
+        <div class="row alert-sp alert-warning mb-0">
+          <p class="txt-small m-0" *ngIf="tabSelected == 'PENDING'"><i class="fa fa-info-circle"
+              aria-hidden="true"></i>
+            Listing all Exempt forms which are in In Progress state.</p>
+          <p class="txt-small m-0" *ngIf="tabSelected == 'STUDIES'"><i class="fa fa-info-circle"
+              aria-hidden="true"></i>
+            Listing all Exempt forms which were determination is made.</p>
+          <p class="txt-small m-0" *ngIf="tabSelected == 'EN-ROUTE'"><i class="fa fa-info-circle"
+              aria-hidden="true"></i>
+            Listing all Exempt forms which are in En-route state.</p>
+          <p class="txt-small m-0" *ngIf="tabSelected == 'SUBMITTED'"><i class="fa fa-info-circle"
+              aria-hidden="true"></i>
+            Listing all Exempt forms which are in Submitted state.</p>
+        </div>
+        <div class="main-list">
+          <div class="row list-rows" *ngFor="let irb of paginatedExemptList">
+            <div class="col-md-2 col-sm-12 col-12 list-view">
+              <span *ngIf="irb.isExempt=='Y' && irb.statusCode=='4'" class="green note rounded active-status" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Exempt</a>
+              </span>
+              <span *ngIf="irb.isExempt=='N' && irb.statusCode=='4'" class="note rounded completed-closed pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Not Exempt</a>
+              </span>
+              <span *ngIf="irb.isExempt=='O' && irb.statusCode=='4'" class="note rounded in-drafts pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Review Not Required</a>
+              </span>
+              <span *ngIf="irb.isExempt==null || irb.statusCode=='1'" class="note rounded orange pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Not Submitted</a>
+              </span>
+              <span *ngIf="irb.isExempt=='O' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="note rounded in-drafts pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Review Not Required-Pending</a>
+              </span>
+              <span *ngIf="irb.isExempt=='Y' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="note rounded orange pending-action pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Exempt-Pending Review</a>
+              </span>
+              <span *ngIf="irb.isExempt=='N' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="note rounded orange pending-action pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
+                <a class="txt-small ml-5">Not Exempt-Pending Review</a>
+              </span>
+            </div>
+            <div class="col-md-8 col-sm-12 col-12 list-des">
+              <h6 class="txt-large mb-10">E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h6>
+              <p class="text-secondary txt-medium mb-5">
+              PI : <span class="text-danger mr-20">{{irb.personName}}</span>
+              Status : <span class="text-danger mr-20">{{irb.status}}</span>
+              Faculty Sponsor : <span class="text-danger mr-20">{{irb.facultySponsorPerson}}</span>
+              </p>
+              <p class="text-secondary txt-medium mb-5">
+              <!-- Last Updated By : <span class="text-danger mr-20">{{irb.updateUser}} on {{irb.updateTimestamp | date :'MM/dd/yyyy'}}</span> -->
+              Start Date : <span class="text-danger mr-20">{{irb.exemptProtocolStartDate | date :'MM/dd/yyyy'}}</span>
+              End Date : <span class="text-danger mr-20">{{irb.exemptProtocolEndDate | date :'MM/dd/yyyy'}}</span>
+              </p>
+            </div>
+            <div class="col-md-2 col-sm-12 col-12 list-des button-responsive text-right">
+              <p class="txt-small txt-darkash"><span class="text-danger">{{irb.updateUser}}</span> on :{{irb.updateTimestamp | date :'MM/dd/yyyy'}} </p>
+              <a (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)"
+                href="javascript:void(0)" class="btn btn-blue btn-sm text-right">
+                <i class="fa fa-eye" aria-hidden="true"></i> View
+              </a>
+              <a href="javascript:void(0)" *ngIf="tabSelected=='STUDIES' || tabSelected=='SUBMITTED'"
+                class="btn btn-blue btn-sm text-right mt-1" (click)="generateDetermination(irb.exemptFormID)">
+                <i class="fa fa-download"></i> Determination
+              </a>
+              <a href="javascript:void(0)" *ngIf="(tabSelected=='STUDIES' || tabSelected=='SUBMITTED') && irb.isExempt=='Y'"
+                (click)="openFundingSourceModal(irb)" class="btn btn-blue btn-sm text-right mt-1">
+                <i class="fa fa-usd"></i> Funding Source
+              </a>
+            </div>
 
-		<button type="button" name="pending" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'PENDING')" [ngClass]="{tabActive:(tabSelected=='PENDING')}">
-				<i class="fa fa-spinner pr5" aria-hidden="true"></i> Pending
-			</button>
-		<span>
-				<button type="button" name="myStudies" (click)="showData(userDTO.role,'STUDIES')" class="btn btn-secondary inner-tab-btn"
-				[ngClass]="{tabActive:(tabSelected=='STUDIES')}">
-				   <i class="fa fa-book pr5" aria-hidden="true"></i>My Studies
-			   </button>
-		</span>
-		<span>
-				<button type="button" name="en-route" (click)="showData(userDTO.role,'EN-ROUTE')" class="btn btn-secondary inner-tab-btn"
-				[ngClass]="{tabActive:(tabSelected=='EN-ROUTE')}">
-				   <i class="fa fa-sitemap pr5" aria-hidden="true"></i>En-Route
-			   </button>
-		</span>
-		<span *ngIf="userDTO.role == 'ADMIN' || userDTO.role == 'CHAIR'">
-			<button type="button" name="submitted" class="btn btn-secondary inner-tab-btn" (click)="showData(userDTO.role,'SUBMITTED')"
-			 [ngClass]="{tabActive:(tabSelected=='SUBMITTED')}">
-				<i class="fa fa-check pr5" aria-hidden="true"></i> Submitted
-			</button>
-		</span>
-	</div>
-	<div class="inner-tab-container">
-<div *ngIf="!showBtn">
-		<div  id="top-exempt-card" class="col-sm-12" *ngIf="paginatedExemptList!=null && paginatedExemptList!=undefined" [ngClass]="{'main-list': paginatedExemptList?.length >1}">
-			<div class="row list-rows" *ngFor="let irb of paginatedExemptList">
-				<div class="col-md-3 col-sm-12 col-12 list-view">
-					<span *ngIf="irb.isExempt=='Y' && irb.statusCode=='4'" class="active-status" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Exempt</p>
-					</span>
-					<span *ngIf="irb.isExempt=='N' && irb.statusCode=='4'" class="completed-closed pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Not Exempt</p>
-					</span>
-					<span *ngIf="irb.isExempt=='O' && irb.statusCode=='4'" class="in-drafts pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Review Not Required</p>
-					</span>
-					<span *ngIf="irb.isExempt==null || irb.statusCode=='1'" class="pending-action pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Not Submitted</p>
-					</span>
-					<span *ngIf="irb.isExempt=='O' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="in-drafts pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Review Not Required-Pending</p>
-					</span>
-					<span *ngIf="irb.isExempt=='Y' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="pending-action pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Exempt-Pending Review</p>
-					</span>
-					<span *ngIf="irb.isExempt=='N' && (irb.statusCode=='3' || irb.statusCode=='2' || irb.statusCode=='5')" class="pending-action pointer" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-						<p>Not Exempt-Pending Review</p>
-					</span>
-				</div>
-				<div class="col-sm-12 col-12 list-des" [ngClass]="tabSelected=='STUDIES' || tabSelected=='SUBMITTED' ? 'col-md-5':'col-md-6'">
-					<h5>E-{{irb.exemptFormID}} - {{irb.exemptTitle}}</h5>
-					<div>
-						<div class="row">
-							<div class="col-md-6">
-								<span>PI : </span>{{irb.personName}}
-							</div>
-							<div class="col-md-6">
-								<span>Status : </span>{{irb.status}}
-							</div>
-						</div>
-						<div class="row"></div>
-						<div class="row">
-							<div class="col-md-6">
-								<span>Faculty Sponsor : </span>{{irb.facultySponsorPerson}}
-							</div>
-							<div class="col-md-6">
-								<span>Last Updated By : </span>{{irb.updateUser}} on {{irb.updateTimestamp | date :'MM/dd/yyyy'}}
-							</div>
-							<div class="col-md-6">
-								<span>Start Date : </span>{{irb.exemptProtocolStartDate | date :'MM/dd/yyyy'}}
-							</div>
-							<div class="col-md-6">
-								<span>End Date : </span>{{irb.exemptProtocolEndDate | date :'MM/dd/yyyy'}}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12 col-12 list-des button-responsive" [ngClass]="tabSelected=='STUDIES' || tabSelected=='SUBMITTED' ? 'col-md-4':'col-md-3'">
-					<a>
-						<button type="button" class="btn btn-outline-secondary button-view" (click)="openExempt(irb.exemptQuestionnaireAnswerHeaderId,irb.statusCode,irb.exemptTitle,irb.exemptFormID)">
-							<i class="fa fa-eye"></i>View
-						</button>
-					</a>
-					<a>
-						<button *ngIf="tabSelected=='STUDIES' || tabSelected=='SUBMITTED'" type="button" class="btn btn-outline-secondary button-view" (click)="generateDetermination(irb.exemptFormID)">
-							<i class="fa fa-download"></i>Determination
-						</button>
-					</a>
-					<a>
-								<button *ngIf="(tabSelected=='STUDIES' || tabSelected=='SUBMITTED') && irb.isExempt=='Y'" type="button" class="btn btn-outline-secondary button-view" (click)="openFundingSourceModal(irb)">
-										<i class="fa fa-usd"></i>Funding Source
-									</button>
-						</a>
-				</div>
-			</div>
-		</div>
-		</div>
-	</div>
-	<div class="col-sm-12" *ngIf="paginatedExemptList?.length == 0 || paginatedExemptList == undefined">
-			<span>No Exempt Studies</span>
-	</div>
-
-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 text-center txt-large" *ngIf="paginatedExemptList?.length == 0 || paginatedExemptList == undefined">
+        <span>No Exempt Studies</span>
+    </div>
+  </div>

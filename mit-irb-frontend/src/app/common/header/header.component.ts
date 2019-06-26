@@ -142,13 +142,13 @@ export class HeaderComponent implements OnInit {
                     }
                 } else {
                     if (acType === 'Q') {
-                        this.alertMessage = 'You donot have Permission to Maintain Questionnaire';
+                        this.alertMessage = 'You do not have Permission to Maintain Questionnaire';
                     } else if (acType === 'CT') {
-                        this.alertMessage = 'You donot have Permission to Maintain Code Tables';
+                        this.alertMessage = 'You do not have Permission to Maintain Code Tables';
                     } else if ( acType === 'T') {
-                        this.alertMessage = 'You donot have Permission to Maintain Person training';
+                        this.alertMessage = 'You do not have Permission to Maintain Person training';
                     }  else if ( acType === 'R') {
-                        this.alertMessage = 'You donot have Permission to Maintain Roles';
+                        this.alertMessage = 'You do not have Permission to Maintain Roles';
                     }
                     this.openPermissionWarningModal(this.alertMessage);
                 }

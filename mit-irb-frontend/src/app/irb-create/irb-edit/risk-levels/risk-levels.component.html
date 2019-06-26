@@ -1,93 +1,109 @@
-<!-- RISK LEVEL - START -->
-<div class="top-distance" *ngIf="isGeneralInfoSaved && generalInfo.protocolStatusCode != 100">
-  <div class="card history-card border-radius-1">
-    <div class="card-header history-header">
-      <nav class="nav navbar-pg3">
-        <h5>Risk Level</h5>
-        <i class="fa fa-info-circle" aria-hidden="true"></i>
-      </nav>
-    </div>
-    <div class="card-body card-paddng">
-      <div class="col-12 search-eidted-p padding-15">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Risk Level
-              </label>
-              <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelCode" (ngModelChange)="riskLevelTypeChange(generalInfo.riskLevelCode)">
-                <option value=null selected>Please Select</option>
-                <option *ngFor="let level of riskLevelType" value="{{level.riskLevelCode}}">{{level.description}}</option>
-              </select>
+<!--   start  -->
+
+<div class=""  *ngIf="isGeneralInfoSaved && generalInfo.protocolStatusCode != 100">
+    <div class="row cards-in">
+      <div class="col-12 mb-10">
+        <div class="card mt-5">
+
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+              aria-labelledby="pills-home-tab">
+              <h4 class="card-hedding dotted-bottom">Risk Level
+                  <i class="fa fa-info-circle " aria-hidden="true" style="float: right;"></i>
+              </h4>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Date Assigned</label>
-              <div class="input-group date-pickr-1 mb-3">
-                <input type="text" class="form-control" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLvlDateAssigned" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
-                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned" *ngIf ="isRiskLevelEditable">
 
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
-
+          <div class="card-body card-paddng">
+              <div class="col-12 search-eidted-p padding-15">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <span class="txt-medium txt-dark">Risk Level
+                      </span>
+                      <select class="txt-small form-control" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelCode" (ngModelChange)="riskLevelTypeChange(generalInfo.riskLevelCode)">
+                        <option value=null selected>Please Select</option>
+                        <option *ngFor="let level of riskLevelType" value="{{level.riskLevelCode}}">{{level.description}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <span class="txt-medium txt-dark">Date Assigned</span>
+                      <div class="input-group date-pickr-1 mb-3">
+                        <input type="text" class="txt-small form-control" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLvlDateAssigned" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
+                        <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned" *ngIf ="isRiskLevelEditable">
+        
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+        
+                        </div>
+                        <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="form-group">
+                        <span class="txt-medium txt-dark">Comments</span>
+                      <textarea class="txt-small form-control" rows="1" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelComments" placeholder="Comments"></textarea>
+                    </div>
+                  </div>
                 </div>
-                <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
               </div>
-            </div>
-          </div>
-          <div class="col-md-5">
-            <div class="form-group">
-              <label>Comments</label>
-              <textarea class="form-control txt-area-fnt" rows="1" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.riskLevelComments" placeholder="Comments"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 search-eidted-p padding-15">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>FDA Risk Level
-              </label>
-              <select class="custom-select" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelCode" (ngModelChange)="fdaRiskLevelTypeChange(generalInfo.fdaRiskLevelCode)">
-                <option value=null selected>Please Select</option>
-                <option *ngFor="let level of fdaRiskLevelType" value="{{level.fdaRiskLevelCode}}">{{level.description}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Date Assigned</label>
-              <div class="input-group date-pickr-1 mb-3">
-                <input type="text" class="form-control" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLvlDateAssigned" [owlDateTime]="fdadateAssigned" placeholder="mm/dd/yyyy">
-                <div class="input-group-append input-span-1" [owlDateTimeTrigger]="fdadateAssigned" *ngIf ="isRiskLevelEditable">
-
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
-
+        
+              <div class="col-12 search-eidted-p padding-15">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                        <span class="txt-medium txt-dark">FDA Risk Level{{generalInfo.fdaRiskLevelCode}}
+                        </span>
+                      <select class="txt-small form-control" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelCode" (ngModelChange)="fdaRiskLevelTypeChange(generalInfo.fdaRiskLevelCode)">
+                        <option value=null selected>Please Select</option>
+                        <option *ngFor="let level of fdaRiskLevelType" value="{{level.fdaRiskLevelCode}}">{{level.description}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                        <span class="txt-medium txt-dark">Date Assigned</span>
+                      <div class="input-group date-pickr-1 mb-3">
+                        <input type="text" class="txt-small form-control" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLvlDateAssigned" [owlDateTime]="fdadateAssigned" placeholder="mm/dd/yyyy">
+                        <div class="input-group-append input-span-1" [owlDateTimeTrigger]="fdadateAssigned" *ngIf ="isRiskLevelEditable">
+        
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+        
+                        </div>
+                        <owl-date-time [pickerType]="'calendar'" #fdadateAssigned></owl-date-time>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="form-group">
+                        <span class="txt-medium txt-dark">Comments</span>
+                      <textarea class="txt-small form-control txt-area-fnt" rows="1" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelComments" placeholder="Comments"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                      <button *ngIf="isRiskLevelEditable" type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">Save
+                      </button>
+                    </div>
                 </div>
-                <owl-date-time [pickerType]="'calendar'" #fdadateAssigned></owl-date-time>
               </div>
+        
+              <div class="col-md-12 users-list-tbl">
+                <div class="row">
+                </div>
+              </div>
+        
             </div>
-          </div>
-          <div class="col-md-5">
-            <div class="form-group">
-              <label>Comments</label>
-              <textarea class="form-control txt-area-fnt" rows="1" [disabled]="!isRiskLevelEditable" [(ngModel)]="generalInfo.fdaRiskLevelComments" placeholder="Comments"></textarea>
-            </div>
-          </div>
-          <div class="col-md-1">
-              <button *ngIf="isRiskLevelEditable" type="button margin-class" class="btn btn-success" (click)="saveGeneralInfo()">Save
-              </button>
-            </div>
+
         </div>
       </div>
-
-      <div class="col-md-12 users-list-tbl">
-        <div class="row">
-        </div>
-      </div>
-
     </div>
   </div>
-</div>
+
+<!--   end    -->
+
+
+<!-- RISK LEVEL - START -->
+
 <!-- RISK LEVEL - END -->

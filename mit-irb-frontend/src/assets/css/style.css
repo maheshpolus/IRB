@@ -18,7 +18,7 @@
 html,body{height: 100%;}
 body{
     background: #fefefe;
-    font-family: "Roboto", "Helvetica Neue", "Segoe UI", Arial, Sans-Serif;
+    font-family: "Source Sans Pro", "Helvetica Neue", "Segoe UI", Arial, Sans-Serif;
 }
 
 
@@ -35,7 +35,7 @@ body{
     margin: 0 auto;
     padding: 10px;
     border-bottom: 1px #E9E9E9 solid;
-    
+
 }
 .borderBox>.borderBoxHeading{
     margin: -15px -10px 10px;
@@ -86,9 +86,9 @@ body{
     margin-bottom: 2px;
 }
  .setBody p{
-  
-     
-    font-size: .8em; 
+
+
+    font-size: .8em;
 }
 
 .viewMode>div>div>span {
@@ -248,7 +248,7 @@ body{
 @media (min-width: 576px) { ... }
 
 /*/ Medium devices (tablets, 768px and up)*/
-@media (min-width: 768px) { 
+@media (min-width: 768px) {
 .slideMenu:hover {width: 225px}
 }
 

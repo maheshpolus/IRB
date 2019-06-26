@@ -56,10 +56,12 @@ export class RoleMaintainanceComponent implements OnInit {
   roleSearchObject = {
     unitNumber: null,
     roleId: null,
+    personId: null
   };
   personRoleUnitList: any;
   personRoleLists: any;
   isRoleList = true;
+  isRoleUnitDisable = false;
 
   constructor(private _router: ActivatedRoute, private _elasticsearchService: PiElasticService,
     private _roleService: RoleMaintainanceService, ) { }
@@ -144,13 +146,16 @@ export class RoleMaintainanceComponent implements OnInit {
     if (result === null) {
       this.isPerson = false;
       this.isRoleList = true;
+      this.roleSearchObject.personId = null;
     } else {
-      this.isPerson = true;
-      this.isRoleList = false;
-     // this.personUnitName = null;
-     // this.personRoleName = null;
+      this.personUnitName = null;
+      this.roleSearchObject.unitNumber = null;
+      this.personRoleName = null;
+      this.roleSearchObject.roleId = null;
+      this.isRoleUnitDisable = true;
       this.personDetails.personName = result.full_name;
-      this.personDetails.personId = this.roleDetails.personId = this.assignedDetails.personId = result.person_id;
+      this.personDetails.personId = this.roleSearchObject.personId =
+      this.roleDetails.personId = this.assignedDetails.personId = result.person_id;
       this.personDetails.user_name = result.user_name;
       this.personDetails.email_id = result.email_address;
       this.personDetails.unit_name = result.unit_name;
@@ -273,7 +278,8 @@ export class RoleMaintainanceComponent implements OnInit {
 */
   fetchUnit(selectedString) {
      // tslint:disable-next-line:no-construct
-   // this.clearField = new String('true');
+    this.clearField = new String('true');
+    this.roleSearchObject.personId = null;
     if (selectedString !== '') {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
@@ -294,9 +300,11 @@ export class RoleMaintainanceComponent implements OnInit {
         this.viewPerson.push(false);
       });
     });
+    this.isRoleUnitDisable = false;
   }
 
   findRoles(personRoleName) {
+    this.roleSearchObject.personId = null;
     // tslint:disable-next-line:no-construct
     this.clearField = new String('true');
     this.isSearchRoleActive = true;

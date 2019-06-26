@@ -1,6 +1,7 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div class="headerPush"></div>
 <div class="container-fluid">
+
   <div class="borderBox irb-margin-top irb-background-tablemaintenance">
     <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Maintenance</h4>
     <div class="text-right">
@@ -13,12 +14,12 @@
         <div class="form-group">
             <div class="form-check-inline">
                 <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="empOptradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Employee
+                  <input type="radio" class="form-check-input" name="empOptradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span class="txt-medium text-secondary">Employee</span>
                 </label>
               </div>
               <div class="form-check-inline">
                 <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="nonEmpOptradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">Non-Employee
+                  <input type="radio" class="form-check-input" name="nonEmpOptradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span class="txt-medium text-secondary">Non-Employee</span>
                 </label>
               </div>
               <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
@@ -41,11 +42,13 @@
       </div>
       <div class="col-md-3  mt-30">
       <div class="form-group">
-          <button class="btn btn-default btn-search" (click)="getAdvanceSearchResult()">
+          <button class="btn btn-outline-success" (click)="getAdvanceSearchResult()">
             <i class="fa fa-search"></i>Search
           </button>
-          <button class="btn btn-default btn-close" (click)="clearAdvancedSearch()">
-              <i class="fa fa-close"></i>Clear
+          <button class="btn btn-outline-secondary" (click)="clearAdvancedSearch()" style="top: 0px;right: 82px;height: 39px;">
+              <span class="pose-ico"> <i class="fa fa-close btn-close-0" style="font-size: 17px;"></i>
+              <span style="font-size: 17px;">Clear</span> 
+            </span>
             </button>
           </div>
           </div>

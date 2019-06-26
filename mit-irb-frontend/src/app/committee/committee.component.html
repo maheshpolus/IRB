@@ -4,37 +4,37 @@
 		<div class="headerPush"></div>
 		<!-- Session handling component -->
 		<app-sessiontimeout> </app-sessiontimeout>
-		<div class="container-fluid position-relative">
-		<div class="exit-button" (click)="backClick()" title="Close">
-						<i class="fa fa-times mg-6">&nbsp;</i>
-		</div>
-			<section class="row sect-padding">
-				<div class="col-12 top-aprv-details">
+		<div class="position-relative">
+			<section class="card">
+				<div class="col-12 card-body">
 					<div class="row">
 						<div class="col-12 apprve-date">
-							<div class="row">
-								<div class="col-md-5 col-sm-4 col-12"> 
-									<h4>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-right" (click)="backClick()" title="Close">
+                  <i class="fa fa-times-circle btn-close-committe-lite" aria-hidden="true"></i>
+                </div>
+								<div class="col-md-5 col-sm-4 col-12">
+									<h4 class="txt-large txt-dark normal">
 										ID # :
-										<span>{{result?.committee?.committeeId}}</span>
+										<span class="text-danger">{{result?.committee?.committeeId}}</span>
 									</h4>
-									<p>
+									<p class="txt-dark txt-large normal">
 										Home Unit :
-										<span>{{result?.committee?.homeUnitName}}</span>
+										<span class="text-danger">{{result?.committee?.homeUnitName}}</span>
 									</p>
 								</div>
 								<div class="col-md-4 col-sm-4 col-12">
-									<p>
+									<p class="txt-dark txt-large normal">
 										Name :
-										<span>{{result?.committee?.committeeName}}</span>
+										<span class="text-danger">{{result?.committee?.committeeName}}</span>
 										<br /> Last updated User :
-										<span>{{result?.committee?.updateUser}}</span>
+										<span class="text-danger">{{result?.committee?.updateUser}}</span>
 									</p>
 								</div>
 								<div class="col-md-3 col-sm-4 col-12">
-									<p>
+									<p class="txt-dark txt-large normal">
 										Type:
-										<span>{{result?.committee?.committeeType?.description}}</span>
+										<span class="text-danger">{{result?.committee?.committeeType?.description}}</span>
 									</p>
 								</div>
 								<!-- <div class="i-icon-top">
@@ -128,7 +128,18 @@
 			</div> -->
 
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<section class="row btn-row-med sect-padding mr-2">
+          <section class="row btn-row-med-lite sect-padding-lite bg-clr mt-10">
+            <button class="btn btn-primary tab_btn" (click)="show_current_tab($event,'committee_home')"
+              [ngClass]="{'nav-active':currentTab=='committee_home'}">
+              <i class="fa fa-calendar"></i>Committee
+            </button>
+            <button class="btn btn-primary " type="submit" [ngClass]="{'nav-active':currentTab=='committee_members',
+                    							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee"
+              (click)="show_current_tab($event,'committee_members')">
+              <i class="fa fa-users"></i>Members
+            </button>
+          </section>
+					<!-- <section class="row btn-row-med sect-padding mr-2"> -->
 							<!-- <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'committee_home')" [ngClass]="{'btnactive':currentTab=='committee_home'}">
 									<i class="fa fa-calendar"></i>Committee
 								</button>
@@ -136,13 +147,13 @@
 							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee" (click)="show_current_tab($event,'committee_members')">
 								<i class="fa fa-users"></i>Members
 								</button> -->
-								<button class="btn btn-primary tab_btn" (click)="show_current_tab($event,'committee_home')" [ngClass]="{'btnactive':currentTab=='committee_home'}">
+								<!-- <button class="btn btn-primary tab_btn" (click)="show_current_tab($event,'committee_home')" [ngClass]="{'btnactive':currentTab=='committee_home'}">
 									<i class="fa fa-calendar"></i>Committee
 								</button>
 								<button class="btn btn-primary " type="submit" [ngClass]="{'btnactive':currentTab=='committee_members',
 							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee" (click)="show_current_tab($event,'committee_members')">
 								<i class="fa fa-users"></i>Members
-								</button>
+								</button> -->
 					<!-- <section class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<ul class="tabsIcon" style="margin-top: 10px;">
@@ -158,9 +169,9 @@
 									<span>Members</span>
 								</a>
 							</li>
-						</ul> 
+						</ul>
 					</div> -->
-				</section>
+				<!-- </section> -->
 			</div>
 		</section>
 		<router-outlet (activate)="onActivate($event)"></router-outlet>

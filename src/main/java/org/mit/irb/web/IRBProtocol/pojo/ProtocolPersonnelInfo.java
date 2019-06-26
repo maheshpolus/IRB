@@ -285,6 +285,9 @@ public class ProtocolPersonnelInfo {
 //	@Column(name="IS_EMPLOYEE")	
 //	private String isEmployee;
 	
+	@Column(name="QUALIFICATION")	
+	private String qualification;
+	
 	@Transient
 	private String trainingInfo;
 
@@ -924,5 +927,13 @@ public class ProtocolPersonnelInfo {
 
 	public void setTrainingInfo(String trainingInfo) {
 		this.trainingInfo = trainingInfo;
+	}
+
+	public String getQualification() {
+		return qualification;
+	}
+
+	public void setQualification(String qualification) {
+		this.qualification = qualification;
 	}
 }

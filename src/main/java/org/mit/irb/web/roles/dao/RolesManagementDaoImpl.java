@@ -140,6 +140,9 @@ public class RolesManagementDaoImpl implements RolesManagementDao{
 		} else if (vo.getRoleId() != null && vo.getUnitNumber() == null) {
 			roleList = session.createSQLQuery(KeyConstants.ROLE_WITH_ROLE);
 			roleList.setParameter("role_id", vo.getRoleId());
+		} else if(vo.getPersonId() != null && vo.getRoleId() == null && vo.getRoleId() == null) {
+			roleList = session.createSQLQuery(KeyConstants.ROLES_OF_PERSON);
+			roleList.setParameter("person_id", vo.getPersonId());
 		} else {
 			roleList = session.createSQLQuery(KeyConstants.FETCH_ALL_ROLES);
 		}

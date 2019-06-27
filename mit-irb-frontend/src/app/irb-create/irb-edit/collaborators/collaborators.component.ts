@@ -424,7 +424,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
       this.irbAttachmentProtocol.documentId = 1;
       this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;
-      this.irbAttachmentProtocol.updateTimestamp = new Date();
+      this.irbAttachmentProtocol.updateTimeStamp = new Date();
       this.irbAttachmentProtocol.updateUser = this.userDTO.userName;
       this.irbAttachmentProtocol.createTimestamp = new Date();
       this.irbAttachmentProtocol.attachmentVersion = 1;
@@ -520,7 +520,8 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this._irbCreateService.addattachment(this.tempSaveAttachment, this.uploadedFile).subscribe(
       data => {
         this.result = data;
-        this.protocolCollaboratorAttachmentsList = this.result.protocolAttachmentList != null ? this.result.protocolAttachmentList : [];
+        this.protocolCollaboratorAttachmentsList = this.result.protocolCollaboratorAttachmentsList != null ?
+        this.result.protocolCollaboratorAttachmentsList : [];
         this.uploadedFile = [];
         this.requestObject.attachmentDescription = '';
       });

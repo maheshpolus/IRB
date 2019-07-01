@@ -1,87 +1,92 @@
 <div class="pushFixedHeaderFooter mt-10" *ngIf="isGeneralInfoSaved">
     <section class="row nav_toggle">
       <div class="card mt-5">
-
+  
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
             <h4 class="card-hedding dotted-bottom">Protocol Personnel</h4>
-
+  
             <div class="col-12  search-eidted-p padding-15 txt-medium" *ngIf="invalidData.invalidPersonnelInfo">
               <div class="alert alert-danger " [innerHTML]="warningMessage"></div>
             </div>
-
+  
             <div class="col-12  search-eidted-p" *ngIf="isPersonnelInfoEditable">
-                <div class="row">
-                    <div class="col-md-11">
-                      <div class="form-group">
-                        <div class="form-check-inline">
-                          <span class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" value="employee"
-                              [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span
-                              class="txt-medium text-secondary">Employee</span>
-                          </span>
-                        </div>
-                        <div class="form-check-inline">
-                          <span class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" value="non-employee"
-                              [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span
-                              class="txt-medium text-secondary">Non-Employee</span>
-                          </span>
-                          <span class="mandatory">*</span>
-                        </div>
-                        <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text"
-                          class="form-control input-field-size txt-small" placeholder="{{personPlaceHolder}}"
-                          [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
-                          (focusout)="isElasticResultPerson = false"
-                          (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'personSearch')"
-                          (keydown.arrowup)="keyPressEvent.onKeyDown($event,'personSearch')"
-                          (keydown.Enter)="keyPressEvent.onKeyDown($event,'personSearch')" />
-                        <div class="sb-seachresults top-margin" id="personSearch">
-                          <ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isElasticResultPerson">
-                            <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)"
-                              (click)="selectedPersonResult(result)" class="block">
-                              <a [innerHTML]="result.label"></a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
+              <div class="row">
+                <div class="col-md-11">
+                  <div class="form-group">
+                    <div class="form-check-inline">
+                      <span class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="employee"
+                          [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span
+                          class="txt-medium text-secondary">Employee</span>
+                      </span>
                     </div>
-
+                    <div class="form-check-inline">
+                      <span class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="non-employee"
+                          [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span
+                          class="txt-medium text-secondary">Non-Employee</span>
+                      </span>
+                      <span class="mandatory">*</span>
+                    </div>
+                    <input [(ngModel)]="personnelInfo.personName" (input)="clearSelectedPIdata()" type="text"
+                      class="form-control input-field-size txt-small" placeholder="{{personPlaceHolder}}"
+                      [formControl]="personSearchText" (focus)="isElasticResultPerson = true"
+                      (focusout)="isElasticResultPerson = false"
+                      (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'personSearch')"
+                      (keydown.arrowup)="keyPressEvent.onKeyDown($event,'personSearch')"
+                      (keydown.Enter)="keyPressEvent.onKeyDown($event,'personSearch')" />
+                    <div class="sb-seachresults top-margin" id="personSearch">
+                      <ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isElasticResultPerson">
+                        <li *ngFor="let result of _results | async" (mousedown)="selectedPersonResult(result)"
+                          (click)="selectedPersonResult(result)" class="block">
+                          <a [innerHTML]="result.label"></a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                  <div class="col-12" *ngIf="showPersonElasticBand">
-                      <div class="row">
-                        <div class="col-12 card search-card-view mb-2 mt-0 p-3">
-                          <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
-                          <div class="row">
-                            <div class="col-12">
-                              <span class="txt-medium text-secondary">Name:</span>
-                              <span class="txt-medium text-danger">{{selectedPerson?.full_name}} (<span *ngIf="personType != 'non-employee'">{{selectedPerson?.person_id}}</span><span *ngIf="personType == 'non-employee'">{{selectedPerson?.rolodex_id}}</span>)</span>
-                            </div>
-                            <div class="col-12">
-                              <span class="txt-medium text-secondary">Username:</span>
-                              <span class="txt-medium text-danger">{{selectedPerson?.user_name}}</span>
-                              <span class="txt-medium text-secondary">Email:</span>
-                              <span class="txt-medium text-danger">{{selectedPerson?.email_address}}</span>
-                              <span class="txt-medium text-secondary">Phone no:</span>
-                              <span class="txt-medium text-danger">{{selectedPerson?.phone_number}}</span>
-                              <span class="txt-medium text-secondary">Title:</span>
-                              <span class="txt-medium text-danger">{{selectedPerson?.title}}</span>
-                            </div>
-                          </div>
-                        </div>
+                </div>
+  
+              </div>
+              <div class="col-12" *ngIf="showPersonElasticBand">
+                <div class="row">
+                  <div class="col-12 card search-card-view mb-2 mt-0 p-3">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12 col-lg-12 text-right" title="Remove"
+                        (click)="showPersonElasticBand = false">
+                        <i aria-hidden="true" class="fa fa-times-circle btn-close-lite-sr"></i>
+                      </div>
+                      <div class="col-12">
+                        <span class="txt-medium text-secondary">Name:</span>
+                        <span class="txt-medium text-danger">{{selectedPerson?.full_name}} (<span
+                            *ngIf="personType != 'non-employee'">{{selectedPerson?.person_id}}</span><span
+                            *ngIf="personType == 'non-employee'">{{selectedPerson?.rolodex_id}}</span>)</span>
+                      </div>
+                      <div class="col-12">
+                        <span class="txt-medium text-secondary">Username:</span>
+                        <span class="txt-medium text-danger">{{selectedPerson?.user_name}}</span>
+                        <span class="txt-medium text-secondary">Email:</span>
+                        <span class="txt-medium text-danger">{{selectedPerson?.email_address}}</span>
+                        <span class="txt-medium text-secondary">Phone no:</span>
+                        <span class="txt-medium text-danger">{{selectedPerson?.phone_number}}</span>
+                        <span class="txt-medium text-secondary">Title:</span>
+                        <span class="txt-medium text-danger">{{selectedPerson?.title}}</span>
                       </div>
                     </div>
-
-
-
-              <!-- <div class="col-md-4">
-              <div class="form-group">
-                <label>Email</label>
-                <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
-                  placeholder="email-id">
+                  </div>
+                </div>
               </div>
-            </div> -->
-
+  
+  
+  
+              <!-- <div class="col-md-4">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input email [class.poping-border]="isPersonalInfoEdit" type="text" [(ngModel)]="personnelInfo.emailAddress" class="form-control input-field-size"
+                    placeholder="email-id">
+                </div>
+              </div> -->
+  
               <div class="row">
                 <div class="col-md-3">
                   <div class="form-group">
@@ -100,15 +105,15 @@
                   </div>
                 </div>
                 <!-- <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Lead unit
-                          <span class="mandatory">*</span>
-                        </label>
-                        <ng2-completer [disabled]="personnelInfo.personId === null" [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit"
-                          (ngModelChange)="setPersonLeadUnit(personLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
-                          class="input-field-size person-unit" placeholder="Lead unit"></ng2-completer>
-                      </div>
-                    </div> -->
+                        <div class="form-group">
+                          <label>Lead unit
+                            <span class="mandatory">*</span>
+                          </label>
+                          <ng2-completer [disabled]="personnelInfo.personId === null" [class.normal-border]="!isPersonalInfoEdit" [(ngModel)]="personLeadUnit"
+                            (ngModelChange)="setPersonLeadUnit(personLeadUnit)" [datasource]="protocolPersonLeadUnitsCopy" [minSearchLength]="0"
+                            class="input-field-size person-unit" placeholder="Lead unit"></ng2-completer>
+                        </div>
+                      </div> -->
                 <div class="col-md-3">
                   <div class="form-group">
                     <span class="txt-medium text-secondary">Affiliation
@@ -144,28 +149,29 @@
                   </div>
                 </div>
               </div>
-
+  
               <div class="row">
                 <div class="col-md-11">
                   <span class="txt-medium text-secondary">Qualification</span> <br>
-                  <textarea [(ngModel)]="personnelInfo.qualification" cols="30" rows="1" class="txt-small form-control mb-10"></textarea>
+                  <textarea [(ngModel)]="personnelInfo.qualification" cols="30" rows="1"
+                    class="txt-small form-control mb-10"></textarea>
                 </div>
                 <div class="col-md-1 add-btn-1">
-                    <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button"
-                      class="btn top-butn">
-                      <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
-                    </button>
-                    <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
-                                          <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                        </button> -->
-                  </div>
+                  <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button"
+                    class="btn top-butn">
+                    <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                  </button>
+                  <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
+                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                          </button> -->
+                </div>
               </div>
-
-
+  
+  
             </div>
-
+  
             <div class="col-12" *ngIf="activePersonExist">
-
+  
               <div class="row alert-sp alert-warning mb-0">
                 <div class="txt-small m-0">
                   <div>
@@ -175,13 +181,13 @@
                 </div>
               </div>
             </div>
-
+  
             <!-- <div class="col-12">
-              <div class="form-group">
-                <label>Active Persons</label>
-                </div>
-            </div> -->
-
+                <div class="form-group">
+                  <label>Active Persons</label>
+                  </div>
+              </div> -->
+  
             <div class="col-md-12 users-list-tbl" *ngIf="activePersonExist">
               <div class="row">
                 <div class="w-100">
@@ -197,7 +203,7 @@
                         <th scope="col" class="align-middle">Training Completed</th>
                         <th scope="col" class="align-middle" width="12%">Action</th>
                       </tr>
-
+  
                     </thead>
                     <tbody class="tbody-font-size">
                       <ng-container *ngFor="let item of personalDataList let i=index">
@@ -221,18 +227,18 @@
                               aria-hidden="true"></i> {{item.personName}}</td>
                           <td class="align-middle" *ngIf="i != personalInfoSelectedRow">{{item.qualification}}</td>
                           <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
-                              <input type="text" class="form-control input-field-size txt-small" placeholder="Qualification"
+                            <input type="text" class="form-control input-field-size txt-small" placeholder="Qualification"
                               [(ngModel)]="editPersonnelInfo.qualification">
                           </td>
-
+  
                           <td class="align-middle" width="15%" *ngIf="i != personalInfoSelectedRow">{{item.description}}
                           </td>
                           <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
-                            <input type="text" class="form-control input-field-size txt-small" placeholder="Role Description"
-                              [(ngModel)]="editPersonnelInfo.description">
+                            <input type="text" class="form-control input-field-size txt-small"
+                              placeholder="Role Description" [(ngModel)]="editPersonnelInfo.description">
                             <!-- <textarea class="form-control txt-area-fnt" [(ngModel)]="editPersonnelInfo.description" placeholder="Role Description"></textarea> -->
                           </td>
-
+  
                           <td class="align-middle" *ngIf="i != personalInfoSelectedRow">
                             {{item.protocolAffiliationTypes?.description}}</td>
                           <td class="align-middle" *ngIf="i == personalInfoSelectedRow">
@@ -269,8 +275,8 @@
                               (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn mb-2">
                               <i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>
                             </button>
-                            <button title="View" type="button" class="btn mb-2" data-toggle="modal" data-target="#personModal"
-                              (click)="loadPersonDetailedList(item)">
+                            <button title="View" type="button" class="btn mb-2" data-toggle="modal"
+                              data-target="#personModal" (click)="loadPersonDetailedList(item)">
                               <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
                             </button>
                             <button title="Delete" (click)="deletePersonalDetails(i)" type="button" class="btn mb-2"
@@ -279,8 +285,8 @@
                             </button>
                           </td>
                           <td class="action-btn mb-2-list align-middle" width="10%" *ngIf="!isPersonnelInfoEditable">
-                            <button title="View" type="button" class="btn mb-2" data-toggle="modal" data-target="#personModal"
-                              (click)="loadPersonDetailedList(item)">
+                            <button title="View" type="button" class="btn mb-2" data-toggle="modal"
+                              data-target="#personModal" (click)="loadPersonDetailedList(item)">
                               <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
                             </button>
                           </td>
@@ -294,7 +300,7 @@
                 </div>
               </div>
             </div>
-
+  
             <div class="col-12" *ngIf="isAmmendment() && inActivePersonExist">
               <div class="form-group">
                 <span class="txt-medium text-secondary">Inactive Persons</span>
@@ -304,12 +310,12 @@
                 </div>
               </div>
             </div>
-
+  
             <!-- <div class="col-12">
-                    <div class="form-group">
-                      <label>Inactive Persons</label>
-                    </div>
-                  </div> -->
+                      <div class="form-group">
+                        <label>Inactive Persons</label>
+                      </div>
+                    </div> -->
             <div class="col-md-12 users-list-tbl" *ngIf="isAmmendment() && inActivePersonExist">
               <div class="row">
                 <div class="w-100">
@@ -365,7 +371,7 @@
                 </div>
               </div>
             </div>
-
+  
           </div>
         </div>
       </div>
@@ -393,7 +399,7 @@
               <div class="col-md-4 col lg- 4 col-sm-4 col-6">
                 <label class="modal-label" for=""> Name : </label>
                 <span class="txt-medium text-danger">{{irbPersonDetailedList?.FULL_NAME}}</span>
-
+  
               </div>
               <div class="col-md-4 col lg- 4 col-sm-4 col-6">
                 <label class="modal-label" for="">Email : </label>
@@ -443,8 +449,8 @@
             </div>
             <div class="col-6">
               <!-- <a class="pdf a-right attachment-btn-position" *ngIf="userHasRightToEditTraining == 1" data-dismiss="modal" (click)="openTrainingMaintainence(null,'ADD')">
-              <i class="fa fa-plus icon-padding"></i>Add Training
-            </a> -->
+                <i class="fa fa-plus icon-padding"></i>Add Training
+              </a> -->
             </div>
           </div>
           <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
@@ -469,8 +475,8 @@
                     <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
                     <td class="action-btn-list">
                       <!-- <button *ngIf="userHasRightToEditTraining == 1" (click)="openTrainingMaintainence(info,'EDIT')" data-dismiss="modal" title="Edit" type="button" class="btn btn-primary edit-btn-1" >
-                          <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </button> -->
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                          </button> -->
                       <button *ngIf="info?.attachment?.length > 0" title="Attachments"
                         (click)="showTrainingAttachments(l)" type="button" class="btn">
                         <i class="fa fa-paperclip log-user-icon-lite" aria-hidden="true"></i>
@@ -479,12 +485,12 @@
                         type="button" class="btn">
                         <i class="fa fa-comments log-user-icon-lite" aria-hidden="true"></i>
                       </button>
-
+  
                     </td>
                   </tr>
-
-
-
+  
+  
+  
                   <tr>
                     <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
                       <div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
@@ -500,7 +506,7 @@
                                 </div>
                               </td>
                             </tr>
-
+  
                           </tbody>
                         </table>
                       </div>
@@ -515,7 +521,7 @@
                               <td width="15%" class="label-font align-middle">Comments</td>
                               <td>
                                 <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
-                                    </div> -->
+                                      </div> -->
                                 <ul *ngFor="let comment of trainingComments">
                                   <li title="{{comment?.COMMENT_DESCRIPTION}}">
                                     {{comment?.COMMENT_DESCRIPTION| slice:0:50}} <span
@@ -524,14 +530,14 @@
                                 </ul>
                               </td>
                             </tr>
-
+  
                           </tbody>
                         </table>
                       </div>
                     </td>
                   </tr>
-
-
+  
+  
                 </tbody>
               </table>
             </div>
@@ -548,7 +554,7 @@
       <div class="modal-content modal-text-color">
         <div class="modal-header popup-header dotted-bottom">
           <h5 class="thick txt-large text-black mb-0 mt-1">Want to delete?</h5>
-
+  
           <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -569,3 +575,4 @@
       </div>
     </div>
   </div>
+  

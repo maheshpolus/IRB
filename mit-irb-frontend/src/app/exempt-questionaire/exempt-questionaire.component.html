@@ -26,14 +26,14 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="row" *ngIf="!isQuestionaireSubmitted">
-                      <div class="col-10">
+                      <div class="col-9">
                         <h6 class="">
                           <i class="fa fa-info-circle" aria-hidden="true"></i>
                           Key elements of Exempt Evaluation.
                           <span class="welcome-popup text-danger txt-small" data-toggle="modal" data-target="#welcomeModal" (click)="isStayOnSamePage = true">Click to View Details</span>
                         </h6>
                       </div>
-                      <div class="col-2 text-right">
+                      <div class="col-3 text-right">
                         <div class="title-head pl-15 mt-5" *ngIf="isViewMode || isEditMode">
                           <span *ngIf="requestObject.irbExemptForm?.isExempt=='Y' && requestObject.irbExemptForm?.status=='Submitted' " class="txt-small note rounded green active-status">Exempt</span>
                           <span *ngIf="requestObject.irbExemptForm?.isExempt=='N' && requestObject.irbExemptForm?.status=='Submitted'" class="txt-small completed-closed rounded note">Not Exempt</span>

@@ -18,33 +18,33 @@
 
                   <div class="row">
                     <div class="col-sm-6 col-md-12  col-lg-12 row">
-                        <div class="col-sm-6 col-md-2  col-lg-2">
+                        <div class="col-sm-6 col-md-3  col-lg-3">
                           <h5 class="txt-dark  txt-large">IRB # : <br> <span
-                              class="text-danger">{{generalInfo?.protocolNumber}}</span>
+                              class="text-danger txt-medium">{{generalInfo?.protocolNumber}}</span>
                               <span class="renewal" *ngIf="protocolNumber?.includes('R')">Renewal</span>
                               <span class="renewal" *ngIf="protocolNumber?.includes('A')">Amendment</span>
                           </h5>
                         </div>
                         <div class="col-sm-6 col-md-2  col-lg-2">
                           <h5 class="txt-dark  txt-large">Protocol Type : <br>
-                            <span class="text-danger">{{generalInfo?.protocolType?.description}}
+                            <span class="text-danger txt-medium">{{generalInfo?.protocolType?.description}}
                             </span>
                           </h5>
                         </div>
                         <div class="col-sm-6 col-md-2  col-lg-2">
                           <h5 class="txt-dark  txt-large">Expiration Date : <br>
                             <span
-                              class="text-danger">{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}
+                              class="text-danger txt-medium">{{generalInfo?.prtocolExpirationDate| date:"MM/dd/yyyy"}}
                             </span>
                           </h5>
                         </div>
                         <div class="col-sm-6 col-md-3  col-lg-3">
                           <h5 class="txt-dark txt-large">PI : <br>
-                            <span class="text-danger">{{piName}}
+                            <span class="text-danger txt-medium">{{piName}}
                             </span>
                           </h5>
                         </div>
-                        <div class="col-sm-6 col-md-3  col-lg-3" *ngIf="generalInfo.protocolType != null">
+                        <div class="col-sm-6 col-md-2  col-lg-2" *ngIf="generalInfo.protocolType != null">
                             <h5 class="txt-dark txt-small">
                               <span class="active-en note green rounded"
                                 [ngClass]="{
@@ -84,22 +84,22 @@
                     </div>
 
                     <div class="col-sm-6 col-md-12  col-lg-12 row">
-                        <div class="col-sm-6 col-md-2 col-lg-2">
+                        <div class="col-sm-6 col-md-3 col-lg-3">
                           <h5 class="txt-dark txt-large">Submission Status : <br>
                             <span
-                              class="text-danger">{{generalInfo?.protocolSubmissionStatuses?.protocolSubmissionStatus?.description}}</span>
+                              class="text-danger txt-medium">{{generalInfo?.protocolSubmissionStatuses?.protocolSubmissionStatus?.description}}</span>
                           </h5>
                         </div>
 
                         <div class="col-sm-6 col-md-2 col-lg-2">
                           <h5 class="txt-dark txt-large">Risk Level : <br>
-                            <span class="text-danger">{{generalInfo?.riskLevel?.description}}</span>
+                            <span class="text-danger txt-medium">{{generalInfo?.riskLevel?.description}}</span>
                           </h5>
                         </div>
 
                         <div class="col-sm-6 col-md-2 col-lg-2">
                           <h5 class="txt-dark txt-large">FDA Risk Level : <br>
-                            <span class="text-danger">{{generalInfo?.fdaRiskLevel?.description}}</span>
+                            <span class="text-danger txt-medium">{{generalInfo?.fdaRiskLevel?.description}}</span>
                           </h5>
                         </div>
 
@@ -107,23 +107,23 @@
                           <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
                             class="txt-dark txt-large">  <!-- COUHES changed to IRB Admin-->
                             IRB Admin : <br>
-                            <span class="text-danger">{{generalInfo?.protocolSubmissionStatuses?.assigneePersonName}}</span>
+                            <span class="text-danger txt-medium">{{generalInfo?.protocolSubmissionStatuses?.assigneePersonName}}</span>
                           </p>
                         </div>
 
-                        <div class="col-sm-6 col-md-3 col-lg-3">
+                        <div class="col-sm-6 col-md-3 col-lg-2">
                           <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
                           class="txt-dark txt-large">
                             <button
                               *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106'"
-                              type="button" class="btn admin-label" (click)="openAssignPopUp('U')">
+                              type="button" class="btn btn-blue btn-sm text-right txt-medium" (click)="openAssignPopUp('U')">
                               <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; Reassign
                             </button>
                           </p>
                           <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId == null">
                             <button
                               *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106'"
-                              type="button" class="btn admin-label" (click)="openAssignPopUp('I')">
+                              type="button" class="btn btn-blue btn-sm text-right txt-medium" (click)="openAssignPopUp('I')">
                               <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Assign IRB Admin
                             </button>
                           </p>
@@ -134,7 +134,7 @@
                     <div class="col-sm-6 col-md-12  col-lg-12 row">
                       <div class="col-sm-6 col-md-12  col-lg-12">
                         <h5 class="txt-dark txt-large">Title : <br>
-                          <span class="text-danger">{{generalInfo?.protocolTitle}}</span>
+                          <span class="text-danger txt-medium">{{generalInfo?.protocolTitle}}</span>
                         </h5>
                       </div>
                     </div>
@@ -150,53 +150,87 @@
 										</div>
 									</div>
 
+									<!--   -->
 									<div id="headingOne" class="">
 
-										<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
-											<div class="row protocol-top-lite apprve-date hr-line">
-
-												<div class="col-3">
-													<h5 class="txt-dark txt-medium">
-														Last Approval Date :
-														<span class="text-danger">
-															{{generalInfo.lastApprovalDate| date:"MM/dd/yyyy"}}
-														</span>
-													</h5>
-												</div>
-												<div class="col-3">
-													<h5 class="txt-dark txt-medium">
-														Anticipated Start Date :
-														<span class="text-danger">
-															{{generalInfo.protocolStartDate| date:"MM/dd/yyyy"}}
-														</span>
-													</h5>
-												</div>
-												<div class="col-3">
-													<h5 class="txt-dark txt-medium">
-														Lead Unit :
-														<span class="text-danger">{{commonVo?.leadUnit?.unitName}}</span>
-													</h5>
-												</div>
-												<div class="col-3">
-													<h5 class="txt-dark txt-medium">
-														Anticipated End Date :
-														<span class="text-danger">
-															{{generalInfo.protocolEndDate| date:"MM/dd/yyyy"}}
-														</span>
-													</h5>
+											<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+												<div class="row protocol-top-lite apprve-date hr-line">
+												
+												
+												
+													<div class="col-sm-6 col-md-12  col-lg-12 row mb-2">
+				
+														<div class="col-sm-6 col-md-3 col-lg-3 mb-0">
+															<h5 class="txt-dark txt-medium">
+																Last Approval Date :
+															</h5>
+															<h5>
+																<span class="text-danger txt-medium">
+																		{{generalInfo.lastApprovalDate| date:"MM/dd/yyyy"}}
+																</span>
+															</h5>
+														</div>
+				
+														<div class="col-sm-6 col-md-2  col-lg-2 mb-0">
+															<h5 class="txt-dark txt-medium">
+																	Anticipated Start Date :
+															</h5>
+															<h5>
+																<span class="text-danger txt-medium">
+																		{{generalInfo.protocolStartDate| date:"MM/dd/yyyy"}}
+																</span>
+															</h5>
+														</div>
+				
+														<div class="col-sm-6 col-md-2  col-lg-2 mb-0">
+															<h5 class="txt-dark txt-medium">
+																	Lead Unit :
+															</h5>
+															<h5>
+																<span class="text-danger txt-medium">{{commonVo?.leadUnit?.unitName}}</span>
+															</h5>
+														</div>
+				
+														<div class="col-sm-6 col-md-3  col-lg-3 mb-0">
+															<h5 class="txt-dark txt-medium">
+																	Anticipated End Date :
+															</h5>
+															<h5>
+																<span class="text-danger txt-medium">
+																		{{generalInfo.protocolEndDate| date:"MM/dd/yyyy"}}
+																</span>
+															</h5>
+														</div>
+			
+														<div class="col-sm-6 col-md-2 col-lg-2 mb-0">
+															<h5 class="txt-dark txt-medium"></h5>
+														</div>
+				
+				
+													</div>
+				
+				
+													<div class="col-sm-6 col-md-12  col-lg-12 row mb-2">
+				
+														<div class="col-sm-6 col-md-12 col-lg-12 mb-0">
+															<h5 class="txt-dark txt-medium">
+																Purpose of study :
+															</h5>
+															<h5>
+																<span class="text-danger txt-medium">{{generalInfo.prtocolDescription}}</span>
+															</h5>
+														</div>
+													</div>
+				
+				
 												</div>
 											</div>
-											<div class="row  protocol-top-lite apprve-date">
-												<div class="col-12">
-													<h5 class="txt-dark txt-medium">
-														Purpose of study :
-														<span class="text-danger">{{generalInfo.prtocolDescription}}</span>
-													</h5>
-												</div>
-											</div>
-
-										</div>
 									</div>
+								 
+
+
+										
+									
 								</div>
 							</div>
 						</div>

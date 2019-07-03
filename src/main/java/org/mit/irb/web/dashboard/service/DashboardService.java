@@ -29,12 +29,13 @@ public interface DashboardService {
 	 * @param protocolTypeCode
 	 * @param title
 	 * @param prtocolStatusCode 
+	 * @param adminPersonId 
 	 * @return load all the IRB protocols in the dashboard
 	 */
 	
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
 			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode,
-			String approvalDate, String  expirationDate, String isAdvanceSearch,String fundingSource,String protocolSubmissionStatus) throws ParseException;
+			String approvalDate, String  expirationDate, String isAdvanceSearch,String fundingSource,String protocolSubmissionStatus, String adminPersonId) throws ParseException;
 
 	/**
 	 * @param personId

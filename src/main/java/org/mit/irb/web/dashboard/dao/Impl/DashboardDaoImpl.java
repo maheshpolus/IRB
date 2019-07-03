@@ -135,7 +135,7 @@ public class DashboardDaoImpl implements DashboardDao{
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboard_type,
 			String pi_name, String protocol_number,String protocol_type_code, String title,
 			String prtocolStatusCode,String approvalDate,String expirationDate,String  isAdvanceSearch,
-			String fundingSource,String protocolSubmissionStatus) throws ParseException {
+			String fundingSource,String protocolSubmissionStatus,String adminPersonId) throws ParseException {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
 		java.util.Date approvalDates = null;
 		java.sql.Date sqlApprovalDates = null;
@@ -167,6 +167,7 @@ public class DashboardDaoImpl implements DashboardDao{
 		inputParam.add(new InParameter("AV_APPROVAL_DATE", DBEngineConstants.TYPE_DATE, sqlApprovalDates));
 		inputParam.add(new InParameter("AV_FUNDING_SOURCE", DBEngineConstants.TYPE_STRING, fundingSource));
 		inputParam.add(new InParameter("AV_PROTO_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING, protocolSubmissionStatus));
+		inputParam.add(new InParameter("AV_ADMIN_PERSON", DBEngineConstants.TYPE_STRING, adminPersonId));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {

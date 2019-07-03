@@ -30,10 +30,10 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public DashboardProfile getDashboardProtocolList(String personId, String personRoleType, String dashboardType,
 			String piName, String protocolNumber,String protocolTypeCode, String title, String prtocolStatusCode,String approvalDate,String  expirationDate,
-			String isAdvanceSearch,String fundingSource,String protocolSubmissionStatus) throws ParseException {
+			String isAdvanceSearch,String fundingSource,String protocolSubmissionStatus,String adminPersonId) throws ParseException {
 		DashboardProfile profile = dashboardDao.getDashboardProtocolList(personId, personRoleType, dashboardType,
 				piName, protocolNumber, protocolTypeCode, title, prtocolStatusCode,
-				approvalDate,expirationDate,isAdvanceSearch,fundingSource,protocolSubmissionStatus);
+				approvalDate,expirationDate,isAdvanceSearch,fundingSource,protocolSubmissionStatus,adminPersonId);
 		return profile;
 	}
 

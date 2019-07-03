@@ -632,4 +632,17 @@ public class QuestionnaireDAO {
 			return new ArrayList<HashMap<String, Object>>();
 		}
 	}
+
+	public ArrayList<HashMap<String, Object>> getQuestionnaireAttachment(Integer questionnaire_ans_attachment_id) {
+		try {
+			ArrayList<Parameter> inputParam = new ArrayList<>();
+			inputParam.add(new Parameter("<<AV_QUESTIONNAIRE_ANS_ATTACHMENT_ID>>", DBEngineConstants.TYPE_INTEGER, questionnaire_ans_attachment_id));
+			ArrayList<HashMap<String, Object>> questionnaireAttachmentMap = dbEngine.executeQuery(inputParam,
+					"GET_QUESTIONNAIRE_ATTACHMENT");
+			return questionnaireAttachmentMap;
+		} catch (Exception e) {
+			logger.error("Exception in getQuestionnaireQuestionsOptions" + e.getMessage());
+			return new ArrayList<HashMap<String, Object>>();
+		}
+	}
 }

@@ -11,14 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.log4j.Logger;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireModuleDataBus;
 import org.mit.irb.web.questionnaire.service.QuestionnaireModuleService;
 
 @Controller
 public class QuestionnaireController {
+	protected static Logger logger = Logger.getLogger(QuestionnaireController.class.getName());
 	 
 	@Autowired QuestionnaireModuleService questionnaireModuleService;	
 	
@@ -45,10 +48,14 @@ public class QuestionnaireController {
 	}
 	
 	@RequestMapping(value = "/saveQuestionnaireModule", method = RequestMethod.POST)
-	public ResponseEntity<String> saveQuestionnaire(HttpServletRequest request, HttpServletResponse response, @RequestBody QuestionnaireModuleDataBus questionnaireDataBus) throws Exception{
-		ObjectMapper mapper=new ObjectMapper();
+	public ResponseEntity<String> saveQuestionnaire(MultipartHttpServletRequest request, HttpServletResponse reponse) throws Exception {
+		logger.info("Requesting for saveQuestionnaire");
+		ObjectMapper mapper = new ObjectMapper();
 		HttpStatus status = HttpStatus.OK;
-		questionnaireDataBus = questionnaireModuleService.saveQuestionnaireAnswers(questionnaireDataBus);	
+		QuestionnaireModuleDataBus questionnaireDataBus = null;
+		String formDataJson = request.getParameter("formDataJson");
+		questionnaireDataBus = mapper.readValue(formDataJson, QuestionnaireModuleDataBus.class);
+		questionnaireDataBus = questionnaireModuleService.saveQuestionnaireAnswers(questionnaireDataBus, request);
 		String responseData = mapper.writeValueAsString(questionnaireDataBus);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -88,5 +95,10 @@ public class QuestionnaireController {
 		questionnaireDataBus = questionnaireModuleService.editQuestionnaire(questionnaireDataBus);	
 		String responseData = mapper.writeValueAsString(questionnaireDataBus);
 		return new ResponseEntity<String>(responseData, status);
+	}
+	
+	@RequestMapping(value = "/downloadQuesAttachment", method = RequestMethod.POST)
+	public ResponseEntity<byte[]> downloadAttachment(HttpServletResponse response, @RequestBody QuestionnaireModuleDataBus questionnaireDataBus) {
+		return questionnaireModuleService.downloadAttachments(questionnaireDataBus, response);
 	}
 }

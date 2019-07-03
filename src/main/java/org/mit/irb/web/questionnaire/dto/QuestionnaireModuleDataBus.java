@@ -12,6 +12,7 @@ public class QuestionnaireModuleDataBus {
 	private Integer module_item_code;
 	private Integer module_sub_item_code;
 	private Integer questionnaire_answer_header_id;
+	private Integer questionnaire_ans_attachment_id;
 	private String questionnaire_complete_flag;
 	private String action_user_id;
 	private String action_person_id;
@@ -175,6 +176,14 @@ public class QuestionnaireModuleDataBus {
 
 	public void setQuestionnaire(QuestionnaireModuleDto questionnaire) {
 		this.questionnaire = questionnaire;
+	}
+
+	public Integer getQuestionnaire_ans_attachment_id() {
+		return questionnaire_ans_attachment_id;
+	}
+
+	public void setQuestionnaire_ans_attachment_id(Integer questionnaire_ans_attachment_id) {
+		this.questionnaire_ans_attachment_id = questionnaire_ans_attachment_id;
 	}
 
 }

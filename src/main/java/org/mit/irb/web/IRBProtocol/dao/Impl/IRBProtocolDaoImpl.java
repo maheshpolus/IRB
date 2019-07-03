@@ -45,7 +45,8 @@ import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.IRBFileData;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
-import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAttachment;
+import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswer;
+import org.mit.irb.web.IRBProtocol.pojo.IRBWatermark;
 import org.mit.irb.web.IRBProtocol.pojo.Proposal;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
@@ -1785,7 +1786,8 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
                              +" group by att.protocolNumber,att.documentId"
                              +" )");                              
 		query.setInteger("protocolId",protocolId);
-		irbProtocolVO.setProtocolAttachmentList(query.list());		
+		irbProtocolVO.setProtocolAttachmentList(query.list());	
+		irbProtocolVO.setQuestionnaireAttachmentList(loadQuestionnaireAttachments(protocolNumber));
 		if(protocolNumber.length() > 10){
 			ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
 			protocolRenewalDetail.setAddModifyNoteAttachments(true);
@@ -1971,19 +1973,16 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			CriteriaQuery<IRBAttachmentProtocol> criteria = builder.createQuery(IRBAttachmentProtocol.class);
 			Root<IRBAttachmentProtocol> attachmentRoot=criteria.from(IRBAttachmentProtocol.class);				
 			criteria.where(builder.equal(attachmentRoot.get("protocolAttachmentData"),Integer.parseInt(documentId)));
-			List<IRBAttachmentProtocol> protocolAttachment = session.createQuery(criteria).getResultList();	
-			if (protocolAttachment != null && !protocolAttachment.isEmpty()) {
-				IRBAttachmentProtocol hmResult = protocolAttachment.get(0);
-				byte[] byteArray = null;
-				byteArray = hmResult.getProtocolAttachmentData().getFileData();	
-				Date updatedDate =null;
-				String updateUser =null; 
-				/*byteArray = irbWatermarkService.generateTimestampAndUsernameForDocuments(byteArray, updatedDate, updateUser);
-						irbWatermarkService.generateTimestampAndUsernameForImages(byteArray, updatedDate, updateUser, hmResult.getMimeType());
-						irbWatermarkService.generateTimestampAndUsernameForPdf(byteArray, updatedDate, updateUser);*/
+			IRBAttachmentProtocol protocolAttachment = session.createQuery(criteria).getResultList().get(0);	
+			if (protocolAttachment != null) {				
+				byte[] byteArray = null;				
+				byteArray = protocolAttachment.getProtocolAttachmentData().getFileData();		
+				if(protocolAttachment.getSubCategoryCode().equals("1") && protocolAttachment.getMimeType().equals("application/pdf")){
+					byteArray = addWatermarkToPdf(byteArray,protocolAttachment);
+				}
     			HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.parseMediaType(hmResult.getMimeType()));
-				String filename = hmResult.getFileName();
+				headers.setContentType(MediaType.parseMediaType(protocolAttachment.getMimeType()));
+				String filename = protocolAttachment.getFileName();
 				headers.setContentDispositionFormData(filename, filename);
 				headers.setContentLength(byteArray.length);
 				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
@@ -1992,11 +1991,25 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Exception in loadPreviousProtocolAttachments method:" + e);
+			logger.info("Exception in downloadProtocolAttachments method:" + e);
 		}
 		return attachmentData;
 	}
 	
+	private byte[] addWatermarkToPdf(byte[] byteArray, IRBAttachmentProtocol protocolAttachment) {		
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<IRBWatermark> criteria = builder.createQuery(IRBWatermark.class);
+		Root<IRBWatermark> watermarkRoot = criteria.from(IRBWatermark.class);				
+		criteria.where(builder.equal(watermarkRoot.get("statusCode"),protocolAttachment.getProtocolGeneralInfo().getProtocolStatusCode()));		
+		List<IRBWatermark> watermarkDetails = session.createQuery(criteria).getResultList();
+		if(watermarkDetails != null && !watermarkDetails.isEmpty()){
+			IRBWatermark watermark = watermarkDetails.get(0);
+			byteArray = irbWatermarkService.generateTimestampAndUsernameForPdf(byteArray, watermark ,protocolAttachment);
+		}
+		return byteArray;
+	}
+
 	@Override
 	public ResponseEntity<byte[]> downloadInternalProtocolAttachments(String documentId) {
 		ResponseEntity<byte[]> attachmentData = null;
@@ -2026,16 +2039,13 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		return attachmentData;
 	}	
 	
-	private List loadQuestionnaireAttachments(IRBProtocolVO irbProtocolVO) {
-		List<IRBQuestionnaireAttachment> questionnaireAttachmentsList = null;
+	private List loadQuestionnaireAttachments(String protocolNumber) {
+		List<IRBQuestionnaireAnswer> questionnaireAttachmentsList = null;
 		try{
-			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<IRBQuestionnaireAttachment> criteria = builder.createQuery(IRBQuestionnaireAttachment.class);
-			Root<IRBQuestionnaireAttachment> attachmentRoot=criteria.from(IRBQuestionnaireAttachment.class);					
-			criteria.where(builder.equal(attachmentRoot.get("protocolId"),irbProtocolVO.getProtocolId()));
-			criteria.orderBy(builder.desc(attachmentRoot.get("updateTimeStamp")));
-			questionnaireAttachmentsList = session.createQuery(criteria).getResultList();			
+			Query queryProtocolQuestionnaireAttach = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from IRBQuestionnaireAnswerAttachment p where p.questionnaireAnswer.questionnaireAnswerHeader.moduleItemKey =:moduleItemKey order by p.updateTimeStamp DESC");
+			queryProtocolQuestionnaireAttach.setString("moduleItemKey", protocolNumber);		
+			questionnaireAttachmentsList = queryProtocolQuestionnaireAttach.list();
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.info("Exception in loadQuestionnaireAttachments method:" + e);

@@ -7,25 +7,34 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "IRB_ATTACHMENT_PROTOCOL")
+@Table(name = "QUEST_ANSWER_ATTACHMENT")
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class IRBQuestionnaireAttachment {
+public class IRBQuestionnaireAnswerAttachment {
 	@Id
 	@Column(name = "QUESTIONNAIRE_ANSWER_ATT_ID")
 	private Integer questionnaireAnswerAttachId;
 	
 	@Column(name = "QUESTIONNAIRE_ANSWER_ID")
 	private Integer questionnaireAnswerId;
+	
+	@JsonBackReference
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "QUEST_ANSWER_ATTACHMENT_FK1"), name = "QUESTIONNAIRE_ANSWER_ID", referencedColumnName = "QUESTIONNAIRE_ANSWER_ID",insertable = false, updatable = false)
+	private IRBQuestionnaireAnswer questionnaireAnswer;
 	
 	@JsonIgnore
 	@Basic(fetch=FetchType.LAZY)
@@ -98,5 +107,13 @@ public class IRBQuestionnaireAttachment {
 
 	public void setQuestionnaireAnswerId(Integer questionnaireAnswerId) {
 		this.questionnaireAnswerId = questionnaireAnswerId;
+	}
+
+	public IRBQuestionnaireAnswer getQuestionnaireAnswer() {
+		return questionnaireAnswer;
+	}
+
+	public void setQuestionnaireAnswer(IRBQuestionnaireAnswer questionnaireAnswer) {
+		this.questionnaireAnswer = questionnaireAnswer;
 	}
 }

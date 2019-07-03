@@ -29,7 +29,6 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.correspondence.dao.DocxDocumentMergerAndConverter;
-import org.mit.irb.web.correspondence.dto.Exempt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -122,6 +121,14 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					 intialResult.remove(i);
 				 }					 
 				 else if(!reviewTypeCode.equals("6")){
+					 intialResult.remove(i);
+				 }
+				break;
+			case "210":
+				 if(reviewTypeCode == null){
+					 intialResult.remove(i);
+				 }					 
+				 else if(!reviewTypeCode.equals("5")){
 					 intialResult.remove(i);
 				 }
 				break;
@@ -1078,8 +1085,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	
 	private IContext setPlaceHolderData(IContext context,IRBActionsVO vo) {
 		try{
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-			LocalDate localDate = LocalDate.now();	
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			LocalDate localDate = LocalDate.now();
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			String code = "";
 			for(IRBCommitteeReviewerComments conti : vo.getIrbActionsReviewerComments()){
 				if(conti.getContingencyCode() != null)
@@ -1088,7 +1096,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			context.put("Date",dtf.format(localDate));
 			context.put("ExpeditedCategorySelection",code == null ? "" :code);
 			context.put("ProtocolNumber",vo.getProtocolNumber());
-			context.put("ActionDate",vo.getActionDate());
+			context.put("ActionDate",sdf.parse( vo.getActionDate()));
 			context.put("CommitteeAction",vo.getProtocolHeaderDetails().get("SUBMISSION_STATUS") == null ? "" : vo.getProtocolHeaderDetails().get("SUBMISSION_STATUS").toString());
 			context.put("StudyTitle",vo.getProtocolHeaderDetails().get("TITLE") == null ? "" : vo.getProtocolHeaderDetails().get("TITLE").toString());
 			context.put("PI_Name",vo.getProtocolHeaderDetails().get("PI_NAME") == null ? "" : vo.getProtocolHeaderDetails().get("PI_NAME").toString());

@@ -39,11 +39,19 @@
                                     <tr *ngFor = "let questionnaire of applicableQuestionnaire" class="pull-up solid-bottom">
                                         <td scope="row">{{questionnaire.QUESTIONNAIRE}}</td>
                                         <td>
-                                          <span>No</span>
-                                          <!-- <span></span> -->
+                                          <span >{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y' ? 'Yes' : 'No'}}</span>
                                         </td>
-                                        <td>Saxe, Rebecca On 12/01/2018</td>
+                                        <td>{{questionnaire.UPDATE_USER}} On {{questionnaire?.UPDATE_TIMESTAMP| date: 'MM/dd/yyyy'}}</td>
                                         <td>
+
+                                            <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
+                                                                                          protocolId: protocolId,
+                                                                                          ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
+                                                                                         qnrId: questionnaire.QUESTIONNAIRE_ID,mode: 'view'}">
+                                              <button type="button" class="btn">
+                                                <i class="fa fa-eye log-user-icon-lite"></i>
+                                              </button>
+                                            </a>
       
                                             <a *ngIf="isQstnrEditable" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
                                                                                                                            protocolId: protocolId,

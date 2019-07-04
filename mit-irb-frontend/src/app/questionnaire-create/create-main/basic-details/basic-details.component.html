@@ -76,11 +76,11 @@
                       <span class="bar"></span>
                     </td>
                     <td scope="col" class="sub-add qst-plus-icon">
-                      <i *ngIf="UsageEditIndex == null" (click)="addNewUsage()" class="fas fa-plus"
+                      <i *ngIf="UsageEditIndex == null" (click)="addNewUsage()" class="fa fa-plus"
                         title="Add Usage"></i>
-                      <i *ngIf="UsageEditIndex != null" (click)="updateUsage()" class="fas fa-save"
+                      <i *ngIf="UsageEditIndex != null" (click)="updateUsage()" class="fa fa-save"
                         title="update Usage"></i>
-                      <i *ngIf="UsageEditIndex != null" (click)="cancelUsageEdit()" class="fas fa-times"
+                      <i *ngIf="UsageEditIndex != null" (click)="cancelUsageEdit()" class="fa fa-times"
                         title="cancel"></i>
                     </td>
                   </tr>
@@ -94,8 +94,8 @@
                       <td>{{getSubmoduleItemName(list.MODULE_SUB_ITEM_CODE)}}&nbsp;</td>
                       <td>{{list.QUESTIONNAIRE_LABEL}}</td>
                       <td>
-                        <span><i (click)="removeUsage(listIndex)" class="fas fa-times close-icon"></i></span>
-                        <span><i (click)="editUsage(list,listIndex)" class="fas fa-edit close-icon"></i></span>
+                        <span><i (click)="removeUsage(listIndex)" class="fa fa-times close-icon"></i></span>
+                        <span><i (click)="editUsage(list,listIndex)" class="fa fa-edit close-icon"></i></span>
                       </td>
                     </ng-container>
                   </tr>

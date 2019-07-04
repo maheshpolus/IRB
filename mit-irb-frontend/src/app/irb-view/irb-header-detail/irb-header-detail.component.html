@@ -306,7 +306,9 @@
 			routerLinkActive="nav-active">
 			<i class="fa fa-home" aria-hidden="true"></i>General
 		</button>
-		<button class="btn btn-primary tab_btn" type="submit">
+		<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbQuestionnaireList']"
+		[queryParams]="{protocolNumber :requestObject.protocolNumber}" (click)="show_current_tab('irbQuestionnaireList')"
+		routerLinkActive="nav-active">
 			<i class="fa fa-question-circle-o" aria-hidden="true"></i>Additional Forms
 		</button>
 		<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->

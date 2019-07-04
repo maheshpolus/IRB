@@ -12,7 +12,7 @@
             <div class="col-lg-12 margin-bottom bottom-line">
               <div class="row">
                 <div class="col-6"><h4 class="card-hedding">Questionnaire List</h4></div>
-                <div class="col-4 offset-lg-2 text-right add-new-1"><a  (click) = "navigateToCreate(null,false)"><i class="fas fa-plus"></i>Add New Questionnaire</a></div>
+                <div class="col-4 offset-lg-2 text-right add-new-1"><a  (click) = "navigateToCreate(null,false)"><i class="fa fa-plus"></i>Add New Questionnaire</a></div>
               </div>
             </div>
             <div class="col-lg-12">
@@ -42,10 +42,10 @@
                           <td class="col-7">{{questionnaire.QUESTIONNAIRE_LABEL}}</td>
                           <td class="col-1">
                             <span class="icon-t">
-                              <a (click) = "navigateToCreate(questionnaire.QUESTIONNAIRE_ID,true)"><i class="far fa-eye view-btn-1"></i></a></span>
+                              <a (click) = "navigateToCreate(questionnaire.QUESTIONNAIRE_ID,true)"><i class="fa fa-eye view-btn-1"></i></a></span>
                             <span class="icon-t">
                               <a (click) = "navigateToCreate(questionnaire.QUESTIONNAIRE_ID,false)">
-                                <i class="fas fa-pencil-alt edit-btn-1"></i>
+                                <i class="fa fa-pencil edit-btn-1"></i>
                               </a>
                             </span>
                           </td>

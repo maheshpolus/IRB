@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ViewQuestionnaireService } from '../view.service';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
@@ -25,7 +25,8 @@ import * as _ from 'lodash';
 export class ViewQuestionnaireComponent implements OnInit {
 
   constructor(private _questionService: ViewQuestionnaireService,
-              private _activatedRoute: ActivatedRoute) { }
+              private _activatedRoute: ActivatedRoute, private _router: Router) { }
+  userDTO = null;
   questionnaire: any = {};
   attachmentIndex    = null;
   requestObject: any = {};
@@ -38,15 +39,17 @@ export class ViewQuestionnaireComponent implements OnInit {
   isViewmode  = false;
 
   ngOnInit() {
+    this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this._activatedRoute.queryParams.subscribe(params => {
     this.requestObject.questionnaire_id = params.qnrId;
     this.requestObject.questionnaire_answer_header_id = params.ansHdrId;
+    this.isViewmode = params.mode === 'view' ? true : false;
     });
     this._questionService.getQuestionnaire(this.requestObject).subscribe(
     data => {
       this.result  = data;
       this.result.module_item_code     = 7;
-      this.result.module_sub_item_code = 0;
+      this.result.module_sub_item_code = null;
       this.result.module_sub_item_key  = 0;
       this.questionnaire = this.result.questionnaire;
       const tempLabels: any = {};
@@ -273,24 +276,31 @@ export class ViewQuestionnaireComponent implements OnInit {
    * add file to temporarylist
    */
   addFileToTempFiles(file) {
-    (<HTMLInputElement>document.getElementById('selectedFile')).value = '';
     if (file) {
       this.tempFiles = [];
-      this.tempFiles.push({ attachment : file,
+      this.tempFiles.push({ attachment : file[0],
                             questionId : this.questionnaire.questions[this.attachmentIndex].QUESTION_ID,
-                            fileName   : file.name,
-                            type       : file.type});
+                            fileName   : file[0].name,
+                            type       : file[0].type});
     }
   }
   saveQuestionniare() {
     this._activatedRoute.queryParams.subscribe(params => {
       this.result.module_item_key = params.protocolNumber;
+      this.result.action_user_id = this.userDTO.userName;
     });
     this.checkQuestionaireCompletion();
     const toastId = document.getElementById('toast-success');
-    this._questionService.saveQuestionnaire(this.result).subscribe(
+    this._questionService.saveQuestionnaire(this.result, this.filesArray).subscribe(
       data => {
         this.result = data;
+        this.questionnaire = this.result.questionnaire;
+        this._router.navigate([], {
+          queryParams: {
+            ansHdrId: this.result.questionnaire_answer_header_id
+          },
+          queryParamsHandling: 'merge',
+        });
         this.showToast(toastId);
     });
   }
@@ -298,7 +308,7 @@ export class ViewQuestionnaireComponent implements OnInit {
    * sets no help message if help mesag is not available
    * @param helpMsg
    */
-  getHelpLink(helpMsg, index) {
+  getHelpLink(helpMsg, index) {debugger
     this.showHelpMsg[index] = !this.showHelpMsg[index];
     if (helpMsg == null) {
         this.helpMsg[index] = 'No help message availabe!';
@@ -340,4 +350,24 @@ export class ViewQuestionnaireComponent implements OnInit {
       }
     });
   }
+
+  /**downloads file added
+   */
+  downloadAttachment(attachmentId, attachmentName) {
+    this._questionService.downloadAttachment(attachmentId)
+     .subscribe(( data: any) => {
+         const a = document.createElement('a');
+         const blob = new Blob([data], { type: data.type });
+         a.href = URL.createObjectURL(blob);
+         a.download = attachmentName;
+         a.id = 'attachment';
+         document.body.appendChild(a);
+         a.click();
+     },
+         error => console.log('Error downloading the file.', error),
+         () => {
+           console.log('OK');
+           document.body.removeChild(document.getElementById('attachment'));
+       });
+   }
 }

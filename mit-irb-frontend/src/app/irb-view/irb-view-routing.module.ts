@@ -12,6 +12,7 @@ import { IrbActionsComponent } from '../irb-create/irb-actions/irb-actions.compo
 import { IrbSummaryDetailsComponent } from '../irb-create/irb-summary-details/irb-summary-details.component';
 import { IrbSubmissionDetailComponent } from './irb-submission-detail/irb-submission-detail.component';
 import { IrbPermissionComponent } from '../irb-create/irb-permission/irb-permission.component';
+import { IrbQuestionnaireListComponent } from '../irb-create/irb-questionnaire-list/irb-questionnaire-list.component';
 
 const routes: Routes = [
                         {path: '', component: IrbHeaderDetailComponent, resolve: { irb: DashboardResolverService },
@@ -29,6 +30,8 @@ const routes: Routes = [
                           { path: 'irbSummaryDetails', component: IrbSummaryDetailsComponent, resolve: { irb: DashboardResolverService } },
                           {path: 'irbSubmissionDetails', component: IrbSubmissionDetailComponent,
                           resolve: { irb: DashboardResolverService }},
+                          { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },
+                          { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }
                           ]}
                         ];
 

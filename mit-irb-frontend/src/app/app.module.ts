@@ -49,6 +49,7 @@ import { AssignModalServiceService } from './common/assign-modal/assign-modal.se
 import { PersonTrainingService } from './person-training/person-training.service';
 import { AssignModalComponent } from './common/assign-modal/assign-modal.component';
 import { PermissionWarningModalComponent } from './common/permission-warning-modal/permission-warning-modal.component';
+import { CommitteeScheduleListComponent } from './committee-schedule-list/committee-schedule-list.component';
 
 enableProdMode();
 
@@ -72,7 +73,8 @@ enableProdMode();
         LogoutComponent,
         FundingSourceModalComponent,
         AssignModalComponent,
-        PermissionWarningModalComponent
+        PermissionWarningModalComponent,
+        CommitteeScheduleListComponent
 
     ],
     imports: [

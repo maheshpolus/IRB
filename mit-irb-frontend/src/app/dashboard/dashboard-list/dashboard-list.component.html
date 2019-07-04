@@ -28,12 +28,12 @@
       </ul>
 			<ul class="navbarmed" *ngIf="roleType == 'ADMIN'">
 				<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
-					<a (click)="getIrbListData('ALL')">My Protocols</a>
+					<a (click)="getIrbListData('ALL')">All Protocols</a>
 				</li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'NEW_SUBMISSION')}">
 					<a (click)="getIrbListData('NEW_SUBMISSION')">New Submission </a>
 				</li>
-				<li [ngClass]="{activenav:(lastClickedTab == 'PI_ACTION')}">
+				<!-- <li [ngClass]="{activenav:(lastClickedTab == 'PI_ACTION')}">
 					<a (click)="getIrbListData('PI_ACTION')">PI Actions</a>
 				</li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'ADMINISTRATOR')}">
@@ -41,16 +41,16 @@
 				</li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'REVIEWER')}">
 					<a (click)="getIrbListData('REVIEWER')">Reviewer</a>
-				</li>
+				</li>-->
 				<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
 					<a (click)="getExemptListData('EXEMPT')">Exempt Evaluations</a>
-				</li>
-				<li [ngClass]="{activenav:(lastClickedTab == 'COMMITTEE')}">
+				</li> 
+				<!-- <li [ngClass]="{activenav:(lastClickedTab == 'COMMITTEE')}">
 					<a (click)="getCommitteeScheduleListData('COMMITTEE')">Committees</a>
 				</li>
 				<li [ngClass]="{activenav:(lastClickedTab == 'SCHEDULE')}">
 					<a (click)="getCommitteeScheduleListData('SCHEDULE')">Schedules</a>
-        </li>
+        		</li> -->
         <a *ngIf="lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'"
           class="btn float-right box-shadow-2 btn-sm btn-danger advanced-search-btn"
           data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
@@ -67,8 +67,8 @@
 			</ul>
 			<div class="navigate_ot tab-content" id="nav-tabContent">
 				<div class="toggle_navgate">
-						<div class="col-sm-12" *ngIf="lastClickedTab != 'EXEMPT'">
-								<div class="collapse" id="collapseExample">
+						<div class="col-sm-12" *ngIf="isAdvancesearch && lastClickedTab != 'EXEMPT'">
+								<div class="active" id="collapseExample">
 								  <div class="col-12 card-body box-shadow-1 form-group">
 									<div class="row">
 									  <div class="col-sm-6 col-md-2">
@@ -113,6 +113,20 @@
 										<input type="text" [(ngModel)]="requestObject.fundingSource" class="form-control txt-small" placeholder="Funding Source" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 									  </div>
 									  <div class="col-sm-6 col-md-3">
+											<input type="text" [(ngModel)]="adminSearchText" (ngModelChange)="getAdminList(adminSearchText)" class="form-control txt-small" placeholder="Search: IRB Admin" (keydown.Enter)="getAdvanceSearch(lastClickedTab)"(focus)="isAdminSearch = true"
+											(focusout)="isAdminSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'adminDropDown')"
+											(keydown.arrowup) ="keyPressEvent.onKeyDown($event,'adminDropDown')"
+											(keydown.Enter) ="keyPressEvent.onKeyDown($event,'adminDropDown')">
+										  <div class="sb-seachresults top-margin dropdown-width" id="adminDropDown">
+											<ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isAdminSearch">
+											  <li class="block" *ngFor="let result of irbAdminsListCopy" (mousedown)="setAdminName(result.FULL_NAME, result.PERSON_ID)"
+												(click)="setAdminName(result.FULL_NAME, result.PERSON_ID)">
+												<a> {{result.FULL_NAME}}</a>
+											  </li>
+											  </ul>
+										  </div>
+										  </div>
+									  <div class="col-sm-6 col-md-2">
 										<div class="input-group">
 										  <input class="form-control txt-small" [owlDateTime]="dt3" placeholder="Approval Date From" [(ngModel)]="approvalDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
 										  <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
@@ -135,15 +149,18 @@
 										  </div>
 										</div>
 									  </div>
-									  <div class="col-sm-6 col-md-2">
-										<button class="btn btn-outline-success txt-small hvr-icon-back" (click)="getAdvanceSearch(lastClickedTab)">
-										  <i class="fa fa-search pr-10"></i>Search
-										</button>
-										<button class="btn btn-outline-secondary txt-small" (click)="clear()">
-										  <i class="fa fa-close pr-10"></i>Clear
-										</button>
-									  </div>
+									  
 									</div>
+									<div class="row mt-10">
+									<div class="col-sm-12 col-md-12 text-right">
+											<button class="btn btn-outline-success txt-small hvr-icon-back" (click)="getAdvanceSearch(lastClickedTab)">
+											  <i class="fa fa-search pr-10"></i>Search
+											</button>
+											<button class="btn btn-outline-secondary txt-small" (click)="clear()">
+											  <i class="fa fa-close pr-10"></i>Clear
+											</button>
+										  </div>
+										  </div>
 								  </div>
 								</div>
 									  </div>
@@ -253,7 +270,7 @@
 											 aria-hidden="true"></i>
 												</a>
 
-										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_STATUS'}" (click)="sortField = 'PROTOCOL_STATUS';updateSortOrder()">Status
+										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_STATUS'}" (click)="sortField = 'PROTOCOL_STATUS';updateSortOrder()">Protocol Status
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
 											 aria-hidden="true"></i>
 										</a>
@@ -261,14 +278,18 @@
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'TITLE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
 											 aria-hidden="true"></i>
 										</a>
-										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_TYPE'}" (click)="sortField = 'PROTOCOL_TYPE';updateSortOrder()">Type
+										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_TYPE'}" (click)="sortField = 'PROTOCOL_TYPE';updateSortOrder()">Prototocol Type
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
 											 aria-hidden="true"></i>
 										</a>
-										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_STATUS'}" (click)="sortField = 'SUBMISSION_STATUS';updateSortOrder()">Submission Type
+										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_STATUS'}" (click)="sortField = 'SUBMISSION_STATUS';updateSortOrder()">Submission Status
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'SUBMISSION_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
 											 aria-hidden="true"></i>
 										</a>
+										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_TYPE'}" (click)="sortField = 'SUBMISSION_TYPE';updateSortOrder()">Submission Type
+												<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'SUBMISSION_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+												 aria-hidden="true"></i>
+											</a>
 										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'LAST_APPROVAL_DATE'}" (click)="sortField = 'LAST_APPROVAL_DATE';updateSortOrder()">Approval Date
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'LAST_APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
 											 aria-hidden="true"></i>
@@ -277,6 +298,10 @@
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'EXPIRATION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
 											 aria-hidden="true"></i>
 										</a>
+										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'ASSIGNEE_PERSON'}" (click)="sortField = 'ASSIGNEE_PERSON';updateSortOrder()">IRB Admin
+												<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'ASSIGNEE_PERSON'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+												 aria-hidden="true"></i>
+											</a>
 										<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'UPDATE_TIMESTAMP'}" (click)="sortField = 'UPDATE_TIMESTAMP';updateSortOrder()">Update Timestamp
 											<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
 											 aria-hidden="true"></i>
@@ -286,8 +311,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12" *ngIf="lastClickedTab == 'EXEMPT'">
-								<div class="collapse" id="collapseExample">
+						<div class="col-12" *ngIf="isAdvancesearch && lastClickedTab == 'EXEMPT'">
+								<div class="active" id="collapseExample">
 								  <div class="col-12 card-body box-shadow-1 form-group">
 									<div class="row">
 									  <div class="col-sm-6 col-md-3">
@@ -390,15 +415,12 @@
 					</div>
 				</ng-container>
 
-				<ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
+				<!--<ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
 					<div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
-					<!-- <app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-					 [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-committee-card> -->
+					
 					<app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 						|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-					 [irbList]="paginatedIrbListData"  [userDTO]="userDTO"></app-committee-card>
-					<!-- PAGINATION - START -->
+					 [irbList]="paginatedIrbListData"></app-committee-card>
 					<div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
 						<nav class="paginationSkin text-right pagination txt-small">
 							<div class="margin8">
@@ -410,18 +432,14 @@
 							</ngb-pagination>
 						</nav>
 					</div>
-					<!-- PAGINATION - END -->
-				</ng-container>
+				</ng-container>-->
 
-				<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
+				<!-- <ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
 					<div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
-					<!-- <app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
-							|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-					 [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}"></app-schedule-card> -->
+				
 					<app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 							|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
-					 [irbList]="paginatedIrbListData"  [userDTO]="userDTO"></app-schedule-card>
-					<!-- PAGINATION - START -->
+					 [irbList]="paginatedIrbListData"></app-schedule-card>
 					<div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
 						<nav class="paginationSkin text-right pagination txt-small">
 							<div class="margin8">
@@ -433,8 +451,7 @@
 							</ngb-pagination>
 						</nav>
 					</div>
-					<!-- PAGINATION - END -->
-				</ng-container>
+				</ng-container> -->
 
 				<ng-container *ngIf="lastClickedTab == 'EXEMPT'">
 					<div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>

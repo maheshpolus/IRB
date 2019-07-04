@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, NgZone, AfterViewInit, OnChanges} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { Router } from '@angular/router';
@@ -27,15 +27,18 @@ declare var $: any;
     styleUrls: ['./dashboard-list.component.css']
 })
 
-export class DashboardListComponent implements OnInit, AfterViewInit {
+export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges {
 
     noProtocolList: boolean;
     noIrbList = false;
     isAdvancesearch = false;
     isAdvancsearchPerformed = false;
     isSubmittedStatusSearch = false;
+    isAdminSearch = false;
 
     @Input() userDTO: any;
+    @Input() currentTab: any;
+    @Input() isUnAssignedClicked: any;
     lastClickedTab = 'ALL';
     requestObject: any = {
         personId: '',
@@ -48,6 +51,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         protocolSubmissionStatus: '',
         dashboardType: '',
         determination: '',
+        adminPersonId: '',
         approvalDate: null,
         expirationDate: null,
         fundingSource: '',
@@ -73,10 +77,13 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     protocolStatus = '';
     direction: number;
     column: any;
+    adminSearchText: string;
     sortOrder = '1';
     sortField = 'UPDATE_TIMESTAMP';
     protocolStatuses: any = [];
     protocolStatusesCopy: any = [];
+    irbAdminsList: any = [];
+    irbAdminsListCopy: any = [];
     submissionStatuses: any = [];
     isCheckBoxCheckedSubmit = {};
     isCheckBoxChecked = {};
@@ -200,6 +207,23 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.getIrbListData(this.lastClickedTab);
         }
         this.getIrbProtocolTypes();
+        this.getIrbAdminList();
+    }
+
+    ngOnChanges() {
+        this.lastClickedTab = this.currentTab;
+        if (this.lastClickedTab) {
+            this.isUnAssignedClicked = '' + this.isUnAssignedClicked;
+            // tslint:disable-next-line:no-construct
+            if (this.isUnAssignedClicked === 'true') {
+                this.adminSearchText = 'Unassigned';
+                this.requestObject.adminPersonId = 'UNASSIGNED';
+                this.isAdvancesearch = true;
+                this.getAdvanceSearch(this.lastClickedTab);
+            } else {
+            this.getIrbListData(this.lastClickedTab);
+            }
+        }
     }
 
     /*logic for elastic search*/
@@ -374,6 +398,14 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         this.message = 'something went wrong';
     }
 
+    getIrbAdminList() {
+        this._dashboardService.getIRBAdminList(null).subscribe((data: any) => {
+            this.irbAdminsList = data.irbAdminsList;
+            this.irbAdminsList.unshift({PERSON_ID: 'UNASSIGNED', FULL_NAME: 'Unassigned'});
+            this.irbAdminsListCopy = Object.assign([], this.irbAdminsList);
+        });
+    }
+
     /** changes the icon in searchbox*/
     protocolSearchValueChange() {
         this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : 'fa fa-search fa-med';
@@ -472,6 +504,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
      */
     sortAnArray(array, column, direction) {
         const sortedArray = array.sort(function(a, b) {
+            a[column] = (a[column] == null ? '' : a[column].toString());
+                b[column] = (b[column] == null ? '' : b[column].toString());
             if (a[column].toLowerCase() < b[column].toLowerCase()) {
                 return 1 * direction;
             } else if ( a[column].toLowerCase() > b[column].toLowerCase()) {
@@ -524,7 +558,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     clear() {
         if (this.requestObject.protocolNumber !== '' || this.requestObject.title !== '' ||
             this.requestObject.piName !== '' || this.requestObject.protocolTypeCode !== '' ||
-            this.requestObject.protocolStatusCode !== '' ||
+            this.requestObject.protocolStatusCode !== '' || this.requestObject.adminPersonId !== '' ||
             this.requestObject.approvalDate !== '' || this.requestObject.expirationDate !== ''
              || this.requestObject.fundingSource !== '' || this.requestObject.protocolSubmissionStatus !== '') {
             this.requestObject.protocolNumber = '';
@@ -538,6 +572,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             this.requestObject.protocolTypeCode = '';
             this.requestObject.protocolStatusCode = '';
             this.requestObject.fundingSource = '';
+            this.requestObject.adminPersonId = '',
+            this.adminSearchText = '';
             this.protocolStatus = '';
             this.isCheckBoxChecked = {};
             this.isCheckBoxCheckedSubmit = {};
@@ -867,5 +903,20 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
          const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
          modalRef.componentInstance.alertMessage = alertMessage;
        }
+
+       getAdminList(searchText) {
+        searchText = searchText.toLowerCase();
+        if (searchText) {
+            this.irbAdminsListCopy = Object.assign([], this.irbAdminsList);
+        }
+        this.irbAdminsListCopy = this.irbAdminsList.filter( admin => {
+            return admin.FULL_NAME.toLowerCase().includes(searchText);
+         });
+    }
+    setAdminName(adminName, personId) {
+        this.isAdminSearch = false;
+        this.adminSearchText = adminName;
+        this.requestObject.adminPersonId = personId;
+    }
 }
 

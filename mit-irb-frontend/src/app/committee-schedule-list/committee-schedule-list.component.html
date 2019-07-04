@@ -1,0 +1,46 @@
+<div class="headerPush-10"></div>
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+<div class="container-fluid pushFixedHeaderFooter">
+
+    <div>
+        <h4 class="txt-large card-hedding dotted-bottom">{{committeeOrScheduleLabel}}
+        </h4>
+      </div>
+      <ng-container *ngIf="isCommitteeList">
+          <div class="col-sm-12"*ngIf="irbListData.length == 0">No SCHEDULE found</div>
+          <!-- <div class="card-body txt-small text-right">
+          <ul>
+          <li>
+              <a href="javascript:void(0)" (click)="goToCommittee()">
+                <i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create Committee
+              </a>
+            </li>
+            </ul>
+            </div> -->
+            <div class="text-right">
+                <span class="welcome-popup text-danger txt-medium p-2" 
+                 (click)="goToCommittee()">
+                  <i class="fa fa-plus icon-padding"></i>Create Committee
+                </span>
+              </div>
+<app-committee-card 
+[irbList]="paginatedIrbListData"></app-committee-card>
+</ng-container>
+<ng-container *ngIf="!isCommitteeList">
+  	<div class="col-sm-12" *ngIf="irbListData.length == 0">No COMMITTEE found</div>
+<app-schedule-card
+           [irbList]="paginatedIrbListData"></app-schedule-card>
+           </ng-container>
+<div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+    <nav class="paginationSkin text-right pagination txt-small">
+      <div class="margin8">
+        <b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number *
+          paginationData.limit - paginationData.limit + paginatedIrbListData.length}} of {{count}} Records</b>
+      </div>
+      <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="count" [(page)]="paginationData.page_number"
+       paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="paginatedListPerPage(paginationData.page_number)">
+      </ngb-pagination>
+    </nav>
+  </div>
+<div class="footerPush"></div>
+</div>

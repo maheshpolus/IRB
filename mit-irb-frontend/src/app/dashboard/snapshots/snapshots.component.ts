@@ -1,10 +1,7 @@
-import { Component, OnInit , Input} from '@angular/core';
+import { Component, OnInit , Input, Output, EventEmitter} from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardService } from '../dashboard.service';
-import { SharedDataService } from '../../common/service/shared-data.service';
-import { PermissionWarningModalComponent } from '../../common/permission-warning-modal/permission-warning-modal.component';
 
 @Component({
   selector: 'app-snapshots',
@@ -15,6 +12,8 @@ import { PermissionWarningModalComponent } from '../../common/permission-warning
 export class SnapshotsComponent implements OnInit {
 
     @Input() userDTO: any;
+    @Output() currentTab = new EventEmitter<Event>();
+    @Output() isUnAssignedClicked = new EventEmitter<Event>();
     result: any = {};
     snapshots: any = [];
     requestObject = {
@@ -23,8 +22,7 @@ export class SnapshotsComponent implements OnInit {
     };
     roleType: string;
 
-  constructor(private _dashboardService: DashboardService, private _router: Router,
-    private modalService: NgbModal, private _sharedDataService: SharedDataService ) { }
+  constructor(private _dashboardService: DashboardService, private _router: Router) { }
 
   /** calls function to load snapshot details */
   ngOnInit() {
@@ -66,25 +64,27 @@ export class SnapshotsComponent implements OnInit {
     this._router.navigate(['/irb/irb-create']);
 }
 
-
-
-openPermissionWarningModal(alertMessage) {
-  const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
-  modalRef.componentInstance.alertMessage = alertMessage;
-}
-goToCommittee() {
-    const requestObject = {
-        acType: 'C', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: null
-    };
-    this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
-    const hasPermission = data.successCode;
-    if (hasPermission) {
-        this._router.navigate(['/irb/committee'], {queryParams: {mode: 'create'}});
-    } else {
-    const alertMessage = 'You donot have permission to Maintain Committee';
-    this.openPermissionWarningModal(alertMessage);
-    }
-    });
+// openPermissionWarningModal(alertMessage) {
+//   const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
+//   modalRef.componentInstance.alertMessage = alertMessage;
+// }
+// goToCommittee() {
+//     const requestObject = {
+//         acType: 'C', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: null
+//     };
+//     this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
+//     const hasPermission = data.successCode;
+//     if (hasPermission) {
+//         this._router.navigate(['/irb/committee'], {queryParams: {mode: 'create'}});
+//     } else {
+//     const alertMessage = 'You donot have permission to Maintain Committee';
+//     this.openPermissionWarningModal(alertMessage);
+//     }
+//     });
+ // }
+    openNewSubmission(tab, isUnAssignedClicked) {
+        this.currentTab.emit(tab);
+            this.isUnAssignedClicked.emit(isUnAssignedClicked);
     }
 }
 

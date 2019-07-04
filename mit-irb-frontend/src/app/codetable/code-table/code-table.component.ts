@@ -1,5 +1,6 @@
-import { Component, Input,  OnChanges } from '@angular/core';
+import { Component, Input,  OnChanges, ViewChild, ElementRef } from '@angular/core';
 import { CodeTableService } from './code-table.service';
+// import _filter from 'lodash/filter';
 
 
 @Component({
@@ -13,8 +14,6 @@ export class CodeTableComponent implements OnChanges {
   @Input() codeTableProperty: any = {};
   @Input() isSavedFlag: any = {};
   updatedCodeTableData: any = {};
-  newCodeTableData: any = {};
-  codeTableData:  any;
   codeTableValues:  any = [];
   isEditEnable:  any = [];
   tableFieldList: any = [];
@@ -30,17 +29,15 @@ export class CodeTableComponent implements OnChanges {
   isEmpty  = false;
   isType = false;
   isNoData = false;
-  isDependency = false;
   toastMessage: any;
-  updatedData:  any;
   deleteIndex: number;
-  id: number;
-  tempId: number;
-  Id: number;
+  validationId: number;
+  selectedRowId: number;
+  selectedEditRowId: number;
   cancelData: any;
-  totalColumnNo;
-  placeHolder = 'Search ';
+  placeHolder = 'Search by ';
   searchText: any;
+  attachmentColumnName: string;
 
   constructor(private _codeTableService: CodeTableService) { }
 
@@ -51,22 +48,21 @@ export class CodeTableComponent implements OnChanges {
     this.codeTableValues = [];
     this.isEditEnable = [];
     this.updatedCodeTableData = {};
-    this.placeHolder = 'Search ';
+    this.placeHolder = 'Search by ';
     this.searchText = '';
+    this.attachmentColumnName = '';
     localStorage.setItem('currentUser', 'admin');
     this.updatedCodeTable.updatedUser = localStorage.getItem('currentUser');
     this.setValueChaged();
     this.tableFieldList = this.codeTableProperty.fields.filter(fieldList => fieldList.visible === 'true');
-    this.totalColumnNo = this.tableFieldList.length;
-    (this.codeTableProperty.dependency.length !== 0) ? this.isDependency = true : this.isDependency = false;
     this.tableFieldList.forEach(element => {
           this.placeHolder = this.placeHolder + element.display_name + ', ';
           this.isValueEmpty.push(false);
-          if (element.data_type === 'Integer') {
+          if (element.data_type === 'INTEGER') {
             this.dataType.push({'type': 'number', 'display_type': 'numbers'});
           } else if (element.data_type === 'String') {
             this.dataType.push({'type': 'text', 'display_type': 'characters'});
-          } else if (element.data_type === 'Clob') {
+          } else if (element.data_type === 'Blob' || element.data_type === 'Clob' ) {
             this.dataType.push({'type': 'file', 'display_type': 'files'});
           } else if (element.data_type === 'Date') {
             this.dataType.push({'type': 'date', 'display_type': ''});
@@ -74,19 +70,18 @@ export class CodeTableComponent implements OnChanges {
             this.dataType.push({'type': '', 'display_type': ''});
           }
     });
-    this.placeHolder = this.placeHolder + '. . .';
     this.updatedCodeTable.codetable = this.codeTableProperty;
     this.getCodeTable();
   }
   /**
    * returns the selected codetable values
-   * stores a true value for isEditEnable for all rows of values
+   * stores a true value for isEditEnable for all rows of values:- used for inline editing
+   * sets a flag isNoData to true if the codetable values returned is empty
    */
   getCodeTable() {
     this._codeTableService.getCodetableValues(this.updatedCodeTable)
-    .subscribe(data => {
-          this.codeTableData = data;
-          this.codeTableValues = this.codeTableData.tableData;
+    .subscribe((data: any) => {
+          this.codeTableValues = data.tableData;
           this.codeTableValues.length === 0 ? this.isNoData = true : this.isNoData = false;
           if (!this.isNoData) {
             this.codeTableValues.forEach(element => {
@@ -101,7 +96,11 @@ export class CodeTableComponent implements OnChanges {
    * @param  {} id
    * @param  {} values
    * sets isEditEnable to false for the currently selected row for editing
-   * sets isValueEmpty to true for all the fields in the row; for field can be empty or not validations.
+   * sets isValueEmpty to true for all the fields in the row; for (field can be empty or not) validations.
+   * this.isSavedFlag.isSaved flag having a true value if we are in the middle of editing any row of values.
+   * To make as the row editable sets isEditEnable to true for the row in the corresponding table of values.
+   * keeps a copy of the data as back up to revert the row as before editing if the user clicks cancel button.
+   * On editing initially sets isValueEmpty of each column value to true : because initially every field is filled.
    */
   editCodeTable(id, values) {
     if (this.isSavedFlag.isSaved || this.isSavedFlag.isSaved == null) {
@@ -109,7 +108,7 @@ export class CodeTableComponent implements OnChanges {
       this.setValueChaged();
     }
     if (Object.getOwnPropertyNames(this.updatedCodeTableData).length === 0) {
-      this.Id = id;
+      this.selectedEditRowId = id;
       this.isEmpty = false;
       this.isType = false;
       this.isLength = false;
@@ -139,15 +138,15 @@ export class CodeTableComponent implements OnChanges {
     this.updatedCodeTableData.UPDATE_TIMESTAMP = '1234';
     this.updatedCodeTable.tableData[0] = this.updatedCodeTableData;
     if (this.isSavedFlag.isSaved === false) {
-      this._codeTableService.getUpdatedTableValues(this.updatedCodeTable)
-      .subscribe(data => {
-          this.updatedData  = data;
-          if (this.updatedData.promptCode === 1) {
-              this.codeTableValues[index] = this.updatedData.tableData[0];
-              this.toastMessage = this.updatedData.promptMessage;
+      this._codeTableService.getUpdatedTableValues(this.updatedCodeTable,  this.attachmentColumnName)
+      .subscribe((data: any) => {
+          if (data.promptCode === 1) {
+              this.codeTableValues.splice(index, 1);
+              this.codeTableValues.splice( 0, 0, data.tableData[0]);
+              this.toastMessage = data.promptMessage;
               this.toastSuccess(this.toastMessage);
           } else {
-              this.toastMessage = this.updatedData.promptMessage;
+              this.toastMessage = data.promptMessage;
               this.toastWarning(this.toastMessage);
           }
       });
@@ -158,13 +157,13 @@ export class CodeTableComponent implements OnChanges {
   /**
    * @param  {} column_name
    * sets the updated column name,
-   * sets value_changed of updated rows to true.
+   * sets value_changed of updated rows to true: this is set to identify which values are changed in the selected row
    */
   setCodeTableField(column_name, i, type, value = 0) {
       const index = this.codeTableProperty.fields.findIndex(fields => column_name === fields.column_name);
       this.codeTableProperty.fields[index].value_changed = 'true';
-      this.tempId = i;
-      if (type === 'date') {
+      this.selectedRowId = i;
+      if (type === 'date' || type === 'Blob' || type === 'Clob') {
           this.isEmpty = false;
           this.isValueEmpty[i] = true;
       }
@@ -174,30 +173,26 @@ export class CodeTableComponent implements OnChanges {
   }
   /**
    * @param  {} event
-   * @param  {} length
-   * @param  {} type
+   * @param  {} tableField
    * @param  {} id
-   * @param  {} canEmpty
-   * @param  {} columnname
    * checks validation
    */
-  setValidation(event, length, type, id, canEmpty, columnname) {
-    this.id = id;
-    if ( event.target.value.length < length ) {
+  checkValidation(event, tableField, id) {
+    this.validationId = id;
+    if ( event.target.value.length < tableField.length ) {
       this.isLength = false;
     } else {
         this.isLength = true;
-        event.target.value = event.target.value.slice(0, length);
-        this.newCodeTableData[columnname] = event.target.value;
-        this.updatedCodeTableData[columnname] = event.target.value;
+        event.target.value = event.target.value.slice(0, tableField.length);
+        this.updatedCodeTableData[tableField.column_name] = event.target.value;
       }
-    if ( type === 'Integer' && event.keyCode >= 65 && event.keyCode <= 90 ) {
+    if ( tableField.data_type === 'INTEGER' && event.keyCode >= 65 && event.keyCode <= 90 ) {
       this.isType = true;
       event.target.value = event.target.value.slice(0, 1);
     } else {
         this.isType = false;
       }
-    if ( event.target.value.length === 0 && canEmpty === 'false' ) {
+    if ( event.target.value.length === 0 && tableField.can_empty === 'false' ) {
       this.isEmpty = true;
       this.isValueEmpty[id] = false;
     } else {
@@ -209,27 +204,24 @@ export class CodeTableComponent implements OnChanges {
    * add new row of values to code table
    */
   addNewCodeTableData() {
-    this.updatedCodeTableData = {};
     if ( this.isValueEmpty.filter(empty => empty === false).length !== 0 ) {
       this.isEmpty = true;
     } else {
         this.isEmpty = false;
         document.getElementById('closeModal').click();
-        // if (Object.getOwnPropertyNames(this.newCodeTableData).length !== 0) {
-            this.updatedCodeTable.UPDATE_TIMESTAMP = '1234';
-            this.updatedCodeTable.tableData[0] = this.newCodeTableData;
+        // if (Object.getOwnPropertyNames(this.updatedCodeTableData).length !== 0) {
+            this.updatedCodeTable.tableData[0] = this.updatedCodeTableData;
             this.updatedCodeTable.tableData[0].UPDATE_TIMESTAMP = '1234';
-            this._codeTableService.addNewCodeTableData(this.updatedCodeTable)
-            .subscribe(data => {
-              this.updatedData = data;
-              if ( this.updatedData.promptCode === 1) {
-                this.updatedData.tableData.length === 0 ? this.isNoData = true : this.isNoData = false;
-                this.toastMessage = this.updatedData.promptMessage;
+            this._codeTableService.addNewCodeTableData(this.updatedCodeTable, this.attachmentColumnName)
+            .subscribe(( data: any ) => {
+              if ( data.promptCode === 1) {
+                data.tableData.length === 0 ? this.isNoData = true : this.isNoData = false;
+                this.toastMessage = data.promptMessage;
                 this.toastSuccess(this.toastMessage);
                 this.isEditEnable[this.codeTableValues.length] = 'true';
-                this.codeTableValues.splice( 0, 0, this.updatedData.tableData[0]);
+                this.codeTableValues.splice( 0, 0, data.tableData[0]);
               } else {
-                  this.toastMessage = this.updatedData.promptMessage;
+                  this.toastMessage = data.promptMessage;
                   this.toastWarning(this.toastMessage);
                 }
               this.setNewCreation();
@@ -238,34 +230,27 @@ export class CodeTableComponent implements OnChanges {
     }
   }
   /**
-   * @param  {} index
-   * Sets index of the row , selected for delete to deleteIndex
-   */
-  codeTableDataIndex(index) {
-    this.deleteIndex = index;
-  }
-  /**
    * removes the selected row from codetable
    */
   deleteCodeTableData() {
     const REMOVEDDATA = this.codeTableValues[this.deleteIndex];
     this.updatedCodeTable.tableData[0] = REMOVEDDATA;
     this._codeTableService.removeSelectedData(this.updatedCodeTable)
-      .subscribe(data => {
-          this.updatedData  = data;
-          if ( this.updatedData.promptCode === 1 ) {
+      .subscribe((data: any) => {
+          if ( data.promptCode === 1 ) {
             this.codeTableValues.length === 1 ? this.isNoData = true : this.isNoData = false;
-            this.toastMessage = this.updatedData.promptMessage;
+            this.toastMessage = data.promptMessage;
             this.toastSuccess(this.toastMessage);
             this.codeTableValues.splice(this.deleteIndex, 1);
           } else {
-              this.toastMessage = this.updatedData.promptMessage;
+              this.toastMessage = data.promptMessage;
               this.toastWarning(this.toastMessage);
             }
     });
     this.isSavedFlag.isSaved = true;
     this.isEditEnable[this.deleteIndex] = true;
     this.updatedCodeTableData = {};
+    this.isEditEnable[this.selectedEditRowId] = true;
   }
   /**
    * sets requirements for new creation:
@@ -277,12 +262,12 @@ export class CodeTableComponent implements OnChanges {
     this.isLength = false;
     this.isType = false;
     this.isEmpty = false;
-    this.newCodeTableData = {};
+    this.updatedCodeTableData = {};
     if (this.isSavedFlag.isSaved === false ) {
       this.toastMessage = 'Save the changes';
       this.toastWarning(this.toastMessage);
     } else {
-        this.isEditEnable[this.Id] = true;
+        this.isEditEnable[this.selectedEditRowId] = true;
         this.updatedCodeTableData = {};
       }
     this.tableFieldList.forEach((field, index) => {
@@ -321,7 +306,7 @@ export class CodeTableComponent implements OnChanges {
    * @param  {} index
    * To cancel changes in the previos edit or cancel changes in the current edit
    */
-  cancelChanges(index) {
+  cancelChangesOnEdit(index) {
     this.isSavedFlag.isSaved = true;
     this.isEditEnable[index] = true;
     this.codeTableValues[index] = this.cancelData;
@@ -329,11 +314,70 @@ export class CodeTableComponent implements OnChanges {
   }
   /**
    * Initialises the value_changed property of UPDATE_TIMESTAP to true and others to false.
+   * because the UPDATE_TIMESTAP is not allowed to edit, if we are not setting valueChanged to true,
+   * the corresponding row is not updated while editing
    */
   setValueChaged() {
     this.codeTableProperty.fields.forEach(element => {
       (element.column_name === 'UPDATE_TIMESTAMP') ? element.value_changed = 'true' : element.value_changed = 'null';
     });
+  }
+  /**
+   * @param  {} values
+   * @param  {} column_name
+   * downloads attachments in the table
+   */
+  downloadAttachment(values, column_name) {
+    this.updatedCodeTable.tableData[0] = values;
+    this.updatedCodeTable.selectedColumnForDownload = column_name;
+    this._codeTableService.downloadAttachment(this.updatedCodeTable)
+    .subscribe(( data: any) => {
+        const a = document.createElement('a');
+        const blob = new Blob([data], { type: data.type });
+        a.href = URL.createObjectURL(blob);
+        a.download = values.FILE_NAME;
+        a.id = 'attachment';
+        document.body.appendChild(a);
+        a.click();
+    },
+        error => console.log('Error downloading the file.', error),
+        () => {console.log('OK');
+        document.body.removeChild(document.getElementById('attachment'));
+    });
+  }
+  /**
+   * @param  {} file
+   * @param  {} column_name
+   * @param  {} i
+   * @param  {} value=0
+   * to add attachments
+   * sets
+   */
+  addAttachments(file, column_name, i, value = 'add') {
+    (<HTMLInputElement>document.getElementById('selectedFile')).value = '';
+    this.updatedCodeTableData[column_name] = file;
+    this.attachmentColumnName = column_name;
+    this.updatedCodeTableData[this.codeTableProperty.file_column_name] = file.name;
+    this.codeTableProperty.fields[i].value_changed = 'true';
+    const index = this.codeTableProperty.fields.findIndex(fields => fields.column_name === this.codeTableProperty.file_column_name);
+    if (index >= 0) { this.codeTableProperty.fields[index].value_changed = 'true'; }
+    if (value === 'edit') {
+      this.setCodeTableField(column_name, i, 'Blob', 1);
+    } else {
+      this.setCodeTableField(column_name, i, 'Blob');
+    }
+  }
+  /**
+   * @param  {} index
+   * update the selected answer with mm-dd-yyyy format
+   */
+  setDateFormat(column_name) {
+    if (this.updatedCodeTableData[column_name]) {
+        const date  = ('0' + (this.updatedCodeTableData[column_name].getMonth() + 1)).slice(-2)
+                + '-' + ('0' + this.updatedCodeTableData[column_name].getDate()).slice(-2)
+                + '-' + ( this.updatedCodeTableData[column_name].getFullYear());
+        this.updatedCodeTableData[column_name] = date;
+    }
   }
 }
 

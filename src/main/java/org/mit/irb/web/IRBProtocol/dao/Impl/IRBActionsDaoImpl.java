@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
@@ -582,7 +583,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		    	vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
 		    }
 			protocolActionAttachments(files,vo);
-			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Returned to PI successfully");	
 		} catch (Exception e) {
@@ -596,9 +596,16 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO closeAdminActions(IRBActionsVO vo) {
-		try {			
-			protocolActionSP(vo,null);
-			//generateProtocolCorrespondence(vo);
+		try {
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("");
+			}	
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Closed successfully");	
 		} catch (Exception e) {
@@ -611,12 +618,19 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
-		try {			
-			protocolActionSP(vo,null);
-			updateRiskLevelDetails(vo);
+		try {	
 			updateSubmissionDetail(vo);
-			updateReviewComments(vo);			
-			//generateProtocolCorrespondence(vo);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("16");
+			}
+			updateRiskLevelDetails(vo);
+			updateReviewComments(vo);							
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Dissapproved successfully");	
 		} catch (Exception e) {
@@ -633,7 +647,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			protocolActionSP(vo,null);
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("COUHES acknowledged successfully");	
 		} catch (Exception e) {
@@ -647,9 +660,16 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO reOpenEnrollmentAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
-			protocolActionSP(vo,null);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("18");
+			}
 			protocolActionAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Re-Open enrollment successful");	
 		} catch (Exception e) {
@@ -663,8 +683,15 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO dataAnalysisOnlyAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);
-			//generateProtocolCorrespondence(vo);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("14");
+			}
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Data analysis only successful");	
 		} catch (Exception e) {
@@ -678,9 +705,16 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO closedForEnrollmentAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("13");
+			}
 			updateReviewComments(vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Closed for enrollment successful");	
 		} catch (Exception e) {
@@ -695,10 +729,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO terminateAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
-			protocolActionSP(vo,null);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("21");
+			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Terminated successfully");	
 		} catch (Exception e) {
@@ -713,10 +754,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO suspendAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
-			protocolActionSP(vo,null);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("20");
+			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Suspended successfully");	
 		} catch (Exception e) {
@@ -732,7 +780,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO notifyCommiteeAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);
-			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Notify Committee successfully");	
 		} catch (Exception e) {
@@ -747,10 +794,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO deferAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
-			protocolActionSP(vo,null);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("15");
+			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Defered successfully");	
 		} catch (Exception e) {
@@ -769,7 +823,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			protocolActionSP(vo,null);
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);			
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Assign to agenda successful");	
 		} catch (Exception e) {
@@ -784,7 +837,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO grantExceptionAdminActions(IRBActionsVO vo) {
 		try {			
-			protocolActionSP(vo,null);
+			//protocolActionSP(vo,null);
 			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Exception granted successfully");	
@@ -800,10 +853,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO reviewNotRequiredAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
-			protocolActionSP(vo,null);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("19");
+			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Review not required successful");	
 		} catch (Exception e) {
@@ -818,13 +878,15 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
 		try {	
-			updateRiskLevelDetails(vo);			
 			updateSubmissionDetail(vo);
-			updateReviewComments(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
-			result = protocolActionSP(vo,null);	
+			result = protocolActionSP(vo,null);
+			updateRiskLevelDetails(vo);			
+			updateReviewComments(vo);	
 			if(vo.getProtocolNumber().contains("A")){
 			    vo.setTemplateTypeCode("8");
+			}else if(vo.getProtocolNumber().contains("R")){
+				vo.setTemplateTypeCode("12");
 			}else{
 				vo.setTemplateTypeCode("9");
 			}
@@ -850,10 +912,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO SMRRAdminActions(IRBActionsVO vo) {
-		try {	
-			updateRiskLevelDetails(vo);	ArrayList<HashMap<String, Object>> result = null;			
-			result = protocolActionSP(vo,null);	
+		try {				
 			updateSubmissionDetail(vo);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			updateRiskLevelDetails(vo);
 			updateReviewComments(vo);
 			if(result != null && !result.isEmpty()){
 				   vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
@@ -876,11 +939,18 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO SRRAdminActions(IRBActionsVO vo) {
 		try {
-			protocolActionSP(vo,null);
-			updateRiskLevelDetails(vo);
 			updateSubmissionDetail(vo);
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("10");
+			}			
+			updateRiskLevelDetails(vo);
 			updateReviewComments(vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Substantive Revisions Required successful");	
 		} catch (Exception e) {
@@ -895,12 +965,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo) {
 		try {
-			updateExpeditedApprovalCheckList(vo);
-			updateRiskLevelDetails(vo);
-			updateSubmissionDetail(vo);		
-			updateReviewComments(vo);					
+			updateSubmissionDetail(vo);										
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
+			updateExpeditedApprovalCheckList(vo);
+			updateRiskLevelDetails(vo);
+			updateReviewComments(vo);
 			if(vo.getProtocolNumber().length() > 10){				
 				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
 			}
@@ -908,8 +978,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				   vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
 				   vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
 				   vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
-				   vo.setTemplateTypeCode("7");				   
-			}				
+			}
+			if(vo.getProtocolNumber().contains("A")){
+			    vo.setTemplateTypeCode("17");
+			}else if(vo.getProtocolNumber().contains("R")){
+				vo.setTemplateTypeCode("6");
+			}else{
+				vo.setTemplateTypeCode("7");
+			}
+			if(vo.getProtocolNumber().length() > 10){				
+				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
+			}
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Expedited approval successfully");	
@@ -952,7 +1031,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO administrativeCorrectionAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);						
-			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Adminstrative correction successful");	
 		} catch (Exception e) {
@@ -967,9 +1045,16 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO adandonAdminActions(IRBActionsVO vo, MultipartFile[] files) {
 		try {			
-			protocolActionSP(vo,null);	
+			ArrayList<HashMap<String, Object>> result = null;			
+			result = protocolActionSP(vo,null);	
+			if(!result.isEmpty()){
+				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
+			    vo.setCorrespTemplateTypeCode(result.get(0).get("coresspond_type_code")  == null ? null : result.get(0).get("coresspond_type_code").toString());
+			    vo.setCorrespTypeDescription(result.get(0).get("coressp_type") == null ? null : result.get(0).get("coressp_type").toString());
+			    vo.setTemplateTypeCode("12");
+			}		
 			protocolActionAttachments(files, vo);
-			//generateProtocolCorrespondence(vo);
+			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Adandon successful");	
 		} catch (Exception e) {
@@ -985,7 +1070,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO undoLastActionAdminActions(IRBActionsVO vo) {
 		try {			
 			protocolActionSP(vo,null);						
-			//generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Undo last action successful");	
 		} catch (Exception e) {
@@ -1673,4 +1757,13 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		}		
 	}
 	
+	private void getCloseActionNeed(){
+		
+		 Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
+					"SELECT COUNT(1) as REQ_FLAG FROM IRB_PROTOCOL_ACTIONS WHERE PROTOCOL_ID = AV_PROTOCOL_ID "
+					+"AND PROTOCOL_NUMBER = AV_PROTOCOL_NUMBER AND "
+					+"SEQUENCE_NUMBER = AV_SEQUENCE_NUMBER AND "
+					+"PROTOCOL_ACTION_TYPE_CODE = '105'");
+			queryGeneral.setString("protocolNumber" ,"");
+	}
 }

@@ -47,7 +47,7 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 	public QuestionnaireModuleDataBus getApplicableQuestionnaire(QuestionnaireModuleDataBus questionnaireDataBus) throws Exception {
 		ArrayList<HashMap<String, Object>> applicableQuestionnaire = questionnaireDAO.getApplicableQuestionnaireData(
 				questionnaireDataBus.getModule_item_key(), questionnaireDataBus.getModule_sub_item_key(),
-				questionnaireDataBus.getModule_item_code(), questionnaireDataBus.getModule_sub_item_code());
+				questionnaireDataBus.getModule_item_code(), questionnaireDataBus.getModuleSubItemCodeList());
 		questionnaireDataBus.setApplicableQuestionnaire(applicableQuestionnaire);
 		return questionnaireDataBus;
 	}

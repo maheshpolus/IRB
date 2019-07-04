@@ -3,6 +3,7 @@ package org.mit.irb.web.questionnaire.dao;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -507,18 +508,21 @@ public class QuestionnaireDAO {
 	}
 	
 	public ArrayList<HashMap<String, Object>> getApplicableQuestionnaireData(String moduleItemKey,String moduleSubItemKey,
-			Integer moduleItemCode, Integer moduleSubItemCode) throws Exception {		
+			Integer moduleItemCode, List<Integer> moduleSubItemCodeList) throws Exception {		
 		ArrayList<HashMap<String, Object>> output = new ArrayList<HashMap<String, Object>>();
 		try {
-			ArrayList<Parameter> inParam = new ArrayList<>();
-			inParam.add(new Parameter("<<MODULE_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleItemKey));
-	        inParam.add(new Parameter("<<MODULE_SUB_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleSubItemKey));
-			inParam.add(new Parameter("<<MODULE_ITEM_CODE>>", DBEngineConstants.TYPE_INTEGER, moduleItemCode));
-			inParam.add(new Parameter("<<MODULE_SUB_ITEM_CODE>>", DBEngineConstants.TYPE_INTEGER, moduleSubItemCode));
-			output = dbEngine.executeQuery(inParam, "GET_APPLICABLE_QUESTIONNAIRE");		
+			for(Integer moduleSubItemCode :moduleSubItemCodeList){
+				ArrayList<HashMap<String, Object>> outputData = new ArrayList<HashMap<String, Object>>();
+				ArrayList<Parameter> inParam = new ArrayList<>();
+				inParam.add(new Parameter("<<MODULE_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleItemKey));
+		        inParam.add(new Parameter("<<MODULE_SUB_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleSubItemKey));
+				inParam.add(new Parameter("<<MODULE_ITEM_CODE>>", DBEngineConstants.TYPE_INTEGER, moduleItemCode));
+				inParam.add(new Parameter("<<MODULE_SUB_ITEM_CODE>>", DBEngineConstants.TYPE_INTEGER, moduleSubItemCode));
+				outputData = dbEngine.executeQuery(inParam, "GET_APPLICABLE_QUESTIONNAIRE");
+				output.addAll(outputData);
+			}					
 		} catch (Exception e) {
 			logger.error("Exception in getApplicableQuestionnaireData" + e.getMessage());
-
 		}
 		return output;
 	}

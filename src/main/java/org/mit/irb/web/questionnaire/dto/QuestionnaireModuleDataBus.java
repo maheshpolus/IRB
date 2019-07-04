@@ -2,6 +2,7 @@ package org.mit.irb.web.questionnaire.dto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class QuestionnaireModuleDataBus {
 
@@ -20,6 +21,7 @@ public class QuestionnaireModuleDataBus {
 	private String acType;
 	private boolean new_questionnaire_version;
 	private boolean question_editted;
+	private List<Integer> moduleSubItemCodeList;
 	private ArrayList<HashMap<String, Object>> questionnaireList;
 	private ArrayList<HashMap<String, Object>> questionnaireGroup;
 	private HashMap<String, Object> header;
@@ -184,6 +186,14 @@ public class QuestionnaireModuleDataBus {
 
 	public void setQuestionnaire_ans_attachment_id(Integer questionnaire_ans_attachment_id) {
 		this.questionnaire_ans_attachment_id = questionnaire_ans_attachment_id;
+	}
+
+	public List<Integer> getModuleSubItemCodeList() {
+		return moduleSubItemCodeList;
+	}
+
+	public void setModuleSubItemCodeList(List<Integer> moduleSubItemCodeList) {
+		this.moduleSubItemCodeList = moduleSubItemCodeList;
 	}
 
 }

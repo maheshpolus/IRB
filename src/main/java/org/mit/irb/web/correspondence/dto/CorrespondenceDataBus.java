@@ -9,6 +9,11 @@ public class CorrespondenceDataBus {
 	private Integer moduleCode;
 	private IRBExemptForm irbExemptFrom;
 	
+	private String outputDataFormat;
+	private Integer sequenceNumber;
+	private String committeAction;
+	private String actionCode;
+	
 	public Integer getSequnceNumber() {
 		return sequnceNumber;
 	}
@@ -32,5 +37,29 @@ public class CorrespondenceDataBus {
 	}
 	public void setIrbExemptFrom(IRBExemptForm irbExemptFrom) {
 		this.irbExemptFrom = irbExemptFrom;
+	}
+	public String getOutputDataFormat() {
+		return outputDataFormat;
+	}
+	public void setOutputDataFormat(String outputDataFormat) {
+		this.outputDataFormat = outputDataFormat;
+	}
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
+	public void setSequenceNumber(Integer sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
+	public String getCommitteAction() {
+		return committeAction;
+	}
+	public void setCommitteAction(String committeAction) {
+		this.committeAction = committeAction;
+	}
+	public String getActionCode() {
+		return actionCode;
+	}
+	public void setActionCode(String actionCode) {
+		this.actionCode = actionCode;
 	}
 }

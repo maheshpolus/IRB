@@ -36,7 +36,7 @@ public class ProtocolSubmission implements Serializable {
 	private Integer submissionId;
 
 	@JsonBackReference
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name ="IRB_PROTO_SUBMISSION_FK8"), name = "SCHEDULE_ID", referencedColumnName = "SCHEDULE_ID")
 	private CommitteeSchedule committeeSchedule;
 
@@ -70,28 +70,28 @@ public class ProtocolSubmission implements Serializable {
 	@Column(name = "SUBMISSION_TYPE_CODE")
 	private String submissionTypeCode;
 	
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK6"), name = "SUBMISSION_TYPE_CODE", referencedColumnName = "SUBMISSION_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionType protocolSubmissionType;
 
 	@Column(name = "SUBMISSION_TYPE_QUAL_CODE")
 	private String submissionTypeQualifierCode;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK7"), name = "SUBMISSION_TYPE_QUAL_CODE", referencedColumnName = "SUBMISSION_TYPE_QUAL_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionQualifierType qualifierType;
 
 	@Column(name = "SUBMISSION_STATUS_CODE")
 	private String submissionStatusCode;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK5"),name = "SUBMISSION_STATUS_CODE", referencedColumnName = "SUBMISSION_STATUS_CODE", insertable = false, updatable = false)
 	private ProtocolSubmissionStatus submissionStatus;
 
 	@Column(name = "PROTOCOL_REVIEW_TYPE_CODE")
 	private String protocolReviewTypeCode;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey =@ForeignKey(name = "IRB_PROTO_SUBMISSION_FK4"),name = "PROTOCOL_REVIEW_TYPE_CODE", referencedColumnName = "PROTOCOL_REVIEW_TYPE_CODE", insertable = false, updatable = false)
 	private ProtocolReviewType protocolReviewType;
 

@@ -11,7 +11,7 @@ public class CodeTable {
 	private List<Fields> fields;
 	private List<String> primary_key;
 	private List<HashMap<String, Object>> dependency;
-	
+	private String file_column_name;
 	public String getGroup() {
 		return group;
 	}
@@ -53,5 +53,11 @@ public class CodeTable {
 	}
 	public void setPrimary_key(List<String> primary_key) {
 		this.primary_key = primary_key;
+	}
+	public String getFile_column_name() {
+		return file_column_name;
+	}
+	public void setFile_column_name(String file_column_name) {
+		this.file_column_name = file_column_name;
 	}
 }

@@ -14,6 +14,8 @@ public class SnapshotData {
 	String scheduledDayPrev;
 	String scheduledDateNext;
 	String scheduledDayNext;
+	Integer unassignedAdminCount;
+	Integer newSubmissionCount;
 
 	public String getAmmendRenewCount() {
 		return ammendRenewCount;
@@ -85,5 +87,21 @@ public class SnapshotData {
 
 	public void setScheduledDayNext(String scheduledDayNext) {
 		this.scheduledDayNext = scheduledDayNext;
+	}
+
+	public Integer getUnassignedAdminCount() {
+		return unassignedAdminCount;
+	}
+
+	public void setUnassignedAdminCount(Integer unassignedAdminCount) {
+		this.unassignedAdminCount = unassignedAdminCount;
+	}
+
+	public Integer getNewSubmissionCount() {
+		return newSubmissionCount;
+	}
+
+	public void setNewSubmissionCount(Integer newSubmissionCount) {
+		this.newSubmissionCount = newSubmissionCount;
 	}
 }

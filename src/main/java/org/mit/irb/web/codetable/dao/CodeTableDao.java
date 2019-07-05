@@ -7,6 +7,7 @@ import java.util.List;
 import org.mit.irb.web.codetable.dto.CodeTableDatabus;
 import org.mit.irb.web.codetable.dto.Fields;
 import org.mit.irb.web.dbengine.Parameter;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface CodeTableDao {
 	
@@ -20,7 +21,7 @@ public interface CodeTableDao {
 	 * @param codeTableDatabus
 	 * @return Get changed values
 	 */
-	HashMap<String, Object> getChangedValue(CodeTableDatabus codeTableDatabus);
+	HashMap<String, Object> getChangedValue(MultipartFile[] files,CodeTableDatabus codeTableDatabus);
 
 	/**
 	 * @param codeTableDatabus
@@ -41,7 +42,39 @@ public interface CodeTableDao {
 	/**
 	 * @param codeTableDatabus
 	 * @param changedMap
+	 * @param files 
 	 * @return generate Primary key of table
 	 */
-	HashMap<String, Object> generateMandatoryFields(CodeTableDatabus codeTableDatabus, HashMap<String, Object> changedMap);
+	HashMap<String, Object> generateMandatoryFields(CodeTableDatabus codeTableDatabus, HashMap<String, Object> changedMap, MultipartFile[] files);
+
+	/**
+	 * @param fields
+	 * @return get attachment column
+	 */
+	String getAttachmentColumn(List<Fields> fields);
+
+	/**
+	 * @param dataList
+	 * @return get content type of a attachment
+	 */
+	String getContentType(ArrayList<HashMap<String, Object>> dataList);
+
+	/**
+	 * @param files
+	 * @param changedMap
+	 * @param codeTableDatabus
+	 * @return
+	 */
+	ArrayList<Parameter> setInsertParamValues(MultipartFile[] files, HashMap<String, Object> changedMap,
+			CodeTableDatabus codeTableDatabus);
+
+	/**
+	 * @param files
+	 * @param changedMap
+	 * @param primaryKeyMap
+	 * @param codeTableDatabus
+	 * @return
+	 */
+	ArrayList<Parameter> setUpdateParamValues(MultipartFile[] files, HashMap<String, Object> changedMap,
+			HashMap<String, Object> primaryKeyMap, CodeTableDatabus codeTableDatabus);
 }

@@ -520,9 +520,14 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Override
 	public SubmissionDetailVO updateIRBAdminAttachments(SubmissionDetailVO submissionDetailvo, MultipartFile[] files) {
 		try{
-			Integer commentId = irbActionsDao.updateIRBAdminComment(submissionDetailvo);
-			submissionDetailvo.setCommentId(commentId);
-			irbActionsDao.updateIRBAdminAttachment(submissionDetailvo,files);
+			if(submissionDetailvo.getAcType().equalsIgnoreCase("D")){
+				irbActionsDao.updateIRBAdminAttachment(submissionDetailvo,files);
+				irbActionsDao.updateIRBAdminComment(submissionDetailvo);
+			}else {
+				Integer commentId = irbActionsDao.updateIRBAdminComment(submissionDetailvo);
+				submissionDetailvo.setCommentId(commentId);
+				irbActionsDao.updateIRBAdminAttachment(submissionDetailvo,files);
+			}
 			submissionDetailvo = getIRBAdminReviewDetails(submissionDetailvo);
 			submissionDetailvo.setSuccessCode(true);
 			submissionDetailvo.setSuccessMessage("Attachments saved succesfully");

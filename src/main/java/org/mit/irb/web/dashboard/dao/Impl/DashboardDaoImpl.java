@@ -100,11 +100,18 @@ public class DashboardDaoImpl implements DashboardDao{
 			if(hmap.get("SCHEDULED_DAY_NEXT") != null){
 				snapshotData.setScheduledDayNext(hmap.get("SCHEDULED_DAY_NEXT").toString());
 			}
+			if(hmap.get("UNASSIGNED_ADMIN_CNT") != null){
+				snapshotData.setUnassignedAdminCount(Integer.parseInt(hmap.get("UNASSIGNED_ADMIN_CNT").toString()));
+			}
+			if(hmap.get("NEW_SUBMISSION_COUNT") != null){
+				snapshotData.setNewSubmissionCount(Integer.parseInt(hmap.get("NEW_SUBMISSION_COUNT").toString()));
+			}
 			if(hmap.get("REVISION_REQ_COUNT") != null){
 				snapshotData.setRevisionReqCount(hmap.get("REVISION_REQ_COUNT").toString());
 			} else{
 				snapshotData.setRevisionReqCount("0");
 			}
+			
 		}
 		profile.setSnapshotData(snapshotData);
 	}

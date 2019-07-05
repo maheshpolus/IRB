@@ -1,5 +1,6 @@
 package org.mit.irb.web.IRBProtocol.VO;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +79,8 @@ public class SubmissionDetailVO {
 	private String committeeMemberDueDate;
 	private String committeeMemberAssignedDate;
 	private String committeeReviewerTypeCode;
+	private String markCompletedBy;
+	private String completeTimeStamp;
 	
 	public ArrayList<HashMap<String, Object>> getPastSubmission() {
 		return pastSubmission;
@@ -475,5 +478,17 @@ public class SubmissionDetailVO {
 	}
 	public void setIrbCommitteeReviewerComments(IRBCommitteeReviewerComments irbCommitteeReviewerComments) {
 		this.irbCommitteeReviewerComments = irbCommitteeReviewerComments;
+	}
+	public String getMarkCompletedBy() {
+		return markCompletedBy;
+	}
+	public void setMarkCompletedBy(String markCompletedBy) {
+		this.markCompletedBy = markCompletedBy;
+	}
+	public String getCompleteTimeStamp() {
+		return completeTimeStamp;
+	}
+	public void setCompleteTimeStamp(String completeTimeStamp) {
+		this.completeTimeStamp = completeTimeStamp;
 	}
 }

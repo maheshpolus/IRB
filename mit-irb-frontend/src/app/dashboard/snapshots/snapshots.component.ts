@@ -82,9 +82,11 @@ export class SnapshotsComponent implements OnInit {
 //     }
 //     });
  // }
-    openNewSubmission(tab, isUnAssignedClicked) {
-        this.currentTab.emit(tab);
-            this.isUnAssignedClicked.emit(isUnAssignedClicked);
+    openNewSubmission(tab, isUnAssignedClicked, event) {
+        event.stopPropagation();
+        const obj: any = {tab: tab, isUnAssignedClicked: isUnAssignedClicked};
+        this.currentTab.emit(obj);
+         //   this.isUnAssignedClicked.emit(isUnAssignedClicked);
     }
 }
 

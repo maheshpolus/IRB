@@ -2,8 +2,8 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 
 <div class="container-fluid">
-	<app-snapshots  (currentTab)="currentTabChanged($event)" (isUnAssignedClicked)="unAssignedClicked($event)" [userDTO]= 'userDTO'></app-snapshots>
+	<app-snapshots  (currentTab)="currentTabChanged($event)" [userDTO]= 'userDTO'></app-snapshots>
 </div>
 <div class="container-fluid nav-med">
-	<app-dashboard-list [userDTO]= 'userDTO' [currentTab]="currentTab" [isUnAssignedClicked]="isUnAssignedClicked"></app-dashboard-list>
+	<app-dashboard-list [userDTO]= 'userDTO' [currentTab]="currentTab"></app-dashboard-list>
 </div>

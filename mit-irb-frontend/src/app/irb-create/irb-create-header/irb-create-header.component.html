@@ -21,8 +21,8 @@
                         <div class="col-sm-6 col-md-3  col-lg-3">
                           <h5 class="txt-dark  txt-large">IRB # : <br> <span
                               class="text-danger txt-medium">{{generalInfo?.protocolNumber}}</span>
-                              <span class="renewal" *ngIf="protocolNumber?.includes('R')">Renewal</span>
-                              <span class="renewal" *ngIf="protocolNumber?.includes('A')">Amendment</span>
+                              <span class="arrow_box" *ngIf="protocolNumber?.includes('R')">Renewal</span>
+                              <span class="arrow_box" *ngIf="protocolNumber?.includes('A')">Amendment</span>
                           </h5>
                         </div>
                         <div class="col-sm-6 col-md-2  col-lg-2">
@@ -104,29 +104,29 @@
                         </div>
 
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                          <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
+                          <h5 *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
                             class="txt-dark txt-large">  <!-- COUHES changed to IRB Admin-->
                             IRB Admin : <br>
                             <span class="text-danger txt-medium">{{generalInfo?.protocolSubmissionStatuses?.assigneePersonName}}</span>
-                          </p>
+                          </h5>
                         </div>
 
                         <div class="col-sm-6 col-md-3 col-lg-2">
-                          <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
+                          <h5 *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId != null"
                           class="txt-dark txt-large">
                             <button
-                              *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106' && generalInfo.protocolType != null"
-                              type="button" class="btn btn-blue btn-sm text-right txt-medium" (click)="openAssignPopUp('U')">
+                              *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106' && generalInfo.protocolType != 'null'"
+                              type="button" class="btn btn-blue btn-sm text-right txt-medium mt-5" (click)="openAssignPopUp('U')">
                               <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; Reassign
                             </button>
-                          </p>
-                          <p *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId == null">
+                          </h5>
+                          <h5 *ngIf="generalInfo?.protocolSubmissionStatuses?.assigneePersonId == null">
                             <button
-                              *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106' && generalInfo.protocolType != null"
-                              type="button" class="btn btn-blue btn-sm text-right txt-medium" (click)="openAssignPopUp('I')">
+                              *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && generalInfo?.protocolStatus?.protocolStatusCode !== '100' && generalInfo?.protocolStatus?.protocolStatusCode !== '105' && generalInfo?.protocolStatus?.protocolStatusCode !== '106' && generalInfo.protocolType != 'null'"
+                              type="button" class="btn btn-blue btn-sm text-right txt-medium mt-5" (click)="openAssignPopUp('I')">
                               <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Assign IRB Admin
                             </button>
-                          </p>
+                          </h5>
                         </div>
 
                     </div>

@@ -665,7 +665,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 .loginHere label, .loginHere .loginBtn + a{font-weight: normal;font-size: .9em;color: rgba(000,000,000, .7);}
 .loginHere input[type="text"], .loginHere input[type="password"]{    width: 100%;    border: 1px #C8C8C8 solid;    padding: 0 2px;}
 .loginHere .loginBtn{display: block;    width: 100%;    }
-.loginHere input, .loginHere .buttonGroup button{border-radius: 2px;margin: 0 0 15px;display: block;height: 30px;}
+.loginHere input, .loginHere .buttonGroup button{border-radius: 5px;margin: 0 0 15px;display: block;height: 30px;}
 .miniLogin {
     position: absolute;
     top: -50px;
@@ -853,7 +853,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     border: 1px #DEDEDE solid;
     width: 100%;
     padding-right: 35px;
-    line-height: 27px;
+    line-height: 30px;
     font-size: 1em;
     padding-left: 10px;
     margin-left: -7px;

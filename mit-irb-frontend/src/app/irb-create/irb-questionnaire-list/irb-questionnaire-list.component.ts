@@ -46,11 +46,11 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
   getQuetionnaireList() {
     let moduleSubItemCodeList: any = [];
     if (this.protocolNumber.includes('A')) {
-      moduleSubItemCodeList = [2, 4];
+      moduleSubItemCodeList = [0, 4];
     } else if (this.protocolNumber.includes('R')) {
-      moduleSubItemCodeList = [2, 3];
+      moduleSubItemCodeList = [0, 3];
     } else {
-      moduleSubItemCodeList = [2];
+      moduleSubItemCodeList = [0];
     }
     const requestObject = { 'module_item_key': this.protocolNumber, 'moduleSubItemCodeList': moduleSubItemCodeList,
                             'module_item_code': 7, 'module_sub_item_code': 0 };

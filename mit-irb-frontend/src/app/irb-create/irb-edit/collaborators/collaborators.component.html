@@ -81,9 +81,9 @@
                       <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span>
                     </div>
                   </div>
-                  <div class="col-md-1 add-btn-1">
-                    <button title="Add" *ngIf="!isCollaboratorInfoEdit" type="button" class="btn mt-3" (click)="addCollaboratorDetails('ADD')">
-                      <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                  <div class="col-md-1">
+                    <button title="Add" *ngIf="!isCollaboratorInfoEdit" type="button" class="btn btn-outline-success txt-small btn-size mt-25" (click)="addCollaboratorDetails('ADD')">
+                    Add
                     </button>
                     <button title="Save" *ngIf="isCollaboratorInfoEdit" (click)="addCollaboratorDetails('EDIT')" type="button" class="btn mt-3">
                       <i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>

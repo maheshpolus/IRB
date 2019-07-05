@@ -3,17 +3,17 @@
       <div class="card-body pt-0 pb-0">
     <section class="row">
       <div class="col-md-12">
-        <div class="row">
-          <div class="card-header">
-              <h4 class="card-title">{{codeTableProperty.codetable_name}} ({{codeTableProperty.database_table_name}})
+        <div>
+          <div class="card-hedding dotted-bottom">
+              <h4 class="thick txt-medium">{{codeTableProperty.codetable_name}} ({{codeTableProperty.database_table_name}})
               </h4>
           </div>
         </div>
-        
-        <div class="row">
+
+        <div class="txt-dark txt-medium">
           <div class="col-12 col-sm-12 col-md-12 pl-0 ct-helpCard mt-3">
             <div class="ct-helpMsg">
-              <label class="ct-m0">{{codeTableProperty.description}}</label>
+              <label class="ct-m0 pl-3">{{codeTableProperty.description}}</label>
             </div>
           </div>
         </div>
@@ -22,13 +22,13 @@
     </section>
   </div>
 </div>
-    
+
 <div class="card-content">
   <div class="card-body pb-0">
-    <div class="row result-outer">
+    <div class="row">
         <div class="col-lg-6 ct-ml5">
           <div class="searchBox">
-            <input type="text" placeholder={{placeHolder}} class="form-control ng-pristine ng-valid ng-touched" [(ngModel)]="searchText">
+            <input type="text" placeholder={{placeHolder}} class="form-control txt-small ng-pristine ng-valid ng-touched" [(ngModel)]="searchText">
             <a *ngIf="!searchText" class="searchButton">
               <i class="fa fa-search"></i>
             </a>
@@ -39,42 +39,43 @@
         </div>
         <div class="offset-md-3 col-lg-3 text-right content-center">
           <div class="col-md-12 advanced-search marginbottom10 p-0 bg-wht">
-            <button  type="button" class="btn btn-primary-sub btn-sm" data-toggle="modal" data-target=".create-modal" (click)="setNewCreation()" title="Add new entry to {{codeTableProperty.codetable_name}}"> 
-              Add Entry
+            <button  type="button" class="btn btn-primary-sub btn-sm txt-medium" data-toggle="modal" data-target=".create-modal" (click)="setNewCreation()" title="Add new entry to {{codeTableProperty.codetable_name}}">
+              <i class="fa fa-plus-circle text-success icon-padding"></i>
+              <u>Add Entry</u>
             </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+
   <div class="card-content">
     <div class="card-body pt-0">
     <section class="row">
       <div class="col-12">
         <div>
-          <table class="table tableSkin mb-0 tablealign tbl-padding table-type-head"  id="code-table">
+          <table class="table tableSkin mb-0 tablealign tbl-padding"  id="code-table">
             <thead class="thead-light">
               <ng-container *ngFor="let tableField of tableFieldList">
-                <th class="headeralign  irb-table-hdcolor ct-border-btm" [ngClass]="{'text-center':tableField.data_type=='Blob'||tableField.data_type=='Clob'}" >
+                <th class="headeralign ct-border-btm txt-medium" [ngClass]="{'text-center':tableField.data_type=='Blob'||tableField.data_type=='Clob'}" >
                   {{tableField.display_name}}
                 </th>
               </ng-container>
-              <th class="headeralign irb-table-hdcolor ct-border-btm" width="10%">Actions</th>
+              <th class="headeralign ct-border-btm txt-medium" width="10%">Actions</th>
             </thead>
             <tbody class="irb-tbody-font-size">
-              <tr *ngFor="let values of codeTableValues | filter : searchText;let index=index" class="pull-up">
+              <tr class="solid-bottom pull-up" *ngFor="let values of codeTableValues | filter : searchText;let index=index" >
                 <ng-container *ngFor="let tableField of tableFieldList;let i=index">
-                  <td [ngClass]="{'text-center':tableField.data_type=='Blob'||tableField.data_type=='Clob'}">
+                  <td class="txt-medium" [ngClass]="{'text-center':tableField.data_type=='Blob'||tableField.data_type=='Clob'}">
                     <ng-container *ngIf="!isEditEnable[index]&&tableField.is_editable=='true'">
                       <ng-container [ngSwitch]="true">
                           <div *ngSwitchCase="tableField.data_type !='Blob' && tableField.data_type !='Clob' && tableField.data_type !='Date'" >
                         <input *ngIf="tableField.length<=60" type="{{dataType[i].type}}" maxlength="{{tableField.length}}"
-                          [(ngModel)]="updatedCodeTableData[tableField.column_name]" class="form-control ct-input-bodr" (keyup)='checkValidation($event,tableField,i)'
+                          [(ngModel)]="updatedCodeTableData[tableField.column_name]" class="form-control txt-medium ct-input-bodr" (keyup)='checkValidation($event,tableField,i)'
                           (ngModelChange)="setCodeTableField(tableField.column_name, index,dataType[i].type, 1)" (click)="emptyId = i" />
                         <!-- if maximum length greaterthan 60 then text area -->
                         <ng-container *ngIf="tableField.length>60">
-                          <textarea maxlength="{{tableField.length}}" class="form-control ct-input-bodr" [(ngModel)]="updatedCodeTableData[tableField.column_name]"
+                          <textarea maxlength="{{tableField.length}}" class="form-control text-medium ct-input-bodr" [(ngModel)]="updatedCodeTableData[tableField.column_name]"
                             (keyup)='checkValidation($event,tableField,i)' (ngModelChange)="setCodeTableField(tableField.column_name, index,dataType[i].type, 1)" (click)="emptyId = i">
                           </textarea>
                         </ng-container>
@@ -91,7 +92,7 @@
                         </span>
                         <div *ngSwitchCase="tableField.data_type=='Date'" class="ct-date-dv">
                             <input [owlDateTimeTrigger]="dt3" [(ngModel)]="updatedCodeTableData[tableField.column_name]" [attr.readonly]=true
-                              placeholder="{{updatedCodeTableData[tableField.column_name]| date: 'MM-dd-yyyy'}}" class="form-control ct-input-bodr"
+                              placeholder="{{updatedCodeTableData[tableField.column_name]| date: 'MM-dd-yyyy'}}" class="form-control txt-small ct-input-bodr"
                               (ngModelChange)="setCodeTableField(tableField.column_name, i, dataType[i].type, 1)"
                               [owlDateTime]="dt3">
                             <span class="trigger ct-date-i action-icon" [owlDateTimeTrigger]="dt3">
@@ -128,14 +129,14 @@
                     </ng-container>
                   </td>
                 </ng-container>
-                <td class="action-icon">
-                  <i *ngIf="isEditEnable[index]" class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#Modal"
+                <td class="txt-medium">
+                  <i *ngIf="isEditEnable[index]" class="fa fa-pencil log-user-icon-lite" aria-hidden="true" data-toggle="modal" data-target="#Modal"
                     (click)="editCodeTable(index,values)" title="Click to edit"></i>
-                  <i *ngIf="!isEditEnable[index]" class="fa fa-save" (click)="updateCodetable(index);emptyId = -1" data-toggle="tooltip"
+                  <i *ngIf="!isEditEnable[index]" class="fa fa-save log-user-icon-lite" (click)="updateCodetable(index);emptyId = -1" data-toggle="tooltip"
                     title="Click to save"></i>
-                  <i *ngIf="!isEditEnable[index]" class="fa fa-close" (click)="cancelChangesOnEdit(index);emptyId = -1" data-toggle="tooltip"
+                  <i *ngIf="!isEditEnable[index]" class="fa fa-close log-user-icon-lite" (click)="cancelChangesOnEdit(index);emptyId = -1" data-toggle="tooltip"
                     title="Click to cancel"></i>
-                  <i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#myModal"
+                  <i class="fa fa-trash-o log-user-icon-lite" aria-hidden="true" data-toggle="modal" data-target="#myModal"
                     title="Click to delete" (click)="emptyId = -1;deleteIndex=index"></i>
                 </td>
               </tr>
@@ -148,31 +149,31 @@
   </div>
 </div>
   </div>
-  
-  
-  
+
+
+
   <!--create-modal-->
-  
+
   <!-- Large modal -->
-  
-  
+
+
   <div *ngIf="isSavedFlag.isSaved == true||isSavedFlag.isSaved==null" id="createModal" class="modal fade create-modal"
     tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" [ngClass]="{'ct-widthmodal':tableFieldList.length>3}">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Add New {{codeTableProperty.codetable_name}}</h5>
+        <div class="modal-header dotted-bottom">
+          <h5 class="modal-title txt-dark txt-large">Add New {{codeTableProperty.codetable_name}}</h5>
           <button type="button" class="close" (click)="emptyId = -1" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="row">
+        <div class="row dotted-bottom">
           <div class="col-md-12 ct-padding-modal ct-outerpadding">
             <div>
               <table class="table tableSkin mb-0 tablealign">
                 <thead>
                   <ng-container *ngFor="let tableField of tableFieldList;let in=index">
-                    <th *ngIf="isPrimary[in]!=true&&tableField.is_editable=='true'" class="headeralign ct-border-none" [ngClass]="{'ct-widthnew':length<=2&&tableField.length<=3}">
+                    <th *ngIf="isPrimary[in]!=true&&tableField.is_editable=='true'" class="headeralign txt-dark ct-border-none" [ngClass]="{'ct-widthnew':length<=2&&tableField.length<=3}">
                       {{tableField.display_name}}
                     </th>
                   </ng-container>
@@ -184,10 +185,10 @@
                         <ng-container [ngSwitch]="true">
                           <div *ngSwitchCase="tableField.data_type !='Blob' && tableField.data_type !='Clob' && tableField.data_type !='Date'" >
                           <input *ngIf="tableField.length <= 60" type="{{dataType[i].type}}" maxlength="{{tableField.length}}"
-                            max="999" class="form-control ct-input-bodr" (click)="emptyId = i" [(ngModel)]="updatedCodeTableData[tableField.column_name]"
+                            max="999" class="form-control txt-small ct-input-bodr" (click)="emptyId = i" [(ngModel)]="updatedCodeTableData[tableField.column_name]"
                             (keyup)='checkValidation($event,tableField,i)' (ngModelChange)="setCodeTableField(tableField.column_name,i,dataType[i].type)">
                           <ng-container *ngIf="tableField.length>60">
-                            <textarea maxlength="{{tableField.length}}" max="999" class="form-control ct-input-bodr" (click)="emptyId = i"
+                            <textarea maxlength="{{tableField.length}}" max="999" class="form-control txt-small ct-input-bodr" (click)="emptyId = i"
                               [(ngModel)]="updatedCodeTableData[tableField.column_name]" (keyup)='checkValidation($event,tableField,i)'
                               (ngModelChange)="setCodeTableField(tableField.column_name,i,dataType[i].type)">
                             </textarea>
@@ -222,7 +223,7 @@
                             *The maximum length is {{tableField.length}}
                           </span>
                           <span *ngIf="isType&&validationId==i" class="ct-warning-validation">
-                            *please enter numbers 
+                            *please enter numbers
                           </span>
                           <span *ngIf="isEmpty&&!isValueEmpty[i]" class="ct-warning-validation">
                             *This field is missing please check
@@ -236,26 +237,26 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer p-2">
           <!-- <button id="closeModal" class="btnSkin btnSkinSecondary span-padding" data-dismiss="modal" type="button"></button> -->
-          <button class="btnSkin btnSkinPrimary" type="button" (click)="addNewCodeTableData();emptyId = -1">Save</button>
-          <button id="closeModal" class="btnSkin btnSkinSecondary" data-dismiss="modal" type="button" (click)="emptyId = -1">Cancel</button>
+          <button class="txt-small btn btn-outline-success" type="button" (click)="addNewCodeTableData();emptyId = -1">Save</button>
+          <button id="closeModal" class="txt-small btn btn-outline-danger" data-dismiss="modal" type="button" (click)="emptyId = -1">Cancel</button>
         </div>
       </div>
     </div>
   </div>
   <!--modal-end-->
-  
+
   <!-- delete Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header ct-footer-padding">
-          <h4 class="modal-title">Remove {{codeTableProperty.codetable_name}}</h4>
+        <div class="modal-header dotted-bottom">
+          <h4 class="thick txt-large">Remove {{codeTableProperty.codetable_name}}</h4>
         </div>
-        <div class="modal-body ct-modal-padding">
+        <div class="modal-body ct-modal-padding dotted-bottom">
           <div class="row">
             <div class="col-lg-12">
               <div *ngIf="codeTableProperty.dependency.length !== 0">
@@ -271,34 +272,34 @@
                   </li>
                 </ul>
               </div>
-            <p>Do you want to delete?</p>
+            <p class="m-0">Do you want to delete?</p>
           </div>
         </div>
       </div>
-        <div class="modal-footer ct-footer-padding">
-          <button (click)="deleteCodeTableData()" type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Yes</button>
-          <button type="button" class="btnSkin btnSkinSecondary" data-dismiss="modal">No</button>
+        <div class="modal-footer ct-footer-padding p-2">
+          <button (click)="deleteCodeTableData()" type="button" class="btn btn-outline-success txt-small" data-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-outline-danger txt-small" data-dismiss="modal">No</button>
         </div>
       </div>
     </div>
   </div>
-  
-  
+
+
   <!-- save Modal -->
   <div *ngIf="isSavedFlag.isSaved==false" class="modal fade" id="Modal" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header ct-footer-padding">
-          <h4 class="modal-title">Save changes</h4>
+        <div class="modal-header dotted-bottom">
+          <h4 class="thick txt-large">Save changes</h4>
         </div>
-        <div class="modal-body">
+        <div class="modal-body dotted-bottom txt-medium">
           Do you want to save the changes
         </div>
-        <div class="modal-footer ct-footer-padding">
-          <button (click)="updateCodetable(selectedRowId)" type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">confirm</button>
-          <button type="button" class="btnSkin btn-secondary" (click)="cancelChangesOnEdit(selectedRowId)" data-dismiss="modal">Cancel</button>
+        <div class="modal-footer ct-footer-padding p-2">
+          <button (click)="updateCodetable(selectedRowId)" type="button" class="btn btn-outline-success txt-small" data-dismiss="modal">confirm</button>
+          <button type="button" class="btn btn-outline-danger txt-small" (click)="cancelChangesOnEdit(selectedRowId)" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>

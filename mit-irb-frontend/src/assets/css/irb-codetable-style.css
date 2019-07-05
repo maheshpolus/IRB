@@ -29,7 +29,7 @@
 }
 
 .result-list{
-	border:solid 1px #dadad6;
+	/* border:solid 1px #dadad6; */
 	padding: 15px;
 	width: 100%;
 	float: left;
@@ -220,10 +220,13 @@
 	width: 100%;
     border-bottom: solid 1px #dadad6;
     padding-bottom: 5px;
-    color: #a92034;
-    font-size: 16px;
+    /* color: #a92034; */
+    /* font-size: 16px; */
 	/* font-weight: 400px; */
 	font-weight: bold;
+	color: #505050;
+    padding-top: 10px;
+    font-size: 14px;
 }
 .result-outer .col-lg-3
 {

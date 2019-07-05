@@ -17,12 +17,8 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {
          this.userDTO = this._activatedRoute.snapshot.data['irb'];
     }
-    currentTabChanged( event: Event ) {
+    currentTabChanged( event: any ) {
      // tslint:disable-next-line:no-construct
-     this.currentTab = new String(event);
-    }
-    unAssignedClicked ( event: Event ) {
-        // tslint:disable-next-line:no-construct
-        this.isUnAssignedClicked = new String(event);
+     this.currentTab = new Object(event);
     }
 }

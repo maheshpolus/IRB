@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mit.irb.web.codetable.dto.CodeTableDatabus;
@@ -41,12 +43,14 @@ public class CodeTableController {
 	}
 	
 	@RequestMapping(value="/updateCodeTableRecord",method= RequestMethod.POST)
-	public ResponseEntity<String> updateCodeTableRecord(@RequestBody CodeTableDatabus codeTableDatabus, HttpServletRequest request,HttpServletResponse response) throws Exception{
+	public ResponseEntity<String> updateCodeTableRecord(
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson) throws Exception{
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
-		if(codeTableDatabus != null){			
-			codeTableDatabus = codeTableService.updateCodeTableRecord(codeTableDatabus);			
-		}
+		CodeTableDatabus codeTableDatabus = null;
+		codeTableDatabus = mapper.readValue(formDataJson, CodeTableDatabus.class);
+		codeTableDatabus = codeTableService.updateCodeTableRecord(codeTableDatabus,files);			
 		String responseData = mapper.writeValueAsString(codeTableDatabus);
 		return new ResponseEntity<String>(responseData, status);
 	}
@@ -62,16 +66,20 @@ public class CodeTableController {
 		return new ResponseEntity<String>(responseData, status);
 	}
 	
-	@RequestMapping(value="/addCodeTableRecord",method= RequestMethod.POST)
-	public ResponseEntity<String> addCodeTableRecord(@RequestBody CodeTableDatabus codeTableDatabus, HttpServletRequest request,HttpServletResponse response) throws Exception{
+	@RequestMapping(value = "/downloadAttachment", method = RequestMethod.POST)
+	public ResponseEntity<byte[]> downloadments(HttpServletResponse response,@RequestBody CodeTableDatabus codeTableDatabus) {
+		return codeTableService.downloadAttachments(codeTableDatabus,response);
+	}
+	
+	@RequestMapping(value = "/addCodeTableRecord", method = RequestMethod.POST)
+	public ResponseEntity<String> addCodeTableRecord(
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson) throws Exception {
+		CodeTableDatabus codeTableDatabus = null;
 		HttpStatus status = HttpStatus.OK;
 		ObjectMapper mapper = new ObjectMapper();
-		if(codeTableDatabus != null){
-			if(codeTableDatabus.getUpdatedUser() == null){
-				codeTableDatabus.setUpdatedUser("admin");
-			}
-			codeTableDatabus = codeTableService.addCodeTableRecord(codeTableDatabus); 			
-		}
+		codeTableDatabus = mapper.readValue(formDataJson, CodeTableDatabus.class);
+		codeTableDatabus = codeTableService.addCodeTableRecord(files,codeTableDatabus); 	
 		String responseData = mapper.writeValueAsString(codeTableDatabus);
 		return new ResponseEntity<String>(responseData, status);
 	}

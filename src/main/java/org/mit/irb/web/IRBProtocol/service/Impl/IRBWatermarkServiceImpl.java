@@ -45,9 +45,9 @@ public class IRBWatermarkServiceImpl implements IRBWatermarkService{
 			PdfStamper watermark = new PdfStamper(reader, outputStream);
 			Font FONT = null;
 			if(watermarkDetails.getFontColour() == "BLACK"){
-				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(1, 1, 1));		
+				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(179, 170, 170));		
 			}else{
-				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(255, 0, 0));		
+				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(251, 148, 142));		
 			}	
 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 			String approvalDate = "";

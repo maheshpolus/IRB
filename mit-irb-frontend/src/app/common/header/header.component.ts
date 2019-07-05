@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
 
     result: any;
     showMenu = true;
+    isScheduleClicked = false;
     alertMessage: string;
     FAQ_URL: string;
     GUIDELINES_URL: string;
@@ -139,6 +140,16 @@ export class HeaderComponent implements OnInit {
                     } else if ( acType === 'R') {
                         this._router.navigate(['/irb/role-maintainance']);
 
+                    } else if ( acType === 'C') {
+
+                        if (this.isScheduleClicked) {
+                            this._router.navigate(['/irb/committee-schedule-list'],
+                            {queryParams: { isCommitteeList: false}});
+                        } else {
+                        this._router.navigate(['/irb/committee-schedule-list'],
+                        {queryParams: { isCommitteeList: true}});
+                        }
+
                     }
                 } else {
                     if (acType === 'Q') {
@@ -149,6 +160,8 @@ export class HeaderComponent implements OnInit {
                         this.alertMessage = 'You do not have Permission to Maintain Person training';
                     }  else if ( acType === 'R') {
                         this.alertMessage = 'You do not have Permission to Maintain Roles';
+                    }  else if ( acType === 'C') {
+                        this.alertMessage = 'You do not have Permission to Maintain Committee';
                     }
                     this.openPermissionWarningModal(this.alertMessage);
                 }

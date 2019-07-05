@@ -174,8 +174,7 @@
                                      *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
                                   <div class="form-group">
                                     <span class="txt-medium">Schedule Date</span>
-                                    <select class="custom-select" id="inlineFormCustomSelect"
-                                            [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedScheduleId">
+                                    <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedScheduleId">
                                       <option value=null selected>Please Select</option>
                                       <option *ngFor="let scheduleDate of scheduleDateList"
                                               value="{{scheduleDate.SCHEDULE_ID}}">{{scheduleDate.SCHEDULE_ID}},

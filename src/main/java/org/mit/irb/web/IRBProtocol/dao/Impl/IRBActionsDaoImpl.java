@@ -955,7 +955,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
 			    vo.setCorrespTemplateTypeCode(result.get(0).get("CORESSPOND_TYPE_CODE")  == null ? null : result.get(0).get("CORESSPOND_TYPE_CODE").toString());
 			    vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
-			    vo.setTemplateTypeCode("10");
+			    vo.setTemplateTypeCode("25");
 			}			
 			updateRiskLevelDetails(vo);
 			updateReviewComments(vo);
@@ -1060,7 +1060,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
 			    vo.setCorrespTemplateTypeCode(result.get(0).get("CORESSPOND_TYPE_CODE")  == null ? null : result.get(0).get("CORESSPOND_TYPE_CODE").toString());
 			    vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
-			    vo.setTemplateTypeCode("12");
+			    vo.setTemplateTypeCode("24");
 			}		
 			protocolActionAttachments(files, vo);
 			generateProtocolCorrespondence(vo);

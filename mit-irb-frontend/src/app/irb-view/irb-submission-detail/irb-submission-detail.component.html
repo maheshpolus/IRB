@@ -289,7 +289,7 @@
                                 Please Choose either Include in Minutes or Include in Letter while adding Review Comments
                                 <strong>*</strong>
                               </div>
-                            <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
+                            <div  id="protocolReviewComment" class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                                 <div class="col-md-6 pl-0 pr-0 ml-15 mb-15">
                                     <div class="form-group">
                                       <label class="label-width">Reviewed By:</label>
@@ -313,14 +313,17 @@
                                 </div>
                               </div>
                               <div class="col-md-1 add-btn-1">
-                                <button title="Add" type="button" class="btn top-butn" (click)="addProtocolReviewComments('I')">
+                                <button *ngIf="!isProtocolReviewCommentEdited" title="Add" type="button" class="btn top-butn" (click)="updateProtocolReviewComments('I')">
                                   <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
                                 </button>
+                                <button *ngIf="isProtocolReviewCommentEdited" title="Save" type="button" class="btn top-butn"  (click)="updateProtocolReviewComments('U', null)">
+                                    <i class="fa fa-floppy-o text-success half-size" aria-hidden="true"></i>
+                                  </button>
                             </div>
                             </div>
                             <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                                 <div class="col-md-10">
-                                    <h5 class="borderBoxHeading pointer" data-toggle="modal" data-target="#attachmentModal" (click)="isReviewerAttachment = true">
+                                    <h5 id = "attachmentDiv" class="borderBoxHeading pointer" data-toggle="modal" data-target="#attachmentModal" (click)="isReviewerAttachment = true">
                                         <span class="clip-container"><i class="fa fa-paperclip" aria-hidden="true"></i></span> Add Attachment
                                     </h5>
                                 </div>
@@ -332,10 +335,19 @@
                                 </span>
                               </div>
                             <ng-container *ngIf="submissionVo?.committeeReviewerCommentsandAttachment != null && submissionVo?.committeeReviewerCommentsandAttachment.length > 0">
-                              <ul class="" *ngFor="let commentGroupObj of submissionVo?.committeeReviewerCommentsandAttachment">
+                              <ul class="" *ngFor="let commentGroupObj of submissionVo?.committeeReviewerCommentsandAttachment; let i =index" [class.poping-border]="i == protocolReviewerCommentEditedRow">
                                 <a class="txt-medium text-danger"><strong>{{commentGroupObj?.FULL_NAME}}</strong></a>
                                 <span class="txt-medium txt-dark">{{commentGroupObj?.ACTION_TYPE}} - </span>
                                 <span class="txt-medium txt-dark">{{commentGroupObj?.UPDATE_TIMESTAMP}}</span>
+                                <span class="action-btn-list float-right">
+                                <button title="Edit" (click)="editProtocolReviewComments(commentGroupObj,i)" type="button" class="btn">
+                                    <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+                                  </button>
+                                  <button title="Delete" (click)="updateProtocolReviewComments('D', commentGroupObj)" type="button" class="btn" data-toggle="modal"
+                                    data-target="#deleteAdminDetails">
+                                    <i class="fa fa-trash log-user-icon-lite log-user-icon-lite" aria-hidden="true"></i>
+                                  </button>
+                                  </span>
                                 <br *ngIf="commentGroupObj.FILE_ID != null">
                                 <p [innerHTML]="commentGroupObj.COMMENTS" *ngIf="commentGroupObj.COMMENTS != null"></p>
                               <div *ngIf="commentGroupObj.FILE_ID != null">
@@ -606,7 +618,7 @@
                   </div>
       
                   <div  id="commentdiv" *ngIf="tabSelected=='IRBCOMMENTS'" class="mb-15">
-                    <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
+                    <div class="row mr-0 ml-0" id="irbReviewComment" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                       <div class="col-md-10 pd-left-0">
                         <div class="form-group">
                           <textarea rows="3" class="txt-small form-control" placeholder="Write your review comments...." [(ngModel)]="adminReviewerComment.comment"></textarea>
@@ -618,15 +630,18 @@
                         </div>
 
                         <div class="row">
-                            <button title="Add" type="button" class="btn top-butn" (click)="addIRBReviewComments('I')">
+                            <button *ngIf="!isIRBReviewCommentEdited" title="Add" type="button" class="btn top-butn" (click)="updateIRBReviewComments('I')">
                             <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
                             </button>
+                            <button *ngIf="isIRBReviewCommentEdited" title="Save" type="button" class="btn top-butn" (click)="updateIRBReviewComments('U', null)">
+                                <i class="fa fa-floppy-o text-success half-size" aria-hidden="true"></i>
+                              </button>
                         </div>
                     </div>
                     </div>
                     <div class="row mr-0 ml-0" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                         <div class="col-md-10 pd-left-0">
-                            <h5 class="borderBoxHeading pointer pd-left-0" data-toggle="modal" data-target="#attachmentModal" (click)="isReviewerAttachment = false">
+                            <h5 id="adminAttchmentDiv" class="borderBoxHeading pointer pd-left-0" data-toggle="modal" data-target="#attachmentModal" (click)="isReviewerAttachment = false">
                              
                               <div class="d-flex align-items-center">
                               <div class="clip-container"><i class="fa fa-paperclip clip-ico" aria-hidden="true" ></i></div>
@@ -646,6 +661,15 @@
                         <a class="txt-medium text-danger"><Strong>{{commentGroupObj?.fullName}}</Strong></a>
                         <span class="txt-medium txt-dark">{{commentGroupObj?.actionType}} - </span>
                         <span class="txt-medium txt-dark">{{commentGroupObj?.updateTimestamp}}</span>
+                        <span class="action-btn-list float-right">
+                        <button title="Edit" (click)="editIRBReviewComments(commentGroupObj,i)" type="button" class="btn">
+                            <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+                          </button>
+                          <button title="Delete" (click)="updateIRBReviewComments('D', commentGroupObj)" type="button" class="btn" data-toggle="modal"
+                            data-target="#deleteAdminDetails">
+                            <i class="fa fa-trash log-user-icon-lite log-user-icon-lite" aria-hidden="true"></i>
+                          </button>
+                          </span>
                         <br *ngIf="commentGroupObj.fileName != null">
                         <p class="sub-history_commnt" [innerHTML]="commentGroupObj.commentDescription" *ngIf="commentGroupObj.commentDescription != null"></p>
                         <div *ngIf="commentGroupObj.reviewAttachments != null && commentGroupObj.reviewAttachments.length > 0">
@@ -800,18 +824,21 @@
               <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
             </span>
           </div>
-          <div class="filechip" *ngIf="isReplaceAttachment">
-            <span>{{ fileName }}
-              <i title="Replace Attachment" class="fa fa-close pdf" (click)="replaceAttachment()"></i>
+          <div class="filechip" *ngIf="(isProtocolReviewAttachmentEdited || isIRBReviewAttachmentEdited) && uploadedFile.length == 0">
+            <span>{{ attachmentEdited.fileName }}
             </span>
           </div>
         </div>
       </div>
       <section class="col-12 btn-row-med sect-confirm-padding proceed-btn-align">
-          <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isReviewerAttachment == false"
-        aria-label="Close" (click)="addAttachments(attachmentDescription)">Add</button>
-        <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isReviewerAttachment == true"
-        aria-label="Close" (click)="addAttachmentCommittee(attachmentDescription)">Add</button>
+          <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isReviewerAttachment == false && isIRBReviewAttachmentEdited == false"
+        aria-label="Close" (click)="updateAttachments(attachmentDescription, 'I', null)">Add</button>
+        <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isReviewerAttachment == false && isIRBReviewAttachmentEdited == true"
+        aria-label="Close" (click)="updateAttachments(attachmentDescription, 'U', null)">Save</button>
+        <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isReviewerAttachment == true && isProtocolReviewAttachmentEdited == false"
+        aria-label="Close" (click)="updateAttachmentCommittee(attachmentDescription, 'I', null)">Add</button>
+        <button title="Add Attachment" class="btn btn-primary tab_btn proceed-btn btn-mt-10 center-button" *ngIf="isReviewerAttachment == true && isProtocolReviewAttachmentEdited == true"
+        aria-label="Close" (click)="updateAttachmentCommittee(attachmentDescription, 'U', null)">Save</button>
       </section>
     </div>
   </div>

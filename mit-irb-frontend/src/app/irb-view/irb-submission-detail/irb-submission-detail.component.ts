@@ -35,15 +35,22 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   selectedPastSubmission: any = {};
   submissionVo: any = {};
   isEditIRBReviewer = false;
+  isIRBReviewCommentEdited = false;
   IRBReviweverSelectedRow = null;
+  protocolReviewerCommentEditedRow = null;
+  irbReviewerCommentEditedRow = null;
   showCheckList = null;
+  attachmentEdited: any = {};
   publicFLag = false;
   adminPanelValidation = false;
   tabSelected = 'IRBCOMMENTS';
   showReviewsOf = 'All Administrative Reviewers';
   validationTextadmin = null;
   viewMode = false;
-
+  isProtocolReviewCommentEdited = false;
+  isProtocolReviewAttachmentEdited = false;
+  isIRBeviewAttachmentEdited = false;
+  isIRBReviewAttachmentEdited = false;
   uploadedFile: File[] = [];
   files: UploadFile[] = [];
   fil: FileList;
@@ -342,7 +349,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
 
-  addIRBReviewComments(mode) {
+  updateIRBReviewComments(mode, comment) {
     this.adminReviewerComment.acType = mode;
     this.adminReviewerComment.submissionId = this.headerDetails.SUBMISSION_ID;
     this.adminReviewerComment.protocolId = this.headerDetails.PROTOCOL_ID;
@@ -352,51 +359,85 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.adminReviewerComment.publicFLag = this.publicFLag === true ? 'Y' : 'N';
     this.adminReviewerComment.updateUser = this.userDTO.userName;
     this.adminReviewerComment.personID = this.userDTO.personID;
-    this._spinner.show();
-    this._irbViewService.updateIRBAdminComment(this.adminReviewerComment).subscribe(data => {
-      this._spinner.hide();
-      const result: any = data || [];
-      this.irbAdminCommentAttachmentBackUp = Object.assign([], result.irbAdminCommentAttachment);
-      this.submissionVo.irbAdminCommentAttachment = result.irbAdminCommentAttachment;
-      this.showReviewsOf = 'All Administrative Reviewers';
-      this.adminReviewerComment = {};
-      this.publicFLag = false;
-      this.submissionVo.successCode = result.successCode;
-        this.submissionVo.successMessage = result.successMessage;
-        if (this.submissionVo.successCode === true) {
-          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
-        } else {
-          this.toastr.error('Failed to Save Adminstrative Reviewer Comment', null, { toastLife: 2000 });
-        }
-    });
+    if (mode === 'D' && comment.reviewAttachments != null) {
+     this.updateAttachments(null, 'D', comment.reviewAttachments[0]);
+    } else {
+    if (mode === 'D') {
+      this.adminReviewerComment.commentId = comment.commentId;
+    }
+      this._spinner.show();
+      this._irbViewService.updateIRBAdminComment(this.adminReviewerComment).subscribe(data => {
+        this._spinner.hide();
+        const result: any = data || [];
+        this.irbAdminCommentAttachmentBackUp = Object.assign([], result.irbAdminCommentAttachment);
+        this.submissionVo.irbAdminCommentAttachment = result.irbAdminCommentAttachment;
+        this.showReviewsOf = 'All Administrative Reviewers';
+        this.adminReviewerComment = {};
+        this.irbReviewerCommentEditedRow = null;
+        this.isIRBReviewCommentEdited = false;
+        this.publicFLag = false;
+        this.submissionVo.successCode = result.successCode;
+          this.submissionVo.successMessage = result.successMessage;
+          if (this.submissionVo.successCode === true) {
+            this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+          } else {
+            this.toastr.error('Failed to Save Adminstrative Reviewer Comment', null, { toastLife: 2000 });
+          }
+      });
+    }
   }
 
 
-  onChange(files: FileList) {
-    this.fil = files;
-    for (let index = 0; index < this.fil.length; index++) {
-      this.uploadedFile.push(this.fil[index]);
+  editIRBReviewComments(comment, index) {
+    const commentEdited = comment.commentDescription.toString();
+    this.irbReviewerCommentEditedRow = index;
+    if (comment.reviewAttachments != null) {
+    this.isIRBReviewAttachmentEdited = true;
+      this.attachmentEdited = {id: comment.reviewAttachments != null ? comment.reviewAttachments[0].attachmentId : null,
+                                fileName:  comment.reviewAttachments != null ? comment.reviewAttachments[0].fileName : null,
+                              commentId:  comment.reviewAttachments != null ? comment.reviewAttachments[0].commentId : null};
+      this.attachmentDescription = commentEdited != null ? commentEdited.replace(/<[^>]*>/g, '') : '';
+      document.getElementById('adminAttchmentDiv').click();
+    } else {
+    this.adminReviewerComment.comment = commentEdited != null ? commentEdited.replace(/<[^>]*>/g, '') : '';
+    this.adminReviewerComment.commentId = comment.commentId;
+    this.publicFLag = comment.publicFlag === 'Y' ? true : false;
+    this.isIRBReviewCommentEdited = true;
+      const id = document.getElementById('irbReviewComment');
+      if (id) {
+        id.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-    // this.changeRef.detectChanges();
+    }
+    onChange(files: FileList) {
+      // this.fil = files;
+      // for (let index = 0; index < this.fil.length; index++) {
+      //     this.uploadedFile.push(this.fil[index]);
+      // }
+      //  console.log(this.uploadedFile);
+      // this.changeRef.detectChanges();
+      this.uploadedFile = [];
+      // this.uploadedFile.push(this.fil[0]);
+      this.uploadedFile[0] = files[0];
   }
 
   /** Push the unique files dropped to uploaded file
   * @param files- files dropped
   */
   public dropped(event: UploadEvent) {
-    this.files = event.files;
-    for (const file of this.files) {
-      this.attachmentList.push(file);
-    }
-    for (const file of event.files) {
-      if (file.fileEntry.isFile) {
-        const fileEntry = file.fileEntry as FileSystemFileEntry;
-        fileEntry.file((info: File) => {
-          this.uploadedFile.push(info);
-          //  this.changeRef.detectChanges();
-        });
+      this.files = event.files;
+      for (const file of this.files) {
+          this.attachmentList.push(file);
       }
-    }
+      for (const file of event.files) {
+          if (file.fileEntry.isFile) {
+              const fileEntry = file.fileEntry as FileSystemFileEntry;
+              fileEntry.file((info: File) => {
+                  this.uploadedFile = [];
+                  this.uploadedFile.push(info);
+              });
+          }
+      }
   }
 
   /**Remove an item from the uploded file
@@ -416,9 +457,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     document.getElementById('addAttach').click();
   }
 
-  addAttachments(attachmentDescription) {
+  updateAttachments(attachmentDescription, mode, attachmentComment) {
     const reqstObj: any = {};
-    reqstObj.acType = 'I';
+    reqstObj.acType = mode;
     reqstObj.submissionId = this.headerDetails.SUBMISSION_ID;
     reqstObj.protocolId = this.headerDetails.PROTOCOL_ID;
     reqstObj.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
@@ -428,6 +469,14 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     reqstObj.updateUser = this.userDTO.userName;
     reqstObj.personID = this.userDTO.personID;
     reqstObj.comment = attachmentDescription;
+    if ( mode === 'D') {
+      reqstObj.attachmentId =  attachmentComment != null ?   attachmentComment.attachmentId : null;
+      reqstObj.commentId = attachmentComment.commentId;
+    }
+    if ( mode === 'U') {
+      reqstObj.attachmentId =  this.attachmentEdited.id;
+      reqstObj.commentId = this.attachmentEdited.commentId;
+    }
     this._spinner.show();
     this._irbViewService.updateIRBAdminAttachments(reqstObj, this.uploadedFile).subscribe(data => {
       this._spinner.hide();
@@ -462,6 +511,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.uploadedFile = [];
     this.publicFLag = false;
     this.attachmentDescription = '';
+    this.attachmentEdited = {};
+    this.protocolReviewerCommentEditedRow = null;
+    this.irbReviewerCommentEditedRow = null;
+    this.isProtocolReviewAttachmentEdited = false;
+    this.isIRBReviewAttachmentEdited = false;
   }
 
   showReviewById(irbAdminsReviewer) {
@@ -534,6 +588,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       this._spinner.hide();
       this.scheduleList = data.scheduleDates != null ? data.scheduleDates : [];
       this.scheduleID = this.scheduleList.length > 0 ? this.scheduleList[0].SCHEDULE_ID : null;
+      if (this.scheduleID != null) {
+        this.loadCommitteeMembers(this.scheduleID.toString());
+      }
     });
   }
 
@@ -731,18 +788,24 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  addAttachmentCommittee(attachmentComment) {
+  updateAttachmentCommittee(attachmentComment, mode, attachment) {
     const reqstObj: any = {};
-    reqstObj.acType = 'I';
+    reqstObj.acType = mode;
     reqstObj.submissionId = this.headerDetails.SUBMISSION_ID;
     reqstObj.protocolId = this.headerDetails.PROTOCOL_ID;
     reqstObj.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
     reqstObj.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
     reqstObj.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
     reqstObj.personID = this.userDTO.personID;
-    reqstObj.flag = this.publicFLag === true ? 'Y' : 'N';
+   if ( mode !== 'D' ) {
+         reqstObj.flag = this.publicFLag === true ? 'Y' : 'N';
     reqstObj.updateUser = this.reviewedBy;
     reqstObj.attachmentDescription = attachmentComment;
+    reqstObj.reviewerAttachmentId = mode === 'U' ? this.attachmentEdited.id : null;
+   } else {
+    reqstObj.reviewerAttachmentId = attachment.REVIEWER_ATTACHMENT_ID;
+   }
+
     this._spinner.show();
     this._irbViewService.updateCommitteeReviewerAttachments(reqstObj, this.uploadedFile).subscribe((data: any) => {
       this._spinner.hide();
@@ -776,8 +839,29 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
      this.committeeReviewerCommentsandAttachment = Object.assign([], this.submissionVo.committeeReviewerCommentsandAttachment);
     });
   }
+  editProtocolReviewComments(comment, index) {
+  const commentEdited = comment.COMMENTS.toString();
+  this.protocolReviewerCommentEditedRow = index;
+  if (comment.FILE_ID != null) {
+ this.isProtocolReviewAttachmentEdited = true;
+ this.attachmentDescription = commentEdited != null ? commentEdited.replace(/<[^>]*>/g, '') : '';
+ this.attachmentEdited = {id: comment.REVIEWER_ATTACHMENT_ID, fileName: comment.FILE_NAME};
+ document.getElementById('attachmentDiv').click();
+  } else {
+  this.isProtocolReviewCommentEdited = true;
+    this.protocolReviewComments.comments = commentEdited != null ? commentEdited.replace(/<[^>]*>/g, '') : '';
+    this.protocolReviewComments.commMinutesScheduleId = comment.COMMENT_ID;
+    this.letterFlag = comment.INCLUDE_IN_LETTER === 'Y' ? true : false;
+    this.minuteFlag = comment.INCLUDE_IN_MINUTES === 'Y' ? true : false;
+      const id = document.getElementById('protocolReviewComment');
+      if (id) {
+        id.scrollIntoView({ behavior: 'smooth' });
+  }
 
-  addProtocolReviewComments(mode) {
+    }
+  }
+
+  updateProtocolReviewComments(mode, comment) {
   if (this.minuteFlag === false && this.letterFlag === false) {
     this.invalidData.invalidReviewComments = true;
   } else {
@@ -789,32 +873,46 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   this.submissionVo.sequenceNumber = this.headerDetails.SEQUENCE_NUMBER;
   this.submissionVo.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
   this.submissionVo.personID = this.userDTO.personID;
-  this.submissionVo.updateUser = this.reviewedBy;
+  if ( mode !== 'D') {
+    this.submissionVo.updateUser = this.reviewedBy;
   this.protocolReviewComments.flag = this.minuteFlag === true ? 'Y' : 'N';
   this.protocolReviewComments.letterFlag  = this.letterFlag === true ? 'Y' : 'N';
-  this.protocolReviewComments.commMinutesScheduleId = null;
+  this.protocolReviewComments.committeeScheduleMinutesId = mode === 'I' ? null : this.protocolReviewComments.commMinutesScheduleId;
   this.protocolReviewComments.contingencyCode = null;
   this.submissionVo.irbCommitteeReviewerComments = this.protocolReviewComments;
+  } else {
+    this.submissionVo.updateUser = this.userDTO.userName;
+    this.submissionVo.irbCommitteeReviewerComments = { committeeScheduleMinutesId: comment.COMMENT_ID};
+  }
   this._spinner.show();
-  this._irbViewService.updateCommitteeReviewerComments(this.submissionVo).subscribe((data: any) => {
-    this._spinner.hide();
-    this.submissionVo.committeeReviewerCommentsandAttachment = data.committeeReviewerCommentsandAttachment != null ?
-    data.committeeReviewerCommentsandAttachment : [];
-    this.committeeReviewerCommentsandAttachment = Object.assign([], this.submissionVo.committeeReviewerCommentsandAttachment);
-    this.reviewedBy = this.userDTO.userName;
-    this.submissionVo.successCode = data.successCode;
-        this.submissionVo.successMessage = data.successMessage;
-        if (this.submissionVo.successCode === true) {
-          this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
-        } else {
-          this.toastr.error('Failed to Save Committee Review Comments', null, { toastLife: 2000 });
-        }
-    this.letterFlag = true;
-    this.minuteFlag = true;
-    this.protocolReviewComments.comments = '';
-  });
+  if (mode === 'D' && comment.FILE_ID != null) {
+    this.updateAttachmentCommittee(null, 'D', comment);
+
+  } else {
+    this._irbViewService.updateCommitteeReviewerComments(this.submissionVo).subscribe((data: any) => {
+      this._spinner.hide();
+      this.submissionVo.committeeReviewerCommentsandAttachment = data.committeeReviewerCommentsandAttachment != null ?
+      data.committeeReviewerCommentsandAttachment : [];
+      this.committeeReviewerCommentsandAttachment = Object.assign([], this.submissionVo.committeeReviewerCommentsandAttachment);
+      this.reviewedBy = this.userDTO.userName;
+      this.submissionVo.successCode = data.successCode;
+          this.submissionVo.successMessage = data.successMessage;
+          if (this.submissionVo.successCode === true) {
+            this.toastr.success(this.submissionVo.successMessage, null, { toastLife: 2000 });
+          } else {
+            this.toastr.error('Failed to Save Committee Review Comments', null, { toastLife: 2000 });
+          }
+      this.letterFlag = true;
+      this.minuteFlag = true;
+      this.protocolReviewComments.comments = '';
+      this.isProtocolReviewCommentEdited = false;
+      this.protocolReviewerCommentEditedRow = null;
+    });
+  }
+
 }
   }
+
   downloadCommitteReviwerAttachment(attachment) {
     this._spinner.show();
     this._irbViewService.downloadCommitteeFileData(attachment.REVIEWER_ATTACHMENT_ID).subscribe(data => {

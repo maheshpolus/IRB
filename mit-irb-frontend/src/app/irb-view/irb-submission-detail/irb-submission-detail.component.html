@@ -153,8 +153,8 @@
                                     </div>
                                   </div>
                                   <div class="col-md-1 add-btn-1">
-                                      <button title="Add" *ngIf="!isEditIRBReviewer" (click)="addProtocolReviewer()" type="button" class="btn top-butn">
-                                        <!-- <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i> -->
+                                      <button title="Add" *ngIf="!isEditIRBReviewer" (click)="addProtocolReviewer()" type="button" class="btn">
+                                        <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
                                       </button>
                                   </div>
                                 </div>
@@ -171,7 +171,8 @@
                                           <th width="15%" scope="col">Assigned Date</th>
                                           <th width="15%" scope="col">Due Date</th>
                                           <th width="15%" scope="col">Review Status</th>
-                                          <th width="20%"scope="col">Recommended Action</th>
+                                          <th width="15%" scope="col">Status Updated By</th>
+                                          <th width="15%"scope="col">Recommended Action</th>
                                           <th *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false" width="10%" scope="col">Action</th>
                                         </tr>
                                       </thead>
@@ -210,7 +211,7 @@
                                                       <td *ngIf="i != protocolReviewerSelectedRow"> {{(reviewer?.DUE_DATE == '' || reviewer?.DUE_DATE
                                                           == null) ? '' : reviewer?.DUE_DATE | date: 'MM/dd/yyyy'}}</td>
                                           <td *ngIf="i == protocolReviewerSelectedRow">  <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect"
-                                            [(ngModel)]="protocolReviewerEdit.statusFlag" [class.poping-border]="isEditProtocolReviewer">
+                                            [(ngModel)]="protocolReviewerEdit.statusFlag" (ngModelChange)="changeCommiitteeReviewStatus()" [class.poping-border]="isEditProtocolReviewer">
                                             <option value="N">In Progress</option>
                                             <option value="Y">Completed</option>
                                           </select></td>
@@ -220,6 +221,7 @@
                                             <span *ngIf="reviewer.STATUS_FLAG=='N' && (userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                                               <button type="button" class="btn btn-outline-success border-button" (click)="markProtocolReviewComplete(reviewer)">Mark Complete</button>
                                             </span></td>
+                                            <td><span *ngIf="reviewer.COMPLETED_BY != null">{{reviewer.COMPLETED_BY}} on {{reviewer.COMPLETED_ON | date: 'MM/dd/yyyy'}}</span></td>
                                           <td *ngIf="i == protocolReviewerSelectedRow"><select class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [class.poping-border]="isEditProtocolReviewer" [(ngModel)]="protocolReviewerEdit.selectedRecommendedAction">
                                               <option selected value=null>Please Select</option>
                                               <option *ngFor="let type of recomendedActionType" value="{{type.REVIEW_DETERM_RECOM_CD}}">{{type.RECOMMEND_ACTION}}</option>
@@ -518,6 +520,7 @@
                               <th scope="col">Review Type</th>
                               <th scope="col">IRB Administrator</th>
                               <th scope="col">Review Status</th>
+                              <th>Status Updated By</th>
                               <th scope="col" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">Action</th>
                             </tr>
                           </thead>
@@ -540,11 +543,12 @@
                               </td>
                               <td *ngIf="i == IRBReviweverSelectedRow">
                                   <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect" [class.poping-border]="isEditIRBReviewer"
-                                  [(ngModel)]="editadminReviewer.statusFlag">
+                                  [(ngModel)]="editadminReviewer.statusFlag" (ngModelChange)="changeAdminReviewStatus()">
                                   <option value="N">In Progress</option>
                                   <option value="Y">Completed</option>
                                 </select>
                               </td>
+                              <td><span *ngIf="irbAdminsReviewer.COMPLETED_BY != null">{{irbAdminsReviewer.COMPLETED_BY}} on {{irbAdminsReviewer.COMPLETED_ON | date: 'MM/dd/yyyy'}}</span></td>
                               <td class="action-btn-list" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                                 <button *ngIf="i != IRBReviweverSelectedRow" title="Edit" (click)="editIRBReviewer(irbAdminsReviewer,i)" type="button" class="btn">
                                   <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>

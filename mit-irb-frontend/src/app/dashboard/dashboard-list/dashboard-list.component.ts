@@ -211,16 +211,17 @@ export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges 
     }
 
     ngOnChanges() {
-        this.lastClickedTab = this.currentTab;
-        if (this.lastClickedTab) {
-            this.isUnAssignedClicked = '' + this.isUnAssignedClicked;
-            // tslint:disable-next-line:no-construct
-            if (this.isUnAssignedClicked === 'true') {
+        if (this.currentTab !== undefined) {
+            this.lastClickedTab = this.currentTab.tab;
+        if (this.currentTab.isUnAssignedClicked) {
                 this.adminSearchText = 'Unassigned';
                 this.requestObject.adminPersonId = 'UNASSIGNED';
                 this.isAdvancesearch = true;
                 this.getAdvanceSearch(this.lastClickedTab);
             } else {
+                this.adminSearchText = null;
+                this.requestObject.adminPersonId = null;
+                this.isAdvancesearch = false;
             this.getIrbListData(this.lastClickedTab);
             }
         }

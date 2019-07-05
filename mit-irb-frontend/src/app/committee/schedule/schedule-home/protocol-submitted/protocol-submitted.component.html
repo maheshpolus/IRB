@@ -18,14 +18,14 @@
                         </thead>
                         <tbody class="tbody-font-size p-75">
                                 <tr *ngFor="let protocolsubm of this.result?.committeeSchedule?.protocolSubmissions">
-                                        <td>{{protocolsubm.protocolNumber}}</td>
-                                        <td>{{protocolsubm.piPersonName}}</td>
-                                        <td>{{protocolsubm.protocolTitle}}</td>
-                                        <td>{{protocolsubm.protocolSubmissionType.description}}</td>
-                                        <td>{{protocolsubm.qualifierType.description}}</td>
-                                        <td>{{protocolsubm.protocolReviewType.description}}</td>
-                                        <td>{{protocolsubm.submissionStatus.description}}</td>
-                                        <td>{{protocolsubm.submissionDate | date :'MM/dd/yyyy'}}</td>
+                                        <td>{{protocolsubm?.protocolNumber}}</td>
+                                        <td>{{protocolsubm?.piPersonName}}</td>
+                                        <td>{{protocolsubm?.protocolTitle}}</td>
+                                        <td>{{protocolsubm?.protocolSubmissionType?.description}}</td>
+                                        <td>{{protocolsubm?.qualifierType?.description}}</td>
+                                        <td>{{protocolsubm?.protocolReviewType?.description}}</td>
+                                        <td>{{protocolsubm?.submissionStatus?.description}}</td>
+                                        <td>{{protocolsubm?.submissionDate | date :'MM/dd/yyyy'}}</td>
                                         <td>
                                                 <a title="Open {{protocolsubm.protocolNumber}}"
                                                 (click)="openProtocolView(protocolsubm.protocolNumber)">

@@ -280,6 +280,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.editadminReviewer.personName = item.FULL_NAME;
     this.editadminReviewer.reviewTypeCode = item.REVIEW_TYPE_CODE;
     this.editadminReviewer.statusFlag = item.STATUS_FLAG;
+    this.editadminReviewer.markCompletedBy = item.COMPLETED_PERSON_ID;
+    this.editadminReviewer.completeTimeStamp = item.COMPLETED_ON;
     this.editadminReviewer.submissionId = item.SUBMISSION_ID;
     this.editadminReviewer.protocolId = item.PROTOCOL_ID;
     this.editadminReviewer.protocolNumber = item.PROTOCOL_NUMBER;
@@ -300,6 +302,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     const reqstObj: any = {};
     reqstObj.acType = 'U';
     reqstObj.statusFlag = 'Y';
+    reqstObj.markCompletedBy = this.userDTO.personID;
+    reqstObj.completeTimeStamp = this.GetFormattedDate(new Date());
     reqstObj.adminReviewerId = item.ADMIN_REVIEWER_ID;
     reqstObj.submissionId = item.SUBMISSION_ID;
     reqstObj.sequenceNumber = item.SEQUENCE_NUMBER;
@@ -310,6 +314,12 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     reqstObj.protocolNumber = item.PROTOCOL_NUMBER;
     reqstObj.updateUser = this.userDTO.userName;
     this.saveOrUpdateAdminReviwever(reqstObj);
+  }
+
+  changeAdminReviewStatus() {
+    this.editadminReviewer.markCompletedBy = this.userDTO.personID;
+    this.editadminReviewer.completeTimeStamp = this.GetFormattedDate(new Date());
+
   }
 
   saveOrUpdateAdminReviwever(requestObj) {
@@ -615,6 +625,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.protocolReviewerEdit.committeeMemberDueDate = reviewer.DUE_DATE != null ? new Date(reviewer.DUE_DATE) : null;
     this.protocolReviewerEdit.committeeMemberAssignedDate = reviewer.ASSIGNED_DATE != null ? new Date(reviewer.ASSIGNED_DATE) : null;
     this.protocolReviewerEdit.statusFlag = reviewer.STATUS_FLAG === null ? 'N' : reviewer.STATUS_FLAG;
+    this.protocolReviewerEdit.markCompletedBy = reviewer.COMPLETED_PERSON_ID;
+    this.protocolReviewerEdit.completeTimeStamp = reviewer.COMPLETED_ON;
     this.protocolReviewerEdit.protocolId = this.headerDetails.PROTOCOL_ID;
     this.protocolReviewerEdit.submissionId = this.headerDetails.SUBMISSION_ID;
     this.protocolReviewerEdit.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
@@ -633,6 +645,8 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.protocolReviewerEdit.committeeMemberDueDate = reviewer.DUE_DATE != null ? new Date(reviewer.DUE_DATE) : null;
     this.protocolReviewerEdit.committeeMemberAssignedDate = reviewer.ASSIGNED_DATE != null ? new Date(reviewer.ASSIGNED_DATE) : null;
     this.protocolReviewerEdit.statusFlag = 'Y';
+    this.protocolReviewerEdit.markCompletedBy = this.userDTO.personID;
+    this.protocolReviewerEdit.completeTimeStamp = this.GetFormattedDate(new Date());
     this.protocolReviewerEdit.protocolId = this.headerDetails.PROTOCOL_ID;
     this.protocolReviewerEdit.submissionId = this.headerDetails.SUBMISSION_ID;
     this.protocolReviewerEdit.submissionNumber = this.headerDetails.SUBMISSION_NUMBER;
@@ -642,6 +656,12 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.protocolReviewerEdit.protocolReviewerId = reviewer.PROTOCOL_REVIEWER_ID;
     this.protocolReviewerEdit.committeeMemberOnlineReviewerId = reviewer.PROTOCOL_ONLN_RVW_ID;
     this.saveProtocolReviewer(this.protocolReviewerEdit, 'U');
+  }
+
+  changeCommiitteeReviewStatus() {
+    this.protocolReviewerEdit.markCompletedBy = this.userDTO.personID;
+    this.protocolReviewerEdit.completeTimeStamp = this.GetFormattedDate(new Date());
+
   }
 
   deleteProtocolReviewer(reviewer) {

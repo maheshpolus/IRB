@@ -337,7 +337,7 @@ editPersonRoles(person) {
   this.roleDetails.personId = this.personDetails.personId = this.assignedDetails.personId = person.personId;
   this.roleDetails.unitNumber = person.unitNumber;
   this.personDetails.personName = person.fullName;
-  this.personDetails.user_name = person.Name;
+  this.personDetails.user_name = person.userName;
   this.personDetails.email_id = person.email;
   this.personDetails.unit_name = person.unitName;
   this.personDetails.unit_number = person.unitNumber;

@@ -8,6 +8,7 @@ import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
 import { DashboardResolverService } from './common/service/dashboard-resolver.service';
 import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
 import { LogoutComponent } from './login/logout.component';
+import { CommitteeScheduleListComponent } from './committee-schedule-list/committee-schedule-list.component';
 
 const appRoutes = [
    { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
@@ -30,7 +31,9 @@ const appRoutes = [
             { path: 'expanded-view', component: ExpandedViewComponent },
             { path: 'exempt-questionaire', component: ExemptQuestionaireComponent,
                     resolve: { irb: DashboardResolverService }
-            }
+            },
+            { path: 'committee-schedule-list', component: CommitteeScheduleListComponent
+    }
         ]
     }
 ];

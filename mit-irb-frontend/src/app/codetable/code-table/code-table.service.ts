@@ -22,15 +22,32 @@ export class CodeTableService {
         return this._http.post('/mit-irb/getCodeTable', codetable);
     }
 
-    getUpdatedTableValues(updatedCodetable) {
-        return this._http.post('/mit-irb/updateCodeTableRecord', updatedCodetable);
+    getUpdatedTableValues(updatedCodetable, attachmentColumnName) {
+        const formData = new FormData();
+        if (attachmentColumnName) {
+            const attachment = updatedCodetable.tableData[0][attachmentColumnName];
+            updatedCodetable.tableData[0][attachmentColumnName] = 'changed';
+            formData.append('files', attachment);
+        }
+        formData.append('formDataJson', JSON.stringify(updatedCodetable));
+        return this._http.post( '/mit-irb/updateCodeTableRecord', formData);
     }
 
     removeSelectedData(removeData) {
-        return this._http.post('/mit-irb/deleteCodeTableRecord', removeData);
+        return this._http.post( '/mit-irb/deleteCodeTableRecord', removeData);
     }
 
-    addNewCodeTableData(newCodeTableData) {
-        return this._http.post('/mit-irb/addCodeTableRecord', newCodeTableData);
+    addNewCodeTableData(newCodeTableData, attachmentColumnName) {
+        const formData = new FormData();
+        if (attachmentColumnName) {
+            const attachment = newCodeTableData.tableData[0][attachmentColumnName];
+            newCodeTableData.tableData[0][attachmentColumnName] = 'changed';
+            formData.append('files', attachment);
+        }
+        formData.append('formDataJson', JSON.stringify(newCodeTableData));
+        return this._http.post( '/mit-irb/addCodeTableRecord', formData);
+    }
+    downloadAttachment(downloadData) {
+        return this._http.post( '/mit-irb/downloadAttachment', downloadData , {responseType: 'blob'});
     }
 }

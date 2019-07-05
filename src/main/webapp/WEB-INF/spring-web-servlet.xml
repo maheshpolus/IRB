@@ -72,7 +72,10 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondenceType</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentSubCategory</value>	
-				<value>org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAttachment</value>				
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswerAttachment</value>				
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBWatermark</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswer</value>				
+				<value>org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswerHeader</value>											
 										
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType</value>							

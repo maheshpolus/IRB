@@ -1,161 +1,198 @@
-<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
-<div class="headerPush"></div>
-<div class="container-fluid">
-
-  <div class="borderBox irb-margin-top irb-background-tablemaintenance">
-    <h4 class="borderBoxHeading irb-head-back font-size-1em">Training Maintenance</h4>
-    <div class="text-right">
-        <a class="pdf add-training" *ngIf="userHasRightToEditTraining == 1" [routerLink]="['person-detail']">
-            <i class="fa fa-plus icon-padding"></i>Add Training
-          </a>
-    </div>
-    <section class="row outerpadding ml-10 mr-10">
-       <div class="col-md-4">
-        <div class="form-group">
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading...">
+  </ngx-spinner>
+  <div class="headerPush"></div>
+  <div class="container-fluid">
+  
+    <div class="card">
+      <h4 class="card-hedding txt-large dotted-bottom">Training Maintenance</h4>
+      <div class="text-right">
+        <span class="welcome-popup text-danger txt-medium p-2" *ngIf="userHasRightToEditTraining == 1"
+          [routerLink]="['person-detail']">
+          <i class="fa fa-plus icon-padding"></i>Add Training
+        </span>
+      </div>
+      <section class="row outerpadding ml-10 mr-10">
+        <div class="col-md-4">
+          <div class="form-group">
             <div class="form-check-inline">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="empOptradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span class="txt-medium text-secondary">Employee</span>
-                </label>
-              </div>
-              <div class="form-check-inline">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="nonEmpOptradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)"><span class="txt-medium text-secondary">Non-Employee</span>
-                </label>
-              </div>
-              <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
-        </div>
-      </div>
-      <div class="col-md-5  mt-30">
-        <div class="form-group">
-          <input type="text" [(ngModel)]="trainingName" class="form-control input-field-size" placeholder="Search for a Training" (ngModelChange)="getTrainingList()" (keyup)="isTrainingSearch = true" (focusout)="isTrainingSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'trainingDropDown')" (keydown.Enter) ="keyPressEvent.onKeyDown($event,'trainingDropDown')">
-          <div class="sb-seachresults top-margin research-dropDown-width " id="trainingDropDown">
-            <ul class="sb-results-dropdown-menu" *ngIf="isTrainingSearch">
-                <ng-container *ngIf="trainingSearchResult.length > 0">
-              <li *ngFor="let result of trainingSearchResult" (mousedown)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)" (click)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)"><span> {{result.DESCRIPTION}}</span></li>
-                  </ng-container>
-                  <ng-container *ngIf="trainingSearchResult.length == 0">
-                    <li>No Results</li>
-                  </ng-container>
-            </ul>
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="empOptradio" value="employee" [(ngModel)]="personType"
+                  (ngModelChange)="changePersonType(personType)">
+                <span class="txt-medium text-secondary">Employee</span>
+              </label>
             </div>
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="nonEmpOptradio" value="non-employee"
+                  [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">
+                <span class="txt-medium text-secondary">Non-Employee</span>
+              </label>
+            </div>
+            <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField"
+              (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+          </div>
         </div>
-      </div>
-      <div class="col-md-3  mt-30">
-      <div class="form-group">
-          <button class="btn btn-outline-success" (click)="getAdvanceSearchResult()">
-            <i class="fa fa-search"></i>Search
-          </button>
-          <button class="btn btn-outline-secondary" (click)="clearAdvancedSearch()" style="top: 0px;right: 82px;height: 39px;">
-              <span class="pose-ico"> <i class="fa fa-close btn-close-0" style="font-size: 17px;"></i>
-              <span style="font-size: 17px;">Clear</span> 
-            </span>
+        <div class="col-md-5  mt-30">
+          <div class="form-group">
+            <input type="text" [(ngModel)]="trainingName" class="form-control input-field-size txt-small"
+              placeholder="Search for a Training" (ngModelChange)="getTrainingList()" (keyup)="isTrainingSearch = true"
+              (focusout)="isTrainingSearch = false"
+              (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'trainingDropDown')"
+              (keydown.arrowup)="keyPressEvent.onKeyDown($event,'trainingDropDown')"
+              (keydown.Enter)="keyPressEvent.onKeyDown($event,'trainingDropDown')">
+            <div class="sb-seachresults" id="trainingDropDown">
+              <ul class="sb-results-dropdown-menu1 box-shadow-1 p-0" *ngIf="isTrainingSearch">
+                <ng-container *ngIf="trainingSearchResult.length > 0">
+                  <li class="block" *ngFor="let result of trainingSearchResult"
+                    (mousedown)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)"
+                    (click)="selectedTraining(result.DESCRIPTION,result.TRAINING_CODE)">
+                    <a>{{result.DESCRIPTION}}</a>
+                  </li>
+                </ng-container>
+                <ng-container *ngIf="trainingSearchResult.length == 0">
+                  <li><a>No Results</a></li>
+                </ng-container>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3  mt-30">
+          <div class="form-group">
+            <button class="btn btn-outline-success txt-small" (click)="getAdvanceSearchResult()">
+              <i class="fa fa-search"></i> Search
+            </button>
+            <button class="btn btn-outline-secondary txt-small" (click)="clearAdvancedSearch()">
+              <span class="pose-ico"> <i class="fa fa-close btn-close-0"></i>
+                <span>Clear</span>
+              </span>
             </button>
           </div>
-          </div>
-      <!-- <div class="col-md-2" *ngIf="userHasRightToEditTraining == 1">
-        <a class="pdf a-right attachment-btn-position" [routerLink]="['person-detail']">
-          <i class="fa fa-plus icon-padding"></i>Add Training
-        </a>
-      </div> -->
-      <!-- <div class="col-12" *ngIf="showPersonElasticBand">
-          <div class="row">
-            <div class="col-12 band-s">
-              <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
-              <div class="row">
-                <div class="col-12">
-                  <label>Name:</label>
-                  <span>{{selectedPerson?.full_name}}</span>
-                </div>
-                <div class="col-12">
-                  <label>Username:</label>
-                  <span>{{selectedPerson?.user_name}}</span>
-                  <label>Email:</label>
-                  <span>{{selectedPerson?.email_address}}</span>
-                  <label>Phone no:</label>
-                  <span>{{selectedPerson?.phone_number}}</span>
-                  <label>Title:</label>
-                  <span>{{selectedPerson?.title}}</span>
+        </div>
+        <!-- <div class="col-md-2" *ngIf="userHasRightToEditTraining == 1">
+          <a class="pdf a-right attachment-btn-position" [routerLink]="['person-detail']">
+            <i class="fa fa-plus icon-padding"></i>Add Training
+          </a>
+        </div> -->
+        <!-- <div class="col-12" *ngIf="showPersonElasticBand">
+            <div class="row">
+              <div class="col-12 band-s">
+                <div class="col-12 padding0 close-bt" (click)="showPersonElasticBand = false">X</div>
+                <div class="row">
+                  <div class="col-12">
+                    <label>Name:</label>
+                    <span>{{selectedPerson?.full_name}}</span>
+                  </div>
+                  <div class="col-12">
+                    <label>Username:</label>
+                    <span>{{selectedPerson?.user_name}}</span>
+                    <label>Email:</label>
+                    <span>{{selectedPerson?.email_address}}</span>
+                    <label>Phone no:</label>
+                    <span>{{selectedPerson?.phone_number}}</span>
+                    <label>Title:</label>
+                    <span>{{selectedPerson?.title}}</span>
+                  </div>
                 </div>
               </div>
             </div>
+          </div> -->
+        <div class="col-12">
+          <div class="row alert-sp alert-warning mb-0" *ngIf="requestObject.searchMode == 'A'">
+            <div class="txt-small m-0">
+              <div>
+                <i aria-hidden="true" class="fa fa-user-circle"> &nbsp;</i>Employee &nbsp;
+                <i aria-hidden="true" class="fa fa-user-o">&nbsp;</i>Non Employee
+              </div>
+            </div>
           </div>
-        </div> -->
-      <div class="text-right persons-header width-99" *ngIf="requestObject.searchMode == 'A'">
-          <i class="fa fa-user-circle" aria-hidden="true"> &nbsp;Employee</i> &nbsp;
-          <i class="fa fa-user-o" aria-hidden="true">&nbsp; Non Employee</i>
-      </div>
-      <div class="col-md-12 users-list-tbl" id ="topOfTrainingList" *ngIf="requestObject.searchMode == 'A'">
+        </div>
+        <div class="col-md-12" id="topOfTrainingList" *ngIf="requestObject.searchMode == 'A'">
           <div class="row">
-            <div class="table-responsive">
-              <table class="table table-striped tbl-p-clr">
+            <div class="w-100">
+              <table class="table tbl-p-clr txt-medium">
                 <thead class="tbl-head-clr thead-font-size">
-                    <tr>
-                        <th scope="col">Person Name</th>
-                        <th scope="col">Training</th>
-                        <th scope="col">Expiration Date</th>
-                        <th scope="col" width="15%">Action</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                        <ng-container *ngIf="personTrainingList.length > 0">
-                        <tr *ngFor="let personTraining of paginatedTrainingList">
-                          <td><i class="fa" [ngClass]="personTraining.IS_EMPLOYEE == 'Y' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{personTraining?.FULL_NAME }}</td>
-                          <td>{{personTraining?.TRAINING}}</td>
-                          <td>{{(personTraining?.EXPIRATION_DATE === ' ' || personTraining?.EXPIRATION_DATE === null ) ? ' ':(personTraining?.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</td>
-                          <td class="action-btn-list" width="15%">
-                              <button title="Edit" type="button" class="btn btn-primary edit-btn-1" (click)="showTrainingDetails(personTraining,'EDIT')" *ngIf="userHasRightToEditTraining == 1">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                              </button>
-                              <button title="View" type="button" class="btn btn-primary view-btn-1" (click)="showTrainingDetails(personTraining, 'VIEW')">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                              </button>
-                              <button title="Delete" type="button" class="btn btn-primary delete-btn-1" *ngIf="userHasRightToEditTraining == 1" (click)="deleteTrainingDetails(personTraining)" data-toggle="modal" data-target="#deletewarningModal">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                              </button>
-                            </td>
-                          
-                        </tr>
-                        </ng-container>
-                        <tr *ngIf="personTrainingList.length == 0 || personTrainingList == null">
-                          <td class="text-center" colspan="4">No Training details to show</td>
-                        </tr>
-                      </tbody>
-                      </table>
-                      <div class="text-right pagiSkin margin8" style="float:right" *ngIf="personTrainingList.length > 0">
-                          <nav class="paginationSkin text-right pagination">
-                              <div class="margin8"><b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number * paginationData.limit - paginationData.limit  + paginatedTrainingList.length}} of {{trainingCount}} Records</b></div>
-                            <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="trainingCount" [(page)]="paginationData.page_number"
-                            paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="trainingListPerPage(paginationData.page_number)">
-                            </ngb-pagination>
-                          </nav>
-                        </div>
-                      </div>
-                      </div>
-                      </div>
-  </section>
+                  <tr class="solid-bottom">
+                    <th scope="col">Person Name</th>
+                    <th scope="col">Training</th>
+                    <th scope="col">Expiration Date</th>
+                    <th scope="col" width="15%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="personTrainingList.length > 0">
+                    <tr class="solid-bottom pull-up" *ngFor="let personTraining of paginatedTrainingList">
+                      <td class="align-middle"><i class="fa"
+                          [ngClass]="personTraining.IS_EMPLOYEE == 'Y' ? 'fa-user-circle':'fa-user-o'"
+                          aria-hidden="true"></i> {{personTraining?.FULL_NAME }}</td>
+                      <td class="align-middle">{{personTraining?.TRAINING}}</td>
+                      <td class="align-middle">
+                        {{(personTraining?.EXPIRATION_DATE === ' ' || personTraining?.EXPIRATION_DATE === null ) ? ' ':(personTraining?.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}
+                      </td>
+                      <td class="action-btn-list align-middle" width="15%">
+                        <span title="Edit" (click)="showTrainingDetails(personTraining,'EDIT')"
+                          *ngIf="userHasRightToEditTraining == 1">
+                          <i class="fa fa-pencil log-user-icon-lite txt-small" aria-hidden="true"></i>
+                        </span>
+                        <span title="View" (click)="showTrainingDetails(personTraining, 'VIEW')">
+                          <i class="fa fa-eye log-user-icon-lite txt-small" aria-hidden="true"></i>
+                        </span>
+                        <span title="Delete" *ngIf="userHasRightToEditTraining == 1"
+                          (click)="deleteTrainingDetails(personTraining)" data-toggle="modal"
+                          data-target="#deletewarningModal">
+                          <i class="fa fa-trash log-user-icon-lite txt-small" aria-hidden="true"></i>
+                        </span>
+                      </td>
+  
+                    </tr>
+                  </ng-container>
+                  <tr *ngIf="personTrainingList.length == 0 || personTrainingList == null">
+                    <td class="text-center" colspan="4">No Training details to show</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-right pagiSkin margin8 txt-small" style="float:right"
+                *ngIf="personTrainingList.length > 0">
+                <nav class="paginationSkin text-right pagination">
+                  <div class="margin8"><b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}}
+                      -
+                      {{paginationData.page_number * paginationData.limit - paginationData.limit  + paginatedTrainingList.length}}
+                      of {{trainingCount}} Records</b></div>
+                  <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="trainingCount"
+                    [(page)]="paginationData.page_number" paginationData.page_number=page
+                    [pageSize]="paginationData.limit" [rotate]="true"
+                    (pageChange)="trainingListPerPage(paginationData.page_number)">
+                  </ngb-pagination>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
-</div>
-
-<!--delete warning modal-->
-<div class="modal fade" *ngIf="showPopup" id="deletewarningModal"
- tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header popup-header">
-				<h5 class="modal-title">Want to delete?
-				</h5>
-				<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body modal-pop-up">
-				<p>Are you sure you want to delete this item?</p>
-			</div>
-			<div class="modal-footer btn-row-med">
-				<button class="btn tab_btn" data-dismiss="modal" aria-label="Close" (click)="showPopup = false">No</button>
-				<!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button> -->
-				<button type="button margin-class"  class="btn btn-primary tab_btn" (click)="confirmDelete()" data-dismiss="modal">Yes</button>
-			</div>
-		</div>
-	</div>
-</div>
+  
+  <!--delete warning modal-->
+  <div class="modal fade" *ngIf="showPopup" id="deletewarningModal" tabindex="-1" role="dialog"
+    aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="modal-title thick txt-large">Want to delete?
+          </h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-pop-up dotted-bottom">
+          <p>Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer p-2">
+          <button class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close"
+            (click)="showPopup = false">No</button>
+          <!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button> -->
+          <button class="btn btn-outline-success txt-small" (click)="confirmDelete()" data-dismiss="modal">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

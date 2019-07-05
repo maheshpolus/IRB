@@ -100,7 +100,7 @@
                           </span>
                         </p>
 
-                        <a class="pdf btn" data-toggle="modal"
+                        <a class="pdf btn" data-toggle="modal" *ngIf="!isViewmode"
                         data-target="#AttachmentModal" (click)="attachmentIndex = indexQuestion">
                         <i class="fa fa-plus-circle text-success"></i>
                         <span class="txt-medium txt-dark">Add Attachment</span>
@@ -109,7 +109,7 @@
                 
                         <span *ngIf="question.ANSWERS[1]" class="qst-attachment-label">
                           <label><b>{{ question.ANSWERS[1]}}</b></label>
-                          <button class="qst-attachment-cls-btn" (click)="removeDulplicateFile(question.QUESTION_ID, indexQuestion)">
+                          <button *ngIf="!isViewmode" class="qst-attachment-cls-btn" (click)="removeDulplicateFile(question.QUESTION_ID, indexQuestion)">
                             <i class="fa fa-times"></i>
                           </button>
                           <button *ngIf="question.ATTACHMENT_ID" class="qst-attachment-cls-btn" (click)="downloadAttachment(question.ATTACHMENT_ID, question.ANSWERS[1])" >
@@ -141,7 +141,7 @@
                             <i (click)="getHelpLink(question.DESCRIPTION, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
                           </span>
                         </p>
-                        <textarea name="name" class="qst-input-width" [(ngModel)]="question.ANSWERS[1]" (ngModelChange)="showChildQuestions(question)"> </textarea>
+                        <textarea name="name" class="qst-input-width"  [disabled] = "isViewmode" [(ngModel)]="question.ANSWERS[1]" (ngModelChange)="showChildQuestions(question)"> </textarea>
                         <div class="row qst-category-margin" *ngIf="showHelpMsg[indexQuestion] == true">
                             <div class="col-12 col-sm-12 col-md-12 pl-0 qst-helpCard">
                               <button class="qst-closeResultCard qst-close-help" (click)="getHelpLink(question.DESCRIPTION, indexQuestion)">
@@ -169,10 +169,10 @@
                         </p>
                         <div>
                           <div class="qst-date-dv">
-                          <input [owlDateTimeTrigger]="dt3" [(ngModel)]="question.ANSWERS[1]" [attr.readonly]=true placeholder="{{question.ANSWERS[1]}}"
-                            (ngModelChange)="showChildQuestions(question)" [owlDateTime]="dt3">
-                            <span class="trigger qst-date-i" [owlDateTimeTrigger]="dt3">
-                                <i class="fas fa-calendar-alt"></i>
+                          <input [owlDateTimeTrigger]="dt3" [(ngModel)]="question.ANSWERS[1]" [attr.readonly]=true placeholder="{{question.ANSWERS[1]}}" [disabled]="isViewmode"
+                            (ngModelChange)="showChildQuestions(question)" [owlDateTime]="dt3"   [disabled] = "isViewmode">
+                            <span class="trigger qst-date-i" *ngIf="!isViewmode" [owlDateTimeTrigger]="dt3">
+                                <i class="fa fa-calendar-alt"></i>
                             </span>
                           <owl-date-time [pickerType]="'calendar'" #dt3 (afterPickerClosed)="setDateFormat(indexQuestion)"></owl-date-time>
                       </div>
@@ -194,7 +194,7 @@
                 </div>
                 <div class="row">
                   <div class="col-12">
-                <button type="button" (click)="saveQuestionniare()" class=" float-right btn btn-outline-success txt-small hvr-icon-back">Save</button> 
+                <button type="button" *ngIf="!isViewmode" (click)="saveQuestionniare()" class=" float-right btn btn-outline-success txt-small hvr-icon-back">Save</button> 
                   </div>
                 </div>
                 </div>   
@@ -229,7 +229,7 @@
         </div>
         <div class="modal-body">
           <div class="col-12">
-            <div class="drop-zone" appDragNdrop (filesDropEvent)="addFileToTempFiles($event)">
+            <!-- <div class="drop-zone" appDragNdrop (filesDropEvent)="addFileToTempFiles($event)">
               <div class="text-wrapper file">
                 <input type="file" id="selectedFile" style="display: none;" (change)="addFileToTempFiles($event.target.files[0])" />
                 <input type="button" class="btn btn-primary" value="Browse..." onclick="document.getElementById('selectedFile').click()"
@@ -237,7 +237,8 @@
                 <div>Drop your file here!</div>
               </div>
   
-            </div>
+            </div> -->
+            <app-file-drop [multiple]="false" (filesDropEvent)="addFileToTempFiles($event)"></app-file-drop>
           </div>
           <div class="upload-table">
             <table class="table">

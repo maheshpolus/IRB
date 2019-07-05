@@ -150,21 +150,19 @@
                                   </div>
                                 </div>
   
-                                <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
+                                <!-- <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
                                   <div class="form-group">
-                                    <!--<span class="txt-medium text-secondary"> Include in Agenda</span> -->
                                     <div class="mt-33">
                                       <input type="checkbox" [(ngModel)]="isIncludedInAgenda"/>
                                       <span class="checkbox-label">Include in Agenda</span>
                                     </div>
                                   </div>
-                                </div>
+                                </div> -->
                                 <div class="col-md-3"
                                      *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
                                   <div class="form-group">
                                     <span class="txt-medium">Committee</span>
-                                    <select class="custom-select" id="inlineFormCustomSelect"
-                                            [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedCommitteeId"
+                                    <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedCommitteeId"
                                             (ngModelChange)="getScheduleDate(selectedCommitteeId)">
                                       <option *ngFor="let committee of committeeList" [value]="committee.COMMITTEE_ID">
                                         {{committee.COMMITTEE_NAME}}
@@ -176,8 +174,7 @@
                                      *ngIf="currentActionPerformed?.ACTION_CODE == '200'|| currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '208'">
                                   <div class="form-group">
                                     <span class="txt-medium">Schedule Date</span>
-                                    <select class="custom-select" id="inlineFormCustomSelect"
-                                            [disabled]="!isIncludedInAgenda" [(ngModel)]="selectedScheduleId">
+                                    <select class="custom-select" id="inlineFormCustomSelect" [(ngModel)]="selectedScheduleId">
                                       <option value=null selected>Please Select</option>
                                       <option *ngFor="let scheduleDate of scheduleDateList"
                                               value="{{scheduleDate.SCHEDULE_ID}}">{{scheduleDate.SCHEDULE_ID}},

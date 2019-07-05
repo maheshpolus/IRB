@@ -1,298 +1,277 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading...">
-  </ngx-spinner>
-  <div class="container-fluid">
-    <section class="row">
-      <!---card list--->
-      <div class="col-12">
-        <div class="row cards-in">
-          <div class="col-12 mb-10">
-            <div class="card mt-5">
+</ngx-spinner>
+<div class="container-fluid">
+  <section class="row">
+    <!---card list--->
+    <div class="col-12">
+      <div class="row cards-in">
+        <div class="col-12 mb-10">
+          <div class="card mt-5">
 
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                  aria-labelledby="pills-home-tab">
-                  <h4 class="card-hedding dotted-bottom">Personnel Information
-                      <a class="tooltip float-right" > <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
-                        <span class="tooltiptext-right">{{PROTOCOL_PERSONNEL_INFO}}</span>
-                      </a>
-
-
-                      <!-- <i class="fa fa-info-circle" title="{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}" aria-hidden="true"></i> -->
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <h4 class="card-hedding dotted-bottom">Personnel Information
+                  <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary"
+                      aria-hidden="true"></i>
+                    <span class="tooltiptext-right">{{PROTOCOL_PERSONNEL_INFO}}</span>
+                  </a>
 
 
-                  </h4>
+                  <!-- <i class="fa fa-info-circle" title="{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}" aria-hidden="true"></i> -->
 
-                  <div class="col-sm-12 main-list ovr-flw" *ngIf="noIrbPersons==false">
-                    <div class="row px-2">
-                      <div class="table ">
-                        <div class="dashboard-table">
-                          <div [ngClass]="{'row-line':i!=0}"
-                            *ngFor="let irbPersons of irbPersonsDetails;let i= index"
-                            data-toggle="modal" data-target="#personModal"
-                            (click)="showpersonData(irbPersons.PERSON_ID)">
-                            <div class="row dotted-bottom">
 
-                              <div class="col-md-1 col-sm-6 co-12">
-                                <span
-                                  [ngClass]="(irbPersons.PROTOCOL_PERSON_ROLE_ID ==='PI')?'fa fa-graduation-cap pi-ico-pi':'fa fa-user'"
-                                  class="pi-ico img-fluid pd20-lite pointer mtr-1">
+                </h4>
 
+                <div class="col-sm-12 main-list ovr-flw" *ngIf="noIrbPersons==false">
+                  <div class="row px-2">
+                    <div class="table ">
+                      <div class="dashboard-table">
+                        <div [ngClass]="{'row-line':i!=0}" *ngFor="let irbPersons of irbPersonsDetails;let i= index"
+                          data-toggle="modal" data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
+                          <div class="row dotted-bottom pd-btm">
+
+                            <div class="col-md-1 col-sm-6 col-12">
+                              <span
+                                [ngClass]="(irbPersons.PROTOCOL_PERSON_ROLE_ID ==='PI')?'fa fa-graduation-cap pi-ico-pi':'fa fa-user'"
+                                class="pi-ico img-fluid pd20-lite pointer pdb-05">
+
+                              </span>
+                            </div>
+
+                            <div class="col-md-10 col-sm-12 col-12 list-des vertical-middle">
+                              <h5 class="txt-large">
+                                {{irbPersons.PERSON_NAME}}
+                              </h5>
+
+                              <h6 class="txt-dark txt-medium mb-5">
+                                Training Status:
+                                <span class="font-size-23">
+                                  <i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'"
+                                    class="training-complete-color fa fa-check text-small" title="Complete"
+                                    aria-hidden="true" style="font-size:16px"></i>
+                                  <i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'"
+                                    class="training-incomplete-color fa fa-times" title="Not Complete"
+                                    aria-hidden="true" style="font-size:16px"></i>
                                 </span>
-                              </div>
+                                Person Role:
+                                <span class="text-danger mr-20">{{irbPersons.PROTOCOL_PERSON_ROLE}}
+                                </span>
 
-                              <div
-                                class="col-md-10 col-sm-12 col-12 list-des vertical-middle pl-43">
-                                <h5 class="txt-large">
-                                  {{irbPersons.PERSON_NAME}}
-                                </h5>
+                                Title:
+                                <span class="text-danger mr-20">{{irbPersons.PRIMARY_TITLE}}</span>
 
-                                <h6 class="txt-dark txt-medium mb-5">
-                                  Training Status:
-                                  <span class="font-size-23">
-                                    <i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='COMPLETED'"
-                                      class="training-complete-color fa fa-check text-small"
-                                      title="Complete" aria-hidden="true"
-                                      style="font-size:16px"></i>
-                                    <i *ngIf="irbPersons.IS_TRAINING_COMPLETED=='INCOMPLETE'"
-                                      class="training-incomplete-color fa fa-times"
-                                      title="Not Complete" aria-hidden="true"
-                                      style="font-size:16px"></i>
-                                  </span>
-                                  Person Role:
-                                  <span
-                                    class="text-danger mr-20">{{irbPersons.PROTOCOL_PERSON_ROLE}}
-                                  </span>
-
-                                  Title:
-                                  <span
-                                    class="text-danger mr-20">{{irbPersons.PRIMARY_TITLE}}</span>
-
-                                  Obtained Consent:
-                                  <span class="font-size-23">
-                                    <i *ngIf="irbPersons.IS_OBTAINED_CONSENT == 'Y'"
-                                      class="training-complete-color fa fa-check"
-                                      title="Yes" aria-hidden="true"
-                                      style="font-size:16px"></i>
-                                    <i *ngIf="irbPersons.IS_OBTAINED_CONSENT == 'N'|| irbPersons.IS_OBTAINED_CONSENT == null"
-                                      class="training-incomplete-color fa fa-times"
-                                      title="No" aria-hidden="true"
-                                      style="font-size:16px"></i>
-                                  </span>
+                                Obtained Consent:
+                                <span class="font-size-23">
+                                  <i *ngIf="irbPersons.IS_OBTAINED_CONSENT == 'Y'"
+                                    class="training-complete-color fa fa-check" title="Yes" aria-hidden="true"
+                                    style="font-size:16px"></i>
+                                  <i *ngIf="irbPersons.IS_OBTAINED_CONSENT == 'N'|| irbPersons.IS_OBTAINED_CONSENT == null"
+                                    class="training-incomplete-color fa fa-times" title="No" aria-hidden="true"
+                                    style="font-size:16px"></i>
+                                </span>
 
 
-                                </h6>
+                              </h6>
 
-                                <h6 class="txt-dark txt-medium mb-5">
+                              <h6 class="txt-dark txt-medium mb-5">
 
 
-                                  Qualification:
-                                  <span
-                                    class="text-danger ">{{irbPersons.EDUCATION_LEVEL}}</span>
-                                  | Study Role:
-                                  <span
-                                    class="text-danger mr-20">{{irbPersons.STUDY_ROLES}}</span>
-                                  Email:
-                                  <span
-                                    class="text-danger ">{{irbPersons.EMAIL_ADDRESS}}</span>
-                                  | Office:
-                                  <span
-                                    class="text-danger mr-20">{{irbPersons.OFFICE_PHONE}}</span>
+                                Qualification:
+                                <span class="text-danger ">{{irbPersons.EDUCATION_LEVEL}}</span>
+                                | Study Role:
+                                <span class="text-danger mr-20">{{irbPersons.STUDY_ROLES}}</span>
+                                Email:
+                                <span class="text-danger ">{{irbPersons.EMAIL_ADDRESS}}</span>
+                                | Office:
+                                <span class="text-danger mr-20">{{irbPersons.OFFICE_PHONE}}</span>
 
-                                  Affiliation:
-                                  <span
-                                    class="text-danger ">{{irbPersons.AFFILIATION_TYPE}}</span>
-                                  | Unit:
-                                  <span
-                                    class="text-danger mr-20">{{irbPersons.UNIT_NAME}}</span>
+                                Affiliation:
+                                <span class="text-danger ">{{irbPersons.AFFILIATION_TYPE}}</span>
+                                | Unit:
+                                <span class="text-danger mr-20">{{irbPersons.UNIT_NAME}}</span>
 
-                                </h6>
-                              </div>
-                              <div
-                                class="col-md-1 col-sm-12 col-12 list-des button-responsive vertical-middle mtr-15">
-                                <a>
-                                  <button type="button"
-                                    class="btn btn-blue btn-sm text-right"
-                                    data-toggle="modal" data-target="#personModal"
-                                    (click)="showpersonData(irbPersons.PERSON_ID)">
-                                    <i class="fa fa-eye"></i> View
-                                  </button>
-                                </a>
-                              </div>
+                              </h6>
                             </div>
-                          </div>
-
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 card-list-no-data ovrflow-no-data" *ngIf="noIrbPersons">
-            <div class="col-12">No person details found</div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="col-6 mb-10">
-        <!-- ----------------------------- -->
-        <div class="card mt-5 h-100">
-
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-              aria-labelledby="pills-home-tab">
-              <h4 class="card-hedding dotted-bottom">Protocol Units
-                <a class="tooltip float-right">
-                  <i class=" fa fa-info-circle" tabindex="0"></i>
-
-                </a>
-              </h4>
-              <div class="px-2">
-                <div class="col-12 ovr-flw">
-                  <div class="table">
-
-                    <div class="dashboard-table">
-
-                      <div class="row dotted-bottom" [ngClass]="{'row-line':i!=0}"
-                        *ngFor="let protocolUnit of irbProtocolUnitList;let i= index">
-                        <div class="row">
-
-                          <div class="vertical-middle width-100 pd-card-row">
-                            <p class="txt-dark txt-medium mb-5">
-
-                              Unit Name:
-                              <span class="text-danger mr-20">
-                                {{protocolUnit.UNIT_NAME}}
-                              </span>
-
-
-                              Type:
-                              <span class="text-danger mr-20">
-                                {{protocolUnit.UNIT_TYPE_DESCRIPTION}}
-                              </span>
-                            </p>
-                            <p class="txt-dark txt-medium mb-5">
-                              Description:
-                              <span class="text-danger mr-20">
-                                {{protocolUnit.DESCRIPTION}}
-                              </span>
-                            </p>
-
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 card-list-no-data" *ngIf="noProtocolUnits">
-                  <div class="col-12">No Protocol Units found</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-  <!--                 --------------------------- -->
-
-        <!-- --------------------------- -->
-
-        <!-- start -->
-        <div class="col-6 mb-10">
-            <!-- ----------------------------- -->
-            <div class="card mt-5 h-100">
-
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                  aria-labelledby="pills-home-tab">
-                  <h4 class="card-hedding dotted-bottom">Points Of Contact
-                    <a class="tooltip float-right">
-                      <i class=" fa fa-info-circle" tabindex="0"></i>
-
-                    </a>
-                  </h4>
-                  <div class="px-2">
-                      <div class="col-12 ovr-flw">
-                        <div class="table">
-
-                          <div class="dashboard-table">
-
-                            <div class="row dotted-bottom" [ngClass]="{'row-line':i!=0}"
-                            *ngFor="let adminContact of irbAdminContactList;let i= index">
-
-                            <div class="row">
-
-                                <div class="vertical-middle width-100 pd-card-row">
-                                  <p class="txt-dark txt-medium mb-5">
-                                      Person Name:
-                                      <span class="text-danger mr-20">
-                                        {{adminContact.PERSON_NAME}}
-                                      </span>
-
-
-                                      Type:
-                                                <span class="text-danger mr-20">
-                                        {{adminContact.ADMIN_CONTACT_TYPE}}
-                                      </span>
-                                  </p>
-                                    <p class="txt-dark txt-medium mb-5">
-                                          Description:
-                                                <span class="text-danger mr-20">
-                                        {{adminContact.DESCRIPTION}}
-                                      </span>
-                                    </p>
-                                </div>
+                            <div class="col-md-1 col-sm-12 col-12 list-des button-responsive vertical-middle mtr-15">
+                              <a>
+                                <button type="button" class="btn btn-blue btn-sm text-right" data-toggle="modal"
+                                  data-target="#personModal" (click)="showpersonData(irbPersons.PERSON_ID)">
+                                  <i class="fa fa-eye"></i> View
+                                </button>
+                              </a>
                             </div>
                           </div>
                         </div>
+
                       </div>
                     </div>
+
+                  </div>
                 </div>
-              </div>
-              <div class="col-12 card-list-no-data" *ngIf="noAdminContacts">
-                  <div class="col-12">No Administrative Contact details found</div>
+
+
               </div>
             </div>
+          </div>
         </div>
+        <div class="col-12 card-list-no-data ovrflow-no-data" *ngIf="noIrbPersons">
+          <div class="col-12">No person details found</div>
         </div>
-        <!--  end  -->
+      </div>
+    </div>
 
 
-      <div class="col-6 mb-10">
+    <div class="col-6 mb-10">
+      <!-- ----------------------------- -->
+      <div class="card mt-5 h-100">
 
-        <div class="card mt-5 h-100">
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-              aria-labelledby="pills-home-tab">
-              <h4 class="card-hedding dotted-bottom">
-                Funding Sources
-                <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
-                  <span class="tooltiptext-right">{{PROTOCOL_FUNDING_SOURCE_INFO}}</span>
-                </a>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">Protocol Units
+              <a class="tooltip float-right">
+                <i class=" fa fa-info-circle" tabindex="0"></i>
 
-
-              </h4>
+              </a>
+            </h4>
+            <div class="px-2">
               <div class="col-12 ovr-flw">
+                <div class="table">
+
+                  <div class="dashboard-table">
+
+                    <div class="row dotted-bottom" [ngClass]="{'row-line':i!=0}"
+                      *ngFor="let protocolUnit of irbProtocolUnitList;let i= index">
+                      <div class="row">
+
+                        <div class="vertical-middle width-100 pd-card-row">
+                          <p class="txt-dark txt-medium mb-5">
+
+                            Unit Name:
+                            <span class="text-danger mr-20">
+                              {{protocolUnit.UNIT_NAME}}
+                            </span>
+
+
+                            Type:
+                            <span class="text-danger mr-20">
+                              {{protocolUnit.UNIT_TYPE_DESCRIPTION}}
+                            </span>
+                          </p>
+                          <p class="txt-dark txt-medium mb-5">
+                            Description:
+                            <span class="text-danger mr-20">
+                              {{protocolUnit.DESCRIPTION}}
+                            </span>
+                          </p>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 card-list-no-data" *ngIf="noProtocolUnits">
+              <div class="col-12">No Protocol Units found</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <!-- start -->
+    <div class="col-6 mb-10">
+
+      <div class="card mt-5 h-100">
+
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">Points Of Contact
+              <a class="tooltip float-right">
+                <i class=" fa fa-info-circle" tabindex="0"></i>
+
+              </a>
+            </h4>
+
+            <div class="px-2">
+              <div class="col-12 ovr-flw">
+                <div class="table">
+
+                  <div class="dashboard-table">
+
+                    <div class="row dotted-bottom" [ngClass]="{'row-line':i!=0}"
+                      *ngFor="let adminContact of irbAdminContactList;let i= index">
+
+                      <div class="row">
+
+                        <div class="vertical-middle width-100 pd-card-row">
+                          <p class="txt-dark txt-medium mb-5">
+                            Person Name:
+                            <span class="text-danger mr-20">
+                              {{adminContact.PERSON_NAME}}
+                            </span>
+
+
+                            Type:
+                            <span class="text-danger mr-20">
+                              {{adminContact.ADMIN_CONTACT_TYPE}}
+                            </span>
+                          </p>
+                          <p class="txt-dark txt-medium mb-5">
+                            Description:
+                            <span class="text-danger mr-20">
+                              {{adminContact.DESCRIPTION}}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 card-list-no-data" *ngIf="noAdminContacts">
+            <div class="col-12">No Administrative Contact details found</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  end  -->
+
+
+    <div class="col-6 mb-10">
+
+      <div class="card mt-5 h-100">
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">
+              Funding Sources
+              <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
+                <span class="tooltiptext-right">{{PROTOCOL_FUNDING_SOURCE_INFO}}</span>
+              </a>
+
+
+            </h4>
+            <div class="col-12 main-list ovr-flw">
+              <div class="row px-2">
                 <div class="table ">
 
                   <div class="dashboard-table">
 
-                    <div [ngClass]="{'row-line':i!=0}"
-                      *ngFor="let fund of irbFundingDetails;let i= index">
-                      <div class="row dotted-bottom">
-                        <div class="vertical-middle">
-                          <p class="m-tlb">
-                            <span class="pi-ico img-fluid pd20-lite pointer fa fa-briefcase "></span>
-                          </p>
+                    <div [ngClass]="{'row-line':i!=0}" *ngFor="let fund of irbFundingDetails;let i= index">
+                      <div class="row dotted-bottom pd-btm">
+                        <div class="col-md-2 col-sm-6 col-1">
+                          <span class="pi-ico img-fluid pd20-lite pointer fa fa-briefcase "></span>
                         </div>
-                        <div class="list-des">
+
+                        <div class="col-md-10 col-sm-12 col-12 list-des vertical-middle">
+
                           <h6 class="txt-dark txt-medium mb-5">
                             {{fund.FUNDING_SOURCE_TYPE}}:
                             <span class="text-danger mr-20">
@@ -309,11 +288,16 @@
                             <span class="text-danger mr-20">
                               {{fund.FUNDING_SOURCE_NAME}}
                             </span>
+
+
+                          </h6>
+                          <h6 class="txt-dark txt-medium mb-5">
                             Title:
                             <span class="text-danger mr-20">
                               {{fund.FUNDING_SOURCE_TYPE}}
                             </span>
                           </h6>
+
 
                         </div>
                       </div>
@@ -330,374 +314,409 @@
 
         <!-- --------------------------- -->
       </div>
+    </div>
+
+    <div class="col-6 mb-10">
+      <!-- --------------------------- -->
+
+      <div class="card mt-5 h-100">
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">
+              Subjects
+              <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
+                <span class="tooltiptext-right">{{PROTOCOL_SUBJECT_INFO}}</span>
+              </a>
 
 
-      <div class="col-6 mb-10">
-        <!-- --------------------------- -->
 
-        <div class="card mt-5 h-100">
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-              aria-labelledby="pills-home-tab">
-              <h4 class="card-hedding dotted-bottom">
-                Subjects
-                <a class="tooltip float-right" > <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
-                  <span class="tooltiptext-right">{{PROTOCOL_SUBJECT_INFO}}</span>
-                </a>
-
-
-
-              </h4>
-              <div class="col-12 ovr-flw" *ngIf="noIrbSubjects==false">
-                <div class="table ">
+            </h4>
+            <div class="col-sm-12 main-list ovr-flw" *ngIf="noIrbSubjects==false">
+              <div class="row px-2">
+                <div class="table">
 
                   <div class="dashboard-table">
 
                     <div [ngClass]="{'row-line':i!=0}" *ngFor="let sub of irbSubjects;let i= index">
 
-                    <div class="row dotted-bottom">
-                      <div class="vertical-middle">
-                        <p class="m-tlb">
-                          <span class="pi-ico img-fluid pd20-lite pointer fa fa-plus-square"></span>
-                        </p>
+                      <div class="row dotted-bottom pd-btm">
+                        <div class="col-md-2 col-sm-6 col-1">
+                          <span class="pi-ico img-fluid pd20-lite pointer fa fa-plus-square "></span>
+                        </div>
 
+                        <div class="col-md-10 col-sm-12 col-12 list-des vertical-middle">
+
+                          <h6 class="txt-dark txt-medium mb-5">
+                            Type:
+                            <span class="text-danger mr-20">{{sub.VULNERABLE_SUBJECT}}</span>
+                          </h6>
+
+                          <h6 class="txt-dark txt-medium mb-5">
+                            Minimum Age:
+                            <span class="text-danger mr-20">{{sub.MIN_AGE}}</span>
+                            Maximum Age:
+                            <span class="text-danger mr-20">{{sub.MAX_AGE}}</span>
+                            Count:
+                            <span class="text-danger mr-20">{{sub.SUBJECT_COUNT}}</span>
+                          </h6>
+                          <h6 class="txt-dark txt-medium mb-5">
+                            Description:
+                            <span class="text-danger mr-20">{{sub.DESCRIPTION}}</span>
+                          </h6>
+
+                        </div>
 
                       </div>
-                      <div class="list-des">
-                        <h6 class="txt-dark txt-medium mb-5">
-                          Type:
-                          <span class="text-danger mr-20">{{sub.VULNERABLE_SUBJECT}}</span>
-                        </h6>
-                        <h6 class="txt-dark txt-medium mb-5">
-                          Minimum Age:
-                          <span class="text-danger mr-20">{{sub.MIN_AGE}}</span>
-                          Maximum Age:
-                          <span class="text-danger mr-20">{{sub.MAX_AGE}}</span>
-                          Count:
-                          <span class="text-danger mr-20">{{sub.SUBJECT_COUNT}}</span>
-                        </h6>
-                        <h6 class="txt-dark txt-medium mb-5">
-                          Description:
-                          <span class="text-danger mr-20">{{sub.DESCRIPTION}}</span>
-                        </h6>
-
-                      </div>
-
-                    </div>
                     </div>
                   </div>
                 </div>
 
               </div>
-              <div class="col-12 card-list-no-data" *ngIf="noIrbSubjects">
-                <div class="col-12">No subject details found</div>
-              </div>
+            </div>
+            <div class="col-12 card-list-no-data" *ngIf="noIrbSubjects">
+              <div class="col-12">No subject details found</div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
 
-      <!-- Engaged Institutions start here -->
+    <!-- Engaged Institutions start here -->
 
-      <div class="col-12 mb-10">
-        <div class="card mt-5">
+    <div class="col-12">
+      <div class="row cards-in">
+        <div class="col-12 mb-10">
+          <div class="card mt-5">
 
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-              aria-labelledby="pills-home-tab">
-              <h4 class="card-hedding dotted-bottom">Engaged Institutions
-                  <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <h4 class="card-hedding dotted-bottom">Engaged Institutions
+                  <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary"
+                      aria-hidden="true"></i>
                     <span class="tooltiptext-right">{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}</span>
                   </a>
 
                 </h4>
 
-              <div class="col-12 ovr-flw" *ngIf="noIrbCollaborators==false">
-                <div class="table ">
-                  <div class="dashboard-table">
-                    <div class="" [ngClass]="{'row-line':i!=0}"
-                      *ngFor="let irbCollab of irbCollaborators;let i= index">
-                      <div class="row dotted-bottom">
-                        <div class="col-md-1 col-sm-6 co-12">
-                          <div class="vertical-middle">
-                            <p class="pi-ico img-fluid pd20-lite pointer fa fa-user-o"></p>
-                          </div>
-                        </div>
-                        <div class="col-md-9 col-sm-6 co-12">
-                          <div class="vertical-middle">
-                            <h5 class="txt-large">
-                              {{irbCollab.ORGANIZATION_NAME}}
-                              <span
-                                class="text-danger mr-20">{{irbCollab.ROLODEX_NAME}}</span>
-                            </h5>
+                <div class="col-sm-12 col-md-12 col-12 main-list ovr-flw" *ngIf="noIrbCollaborators==false">
+                  <div class="row px-">
+                    <div class="table">
+                      <div class="dashboard-table">
+                        <div class="" [ngClass]="{'row-line':i!=0}"
+                          *ngFor="let irbCollab of irbCollaborators;let i= index">
+                          <div class="row dotted-bottom pd-btm">
+                            <div class="col-md-1 col-sm-6 co1-12">
+                              <span class="pi-ico img-fluid pd20-lite pointer fa fa-user-o ml3 ml-3"></span>
+                            </div>
+                            <div class="col-md-8 col-sm-6 col-12 list-des">
 
-                            <p class="txt-dark txt-medium mb-5">
-                              Email:
-                              <span
-                                class="text-danger">{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
-                              | Office:
-                              <span
-                                class="text-danger mr-20">{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
+                              <h5 class="txt-large">
+                                {{irbCollab.ORGANIZATION_NAME}}
+                                <span class="text-danger mr-20">{{irbCollab.ROLODEX_NAME}}</span>
+                              </h5>
 
-                              Expiration date:
-                              <span class="text-danger mr-20">{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE
-                                              | date: 'MM/dd/yyyy')}}</span>
+                              <h6 class="txt-dark txt-medium mb-5">
+                                Email:
+                                <span class="text-danger">{{irbCollab.ROLODEX_EMAIL_ADDRESS}}</span>
+                                | Office:
+                                <span class="text-danger mr-20">{{irbCollab.ROLODEX_PHONE_NUMBER}}</span>
 
-                              Approval Date:
-                              <span class="text-danger mr-20">{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date:
-                                                'MM/dd/yyyy')}}</span>
-                            </p>
-                            <p class="txt-dark txt-medium mb-5">
-                              Human Sub Assurance number:
-                              <span
-                                class="text-danger mr-20">{{irbCollab.HUMAN_SUB_ASSURANCE}}</span>
+                                Expiration date:
+                                <span class="text-danger mr-20">{{(irbCollab.EXPIRATION_DATE === ' ' || irbCollab.EXPIRATION_DATE === null ) ? ' ':(irbCollab.EXPIRATION_DATE
+                                            | date: 'MM/dd/yyyy')}}</span>
 
-                              Point of Contact:
-                              <span
-                                class="text-danger mr-20">{{irbCollab.POINT_OF_CONTACT}}</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div class="col-md-2 col-sm-12 col-12 list-des button-responsive vertical-middle">
+                                Approval Date:
+                                <span class="text-danger mr-20">{{(irbCollab.APPROVAL_DATE === ' ' || irbCollab.APPROVAL_DATE === null ) ? ' ':(irbCollab.APPROVAL_DATE | date:
+                                              'MM/dd/yyyy')}}</span>
+                              </h6>
+                              <h6 class="txt-dark txt-medium mb-5">
+                                Human Sub Assurance number:
+                                <span class="text-danger mr-20">{{irbCollab.HUMAN_SUB_ASSURANCE}}</span>
 
-                          <div class="text-right vertical-middle">
-                            <p>
-                              <a  class="btn btn-blue btn-sm text-right vertical-middle"
-                                data-toggle="modal" data-target="#personAttachmentModal"
-                                (click)="openCollaboratordetails(irbCollab)">
-                                <i class="fa fa-eye" aria-hidden="true"></i> More
-                                Details</a>
-                            </p>
+                                Point of Contact:
+                                <span class="text-danger mr-20">{{irbCollab.POINT_OF_CONTACT}}</span>
+                              </h6>
 
-                            <!-- <a>
-                                        <button type="button" class="btn btn-outline-secondary button-view"
-                                          data-toggle="modal" data-target="#personAttachmentModal"
-                                          (click)="openCollaboratordetails(irbCollab)">
-                                          <i class="fa fa-eye"></i>More Details
-                                        </button>
-                                      </a> -->
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12 list-des button-responsive vertical-middle">
+
+                              <div class="text-right mt-3 mr-3">
+                                <h6>
+                                  <a class="btn btn-blue btn-sm text-right vertical-middle" data-toggle="modal"
+                                    data-target="#personAttachmentModal" (click)="openCollaboratordetails(irbCollab)">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    More Details
+                                  </a>
+                                </h6>
+
+                                <!-- <a>
+                                      <button type="button" class="btn btn-outline-secondary button-view"
+                                        data-toggle="modal" data-target="#personAttachmentModal"
+                                        (click)="openCollaboratordetails(irbCollab)">
+                                        <i class="fa fa-eye"></i>More Details
+                                      </button>
+                                    </a> -->
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div class="col-12 card-list-no-data" *ngIf="noIrbCollaborators">
+                  <div class="col-12">No Engaged Institutions</div>
+                </div>
               </div>
-              <div class="col-12 card-list-no-data" *ngIf="noIrbCollaborators">
-                <div class="col-12">No Engaged Institutions</div>
-              </div>
-
             </div>
           </div>
         </div>
-
       </div>
 
-      <!-- Engaged Institutions ends here -->
+    </div>
+
+    <!-- Engaged Institutions ends here -->
 
 
-    </section>
-  </div>
+  </section>
+</div>
 
-  <!-- modal -->
-  <div class="modal fade bd-example-modal-lg" id="personModal" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header popup-header dotted-bottom">
-          <h5 class="modal-title thick txt-large" id="exampleModalLongTitle">Person Details
-          </h5>
-          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<!-- modal -->
+<div class="modal fade bd-example-modal-lg" id="personModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header dotted-bottom">
+        <h5 class="modal-title thick txt-large" id="exampleModalLongTitle">Person Details
+        </h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-popup txt-medium dotted-bottom">
+        <div class="modal-header-label">
+          <h4 class="txt-medium thick">Basic</h4>
         </div>
-        <div class="modal-body modal-popup txt-medium dotted-bottom">
-          <div class="modal-header-label">
-            <h4 class="txt-medium thick">Basic</h4>
-          </div>
-          <!-- section1 -->
-          <div class="modal-padding">
-            <div class="row txt-medium">
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Name: </label>
-                <span class="text-danger mr-20">{{irbPersonDetailedList?.FULL_NAME}}</span>
-              </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for="">Email: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.EMAIL_ADDRESS}}
-                </span>
-              </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for="">Title: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.PRIMARY_TITLE}}
-                  </span>
-              </div>
+        <!-- section1 -->
+        <div class="modal-padding">
+          <div class="row txt-medium">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Name: </label>
+              <span class="text-danger mr-20">{{irbPersonDetailedList?.FULL_NAME}}</span>
             </div>
-            <div class="row">
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Unit: </label>
-                <span class="text-danger mr-20">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for="">Email: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.EMAIL_ADDRESS}}
+              </span>
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for="">Title: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.PRIMARY_TITLE}}
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Unit: </label>
+              <span class="text-danger mr-20">
                 {{irbPersonDetailedList?.UNIT_NAME}}
-                </span>
-              </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Address:
-                </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.ADDRESS_LINE_1}}
-                  </span>
-              </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> City: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.CITY}}
-                  </span>
-              </div>
-
+              </span>
             </div>
-            <div class="row">
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Country: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.COUNTRY_CODE}}
-                  </span>
-              </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Office Location: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.OFFICE_LOCATION}}
-                </span>
-              </div>
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Office Phone Number: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.OFFICE_PHONE }}
-                  </span>
-              </div>
-
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Address:
+              </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.ADDRESS_LINE_1}}
+              </span>
             </div>
-            <div class="row">
-              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
-                <label class="modal-label" for=""> Postal Code: </label>
-                <span class="text-danger mr-20">
-                  {{irbPersonDetailedList?.POSTAL_CODE}}
-                  </span>
-              </div>
-
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> City: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.CITY}}
+              </span>
             </div>
+
           </div>
-          <!-- section2 -->
-          <div>
-            <h4 class="txt-medium thick">Training-
-              <span *ngIf="trainingCompleted=='COMPLETED'"> Completed</span>
-              <span *ngIf="trainingCompleted=='INCOMPLETE'">Not Completed</span>
-            </h4>
-          </div>
-          <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
-            <div class="popup-div">
-              <table class="table table-striped">
-                <thead class="popup-header">
-                  <tr>
-                    <th class="table-align-head" scope="col">Description</th>
-                    <!-- <th scope="col">Score</th> -->
-                    <th scope="col">Expiration Date</th>
-                    <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
-                  </tr>
-                </thead>
-                <tbody *ngFor="let info of irbPersonDetailedTraining; let l=index">
-                  <tr>
-                    <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}
-                    </td>
-                    <!-- <td>{{info.SCORE}}</td> -->
-                    <td>{{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}
-                    </td>
-                    <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
-                    <td class="action-btn-list">
-                      <button *ngIf="info?.attachment?.length > 0" title="Attachments"
-                        (click)="showTrainingAttachments(l)" type="button"
-                        class="btn icon-chatbox">
-                        <i class="fa fa-paperclip" aria-hidden="true"></i>
-                      </button>
-                      <button *ngIf="info?.comments?.length > 0" title="Comments"
-                        (click)="showTrainingComments(l)" type="button"
-                        class="btn icon-chatbox">
-                        <i class="fa fa-comments" aria-hidden="true"></i>
-                      </button>
-
-                    </td>
-                  </tr>
-
-
-
-                  <tr>
-                    <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
-                      <div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
-                        <table id="trainingTable" class="table table-striped">
-                          <tbody>
-                            <tr style="background-color: #f5f3f3!important">
-                              <td width="15%" class="label-font">Attachments</td>
-                              <td>
-                                <div class="filechipCollaboratorAttachment pdf"
-                                  *ngIf="trainingAttachments?.length > 0">
-                                  <span title="download"
-                                    *ngFor="let attachment of trainingAttachments"
-                                    (click)="downloadAttachment(attachment)">{{attachment?.FILE_NAME}}<i
-                                      class="fa fa-download"></i></span>
-                                </div>
-                              </td>
-                            </tr>
-
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="12" class="hiddenRow padding0" *ngIf="commentIconValue==l">
-                      <div style="background-color: #f5f3f3!important" id=comment+{{l}}>
-                        <table id="trainingTable" class="table table-striped">
-                          <tbody>
-                            <tr style="background-color: #f5f3f3!important">
-                              <td width="15%" class="label-font">Comments</td>
-                              <td>
-                                <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
-                                    </div> -->
-                                <ul *ngFor="let comment of trainingComments">
-                                  <li title="{{comment?.COMMENT_DESCRIPTION}}">
-                                    {{comment?.COMMENT_DESCRIPTION| slice:0:50}} <span
-                                      *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50">
-                                      ...</span></li>
-                                </ul>
-                              </td>
-                            </tr>
-
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="row">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Country: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.COUNTRY_CODE}}
+              </span>
             </div>
-          </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Office Location: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.OFFICE_LOCATION}}
+              </span>
+            </div>
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Office Phone Number: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.OFFICE_PHONE }}
+              </span>
+            </div>
 
+          </div>
+          <div class="row">
+            <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+              <label class="modal-label" for=""> Postal Code: </label>
+              <span class="text-danger mr-20">
+                {{irbPersonDetailedList?.POSTAL_CODE}}
+              </span>
+            </div>
+
+          </div>
         </div>
-        <div class="modal-footer"></div>
+        <!-- section2 -->
+        <div>
+          <h4 class="txt-medium thick">Training-
+            <span *ngIf="trainingCompleted=='COMPLETED'"> Completed</span>
+            <span *ngIf="trainingCompleted=='INCOMPLETE'">Not Completed</span>
+          </h4>
+        </div>
+        <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
+          <div class="popup-div">
+            <table class="table table-striped">
+              <thead class="popup-header">
+                <tr>
+                  <th class="table-align-head" scope="col">Description</th>
+                  <!-- <th scope="col">Score</th> -->
+                  <th scope="col">Expiration Date</th>
+                  <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
+                </tr>
+              </thead>
+              <tbody *ngFor="let info of irbPersonDetailedTraining; let l=index">
+                <tr>
+                  <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}
+                  </td>
+                  <!-- <td>{{info.SCORE}}</td> -->
+                  <td>
+                    {{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}
+                  </td>
+                  <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
+                  <td class="action-btn-list">
+                    <button *ngIf="info?.attachment?.length > 0" title="Attachments"
+                      (click)="showTrainingAttachments(l)" type="button" class="btn icon-chatbox">
+                      <i class="fa fa-paperclip" aria-hidden="true"></i>
+                    </button>
+                    <button *ngIf="info?.comments?.length > 0" title="Comments" (click)="showTrainingComments(l)"
+                      type="button" class="btn icon-chatbox">
+                      <i class="fa fa-comments" aria-hidden="true"></i>
+                    </button>
+
+                  </td>
+                </tr>
+
+
+
+                <tr>
+                  <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
+                    <div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
+                      <table id="trainingTable" class="table table-striped">
+                        <tbody>
+                          <tr style="background-color: #f5f3f3!important">
+                            <td width="15%" class="label-font">Attachments</td>
+                            <td>
+                              <div class="filechipCollaboratorAttachment pdf" *ngIf="trainingAttachments?.length > 0">
+                                <span title="download" *ngFor="let attachment of trainingAttachments"
+                                  (click)="downloadAttachment(attachment)">{{attachment?.FILE_NAME}}<i
+                                    class="fa fa-download"></i></span>
+                              </div>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="12" class="hiddenRow padding0" *ngIf="commentIconValue==l">
+                    <div style="background-color: #f5f3f3!important" id=comment+{{l}}>
+                      <table id="trainingTable" class="table table-striped">
+                        <tbody>
+                          <tr style="background-color: #f5f3f3!important">
+                            <td width="15%" class="label-font">Comments</td>
+                            <td>
+                              <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
+                                  </div> -->
+                              <ul *ngFor="let comment of trainingComments">
+                                <li title="{{comment?.COMMENT_DESCRIPTION}}">
+                                  {{comment?.COMMENT_DESCRIPTION| slice:0:50}} <span
+                                    *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50">
+                                    ...</span></li>
+                              </ul>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
+      <div class="modal-footer"></div>
     </div>
   </div>
-  <!-- modal-end -->
+</div>
+<!-- modal-end -->
 
-  <div class="container-fluid">
-    <section class="row section-margin">
-      <!--collapse-->
+<div class="container-fluid">
+  <section class="row section-margin">
+    <!--collapse-->
 
-      <!-- ------------------ -->
+    <!-- ------------------ -->
 
-      <div class="col-12">
+    <div class="col-12">
+      <div class="row cards-in">
+        <div class="col-12 mb-10">
+          <div class="card mt-5">
+
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <h4 class="card-hedding dotted-bottom">Special Review
+                  <a class="tooltip float-right"> <i class="fa fa-exclamation-circle text-secondary"
+                      aria-hidden="true"></i>
+                    <span class="tooltiptext-right">{{PROTOCOL_SPECIAL_REVIEW_INFO}}</span>
+                  </a>
+
+
+                </h4>
+
+                <div class="card-list-med ovr-flw" *ngIf="noIrbSpecialReviews">
+                  <div class="col-12 card-list-no-data" id="headingTwo">
+                    <div class="col-12">
+                      No special reviews
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risk Level -->
+
+    <!-- start here-->
+    <!-- start --->
+    <div class="container-fluid">
+      <div class="row">
+        <!--collapse-->
+
+
+        <div class="col-12">
           <div class="row cards-in">
             <div class="col-12 mb-10">
               <div class="card mt-5">
@@ -705,266 +724,229 @@
                 <div class="tab-content" id="pills-tabContent">
                   <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                     aria-labelledby="pills-home-tab">
-                    <h4 class="card-hedding dotted-bottom">Special Review
-                        <a class="tooltip float-right" > <i class="fa fa-exclamation-circle text-secondary" aria-hidden="true"></i>
-                          <span class="tooltiptext-right">{{PROTOCOL_SPECIAL_REVIEW_INFO}}</span>
-                        </a>
-
-
+                    <h4 class="card-hedding dotted-bottom">Risk Level
+                      <span style="float: right;">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                      </span>
                     </h4>
-
-                    <div class="card-list-med ovr-flw" *ngIf="noIrbSpecialReviews">
-                        <div class="col-12 card-list-no-data" id="headingTwo">
-                          <div class="col-12">
-                            No special reviews
-                          </div>
-                        </div>
-
-                    </div>
                   </div>
                 </div>
+
+                <div class="col-12 card-list-med">
+                  <h6 class="borderBoxHeading mr-10 ml-10 pl-0">
+                    <span>Risk Level</span>
+
+                  </h6>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row padding-row">
+
+                        <div class="col-md-7 col-sm-6 co-12 card-desc">
+                          <p class="txt-medium txt-dark">
+                            <span>Type:</span>
+                            <span class="text-danger">{{irbHeaderDetails?.RISK_LEVEL}}</span>
+                          </p>
+
+
+                        </div>
+                        <div class="col-md-5 col-sm-6 co-12 card-desc">
+                          <p class="txt-medium txt-dark">
+                            <span>Date Assigned:</span>
+                            <span class="text-danger">{{irbHeaderDetails?.RISK_LVL_DATE_ASSIGNED}}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="row padding-row card-desc">
+                        <div class="col-md-12 col-sm-6 co-12">
+
+                          <p class="txt-medium txt-dark">
+                            <span>Description:</span>
+                            <span class="text-danger">{{irbHeaderDetails?.RISK_LEVEL_COMMENTS}}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="col-12 card-list-med">
+                  <h6 class="borderBoxHeading mr-10 ml-10 pl-0">
+                    <span>FDA Risk Level</span>
+
+                  </h6>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row padding-row">
+
+                        <div class="col-md-7 col-sm-6 co-12 card-desc">
+                          <p class="txt-medium txt-dark">
+                            <span>Type:</span>
+                            <span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LEVEL}}</span>
+                          </p>
+
+
+                        </div>
+                        <div class="col-md-5 col-sm-6 co-12 card-desc">
+                          <p class="txt-medium txt-dark">
+                            <span>Date Assigned:</span>
+                            <span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LVL_DATE_ASSIGNED}}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="row padding-row">
+                        <div class="col-md-12 col-sm-6 co-12 card-desc">
+
+                          <p class="txt-medium txt-dark">
+                            <span> Description:</span>
+                            <span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LVL_COMMENTS}}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
-      </div>
-
-  <!-- Risk Level -->
-
-  <!-- start here-->
-  <!-- start --->
-  <div class="container-fluid">
-      <div class="row">
-        <!--collapse-->
-
-
-        <div class="col-12">
-        <div class="row cards-in">
-          <div class="col-12 mb-10">
-          <div class="card mt-5">
-
-            <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-              <h4 class="card-hedding dotted-bottom">Risk Level
-              <span style="float: right;">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
-              </span>
-              </h4>
-            </div>
-            </div>
-
-            <div class="col-12 card-list-med">
-              <h6 class="borderBoxHeading mr-10 ml-10 pl-0">
-                  <span >Risk Level</span>
-
-              </h6>
-
-              <div class="row">
-        <div class="col-12">
-            <div class="row padding-row">
-
-              <div class="col-md-7 col-sm-6 co-12 card-desc">
-                <p class="txt-medium txt-dark">
-                    <span>Type:</span>
-                  <span class="text-danger">{{irbHeaderDetails?.RISK_LEVEL}}</span>
-                </p>
-
-
-              </div>
-              <div class="col-md-5 col-sm-6 co-12 card-desc">
-                <p class="txt-medium txt-dark">
-                    <span>Date Assigned:</span>
-                  <span class="text-danger">{{irbHeaderDetails?.RISK_LVL_DATE_ASSIGNED}}</span>
-                </p>
-              </div>
-            </div>
-            <div class="row padding-row card-desc">
-              <div class="col-md-12 col-sm-6 co-12">
-
-                <p class="txt-medium txt-dark">
-                    <span>Description:</span>
-                  <span class="text-danger">{{irbHeaderDetails?.RISK_LEVEL_COMMENTS}}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          </div>
-          </div>
-
-          <div class="col-12 card-list-med">
-              <h6 class="borderBoxHeading mr-10 ml-10 pl-0">
-                  <span>FDA Risk Level</span>
-
-              </h6>
-
-              <div class="row">
-        <div class="col-12">
-            <div class="row padding-row">
-
-              <div class="col-md-7 col-sm-6 co-12 card-desc">
-                <p class="txt-medium txt-dark">
-                    <span>Type:</span>
-                  <span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LEVEL}}</span>
-                </p>
-
-
-              </div>
-              <div class="col-md-5 col-sm-6 co-12 card-desc">
-                <p class="txt-medium txt-dark">
-                    <span>Date Assigned:</span>
-                  <span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LVL_DATE_ASSIGNED}}</span>
-                </p>
-              </div>
-            </div>
-            <div class="row padding-row">
-              <div class="col-md-12 col-sm-6 co-12 card-desc">
-
-                <p class="txt-medium txt-dark">
-                    <span> Description:</span>
-                  <span class="text-danger">{{irbHeaderDetails?.FDA_RISK_LVL_COMMENTS}}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          </div>
-          </div>
-
-          </div>
-          </div>
-        </div>
         </div>
 
       </div>
     </div>
     <!--  ends  -->
-  <!-- end here  -->
+    <!-- end here  -->
 
 
 
 
-      <!-- ----------------  -->
+    <!-- ----------------  -->
 
-    </section>
-  </div>
-  <!--Colloborator person modal-->
-  <div class="modal fade bd-example-modal-lg" id="personAttachmentModal" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header popup-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">More Details
-          </h5>
-          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body modal-popup">
-          <div class="modal-header-label">
-            <h4 class="popup-sub-head">Engaged Institution</h4>
-          </div>
-          <!-- section1 -->
-          <div class="modal-padding">
-            <div class="row">
-              <div class="col-md-6 col lg- 6 col-sm-6 col-6">
-                <label class="modal-label" for=""> Organization : </label>
-                <span class="text-danger">{{protocolCollaboratorSelected?.ORGANIZATION_NAME}}</span>
-              </div>
-              <div class="col-md-6 col lg- 6 col-sm-6 col-6">
-                <label class="modal-label" for="">Point of contact : </label>
-                <span class="text-danger">{{protocolCollaboratorSelected?.POINT_OF_CONTACT}}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col lg- 6 col-sm-6 col-6">
-                <label class="modal-label" for=""> Approval Date : </label>
-                <span class="text-danger">{{ (protocolCollaboratorSelected.APPROVAL_DATE === ' ' || protocolCollaboratorSelected.APPROVAL_DATE === null ) ? ' ' : protocolCollaboratorSelected?.APPROVAL_DATE| date:"MM/dd/yyyy"}}</span>
-              </div>
-              <div class="col-md-6 col lg- 6 col-sm-6 col-6">
-                <label class="modal-label" for=""> Expiration Date :
-                </label>
-                <span class="text-danger">{{(protocolCollaboratorSelected.EXPIRATION_DATE === ' ' || protocolCollaboratorSelected.EXPIRATION_DATE === null ) ? ' ' : protocolCollaboratorSelected?.EXPIRATION_DATE| date:"MM/dd/yyyy"}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-header-label">
-            <h4 class="popup-sub-head">Person</h4>
-          </div>
-
-          <div class="modal-padding">
-            <div class="popup-div">
-
-              <table class="table table-striped">
-                <thead class="popup-sub-header">
-                  <tr>
-                    <th scope="col" class="txt-medium txt-dark">Name</th>
-                    <th scope="col" class="txt-medium txt-dark">Role</th>
-                    <th scope="col" class="txt-medium txt-dark">Affiliation</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <ng-container *ngIf="irbViewProtocolCollaboratorPersons.length != 0">
-                    <tr *ngFor="let person of irbViewProtocolCollaboratorPersons">
-                      <td>{{person?.PERSON_NAME}}</td>
-                      <td>{{person?.ROLE__DESCRIPTION}}</td>
-                      <td>{{person?.AFFILIATION_TYPE_DESCRIPTION}}</td>
-                    </tr>
-                  </ng-container>
-                  <ng-container *ngIf="irbViewProtocolCollaboratorPersons.length == 0">
-                    <tr>
-                      <td class="text-center" colspan="3">No persons to show</td>
-                    </tr>
-                  </ng-container>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!--attachment section-->
-          <div class="modal-header-label">
-            <h4 class="popup-sub-head">Attachments</h4>
-          </div>
-
-          <div class="modal-padding">
-            <div class="popup-div">
-              <table class="table table-striped">
-                <thead class="popup-sub-header">
-                  <tr>
-                    <th scope="col" style="width: 20%"  class="txt-medium txt-dark">Type</th>
-                    <th scope="col" style="width: 20%"  class="txt-medium txt-dark">Description</th>
-                    <th scope="col" style="width: 30%"  class="txt-medium txt-dark">File</th>
-                    <th scope="col"  class="txt-medium txt-dark">Updated By</th>
-                    <th scope="col"  class="txt-medium txt-dark">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ng-container *ngIf="irbViewProtocolCollaboratorAttachments.length > 0">
-                    <tr *ngFor="let attachment of irbViewProtocolCollaboratorAttachments">
-                      <td style="width: 20%">{{attachment?.DESCRIPTION}}</td>
-                      <td style="width: 20%">{{attachment?.DESCRIPTION}}</td>
-                      <td style="width: 30%" class="padding-table-content">{{attachment?.FILE_NAME}}
-                      </td>
-                      <td>{{attachment?.UPDATE_USER}}</td>
-                      <td class="action-btn-list">
-                        <button title="View" type="button" class="btn btn-primary view-btn-1"
-                          (click)="downloadAttachment(attachment)">
-                          <i class="fa fa-download" aria-hidden="true"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </ng-container>
-                  <ng-container *ngIf="irbViewProtocolCollaboratorAttachments.length == 0">
-                    <tr>
-                      <td class="text-center" colspan="3">No Attachments to show</td>
-                    </tr>
-                  </ng-container>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer"></div>
+  </section>
+</div>
+<!--Colloborator person modal-->
+<div class="modal fade bd-example-modal-lg" id="personAttachmentModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">More Details
+        </h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+      <div class="modal-body modal-popup">
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head">Engaged Institution</h4>
+        </div>
+        <!-- section1 -->
+        <div class="modal-padding">
+          <div class="row">
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for=""> Organization : </label>
+              <span class="text-danger">{{protocolCollaboratorSelected?.ORGANIZATION_NAME}}</span>
+            </div>
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for="">Point of contact : </label>
+              <span class="text-danger">{{protocolCollaboratorSelected?.POINT_OF_CONTACT}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for=""> Approval Date : </label>
+              <span
+                class="text-danger">{{ (protocolCollaboratorSelected.APPROVAL_DATE === ' ' || protocolCollaboratorSelected.APPROVAL_DATE === null ) ? ' ' : protocolCollaboratorSelected?.APPROVAL_DATE| date:"MM/dd/yyyy"}}</span>
+            </div>
+            <div class="col-md-6 col lg- 6 col-sm-6 col-6">
+              <label class="modal-label" for=""> Expiration Date :
+              </label>
+              <span
+                class="text-danger">{{(protocolCollaboratorSelected.EXPIRATION_DATE === ' ' || protocolCollaboratorSelected.EXPIRATION_DATE === null ) ? ' ' : protocolCollaboratorSelected?.EXPIRATION_DATE| date:"MM/dd/yyyy"}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head">Person</h4>
+        </div>
+
+        <div class="modal-padding">
+          <div class="popup-div">
+
+            <table class="table table-striped">
+              <thead class="popup-sub-header">
+                <tr>
+                  <th scope="col" class="txt-medium txt-dark">Name</th>
+                  <th scope="col" class="txt-medium txt-dark">Role</th>
+                  <th scope="col" class="txt-medium txt-dark">Affiliation</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <ng-container *ngIf="irbViewProtocolCollaboratorPersons.length != 0">
+                  <tr *ngFor="let person of irbViewProtocolCollaboratorPersons">
+                    <td>{{person?.PERSON_NAME}}</td>
+                    <td>{{person?.ROLE__DESCRIPTION}}</td>
+                    <td>{{person?.AFFILIATION_TYPE_DESCRIPTION}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="irbViewProtocolCollaboratorPersons.length == 0">
+                  <tr>
+                    <td class="text-center" colspan="3">No persons to show</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!--attachment section-->
+        <div class="modal-header-label">
+          <h4 class="popup-sub-head">Attachments</h4>
+        </div>
+
+        <div class="modal-padding">
+          <div class="popup-div">
+            <table class="table table-striped">
+              <thead class="popup-sub-header">
+                <tr>
+                  <th scope="col" style="width: 20%" class="txt-medium txt-dark">Type</th>
+                  <th scope="col" style="width: 20%" class="txt-medium txt-dark">Description</th>
+                  <th scope="col" style="width: 30%" class="txt-medium txt-dark">File</th>
+                  <th scope="col" class="txt-medium txt-dark">Updated By</th>
+                  <th scope="col" class="txt-medium txt-dark">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="irbViewProtocolCollaboratorAttachments.length > 0">
+                  <tr *ngFor="let attachment of irbViewProtocolCollaboratorAttachments">
+                    <td style="width: 20%">{{attachment?.DESCRIPTION}}</td>
+                    <td style="width: 20%">{{attachment?.DESCRIPTION}}</td>
+                    <td style="width: 30%" class="padding-table-content">{{attachment?.FILE_NAME}}
+                    </td>
+                    <td>{{attachment?.UPDATE_USER}}</td>
+                    <td class="action-btn-list">
+                      <button title="View" type="button" class="btn btn-primary view-btn-1"
+                        (click)="downloadAttachment(attachment)">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="irbViewProtocolCollaboratorAttachments.length == 0">
+                  <tr>
+                    <td class="text-center" colspan="3">No Attachments to show</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"></div>
     </div>
   </div>
+</div>

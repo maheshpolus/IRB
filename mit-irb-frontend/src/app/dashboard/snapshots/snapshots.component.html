@@ -85,18 +85,20 @@
 	<!-- Snapshot of ADMIN -->
 	<section class="row snapshot-responsive" *ngIf="roleType == 'ADMIN'">
 		<div class="headerPush"></div>
-		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" (click)="expandedView('ADMIN_PENDING')">
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" (click)="openNewSubmission('NEW_SUBMISSION', false)">
 			<div class="card pull-up">
 				<div class="card-content">
 					<div class="card-body">
 						<div class="media d-flex">
 							<div class="media-body text-left">
-								<h2 class="info txt-blue">{{snapshots?.revisionReqCount}}
-									<span class="txt-ash txt-small">Pending responses</span></h2>
-								<h6 class="txt-large">Protocols/Exempt Studies</h6>
+								<h2 class="info txt-blue mb-0">{{snapshots?.newSubmissionCount}}
+									<span class="txt-ash txt-small">New Submissions</span></h2>
+									<h2 class="info txt-blue mb-0"(click)="openNewSubmission('NEW_SUBMISSION', true)">{{snapshots?.unassignedAdminCount}}
+											<span class="txt-ash txt-small">Unassigned</span></h2>
+							<!-- <h6 class="txt-large">Protocols/Exempt Studies</h6> -->
 							</div>
 							<div class="card-ico txt-blue">
-								<i class="fa fa-bar-chart" aria-hidden="true"></i>
+								<i class="fa fa-file-text-o" aria-hidden="true"></i>
 							</div>
 						</div>
 					</div>
@@ -153,19 +155,19 @@
 								</a>
 							</li>
 							<!-- <li *ngIf="result.canCreateProtocol"> -->
-							<li>
+							<!-- <li>
 								<a href="javascript:void(0)">
 									<i class="fa fa-check-square-o pr-10 " aria-hidden="true"></i>COUHES
 								</a>
-							</li>
-							<li>
+							</li> -->
+							<!-- <li>
 								<a href="javascript:void(0)" (click)="goToCommittee()">
 									<i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create Committee
 								</a>
-							</li>
+							</li> -->
 							<li>
 								<a href="javascript:void(0)" (click)="goToCreateProtocol()">
-									<i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create Protocol
+									<i class="fa fa-plus pr-10 " aria-hidden="true"></i>Create New Protocol
 								</a>
 							</li>
 							<!-- <li>

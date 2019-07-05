@@ -11,7 +11,19 @@ export class ViewQuestionnaireService {
   getQuestionnaire(data) {
     return this.http.post('/mit-irb/getQuestionnaire', data );
   }
-  saveQuestionnaire(data) {
-     return this.http.post('mit-irb/saveQuestionnaireModule', data);
+  saveQuestionnaire(data, filesArray) {
+    const formData = new FormData();
+    if (filesArray.length > 0) {
+      filesArray.forEach(file => {
+        formData.append(file.questionId + '', file.attachment);
+      });
+    }
+    formData.append('formDataJson', JSON.stringify(data));
+     return this.http.post('mit-irb/saveQuestionnaireModule', formData);
+  }
+
+  downloadAttachment(attachmentId) {
+    return this.http.post( 'mit-irb/downloadQuesAttachment',
+    {'questionnaire_ans_attachment_id': attachmentId }, {responseType: 'blob'});
   }
 }

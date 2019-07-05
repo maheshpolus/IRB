@@ -50,7 +50,7 @@ public class DashboardController {
 		DashboardProfile profile = this.dashboardService.getDashboardProtocolList(vo.getPersonId(), vo.getPersonRoleType(), vo.getDashboardType(),vo.getPiName(), vo.getProtocolNumber(),
 				vo.getProtocolTypeCode(), vo.getTitle(),vo.getProtocolStatusCode(),vo.getApprovalDate(),
 				vo.getExpirationDate(),vo.getIsAdvancedSearch(),
-				vo.getFundingSource(),vo.getProtocolSubmissionStatus());
+				vo.getFundingSource(),vo.getProtocolSubmissionStatus(),vo.getAdminPersonId());
 		return profile;
 	}
 	

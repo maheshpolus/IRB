@@ -82,7 +82,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
         this._irbCreateService.getAttachmentTypes(null).subscribe(data => {
             this.result = data;
             this.studyAttachmentTypes = this.result.irbAttachementTypes;
-            this.loadIrbAttachmentList();
+            this.attachmentTypes = this.result.irbAttachementTypes;
         });
         this.createOrViewPath = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
     if (this.createOrViewPath === 'irb-create') {
@@ -105,6 +105,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             });
 
         }
+        this.loadIrbAttachmentList();
     }
 
     ngOnDestroy() {
@@ -132,7 +133,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
     loadIrbAttachmentList() {
         this.tabSelected = 'STUDY';
         this.column = 'groupDescription';
-        this.attachmentTypes = this.studyAttachmentTypes;
+        this.attachmentTypes = this.studyAttachmentTypes.length > 0 ? this.studyAttachmentTypes : this.attachmentTypes;
         this.attachmentSelectedRow = null;
         this.attachmentEditedRow = null;
         this._spinner.show();

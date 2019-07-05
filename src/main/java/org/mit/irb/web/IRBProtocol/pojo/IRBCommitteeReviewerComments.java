@@ -1,5 +1,7 @@
 package org.mit.irb.web.IRBProtocol.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class IRBCommitteeReviewerComments {
 	private String committeeScheduleMinutesId;
 	private String comments;
@@ -36,5 +38,9 @@ public class IRBCommitteeReviewerComments {
 	}
 	public void setLetterFlag(String letterFlag) {
 		this.letterFlag = letterFlag;
+	}
+	
+	public IRBCommitteeReviewerComments(@JsonProperty("myStringVar")String comments) {
+		this.comments = comments;
 	}
 }

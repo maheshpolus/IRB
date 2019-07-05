@@ -11,6 +11,8 @@ import org.mit.irb.web.IRBProtocol.pojo.FDARiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
+import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswer;
+import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswerAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAffiliationTypes;
@@ -78,6 +80,7 @@ public class IRBProtocolVO {
 	private List<HashMap<String, Object>> committeSchedulList;
 	private ProtocolRenewalDetails protocolRenewalDetails;
 	private List<IRBAttachmentProtocol> previousProtocolAttachmentList;
+	private List<IRBQuestionnaireAnswerAttachment> questionnaireAttachmentList;
 	
 	private ExemptFundingSource exemptFundingSource;
 	private List<HashMap<String, Object>> exemptFundingSourceList;
@@ -470,5 +473,13 @@ public class IRBProtocolVO {
 
 	public void setIrbInternalAttachementTypes(List<IRBAttachementTypes> irbInternalAttachementTypes) {
 		this.irbInternalAttachementTypes = irbInternalAttachementTypes;
+	}
+
+	public List<IRBQuestionnaireAnswerAttachment> getQuestionnaireAttachmentList() {
+		return questionnaireAttachmentList;
+	}
+
+	public void setQuestionnaireAttachmentList(List<IRBQuestionnaireAnswerAttachment> questionnaireAttachmentList) {
+		this.questionnaireAttachmentList = questionnaireAttachmentList;
 	}
 }

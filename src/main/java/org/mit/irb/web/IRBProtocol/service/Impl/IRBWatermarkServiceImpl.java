@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,20 +14,18 @@ import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFHeader;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.mit.irb.web.IRBProtocol.dao.Impl.IRBProtocolDaoImpl;
+import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
+import org.mit.irb.web.IRBProtocol.pojo.IRBWatermark;
 import org.mit.irb.web.IRBProtocol.service.IRBWatermarkService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.ColumnText;
-import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfReader;
@@ -37,32 +34,53 @@ import com.itextpdf.text.pdf.PdfStamper;
 @Transactional
 @Service(value = "watermarkService")
 public class IRBWatermarkServiceImpl implements IRBWatermarkService{
-	Logger logger = Logger.getLogger(IRBProtocolDaoImpl.class.getName());
+	Logger logger = Logger.getLogger(IRBWatermarkServiceImpl.class.getName());
 
 	@Override
-	public byte[] generateTimestampAndUsernameForPdf(byte[] data, Date updatedDate, String updateUser) {
+	public byte[] generateTimestampAndUsernameForPdf(byte[] data, IRBWatermark watermarkDetails, IRBAttachmentProtocol protocolAttachment) {
 		byte[] byteArray = null;
 		try {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 	
 			PdfReader reader = new PdfReader(data);
 			PdfStamper watermark = new PdfStamper(reader, outputStream);
-			Font FONT = new Font(Font.FontFamily.COURIER, 10, Font.BOLD, new GrayColor(0.5f));
-			/*DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-			String startDate = df.format(updatedDate);*/
-			Phrase watermarkText = new Phrase("Uploaded on " + "" + " by " + updateUser, FONT);
+			Font FONT = null;
+			if(watermarkDetails.getFontColour() == "BLACK"){
+				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(1, 1, 1));		
+			}else{
+				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(255, 0, 0));		
+			}	
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			String approvalDate = "";
+			String expirationDate = "";
+			if(protocolAttachment.getProtocolGeneralInfo().getApprovalDate() != null){
+				approvalDate = df.format(protocolAttachment.getProtocolGeneralInfo().getApprovalDate());
+				expirationDate = df.format( protocolAttachment.getProtocolGeneralInfo().getPrtocolExpirationDate());
+			}
+			String text = null;
+			text = watermarkDetails.getWatermarkText().replace("{PROTOCOL_LAST_APPROVAL_DATE}",approvalDate);
+			text = text.replace("{PROTOCOL_NUMBER}", protocolAttachment.getProtocolNumber());
+		    text = text.replace("{PROTOCOL_EXPIRATION_DATE}",expirationDate);
+		    text = text.replace("{PROTOCOL_INITIAL_APPROVAL_DATE}",approvalDate);
+			Phrase watermarkText = new Phrase(text, FONT);   
 			PdfContentByte over;
 			Rectangle pageSize;
 			float x;
 			int totalpages = reader.getNumberOfPages();
 			for (int i = 1; i <= totalpages; i++) {
 				pageSize = reader.getPageSizeWithRotation(i);
-				x = (pageSize.getLeft() + pageSize.getRight());
-				over = watermark.getOverContent(i);
+				x = (pageSize.getLeft() + pageSize.getRight());				
+				over = watermark.getUnderContent(i); 
 				over.saveState();
 				PdfGState state = new PdfGState();
 				state.setFillOpacity(10);
-				over.setGState(state);
-				ColumnText.showTextAligned(over, Element.ALIGN_CENTER, watermarkText, x - 150, 15, 0);
+				over.setGState(state);	
+				float y_axis = 0;
+				if(watermarkDetails.getPosition().equals("HEADER")){
+				    y_axis = pageSize.getTop() - 20;				
+				}else{
+					y_axis = 15;
+				}
+				ColumnText.showTextAligned(over, Element.ALIGN_CENTER, watermarkText, x/2 , y_axis, 0);
 				over.restoreState();
 			}
 			watermark.close();
@@ -110,7 +128,7 @@ public class IRBWatermarkServiceImpl implements IRBWatermarkService{
 	@Override
 	public byte[] generateTimestampAndUsernameForDocuments(byte[] data, Date updatedDate, String updateUser) {
 		byte[] byteArray = null;
-		try {
+		/*try {
 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 			String startDate = df.format(updatedDate);
 			InputStream is = new ByteArrayInputStream(data);
@@ -138,7 +156,7 @@ public class IRBWatermarkServiceImpl implements IRBWatermarkService{
 			}
 		} catch (Exception e) {
 			logger.error("Exception in Document" + e.getMessage());
-		}
+		}*/
 		return byteArray;
 	}
 

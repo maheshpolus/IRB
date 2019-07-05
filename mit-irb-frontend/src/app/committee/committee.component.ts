@@ -297,6 +297,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     stayOnCommittee() {
     }
     backClick() {
-        this.router.navigate(['/irb/dashboard']);
+        this.router.navigate(['/irb/committee-schedule-list'],
+        {queryParams: { isCommitteeList: true}});
     }
 }

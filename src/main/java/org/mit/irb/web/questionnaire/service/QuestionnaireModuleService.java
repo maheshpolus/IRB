@@ -1,6 +1,10 @@
 package org.mit.irb.web.questionnaire.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.mit.irb.web.questionnaire.dto.QuestionnaireModuleDataBus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public interface QuestionnaireModuleService {
 
@@ -26,9 +30,8 @@ public interface QuestionnaireModuleService {
 	 * @return QuestionnaireDataBus : Save questionnaire and return back the data
 	 * @throws Exception
 	 */
-	QuestionnaireModuleDataBus saveQuestionnaireAnswers(QuestionnaireModuleDataBus questionnaireDataBus) throws Exception;
-	
-	
+	QuestionnaireModuleDataBus saveQuestionnaireAnswers(QuestionnaireModuleDataBus questionnaireDataBus,
+			MultipartHttpServletRequest request) throws Exception;
 	
 	
 	/**
@@ -70,7 +73,10 @@ public interface QuestionnaireModuleService {
 	 */
 	QuestionnaireModuleDataBus createQuestionnaire(QuestionnaireModuleDataBus questionnaireDataBus) throws Exception;
 	
-	
-	
-
+	/**
+	 * @param questionnaireDataBus
+	 * @param response
+	 * @return download attachments
+	 */
+	ResponseEntity<byte[]> downloadAttachments(QuestionnaireModuleDataBus questionnaireDataBus, HttpServletResponse response);
 }

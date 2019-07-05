@@ -33,7 +33,7 @@
 												irb.PROTOCOL_STATUS_CODE== '311')}">
 					<span class="txt-small m-0 vertical-middle">{{irb.PROTOCOL_STATUS}}</span>
 				</span>
-				<a class="tooltip vertical-middle" href="#" *ngIf="irb.IS_NEW_RULE=='N'"> <i class="fa fa-exclamation-circle text-secondary"
+				<a class="tooltip vertical-middle"  *ngIf="irb.IS_NEW_RULE=='N'"> <i class="fa fa-exclamation-circle text-secondary ml-5"
 						aria-hidden="true"></i>
 					<span class="tooltiptext-left">Follows Old Rules</span>
 				</a>
@@ -51,12 +51,16 @@
 							<span class="text-danger">{{irb.SUBMISSION_STATUS}}</span>
 						</div>
 						<div class="col-md-4">
-							PI :
-							<span class="text-danger">{{irb.PI_NAME}}</span>
+							Submission Type :
+							<span class="text-danger">{{irb.SUBMISSION_TYPE}}</span>
 						</div>
 					</div>
 				</div>
 				<div class="row txt-dark txt-medium">
+						<div class="col-md-4">
+								PI :
+								<span class="text-danger">{{irb.PI_NAME}}</span>
+							</div>
 					<div class="col-md-4">
 						Approval Date :
 						<span class="text-danger">{{(irb.APPROVAL_DATE === ' ' || irb.APPROVAL_DATE === null ) ? ' ':(irb.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span>
@@ -65,16 +69,17 @@
 						Expiration Date :
 						<span class="text-danger">{{(irb.EXPIRATION_DATE === ' ' || irb.EXPIRATION_DATE === null ) ?  ' ':(irb.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</span>
 					</div>
-					<div class="col-md-4" *ngIf="irb?.ASSIGNEE_PERSON_ID != null">
+					<div class="col-md-4">
 
-							COUHES Admin :
+							IRB Admin :
 							<span class="text-danger">
 								{{irb?.ASSIGNEE_PERSON}}
 							</span>
-
-					</div>
+							</div>
+					
 
 				</div>
+				
 			</div>
 			<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
 

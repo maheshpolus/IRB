@@ -52,7 +52,10 @@ public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> expeditedCannedComments;
 	private List<IRBCommitteeReviewerComments> irbActionsReviewerComments;
 	private String attachmentDescription;
-	
+	private HashMap<String, Object> protocolHeaderDetails;
+	private String correspTemplateTypeCode;
+	private String correspTypeDescription;
+	private Integer actionId;
 	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
 	}
@@ -395,5 +398,37 @@ public class IRBActionsVO {
 
 	public void setPublicFlag(String publicFlag) {
 		this.publicFlag = publicFlag;
+	}
+
+	public HashMap<String, Object> getProtocolHeaderDetails() {
+		return protocolHeaderDetails;
+	}
+
+	public void setProtocolHeaderDetails(HashMap<String, Object> protocolHeaderDetails) {
+		this.protocolHeaderDetails = protocolHeaderDetails;
+	}
+
+	public String getCorrespTemplateTypeCode() {
+		return correspTemplateTypeCode;
+	}
+
+	public void setCorrespTemplateTypeCode(String correspTemplateTypeCode) {
+		this.correspTemplateTypeCode = correspTemplateTypeCode;
+	}
+
+	public String getCorrespTypeDescription() {
+		return correspTypeDescription;
+	}
+
+	public void setCorrespTypeDescription(String correspTypeDescription) {
+		this.correspTypeDescription = correspTypeDescription;
+	}
+
+	public Integer getActionId() {
+		return actionId;
+	}
+
+	public void setActionId(Integer actionId) {
+		this.actionId = actionId;
 	}
 }

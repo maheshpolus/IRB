@@ -8,7 +8,8 @@ import { ViewRoutingModule } from './view-routing.module';
 import { ViewQuestionnaireService } from './view.service';
 import { ViewQuestionnaireComponent } from './view-questionnaire/view-questionnaire.component';
 
-import { DragNdropDirective } from './drag-ndrop.directive';
+import { DragNdropDirective } from './file-drop/drag-ndrop.directive';
+import { FileDropComponent } from './file-drop/file-drop.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import { DragNdropDirective } from './drag-ndrop.directive';
     OwlNativeDateTimeModule,
   ],
   providers: [ViewQuestionnaireService],
-  declarations: [ViewQuestionnaireComponent, DragNdropDirective]
+  declarations: [ViewQuestionnaireComponent, DragNdropDirective, FileDropComponent]
 })
 export class ViewModule { }

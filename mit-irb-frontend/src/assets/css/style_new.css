@@ -1464,7 +1464,7 @@ form-check-label {
 {
     font-size: 14px;
 	color: #424141;/* modified from #585858*/
-    line-height: 30px;
+    line-height: 20px;
     margin: 0;
 }
 .list-des
@@ -1712,7 +1712,6 @@ div
 .hr-line
 {
     border-top: solid 1px #efefef;
-    width: 97%;
     padding-top: 10px;
 }
 
@@ -2420,12 +2419,12 @@ div
 }
 
 .txt-small {
-	font-size: 0.80rem !important;
+	font-size: 0.85rem !important;
 	/* font-weight: lighter; */
 }
 
 .txt-medium {
-	font-size: 0.90rem !important;
+	font-size: 0.95rem !important;
 	/* font-weight: lighter; */
 }
 
@@ -2746,9 +2745,11 @@ div
 }
 
 .card-hedding {
-	color: rgb(48, 47, 47);
-	font-size: 1rem;
-	padding: 1rem;
+    color: rgb(48, 47, 47);
+    font-size: 1rem;
+    padding: 1rem;
+    font-weight: 600 !important;
+    background-color: #f7f8fa !important;
 }
 
 .dotted-bottom {
@@ -2811,7 +2812,7 @@ tr:nth-child(even) {background: #fff}
 }
 
 .note {
-  width: 200px;
+  width: 185px;
   padding: 0.5rem 0.8rem;
   margin-top: 0 !important;
   overflow: hidden;
@@ -2907,14 +2908,15 @@ tr:nth-child(even) {background: #fff}
 }
 
 .pi-ico{
-    background: #f2f3f8;
-    padding: 1.5rem 1.6rem;
-    font-size: 1.2rem;
-    color: #2d2d2d;
-    box-shadow: 0 8px 15px 0 rgba(62,57,107,.2);
-    border-radius: 50%;
-    margin: 0rem 1.2rem;
+  background: #f2f3f8;
+  padding: 1.5rem 1.6rem !important;
+  font-size: 1.2rem;
+  color: #2d2d2d;
+  box-shadow: 0 8px 15px 0 rgba(62,57,107,.2);
+  border-radius: 50%;
+  margin: 0.3rem;
 }
+
 .float-right-lite span {
     right: 0;
 }
@@ -2998,9 +3000,9 @@ tr:nth-child(even) {background: #fff}
     right: 0;
   }
 
-  .mtr-1 {
-      margin-top: 1rem;
-  }
+  .pdb-05 {
+    padding: 0.5rem 0;
+}
 
   .mtr-15 {
       margin-top: 1.5rem;
@@ -3297,7 +3299,7 @@ tr:nth-child(even) {background: #fff}
     top: 32px;
     z-index: 5;
     border-radius: 3px;
-    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.18);
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0);
 }
 .status-links a
 {
@@ -3756,3 +3758,17 @@ transition: color .25s, border-color .25s;
     right: -15px;
     background: none;
 }
+h4, h5, h6 {
+  margin-bottom: 0;
+}
+.pd-0 {
+    padding: 0;
+}
+.searchButton-fix {
+    position: absolute;
+      right: 11px;
+      top: 0px;
+      font-size: 1.2em;
+      color: #9E9E9E;
+      cursor: pointer;
+  }

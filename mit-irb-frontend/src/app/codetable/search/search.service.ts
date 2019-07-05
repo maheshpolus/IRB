@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class SearchService {
 
-    constructor(private _http: HttpClient) { }
+    constructor(private _http: HttpClient ) { }
 
     getTableProperties() {
         return this._http.get('/mit-irb/getCodeTableMetaData');

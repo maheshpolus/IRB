@@ -143,7 +143,7 @@
                       <!-- <span class="mandatory">*</span> -->
                     </span>
                     <div>
-                      <input type="checkbox" class="form-control txt-small align-center mt-10 checkbox-lg"
+                      <input type="checkbox" class="form-control txt-small align-center checkbox-lg m-0"
                         [(ngModel)]="isObtainedConsent">
                     </div>
                   </div>
@@ -156,10 +156,10 @@
                   <textarea [(ngModel)]="personnelInfo.qualification" cols="30" rows="1"
                     class="txt-small form-control mb-10"></textarea>
                 </div>
-                <div class="col-md-1 add-btn-1">
+                <div class="col-md-1">
                   <button title="Add" (click)="addPersonalDetails(personnelInfo,'ADD')" type="button"
-                    class="btn top-butn">
-                    <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                    class="btn btn-outline-success txt-small btn-size mt-25">
+                    Add
                   </button>
                   <!-- <button title="Save" *ngIf="isPersonalInfoEdit" (click)="addPersonalDetails(editPersonnelInfo,'EDIT')" type="button" class="btn btn-success top-butn">
                                             <i class="fa fa-floppy-o" aria-hidden="true"></i>

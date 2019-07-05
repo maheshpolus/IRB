@@ -1,7 +1,4 @@
-<!--     -----------  Tinu start here   ----------          -->
 
-
-<!-- -------- tinu starts from here -------------- -->
 <div class="" *ngIf="isGeneralInfoSaved">
     <div class="row cards-in">
       <div class="col-12 mb-10">
@@ -120,10 +117,10 @@
                            [(ngModel)]="fundingSource.description">
                   </div>
                 </div>
-                <div class="col-md-1 add-btn-1">
-                  <button title="Add" *ngIf="!isFundingInfoEdit" type="button" class="btn top-butn"
+                <div class="col-md-1 ">
+                  <button title="Add" *ngIf="!isFundingInfoEdit" type="button" class="btn btn-outline-success txt-small btn-size mt-25"
                           (click)="addFundingDetails('ADD')">
-                    <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                    Add
                   </button>
                   <button title="Save" *ngIf="isFundingInfoEdit" type="button" class="btn top-butn"
                           (click)="addFundingDetails('EDIT')">

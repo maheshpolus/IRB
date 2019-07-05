@@ -67,9 +67,9 @@
                           <!-- <textarea [class.poping-border]="isProtocolUnitEdit" class="form-control txt-area-fnt" placeholder="Description" [(ngModel)]="protocolUnit.description"></textarea> -->
                         </div>
                       </div>
-                      <div class="col-md-1 add-btn-1">
-                        <button title="Add" *ngIf="!isProtocolUnitEdit" type="button" class="btn top-butn" (click)="addProtocolUnit('ADD')">
-                          <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                      <div class="col-md-1">
+                        <button title="Add" *ngIf="!isProtocolUnitEdit" type="button" class="btn btn-outline-success txt-small btn-size mt-25" (click)="addProtocolUnit('ADD')">
+                         Add
                         </button>
                         <button title="Save" *ngIf="isProtocolUnitEdit" type="button" class="btn top-butn" (click)="addProtocolUnit('EDIT')">
                           <i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>

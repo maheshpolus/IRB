@@ -1717,7 +1717,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			e.printStackTrace();
 			logger.info("DBException in getIRBProtocolDetails:" + e);
 		}
-		return result.get(0);
+		if(result != null && !result.isEmpty()){
+			return result.get(0);
+		}else{ 
+			return null;
+		}
 	}
 
 	@Override

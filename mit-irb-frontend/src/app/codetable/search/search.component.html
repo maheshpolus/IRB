@@ -1,0 +1,99 @@
+<div class=" pageMinHeight mt-15">
+    <div class="container-fluid pushFixedHeaderFooter">
+        <div class="headerPush"></div>
+        <div class="card">
+            <div class="card-hedding dotted-bottom">
+
+                <h4 class="thick txt-large">Code Table Maintenance
+                  <a class="tooltip float-right" href="javascript:void(0)"> <i aria-hidden="true" class="fa fa-info-circle text-secondary"></i>
+                    <span class="tooltiptext-right">To manage lookup tables in IRB</span>
+                  </a>
+                </h4>
+            </div>
+
+            <div class="card-content">
+                <div class="card-body pb-0">
+                    <section class="row" class="ct-outerpadding">
+                        <div class="col-12">
+                            <div class="input-group row">
+                                <div class="col-lg-6 pl-0">
+                                    <div class="searchBox">
+                                        <ng2-completer [datasource]="dataService" [minSearchLength]="0" [placeholder]="'Search by table name'" [inputClass]="'ng-pristine txt-small ng-valid ng-touched'" [(ngModel)]="SearchTableName" [autofocus]="true" (selected)="getSearchedTable($event)">
+                                        </ng2-completer>
+                                        <a *ngIf="!SearchTableName" class="searchButton"><i
+												class="fa fa-search"></i></a>
+                                        <a *ngIf="SearchTableName" class="searchButton" (click)="SearchTableName=''"><i
+												class="fa fa-close"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="card-body pt-0 pb-0">
+                    <section class="row" class="accordion row">
+                        <div class="col-md-12 advanced-list pd-10">
+                            <div class="px-2">
+                                <div>
+                                    <div class="card-hedding dotted-bottom" id="accordionSearch">
+                                        <div class="">
+                                            <h4 class="txt-medium thick"> Filter by
+                                                <i id="advancesearch" class="ct-acrdn-i ct-pointer align-right txt-dark" [ngClass]="(isCollapse === false)?'fa fa-angle-double-up':'fa fa-angle-double-down'" data-toggle="collapse" data-target="#collapseSearch" aria-expanded="true" aria-controls="collapseSearch" (click)="collapseAdvanceSearch()"></i>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ct-mb10" style="margin-left: -25px">
+                                            <div class="card-content">
+                                                <div class="card-body pt-0 pb-0">
+                                                    <div class="col-md-12 advanced-list advance p-3">
+                                                        <div *ngFor="let groupName of groupNames;let index=index" class="ct-modulelist" class="d-inline pr-3">
+                                                            <input type="radio" class="radio-inline" name="{{groupName}}" [value]="groupName" [(ngModel)]="checkedList.groupName" (ngModelChange)="accordionShow()" />
+                                                            <label class="form-check-label p-0">{{groupName}}</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="collapseSearch" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionSearch">
+                                            <div class="result-outer">
+                                                <div class="list-outer-1">
+                                                    <div class="card-hedding dotted-bottom">
+                                                        <h4 class="txt-medium thick">{{checkedList.groupName}}
+                                                        </h4>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <div class="pt-2 pb-0">
+                                                            <div class="container-fluid">
+                                                                <div class="row">
+                                                                    <div class="col-lg-3 ct-pl0 ct-pointer" *ngFor="let codetable of getCodeTableList(checkedList.groupName); let i=index" (click)="getSelectedId(i, groupName)">
+                                                                        <a [ngClass]="{'modulename-color irb-modulename-color':selectedId==i&&groupName==groupNameSelected}" (click)="getSelectedTable(codetable.group,codetable.codetable_name)" class="ct-pointer" data-toggle="tooltip" title="{{codetable.codetable_name}}" data-toggle="modal"
+                                                                            data-target="#Modal">{{codetable.codetable_name}}
+																		                                    </a>
+                                                                    </div>
+                                                                    <div class="col-lg-3 ct-pl0 ct-txt-dcr" *ngIf="getCodeTableList(checkedList.groupName)?.length == 0">
+                                                                        <a>No lookup tables available</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <app-code-table *ngIf="isVisible" [codeTableProperty]="codeTableProperty" [isSavedFlag]="isSavedFlag">
+            </app-code-table>
+        </div>
+        <div class="footerPush"></div>
+    </div>
+</div>

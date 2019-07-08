@@ -1,0 +1,210 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+<div id="scrollToTop">
+	<div class="container-fluid pushFixedHeaderFooter">
+		<div class="headerPush"></div>
+		<!-- Session handling component -->
+		<app-sessiontimeout> </app-sessiontimeout>
+		<div class="position-relative">
+			<section class="card">
+				<div class="col-12 card-body">
+					<div class="row">
+						<div class="col-12 apprve-date">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-right" (click)="backClick()" title="Close">
+                  <i class="fa fa-times-circle btn-close-committe-lite" aria-hidden="true"></i>
+                </div>
+								<div class="col-md-5 col-sm-4 col-12">
+									<h4 class="txt-large txt-dark normal">
+										ID # :
+										<span class="text-danger">{{result?.committee?.committeeId}}</span>
+									</h4>
+									<p class="txt-dark txt-large normal">
+										Home Unit :
+										<span class="text-danger">{{result?.committee?.homeUnitName}}</span>
+									</p>
+								</div>
+								<div class="col-md-4 col-sm-4 col-12">
+									<p class="txt-dark txt-large normal">
+										Name :
+										<span class="text-danger">{{result?.committee?.committeeName}}</span>
+										<br /> Last updated User :
+										<span class="text-danger">{{result?.committee?.updateUser}}</span>
+									</p>
+								</div>
+								<div class="col-md-3 col-sm-4 col-12">
+									<p class="txt-dark txt-large normal">
+										Type:
+										<span class="text-danger">{{result?.committee?.committeeType?.description}}</span>
+									</p>
+								</div>
+								<!-- <div class="i-icon-top">
+									<span class="collapsed" (click)="toggle()" [ngClass]="isExpanded==true?'up-arrow':'down-arrow'" data-toggle="collapse" data-target="#collapseOne"
+									 aria-expanded="false" aria-controls="collapseOne"> </span>
+								</div>
+								<div class="info-icon-header">
+									<i class="fa fa-info-circle" aria-hidden="true"></i>
+								</div> -->
+							</div>
+						</div>
+					</div>
+					<!-- <div id="headingOne" class="expand-div">
+						<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+							<div class="row protocol-top apprve-date">
+								<hr class="hr-line">
+								<div class="col-6">
+									<p>
+										Last Approval Date :
+										<span>value</span>
+										<br /> Anticipated Start Date :
+										<span>value</span>
+									</p>
+								</div>
+								<div class="col-6">
+									<p>
+										Lead Unit :
+										<span></span>
+										<br /> Anticipated End Date :
+										<span>value</span>
+									</p>
+								</div>
+							</div>
+							<div class="row  protocol-top apprve-date">
+								<div class="col-12">
+									<p>
+										Purpose of Study :
+										<span>value</span>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div> -->
+				</div>
+			</section>
+		</div>
+		<section class="row">
+			<!-- <div id="myawa"
+				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<br>
+				<div class="h6">COMMITTEE</div>
+			</div>
+			 <div
+				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label><span class="mandatory">*</span> Id</label> <span><input
+							type="text" class="committeeBoxNotEditable"
+							[(ngModel)]="result.committee.committeeId" disabled /></span>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label><span class="mandatory">*</span> Name</label> <span><input
+							type="text" [ngClass]="class"
+							[(ngModel)]="result.committee.committeeName"
+							[disabled]="mode=='view' && editFlag == false" /></span>
+					</div>
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label><span class="mandatory">*</span> Type</label> <span><input
+							type="text" [ngClass]="constantClass"
+							[(ngModel)]="result.committee.committeeType.description"
+							[disabled]="mode=='view'" /></span>
+					</div>
+					<div class="col-xl-3 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label><span class="mandatory">*</span> Home Unit</label> <span>
+							<ng2-completer *ngIf="editFlag" title="Enter Home Unit"
+								[(ngModel)]="result.committee.homeUnitName"
+								[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
+								(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
+								(selected)="onHomeSelect()"></ng2-completer>
+						</span> <span *ngIf="editFlag == false &&  mode =='view'"> <input
+							type="text" [disabled]="mode=='view' && editFlag == false"
+							class="committeeBoxNotEditable"
+							[(ngModel)]="result.committee.homeUnitName" disabled /></span>
+					</div>
+					<div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Last Updated User</label> <span><input type="text"
+							class="committeeBoxNotEditable" [(ngModel)]="lastUpdated"
+							disabled /></span>
+					</div>
+				</div>
+			</div> -->
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <section class="row btn-row-med-lite sect-padding-lite bg-clr mt-10">
+            <button class="btn btn-primary tab_btn" (click)="show_current_tab($event,'committee_home')"
+              [ngClass]="{'nav-active':currentTab=='committee_home'}">
+              <i class="fa fa-calendar"></i>Committee
+            </button>
+            <button class="btn btn-primary " type="submit" [ngClass]="{'nav-active':currentTab=='committee_members',
+                    							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee"
+              (click)="show_current_tab($event,'committee_members')">
+              <i class="fa fa-users"></i>Members
+            </button>
+          </section>
+					<!-- <section class="row btn-row-med sect-padding mr-2"> -->
+							<!-- <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'committee_home')" [ngClass]="{'btnactive':currentTab=='committee_home'}">
+									<i class="fa fa-calendar"></i>Committee
+								</button>
+								<button class="btn btn-primary " type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'btnactive':currentTab=='committee_members',
+							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee" (click)="show_current_tab($event,'committee_members')">
+								<i class="fa fa-users"></i>Members
+								</button> -->
+								<!-- <button class="btn btn-primary tab_btn" (click)="show_current_tab($event,'committee_home')" [ngClass]="{'btnactive':currentTab=='committee_home'}">
+									<i class="fa fa-calendar"></i>Committee
+								</button>
+								<button class="btn btn-primary " type="submit" [ngClass]="{'btnactive':currentTab=='committee_members',
+							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee" (click)="show_current_tab($event,'committee_members')">
+								<i class="fa fa-users"></i>Members
+								</button> -->
+					<!-- <section class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<ul class="tabsIcon" style="margin-top: 10px;">
+							<li class="active" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'active':currentTab=='committee_home'}">
+								<a style="padding-top: -5px;" href="#" (click)="show_current_tab($event,'committee_home');">
+									<i class="fa fa-calendar"></i>
+									<span>Committee</span>
+								</a>
+							</li>
+							<li [ngClass]="{'active':currentTab=='committee_members'}">
+								<a href="#" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'committee_members');">
+									<i class="fa fa-users"></i>
+									<span>Members</span>
+								</a>
+							</li>
+						</ul>
+					</div> -->
+				<!-- </section> -->
+			</div>
+		</section>
+		<router-outlet (activate)="onActivate($event)"></router-outlet>
+		<!-- modal for showing warnings -->
+		<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="warningModalMain" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+		 aria-hidden="true">
+		 <div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content modal-text-color">
+				  <div class="modal-header popup-header">
+					<h5 class="modal-title modal-text-color" *ngIf="middleOfEdit || middleOfSave || isOnEditMembers" id="exampleModalLongTitle">Alert!</h5>
+						<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p *ngIf="middleOfEdit">{{ alertMsgMiddleOfEdit }}</p>
+						<p *ngIf="middleOfSave">{{ alertMsgNotSaved }}</p>
+						<p *ngIf="isOnEditMembers">{{ alertMsgMemberMiddleOfEdit }}</p>
+					</div>
+					<div class="modal-footer" *ngIf="middleOfEdit">
+						<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal" (click)="stayOnCommittee()">Ok</button>
+						<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" (click)="saveAndContinue(this.activatedRoute)" data-dismiss="modal">Save and continue</button>
+					</div>
+					<div class="modal-footer" *ngIf="alertMsgNotSaved">
+						<button type="button" class="btn pop-up-color tab_btn proceed-btn pdf" data-dismiss="modal">Ok</button>
+					</div>
+					<div class="modal-footer btn-row-med" *ngIf="isOnEditMembers">
+						<button type="button" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="saveMemberAndContinue(memberData)">Cancel and Exit</button>
+						<button type="button" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="stayOnPage()">Yes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footerPush"></div>
+	</div>
+</div>

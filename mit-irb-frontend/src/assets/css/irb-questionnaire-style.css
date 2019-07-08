@@ -1,0 +1,92 @@
+.qst-save-button
+{
+    background:  #ff643b !important;
+    border-color:  #ff643b !important;
+
+    
+}
+.qst-form-check-input{
+    margin-left: -1.25rem;
+}
+
+.irb-qst-addbtn-clr 
+{
+    background: #a92034 !important;		/*line no 77*/
+    border-color: #a92034 !important;
+    color:#fff;
+}
+.irb-qst-savebtn-clr
+{
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color:#fff;
+}
+.irb-qst-graybtn-clr
+{
+    background-color: #727272 !important;
+    border-color: #727272 !important;
+}
+.irb-qst-leftline
+{
+    border-left: solid #a92034; /*line no 8*/
+}
+.irb-qst-active
+{
+    border-bottom: solid #a92034 !important; /*line no 116*/
+    color: #000 !important;
+}
+.irb-qst-form-outer
+{
+    background: #fff; /*line no ,5,3,109*/
+}
+.irb-qst-form-outer .bar::before
+{
+    background: #a92034 !important;
+}
+.irb-qst-form-outer .bar::after
+{
+    background: #a92034 !important;
+}
+.irb-qst-nav
+{
+    background: #ebeef3 !important; /*line no ,111*/
+}
+
+.irb-qst-bg-head
+{
+    background: #a92034;
+    color: #fff;
+}
+.add-new-1{
+    color: #a92034;
+}
+.node-content-wrapper {
+    font-weight: 600;
+    color: #a92034;
+}
+.help-header
+{
+    color: #000;
+    font-weight: 600;
+}
+.qst-header-bg {
+    background: #ebeef3;
+    color: #a92034;
+}
+.qst-main-header {
+    background: #a92034;
+    color: #fff;
+}
+.qst-head {
+    color: #ffffff;
+}
+.qst-tree-head {
+    color: #424242;
+}
+.qst-plus-icon i {
+    color: #a92034; 
+    border: solid 1px #a92034;
+}
+.qst-tree-heading {
+    color: #a92034;
+}

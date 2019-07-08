@@ -1,0 +1,204 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading...">
+  </ngx-spinner>
+  <div class="headerPush-10"></div>
+  <div class="container-fluid pushFixedHeaderFooter">
+    <section class="row nav_toggle">
+      <div class="card mt-5" *ngIf="this.requestObject.personRoleType !== 'ADMIN' && this.requestObject.personRoleType !== 'CHAIR'">
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom m-0 txt-large">{{pageHeader}}</h4>
+
+            <div class="col-12">
+              <table class="table table-hover txt-medium">
+                <thead>
+                  <tr class="solid-bottom">
+                    <th class="pointer" (click)="sortFieldProtocol = 'PROTOCOL_NUMBER';updateSortOrderProtocol()">
+                      <a class="hvr-icon-down btn-sort">Protocol#
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldProtocol == 'PROTOCOL_NUMBER'"
+                          (click)="updateSortOrderProtocol();"
+                          [ngClass]="(sortOrderProtocol == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th class="pointer" (click)="sortFieldProtocol = 'TITLE';updateSortOrderProtocol()">
+                      <a class="hvr-icon-down btn-sort">Title
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldProtocol == 'TITLE'"
+                          (click)="updateSortOrderProtocol();"
+                          [ngClass]="(sortOrderProtocol == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th class="pointer" (click)="sortFieldProtocol = 'PROTOCOL_TYPE';updateSortOrderProtocol()">
+                      <a class="hvr-icon-down btn-sort">Type
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldProtocol == 'PROTOCOL_TYPE'"
+                          (click)="updateSortOrderProtocol();"
+                          [ngClass]="(sortOrderProtocol == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th class="pointer" (click)="sortFieldProtocol = 'PROTOCOL_STATUS';updateSortOrderProtocol()">
+                      <a class="hvr-icon-down btn-sort">Status
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldProtocol == 'PROTOCOL_STATUS'"
+                          (click)="updateSortOrderProtocol();"
+                          [ngClass]="(sortOrderProtocol == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th class="pointer" (click)="sortFieldProtocol = 'APPROVAL_DATE';updateSortOrderProtocol()">
+                      <a class="hvr-icon-down btn-sort">Approval Date
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldProtocol == 'APPROVAL_DATE'"
+                          (click)="updateSortOrderProtocol();"
+                          [ngClass]="(sortOrderProtocol == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th class="pointer" (click)="sortFieldProtocol = 'EXPIRATION_DATE';updateSortOrderProtocol()">
+                      <a class="hvr-icon-down btn-sort pointer">Expiration Date
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldProtocol == 'EXPIRATION_DATE'"
+                          (click)="updateSortOrderProtocol();"
+                          [ngClass]="(sortOrderProtocol == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th width="6%" class="align-middle">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="dashboard-table" *ngIf="expandedList != undefined && expandedList.length > 0">
+                  <tr
+                    class="pull-up solid-bottom"
+                    *ngFor="let result of expandedList | orderBy: {property: columnProtocol, direction: directionProtocol}">
+                    <td class="align-middle">{{result.PROTOCOL_NUMBER}}</td>
+                    <td class="align-middle">{{result.TITLE}}</td>
+                    <td class="align-middle">{{result.PROTOCOL_TYPE}}</td>
+                    <td class="align-middle">{{result.PROTOCOL_STATUS}}</td>
+                    <td class="align-middle">
+                      {{(result.APPROVAL_DATE === ' ' || result.APPROVAL_DATE === null ) ? ' ':(result.APPROVAL_DATE | date: 'MM/dd/yyyy')}}
+                    </td>
+                    <td class="align-middle">
+                      {{(result.EXPIRATION_DATE === ' ' || result.EXPIRATION_DATE === null ) ? ' ':(result.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}
+                    </td>
+                    <td class="align-middle">
+                      <a class="pointer" title="Open {{result.PROTOCOL_NUMBER}}"
+                        (click)="openIrbView(result.PROTOCOL_NUMBER)">
+                        <button type="button" class="btn btn-blue btn-sm text-right txt-medium"
+                          (click)="openIrbView(result.PROTOCOL_NUMBER)">
+                          <i class="fa fa-eye"></i> View
+                        </button>
+                      </a>
+                           <a  *ngIf="result.PROTOCOL_STATUS_CODE == 100 || result.PROTOCOL_STATUS_CODE == 104 || result.PROTOCOL_STATUS_CODE == 105 || result.PROTOCOL_STATUS_CODE == 106
+		          || result.PROTOCOL_STATUS_CODE == 304 || result.PROTOCOL_STATUS_CODE == 107 || result.PROTOCOL_STATUS_CODE == 102 || result.PROTOCOL_STATUS_CODE == 103" class="pointer" title="Open {{result.PROTOCOL_NUMBER}}"
+                        (click)="EditIrb(result.PROTOCOL_NUMBER,result.PROTOCOL_ID)">
+                        <button type="button" class="btn btn-blue btn-sm text-right txt-medium mt-10"
+                          (click)="EditIrb(result.PROTOCOL_NUMBER,result.PROTOCOL_ID)">
+                          <i class="fa fa-pencil"></i> Edit
+                        </button>
+                      </a>
+                      <!-- <ul class="actionButtonGroup">
+                              <li><a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
+                                (click)="openIrbView(result.PROTOCOL_NUMBER)"><i
+                                  class="fa fa-eye"></i> </a></li>
+                            </ul> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+            *ngIf="noData">
+            <p class="txt-medium p-10">No Protocols Found</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row nav_toggle mt-2">
+      <div class="card mt-5" *ngIf="this.requestObject.avSummaryType == 'REVISION_REQ' || this.requestObject.avSummaryType == 'ADMIN_PENDING'">
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+            >
+            <h4 class="card-hedding dotted-bottom m-0 txt-large">Pending Exempt Studies</h4>
+
+            <div class="col-12">
+              <table class="table table-hover txt-medium">
+                <thead>
+                  <tr class="solid-bottom">
+                    <th (click)="sortFieldExempt = 'IRB_PERSON_EXEMPT_FORM_ID';updateSortOrderExempt()">
+                      <a class="hvr-icon-down btn-sort pointer">Exempt Id
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldExempt == 'IRB_PERSON_EXEMPT_FORM_ID'"
+                          (click)="updateSortOrderExempt();"
+                          [ngClass]="(sortOrderExempt == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th (click)="sortFieldExempt = 'EXEMPT_TITLE';updateSortOrderExempt()">
+                      <a class="hvr-icon-down btn-sort pointer">Title
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldExempt == 'EXEMPT_TITLE'"
+                          (click)="updateSortOrderExempt();"
+                          [ngClass]="(sortOrderExempt == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th (click)="sortFieldExempt = 'PERSON_NAME';updateSortOrderExempt()">
+                      <a class="hvr-icon-down btn-sort pointer">PI
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldExempt == 'PERSON_NAME'"
+                          (click)="updateSortOrderExempt();"
+                          [ngClass]="(sortOrderExempt == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th (click)="sortFieldExempt = 'FACULTY_SPONSOR_PERSON';updateSortOrderExempt()">
+                      <a class="hvr-icon-down btn-sort pointer">Faculty Sponsor
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldExempt == 'FACULTY_SPONSOR_PERSON'"
+                          (click)="updateSortOrderExempt();"
+                          [ngClass]="(sortOrderExempt == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th (click)="sortFieldExempt = 'UPDATE_TIMESTAMP';updateSortOrderExempt()">
+                      <a class="hvr-icon-down btn-sort pointer">Last Updated By
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldExempt == 'UPDATE_TIMESTAMP'"
+                          (click)="updateSortOrderExempt();"
+                          [ngClass]="(sortOrderExempt == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th (click)="sortFieldExempt = 'EXEMPT_STATUS';updateSortOrderExempt()" width="10%">
+                      <a class="hvr-icon-down btn-sort pointer">Status
+                        <i class="fa hvr-icon text-lightash btn-orange" *ngIf="sortFieldExempt == 'EXEMPT_STATUS'"
+                          (click)="updateSortOrderExempt();"
+                          [ngClass]="(sortOrderExempt == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"></i>
+                      </a>
+                    </th>
+                    <th width="5%" class="align-middle">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="dashboard-table">
+                  <tr
+                    class="pull-up solid-bottom"
+                    *ngFor="let result of exemptCardDetails | orderBy: {property: columnExempt, direction: directionExempt}">
+                    <td class="align-middle">E-{{result.IRB_PERSON_EXEMPT_FORM_ID}}</td>
+                    <td class="align-middle">{{result.EXEMPT_TITLE}}</td>
+                    <td class="align-middle">{{result.PERSON_NAME}}</td>
+                    <td class="align-middle">{{(result.FACULTY_SPONSOR_PERSON)}}</td>
+                    <td class="align-middle">{{(result.UPDATE_USER)}} On
+                      {{(result.UPDATE_TIMESTAMP === ' ' || result.UPDATE_TIMESTAMP === null ) ? ' ':(result.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}
+                    </td>
+                    <td class="align-middle">{{result.EXEMPT_STATUS}}</td>
+                    <td class="align-middle">
+                      <!-- <ul class="actionButtonGroup">
+                              <li> -->
+                      <!-- <a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
+                                                (click)="openIrbView(result.PROTOCOL_NUMBER)"><i
+                                                  class="fa fa-eye"></i> </a> -->
+                      <a class="pointer">
+                        <button type="button" class="btn btn-blue btn-sm text-right txt-medium"
+                          (click)="openExempt(result.QUESTIONNAIRE_ANS_HEADER_ID,result.EXEMPT_STATUS_CODE,result.EXEMPT_TITLE,result.IRB_PERSON_EXEMPT_FORM_ID)">
+                          <i class="fa fa-eye"></i> View
+                        </button>
+                      </a>
+                      <!--        </li>
+                            </ul> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="exemptCardDetails === undefined || exemptCardDetails.length === 0">
+              <p class="txt-medium p-10">No Pending Exempt Studies</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="footerPush"></div>
+  </div>

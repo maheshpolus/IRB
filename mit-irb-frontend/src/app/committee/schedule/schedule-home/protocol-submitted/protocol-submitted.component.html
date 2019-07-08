@@ -1,0 +1,102 @@
+<div class="col-12 border-box schedule-box mt15">
+<div class="col-md-12 users-list-tbl" *ngIf="result?.committeeSchedule?.protocolSubmissions?.length !== 0">
+        <div class="row">
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr">
+              <thead class="tbl-head-clr thead-font-size p-75">
+                    <tr>        
+                            <th title="">Protocol Number</th>
+                            <th title="">PI</th>
+                            <th title="">Protocol Title</th>
+                            <th title="">Submission Type</th>
+                            <th title="">Sub. Type Qualifier</th>
+                            <th title="">Sub. Review Type</th>
+                            <th title="">Submission Status</th>
+                            <th title="">Submission Date</th>
+                            <th title="">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tbody-font-size p-75">
+                                <tr *ngFor="let protocolsubm of this.result?.committeeSchedule?.protocolSubmissions">
+                                        <td>{{protocolsubm?.protocolNumber}}</td>
+                                        <td>{{protocolsubm?.piPersonName}}</td>
+                                        <td>{{protocolsubm?.protocolTitle}}</td>
+                                        <td>{{protocolsubm?.protocolSubmissionType?.description}}</td>
+                                        <td>{{protocolsubm?.qualifierType?.description}}</td>
+                                        <td>{{protocolsubm?.protocolReviewType?.description}}</td>
+                                        <td>{{protocolsubm?.submissionStatus?.description}}</td>
+                                        <td>{{protocolsubm?.submissionDate | date :'MM/dd/yyyy'}}</td>
+                                        <td>
+                                                <a title="Open {{protocolsubm.protocolNumber}}"
+                                                (click)="openProtocolView(protocolsubm.protocolNumber)">
+                                                    <button type="button" class="btn btn-outline-secondary button-view mb-0 mt-0 pointer" (click)="openProtocolView(protocolsubm.protocolNumber)">
+                                                            <i class="fa fa-eye"></i>View
+                                                        </button>
+                                                        </a>
+                                        <!-- <ul class="actionButtonGroup"><li>
+                                        &nbsp;&nbsp;<a title="Open {{protocolsubm.protocolNumber}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+protocolsubm.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+                                        </li></ul> -->
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
+                                            <td>vdn jjknfjnfk</td>
+                                            <td>fdvbdfv</td>
+                                            <td>dfvdfvg</td>
+                                            <td>fdbvfd</td>
+                                            <td>fdvdfv</td>
+                                            <td>fdddddf</td>
+                                            <td>fxdvgrf</td>
+                                            <td>rfgrmg</td>
+                                            <td>
+                                            <ul class="actionButtonGroup"><li>
+                                            &nbsp;&nbsp;<a title="Open {{protocolsubm.protocolNumber}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+protocolsubm.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+                                            </li></ul>
+                                            </td>
+                                        </tr> -->
+
+                        </tbody>
+                        </table>
+                        </div> 
+                        </div>
+                        </div>    
+                        <div class="noDataOnChart" *ngIf="result?.committeeSchedule?.protocolSubmissions?.length == 0">
+                                No protocols associated with this schedule
+                        </div>  
+                        </div>
+               
+               
+               
+               <!-- <div>
+                  <table class="table table-responsive tableSkin" *ngIf="result?.committeeSchedule?.protocolSubmissions?.length !== 0">
+                      <tr>
+                          <th title="">Protocol Number</th>
+                          <th title="">PI</th>
+                          <th title="">Protocol Title</th>
+                          <th title="">Submission Type</th>
+                          <th title="">Sub. Type Qualifier</th>
+                          <th title="">Sub. Review Type</th>
+                          <th title="">Submission Status</th>
+                          <th title="">Submission Date</th>
+                          <th title="">Action</th>
+                      </tr>
+                      <tr *ngFor="let protocolsubm of this.result?.committeeSchedule?.protocolSubmissions">
+                          <td>{{protocolsubm.protocolNumber}}</td>
+                          <td>{{protocolsubm.piPersonName}}</td>
+                          <td>{{protocolsubm.protocolTitle}}</td>
+                          <td>{{protocolsubm.protocolSubmissionType.description}}</td>
+                          <td>{{protocolsubm.qualifierType.description}}</td>
+                          <td>{{protocolsubm.protocolReviewType.description}}</td>
+                          <td>{{protocolsubm.submissionStatus.description}}</td>
+                          <td>{{protocolsubm.submissionDate}}</td>
+                          <td>
+                          <ul class="actionButtonGroup"><li>
+                          &nbsp;&nbsp;<a title="Open {{protocolsubm.protocolNumber}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+protocolsubm.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+                          </li></ul>
+                          </td>
+                      </tr>
+                  </table>
+                  <div class="noDataOnChart" *ngIf="result?.committeeSchedule?.protocolSubmissions?.length == 0">
+                  		No protocols associated with this schedule
+                  </div>
+              </div> -->
+              

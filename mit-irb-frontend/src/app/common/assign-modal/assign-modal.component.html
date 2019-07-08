@@ -1,0 +1,55 @@
+<!--asign admin Modal-->
+<!-- <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner> -->
+<div class="modal-header popup-header dotted-bottom" data-backdrop="static">
+    <h5 class="modal-title txt-large thick">Assign IRB Admin</h5>
+    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body modal-popup">
+    <!-- <section class="row header-padding">
+      <div class="col-12">
+        <div class="row">
+  
+            Description on assiign
+  
+        </div>
+      </div>
+  
+    </section> -->
+  
+    <!--Assign Admin Section-->
+    <div class="modal-header-label padding-15 solid-bottom">
+      <h4 class="txt-medium sub-head-width select-notify-popup">IRB Admin</h4>
+      <div class="display" *ngIf="userDTO?.personID != protocoldetails?.ASSIGNEE_PERSON_ID">
+        <p class="txt-small"><input type="checkbox" [(ngModel)]="assignCheckbox" (ngModelChange)="assignMeAsAdmin()"/> Assign Me as Admin</p>
+      </div>
+    </div>
+    <div class="card-body card-paddng">
+      <div class="col-12 search-eidted-p padding-15">
+        <div class="row">
+          <div class="col-md-10">
+            <!--Unit Search-->
+            <!-- <input type="text" placeholder="Search for COUHES Admins" class="form-control input-field-size"
+              (focus)="isAdmintSearch = true" (focusout)="isAdmintSearch = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'UnitDropDown')"
+              (keydown.arrowup)="keyPressEvent.onKeyDown($event,'UnitDropDown')" (keydown.Enter)="keyPressEvent.onKeyDown($event,'UnitDropDown')">
+             <div class="sb-seachresults list-position" id="UnitDropDown">
+               <ul class="sb-results-dropdown-menu" *ngIf="isAdmintSearch">
+                 <li *ngFor="let result of adminList" (mousedown)="selectedHomeUnit(result.unitNumber,result.unitName)" (click)="selectedHomeUnit(result.unitNumber,result.unitName)">
+                   <span>{{result.PERSON_ID}} - {{result.FULL_NAME}}</span>
+                 </li>
+               </ul>
+             </div> -->
+            <ng2-completer class="txt-small" [datasource]="adminListDataSource" [minSearchLength]="0" [placeholder]="'Search IRB Admin'" [openOnFocus]="true"
+              [inputClass]="'ng-pristine ng-valid ng-touched'" [(ngModel)]="SearchTableName" (selected)="setAdmin($event)">
+            </ng2-completer>
+          </div>
+  
+          <div class="col-md-2">
+            <button type="button" class="btn btn-outline-success txt-small" (click)="updateIrbAdmin()">Assign</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

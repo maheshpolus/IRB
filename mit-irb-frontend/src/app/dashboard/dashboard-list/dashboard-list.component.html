@@ -1,0 +1,559 @@
+<section class="row nav_toggle">
+		<div class="navigate">
+		  <ul class="navbarmed" *ngIf="roleType != 'ADMIN'">
+			<li [ngClass]="{activenav:(lastClickedTab == 'ACTIVE')}">
+			  <a (click)="getIrbListData('ACTIVE')">Active Protocols</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'INPROGRESS')}">
+			  <a (click)="getIrbListData('INPROGRESS')">In Progress Protocols</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
+			  <a (click)="getIrbListData('ALL')">All Protocols</a>
+			</li>
+			<!--<li [ngClass]="{activenav:(lastClickedTab == 'PENDING')}">
+							<a (click)="getIrbListData('PENDING')">Pending Action</a>
+						  </li>
+						  <li [ngClass]="{activenav:(lastClickedTab == 'DRAFT')}">
+							<a (click)="getIrbListData('DRAFT')">In Progress</a>
+						  </li> -->
+			<!--<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
+			  <a (click)="getExemptListData('EXEMPT')">Exempt Evaluations</a>
+			</li>-->
+			<a class="btn float-right box-shadow-2 btn-sm btn-danger advanced-search-btn mobile-absolute" data-toggle="collapse"
+			  href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"
+			  (click)="showAdvanceSearch()">
+			  <i *ngIf="isAdvancesearch" class="fa fa-sliders"></i>
+			  <i *ngIf="!isAdvancesearch" class="fa fa-sliders"></i><a class="mobile-hide"> Advanced Search</a>
+			</a>
+		  </ul>
+		  <ul class="navbarmed" *ngIf="roleType == 'ADMIN'">
+			<li [ngClass]="{activenav:(lastClickedTab == 'ALL')}">
+			  <a (click)="getIrbListData('ALL')">All Protocols</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'NEW_SUBMISSION')}">
+			  <a (click)="getIrbListData('NEW_SUBMISSION')">New Submission </a>
+			</li>
+			<!-- <li [ngClass]="{activenav:(lastClickedTab == 'PI_ACTION')}">
+			  <a (click)="getIrbListData('PI_ACTION')">PI Actions</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'ADMINISTRATOR')}">
+			  <a (click)="getIrbListData('ADMINISTRATOR')">Administrator</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'REVIEWER')}">
+			  <a (click)="getIrbListData('REVIEWER')">Reviewer</a>
+			</li> -->
+			<!--<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
+			  <a (click)="getExemptListData('EXEMPT')">Exempt Evaluations</a>
+			</li>-->
+			<!-- <li [ngClass]="{activenav:(lastClickedTab == 'COMMITTEE')}">
+			  <a (click)="getCommitteeScheduleListData('COMMITTEE')">Committees</a>
+			</li>
+			<li [ngClass]="{activenav:(lastClickedTab == 'SCHEDULE')}">
+			  <a (click)="getCommitteeScheduleListData('SCHEDULE')">Schedules</a>
+			</li> -->
+			<a *ngIf="lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'"
+			  class="btn float-right box-shadow-2 btn-sm btn-danger advanced-search-btn mobile-absolute"
+			  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+			  aria-controls="collapseExample" (click)="showAdvanceSearch()">
+			  <i *ngIf="isAdvancesearch" class="fa fa-sliders"></i>
+			  <i *ngIf="!isAdvancesearch" class="fa fa-sliders"></i><a class="mobile-hide"> Advanced Search</a>
+			</a>
+			<!-- <span >
+			  <a (click)="showAdvanceSearch()">
+				<i *ngIf="isAdvancesearch" class="fa fa-minus-circle"></i>
+				<i *ngIf="!isAdvancesearch" class="fa fa-plus-circle"></i> Advanced Search
+			  </a>
+			</span> -->
+		  </ul>
+		  <div class="navigate_ot tab-content" id="nav-tabContent">
+					<div class="toggle_navgate">
+				<div class="col-sm-12" *ngIf="isAdvancesearch && lastClickedTab != 'EXEMPT'">
+					<div class="active" id="collapseExample">
+					  <div class="col-12 card-body box-shadow-1 form-group">
+					  <div class="row">
+						<div class="col-sm-6 col-md-2">
+						  <input type="text" [(ngModel)]="requestObject.protocolNumber" class="form-control txt-small" placeholder="Protocol Number" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						</div>
+						<div class="col-sm-6 col-md-3">
+						  <input type="text" [(ngModel)]="requestObject.title" class="form-control txt-small" placeholder="Title" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<!-- <input class="form-control" type="text" *ngIf="!continueBtnClicked" (input)="clearSelectedPIdata()" [(ngModel)]="requestObject.irbExemptForm.personName"
+						  (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.arrowup) ="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter) ="onKeyEnterElastic('pIDropDown')"
+						  placeholder="Search: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false"> -->
+						  <input type="text" [(ngModel)]="requestObject.piName" class="form-control txt-small" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'pIDropDown')"
+						  (keydown.arrowup)="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter)="onKeyEnterElastic('pIDropDown')"
+						  placeholder="Search: Protocol Person Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false">
+						  <div class="sb-seachresults results-margin advancedSearchPiElastic" id="pIDropDown">
+						  <ul class="sb-results-dropdown-menu test mt-15 search-position-fix-large box-shadow-1" *ngIf="IsElasticResultPI">
+							<li *ngFor="let result of _piResults | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
+							  <a [innerHTML]="result.label"></a>
+							</li>
+						  </ul>
+						  </div>
+						</div>
+						<div class="col-sm-6 col-md-2">
+						  <select class="form-control txt-small" placeholder="Protocol Type" [(ngModel)]="requestObject.protocolTypeCode"
+						  (ngModelChange)="getAdvanceSearch(lastClickedTab)" id="inlineFormCustomSelect">
+						  <option value="" hidden>Protocol Type</option>
+						  <option *ngFor="let type of protocolTypeList" value="{{type.PROTOCOL_TYPE_CODE}}">{{type.PROTOCOL_TYPE}}</option>
+						  </select>
+						</div>
+						<div class="col-sm-6 col-md-2">
+						<input type="text" class="form-control txt-small" placeholder="Protocol Status" [(ngModel)]="protocolStatus" (click)="openStatusModal(false)"
+						(keyup.tab)="openStatusModal(false)" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						</div>
+					  </div>
+					  <div class="row mt-10">
+						<div class="col-sm-6 col-md-2">
+						<input type="text" class="form-control txt-small" placeholder="Submission Status" [(ngModel)]="submissionStatus" (click)="openStatusModal(true)"
+						(keyup.tab)="openStatusModal(true)" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<input type="text" [(ngModel)]="requestObject.fundingSource" class="form-control txt-small" placeholder="Funding Source" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						</div>
+						<div class="col-sm-6 col-md-3">
+								<input type="text" [(ngModel)]="adminSearchText" (ngModelChange)="getAdminList(adminSearchText)" class="form-control txt-small" placeholder="Search: IRB Admin" (keydown.Enter)="getAdvanceSearch(lastClickedTab)"(focus)="isAdminSearch = true"
+								(focusout)="isAdminSearch = false" (keydown.arrowdown) ="keyPressEvent.onKeyDown($event,'adminDropDown')"
+								(keydown.arrowup) ="keyPressEvent.onKeyDown($event,'adminDropDown')"
+								(keydown.Enter) ="keyPressEvent.onKeyDown($event,'adminDropDown')">
+								<div class="sb-seachresults top-margin dropdown-width" id="adminDropDown">
+								<ul class="sb-results-dropdown-menu1 box-shadow-1" *ngIf="isAdminSearch">
+									<li class="block" *ngFor="let result of irbAdminsListCopy" (mousedown)="setAdminName(result.FULL_NAME, result.PERSON_ID)"
+									(click)="setAdminName(result.FULL_NAME, result.PERSON_ID)">
+									<a> {{result.FULL_NAME}}</a>
+									</li>
+									</ul>
+								</div>
+								</div>
+						<div class="col-sm-6 col-md-2">
+						<div class="input-group">
+						  <input class="form-control txt-small" [owlDateTime]="dt3" placeholder="Approval Date From" [(ngModel)]="approvalDate" (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						  <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+						  <div class="input-group-append" [owlDateTimeTrigger]="dt3">
+						  <span title="Choose Approval Date" class="input-group-text">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						  </span>
+						  </div>
+						</div>
+						</div>
+						<div class="col-sm-6 col-md-2">
+						<div class="input-group">
+						  <input class="form-control txt-small" [owlDateTime]="dt4" placeholder="Expiration Date To" [(ngModel)]="expirationDate"
+						  (keydown.Enter)="getAdvanceSearch(lastClickedTab)">
+						  <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+						  <div class="input-group-append" [owlDateTimeTrigger]="dt4">
+						  <span title="Choose Expiration Date" class="input-group-text">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						  </span>
+						  </div>
+						</div>
+						</div>
+				
+
+					  </div>
+					  <div class="row mt-10">
+							<div class="col-sm-12 col-md-12 text-right">
+									<button class="btn btn-outline-success txt-small hvr-icon-back" (click)="getAdvanceSearch(lastClickedTab)">
+										<i class="fa fa-search pr-10"></i>Search
+									</button>
+									<button class="btn btn-outline-secondary txt-small" (click)="clear()">
+										<i class="fa fa-close pr-10"></i>Clear
+									</button>
+									</div>
+									</div>
+					  </div>
+					</div>
+						</div>
+			  <div class="col-md-12 col-sm-12">
+				<div class="row">
+				  <div class="col-md-12 col-sm-12 col-lg-12">
+					<div class="searchBox mt-10" *ngIf="lastClickedTab == 'ALL'">
+	  
+	  
+	  
+	  
+					  <!-- <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder"  [clearField]="true"
+						(selectedResult)="selectProposalElasticResult($event)"></app-elastic> -->
+	  
+	  
+	  
+					  <input class="form-control txt-small" type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status" [formControl]="searchText" [(ngModel)]="searchTextModel"
+					   (ngModelChange)="protocolSearchValueChange()" (focus)="IsElasticResult = true" (focusout)="IsElasticResult = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'protocolDropDown')"
+					   (keydown.arrowup)="keyPressEvent.onKeyDown($event,'protocolDropDown')" (keydown.Enter)="onKeyEnterElastic('protocolDropDown')"
+					  />
+					  <a  class="searchButton" (click)="clearsearchBox($event)">
+						<i [ngClass]="iconClass"></i>
+					  </a>
+					  <div class="sb-seachresults" id="protocolDropDown">
+						<ul class="sb-results-dropdown-menu1 test" *ngIf="IsElasticResult">
+						  <li class="block" *ngFor="let result of _results | async" (mousedown)="selectedResult(result)" (click)="selectedResult(result)">
+							<a [innerHTML]="result.label"></a>
+						  </li>
+						</ul>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-12 col-sm-12 viewMode" *ngIf="elasticResultTab && lastClickedTab == 'ALL'">
+				  <div class="card mt-1 mb-2 box-shadow-1">
+					<div class="card-content search-card-view">
+					<div class="card-body">
+					  <div class="row text-secondary txt-medium">
+					  <div class="col-sm-12 col-md-12 col-lg-12 text-right" (click)="closeResultTab()" title="Remove">
+						<i aria-hidden="true" class="fa fa-times-circle btn-close-lite-sr"></i>
+					  </div>
+					  <button class="closeResultCard" >
+						<i class="fa fa-times"></i>
+					  </button>
+	  
+					  <div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
+						<label> Protocol# </label>
+						<span class="nav-advance-search text-danger">
+						<a (click)="openIrb(protocol)">{{protocol }}</a>
+						</span>
+					  </div>
+					  <div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
+						<label> Title </label>
+						<span class="nav-advance-search text-danger">
+						<a (click)="openIrb(protocol)">{{title }}</a>
+						</span>
+					  </div>
+					  <div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
+						<label> Expiration Date </label>
+						<span class="nav-advance-search text-danger">
+						<a (click)="openIrb(protocol)">{{expiry_date }}</a>
+						</span>
+					  </div>
+					  <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+						<label> Protocol Type </label>
+						<span class="nav-advance-search text-danger">
+						<a (click)="openIrb(protocol)">{{protocolType }}</a>
+						</span>
+					  </div>
+					  <div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
+						<label> Status </label>
+						<span class="nav-advance-search text-danger">
+						<a (click)="openIrb(protocol)">{{status }}</a>
+						</span>
+					  </div>
+					  <div class="col-xl-1 col-lg-2 col-md-4 col-sm-4 col-4">
+						<label> PI </label>
+						<span class="nav-advance-search text-danger">
+						<a (click)="openIrb(protocol)">{{piName }}</a>
+						</span>
+					  </div>
+					  <div class="col-xl-1 col-lg-12 col-md-12 col-sm-12 col-12 align-view-btn">
+						<a class="pointer">
+						<button type="button" class="btn btn-blue btn-sm text-right" (click)="openIrb(protocol)">
+						  <i class="fa fa-eye"></i>View
+						</button>
+						</a>
+					  </div>
+					  </div>
+					</div>
+					</div>
+				  </div>
+	  
+				  <div class="row">
+	  
+				  </div>
+				  </div>
+			  <div class="col-md-12 col-sm-12 sort-labels">
+				  <div class="row">
+					<div class="col-md-12 col-sm-12 col-lg-12" *ngIf="(lastClickedTab !== 'EXEMPT' && lastClickedTab !== 'COMMITTEE' && lastClickedTab !== 'SCHEDULE')">
+					  <div class="form-check form-check-inline sort-fields">
+						<p class="txt-small mtb10-lite">Sort by :
+	  
+							<a  class="hvr-icon-down btn-sort  btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_NUMBER'}" (click)="sortField = 'PROTOCOL_NUMBER';updateSortOrder()">Protocol Number
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_NUMBER'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
+						   aria-hidden="true"></i>
+							</a>
+	  
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_STATUS'}" (click)="sortField = 'PROTOCOL_STATUS';updateSortOrder()">Protocol Status
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+						   aria-hidden="true"></i>
+						</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'TITLE'}" (click)="sortField = 'TITLE';updateSortOrder()">Title
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'TITLE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
+						   aria-hidden="true"></i>
+						</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_TYPE'}" (click)="sortField = 'PROTOCOL_TYPE';updateSortOrder()">Protocol Type
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+						   aria-hidden="true"></i>
+						</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_STATUS'}" (click)="sortField = 'SUBMISSION_STATUS';updateSortOrder()">Submission Status
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'SUBMISSION_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
+						   aria-hidden="true"></i>
+						</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'SUBMISSION_TYPE'}" (click)="sortField = 'SUBMISSION_TYPE';updateSortOrder()">Submission Type
+								<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'SUBMISSION_TYPE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+								 aria-hidden="true"></i>
+							</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'LAST_APPROVAL_DATE'}" (click)="sortField = 'LAST_APPROVAL_DATE';updateSortOrder()">Approval Date
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'LAST_APPROVAL_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+						   aria-hidden="true"></i>
+						</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'EXPIRATION_DATE'}" (click)="sortField = 'EXPIRATION_DATE';updateSortOrder()">Expiration Date
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'EXPIRATION_DATE'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
+						   aria-hidden="true"></i>
+						</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'ASSIGNEE_PERSON'}" (click)="sortField = 'ASSIGNEE_PERSON';updateSortOrder()">IRB Admin
+								<i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'ASSIGNEE_PERSON'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+								 aria-hidden="true"></i>
+							</a>
+						<a  class="hvr-icon-down btn-sort btn-orange pointer" [ngClass]="{'sort-field-selected': sortField == 'UPDATE_TIMESTAMP'}" (click)="sortField = 'UPDATE_TIMESTAMP';updateSortOrder()">Update Timestamp
+						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'UPDATE_TIMESTAMP'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
+						   aria-hidden="true"></i>
+						</a>
+					  </p>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				<div class="col-12" *ngIf="isAdvancesearch && lastClickedTab == 'EXEMPT'">
+					<div class="active" id="collapseExample">
+					  <div class="col-12 card-body box-shadow-1 form-group">
+					  <div class="row">
+						<div class="col-sm-6 col-md-3">
+						<input type="number" [(ngModel)]="requestObject.exemptFormId" class="form-control txt-small" placeholder="Exempt-ID" (keydown.Enter)="getExemptListData('EXEMPT')">
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<input type="text" [(ngModel)]="requestObject.title" class="form-control txt-small" placeholder="Title" (keydown.Enter)="getExemptListData('EXEMPT')">
+						</div>
+						<div class="col-sm-6 col-md-3">
+						  <input type="text" [(ngModel)]="requestObject.piName" class="form-control txt-small" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'pIDropDown')"
+						  (keydown.arrowup)="keyPressEvent.onKeyDown($event,'pIDropDown')" (keydown.Enter)="onKeyEnterElastic('pIDropDown')"
+						  placeholder="Searchs: PI Name" [formControl]="piSearchText" (focus)="IsElasticResultPI = true" (focusout)="IsElasticResultPI = false">
+						  <div class="sb-seachresults results-margin advancedSearchPiElastic" id="pIDropDown">
+						  <ul class="sb-results-dropdown-menu test box-shadow-1 search-position-fix-small" *ngIf="IsElasticResultPI">
+							<li *ngFor="let result of _piResults | async" (mousedown)="selectedPiResult(result)" (click)="selectedPiResult(result)">
+							  <a [innerHTML]="result.label"></a>
+							</li>
+						  </ul>
+						  </div>
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<input type="text" [(ngModel)]="requestObject.exemptFormfacultySponsorName" class="form-control txt-small" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'fSDropDown')"
+						(keydown.arrowup)="keyPressEvent.onKeyDown($event,'fSDropDown')" (keydown.Enter)="onKeyEnterElastic('fSDropDown')"
+						placeholder="Search: Faculty Sponsor Name" [formControl]="fsSearchText" (focus)="IsElasticResultFS = true" (focusout)="IsElasticResultFS = false">
+						<div class="sb-seachresults results-margin advancedSearchPiElastic" id="fSDropDown">
+						  <ul class="sb-results-dropdown-menu test mt-15 box-shadow-1 search-position-fix-large" *ngIf="IsElasticResultFS">
+						  <li *ngFor="let result of _piResults | async" (mousedown)="selectedFsResult(result)" (click)="selectedFsResult(result)">
+							<a [innerHTML]="result.label"></a>
+						  </li>
+						  </ul>
+						  </div>
+						</div>
+					  </div>
+					  <div class="row mt-10">
+						<div class="col-sm-6 col-md-3">
+						<select class="form-control txt-small" placeholder="Determination" [(ngModel)]="requestObject.determination"
+						(ngModelChange)="getExemptListData('EXEMPT')" id="inlineFormCustomSelect">
+						  <option value="" hidden>Determination</option>
+						  <option value="Y">Exempt</option>
+						  <option value="N">Not Exempt</option>
+						  <option value="O">Review Not Required</option>
+						  </select>
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<div class="input-group">
+						  <input class="form-control txt-small" [owlDateTime]="dt1" placeholder="Start Date" [(ngModel)]="requestObject.exemptFormStartDate"
+						  (keydown.Enter)="getExemptListData('EXEMPT')">
+						  <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+						  <div class="input-group-append" [owlDateTimeTrigger]="dt1">
+						  <span title="Choose Start Date" class="input-group-text">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						  </span>
+						  </div>
+						</div>
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<div class="input-group">
+						  <input class="form-control txt-small" [owlDateTime]="dt2" placeholder="End Date" [(ngModel)]="requestObject.exemptFormEndDate"
+						  (keydown.Enter)="getExemptListData('EXEMPT')">
+						  <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+						  <div class="input-group-append" [owlDateTimeTrigger]="dt2">
+						  <span title="Choose End Date" class="input-group-text">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						  </span>
+						  </div>
+						</div>
+						</div>
+						<div class="col-sm-6 col-md-3">
+						<button class="btn btn-outline-success txt-small mr-10 hvr-icon-back" (click)="getExemptListData('EXEMPT')">
+						  <i class="fa fa-search pr-10"></i>Search
+						</button>
+						<button class="btn btn-outline-secondary txt-small" (click)="clearExemptSearch()">
+						  <i class="fa fa-times pr-10"></i>Clear
+						</button>
+						</div>
+					  </div>
+					  </div>
+					</div>
+						</div>
+			</div>
+	  
+			<ng-container *ngIf="lastClickedTab != 'EXEMPT' && lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
+			  <div class="col-sm-12" *ngIf="noIrbList">No IRB protocol found for this status</div>
+			  <div *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+					  || (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType !== 'ADMIN')">
+				<app-card-details [irbList]="paginatedIrbListData  | orderBy: {property: column, direction: direction}" [userDTO]="userDTO" [currentTab]="lastClickedTab"></app-card-details>
+				<!-- PAGINATION - START -->
+				<div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+				  <nav class="paginationSkin text-right pagination txt-small">
+					<div class="margin8">
+					  <b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number *
+						paginationData.limit - paginationData.limit + paginatedIrbListData.length}} of {{protocolCount}} Records</b>
+					</div>
+					<ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="protocolCount" [(page)]="paginationData.page_number"
+					 paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="protocolListPerPage(paginationData.page_number)">
+					</ngb-pagination>
+				  </nav>
+				</div>
+				<!-- PAGINATION - END -->
+			  </div>
+			</ng-container>
+	  
+			<!-- <ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
+			  <div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
+			
+			  <app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+				|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
+			   [irbList]="paginatedIrbListData"  [userDTO]="userDTO"></app-committee-card>
+			  <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+				<nav class="paginationSkin text-right pagination txt-small">
+				  <div class="margin8">
+					<b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number *
+					  paginationData.limit - paginationData.limit + paginatedIrbListData.length}} of {{protocolCount}} Records</b>
+				  </div>
+				  <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="protocolCount" [(page)]="paginationData.page_number"
+				   paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="protocolListPerPage(paginationData.page_number)">
+				  </ngb-pagination>
+				</nav>
+			  </div>
+			</ng-container>
+	  
+			<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
+			  <div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
+			 
+			  <app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
+				  || (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
+			   [irbList]="paginatedIrbListData"  [userDTO]="userDTO"></app-schedule-card>
+	
+			  <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
+				<nav class="paginationSkin text-right pagination txt-small">
+				  <div class="margin8">
+					<b>{{paginationData.page_number * paginationData.limit - paginationData.limit + 1}} - {{paginationData.page_number *
+					  paginationData.limit - paginationData.limit + paginatedIrbListData.length}} of {{protocolCount}} Records</b>
+				  </div>
+				  <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="protocolCount" [(page)]="paginationData.page_number"
+				   paginationData.page_number=page [pageSize]="paginationData.limit" [rotate]="true" (pageChange)="protocolListPerPage(paginationData.page_number)">
+				  </ngb-pagination>
+				</nav>
+			  </div>
+			</ng-container> -->
+	  
+			<ng-container *ngIf="lastClickedTab == 'EXEMPT'">
+			  <div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>
+			  <app-exempt-card #childExempt [exemptList]="exemptListData" [userDTO]="userDTO" [showBtn]="noIrbList"></app-exempt-card>
+			  <!-- PAGINATION - EXEMPT - START -->
+			  <div class="text-right pagiSkin margin8" style="float:right" *ngIf="childExempt.paginatedExemptList.length > 0">
+				<nav class="paginationSkin text-right pagination txt-small">
+				  <div class="margin8">
+					<b>{{childExempt.paginationData.page_number * childExempt.paginationData.limit - childExempt.paginationData.limit + 1}}
+					  - {{childExempt.paginationData.page_number * childExempt.paginationData.limit - childExempt.paginationData.limit
+					  + childExempt.paginatedExemptList.length}} of {{childExempt.protocolCount}} Records</b>
+				  </div>
+				  <ngb-pagination [boundaryLinks]="true" [maxSize]="4" [collectionSize]="childExempt.protocolCount" [(page)]="childExempt.paginationData.page_number"
+				   childExempt.paginationData.page_number=page [pageSize]="childExempt.paginationData.limit" [rotate]="true" (pageChange)="childExempt.paginateExempList(childExempt.paginationData.page_number)">
+				  </ngb-pagination>
+				</nav>
+			  </div>
+			  <!-- PAGINATION - EXEMPT - END -->
+			</ng-container>
+	  
+		  </div>
+		</div>
+	  </section>
+	  
+	  <div class="modal fade mySkinDialog modalFallBack" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModal"
+	   aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+		  <div class="modal-content modal-text-color">
+			<div class="modal-header popup-header dotted-bottom">
+			  <h5 class="modal-title text-black text-body thick txt-large">Alert!</h5>
+	  
+			  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body modal-popup">
+			  <!-- section1 -->
+			  <div class="modal-padding">
+				<div class="row">
+				  <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+					<h4 class="txt-medium text-center">
+					  <p>You do not have the right to view this protocol</p>
+					</h4>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<div class="modal-footer">
+	  
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  <!-- Status search modal -->
+	  <div class="modal fade bd-example-modal-lg" id="statusSearchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	   aria-hidden="true">
+	   <div class="modal-dialog modal-lg" role="document">
+		  <div class="modal-content">
+			<div class="modal-header popup-header dotted-bottom">
+			  <h5 class="modal-title thick txt-large" id="exampleModalLongTitle">Select the Status to be Searched</h5>
+			  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body modal-popup txt-medium dotted-bottom">
+			  <div class="modal-header-label">
+				<div class="status-input-search searchBox">
+				  <input type="text" placeholder="Search Status of Protocols here" [(ngModel)]="statusSearchText" (ngModelChange)="statusSearchChange()"
+				  />
+				  <a  class="searchButton" (click)="clearStatusSearch($event)">
+					<i [ngClass]="statusSearchText?'fa fa-times fa-med':'fa fa-search fa-med'"></i>
+				  </a>
+				</div>
+				<h4 class="txt-medium thick">Status</h4>
+			  </div>
+			  <!-- section1 -->
+			  <div class="modal-padding">
+				<div class="row txt-medium">
+				  <div class="col-lg-4 status-links pdf" *ngFor="let protocolStatus of protocolStatusesCopy">
+					<input *ngIf="!isSubmittedStatusSearch" type="checkbox" [(ngModel)]="isCheckBoxChecked[protocolStatus?.PROTOCOL_STATUS]"
+					/>
+					<input *ngIf="isSubmittedStatusSearch" type="checkbox" [(ngModel)]="isCheckBoxCheckedSubmit[protocolStatus?.description]"
+					/>
+					<a class="pl-1">
+					  <span *ngIf="!isSubmittedStatusSearch">{{protocolStatus?.PROTOCOL_STATUS}}</span>
+					  <span *ngIf="isSubmittedStatusSearch">{{protocolStatus?.description}}</span>
+					</a>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<section class="row sect-confirm-padding proceed-btn-align mg-top pt-2">
+			  <div class="col">
+				<button class="btn btn-outline-success txt-small" (click)="setProtocolStatus()" data-dismiss="modal">Search</button>
+				<button class="btn btn-outline-secondary txt-small" (click)="clearStatus()">Clear</button>
+			  </div>
+			</section>
+		  </div>
+		</div>
+		<!--Hidden Button for warning modal-->
+		<button id="openWarningModalButton" [hidden]="true" data-toggle="modal" data-target="#warningModal"></button>
+		<button id="openStatusModalButton" [hidden]="true" data-toggle="modal" data-target="#statusSearchModal"></button>
+	  

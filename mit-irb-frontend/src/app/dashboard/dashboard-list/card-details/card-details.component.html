@@ -1,0 +1,116 @@
+<div id="top-card" class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
+		<div class="row list-rows" *ngFor="let irb of irbList let i=index">
+			<div class="col-md-2 col-sm-12 col-12 list-view">
+				<span (click)="openIrb(irb.PROTOCOL_NUMBER)" class="pointer note green rounded p-0 vertical-middle" [ngClass]="{
+								'active-status': (irb.PROTOCOL_STATUS_CODE=='200'||
+												 irb.PROTOCOL_STATUS_CODE== '201'||
+												 irb.PROTOCOL_STATUS_CODE== '202'||
+												 irb.PROTOCOL_STATUS_CODE== '901'||
+												 irb.PROTOCOL_STATUS_CODE== '400'||
+												 irb.PROTOCOL_STATUS_CODE== '401'||
+												 irb.PROTOCOL_STATUS_CODE== '203'),
+								'in-drafts': (irb.PROTOCOL_STATUS_CODE=='309'||
+												 irb.PROTOCOL_STATUS_CODE=='310'),
+								'pending-action': (irb.PROTOCOL_STATUS_CODE=='100'||
+												 irb.PROTOCOL_STATUS_CODE== '103'||
+												 irb.PROTOCOL_STATUS_CODE=='105'||
+												 irb.PROTOCOL_STATUS_CODE=='106'||
+												 irb.PROTOCOL_STATUS_CODE=='107'||
+												 irb.PROTOCOL_STATUS_CODE=='900'),
+								'revision-required': (irb.PROTOCOL_STATUS_CODE=='102'||
+												 irb.PROTOCOL_STATUS_CODE== '104'),
+								'submitted' :   irb.PROTOCOL_STATUS_CODE=='101',
+								'completed-closed': (irb.PROTOCOL_STATUS_CODE=='103'||
+												irb.PROTOCOL_STATUS_CODE== '300'||
+												irb.PROTOCOL_STATUS_CODE== '301'||
+												irb.PROTOCOL_STATUS_CODE== '304'||
+												irb.PROTOCOL_STATUS_CODE== '305'||
+												irb.PROTOCOL_STATUS_CODE== '306'||
+												irb.PROTOCOL_STATUS_CODE== '307'||
+												irb.PROTOCOL_STATUS_CODE== '313'),
+							'suspended': (irb.PROTOCOL_STATUS_CODE=='302'||
+												irb.PROTOCOL_STATUS_CODE== '308'||
+												irb.PROTOCOL_STATUS_CODE== '311')}">
+					<span class="txt-small m-0 vertical-middle">{{irb.PROTOCOL_STATUS}}</span>
+				</span>
+				<a class="tooltip vertical-middle"  *ngIf="irb.IS_NEW_RULE=='N'"> <i class="fa fa-exclamation-circle text-secondary ml-5"
+						aria-hidden="true"></i>
+					<span class="tooltiptext-left">Follows Old Rules</span>
+				</a>
+			</div>
+			<div class="col-md-8 col-sm-12 col-12 list-des">
+				<h6 class="txt-large">{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}</h6>
+				<div>
+					<div class="row txt-dark txt-medium">
+						<div class="col-md-4 ">
+							Type :
+							<span class="text-danger ">{{irb.PROTOCOL_TYPE}}</span>
+						</div>
+						<div class="col-md-4">
+							Submission Status :
+							<span class="text-danger">{{irb.SUBMISSION_STATUS}}</span>
+						</div>
+						<div class="col-md-4">
+							Submission Type :
+							<span class="text-danger">{{irb.SUBMISSION_TYPE}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="row txt-dark txt-medium">
+						<div class="col-md-4">
+								PI :
+								<span class="text-danger">{{irb.PI_NAME}}</span>
+							</div>
+					<div class="col-md-4">
+						Approval Date :
+						<span class="text-danger">{{(irb.APPROVAL_DATE === ' ' || irb.APPROVAL_DATE === null ) ? ' ':(irb.APPROVAL_DATE | date: 'MM/dd/yyyy')}}</span>
+					</div>
+					<div class="col-md-4">
+						Expiration Date :
+						<span class="text-danger">{{(irb.EXPIRATION_DATE === ' ' || irb.EXPIRATION_DATE === null ) ?  ' ':(irb.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}</span>
+					</div>
+					<div class="col-md-4">
+
+							IRB Admin :
+							<span class="text-danger">
+								{{irb?.ASSIGNEE_PERSON}}
+							</span>
+							</div>
+					
+
+				</div>
+				
+			</div>
+			<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+
+					<div class="txt-small txt-dark text-right mb-5">
+					Last Update:{{irb.updateUser}}
+					<span class="text-danger">{{(irb.UPDATE_TIMESTAMP === ' ' || irb.UPDATE_TIMESTAMP === null ) ? ' ':(irb.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</span>
+				</div>
+
+				<div class="text-right ">
+          <a href="#/irb/irb-view/irbOverview?protocolNumber={{irb.PROTOCOL_NUMBER}}"
+						class="btn btn-blue btn-sm text-right txt-medium" (click)="openIrb(irb.PROTOCOL_NUMBER)">
+            <i class="fa fa-eye" aria-hidden="true"></i> View
+          </a>
+
+					<a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105 || irb.PROTOCOL_STATUS_CODE == 106
+		          || irb.PROTOCOL_STATUS_CODE == 304 || irb.PROTOCOL_STATUS_CODE == 107 || irb.PROTOCOL_STATUS_CODE == 102 || irb.PROTOCOL_STATUS_CODE == 103"
+						class="btn btn-blue btn-sm text-right txt-medium"
+						(click)="EditIrb(irb.PROTOCOL_NUMBER,irb.PROTOCOL_ID)">
+            <i class="fa fa-pencil"></i> Edit
+          </a>
+
+          <a *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && currentTab == 'NEW_SUBMISSION' && irb?.ASSIGNEE_PERSON_ID == null"
+            (click)="openAssignPopUp('I', irb, i )" class="btn btn-blue btn-sm text-right mt-1 txt-medium">
+            <i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin
+          </a>
+
+				</div>
+			</div>
+		</div>
+		<!-- <a *ngIf="irbList?.length >1" href="#"(click)="scrollToTop()">scroll to top</a> -->
+	</div>
+	<!--
+			<div class="col-sm-12" *ngIf="irbList.length==0"> No Irb protocol found for this status</div> -->
+	<!-- list of exempt protocols-->

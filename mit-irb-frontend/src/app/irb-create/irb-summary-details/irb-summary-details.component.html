@@ -1,0 +1,60 @@
+<!-- <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner> -->
+<div class="container-fluid">
+    <div class="row">
+      <!-- start here -->
+      <div class="col-12">
+          <div class="row cards-in">
+            <div class="col-12 mb-10">
+              <div class="card mt-5">
+      
+                <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                    aria-labelledby="pills-home-tab">
+                    <h4 class="card-hedding dotted-bottom" *ngIf="!isAmendment">Renewal Summary
+                        <i class="fa fa-info-circle " aria-hidden="true" style="float: right;"></i>
+                    </h4>
+                    <h4 class="card-hedding dotted-bottom" *ngIf="isAmendment">Amendment Summary
+                        <i class="fa fa-info-circle " aria-hidden="true" style="float: right;"></i>
+                    </h4>
+                  </div>
+                </div>
+
+                <div class="card-body card-paddng">
+                    <div class="col-12  search-eidted-p padding-15">
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                              <!-- <span class="txt-medium txt-dark" *ngIf="!isAmendment ">Renewal Summary</span>
+                              <span class="txt-medium txt-dark" *ngIf="isAmendment ">Amendment Summary</span> -->
+                              <textarea class="txt-small form-control  txt-area-fnt mb-15"  rows="5" [(ngModel)]="irbSummaryVo.comment"
+                              [placeholder]="isAmendment  == true ? 'Amendment Summary':'Renewal Summary'"  [disabled]="((isAmendment  == true && protocolStatus != '105') || (isAmendment  == false && protocolStatus != '106')) "></textarea>
+                            </div>
+                          </div>
+                          </div>
+                          <div class="row"  *ngIf="isAmendment ">
+                              <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
+                                  <input type="checkbox" [disabled]="module.IS_EDITABLE == 'N' || protocolStatus != '105'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="module.AC_TYPE='U'"/>
+                              
+                                  <span class="txt-medium txt-dark" [ngStyle]="{'color': module.IS_EDITABLE == 'N' || protocolStatus != '105' ? 'grey' : ''}">{{module?.DESCRIPTION}}</span>
+                            
+                              </div>
+                            </div>
+                            <div class="modal-footer btn-row-med text-center">
+                                <button type="button margin-class" class="btn btn-outline-success txt-small hvr-icon-back
+                                " (click)="saveAmendmentDetails()" *ngIf="protocolStatus == '105' || protocolStatus == '106'">Save</button>
+                      
+                              </div>
+                    
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+          </div>        
+      </div>
+
+
+      <!--  ends here  -->
+     
+    </div>
+    </div>

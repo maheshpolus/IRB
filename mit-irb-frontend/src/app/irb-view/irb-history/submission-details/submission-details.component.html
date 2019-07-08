@@ -1,0 +1,252 @@
+<ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+<div class="container-fluid">
+
+    <!--     edit start -->
+    <div class="row cards-in">
+        <div class="col-12 mb-10">
+            <div class="card mt-5">
+    
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <h4 class="card-hedding dotted-bottom">Submission details - {{historyName}}
+                            <i class="fa fa-info-circle " aria-hidden="true" style="float: right;"></i>
+                        </h4>
+                    </div>
+                </div>
+                <!-- -->
+                <div class="card-body card-paddng">
+                        <div class="col-12  search-eidted-p padding-15">
+                            <div class="col-md-12 padding-10">
+                                <div class="row">
+                                    <div class=" col-8 modal-header-label">
+                                        <h4 class="txt-large">Details</h4>
+                                    </div>
+                                    <div class="col-4 text-right modal-header-label">
+                                        <button title="Back to history" class="history-back pointer btn btn-outline-success txt-small" (click)="backToHistory()">
+                                            <i class="fa fa-mail-reply">&nbsp;</i>Back to history</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pl-15 pr-15">
+                                <div class="col-6 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">Committee Id:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.COMMITTEE_ID}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5">Schedule Date:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.SCHEDULED_DATE}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5">Review Type:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.REVIEW_TYPE_DESCRIPTION}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5">Submission Status:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.SUBMISSION_STATUS_DESCRIPTION}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5" class="txt-dark txt-medium mb-5">Risk Levels:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.RISK_LEVEL}}</span>
+                                    </p>
+                                </div>
+    
+                                <div class="col-6 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">Committee Name:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.COMMITTEE_NAME}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5">Submission Type:
+                                        <span class="text-danger">{{result?.protocolSubmissionDetails?.SUBMISSION_TYPE_DESCRIPTION}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5">Type Qualifier:
+                                        <span  class="text-danger">{{result?.protocolSubmissionDetails?.QUAL_TYPE_DESCRIPTION}}</span>
+                                    </p>
+                                    <p class="txt-dark txt-medium mb-5">Billable:
+                                        <span class="text-danger" *ngIf="result?.protocolSubmissionDetails?.IS_BILLABLE=='Y'">Yes</span>
+                                        <span class="text-danger" *ngIf="result?.protocolSubmissionDetails?.IS_BILLABLE=='N'">No</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-12 padding-10">
+                                <div class="modal-header-label">
+                                    <h4 class="txt-large">Reviewers</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-12 users-list-tbl">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped tbl-p-clr">
+                                            <thead class="tbl-head-clr thead-font-size">
+                                                <tr>
+                                                    <th scope="col">Reviewer</th>
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">Determination Recommendation</th>
+                                                    <th scope="col">Due Date</th>
+    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngIf="protocolSubmissionReviewers.length > 0">
+                                                    <tr *ngFor="let reviewer of protocolSubmissionReviewers">
+                                                        <td>{{reviewer.FULL_NAME}}</td>
+                                                        <td>{{reviewer.REVIEWER_TYPE_DESCRIPTION}}</td>
+                                                        <td>{{reviewer.RECOMMENDATION_DETERMINATION}}</td>
+                                                        <td>{{reviewer.DUEDATE}}</td>
+                                                    </tr>
+                                                </ng-container>
+                                                <ng-container *ngIf="protocolSubmissionReviewers==null || protocolSubmissionReviewers.length==0">
+                                                    <tr>
+                                                        <td class="text-center" colspan="4">No Reviewer Details to show</td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 padding-10">
+                                <div class="modal-header-label">
+                                    <h4 class="txt-large">Vote Summary</h4>
+                                </div>
+                            </div>
+                            <div class="row pl-15 pr-15">
+                                <div class="col-1 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">No:
+                                        <span>{{result?.protocolSubmissionDetails?.NO_VOTE_COUNT}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-1 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">Yes:
+                                        <span>{{result?.protocolSubmissionDetails?.YES_VOTE_COUNT}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-1 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">Abstain:
+                                        <span>{{result?.protocolSubmissionDetails?.ABSTAINER_COUNT}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-1 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">Recused:
+                                        <span>{{result?.protocolSubmissionDetails?.RECUSED_COUNT}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-8 card-desc">
+                                    <p class="txt-dark txt-medium mb-5">Voting Text:
+                                        <span>{{result?.protocolSubmissionDetails?.VOTE_COMMENTS}}</span>
+                                    </p>
+                                </div>
+                            </div>
+    
+                            <div class="col-md-12 padding-10" *ngIf="isrenewal || isammendment">
+                                <div class="modal-header-label">
+                                    <h4 class="txt-large" *ngIf="isammendment">Ammendment Details</h4>
+                                    <h4 class="txt-large" *ngIf="isrenewal">Renewal Details</h4>
+                                </div>
+                            </div>
+                            <div class="row  pl-15 pr-15" *ngIf="isrenewal || isammendment">
+                                <div class="col-7 card-desc" *ngIf="isammendment">
+                                    <p class="txt-dark txt-medium mb-5">Modify Sections: </p>
+                                    <div class="row">
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.generalInfo"> General Info
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.addModifyNoteAttachments"> Add/Modify Notes & Attachments
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.fundingSource"> Funding Source
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.areaOfResearch"> Area of Research
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.protocolReferences"> Protocol References & Other Identifiers
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.specialReview"> Special Reviews
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.protocolOrganization"> Protocol Organisations
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.protocolPersonel"> Protocol Personnel
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.questionnaire"> Questionnaire
+                                        </div>
+                                        <div class="col-6 txt-medium text-secondary">
+                                            <input type="checkbox" class="checkbox-lg" disabled="true" [(ngModel)]="protocolRenewalDetail.other"> Others
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-5 card-desc" [ngClass]="{'col-12': isrenewal}">
+                                    <p class="txt-dark txt-medium mb-5">Summary: </p>
+                                    <textarea rows="6"  class="txt-small form-control" disabled="true" [(ngModel)]="protocolRenewalComments" style="width: 100%"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 padding-10">
+                                <div class="modal-header-label">
+                                    <h4 class="txt-large">Checklist Items</h4>
+                                </div>
+                                <ng-container *ngIf="submissionCheckListData.length > 0">
+                                    <div *ngFor="let checklist of submissionCheckListData; let i=index" class="margin8">
+                                        <span>{{i+1}}. </span> {{checklist.EXEMPT_EXPEDITED_DESCRIPTION}}
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="submissionCheckListData.length == 0 || submissionCheckListData == null">
+                                        <div class="margin8 text-center" style="color:#6e6e6e">
+                                            No Checklist Items to show
+                                        </div>
+                                    </ng-container>
+                            </div>
+                            <div class="col-md-12 padding-10">
+                                <div class="modal-header-label">
+                                    <h4 class="txt-large">Review Comments</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-12 users-list-tbl">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped tbl-p-clr">
+                                            <thead class="tbl-head-clr thead-font-size">
+                                                <tr>
+                                                    <th scope="col">Comment</th>
+                                                    <th scope="col">Private</th>
+                                                    <th scope="col">Final</th>
+                                                    <th scope="col">Updated By</th>
+    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngIf="protocolReviewerComments.length > 0">
+                                                    <tr *ngFor="let comment of protocolReviewerComments">
+                                                        <td>{{comment.CMT}}</td>
+                                                        <td>
+                                                            <span *ngIf="comment.PRIVATE_CMT=='Y'">Yes</span>
+                                                            <span *ngIf="comment.PRIVATE_CMT=='N'">No</span>
+                                                        </td>
+                                                        <td>
+                                                            <span *ngIf="comment.FINAL_CMT=='Y'">Yes</span>
+                                                            <span *ngIf="comment.FINAL_CMT=='N'">No</span>
+                                                        </td>
+                                                        <td>
+                                                            {{comment.UPDATE_USER}} on {{comment.UPDATE_TIMESTAMP}}
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                                <ng-container *ngIf="protocolReviewerComments == null || protocolReviewerComments.length == 0">
+                                                    <tr>
+                                                        <td class="text-center" colspan="4">No Review Comments to show</td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                 <!-- -->
+            </div>
+        </div>
+    </div>
+
+    <!--      edit end  -->
+    
+    </div>

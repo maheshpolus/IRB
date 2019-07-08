@@ -1,0 +1,27 @@
+.list{
+    list-style: none;
+}
+.welcome-table {
+   width: 96%;
+   margin-left: 36px; 
+}
+/* .welcome-table-border {
+    border:1px solid #a92034;
+} */
+.welcome-table-border tr {
+    border-bottom:1px solid #a92034;
+}
+.welcome-table-border td {
+    /* border-right:1px solid #a92034; */
+    padding: 10px;
+}
+.no-bd-right{
+    border:none !important;
+}
+.mg-top{
+    margin-top:15px;
+}
+/* .hightlight-text {
+    font-weight: bold;
+    text-decoration: underline;
+} */

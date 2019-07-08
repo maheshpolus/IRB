@@ -1,0 +1,35 @@
+<div class="loginPage">
+	<div class="bg">
+		<div class="container container-login">
+			<div class="row">
+				<div class="ground borderRadius pageMinHeight col-lg-8">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6 hidden-xs">
+							<div class="leftLoginArea"></div>
+							<div>
+								<span> <!-- <a class="logo"><img
+										src="resources/dist/assets/images/loginLogo.png" /></a> --> <a  class="logo"><img src="/irb/resources/dist/assets/images/logoLogin.png"/></a>
+									<span class="tagLine">IRB Login</span>
+								</span>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 maximum-height-container">
+							<div class="loginHere">
+								<label>Username</label> <br /> <input type="text"
+									placeholder="Username" id="login_username" name='username'
+									value='' [(ngModel)]="username" (keyup.enter)="login()" /> <label>Password</label>
+								<br /> <input type="password" placeholder=" Password"
+									id="login_password" name='password' value=''
+									[(ngModel)]="password" (keyup.enter)="login()" /><br>
+								<div class="buttonGroup">
+									<button class="loginBtn button first" value="Login"
+										(click)="login()">Login</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

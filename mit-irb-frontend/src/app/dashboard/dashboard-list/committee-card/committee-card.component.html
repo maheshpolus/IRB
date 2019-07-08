@@ -1,0 +1,52 @@
+<div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
+    <div class="row list-rows" *ngFor="let irb of irbList">
+      <div class="col-md-2 col-sm-12 col-12 list-view mt-2">
+        <span class="rounded note pointer green p-0"><span class="txt-small">Active</span></span>
+      </div>
+      <div class="col-md-8 col-sm-12 col-12 txt-dark txt-medium py-2">
+        <h5 class="text-black txt-large">{{irb.COMMITTEE_ID}} - {{irb.COMMITTEE_NAME}}</h5>
+        <div>
+          <div class="row ">
+            <div class="col-md-6">
+              <!-- <span>Type : </span>{{irb.committeeType?.description}} -->
+              Type : <span class="text-danger">{{irb.COMMITTEE_TYPE}}</span>
+            </div>
+            <div class="col-md-6">
+              Home Unit : <span class="text-danger">{{irb.HOME_UNIT_NAME}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-6">
+              <span>Approval Date : </span>{{(irb.LAST_APPROVAL_DATE === ' ' || irb.LAST_APPROVAL_DATE === null ) ? ' ':(irb.LAST_APPROVAL_DATE | date: 'MM/dd/yyyy')}}
+            </div>
+            <div class="col-md-6">
+              <span>Expiration Date : </span>{{(irb.EXPIRATION_DATE === ' ' || irb.EXPIRATION_DATE === null ) ?  ' ':(irb.EXPIRATION_DATE | date: 'MM/dd/yyyy')}}
+            </div>
+          </div> -->
+        <div>
+          <div class="row">
+            <!-- <div class="col-md-6">
+                <span>PI : </span>{{irb.PI_NAME}}
+              </div> -->
+            <div class="col-md-6">
+              Last Update : <span
+                class="text-danger">{{(irb.UPDATE_TIMESTAMP === ' ' || irb.UPDATE_TIMESTAMP === null ) ? ' ':(irb.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+        <div class="text-right mt-3">
+          <a (click)="openIrb(irb.COMMITTEE_ID)" class="pointer"
+            href="javascript:void(0)" class="btn btn-blue btn-sm text-right">
+            <i class="fa fa-eye" aria-hidden="true"></i> View
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--
+    <div class="col-sm-12" *ngIf="irbList.length==0"> No Irb protocol found for this status</div> -->
+  <!-- list of exempt protocols-->
+  

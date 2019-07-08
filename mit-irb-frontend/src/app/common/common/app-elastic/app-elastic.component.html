@@ -1,0 +1,22 @@
+<div id="searchElastic">
+    <input class="form-control txt-small" id="searchBox" tabindex = "1" type="text" (focus) ="active = true"  placeholder="{{placeHolder}}" autocomplete="off"
+      (keydown.arrowdown) = "downArrowEvent($event);" (keydown.esc) = "hideSearchResults($event);"
+      [(ngModel)]="searchText" (ngModelChange)="getElasticResult()" [ngClass]="{'poping-border' : options.editHighlight}"/>
+    <!-- <a  class="searchButton" >
+      <i *ngIf = "searchText == ''" class="fa fa-search elastic-icons mt-lg-2 txt-large"></i>
+      <i *ngIf = "searchText != ''" class="fa fa-times elastic-icons mt-lg-2 txt-large" (click) ="emitSelectedObject(null);"></i>
+    </a> -->
+    <div id="overlay-elastic" class="overlay-elastic" (click)="hideSearchResults($event)"></div>
+    <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" *ngIf = "active" >
+      <ul id="searchList" class="sb-results-dropdown-menu1 search-position-fix-small box-shadow-1 p-0"  >
+        <li class="block" *ngFor="let result of results"
+          (mousedown)="emitSelectedObject(result.value)"
+          (keydown.enter) = "emitSelectedObject(result.value);"
+          (keydown.arrowdown) = "downArrowEvent($event);"
+          (keydown.arrowup) = "upArrowEvent($event);"
+          (keydown.esc) = "hideSearchResults();">
+          <a tabindex="3" [innerHTML]="result.label"></a>
+        </li>
+      </ul>
+    </div>
+  </div>

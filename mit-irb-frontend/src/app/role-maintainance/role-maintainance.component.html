@@ -1,0 +1,383 @@
+<!-- <div class="push4slideMenu pageMinHeight"> -->
+  <div class="container-fluid pushFixedHeaderFooter">
+    <div class="headerPush"></div>
+    <div class="card mb-10 mt-3">
+      <div class="">
+        <div>
+          <h4 class="txt-large card-hedding dotted-bottom">Role Maintenance at {{unitName}}
+            <!-- <a title="Sync Roles" class="btn btn-sm btn-tertiary float-right" id="sync-role-btn" (click)="syncRoles()">
+                                  <i class="fa fa-refresh"></i> Sync Roles
+                              </a> -->
+          </h4>
+        </div>
+
+        <div class="row p-15">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-2">
+            <span class="text-secondary txt-medium">Person Name:</span>
+            <div class="searchBox memberSearchBox">
+              <app-elastic [options]="elasticSearchOptions"
+                [placeHolder]="'Search for person with full name, user id, person id'"
+                (selectedResult)="selectUserElasticResult($event)" [clearField]="clearField"
+                (keyup)="emptyValidationKeyup($event,roleSearchObject,'personId')">
+              </app-elastic>
+            </div>
+          </div>
+
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-2">
+            <span class="text-secondary txt-medium">Unit Name:</span>
+            <div class="searchBox memberSearchBox" appKeyboardListener>
+              <input id="role-unit" placeholder="Search here for Unit" [(ngModel)]="personUnitName"
+                (focus)="fetchUnit(personUnitName);isPerson = false; isUnitSearchActive = true;"
+                (blur)="isUnitSearchActive = false; unitResults = []" (ngModelChange)="fetchUnit(personUnitName)"
+                [disabled]="isRoleUnitDisable" autocomplete="off"
+                (keyup)="emptyValidationKeyup($event,roleSearchObject,'unitNumber')"
+                class="form-control member_search txt-small" />
+              <!-- <a class="searchButton" (click)="personUnitName = null;roleSearchObject.unitNumber = null;">
+                              <i [ngClass]="(personUnitName)? 'fa fa-times fa-med' : 'fa fa-search fa-med'"></i>
+                          </a> -->
+              <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" *ngIf="isUnitSearchActive">
+                <ul class="sb-results-dropdown-menu1 search-position-fix-large box-shadow-1 p-0">
+                  <li class="block" *ngFor="let result of unitResults"
+                    (mousedown)="personUnitName = result.unitName;roleSearchObject.unitNumber = result.unitNumber">
+                    <a [innerHTML]="result.unitName"></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-2">
+            <span class="text-secondary txt-medium">Role:</span>
+            <div class="searchBox memberSearchBox">
+              <input [(ngModel)]="personRoleName" (ngModelChange)="findRoles(personRoleName);isPerson = false"
+                (blur)="isSearchRoleActive = false" [disabled]="isRoleUnitDisable"
+                placeholder="Search for a role with role name "
+                class="form-control member_search ng-pristine ng-valid ng-touched txt-small">
+              <!-- <a *ngIf="!personRoleName" class="searchButton">
+                              <i class="fa fa-search"></i>
+                          </a>
+                          <a *ngIf="personRoleName" class="searchButton" (click)="personRoleName = null;isSearchRoleActive = false;roleSearchObject.roleId = null"">
+                              <i class="fa fa-close"></i>
+                          </a> -->
+            </div>
+            <div class="sb-seachresults top-margin search-dropdown-position dropdown-width">
+              <ul class="sb-results-dropdown-menu1 search-position-fix-small box-shadow-1 p-0" *ngIf="isSearchRoleActive">
+                <li class="block" *ngFor="let list of tempRoleResultList;"
+                  (mousedown)="personRoleName = list.roleName;roleSearchObject.roleId = list.roleId;isSearchRoleActive = false">
+                  <a>{{list.roleName}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-2">
+            <button class="btn btn-outline-success txt-small float-right mt-4" id="search-person-role"
+              data-toggle="collapse" aria-expanded="false" (click)="roleUnitSearch();isRoleList = true;">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-0" *ngIf="isRoleList">
+      <div>
+        <div class="w-100">
+          <table class="table mb-0 txt-medium" *ngIf="personRoleUnitList.length > 0">
+            <thead>
+              <tr class="header-border solid-bottom">
+                <th>User Name</th>
+                <th>Full Name</th>
+                <th>Unit Name</th>
+                <th>e-Mail</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let personRole of personRoleUnitList; let i =index">
+                <tr class="solid-bottom pull-up">
+                  <td class="align-middle">{{personRole?.userName}}</td>
+                  <td class="align-middle">{{personRole?.fullName}}</td>
+                  <td class="align-middle">{{personRole?.unitName}}</td>
+                  <td class="align-middle">{{personRole?.email}}</td>
+                  <td class="align-middle">
+                    <ul class="actionButtonGroup">
+                      <li class="m-0">
+                        <i class="fa fa-eye icon log-user-icon-lite txt-small"
+                          (click)="isPerson = true;isRoleList= false;editPersonRoles(personRole)"></i>
+                      </li>
+                      <li class="m-0" (click)="setPersonIndex(i)">
+                        <i [ngClass]="viewPerson[i]?'fa fa-angle-double-up':'fa fa-angle-double-down'"
+                          class="fa-large log-user-icon-lite txt-small"
+                          (click)="viewPersonRoles(personRole.personId,personRole.unitNumber);isPerson = false;"></i>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+                <!-- <tr *ngIf="viewPerson[i] == true"> -->
+                <tr *ngIf="viewPerson[i] && roleVisibleId == personRole.personId" class="solid-bottom">
+                  <td colspan="5" class="Welcome-msg">
+                    <div class="card m-0">
+                      <div class="">
+                        <div class="">
+                          <div class="">
+                            <h4 class="txt-large card-hedding dotted-bottom">Assigned Roles
+                            </h4>
+                          </div>
+                          <div class="card-body" *ngIf="viewPerson[i]">
+                            <div class="row">
+                              <div class="col-lg-3 mb-3" *ngFor="let list of personRoleLists">
+                                <span class="imge-display">
+                                  <img *ngIf="list.descentFlag == 'Y'"
+                                    src="/irb/resources/dist/assets/images/tree1.png" aria-hidden="true">
+                                  <!-- <img *ngIf="list.descentFlag == 'Y'" src="assets/images/tree1.png" aria-hidden="true"> -->
+                                  <img *ngIf="list.descentFlag == 'N'"
+                                    src="/irb/resources/dist/assets/images/tree.png" aria-hidden="true">
+                                  <!-- <img *ngIf="list.descentFlag == 'N'" src="assets/images/tree.png" aria-hidden="true"> -->
+                                </span>
+                                <span class="welcome-popup text-danger txt-small" (click)="viewRoleDetails(list.roleId)"
+                                  data-toggle="modal" data-target="#roleModal" aria-hidden="true">{{list.roleName}}
+                                </span>
+                                <!-- <a>
+                                                                          <i class="fa fa-eye icon m-left" (click)="viewRoleDetails(list.roleId)" data-toggle="modal" data-target="#roleModal" aria-hidden="true"></i>
+                                                                      </a> -->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="isPerson">
+      <div class="row">
+        <div class="card action-margin m-0">
+          <div class="card-content search-card-view">
+            <div class="card-body m-0">
+              <div class="row txt-medium">
+                <div class="col-xl-2 col-md-3 col-sm-6 col-6">
+                  <span class="text-secondary">
+                    Person Id:
+                  </span>
+                  <span class="text-danger">{{personDetails?.personId}}</span>
+                </div>
+                <div class="col-xl-3 col-md-3 col-sm-6 col-6">
+                  <span class="text-secondary">
+                    Full Name:
+                  </span>
+                  <span class="text-danger">{{personDetails?.personName}} ({{personDetails?.user_name}})</span>
+                </div>
+                <div class="col-xl-3 col-md-3 col-sm-6 col-6">
+                  <span class="text-secondary">
+                    Email Id:
+                  </span>
+                  <span class="text-danger">{{personDetails?.email_id}}</span>
+                </div>
+                <div class="col-xl-4 col-md-3 col-sm-6 col-6">
+                  <span class="text-secondary">
+                    Department:
+                  </span>
+                  <span class="text-danger">{{personDetails?.unit_name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-0" *ngIf="isPerson">
+      <div>
+        <div *ngIf="isPerson" class="row mt-10">
+          <div class="dual-list list-left" [ngClass]="(isViewMode)?'col':'col-lg-3'">
+            <div class="card m-0">
+              <label class="card-hedding col-12 dotted-bottom mb-20 pd-chg">Assigned Roles</label>
+
+              <div class="row px-2">
+                <div class="col-md-1 pl-0">
+                  <div *ngIf="tempAssignedList?.length > 0">
+                    <label class="custom-checkbox">
+                      <input title="Select All" type="checkbox" class="select-all" [(ngModel)]="checkall"
+                        (ngModelChange)="selectAllAssigned(checkall)">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-11 ">
+                  <div class="searchBox">
+                    <input [(ngModel)]="searchText" (ngModelChange)="filterAssignedUnits(searchText)" type="text"
+                      placeholder="Search for a role with role name " class="ng-pristine ng-valid ng-touched">
+                    <a *ngIf="!searchText" class="searchButton-fix">
+                      <i class="fa fa-search"></i>
+                    </a>
+                    <a *ngIf="searchText" class="searchButton-fix" (click)="searchText = '';filterAssignedUnits(searchText)">
+                      <i class="fa fa-close"></i>
+                    </a>
+
+                  </div>
+                </div>
+              </div>
+              <ul id="drop-container" class="list-group pb-1 px-2">
+                <li *ngFor="let list of tempAssignedList;let index=index" class="drop-child list-group-item">
+                  <div draggable="false">
+                    <span class="dsp-blk">
+                      <label class="custom-checkbox custom-alt">
+                        <input type="checkbox" [checked]="list.selected" (change)="list.selected = !list.selected">
+                        <span class="checkmark alt-check"></span>
+                      </label>
+                    </span>
+                    <span class="dsp-blk">
+                      <img *ngIf="list.descentFlag == 'Y' " (click)="setDescentType(list)" class="pointer align"
+                        src="/irb/resources/dist/assets/images/tree1.png" aria-hidden="true">
+                      <!-- <img *ngIf="list.descentFlag == 'Y' " (click)="setDescentType(list)" class="pointer align" src="assets/images/tree1.png"
+                                              aria-hidden="true"> -->
+                      <img *ngIf="list.descentFlag == 'N'" (click)="setDescentType(list)" class="pointer"
+                        src="/irb/resources/dist/assets/images/tree.png" aria-hidden="true">
+                      <!-- <img *ngIf="list.descentFlag == 'N'" (click)="setDescentType(list)" class="pointer" src="assets/images/tree.png" aria-hidden="true"> -->
+                    </span>
+                    <span (click)="list.selected = !list.selected" class="dsp-blk label-name">
+                      <div id="visibleOrderId" class="font" draggable="false"> {{list?.roleName}}
+                      </div>
+                    </span>
+                    <span class="float-right u-icons">
+                      <a>
+                        <i class="fa fa-eye icon mt-2" (click)="viewRoleDetails(list.roleId)" data-toggle="modal"
+                          data-target="#roleModal" aria-hidden="true"></i>
+                      </a>
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="list-arrows" [ngClass]="(isViewMode)?'col-lg-1':'col-lg-1'">
+            <button class="btn btn-outline-danger move-left rounded-circle" title="Add roles"
+              (click)="moveunAssignedList();allcheck = false">
+              <span class="fa fa-angle-double-left"></span>
+            </button>
+            <button class="btn btn-outline-danger move-right rounded-circle" title="Remove roles"
+              (click)="moveassignedList();checkall = false">
+              <span class="fa fa-angle-double-right"></span>
+            </button>
+          </div>
+          <div class="dual-list list-right " [ngClass]="(isViewMode)?'col':'col-lg-3'">
+            <div class="card m-0">
+              <label class="card-hedding col-12 dotted-bottom mb-20 pd-chg">Unassigned Roles</label>
+              <div class="row px-2">
+                <div class="col-md-1 pl-0">
+                  <div *ngIf="tempUnAssignedList?.length > 0" class="btn-group">
+                    <label class="custom-checkbox">
+                      <input title="Select All" type="checkbox" class="select-all" [(ngModel)]="allcheck"
+                        (ngModelChange)="selectAllUnAssigned(allcheck)">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-11 ">
+                  <div class="searchBox">
+                    <input [(ngModel)]="search" (ngModelChange)="filterUnassignedUnits(search)" type="text"
+                      placeholder="Search for a role with role name" class="ng-pristine ng-valid ng-touched">
+
+                    <a *ngIf="!search" class="searchButton-fix">
+                      <i class="fa fa-search"></i>
+                    </a>
+                    <a *ngIf="search" class="searchButton-fix" (click)="search='';filterUnassignedUnits(search)">
+                      <i class="fa fa-close"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <ul id="drop-container" class="list-group pb-1 px-2">
+                <li *ngFor="let list of tempUnAssignedList;let index=index" class="drop-child list-group-item">
+                  <div>
+                    <span class="dsp-blk">
+                      <label class="custom-checkbox custom-alt">
+                        <input type="checkbox" [checked]="list.selected" (change)="list.selected = !list.selected">
+                        <span class="checkmark alt-check"></span>
+                      </label>
+                    </span>
+                    <span class="dsp-blk label-name" (click)="list.selected = !list.selected">
+                      <div id="visibleOrderId" class="font"> {{list?.roleName}}</div>
+                    </span>
+                    <span class="float-right u-icons">
+                      <a>
+                        <i class="fa fa-eye icon" (click)="viewRoleDetails(list.roleId)" data-toggle="modal"
+                          data-target="#roleModal" aria-hidden="true"></i>
+                      </a>
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <button *ngIf="isPerson" class="btnSkin btnPublish rm-sync" (click)="syncRoles()" title="Sync Roles" type="button">Sync Roles</button> -->
+      <div id="toast-success txt-small">{{toast_message}}</div>
+    </div>
+    <div class="footerPush"></div>
+  </div>
+  <!-- </div> -->
+  <div class="modal fade mySkinDialog " id="roleModal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg uh-confirm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="modal-title thick" id="exampleModalLongTitle">Role Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="pullSide">
+            <div class="topGrid">
+              <div class="row px-3 py-2">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 card m-0">
+                  <div class="row search-card-view p-2">
+                    <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
+                      <span class="text-secondary txt-medium">Role Id:</span>
+                      <span class="text-danger txt-medium">{{roleOverview?.roleId}}</span>
+                    </div>
+                    <div class="col-xl-5 col-lg-3 col-md-3 col-sm-3 col-3">
+                      <span class="text-secondary txt-medium">Role Name:</span>
+                      <span class="text-danger txt-medium">{{roleOverview?.roleName}}</span>
+                    </div>
+                    <div class="col-xl-5 col-lg-3 col-md-3 col-sm-3 col-3">
+                      <span class="text-secondary txt-medium">Description:</span>
+                      <span class="text-danger txt-medium">{{roleOverview?.description}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="roleOverview?.rights?.length == 0" class="right-not-available">
+                <span class="txt-medium"> No Rights Available</span>
+              </div>
+              <div class="role-Modal">
+                <table *ngIf="roleOverview?.rights?.length > 0 " class="table txt-medium">
+                  <thead class="table-header">
+                    <tr>
+                      <th>
+                        <label>Rights</label>
+                      </th>
+                      <th>
+                        <label>Description</label>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let right of roleOverview?.rights" class="solid-bottom">
+                      <td class="align-middle">{{right.rightName}}</td>
+                      <td class="align-middle">{{right.description}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

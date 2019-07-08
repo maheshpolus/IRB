@@ -1,0 +1,51 @@
+<div class="col-sm-12" [ngClass]="{'main-list': irbList?.length >1}">
+    <div class="row list-rows" *ngFor="let irb of irbList">
+      <div class="col-md-2 col-sm-12 col-12 list-view mt-2">
+        <span class="rounded note pointer green p-0" *ngIf="irb.isActive">
+          <span class="txt-small">Active</span>
+        </span>
+        <span class="completed-closed rounded note pointer p-0" *ngIf="!irb.isActive">
+          <span class="txt-small">Past</span>
+        </span>
+      </div>
+      <div class="col-md-8 col-sm-12 col-12 list-des txt-dark txt-medium">
+        <h5 class="text-black txt-large">{{irb.COMMITTEE_NAME}} - {{(irb.SCHEDULED_DATE === ' ' || irb.SCHEDULED_DATE === null ) ? ' ':(irb.SCHEDULED_DATE
+            | date: 'MM/dd/yyyy')}}
+        </h5>
+        <div>
+          <div class="row">
+            <div class="col-md-6">
+              Place : <span class="text-danger">{{irb.PLACE}}</span>
+            </div>
+            <div class="col-md-6">
+              Schedule Status : <span class="text-danger">{{irb.SCHEDULE_STATUS}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            Deadline Date : <span class="text-danger">{{(irb.PROTOCOL_SUB_DEADLINE === ' ' || irb.PROTOCOL_SUB_DEADLINE === null ) ? ' ':(irb.PROTOCOL_SUB_DEADLINE
+            | date: 'MM/dd/yyyy')}}</span>
+          </div>
+          <div class="col-md-6">
+            Last Update : <span class="text-danger">{{(irb.UPDATE_TIMESTAMP === ' ' || irb.UPDATE_TIMESTAMP === null ) ? ' ':(irb.UPDATE_TIMESTAMP
+              | date: 'MM/dd/yyyy')}}</span>
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+      <div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
+        <div class="text-right mt-3">
+          <a (click)="openIrb(irb.SCHEDULE_ID)" class="pointer" href="javascript:void(0)"
+            class="btn btn-blue btn-sm text-right">
+            <i class="fa fa-eye" aria-hidden="true"></i> View
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--
+    <div class="col-sm-12" *ngIf="irbList.length==0"> No Irb protocol found for this status</div> -->
+  <!-- list of exempt protocols-->
+  

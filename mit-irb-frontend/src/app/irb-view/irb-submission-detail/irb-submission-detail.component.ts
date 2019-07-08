@@ -827,7 +827,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   loadCommitteeReviewerDetails() {
     this.showProtocolReviewsOf = 'All Protocol Reviewers';
     const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
+    this._spinner.show();
     this._irbViewService.loadCommitteeReviewerDetails(reqstObj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
       // this.submissionVo.irbAdminsReviewers = result.irbAdminsReviewers;
       this.submissionVo.comment = result.comment;

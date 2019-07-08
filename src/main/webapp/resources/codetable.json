@@ -1,0 +1,1450 @@
+{
+	"groups": ["Protocol","Exempt Studies","Committee","Others"],
+	"data_types": ["INTEGER", "String", "Date","Blob","Clob"],
+	"codetables": [{
+			"group": "Committee",
+			"codetable_name": "IRB Committee Type",
+			"description": "Short description on IRB_COMMITTEE_TYPE",
+			"database_table_name": "IRB_COMMITTEE_TYPE",
+			"fields": [{
+					"column_name": "COMMITTEE_TYPE_CODE",
+					"display_name": "Committee Type Code",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["COMMITTEE_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_COMMITTEE",
+					"column_name": "COMMITTEE_TYPE_CODE",
+					"display_name":"IRB Committee"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "IRB Protocol Action Type",
+			"description": "Short description on IRB_PROTOCOL_ACTION_TYPE",
+			"database_table_name": "IRB_PROTOCOL_ACTION_TYPE",
+			"fields": [{
+					"column_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"display_name": "Protocol Action Type Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "TRIGGER_SUBMISSION",
+					"display_name": "Trigger Submission",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "TRIGGER_CORRESPONDENCE",
+					"display_name": "Trigger Correspondence",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "FINAL_ACTION_FOR_BATCH_CORRESP",
+					"display_name": "Final Action For Batch Correspodence",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["PROTOCOL_ACTION_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_ACTIONS",
+					"column_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"display_name":"IRB Protocol Actions"
+				},{
+					"table_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"column_name": "PROTOCOL_ACTION_TYPE_CODE",
+					"display_name":"Protocol Action Type Code"
+				}
+			]
+		},{
+			"group": "Committee",
+			"codetable_name": "IRB Protocol Action Type",
+			"description": "Short description on IRB_COMM_MEMBERSHIP_TYPE",
+			"database_table_name": "IRB_COMM_MEMBERSHIP_TYPE",
+			"fields": [{
+					"column_name": "MEMBERSHIP_TYPE_CODE",
+					"display_name": "Membership Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["MEMBERSHIP_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_COMM_MEMBERSHIPS",
+					"column_name": "MEMBERSHIP_TYPE_CODE",
+					"display_name":"IRB Committee Memberships"
+				}]
+		},{
+			"group": "Committee",
+			"codetable_name": "IRB Schedule Status",
+			"description": "Short description on IRB_SCHEDULE_STATUS",
+			"database_table_name": "IRB_SCHEDULE_STATUS",
+			"fields": [{
+					"column_name": "SCHEDULE_STATUS_CODE",
+					"display_name": "Schedule Status Code",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["SCHEDULE_STATUS_CODE"],
+			"dependency": [{
+					"table_name": "IRB_COMM_SCHEDULE",
+					"column_name": "SCHEDULE_STATUS_CODE",
+					"display_name":"IRB Committee Schedule"
+				}]
+		},{
+			"group": "Exempt Studies",
+			"codetable_name": "IRB Exempt Action Type",
+			"description": "Short description on IRB_EXEMPT_ACTION_TYPE",
+			"database_table_name": "IRB_EXEMPT_ACTION_TYPE",
+			"fields": [{
+					"column_name": "ACTION_TYPE_CODE",
+					"display_name": "Action Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["ACTION_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_EXEMPT_FORM_ACTN_LOG",
+					"column_name": "ACTION_TYPE_CODE",
+					"display_name":"IRB Exempt Form Action Log"
+				}]
+		},{
+			"group": "Exempt Studies",
+			"codetable_name": "IRB Exempt Form Status",
+			"description": "Short description on IRB_EXEMPT_FORM_STATUS",
+			"database_table_name": "IRB_EXEMPT_FORM_STATUS",
+			"fields": [{
+					"column_name": "EXEMPT_STATUS_CODE",
+					"display_name": "Exempt Status Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["EXEMPT_STATUS_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PERSON_EXEMPT_FORM",
+					"column_name": "EXEMPT_STATUS_CODE",
+					"display_name":"IRB Person Exempt Form"
+				}]
+		},{
+			"group": "Committee",
+			"codetable_name": "IRB Committe Schedule Attachment Type",
+			"description": "Short description on IRB_COMM_SCHEDULE_ATTACH_TYPE",
+			"database_table_name": "IRB_COMM_SCHEDULE_ATTACH_TYPE",
+			"fields": [{
+					"column_name": "ATTACHMENT_TYPE_CODE",
+					"display_name": "Attachment Type Code",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["ATTACHMENT_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_COMM_SCHEDULE_ATTACHMENTS",
+					"column_name": "ATTACHMENT_TYPE_CODE",
+					"display_name":"IRB Committee Schedule Attachments"
+				}]
+		},{
+			"group": "Committee",
+			"codetable_name": "IRB Minute Entry Type",
+			"description": "Short description on IRB_MINUTE_ENTRY_TYPE",
+			"database_table_name": "IRB_MINUTE_ENTRY_TYPE",
+			"fields": [{
+					"column_name": "MINUTE_ENTRY_TYPE_CODE",
+					"display_name": "Minute Entry Type Code",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "SORT_ID",
+					"display_name": "Sort Id",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["MINUTE_ENTRY_TYPE_CODE"],
+			"dependency": []
+		},{
+			"group": "Committee",
+			"codetable_name": "IRB Protocol Contingency",
+			"description": "Short description on IRB_PROTOCOL_CONTINGENCY",
+			"database_table_name": "IRB_PROTOCOL_CONTINGENCY",
+			"fields": [{
+					"column_name": "PROTOCOL_CONTINGENCY_CODE",
+					"display_name": "Protocol Contingency Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "4",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["PROTOCOL_CONTINGENCY_CODE"],
+			"dependency": []
+		},{
+			"group": "Protocol",
+			"codetable_name": "IRB Protocol Review Type",
+			"description": "Short description on IRB_PROTOCOL_REVIEW_TYPE",
+			"database_table_name": "IRB_PROTOCOL_REVIEW_TYPE",
+			"fields": [{
+					"column_name": "PROTOCOL_REVIEW_TYPE_CODE",
+					"display_name": "Protocol Review Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "GLOBAL_FLAG",
+					"display_name": "Global Flag",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["PROTOCOL_REVIEW_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_SUBMISSION",
+					"column_name": "PROTOCOL_REVIEW_TYPE_CODE",
+					"display_name":"IRB Protocol Submission"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "Submission Type",
+			"description": "Short description on SUBMISSION_TYPE",
+			"database_table_name": "SUBMISSION_TYPE",
+			"fields": [{
+					"column_name": "SUBMISSION_TYPE_CODE",
+					"display_name": "Submission Type Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "Number",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "36",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["SUBMISSION_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_SUBMISSION",
+					"column_name": "SUBMISSION_TYPE_CODE",
+					"display_name":"IRB Protocol Submission"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "Submission Type Qualifier",
+			"description": "Short description on SUBMISSION_TYPE_QUALIFIER",
+			"database_table_name": "SUBMISSION_TYPE_QUALIFIER",
+			"fields": [{
+					"column_name": "SUBMISSION_TYPE_QUAL_CODE",
+					"display_name": "Submission Type Qualifier Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "Number",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "36",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["SUBMISSION_TYPE_QUAL_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_SUBMISSION",
+					"column_name": "SUBMISSION_TYPE_QUAL_CODE",
+					"display_name":"IRB Protocol Submission"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "Vulnerable Subject Age Group",
+			"description": "Short description on VULNERABLE_SUBJECT_AGE_GROUP",
+			"database_table_name": "VULNERABLE_SUBJECT_AGE_GROUP",
+			"fields": [{
+					"column_name": "AGE_GROUP_CODE",
+					"display_name": "Age Group Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "VULNERABLE_SUBJECT_TYPE_CODE",
+					"display_name": "Vulnerable Subject Type Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "AGE_GROUP",
+					"display_name": "Age Group",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "60",
+					"can_empty": "true",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["AGE_GROUP_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTO_VULNERABLE_SUB",
+					"column_name": "AGE_GROUP_CODE",
+					"display_name":"IRB Protocol Vulnerable Sub"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "Affiliation Type",
+			"description": "Short description on AFFILIATION_TYPE",
+			"database_table_name": "AFFILIATION_TYPE",
+			"fields": [{
+					"column_name": "AFFILIATION_TYPE_CODE",
+					"display_name": "Affiliation Type Code",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "ACTIVE_FLAG",
+					"display_name": "Active Flag",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "36",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["AFFILIATION_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_PERSONS",
+					"column_name": "AFFILIATION_TYPE_CODE",
+					"display_name":"IRB Protocol Persons"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "IRB Protocol Status",
+			"description": "Short description on IRB_PROTOCOL_STATUS",
+			"database_table_name": "IRB_PROTOCOL_STATUS",
+			"fields": [{
+					"column_name": "PROTOCOL_STATUS_CODE",
+					"display_name": "Protocol Status Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["PROTOCOL_STATUS_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL",
+					"column_name": "PROTOCOL_STATUS_CODE",
+					"display_name":"IRB Protocol"
+				},{
+					"table_name": "IRB_STATUS_ACTION_TYP_MAPPING",
+					"column_name": "PROTOCOL_STATUS_CODE",
+					"display_name":"IRB Status Action Type Mapping"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "IRB Protocol Type",
+			"description": "Short description on IRB_PROTOCOL_TYPE",
+			"database_table_name": "IRB_PROTOCOL_TYPE",
+			"fields": [{
+					"column_name": "PROTOCOL_TYPE_CODE",
+					"display_name": "Protocol Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["PROTOCOL_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL",
+					"column_name": "PROTOCOL_TYPE_CODE",
+					"display_name":"IRB Protocol"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "Funding Source Type",
+			"description": "Short description on FUNDING_SOURCE_TYPE",
+			"database_table_name": "FUNDING_SOURCE_TYPE",
+			"fields": [{
+					"column_name": "FUNDING_SOURCE_TYPE_CODE",
+					"display_name": "Protocol Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "FUNDING_SOURCE_TYPE_FLAG",
+					"display_name": "Funding Source Type Flag",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["FUNDING_SOURCE_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "FUNDING_SOURCE_TYPE",
+					"column_name": "FUNDING_SOURCE_TYPE_CODE",
+					"display_name":"Funding Source Type"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "IRB Attachment Type",
+			"description": "Short description on IRB_ATTACHMENT_TYPE",
+			"database_table_name": "IRB_ATTACHMENT_TYPE",
+			"fields": [{
+					"column_name": "TYPE_CD",
+					"display_name": "Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["TYPE_CD"],
+			"dependency": [{
+					"table_name": "IRB_ATTACHMENT_PROTOCOL",
+					"column_name": "TYPE_CD",
+					"display_name":"IRB Attachment Protocol"
+				},{
+					"table_name": "IRB_ATTACHMENT_TYPE_GROUP",
+					"column_name": "TYPE_CD",
+					"display_name":"IRB Attachment Type Group"
+				},{
+					"table_name": "IRB_ATTACHMENT_PERSONNEL",
+					"column_name": "TYPE_CD",
+					"display_name":"IRB Attachment Personnel"
+				},{
+					"table_name": "IRB_PROTOCOL_LOCATION_ATTMNT",
+					"column_name": "TYPE_CD",
+					"display_name":"IRB Protocol Location Attachment"
+				}]
+		},{
+			"group": "Protocol",
+			"codetable_name": "Vulnerable Subject Type",
+			"description": "Short description on VULNERABLE_SUBJECT_TYPE",
+			"database_table_name": "VULNERABLE_SUBJECT_TYPE",
+			"fields": [{
+					"column_name": "VULNERABLE_SUBJECT_TYPE_CODE",
+					"display_name": "Vulnerable Subject Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["VULNERABLE_SUBJECT_TYPE_CODE"],
+			"dependency": [{
+					"table_name": "IRB_PROTO_VULNERABLE_SUB",
+					"column_name": "VULNERABLE_SUBJECT_TYPE_CODE",
+					"display_name":"IRB Protocol Vulnerable Subject"
+				}]
+		},{
+			"group": "Others",
+			"codetable_name": "Unit",
+			"description": "Short description on UNIT",
+			"database_table_name": "UNIT",
+			"fields": [{
+					"column_name": "UNIT_NUMBER",
+					"display_name": "Unit Number",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UNIT_NAME",
+					"display_name": "Unit Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "60",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "36",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "ORGANIZATION_ID",
+					"display_name": "Organization Id",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "8",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "PARENT_UNIT_NUMBER",
+					"display_name": "Parent Unit Number",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "8",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "ACTIVE_FLAG",
+					"display_name": "Active Flag",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["UNIT_NUMBER"],
+			"dependency": [{
+					"table_name": "IRB_PROTOCOL_UNITS",
+					"column_name": "UNIT_NUMBER",
+					"display_name":"IRB Protocol Units"
+				}]
+		},{
+			"group": "Others",
+			"codetable_name": "Unit Administrator Type",
+			"description": "Short description on UNIT_ADMINISTRATOR_TYPE",
+			"database_table_name": "UNIT_ADMINISTRATOR_TYPE",
+			"fields": [{
+					"column_name": "UNIT_ADMINISTRATOR_TYPE_CODE",
+					"display_name": "Unit Administrator Type Code",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "36",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DEFAULT_GROUP_FLAG",
+					"display_name": "Default Group Flag",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "MULTIPLES_FLAG",
+					"display_name": "Multiples Flag",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["UNIT_ADMINISTRATOR_TYPE_CODE"],
+			"dependency": []
+		},{
+			"group": "Protocol",
+			"codetable_name": "Training",
+			"description": "Short description on Training",
+			"database_table_name": "TRAINING",
+			"fields": [{
+					"column_name": "TRAINING_CODE",
+					"display_name": "Traing Code",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "DESCRIPTION",
+					"display_name": "Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "VER_NBR",
+					"display_name": "Version Number",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "OBJ_ID",
+					"display_name": "Object Id",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				}
+			],
+			"primary_key": ["TRAINING_CODE"],
+			"dependency": []
+		},{
+			"group": "Protocol",
+			"codetable_name": "Protocol Available Actions",
+			"description": "Short description on Available Actions",
+			"database_table_name": "IRB_PROTOCOL_AVAILABLE_ACTIONS",
+			"fields": [{
+					"column_name": "AVAILABLE_ACTION_ID",
+					"display_name": "Available Action Id",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "10",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "ACTION_CODE",
+					"display_name": "Action Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "ACTION_DESCRIPTION",
+					"display_name": "Action Description",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "ACTION_NAME",
+					"display_name": "Action Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "ICON_CLASS_NAME",
+					"display_name": "Icon Class Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "PERMISSION_NAME",
+					"display_name": "Permission Name",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_CURNT_STATUS_CODE",
+					"display_name": "Current Status Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_NEXT_STATUS_CODE",
+					"display_name": "Next Status Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_SUBMS_NEXT_STATUS_CODE",
+					"display_name": "Next Submission Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "PROTO_SUBMS_STATUS_CODE",
+					"display_name": "Current Submission Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				}
+			],
+			"primary_key": ["AVAILABLE_ACTION_ID"],
+			"dependency": []
+		},{
+			"group": "Protocol",
+			"codetable_name": "IRB WaterMark",
+			"description": "Short description on IRB_WATERMARK",
+			"database_table_name": "IRB_WATERMARK",
+			"fields": [{
+					"column_name": "WATERMARK_ID",
+					"display_name": "Watermark Id",
+					"data_type": "INTEGER",
+					"is_editable": "false",
+					"length": "12",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "STATUS_CODE",
+					"display_name": "Status Code",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "8",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "UPDATE_TIMESTAMP",
+					"display_name": "update timestamp",
+					"data_type": "Date",
+					"is_editable": "false",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "UPDATE_USER",
+					"display_name": "Update User",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "60",
+					"can_empty": "false",
+					"visible": "false"
+				},{
+					"column_name": "WATERMARK_TEXT",
+					"display_name": "Watermark Text",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "200",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "WATERMARK_STATUS",
+					"display_name": "Watermark Status",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "1",
+					"can_empty": "false",
+					"visible": "true"
+				},{
+					"column_name": "FONT_SIZE",
+					"display_name": "Font Size",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "5",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "FONT_COLOUR",
+					"display_name": "Font Color",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "50",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "WATERMARK_TYPE",
+					"display_name": "Watermark Type",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "20",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "IMAGE_FILE",
+					"display_name": "Image File",
+					"data_type": "Blob",
+					"is_editable": "false",
+					"can_empty": "true",
+					"visible": "false"
+				},{
+					"column_name": "FILE_NAME",
+					"display_name": "File Name",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "255",
+					"can_empty": "true",
+					"visible": "false"
+				},{
+					"column_name": "CONTENT_TYPE",
+					"display_name": "Content Type",
+					"data_type": "String",
+					"is_editable": "false",
+					"length": "150",
+					"can_empty": "true",
+					"visible": "false"
+				},{
+					"column_name": "POSITION",
+					"display_name": "Position",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "20",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "ALIGNMENT",
+					"display_name": "Alignment",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "20",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "POSITION_FONT",
+					"display_name": "Position Font",
+					"data_type": "String",
+					"is_editable": "true",
+					"length": "20",
+					"can_empty": "true",
+					"visible": "true"
+				},{
+					"column_name": "MODULE_CODE",
+					"display_name": "Module Code",
+					"data_type": "INTEGER",
+					"is_editable": "true",
+					"length": "3",
+					"can_empty": "true",
+					"visible": "true"
+				}		
+			],
+			"primary_key": ["WATERMARK_ID"],
+			"dependency": []
+		}
+	]
+}

@@ -1,0 +1,59 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+ <!-- <Context path="/mit-irb">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="stage50kc" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@kc-stage-db.mit.edu:1521:KCSTAGE" 
+username="kcso" validationQuery="select 1 from dual"/>
+</Context>  -->
+ <!--  <Context path="/irb">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxTotal="20"
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="kcsomit"
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@52.20.184.15:1521:kuali"
+username="kcsomit" validationQuery="select 1 from dual"/>
+</Context>  --> 
+
+<!--  <Context path="/irb">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxTotal="20" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="kcsomit" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@192.168.1.60:1521: kualidup" 
+username="kcsomit" validationQuery="select 1 from dual"/>
+</Context> -->
+ <Context path="/irb">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxTotal="20" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="kcsomit" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@172.30.4.198:1521: kualidup" 
+username="kcsomit" validationQuery="select 1 from dual"/>
+</Context>    
+<!-- <Context path="/irb"> 
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxTotal="20" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="kcsomit" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@192.168.1.60:1521:kualidup" 
+username="kcsomit" validationQuery="select 1 from dual"/>
+</Context> -->
+<!--    <Context path="/mit-irb">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="qawkly50kc" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@kc-train-db.mit.edu:1521:KCQAWKLY" 
+username="kcso" validationQuery="select 1 from dual"/>
+</Context>  -->
+ 
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<Context path="/connect">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="kcso" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@192.168.1.60:1521:kuali" 
+username="kcso" validationQuery="select 1 from dual"/>
+</Context> -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<Context path="/connect">
+<Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="stage50kc" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@kc-stage-db.mit.edu:1521:KCSTAGE" 
+username="kcso" validationQuery="select 1 from dual"/>
+</Context> -->
+<!-- <Resource driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
+maxIdle="10" maxWait="5000" name="jdbc/mit-irb" password="qawkly50kc" 
+type="javax.sql.DataSource" url="jdbc:oracle:thin:@kc-train-db.mit.edu:1521:KCQAWKLY" 
+username="kcso" validationQuery="select 1 from dual"/>
+</Context> -->

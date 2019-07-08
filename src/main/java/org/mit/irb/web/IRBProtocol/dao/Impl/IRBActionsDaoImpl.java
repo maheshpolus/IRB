@@ -7,10 +7,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -67,26 +64,15 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO getActionList(IRBActionsVO vo) {		
 		ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		ArrayList<HashMap<String, Object>> permissionList = null;
 		ArrayList<HashMap<String, Object>> result = null;	
-		ArrayList<HashMap<String, Object>> intialResult =  new ArrayList<HashMap<String, Object>>();
-		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,String.valueOf(vo.getPersonID())));				
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));		
 		try {
-			permissionList = dbEngine.executeProcedure(inputParam,"GET_IRB_PERSON_PERMISSION", outputParam);
-			if(permissionList !=null && !permissionList.isEmpty()){			
-				for(HashMap<String,Object> permName : permissionList){		
-					inputParam=new ArrayList<InParameter>();			
-					inputParam.add(new InParameter("AV_PERMISSION_NAME", DBEngineConstants.TYPE_STRING,permName.get("PERM_NM").toString()));				
-					inputParam.add(new InParameter("AV_PROTOCOL_STATUS", DBEngineConstants.TYPE_STRING,vo.getProtocolStatus()));				
-					inputParam.add(new InParameter("AV_PROTOCOL_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING,vo.getSubmissionStatus()));				
-					result = dbEngine.executeProcedure(inputParam,"GET_IRB_AVAILABLE_ACTION", outputParam);
-					if(result != null && !result.isEmpty())
-						intialResult.addAll(result);								
-				}						
-			}
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,String.valueOf(vo.getPersonID())));				
+			inputParam.add(new InParameter("AV_PROTOCOL_STATUS", DBEngineConstants.TYPE_STRING,vo.getProtocolStatus()));				
+			inputParam.add(new InParameter("AV_PROTOCOL_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING,vo.getSubmissionStatus()));				
+			result = dbEngine.executeProcedure(inputParam,"GET_IRB_AVAILABLE_ACTION_BKP", outputParam);													
 			vo = getProtocolActionDetails(vo);	
-			ArrayList<HashMap<String, Object>> finalResult = actionsAvaliableForUser(vo,intialResult);			
+			ArrayList<HashMap<String, Object>> finalResult = actionsAvaliableForUser(vo,result);			
 			vo.setPersonActionsList(finalResult);	
 		} catch (Exception e) {
 			logger.info("Exception in getPersonRight:" + e);
@@ -98,16 +84,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
 		if(intialResult !=null && !intialResult.isEmpty()){	
 		for(int i = 0;i < intialResult.size();i++)
-        {
-            Object temp = intialResult.get(i).get("ACTION_NAME");
-            for(int k = i+1;k < intialResult.size();k++)
-            {
-                if(temp.equals(intialResult.get(k).get("ACTION_NAME")))
-                {
-                	intialResult.remove(k); 
-                }                 
-            }
-            temp = intialResult.get(i).get("ACTION_CODE"); 
+        {           
+            Object temp = intialResult.get(i).get("ACTION_CODE"); 
             switch (temp.toString()) {
 			case "205":
 				 if(reviewTypeCode == null){
@@ -887,6 +865,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
 		try {	
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);
@@ -903,7 +882,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
 				    vo.setCorrespTemplateTypeCode(result.get(0).get("CORESSPOND_TYPE_CODE")  == null ? null : result.get(0).get("CORESSPOND_TYPE_CODE").toString());
 				    vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
-			}					
+			}
 			generateProtocolCorrespondence(vo);	
 			if(vo.getProtocolNumber().length() > 10){				
 				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
@@ -1108,7 +1087,6 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
 		ResponseEntity<byte[]> attachmentData = null;
 		try{
-			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			byte[] data = getTemplateData(vo);
 			byte[] mergedOutput = mergePlaceHolders(data,vo);
 			String generatedFileName = vo.getCorrespTypeDescription()+".pdf";

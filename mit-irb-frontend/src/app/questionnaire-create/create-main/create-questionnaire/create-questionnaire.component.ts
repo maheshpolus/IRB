@@ -57,7 +57,7 @@ export class CreateQuestionnaireComponent implements OnInit, OnDestroy {
     this.editIndex = null;
     this.scrollAnimate();
   }
-  @HostListener('window:scroll',['$event']) onWindowScroll() {
+  @HostListener('window:scroll', ['$event']) onWindowScroll() {
       this.scrollAnimate();
   }
   /**Animates the button as user scrolls
@@ -178,7 +178,7 @@ export class CreateQuestionnaireComponent implements OnInit, OnDestroy {
    */
   addNewQuestion(groupName) {
     this.questionnaire.questions.push( Object.assign({}, this.configureNewQuestion(groupName, null)));
-    this._createQuestionnaireService.updateTree.next({'questionId': this.commonValues.lastQuestionId, 'groupName': groupName})
+    this._createQuestionnaireService.updateTree.next({'questionId': this.commonValues.lastQuestionId, 'groupName': groupName});
     this.editIndex = this.commonValues.lastQuestionId - 1;
     this.autoFocus();
     this._createQuestionnaireService.updateSelectedQuestionId.next(this.editIndex);

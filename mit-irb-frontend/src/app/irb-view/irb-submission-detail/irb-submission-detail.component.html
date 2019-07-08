@@ -340,10 +340,10 @@
                                 <span class="txt-medium txt-dark">{{commentGroupObj?.ACTION_TYPE}} - </span>
                                 <span class="txt-medium txt-dark">{{commentGroupObj?.UPDATE_TIMESTAMP}}</span>
                                 <span class="action-btn-list float-right">
-                                <button title="Edit" (click)="editProtocolReviewComments(commentGroupObj,i)" type="button" class="btn">
+                                <button title="Edit" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false" (click)="editProtocolReviewComments(commentGroupObj,i)" type="button" class="btn">
                                     <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
                                   </button>
-                                  <button title="Delete" (click)="updateProtocolReviewComments('D', commentGroupObj)" type="button" class="btn" data-toggle="modal"
+                                  <button title="Delete" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false" (click)="updateProtocolReviewComments('D', commentGroupObj)" type="button" class="btn" data-toggle="modal"
                                     data-target="#deleteAdminDetails">
                                     <i class="fa fa-trash log-user-icon-lite log-user-icon-lite" aria-hidden="true"></i>
                                   </button>
@@ -662,10 +662,10 @@
                         <span class="txt-medium txt-dark">{{commentGroupObj?.actionType}} - </span>
                         <span class="txt-medium txt-dark">{{commentGroupObj?.updateTimestamp}}</span>
                         <span class="action-btn-list float-right">
-                        <button title="Edit" (click)="editIRBReviewComments(commentGroupObj,i)" type="button" class="btn">
+                        <button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false" title="Edit" (click)="editIRBReviewComments(commentGroupObj,i)" type="button" class="btn">
                             <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
                           </button>
-                          <button title="Delete" (click)="updateIRBReviewComments('D', commentGroupObj)" type="button" class="btn" data-toggle="modal"
+                          <button *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false" title="Delete" (click)="updateIRBReviewComments('D', commentGroupObj)" type="button" class="btn" data-toggle="modal"
                             data-target="#deleteAdminDetails">
                             <i class="fa fa-trash log-user-icon-lite log-user-icon-lite" aria-hidden="true"></i>
                           </button>

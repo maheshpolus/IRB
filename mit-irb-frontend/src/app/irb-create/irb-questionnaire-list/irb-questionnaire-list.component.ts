@@ -14,6 +14,7 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
   protocolNumber = null;
   protocolId = null;
+  sequenceNumber = null;
   applicableQuestionnaire = [];
   isQstnrEditable = true;
   private $subscription1: ISubscription;
@@ -24,6 +25,7 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
     this._activatedRoute.queryParams.subscribe(params => {
       this.protocolNumber = params['protocolNumber'];
       this.protocolId = params['protocolId'];
+      this.sequenceNumber = params['sequenceNumber'];
     });
     const path = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
     if (path === 'irb-view') {
@@ -52,8 +54,10 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
     } else {
       moduleSubItemCodeList = [0];
     }
-    const requestObject = { 'module_item_key': this.protocolNumber, 'moduleSubItemCodeList': moduleSubItemCodeList,
-                            'module_item_code': 7, 'module_sub_item_code': 0 };
+    const requestObject = { 'module_item_key': this.protocolNumber,
+                            'module_sub_item_key': this.sequenceNumber,
+                            'moduleSubItemCodeList': moduleSubItemCodeList,
+                            'module_item_code': 7 };
     this._irbCreateService.getApplicableQuestionnaire(requestObject).subscribe(
       data => {
         const result: any = data;

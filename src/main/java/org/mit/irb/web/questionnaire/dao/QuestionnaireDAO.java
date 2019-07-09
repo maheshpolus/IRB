@@ -519,6 +519,9 @@ public class QuestionnaireDAO {
 				inParam.add(new Parameter("<<MODULE_ITEM_CODE>>", DBEngineConstants.TYPE_INTEGER, moduleItemCode));
 				inParam.add(new Parameter("<<MODULE_SUB_ITEM_CODE>>", DBEngineConstants.TYPE_INTEGER, moduleSubItemCode));
 				outputData = dbEngine.executeQuery(inParam, "GET_APPLICABLE_QUESTIONNAIRE");
+				for(HashMap<String, Object> data : outputData){
+					data.put("MODULE_SUB_ITEM_CODE", moduleSubItemCode);
+				}
 				output.addAll(outputData);
 			}					
 		} catch (Exception e) {

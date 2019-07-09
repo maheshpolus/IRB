@@ -48,9 +48,6 @@ export class ViewQuestionnaireComponent implements OnInit {
     this._questionService.getQuestionnaire(this.requestObject).subscribe(
     data => {
       this.result  = data;
-      this.result.module_item_code     = 7;
-      this.result.module_sub_item_code = null;
-      this.result.module_sub_item_key  = 0;
       this.questionnaire = this.result.questionnaire;
       const tempLabels: any = {};
       this.questionnaire.questions.forEach(question => {
@@ -287,6 +284,9 @@ export class ViewQuestionnaireComponent implements OnInit {
   saveQuestionniare() {
     this._activatedRoute.queryParams.subscribe(params => {
       this.result.module_item_key = params.protocolNumber;
+      this.result.module_item_code     = 7;
+      this.result.module_sub_item_key = params.sequenceNumber;
+      this.result.module_sub_item_code = params.subItemCode;
       this.result.action_user_id = this.userDTO.userName;
     });
     this.checkQuestionaireCompletion();
@@ -308,7 +308,7 @@ export class ViewQuestionnaireComponent implements OnInit {
    * sets no help message if help mesag is not available
    * @param helpMsg
    */
-  getHelpLink(helpMsg, index) {debugger
+  getHelpLink(helpMsg, index) {
     this.showHelpMsg[index] = !this.showHelpMsg[index];
     if (helpMsg == null) {
         this.helpMsg[index] = 'No help message availabe!';

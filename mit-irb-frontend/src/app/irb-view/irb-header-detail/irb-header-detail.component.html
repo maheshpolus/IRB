@@ -309,7 +309,7 @@
 				<i class="fa fa-home" aria-hidden="true"></i>General
 			</button>
 			<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbQuestionnaireList']"
-				[queryParams]="{protocolNumber :requestObject.protocolNumber}" (click)="show_current_tab('irbQuestionnaireList')"
+				[queryParams]="{protocolNumber :requestObject.protocolNumber, sequenceNumber:irbHeaderDetails?.SEQUENCE_NUMBER}" (click)="show_current_tab('irbQuestionnaireList')"
 				routerLinkActive="nav-active">
 				<i class="fa fa-question-circle-o" aria-hidden="true"></i>Additional Forms
 			</button>

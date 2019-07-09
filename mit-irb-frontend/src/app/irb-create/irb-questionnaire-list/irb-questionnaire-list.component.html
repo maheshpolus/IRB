@@ -46,8 +46,10 @@
 
                                             <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
                                                                                           protocolId: protocolId,
+                                                                                          sequenceNumber: sequenceNumber,
                                                                                           ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
-                                                                                         qnrId: questionnaire.QUESTIONNAIRE_ID,mode: 'view'}">
+                                                                                          subItemCode:questionnaire.MODULE_SUB_ITEM_CODE,
+                                                                                          qnrId: questionnaire.QUESTIONNAIRE_ID,mode: 'view'}">
                                               <button type="button" class="btn">
                                                 <i class="fa fa-eye log-user-icon-lite"></i>
                                               </button>
@@ -55,8 +57,10 @@
       
                                             <a *ngIf="isQstnrEditable" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
                                                                                                                            protocolId: protocolId,
+                                                                                                                           sequenceNumber: sequenceNumber,
                                                                                                                            ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
-                                                                                                                          qnrId: questionnaire.QUESTIONNAIRE_ID}">
+                                                                                                                           qnrId: questionnaire.QUESTIONNAIRE_ID,
+                                                                                                                           subItemCode:questionnaire.MODULE_SUB_ITEM_CODE}">
                                                 <button type="button" class="btn" >
                                                   <i class="fa fa-pencil log-user-icon-lite"></i>
                                                 </button>

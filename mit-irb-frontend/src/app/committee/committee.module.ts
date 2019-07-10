@@ -30,13 +30,15 @@ import { CommitteeConfigurationService } from '../common/service/committee-confi
 import { CommitteeMemberEmployeeElasticService } from '../common/service/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from '../common/service/committee-members-nonEmployee-elastic-search.service';
 import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
+import { ScheduleDetailsComponent } from './committee-home/schedule-details/schedule-details.component';
 
 const routes = [
     {
         path: '', component: CommitteeComponent, resolve: { irb: DashboardResolverService },
         children: [{ path: '', redirectTo: 'committeeHome', pathMatch: 'full' },
         { path: 'committeeHome', component: CommitteeHomeComponent },
-        { path: 'committeeMembers', component: CommitteeMembersComponent }]
+        { path: 'committeeMembers', component: CommitteeMembersComponent },
+        { path: 'scheduleDetails', component: ScheduleDetailsComponent }]
     },
     { path: 'schedule', component: ScheduleComponent }];
 
@@ -62,7 +64,8 @@ const routes = [
         ProtocolSubmittedComponent,
         ScheduleAttendanceComponent,
         ScheduleOtherActionsComponent,
-        ScheduleAttachmentsComponent],
+        ScheduleAttachmentsComponent,
+        ScheduleDetailsComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [CommitteeConfigurationService,
                 CommitteeMemberEmployeeElasticService,

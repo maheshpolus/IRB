@@ -17,7 +17,7 @@
 					</div> -->
 	  
 					<div class="row bottom-margin">
-					  <div class="col-md-4">
+					  <!-- <div class="col-md-4">
 						<div class="form-group ">
 						  <span class="txt-medium text-secondary">Review Type
 							<span class="mandatory">*</span>
@@ -34,11 +34,29 @@
 							  [(ngModel)]="result.committee.reviewTypeDescription">
 						  </span>
 						</div>
-					  </div>
+						</div> -->
+						<div class="col-md-3">
+								<div class="form-group ">
+									<span class="text-secondary txt-medium">Committee ID
+									<span class="mandatory">*</span>
+									</span>
+									<input type="text" [(ngModel)]="result.committee.committeeName" [disabled]="mode=='view' && editDetails == false"
+									class="form-control input-field-size txt-small">
+								</div>
+								</div>
+								<div class="col-md-3">
+										<div class="form-group ">
+											<span class="text-secondary txt-medium">Committee Type
+											<span class="mandatory">*</span>
+											</span>
+											<input type="text" [(ngModel)]="result.committee.committeeName" [disabled]="mode=='view' && editDetails == false"
+											class="form-control input-field-size txt-small">
+										</div>
+										</div>
 	  
-					  <div class="col-md-4">
+					  <div class="col-md-6">
 						<div class="form-group ">
-						  <span class="text-secondary txt-medium">Name
+						  <span class="text-secondary txt-medium">Committee Name
 							<span class="mandatory">*</span>
 						  </span>
 						  <input type="text" [(ngModel)]="result.committee.committeeName" [disabled]="mode=='view' && editDetails == false"
@@ -46,62 +64,59 @@
 						</div>
 					  </div>
 	  
-					  <div class="col-md-4">
-						<div class="form-group ">
-						  <span class="text-secondary txt-medium">Home Unit
-							<span class="mandatory">*</span>
-						  </span>
-						  <!-- <ng2-completer title="Enter Home Unit" [inputClass]="'form-control'" placeholder="Enter Home Unit"
-													[(ngModel)]="result.committee.homeUnitName"
-													[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
-													(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
-													(selected)="onHomeSelect()" [disabled]=" editDetails == false"></ng2-completer> -->
-						  <!-- <ng2-completer title="Enter Home Unit" [inputClass]="'form-control'" placeholder="Enter Home Unit"
-													[(ngModel)]="result.committee.homeUnitName"
-													[datasource]="dataServiceHomeUnit" [minSearchLength]="0" (ngModelChange)="onHomeSelect($event)"
-													(selected)="onHomeSelect($event)" [disabled]=" editDetails == false"></ng2-completer> -->
-						  <input type="text" class="form-control input-field-size txt-small" placeholder="Enter Home Unit"
-							[(ngModel)]="result.committee.homeUnitName" (ngModelChange)="getHomeUnitList()" (focus)="isHomeUnitSearch = true"
-							(focusout)="isHomeUnitSearch = false" [disabled]=" editDetails == false"
-							(keydown.arrowdown)="keyPressEvent.onKeyDown($event,'homeUnitDropDown')"
-							(keydown.arrowup)="keyPressEvent.onKeyDown($event,'homeUnitDropDown')"
-							(keydown.Enter)="keyPressEvent.onKeyDown($event,'homeUnitDropDown')">
-						  <div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="homeUnitDropDown">
-							<ul class="sb-results-dropdown-menu" *ngIf="isHomeUnitSearch">
-							  <li *ngFor="let result of homeUnitSearchResult"
-								(mousedown)="selectedHomeUnit(result.unitName,result.unitNumber)"
-								(click)="selectedHomeUnit(result.unitName,result.unitNumber)">
-								<a>{{result.unitNumber}} -
-								  {{result.unitName}}</a></li>
-							</ul>
-						  </div>
-						</div>
-					  </div>
 					</div>
 	  
 					<div class="row bottom-margin">
-					  <div class="col-md-4">
+						
+							<div class="col-md-3">
+									<div class="form-group ">
+										<span class="text-secondary txt-medium">Home Unit
+										</span>
+										<!-- <ng2-completer title="Enter Home Unit" [inputClass]="'form-control'" placeholder="Enter Home Unit"
+																[(ngModel)]="result.committee.homeUnitName"
+																[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
+																(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
+																(selected)="onHomeSelect()" [disabled]=" editDetails == false"></ng2-completer> -->
+										<!-- <ng2-completer title="Enter Home Unit" [inputClass]="'form-control'" placeholder="Enter Home Unit"
+																[(ngModel)]="result.committee.homeUnitName"
+																[datasource]="dataServiceHomeUnit" [minSearchLength]="0" (ngModelChange)="onHomeSelect($event)"
+																(selected)="onHomeSelect($event)" [disabled]=" editDetails == false"></ng2-completer> -->
+										<input type="text" class="form-control input-field-size txt-small" placeholder="Enter Home Unit"
+										[(ngModel)]="result.committee.homeUnitName" (ngModelChange)="getHomeUnitList()" (focus)="isHomeUnitSearch = true"
+										(focusout)="isHomeUnitSearch = false" [disabled]=" editDetails == false"
+										(keydown.arrowdown)="keyPressEvent.onKeyDown($event,'homeUnitDropDown')"
+										(keydown.arrowup)="keyPressEvent.onKeyDown($event,'homeUnitDropDown')"
+										(keydown.Enter)="keyPressEvent.onKeyDown($event,'homeUnitDropDown')">
+										<div class="sb-seachresults top-margin search-dropdown-position dropdown-width" id="homeUnitDropDown">
+										<ul class="sb-results-dropdown-menu" *ngIf="isHomeUnitSearch">
+											<li *ngFor="let result of homeUnitSearchResult"
+											(mousedown)="selectedHomeUnit(result.unitName,result.unitNumber)"
+											(click)="selectedHomeUnit(result.unitName,result.unitNumber)">
+											<a>{{result.unitNumber}} -
+												{{result.unitName}}</a></li>
+										</ul>
+										</div>
+									</div>
+									</div>
+					  <div class="col-md-3">
 						<div class="form-group ">
 						  <span class="text-secondary txt-medium">Minimum Members for Quorum
-							<span class="mandatory">*</span>
 						  </span>
 						  <input type="number" [disabled]="editDetails==false" min="1" [(ngModel)]="result.committee.minimumMembersRequired"
 							class="form-control txt-small input-field-size">
 						</div>
 					  </div>
-					  <div class="col-md-4">
+					  <div class="col-md-3">
 						<div class="form-group ">
 						  <span class="text-secondary txt-medium">Advance Submission Days
-							<span class="mandatory">*</span>
 						  </span>
 						  <input type="number" [disabled]="editDetails==false" min="1" [(ngModel)]="result.committee.advSubmissionDaysReq"
 							class="form-control txt-small input-field-size">
 						</div>
 					  </div>
-					  <div class="col-md-4">
+					  <div class="col-md-3">
 						<div class="form-group ">
 						  <span class="text-secondary txt-medium">Maximum Protocols
-							<span class="mandatory">*</span>
 						  </span>
 						  <input type="number" [disabled]="editDetails==false" min="1" [(ngModel)]="result.committee.maxProtocols"
 							class="form-control txt-small input-field-size">
@@ -111,13 +126,23 @@
 					<div class="row bottom-margin">
 					  <div class="col-md-12">
 						<div class="form-group ">
-						  <span class="text-secondary txt-medium">Description
+						  <span class="text-secondary txt-medium">Meeting Description
 						  </span>
 						  <textarea class="form-control txt-small txt-area-fnt" [disabled]="editDetails==false"
 							[(ngModel)]="result.committee.description"></textarea>
 						</div>
 					  </div>
 					</div>
+					<div class="row bottom-margin">
+							<div class="col-md-12">
+							<div class="form-group ">
+								<span class="text-secondary txt-medium">Description
+								</span>
+								<textarea class="form-control txt-small txt-area-fnt" [disabled]="editDetails==false"
+								[(ngModel)]="result.committee.description"></textarea>
+							</div>
+							</div>
+						</div>
 					<div class="row bottom-margin">
 					  <div class="col-md-2">
 						<button type="button margin-class" *ngIf="editDetails ==false"
@@ -263,21 +288,23 @@
 							data-target="#exampleModalCenter,#editDetailsModal">
 							<i class="fa fa-plus icon-padding text-danger txt-medium"></i>Generate Schedule
 						  </a></div>
-						<div class="col-md-3">
+						<!-- <div class="col-md-3">
 						  <a class="pdf txt-medium text-danger" (click)="isFilterClicked = !isFilterClicked"
 						  data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
 							<i class="fa fa-glass icon-padding text-danger txt-medium"></i>Apply Filters
-						  </a></div>
+							</a></div> -->
+							<div class="col-md-9 text-right">
+									<input type="checkbox" [(ngModel)]="minuteFlag" /> Show All
+								</div>
 					  </div>
 					</div>
 				  </div>
-				  <div class="col-md-12 collapse pt-1" id="collapseExample2">
-					<div class="col-12  search-eidted-p padding-15 confirm-text-padding"
+				  					<!--<div class="col-md-12 collapse pt-1" id="collapseExample2">
+ <div class="col-12  search-eidted-p padding-15 confirm-text-padding"
 					  *ngIf="isFilterDatePrevious || !isMandatoryFilterFilled">
 					  <div class="alert alert-danger txt-medium">{{filterValidationMessage}}
 					  </div>
-					</div>
-	  
+					</div> 
 					<div class="row">
 					  <div class="col-md-4">
 						<div class="form-group">
@@ -318,10 +345,15 @@
 	  
 	  
 	  
-					  <!-- <div *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</div> -->
+					 
 	  
 					</div>
-				  </div>
+					</div>-->
+					<div class="col-12  search-eidted-p">
+							<div class="row alert-sp alert-warning mb-0">
+								<i class="txt-small m-0 ml-10">schedules from xx to xx</i>
+							</div>
+						</div>
 				  <div class="col-12  search-eidted-p padding-15 confirm-text-padding" *ngIf="!isScheduleFieldsFilled">
 					<div class="alert alert-danger txt-medium">Please Fill Mandatory Fields Marked *
 					</div>
@@ -523,22 +555,22 @@
 						</div>
 						<div>
 						  <ul class="nav nav-tabs tabsIcon" id="myTab" role="tablist">
-							<li class="nav-item">
+							<!-- <li class="nav-item">
 							  <a class="nav-link active txt-medium" id="home-tab" data-toggle="tab" href="#Daily" role="tab" aria-controls="home"
 								aria-selected="true" (click)="showTab('DAILY')">Daily</a>
 							</li>
 							<li class="nav-item">
 							  <a class="nav-link txt-medium" id="profile-tab" data-toggle="tab" href="#Weekly" role="tab" aria-controls="profile"
 								aria-selected="false" (click)="showTab('WEEKLY')">Weekly</a>
-							</li>
+							</li> -->
 							<li class="nav-item">
-							  <a class="nav-link txt-medium" id="contact-tab" data-toggle="tab" href="#Monthly" role="tab" aria-controls="contact"
-								aria-selected="false" (click)="showTab('MONTHLY')">Monthly</a>
-							</li>
+							  <a class="nav-link active txt-medium" id="home-tab" data-toggle="tab" href="#Monthly" role="tab" aria-controls="home"
+								aria-selected="true" (click)="showTab('MONTHLY')">Monthly</a>
+							<!-- </li>
 							<li class="nav-item">
 							  <a class="nav-link txt-medium" id="contact-tab" data-toggle="tab" href="#Yearly" role="tab" aria-controls="contact"
 								aria-selected="false" (click)="showTab('YEARLY')">Yearly</a>
-							</li>
+							</li> -->
 							<li class="nav-item">
 							  <a class="nav-link txt-medium" id="contact-tab" data-toggle="tab" href="#Never" role="tab" aria-controls="contact"
 								aria-selected="false" (click)="showTab('NEVER')">Never</a>
@@ -546,7 +578,7 @@
 						  </ul>
 						</div>
 						<div class="tab-content" id="myTabContent">
-						  <div class="tab-pane fade show active" id="Daily" role="tabpanel" aria-labelledby="home-tab">
+						  <div class="tab-pane fade" id="Daily" role="tabpanel" aria-labelledby="contact-tab">
 							<div class="tabCover">
 							  <ul class="tablelayout padding-0">
 								<li>
@@ -640,7 +672,7 @@
 						  </div>
 	  
 	  
-						  <div class="tab-pane fade" id="Monthly" role="tabpanel" aria-labelledby="contact-tab">
+						  <div class="tab-pane fade show active" id="Monthly" role="tabpanel" aria-labelledby="home-tab">
 							<div class="tabCover">
 							  <ul class="tablelayout padding-0">
 								<li>

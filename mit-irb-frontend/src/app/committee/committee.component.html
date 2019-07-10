@@ -137,6 +137,11 @@
                     							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee"
               (click)="show_current_tab($event,'committee_members')">
               <i class="fa fa-users"></i>Members
+			</button>
+			<button class="btn btn-primary " type="submit" [ngClass]="{'nav-active':currentTab=='committee_schedule',
+                    							'tab_btn':isCreateNewCommittee==false}" [disabled]="isCreateNewCommittee"
+              (click)="show_current_tab($event,'committee_schedule')">
+              <i class="fa fa-users"></i>Meetings
             </button>
           </section>
 					<!-- <section class="row btn-row-med sect-padding mr-2"> -->

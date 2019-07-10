@@ -540,17 +540,22 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.result.scheduleData.monthlySchedule = {};
             this.result.scheduleData.yearlySchedule = {};
             this.result.scheduleData.scheduleStartDate = this.today;
-            this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.recurrenceType = 'DAILY';
+            // this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
+            // this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
+            // this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
+            // this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
+            this.result.scheduleData.recurrenceType = 'MONTHLY';
             this.result.scheduleData.dailySchedule.day = 1;
             this.displayTime = null;
             this.isDatePrevious = false;
             this.isMandatoryFilled = true;
             this.isStartDateBeforeToday = false;
-            this.optionDay = 'XDAY';
+            this.monthOptionDay = 'XDAYANDXMONTH';
+                this.result.scheduleData.monthlySchedule.day = 1;
+                this.result.scheduleData.monthlySchedule.option1Month = 1;
+                this.result.scheduleData.monthlySchedule.selectedMonthsWeek = '';
+                this.result.scheduleData.monthlySchedule.selectedDayOfWeek = '';
+                this.result.scheduleData.monthlySchedule.option2Month = null;
         }
     }
 

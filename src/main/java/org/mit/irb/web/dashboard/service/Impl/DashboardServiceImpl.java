@@ -3,7 +3,6 @@ package org.mit.irb.web.dashboard.service.Impl;
 import java.text.ParseException;
 
 import org.mit.irb.web.common.pojo.DashboardProfile;
-import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.dashboard.dao.DashboardDao;
 import org.mit.irb.web.dashboard.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,6 @@ import org.springframework.stereotype.Service;
 @Service(value = "dashboardService")
 public class DashboardServiceImpl implements DashboardService {
 
-	private DBEngine dBEngine;
-
-	public DashboardServiceImpl(){ 
-		dBEngine = new DBEngine();
-	}
 
 	@Autowired
 	DashboardDao dashboardDao; 
@@ -58,6 +52,12 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public DashboardProfile getprotocolSubmissionStatus() {
 		DashboardProfile profile = dashboardDao.getProtocolSubmissionStatus();
+		return profile;
+	}
+
+	@Override
+	public DashboardProfile getAdminDashBoardPermissions(String personId ,String leadUnitNumber) {
+		DashboardProfile profile = dashboardDao.getAdminDashBoardPermissions(personId, leadUnitNumber);
 		return profile;
 	}
 }

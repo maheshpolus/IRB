@@ -136,4 +136,10 @@ public class CommitteeController {
 		CommitteeVo committeeVo = committeeService.loadScheduleDetailsById(vo.getCommitteeId());
 		return committeeVo;
 	}
+	
+	@RequestMapping(value = "/loadCommitteeMemberById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo loadCommitteeMembers(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
+		CommitteeVo committeeVo = committeeService.loadCommitteeMembers(vo.getCommitteeId());
+		return committeeVo;
+	}
 }

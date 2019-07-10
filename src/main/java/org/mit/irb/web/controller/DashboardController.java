@@ -74,4 +74,11 @@ public class DashboardController {
 		DashboardProfile profile=this.dashboardService.getprotocolSubmissionStatus();
 		return profile;
 	}
+	
+	@RequestMapping(value = "/getAdminDashBoardPermissions", method = RequestMethod.POST)
+	public @ResponseBody DashboardProfile getAdminDashBoardPermissions(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) {
+		DashboardProfile profile = dashboardService.getAdminDashBoardPermissions(vo.getPersonId(),vo.getLeadunitNumber());
+		return profile;
+	}
 }

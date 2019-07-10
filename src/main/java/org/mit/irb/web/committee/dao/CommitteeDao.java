@@ -251,4 +251,20 @@ public interface CommitteeDao {
 	 */
 	public CommitteeSchedule updateCommitteeSchedule(CommitteeSchedule committeeSchedule);
 
+	/**
+	 * @param commResearchAreasId
+	 */
+	public void deleteCommitteeResearchArea(Integer commResearchAreasId);
+	
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	public List<CommitteeResearchAreas> getResearchAreasByCommitteeId(String committeeId);
+
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	public Committee loadCommitteeMembers(String committeeId);
 }

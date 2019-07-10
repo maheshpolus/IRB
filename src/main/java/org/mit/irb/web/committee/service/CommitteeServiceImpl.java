@@ -117,7 +117,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 		CommitteeVo committeeVo = new CommitteeVo();
 		try {
 		    Committee committee = committeeDao.fetchCommitteeById(committeeId);
-		    List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
+		    /*List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
 			if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
 				for (CommitteeMemberships membership : committeeMemberships) {
 					if (membership.getNonEmployeeFlag()) {
@@ -128,7 +128,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 						membership.setPersonDetails(personDetails);
 					}
 				}
-			}	
+			}	*/
 		    committeeVo.setCommittee(committee);
 	        Future<CommitteeVo> loadMembershipTypes=committeeDao.loadMembershipTypes(committeeVo);
 		    Future<CommitteeVo> loadMembershipRoles=committeeDao.loadMembershipRoles(committeeVo);
@@ -329,18 +329,15 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo saveAreaOfResearch(CommitteeVo committeeVo) {
 		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
-		CommitteeResearchAreas committeeResearchAreas = committeeVo.getCommitteeResearchArea();
-		/*committeeResearchAreas.setCommittee(committee);
-		committee.getResearchAreas().add(committeeResearchAreas);*/
 		CommitteeResearchAreas researchAreas = new CommitteeResearchAreas();
 		researchAreas.setCommittee(committee);
-		researchAreas.setResearchAreaCode(committeeResearchAreas.getResearchAreaCode());
-		researchAreas.setResearchAreaDescription(committeeResearchAreas.getResearchAreaDescription());
-		researchAreas.setUpdateTimestamp(committeeResearchAreas.getUpdateTimestamp());
-		researchAreas.setUpdateUser(committeeResearchAreas.getUpdateUser());
-		researchAreas = committeeDao.saveCommitteeResearchAreas(researchAreas);
+		researchAreas.setResearchAreaCode(committeeVo.getCommitteeResearchArea().getResearchAreaCode());
+		researchAreas.setResearchAreaDescription(committeeVo.getCommitteeResearchArea().getResearchAreaDescription());
+		researchAreas.setUpdateTimestamp(committeeVo.getCommitteeResearchArea().getUpdateTimestamp());
+		researchAreas.setUpdateUser(committeeVo.getCommitteeResearchArea().getUpdateUser());
 		committee.getResearchAreas().add(researchAreas);
-		committee = committeeDao.saveCommittee(committee);
+		researchAreas = committeeDao.saveCommitteeResearchAreas(researchAreas);
+		committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 		committeeVo.setCommittee(committee);
 		return committeeVo;
 	}
@@ -348,8 +345,9 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo deleteAreaOfResearch(CommitteeVo committeeVo) {
 		try {
+			committeeDao.deleteCommitteeResearchArea(committeeVo.getCommResearchAreasId());
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
-			List<CommitteeResearchAreas> list = committee.getResearchAreas();
+			/*List<CommitteeResearchAreas> list =  committee.getResearchAreas();
 			List<CommitteeResearchAreas> updatedlist = new ArrayList<CommitteeResearchAreas>(list);
 			Collections.copy(updatedlist, list);
 			for (CommitteeResearchAreas researchArea : list) {
@@ -359,7 +357,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			}
 			committee.getResearchAreas().clear();
 			committee.getResearchAreas().addAll(updatedlist);
-			committeeDao.saveCommittee(committee);
+			committeeDao.saveCommittee(committee);*/
 			committeeVo.setCommittee(committee);
 			committeeVo.setStatus(true);
 			committeeVo.setMessage("Committee research area deleted successfully");
@@ -488,6 +486,26 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo loadScheduleDetailsById(String committeeId) {
 		Committee committee=committeeDao.loadScheduleDetailsById(committeeId);
+		CommitteeVo vo=new CommitteeVo();
+		vo.setCommittee(committee);
+		return vo;
+	}
+
+	@Override
+	public CommitteeVo loadCommitteeMembers(String committeeId) {
+		Committee committee=committeeDao.loadCommitteeMembers(committeeId);
+		List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
+		if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
+			for (CommitteeMemberships membership : committeeMemberships) {
+				if (membership.getNonEmployeeFlag()) {
+					Rolodex rolodex = committeeDao.getRolodexById(membership.getRolodexId());
+					membership.setRolodex(rolodex);
+				} else {
+					PersonDetailsView personDetails = committeeDao.getPersonDetailsById(membership.getPersonId());
+					membership.setPersonDetails(personDetails);
+				}
+			}
+		}
 		CommitteeVo vo=new CommitteeVo();
 		vo.setCommittee(committee);
 		return vo;

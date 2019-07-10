@@ -177,10 +177,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	protected boolean isActiveMembership(CommitteeMemberships committeeMembership, Date scheduledDate) {
 		return isActiveForScheduledDate(scheduledDate, committeeMembership.getTermStartDate(), committeeMembership.getTermEndDate())
-				&& hasActiveMembershipRoleForScheduledDate(committeeMembership.getCommitteeMemberRoles(), scheduledDate);
+				&& hasActiveMembershipRoleForScheduledDate((List<CommitteeMemberRoles>) committeeMembership.getCommitteeMemberRoles(), scheduledDate);
 	}
 
-	private boolean isActiveForScheduledDate(Date scheduledDate, Date startDate, Date endDate) {
+	private boolean isActiveForScheduledDate(java.util.Date scheduledDate, java.util.Date startDate, java.util.Date endDate) {
 		return startDate.before(scheduledDate) && endDate.after(scheduledDate);
 	}
 

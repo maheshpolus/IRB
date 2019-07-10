@@ -2,8 +2,8 @@ package org.mit.irb.web.committee.pojo;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Cacheable;
@@ -51,13 +51,7 @@ public class CommitteeMemberships implements Serializable {
 	@ManyToOne(cascade = { CascadeType.REFRESH })
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBERSHIPS"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
 	private Committee committee;
-
-	@Column(name = "MEMBERSHIP_ID")
-	private String membershipId;
-
-	@Column(name = "SEQUENCE_NUMBER")
-	private Integer sequenceNumber;
-
+	
 	@Column(name = "PERSON_ID")
 	private String personId;
 
@@ -76,10 +70,10 @@ public class CommitteeMemberships implements Serializable {
 	private Boolean paidMemberFlag;
 
 	@Column(name = "TERM_START_DATE")
-	private Date termStartDate;
+	private java.util.Date termStartDate;
 
 	@Column(name = "TERM_END_DATE")
-	private Date termEndDate;
+	private java.util.Date termEndDate;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBERSHIPS_2"), name = "MEMBERSHIP_TYPE_CODE", referencedColumnName = "MEMBERSHIP_TYPE_CODE", insertable = false, updatable = false)
@@ -89,7 +83,7 @@ public class CommitteeMemberships implements Serializable {
 	private String membershipTypeCode;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private Timestamp updateTimestamp;
+	private java.util.Date updateTimestamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
@@ -102,7 +96,7 @@ public class CommitteeMemberships implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
-	private List<CommitteeMemberRoles> committeeMemberRoles;
+	private Collection<CommitteeMemberRoles> committeeMemberRoles;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
@@ -142,22 +136,6 @@ public class CommitteeMemberships implements Serializable {
 		this.committee = committee;
 	}
 
-	public String getMembershipId() {
-		return membershipId;
-	}
-
-	public void setMembershipId(String membershipId) {
-		this.membershipId = membershipId;
-	}
-
-	public Integer getSequenceNumber() {
-		return sequenceNumber;
-	}
-
-	public void setSequenceNumber(Integer sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
-
 	public String getPersonId() {
 		return personId;
 	}
@@ -190,14 +168,6 @@ public class CommitteeMemberships implements Serializable {
 		this.comments = comments;
 	}
 
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
 	public String getUpdateUser() {
 		return updateUser;
 	}
@@ -224,30 +194,6 @@ public class CommitteeMemberships implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public Date getTermStartDate() {
-		return termStartDate;
-	}
-
-	public void setTermStartDate(Date termStartDate) {
-		this.termStartDate = termStartDate;
-	}
-
-	public Date getTermEndDate() {
-		return termEndDate;
-	}
-
-	public void setTermEndDate(Date termEndDate) {
-		this.termEndDate = termEndDate;
-	}
-
-	public List<CommitteeMemberRoles> getCommitteeMemberRoles() {
-		return committeeMemberRoles;
-	}
-
-	public void setCommitteeMemberRoles(List<CommitteeMemberRoles> committeeMemberRoles) {
-		this.committeeMemberRoles = committeeMemberRoles;
 	}
 
 	public List<CommitteeMemberExpertise> getCommitteeMemberExpertises() {
@@ -283,16 +229,11 @@ public class CommitteeMemberships implements Serializable {
      */
     public boolean isActive(Date date) {
         boolean isActive = false;
-        for (CommitteeMemberRoles role : committeeMemberRoles) {
-            if (role.getStartDate() != null && role.getEndDate() != null && !date.before(role.getStartDate()) && !date.after(role.getEndDate())) {
-                if (role.getMembershipRoleCode().equals(Constants.INACTIVE_ROLE)) {
+            if (termStartDate != null && termEndDate != null && !date.before(termStartDate) && !date.after(termEndDate)) {              
                     isActive = false;
-                    break;
                 } else {
                     isActive = true;
-                }
-            }
-        }
+                }                    
         this.active = isActive;
         return this.active;
     }
@@ -337,4 +278,52 @@ public class CommitteeMemberships implements Serializable {
 		this.paidMemberFlag = paidMemberFlag;
 	}
 
+	public java.util.Date getTermStartDate() {
+		return termStartDate;
+	}
+
+	public void setTermStartDate(java.util.Date termStartDate) {
+		this.termStartDate = termStartDate;
+	}
+
+	public java.util.Date getTermEndDate() {
+		return termEndDate;
+	}
+
+	public void setTermEndDate(java.util.Date termEndDate) {
+		this.termEndDate = termEndDate;
+	}
+
+	public java.util.Date getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(java.util.Date updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
+
+	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
+			String personName, Boolean nonEmployeeFlag, java.util.Date termStartDate, java.util.Date termEndDate,
+			java.util.Date updateTimestamp, String updateUser, boolean active) {
+		super();
+		this.commMembershipId = commMembershipId;
+		this.committee = committee;
+		this.personId = personId;
+		this.rolodexId = rolodexId;
+		this.personName = personName;
+		this.nonEmployeeFlag = nonEmployeeFlag;
+		this.termStartDate = termStartDate;
+		this.termEndDate = termEndDate;
+		this.updateTimestamp = updateTimestamp;
+		this.updateUser = updateUser;
+		this.active = active;
+	}
+
+	public Collection<CommitteeMemberRoles> getCommitteeMemberRoles() {
+		return committeeMemberRoles;
+	}
+
+	public void setCommitteeMemberRoles(Collection<CommitteeMemberRoles> committeeMemberRoles) {
+		this.committeeMemberRoles = committeeMemberRoles;
+	}
 }

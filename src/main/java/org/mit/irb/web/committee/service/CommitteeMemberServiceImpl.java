@@ -43,7 +43,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			membership.setPersonId(personDetails.getPersonId());
 			membership.setPersonName(personDetails.getFullName());
 		}
-		membership.setMembershipId("0");
+		/*membership.setMembershipId("0");*/
 
 		committee.getCommitteeMemberships().add(membership);
 		committeeVo.setCommittee(committee);
@@ -61,7 +61,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 				if (committeeMember.getCommMembershipId() == null) {
 					committeeMember.setCommittee(committee);
 					committeeMember.setCommitteeMembershipType(committeeDao.getCommitteeMembershipTypeById(committeeMember.getMembershipTypeCode()));
-					List<CommitteeMemberRoles> committeeMemberRoles = committeeMember.getCommitteeMemberRoles();
+					List<CommitteeMemberRoles> committeeMemberRoles = (List<CommitteeMemberRoles>) committeeMember.getCommitteeMemberRoles();
 					if (committeeMemberRoles != null && !committeeMemberRoles.isEmpty()) {
 						for (CommitteeMemberRoles memberRole : committeeMemberRoles) {
 							if (memberRole.getCommMemberRolesId() == null) {
@@ -164,7 +164,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					List<CommitteeMemberRoles> list = committeeMembership.getCommitteeMemberRoles();
+					List<CommitteeMemberRoles> list = (List<CommitteeMemberRoles>) committeeMembership.getCommitteeMemberRoles();
 					List<CommitteeMemberRoles> updatedlist = new ArrayList<CommitteeMemberRoles>(list);
 					Collections.copy(updatedlist, list);
 					for (CommitteeMemberRoles role : list) {
@@ -202,7 +202,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					List<CommitteeMemberRoles> memberRoles = committeeMembership.getCommitteeMemberRoles();
+					List<CommitteeMemberRoles> memberRoles = (List<CommitteeMemberRoles>) committeeMembership.getCommitteeMemberRoles();
 					for (CommitteeMemberRoles role : memberRoles) {
 						if (role.getCommMemberRolesId().equals(committeeVo.getCommMemberRolesId())) {
 							role.setStartDate(committeeVo.getCommitteeMemberRole().getStartDate());

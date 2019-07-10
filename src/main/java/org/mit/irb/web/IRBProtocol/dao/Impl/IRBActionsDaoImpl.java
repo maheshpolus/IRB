@@ -82,32 +82,33 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	private ArrayList<HashMap<String, Object>> actionsAvaliableForUser(IRBActionsVO vo,ArrayList<HashMap<String, Object>> intialResult) {
 		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
-		if(intialResult !=null && !intialResult.isEmpty()){			
-            for(HashMap<String, Object> action : intialResult){	           	
-            	Object temp = action.get("ACTION_CODE"); 
+		if(intialResult !=null && !intialResult.isEmpty()){		
+			for(int i = 0; i< intialResult.size(); i++)
+             {	           	
+            	Object temp = intialResult.get(i).get("ACTION_CODE"); 
             	switch (temp.toString()) {
             		case "205":
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}					 
             			else if(!reviewTypeCode.equals("2")){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;
             		case "208":
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}					 
             			else if(!reviewTypeCode.equals("6")){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;
             		case "210":
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}					 
             			else if(!reviewTypeCode.equals("5")){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;
             		case "204":
@@ -115,7 +116,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
             		case "203":	
             		case "202":	
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;			
             	}	          

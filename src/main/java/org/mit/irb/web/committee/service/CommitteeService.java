@@ -101,10 +101,16 @@ public interface CommitteeService {
 	public CommitteeVo loadResearchAreas(String researchSearchString);
 
 	/**
-	 * This method is used to get scheduke details  for a particular committee id
+	 * This method is used to get schedule details  for a particular committee id
 	 * @param committeeId
 	 * @return
 	 */
 	public CommitteeVo loadScheduleDetailsById(String committeeId);
+
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	public CommitteeVo loadCommitteeMembers(String committeeId);
 
 }

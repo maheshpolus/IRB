@@ -22,6 +22,8 @@ const appRoutes = [
                     resolve: { irb: DashboardResolverService }
             },
             { path: 'code-table', loadChildren: 'app/codetable/codetable.module#CodetableModule' },
+            { path: 'admin-dashbord', loadChildren: 'app/admin-dashboard/admin-dashboard.module#AdminDashboardModule',  
+            resolve: { irb: DashboardResolverService } },
             { path: 'training-maintenance', loadChildren: 'app/person-training/person-training.module#PersonTrainingModule' },
             { path: 'role-maintainance', loadChildren: 'app/role-maintainance/role-maintainance.module#RoleMaintainanceModule' },
             { path: 'irb-create', loadChildren: 'app/irb-create/irb-create.module#IrbCreateModule' },

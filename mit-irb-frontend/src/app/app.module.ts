@@ -50,6 +50,7 @@ import { PersonTrainingService } from './person-training/person-training.service
 import { AssignModalComponent } from './common/assign-modal/assign-modal.component';
 import { PermissionWarningModalComponent } from './common/permission-warning-modal/permission-warning-modal.component';
 import { CommitteeScheduleListComponent } from './committee-schedule-list/committee-schedule-list.component';
+import { AdminDashboardService } from './admin-dashboard/admin-dashboard.service';
 
 enableProdMode();
 
@@ -74,7 +75,7 @@ enableProdMode();
         FundingSourceModalComponent,
         AssignModalComponent,
         PermissionWarningModalComponent,
-        CommitteeScheduleListComponent
+        CommitteeScheduleListComponent,
 
     ],
     imports: [
@@ -97,7 +98,7 @@ enableProdMode();
     providers: [AuthGuard, DashboardService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
-        SharedDataService, FundingSourceModalService, AssignModalServiceService, PersonTrainingService,
+        SharedDataService, FundingSourceModalService, AssignModalServiceService, PersonTrainingService, AdminDashboardService,
         KeyPressEvent, HeaderService],
         entryComponents: [FundingSourceModalComponent, AssignModalComponent, PermissionWarningModalComponent],
     bootstrap: [AppComponent]

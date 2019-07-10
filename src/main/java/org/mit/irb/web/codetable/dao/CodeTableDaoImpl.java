@@ -224,7 +224,7 @@ public class CodeTableDaoImpl implements CodeTableDao{
 		try{
 			for(Fields fields: codeTableDatabus.getCodetable().getFields()){
 				if(fields.getData_type().equalsIgnoreCase("Blob") || fields.getData_type().equalsIgnoreCase("Clob")){
-					inputParam.add(new Parameter(fields.getColumn_name(), fields.getData_type(), files[0].getBytes()));
+					inputParam.add(new Parameter(fields.getColumn_name(), fields.getData_type(),files.length != 0 ? files[0].getBytes():new byte[0]));
 				}else if (fields.getData_type().equalsIgnoreCase("INTEGER") ) {
 					inputParam.add(new Parameter(fields.getColumn_name(), fields.getData_type(),Integer.parseInt(changedMap.get(fields.getColumn_name()).toString())));
 				}else if (fields.getData_type().equalsIgnoreCase("Date") ) {

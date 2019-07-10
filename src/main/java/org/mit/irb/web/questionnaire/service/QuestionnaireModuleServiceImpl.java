@@ -2,11 +2,9 @@ package org.mit.irb.web.questionnaire.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;

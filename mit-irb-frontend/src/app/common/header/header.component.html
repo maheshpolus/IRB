@@ -18,23 +18,20 @@
 				<span>Dashboard</span>
 			</a>
 		</li>
-		<li routerLinkActive="active">
-			<a (click)="checkPermissionToGotoLink('Q')">
-				<!-- <i class="fa fa-tachometer"></i> -->
-				<i class="fa fa-question" title="Configure Questionnaire"></i>
-				<span>Configure questionnaire</span>
+		<li routerLinkActive="active" *ngIf="result?.role =='ADMIN'">
+			<a  href="#" [routerLink]="['/irb/admin-dashbord']">
+				<i class="fa fa-th" title="Administrative Dashboard"></i>
+				<span>Administrative Dashboard</span>
 			</a>
 		</li>
-		<li routerLinkActive="active">
+	<!--	<li routerLinkActive="active">
 			<a (click)="checkPermissionToGotoLink('CT')">
-				<!-- <i class="fa fa-tachometer"></i> -->
 				<i class="fa fa-table" title="Table Maintenance"></i>
 				<span>Table Maintenance</span>
 			</a>
 		</li>
 		<li routerLinkActive="active">
 				<a (click)="checkPermissionToGotoLink('T')">
-					<!-- <i class="fa fa-tachometer"></i> -->
 					<i class="fa fa-graduation-cap" title="Training Maintenance"></i>
 					<span>Training Maintenance</span>
 				</a>
@@ -56,7 +53,7 @@
 							<i class="fa fa-calendar" aria-hidden="true"></i>
 							<span>Schedules</span>
 						</a>
-					</li>
+					</li>-->
 			
 	</ul>
 	<div class="pullBack d-md-none d-lg-none d-xl-none">

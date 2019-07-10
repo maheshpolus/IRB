@@ -660,6 +660,10 @@
 	"/mit-irb/downloadQuesAttachment": {
 		"target": "http://192.168.1.93:8082",
 		"secure": false	
+	},
+	"/mit-irb/getAdminDashBoardPermissions": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false	
 	}
 	
 }

@@ -96,7 +96,7 @@ public class CommitteeMemberships implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
-	private Collection<CommitteeMemberRoles> committeeMemberRoles;
+	private List<CommitteeMemberRoles> committeeMemberRoles;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
@@ -304,7 +304,7 @@ public class CommitteeMemberships implements Serializable {
 
 	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
 			String personName, Boolean nonEmployeeFlag, java.util.Date termStartDate, java.util.Date termEndDate,
-			java.util.Date updateTimestamp, String updateUser, boolean active) {
+			java.util.Date updateTimestamp, String updateUser) {
 		super();
 		this.commMembershipId = commMembershipId;
 		this.committee = committee;
@@ -316,14 +316,17 @@ public class CommitteeMemberships implements Serializable {
 		this.termEndDate = termEndDate;
 		this.updateTimestamp = updateTimestamp;
 		this.updateUser = updateUser;
+	}
+
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 
-	public Collection<CommitteeMemberRoles> getCommitteeMemberRoles() {
+	public List<CommitteeMemberRoles> getCommitteeMemberRoles() {
 		return committeeMemberRoles;
 	}
 
-	public void setCommitteeMemberRoles(Collection<CommitteeMemberRoles> committeeMemberRoles) {
+	public void setCommitteeMemberRoles(List<CommitteeMemberRoles> committeeMemberRoles) {
 		this.committeeMemberRoles = committeeMemberRoles;
 	}
 }

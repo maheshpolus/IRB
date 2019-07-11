@@ -6,10 +6,11 @@ import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
 import org.mit.irb.web.committee.pojo.CommitteeMembershipType;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
+import org.mit.irb.web.committee.pojo.CommitteeType;
 import org.mit.irb.web.committee.pojo.MembershipRole;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.schedule.ScheduleData;
@@ -23,7 +24,7 @@ public class CommitteeVo {
 
 	private Committee committee;
 
-	private List<ProtocolReviewType> reviewTypes;
+	//private List<ProtocolReviewType> reviewTypes;
 
 	private List<Unit> homeUnits;
 
@@ -76,14 +77,20 @@ public class CommitteeVo {
 	private List<ScheduleStatus> scheduleStatus;
 	
 	private Integer advSubmissionDaysReq;
+	
+	private String acType;
 
-	public List<ProtocolReviewType> getReviewTypes() {
+	private List<CommitteeType> committeeTypeList;
+	
+	private CommitteeMemberships committeeMemberships;
+	
+	/*public List<ProtocolReviewType> getReviewTypes() {
 		return reviewTypes;
 	}
 
 	public void setReviewTypes(List<ProtocolReviewType> reviewTypes) {
 		this.reviewTypes = reviewTypes;
-	}
+	}*/
 
 	public List<Unit> getHomeUnits() {
 		return homeUnits;
@@ -307,6 +314,30 @@ public class CommitteeVo {
 
 	public void setAdvSubmissionDaysReq(Integer advSubmissionDaysReq) {
 		this.advSubmissionDaysReq = advSubmissionDaysReq;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+
+	public List<CommitteeType> getCommitteeTypeList() {
+		return committeeTypeList;
+	}
+
+	public void setCommitteeTypeList(List<CommitteeType> committeeTypeList) {
+		this.committeeTypeList = committeeTypeList;
+	}
+
+	public CommitteeMemberships getCommitteeMemberships() {
+		return committeeMemberships;
+	}
+
+	public void setCommitteeMemberships(CommitteeMemberships committeeMemberships) {
+		this.committeeMemberships = committeeMemberships;
 	}
 
 }

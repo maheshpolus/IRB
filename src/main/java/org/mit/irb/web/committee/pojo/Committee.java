@@ -34,8 +34,8 @@ public class Committee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GenericGenerator(name = "seq_comm_id", strategy = "org.mit.irb.web.generator.CommitteeIdGenerator")
-	@GeneratedValue(generator = "seq_comm_id")  
+	/*@GenericGenerator(name = "seq_comm_id", strategy = "org.mit.irb.web.generator.CommitteeIdGenerator")
+	@GeneratedValue(generator = "seq_comm_id")  */
 	@Column(name = "COMMITTEE_ID")
 	private String committeeId;
 
@@ -117,7 +117,13 @@ public class Committee implements Serializable {
 	private List<CommitteeMemberships> committeeMemberships;
 
 	@Column(name = "HOME_UNIT_NAME")
-	private String homeUnitName;
+	private String homeUnitName;	
+
+	@Transient
+	private java.util.Date scheduleStartDate;
+	
+	@Transient
+	private java.util.Date scheduleEndDate;
 
 	public Committee() {
 		/*setResearchAreas(new ArrayList<CommitteeResearchAreas>());
@@ -276,5 +282,21 @@ public class Committee implements Serializable {
 
 	public void setResearchAreas(List<CommitteeResearchAreas> researchAreas) {
 		this.researchAreas = researchAreas;
+	}
+
+	public java.util.Date getScheduleStartDate() {
+		return scheduleStartDate;
+	}
+
+	public void setScheduleStartDate(java.util.Date scheduleStartDate) {
+		this.scheduleStartDate = scheduleStartDate;
+	}
+
+	public java.util.Date getScheduleEndDate() {
+		return scheduleEndDate;
+	}
+
+	public void setScheduleEndDate(java.util.Date scheduleEndDate) {
+		this.scheduleEndDate = scheduleEndDate;
 	}
 }

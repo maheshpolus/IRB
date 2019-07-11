@@ -15,7 +15,6 @@ import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
 import org.mit.irb.web.committee.pojo.MembershipRole;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Rolodex;
@@ -31,13 +30,13 @@ public interface CommitteeDao {
 	 * @param committeeTypeCode - code of committee type.
 	 * @return committeeType.
 	 */
-	public CommitteeType fetchCommitteeType(Integer committeeTypeCode);
+	public List<CommitteeType> fetchCommitteeType();
 
 	/**
 	 * This method is used to fetch all ProtocolReviewTypes.
 	 * @return list of ProtocolReviewTypes.
 	 */
-	public List<ProtocolReviewType> fetchAllReviewType();
+	/*public List<ProtocolReviewType> fetchAllReviewType();*/
 
 	/**
 	 * This method is used to fetch list of Lead Units.
@@ -224,8 +223,8 @@ public interface CommitteeDao {
 	 * @param committeeVo
 	 * @return
 	 */
-	@Async
-	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo);
+	/*@Async
+	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo);*/
 
 	/**
 	 * @param committeeVo
@@ -236,9 +235,10 @@ public interface CommitteeDao {
 
 	/**
 	 * @param committeeId
+	 * @param acType 
 	 * @return
 	 */
-	public Committee loadScheduleDetailsById(String committeeId);
+	public Committee loadScheduleDetailsById(String committeeId, String acType);
 	
 	/**
 	 * @param committeeSchedule
@@ -267,4 +267,6 @@ public interface CommitteeDao {
 	 * @return
 	 */
 	public Committee loadCommitteeMembers(String committeeId);
+
+	public Boolean checkUniqueCommitteeId(Committee committee);
 }

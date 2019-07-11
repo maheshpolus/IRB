@@ -61,7 +61,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
 
-	@Override
+	/*@Override
 	public List<ProtocolReviewType> fetchAllReviewType() {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(ProtocolReviewType.class);
@@ -73,7 +73,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		@SuppressWarnings("unchecked")
 		List<ProtocolReviewType> reviewTypes = criteria.list();
 		return reviewTypes;
-	}
+	}*/
 
 	@Override
 	public List<Unit> fetchAllHomeUnits() {
@@ -106,10 +106,10 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	}
 
 	@Override
-	public CommitteeType fetchCommitteeType(Integer committeeTypeCode) {
-		CommitteeType committeeType = null;
-		committeeType = hibernateTemplate.get(CommitteeType.class, committeeTypeCode);
-		return committeeType;
+	public List<CommitteeType> fetchCommitteeType() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeType.class);				  
+		return criteria.list();
 	}
 
 	@Override
@@ -140,7 +140,11 @@ public class CommitteeDaoImpl implements CommitteeDao {
 
 	@Override
 	public Committee saveCommittee(Committee committee) {
-		hibernateTemplate.saveOrUpdate(committee);
+		try {
+			hibernateTemplate.saveOrUpdate(committee);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return committee;
 	}
 
@@ -391,7 +395,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		
 	}
 
-	@Override
+	/*@Override
 	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(ProtocolReviewType.class);
@@ -404,7 +408,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		List<ProtocolReviewType> reviewTypes = criteria.list();
 		committeeVo.setReviewTypes(reviewTypes);
 		return new AsyncResult<>(committeeVo);
-	}
+	}*/
 
 	@Override
 	public Future<CommitteeVo> loadScheduleStatus(CommitteeVo committeeVo) {
@@ -422,7 +426,11 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	}
 	
 	@Override
-	public Committee loadScheduleDetailsById(String committeeId) {
+	public Committee loadScheduleDetailsById(String committeeId, String acType) {			
+		Calendar startDate = Calendar.getInstance();
+		startDate.add(Calendar.DATE, -90); 
+		Calendar endDate = Calendar.getInstance();
+		endDate.add(Calendar.DATE, 365); 
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(CommitteeSchedule.class);
 	    ProjectionList projList = Projections.projectionList();
@@ -433,11 +441,16 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		projList.add(Projections.property("protocolSubDeadline"), "protocolSubDeadline");
 		projList.add(Projections.property("scheduleStatus"), "scheduleStatus");
 		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeSchedule.class));
-		criteria.createAlias("committee","committee").add(Restrictions.eq("committee.committeeId",committeeId));
+		criteria.createAlias("committee","committee").add(Restrictions.eq("committee.committeeId",committeeId));		
+		if(acType != null)
+			if(acType.equals("F"))
+				criteria.add(Restrictions.between("scheduledDate",startDate.getTime(),endDate.getTime()));
 		@SuppressWarnings("unchecked")
 		List<CommitteeSchedule> committeeSchedule = criteria.list();
 		Committee committee=new Committee();
-		committee.setCommitteeId(committeeId);
+		committee.setCommitteeId(committeeId);		
+		committee.setScheduleStartDate(startDate.getTime());
+		committee.setScheduleEndDate(endDate.getTime());
 		committee.setCommitteeSchedules(committeeSchedule);
 		return committee;
 	}
@@ -475,14 +488,30 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CommitteeMemberships> criteria = builder.createQuery(CommitteeMemberships.class);
 		Root<CommitteeMemberships> committeeRoot = criteria.from(CommitteeMemberships.class);
-		/*criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
+		criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
 				,committeeRoot.get("rolodexId"),committeeRoot.get("personName")
 				,committeeRoot.get("nonEmployeeFlag"),committeeRoot.get("termStartDate")
 				,committeeRoot.get("termEndDate"),committeeRoot.get("updateTimestamp")
-				,committeeRoot.get("updateUser"),committeeRoot.get("committeeMemberRoles"));*/
+				,committeeRoot.get("updateUser"));
 		criteria.where(builder.equal(committeeRoot.get("committee").get("committeeId"),committeeId));
 		List<CommitteeMemberships> committeeMemberships = session.createQuery(criteria).getResultList();			
 		committee.setCommitteeMemberships(committeeMemberships);
 		return committee;
+	}
+
+	@Override
+	public Boolean checkUniqueCommitteeId(Committee committee) {
+		Boolean isIDUnique = true;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria myCriteria = session.createCriteria(Committee.class);
+			myCriteria.add(Restrictions.eq("committeeId", committee.getCommitteeId()));
+			if(!myCriteria.list().isEmpty()){
+				isIDUnique = false;
+			}
+		}catch (Exception e) {
+			logger.error("Error in checkUniqueCommitteeId : ", e);
+		}
+		return isIDUnique;
 	}
 }

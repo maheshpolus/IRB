@@ -607,8 +607,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() > 10)
+			if(vo.getProtocolNumber().length() > 10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}				
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
@@ -877,8 +880,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() >10)
+			if(vo.getProtocolNumber().length() >10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}				
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);
@@ -970,8 +976,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() > 10)
+			if(vo.getProtocolNumber().length() > 10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}
 			updateSubmissionDetail(vo);										
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
@@ -1013,8 +1022,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO responseApprovalAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() > 10)
+			if(vo.getProtocolNumber().length() > 10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
 			if(result != null && !result.isEmpty()){

@@ -837,4 +837,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 		vo.setCommittee(committee);
 		return vo;
 	}
+
+	@Override
+	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

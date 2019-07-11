@@ -2,6 +2,10 @@ package org.mit.irb.web.schedule.dao;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -123,5 +127,30 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	@Override
 	public CommitteeScheduleAttachment fetchAttachmentById(Integer attachmentId) {
 		return hibernateTemplate.get(CommitteeScheduleAttachment.class, attachmentId);
+	}
+
+
+
+	@Override
+	public CommitteeSchedule getCommitteeScheduleDetail(Integer scheduleId) {
+		CommitteeSchedule committeeSchedule = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeSchedule> criteria = builder.createQuery(CommitteeSchedule.class);
+			Root<CommitteeSchedule> committeeRoot = criteria.from(CommitteeSchedule.class);		
+			criteria.multiselect(committeeRoot.get("scheduleId"),committeeRoot.get("scheduledDate"),committeeRoot.get("meetingDate")
+					,committeeRoot.get("scheduleStatusCode"),committeeRoot.get("place")
+					,committeeRoot.get("time"),committeeRoot.get("protocolSubDeadline")
+					,committeeRoot.get("maxProtocols"),committeeRoot.get("startTime")
+					,committeeRoot.get("endTime"),committeeRoot.get("availableToReviewers"),
+					committeeRoot.get("comments"));/*attachmentRoot.get("researchAreas"),*/
+				//	committeeRoot.get("homeUnitName"),committeeRoot.get("reviewTypeDescription"));
+			criteria.where(builder.equal(committeeRoot.get("scheduleId"),scheduleId));
+			committeeSchedule = session.createQuery(criteria).getResultList().get(0);
+		}catch (Exception e) {
+			logger.info("Exception in getCommitteeScheduleDetail:" + e);
+		}
+		return committeeSchedule;
 	}
 }

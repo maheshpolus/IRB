@@ -34,6 +34,22 @@ public class ScheduleController {
 		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo.getScheduleId());
 		return ScheduleVo;
 	}
+	
+	@RequestMapping(value = "/loadScheduleHeaderDetails", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadScheduleHeaderDetails(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduleById");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo.getScheduleId());
+		return ScheduleVo;
+	}
+	
+	@RequestMapping(value = "/loadScheduleBasicDetail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadScheduleBasicDetail(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduleById");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadScheduleBasicDetail(vo.getScheduleId());
+		return ScheduleVo;
+	}
 
 	@RequestMapping(value = "/updateSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody ScheduleVo updateSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {

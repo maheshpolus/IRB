@@ -94,4 +94,10 @@ public interface ScheduleDao {
 	 */
 	public CommitteeScheduleAttachment fetchAttachmentById(Integer attachmentId);
 
+	/**
+	 * @param scheduleId
+	 * @return get scedule details
+	 */
+	public CommitteeSchedule getCommitteeScheduleDetail(Integer scheduleId);
+
 }

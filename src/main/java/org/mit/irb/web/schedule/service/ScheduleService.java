@@ -108,4 +108,6 @@ public interface ScheduleService {
 	 */
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo);
 
+	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId);
+
 }

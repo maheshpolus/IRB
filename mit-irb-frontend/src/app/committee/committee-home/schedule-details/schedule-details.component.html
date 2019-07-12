@@ -1,3 +1,158 @@
-<p>
-  schedule-details works!
-</p>
+<div class="col-12  search-eidted-p padding-15">
+  <div class="row">
+    <div class="col-md-3">
+      <a class="pdf txt-medium text-danger" (click)="showSchedulePopUp()" data-toggle="modal" data-target="#exampleModalCenter,#editDetailsModal">
+        <i class="fa fa-plus icon-padding text-danger txt-medium"></i>Generate Schedule
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12  search-eidted-p">
+      <div class="alert-sp alert-warning mb-0">
+        <p class="txt-small m-0 ml-10">
+          <span *ngIf="!showAllClicked">Meetings from {{committee?.scheduleStartDate | date: 'MM/dd/yyyy'}} to {{committee?.scheduleEndDate | date: 'MM/dd/yyyy'}}</span>
+          <span *ngIf="showAllClicked">Listing all Meetings</span>
+          <span style="float: right">
+            <input type="checkbox" [(ngModel)]="minuteFlag" (click)="showAll()" /> Show All
+          </span>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="col-12  search-eidted-p padding-15 confirm-text-padding" *ngIf="!isScheduleFieldsFilled">
+      <div class="alert alert-danger txt-medium">Please Fill Mandatory Fields Marked *
+      </div>
+    </div> -->
+
+  <div class="col-md-12 users-list-tbl padding-none">
+    <div class="row">
+      <div class="w-100">
+        <table class="table tbl-p-clr" *ngIf="committeeSchedules?.length > 0">
+          <thead class="tbl-head-clr thead-font-size">
+            <tr class="solid-bottom">
+              <th scope="col">Schedule Id</th>
+              <th scope="col">Schedule Date
+                <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span>
+              </th>
+              <th scope="col">Day of Week</th>
+              <th scope="col">Deadline</th>
+              <th scope="col">Status</th>
+              <th scope="col">Place
+                <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span>
+              </th>
+              <th scope="col">Time
+                <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span>
+              </th>
+              <th scope="col" width="12%">Action</th>
+            </tr>
+          </thead>
+          <tbody class="tbody-font-size">
+            <tr class="solid-bottom pull-up" *ngFor="let committeScheduleData of committeeSchedules; let i = index;">
+              <ng-container *ngIf="committeScheduleData.filter">
+                <td class="align-middle">{{ committeScheduleData.scheduleId }}</td>
+                <td width="15%" class="align-middle">
+                  <span class="input-group  mb-2" *ngIf="editSchedule[i] == true">
+                    <input type="text" class="form-control txt-small font-size-13" [owlDateTime]="dt1" placeholder="mm/dd/yyyy" [(ngModel)]="committeScheduleData.scheduledDate"
+                      [disabled]="!editSchedule[i] == true">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                    <div class="input-group-append" [owlDateTimeTrigger]="dt1">
+                      <span class="input-group-text ">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </span>
+                  <span *ngIf="!editSchedule[i]">{{committeScheduleData?.scheduledDate | date: 'MM/dd/yyyy'}}</span>
+
+                  <!-- <input [owlDateTimeTrigger]="schdlDt" [owlDateTime]="schdlDt" [(ngModel)]="committeScheduleData.scheduledDate" [disabled]="!editSchedule[i] == true"
+                                   [ngClass]="(editSchedule[i] == true)? 'scheduleBoxes' : 'committeeBoxNotEditable'" />
+                                  <owl-date-time #schdlDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time> -->
+                </td>
+                <td class="align-middle">{{ committeScheduleData.dayOfWeek }}</td>
+                <td class="align-middle">{{ committeScheduleData.protocolSubDeadline | date: 'MM/dd/yyyy' }}</td>
+                <td class="align-middle">
+                  <span class="form-group" *ngIf="editSchedule[i] == true">
+                    <select class="custom-select font-size-13 mr-sm-2 txt-small" id="inlineFormCustomSelect" [(ngModel)]="committeScheduleData.scheduleStatus.description">
+                      <option *ngFor="let status of scheduleStatus">{{ status.description }}</option>
+                    </select>
+                  </span>
+                  <span *ngIf="!editSchedule[i]">{{committeScheduleData?.scheduleStatus?.description}}</span>
+                  <!-- <select [ngClass]="(!editSchedule[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" [disabled]="!editSchedule[i] == true"
+                                   [(ngModel)]="committeScheduleData.scheduleStatus.description">
+                                    <option *ngFor="let status of scheduleStatus">{{ status.description }}</option>
+                                  </select> -->
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="editSchedule[i] == true">
+                    <input type="text" class="form-control txt-small input-field-size" [disabled]="!editSchedule[i] == true" [(ngModel)]="committeScheduleData.place">
+                  </span>
+                  <span *ngIf="!editSchedule[i]">{{committeScheduleData.place}}</span>
+                </td>
+                <td style="width: 15%" class="align-middle">
+                  <span *ngIf="!editSchedule[i] == true">{{ committeScheduleData.time | date:'shortTime' }}</span>
+                  <span class="input-group  mb-2" *ngIf="!editSchedule[i] == false">
+                    <input type="text" class="form-control txt-small font-size-13" [owlDateTime]="schdlTm" [(ngModel)]="scheduleTime">
+                    <owl-date-time #schdlTm [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
+                    <div class="input-group-append" [owlDateTimeTrigger]="schdlTm" *ngIf="editSchedule[i] == true">
+                      <span class="input-group-text ">
+                        <i class="fa fa fa-clock-o" aria-hidden="true"></i>
+                      </span>
+                    </div>
+
+                  </span>
+                </td>
+                <td width="12%" class="action-btn-list align-middle">
+                  <button *ngIf="!editSchedule[i] == true" title="Edit" data-toggle="modal" data-target="#warningModal" (click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i, committeScheduleData.scheduleId)"
+                    type="button" class="btn log-user-icon-lite">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                  </button>
+                  <button *ngIf="!editSchedule[i] == false" title="Save" (click)="updateScheduleData($event, i, committeScheduleData)" type="button"
+                    class="btn log-user-icon-lite">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                  </button>
+                  <button title="View" type="button" class="btn log-user-icon-lite" (click)="loadSchedules($event,committeScheduleData.scheduleId)">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                  </button>
+                  <button title="Delete" type="button" class="btn log-user-icon-lite" data-toggle="modal" data-target="#deleteModal, #warningModal"
+                    (click)="showDeleteModal($event, committeScheduleData, result.committee.committeeId, committeScheduleData.scheduledDate)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="committeeSchedules.length == 0">No Mettings to show.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Show Warning on Delete Schedule from List -->
+<div class="modal fade" *ngIf="isTodelete" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+ aria-hidden="true">
+ <div class="modal-dialog" role="document">
+   <div class="modal-content">
+     <div class="modal-header popup-header dotted-bottom">
+       <h5 class="modal-title text-black thick txt-large" id="exampleModalLongTitle">Want to delete?
+       </h5>
+       <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+       </button>
+     </div>
+     <div class="modal-body modal-pop-up dotted-bottom txt-medium">
+       <p>
+         Are you sure you want to delete the schedule on the date
+         <span>
+           {{scheduledDate}}</span> ?
+       </p>
+
+     </div>
+     <div class="modal-footer btn-row-med p-2">
+       <button type="button margin-class" class="btn btn-outline-danger txt-small" data-dismiss="modal">No</button>
+       <button type="button margin-class" class="btn btn-outline-success txt-small" (click)="deleteScheduleData()" data-dismiss="modal">Yes</button>
+     </div>
+   </div>
+ </div>
+</div>

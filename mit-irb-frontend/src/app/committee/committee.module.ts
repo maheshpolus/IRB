@@ -31,6 +31,7 @@ import { CommitteeMemberEmployeeElasticService } from '../common/service/committ
 import { CommitteeMemberNonEmployeeElasticService } from '../common/service/committee-members-nonEmployee-elastic-search.service';
 import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
 import { ScheduleDetailsComponent } from './committee-home/schedule-details/schedule-details.component';
+import { CommitteeMemberDetailsComponent } from './committee-members/committee-member-details/committee-member-details.component';
 
 const routes = [
     {
@@ -38,7 +39,9 @@ const routes = [
         children: [{ path: '', redirectTo: 'committeeHome', pathMatch: 'full' },
         { path: 'committeeHome', component: CommitteeHomeComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent },
-        { path: 'scheduleDetails', component: ScheduleDetailsComponent }]
+        { path: 'scheduleDetails', component: ScheduleDetailsComponent },
+        { path: 'committeeMembers', component: CommitteeMembersComponent },
+        { path: 'committeeMembers/personDetail', component: CommitteeMemberDetailsComponent }]
     },
     { path: 'schedule', component: ScheduleComponent }];
 
@@ -65,7 +68,8 @@ const routes = [
         ScheduleAttendanceComponent,
         ScheduleOtherActionsComponent,
         ScheduleAttachmentsComponent,
-        ScheduleDetailsComponent],
+        ScheduleDetailsComponent,
+        CommitteeMemberDetailsComponent ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [CommitteeConfigurationService,
                 CommitteeMemberEmployeeElasticService,

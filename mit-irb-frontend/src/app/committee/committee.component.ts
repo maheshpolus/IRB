@@ -101,7 +101,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this._spinner.show();
         if ( this.mode === 'create' ) {
             this.editFlag = true;
-            this.committeCreateService.getCommitteeData( '1' )
+            this.committeCreateService.getCommitteeData()
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     this._spinner.hide();
                     this.result = data || [];

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { CommitteeSaveService } from '../committee-save.service';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
@@ -54,7 +55,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     unitName: string;
     editFlag: boolean;
     modeFlag: string;
-    reviewTypes: any[];
+    committeeTypeList: any[];
     areaList: any = [];
     scheduleStatus: any[];
     committeeData: any = {};
@@ -162,7 +163,8 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         private completerService: CompleterService,
         public keyPressEvent: KeyPressEvent,
         public committeeSaveService: CommitteeSaveService,
-        private committeeConfigurationService: CommitteeConfigurationService) {
+        private committeeConfigurationService: CommitteeConfigurationService,
+        , public toastr: ToastsManager) {
         this.committeeConfigurationService.currentMode.takeUntil(this.onDestroy$).subscribe(data => {
             this.mode = data;
         }, error => { }, () => {
@@ -182,10 +184,10 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.unitname = this.resultTemp.committee.homeUnitName;
                 this.Id = this.resultTemp.committee.committeeId;
                 this.Name = this.resultTemp.committee.committeeName;
-                this.Type = this.resultTemp.committee.committeeType.description;
+                this.Type = this.resultTemp.committee.committeeType != null ? this.resultTemp.committee.committeeType.description : null;
                 this.Unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitName = this.resultTemp.committee.homeUnitName;
-                this.reviewTypes = this.resultTemp.reviewTypes;
+                this.committeeTypeList = this.resultTemp.committeeTypeList;
                 if (this.resultTemp.homeUnits != null || this.resultTemp.homeUnits !== undefined) {
                     this.homeUnitList = this.resultTemp.homeUnits;
                     this.dataServiceHomeUnit = this.completerService.local(this.homeUnitList, 'unitName', 'unitName');
@@ -308,14 +310,10 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.result = dataObject.result;
             this.committeeConfigurationService.changeCommmitteeData(this.result);
         }
-        if ((this.result.committee.minimumMembersRequired == null ||
-            this.result.committee.advSubmissionDaysReq === null ||
-            this.result.committee.maxProtocols === null || this.Type === null ||
+        if ((this.result.committee.committeeId == null ||
             this.result.committee.committeeName === null || this.result.committee.committeeName === '' ||
             this.result.committee.committeeName === undefined ||
-            this.result.committee.homeUnitName === null || this.result.committee.homeUnitName === '' ||
-            this.result.committee.homeUnitNumber == null || this.result.committee.homeUnitNumber === '')
-            || (this.result.committee.reviewTypeDescription === 'Select' || this.result.committee.reviewTypeDescription === '')) {
+            this.result.committee.committeeTypeCode === null || this.result.committee.committeeTypeCode === '')) {
             this.errorFlag = true;
             this.error = '*Please fill all the mandatory fields marked';
         } else {
@@ -331,7 +329,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             });
             if (this.mode === 'create') {
                 this.result.updateType = 'SAVE';
-                this.result.committee.committeeType.committeeTypeCode = '1';
+               // this.result.committee.committeeType.committeeTypeCode = '1';
                 this.result.committee.createUser = localStorage.getItem('currentUser');
                 this.result.committee.createTimestamp = new Date().getTime();
                 this.result.committee.updateUser = localStorage.getItem('currentUser');
@@ -345,15 +343,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             if (this.editDetails === false) {
                 this.editClass = 'committeeBoxNotEditable';
             }
-            this.reviewTypes.forEach((value, index) => {
-                if (value.description === this.result.committee.reviewTypeDescription) {
-                    this.result.committee.applicableReviewTypecode = value.reviewTypeCode;
-                    this.result.committee.reviewTypeDescription = value.description;
-                }
-            });
             this.committeeSaveService.saveCommitteeData(this.result).takeUntil(this.onDestroy$).subscribe(data => {
                 this.result = data || [];
+                if (this.result.status === true) {
                 if (this.result != null) {
+                    this.toastr.success('Committee saved successfully', null, { toastLife: 2000 });
                     this.committeeConfigurationService.changeCommmitteeData(this.result);
                     this.saveCommitteeFlag = true;
                     if (this.mode === 'view') {
@@ -373,6 +367,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                         this.router.navigate(['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } });
                     }
                 });
+            } else {
+                this.toastr.error(this.result.message, null, { toastLife: 2000 });
+            }
             });
         }
     }

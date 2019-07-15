@@ -1,6 +1,7 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
@@ -37,4 +38,7 @@ public interface IRBUtilService {
 	 * @return True if user has permission else false
 	 */
 	IRBPermissionVO checkUserPermission(IRBPermissionVO vo);
+	
+
+	Date adjustTimezone(Date date);
 }

@@ -100,5 +100,35 @@ public class CommitteeMemberController {
 		CommitteeVo committeeVo =  committeeMemberService.deleteExpertise(vo);
 		return committeeVo;
 	}
+	
+	@RequestMapping(value = "/loadCommitteeMemberDetails", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo loadCommitteeMemberDetails(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
+		CommitteeVo committeeVo = committeeMemberService.loadCommitteeMemberDetails(vo); 
+		return committeeVo;
+	}
+	
+	@RequestMapping(value = "/updateCommitteeMemberDetails", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo updateCommitteeMemberDetails(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
+		CommitteeVo committeeVo = committeeMemberService.updateCommitteeMemberDetails(vo);
+		return committeeVo;
+	}
+	
+	@RequestMapping(value = "/loadTerHistory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo loadTerHistory(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
+		CommitteeVo committeeVo = committeeMemberService.loadTerHistory(vo);
+		return committeeVo;
+	}
+	
+	@RequestMapping(value = "/updateMemberRole", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo updateMemberRole(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
+		CommitteeVo committeeVo = committeeMemberService.updateMemberRole(vo);
+		return committeeVo;
+	}
+	
+	@RequestMapping(value = "/updateMemberExpertise", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo updateMemberExpertise(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
+		CommitteeVo committeeVo = committeeMemberService.updateMemberExpertise(vo);
+		return committeeVo;
+	}
 
 }

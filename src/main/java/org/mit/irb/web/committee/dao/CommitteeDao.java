@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange;
 import org.mit.irb.web.committee.pojo.CommitteeMembershipType;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
@@ -269,4 +271,59 @@ public interface CommitteeDao {
 	public Committee loadCommitteeMembers(String committeeId);
 
 	public Boolean checkUniqueCommitteeId(Committee committee);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public List<CommitteeMemberRoles> getCommitteeMemberRoles(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public List<CommitteeMemberExpertise> getCommitteeMemberExpertise(Integer commMembershipId);
+
+	/**
+	 * @param committeeMember
+	 * @return 
+	 */
+	public CommitteeMemberships saveCommitteeMemberships(CommitteeMemberships committeeMember);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberRoles(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberExpertise(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberships(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange(Integer commMembershipId);
+
+	/**
+	 * @param committeeMember
+	 */
+	public void saveCommitteeMemberStatusChange(CommitteeMemberships committeeMember);
+
+	/**
+	 * @param commMemberRolesId
+	 */
+	public void deleteCommitteeMemberRole(Integer commMemberRolesId);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public CommitteeMemberships fetchCommitteeMemberDetail(Integer commMembershipId);
 }

@@ -34,13 +34,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange;
 import org.mit.irb.web.committee.pojo.CommitteeMembershipType;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
 import org.mit.irb.web.committee.pojo.MembershipRole;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Rolodex;
@@ -426,7 +426,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	}
 	
 	@Override
-	public Committee loadScheduleDetailsById(String committeeId, String acType) {			
+	public Committee loadScheduleDetailsById(String committeeId, String acType) {					
 		Calendar startDate = Calendar.getInstance();
 		startDate.add(Calendar.DATE, -90); 
 		Calendar endDate = Calendar.getInstance();
@@ -441,13 +441,14 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		projList.add(Projections.property("protocolSubDeadline"), "protocolSubDeadline");
 		projList.add(Projections.property("scheduleStatus"), "scheduleStatus");
 		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeSchedule.class));
-		criteria.createAlias("committee","committee").add(Restrictions.eq("committee.committeeId",committeeId));		
+		criteria.createAlias("committee","committee").add(Restrictions.eq("committee.committeeId",committeeId));
+		criteria.addOrder(Order.asc("scheduledDate"));
 		if(acType != null)
 			if(acType.equals("F"))
 				criteria.add(Restrictions.between("scheduledDate",startDate.getTime(),endDate.getTime()));
 		@SuppressWarnings("unchecked")
 		List<CommitteeSchedule> committeeSchedule = criteria.list();
-		Committee committee=new Committee();
+		Committee committee = new Committee();
 		committee.setCommitteeId(committeeId);		
 		committee.setScheduleStartDate(startDate.getTime());
 		committee.setScheduleEndDate(endDate.getTime());
@@ -492,7 +493,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 				,committeeRoot.get("rolodexId"),committeeRoot.get("personName")
 				,committeeRoot.get("nonEmployeeFlag"),committeeRoot.get("termStartDate")
 				,committeeRoot.get("termEndDate"),committeeRoot.get("updateTimestamp")
-				,committeeRoot.get("updateUser"));
+				,committeeRoot.get("updateUser"),committeeRoot.get("membershipTypeCode"),committeeRoot.get("committeeMembershipType"));
 		criteria.where(builder.equal(committeeRoot.get("committee").get("committeeId"),committeeId));
 		List<CommitteeMemberships> committeeMemberships = session.createQuery(criteria).getResultList();			
 		committee.setCommitteeMemberships(committeeMemberships);
@@ -513,5 +514,169 @@ public class CommitteeDaoImpl implements CommitteeDao {
 			logger.error("Error in checkUniqueCommitteeId : ", e);
 		}
 		return isIDUnique;
+	}
+
+	@Override
+	public List<CommitteeMemberRoles> getCommitteeMemberRoles(Integer commMembershipId) {
+		List<CommitteeMemberRoles> committeeMemberRoles = null;
+		try{
+			Query queryCommitteeMemberRoles = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from CommitteeMemberRoles p where p.committeeMemberships.commMembershipId =:commMembershipId");
+			queryCommitteeMemberRoles.setInteger("commMembershipId", commMembershipId);		
+			committeeMemberRoles = queryCommitteeMemberRoles.list();			
+		}catch (Exception e) {
+			logger.error("Error in getCommitteeMemberRoles : ", e);
+		}
+		return committeeMemberRoles;
+	}
+
+	@Override
+	public List<CommitteeMemberExpertise> getCommitteeMemberExpertise(Integer commMembershipId) {
+		List<CommitteeMemberExpertise> committeeMemberExpertise = null;
+		try{
+			Query queryCommitteeMemberExpertise = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("from CommitteeMemberExpertise p where p.committeeMemberships.commMembershipId =:commMembershipId");
+			queryCommitteeMemberExpertise.setInteger("commMembershipId", commMembershipId);		
+			committeeMemberExpertise = queryCommitteeMemberExpertise.list();			
+		}catch (Exception e) {
+			logger.error("Error in getCommitteeMemberExpertise : ", e);
+		}
+		return committeeMemberExpertise;
+	}
+
+	@Override
+	public CommitteeMemberships saveCommitteeMemberships(CommitteeMemberships committeeMember) {
+		try{
+			hibernateTemplate.saveOrUpdate(committeeMember);	
+		}catch (Exception e) {
+			logger.error("Error in saveCommitteeMemberships: ", e);
+		} 
+		return committeeMember;
+	}
+
+	@Override
+	public void deleteCommitteeMemberRoles(Integer commMembershipId) {
+		Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeMemberRoles p where p.committeeMemberships.commMembershipId =:commMembershipId");
+		queryDeleteResearchArea.setInteger("commMembershipId",commMembershipId);
+		queryDeleteResearchArea.executeUpdate();	
+	} 
+
+	@Override
+	public void deleteCommitteeMemberExpertise(Integer commMembershipId) {
+		Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeMemberExpertise p where p.committeeMemberships.commMembershipId =:commMembershipId");
+		queryDeleteResearchArea.setInteger("commMembershipId",commMembershipId);
+		queryDeleteResearchArea.executeUpdate();			
+	}
+
+	@Override
+	public void deleteCommitteeMemberships(Integer commMembershipId) {
+		Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeMemberships p where p.commMembershipId =:commMembershipId");
+		queryDeleteResearchArea.setInteger("commMembershipId",commMembershipId);
+		queryDeleteResearchArea.executeUpdate();		
+	}
+
+	@Override
+	public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange(Integer commMembershipId) {
+		List<CommitteeMemberStatusChange> committeeMemberStatusChange = null;
+	try{
+		Query queryCommitteeMemberRoles = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from CommitteeMemberStatusChange p where p.committeeMemberships.commMembershipId =:commMembershipId");
+		queryCommitteeMemberRoles.setInteger("commMembershipId", commMembershipId);		
+		committeeMemberStatusChange = queryCommitteeMemberRoles.list();			
+	}catch (Exception e) {
+		logger.error("Error in getCommitteeMemberStatusChange : ", e);
+	}
+	return committeeMemberStatusChange;
+	}
+
+	@Override
+	public void saveCommitteeMemberStatusChange(CommitteeMemberships committeeMember) {
+		try{
+			Integer activeStatusCode = null;
+			CommitteeMemberStatusChange committeeMemberStatusChange = new CommitteeMemberStatusChange();
+			committeeMemberStatusChange.setCommitteeMemberships(committeeMember);
+	        java.util.Date currentDate = new java.util.Date(); 
+			 if(currentDate.before(committeeMember.getPerviousTermStartDate()) || currentDate.equals(committeeMember.getPerviousTermEndDate())){
+		        	activeStatusCode = 1;
+		        }else{
+		        	activeStatusCode = 2;
+		        }
+			committeeMemberStatusChange.setMembershipStatusCode(activeStatusCode);
+			committeeMemberStatusChange.setCommMembershipId(committeeMember.getCommMembershipId());
+			committeeMemberStatusChange.setEndDate(new java.sql.Date(committeeMember.getPerviousTermEndDate().getTime()));
+			committeeMemberStatusChange.setStartDate(new java.sql.Date(committeeMember.getPerviousTermStartDate().getTime()));
+			committeeMemberStatusChange.setUpdateUser(committeeMember.getUpdateUser());
+			Date date= new Date();
+			long time = date. getTime();
+			Timestamp ts = new Timestamp(time);
+			committeeMemberStatusChange.setUpdateTimestamp(ts);
+			hibernateTemplate.saveOrUpdate(committeeMemberStatusChange);	
+		}catch (Exception e) {
+			logger.error("Error in saveCommitteeMemberStatusChange: ", e);
+		} 
+		
+	}
+
+	@Override
+	public void deleteCommitteeMemberRole(Integer commMemberRolesId) {
+		try{
+			Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from CommitteeMemberRoles p where p.commMemberRolesId =:commMemberRolesId");
+			queryDeleteResearchArea.setInteger("commMemberRolesId",commMemberRolesId);
+			queryDeleteResearchArea.executeUpdate();
+		}catch (Exception e) {
+			logger.error("Error in deleteCommitteeMemberRole: ", e);
+		} 
+	}
+
+	@Override
+	public CommitteeMemberships fetchCommitteeMemberDetail(Integer commMembershipId) {
+		
+		Query queryCommitteeResearchAreas = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("from CommitteeMemberships p where p.commMembershipId =:commMembershipId");
+		queryCommitteeResearchAreas.setInteger("commMembershipId", commMembershipId);		
+		List<CommitteeMemberships> committeeMemberships = queryCommitteeResearchAreas.list();
+		//return committeeResearchAreas;		
+		
+		
+		/*Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeMemberships.class);
+	    ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("commMembershipId"), "commMembershipId");
+		projList.add(Projections.property("committee"), "committee");
+		projList.add(Projections.property("personId"), "personId");
+		projList.add(Projections.property("rolodexId"), "rolodexId");
+		projList.add(Projections.property("personName"), "personName");
+		projList.add(Projections.property("nonEmployeeFlag"), "nonEmployeeFlag");
+		projList.add(Projections.property("termStartDate"), "termStartDate");
+		projList.add(Projections.property("termEndDate"), "termEndDate");
+		projList.add(Projections.property("updateTimestamp"), "updateTimestamp");
+		projList.add(Projections.property("updateUser"), "updateUser");
+		projList.add(Projections.property("membershipTypeCode"), "membershipTypeCode");
+		projList.add(Projections.property("committeeMembershipType"), "committeeMembershipType");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeMemberships.class));
+		criteria.createAlias("committeeMemberships","committeeMemberships").add(Restrictions.eq("commMembershipId",commMembershipId));
+		List<CommitteeMemberships> committeeMemberships = criteria.list();*/
+		
+		
+		
+		/*Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CommitteeMemberships> criteria = builder.createQuery(CommitteeMemberships.class);
+		Root<CommitteeMemberships> committeeRoot = criteria.from(CommitteeMemberships.class);
+		criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
+				,committeeRoot.get("rolodexId"),committeeRoot.get("personName")
+				,committeeRoot.get("nonEmployeeFlag"),committeeRoot.get("termStartDate")
+				,committeeRoot.get("termEndDate"),committeeRoot.get("updateTimestamp")
+				,committeeRoot.get("updateUser"),committeeRoot.get("membershipTypeCode"),committeeRoot.get("committeeMembershipType"));
+		criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),commMembershipId));
+		List<CommitteeMemberships> committeeMemberships = session.createQuery(criteria).getResultList();*/			
+		if(committeeMemberships == null){
+			return null;
+		}
+		return committeeMemberships.get(0);
 	}
 }

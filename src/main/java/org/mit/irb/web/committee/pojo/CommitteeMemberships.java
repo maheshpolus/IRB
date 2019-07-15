@@ -3,7 +3,6 @@ package org.mit.irb.web.committee.pojo;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Cacheable;
@@ -28,7 +27,6 @@ import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.mit.irb.web.committee.schedule.DateUtils;
-import org.mit.irb.web.committee.constants.Constants;
 import org.mit.irb.web.committee.pojo.Rolodex;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 import org.mit.irb.web.committee.view.PersonDetailsView;
@@ -114,6 +112,15 @@ public class CommitteeMemberships implements Serializable {
 
 	@Transient
 	private Rolodex rolodex;
+	
+	@Transient
+	private java.util.Date perviousTermStartDate;
+	
+	@Transient
+	private java.util.Date perviousTermEndDate;
+	
+	@Transient
+	private String acType;
 
 	public CommitteeMemberships() {
 		setCommitteeMemberRoles(new ArrayList<CommitteeMemberRoles>());
@@ -229,10 +236,10 @@ public class CommitteeMemberships implements Serializable {
      */
     public boolean isActive(Date date) {
         boolean isActive = false;
-            if (termStartDate != null && termEndDate != null && !date.before(termStartDate) && !date.after(termEndDate)) {              
-                    isActive = false;
-                } else {
+            if (termStartDate != null && termEndDate != null && (date.before(termEndDate) || date.equals(termEndDate))) {              
                     isActive = true;
+                } else {
+                    isActive = false;
                 }                    
         this.active = isActive;
         return this.active;
@@ -304,7 +311,7 @@ public class CommitteeMemberships implements Serializable {
 
 	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
 			String personName, Boolean nonEmployeeFlag, java.util.Date termStartDate, java.util.Date termEndDate,
-			java.util.Date updateTimestamp, String updateUser) {
+			java.util.Date updateTimestamp, String updateUser,String membershipTypeCode , CommitteeMembershipType committeeMembershipType) {
 		super();
 		this.commMembershipId = commMembershipId;
 		this.committee = committee;
@@ -316,6 +323,8 @@ public class CommitteeMemberships implements Serializable {
 		this.termEndDate = termEndDate;
 		this.updateTimestamp = updateTimestamp;
 		this.updateUser = updateUser;
+		this.membershipTypeCode = membershipTypeCode;
+		this.committeeMembershipType = committeeMembershipType;
 	}
 
 	public void setActive(boolean active) {
@@ -328,5 +337,29 @@ public class CommitteeMemberships implements Serializable {
 
 	public void setCommitteeMemberRoles(List<CommitteeMemberRoles> committeeMemberRoles) {
 		this.committeeMemberRoles = committeeMemberRoles;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+
+	public java.util.Date getPerviousTermStartDate() {
+		return perviousTermStartDate;
+	}
+
+	public void setPerviousTermStartDate(java.util.Date perviousTermStartDate) {
+		this.perviousTermStartDate = perviousTermStartDate;
+	}
+
+	public java.util.Date getPerviousTermEndDate() {
+		return perviousTermEndDate;
+	}
+
+	public void setPerviousTermEndDate(java.util.Date perviousTermEndDate) {
+		this.perviousTermEndDate = perviousTermEndDate;
 	}
 }

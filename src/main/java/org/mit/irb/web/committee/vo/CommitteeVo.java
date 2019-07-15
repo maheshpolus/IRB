@@ -5,6 +5,7 @@ import java.util.List;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange;
 import org.mit.irb.web.committee.pojo.CommitteeMembershipType;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
@@ -84,13 +85,7 @@ public class CommitteeVo {
 	
 	private CommitteeMemberships committeeMemberships;
 	
-	/*public List<ProtocolReviewType> getReviewTypes() {
-		return reviewTypes;
-	}
-
-	public void setReviewTypes(List<ProtocolReviewType> reviewTypes) {
-		this.reviewTypes = reviewTypes;
-	}*/
+	List<CommitteeMemberStatusChange> committeeMemberStatusChange; 
 
 	public List<Unit> getHomeUnits() {
 		return homeUnits;
@@ -338,6 +333,14 @@ public class CommitteeVo {
 
 	public void setCommitteeMemberships(CommitteeMemberships committeeMemberships) {
 		this.committeeMemberships = committeeMemberships;
+	}
+
+	public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange() {
+		return committeeMemberStatusChange;
+	}
+
+	public void setCommitteeMemberStatusChange(List<CommitteeMemberStatusChange> committeeMemberStatusChange) {
+		this.committeeMemberStatusChange = committeeMemberStatusChange;
 	}
 
 }

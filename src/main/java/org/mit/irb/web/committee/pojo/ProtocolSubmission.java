@@ -53,7 +53,7 @@ public class ProtocolSubmission implements Serializable {
 	private String protocolNumber;
 
 	@Transient
-	private String piPersonName;
+	private String personName;
 	
 	@Transient
 	private String piPersonId;
@@ -64,8 +64,8 @@ public class ProtocolSubmission implements Serializable {
 /*	@Column(name = "PI_PERSON_ID")
 	private String piPersonId;*/
 
-/*	@Column(name = "PROTOCOL_TITLE")
-	private String protocolTitle;*/
+	@Transient
+	private String protocolTitle;
 
 	@Column(name = "SUBMISSION_TYPE_CODE")
 	private String submissionTypeCode;
@@ -111,23 +111,15 @@ public class ProtocolSubmission implements Serializable {
 
 	public void setProtocolNumber(String protocolNumber) {
 		this.protocolNumber = protocolNumber;
-	}
+	}	
 
-	public String getPiPersonName() {
-		return piPersonName;
-	}
-
-	public void setPiPersonName(String piPersonName) {
-		this.piPersonName = piPersonName;
-	}
-
-	/*public String getProtocolTitle() {
+	public String getProtocolTitle() {
 		return protocolTitle;
 	}
 
 	public void setProtocolTitle(String protocolTitle) {
 		this.protocolTitle = protocolTitle;
-	}*/
+	}
 
 	public String getSubmissionTypeCode() {
 		return submissionTypeCode;
@@ -267,6 +259,14 @@ public class ProtocolSubmission implements Serializable {
 
 	public void setProtocolId(Integer protocolId) {
 		this.protocolId = protocolId;
+	}
+
+	public String getPersonName() {
+		return personName;
+	}
+
+	public void setPersonName(String personName) {
+		this.personName = personName;
 	}
 
 }

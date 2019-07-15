@@ -110,4 +110,10 @@ public interface ScheduleService {
 
 	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId);
 
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduledProtocols(ScheduleVo vo);
+
 }

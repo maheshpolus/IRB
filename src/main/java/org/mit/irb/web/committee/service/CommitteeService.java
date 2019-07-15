@@ -113,12 +113,4 @@ public interface CommitteeService {
 	 * @return
 	 */
 	public CommitteeVo loadCommitteeMembers(String committeeId);
-	
-	/**
-	 * @param committeeMemberships
-	 * @return Load Details of Committee Member
-	 */
-	public CommitteeVo loadCommitteeMemberDetails(CommitteeMemberships committeeMemberships);
-
-
 }

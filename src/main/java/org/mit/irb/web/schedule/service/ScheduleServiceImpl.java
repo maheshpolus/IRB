@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -75,11 +76,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 			for (ProtocolSubmission protocolSubmission : protocolSubmissions) {
 				logger.info("protocolId : " + protocolSubmission.getProtocolId());
 				logger.info("piPersonId : " + protocolSubmission.getPiPersonId());
-				logger.info("piPersonName : " + protocolSubmission.getPiPersonName());
-				ProtocolView protocolView = scheduleDao.fetchProtocolViewByParams(protocolSubmission.getProtocolId().intValue(), protocolSubmission.getPiPersonId(), protocolSubmission.getPiPersonName());
+				/*ProtocolView protocolView = scheduleDao.fetchProtocolViewByParams(protocolSubmission.getProtocolId().intValue(), protocolSubmission.getPiPersonId(), protocolSubmission.getPiPersonName());
 				if (protocolView != null) {
 					protocolSubmission.setDocumentNumber(protocolView.getDocumentNumber());
-				}
+				}*/
 			}
 		}
 		if (committeeSchedule.getCommitteeScheduleAttendances().isEmpty() && !committeeSchedule.getCommittee().getCommitteeMemberships().isEmpty()) {
@@ -424,6 +424,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public ScheduleVo addOtherActions(ScheduleVo scheduleVo) {
+		List<ScheduleActItemType> scheduleActItemTypes = scheduleDao.fetchAllScheduleActItemType();
+		scheduleVo.setScheduleActItemTypes(scheduleActItemTypes);//for other actions
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleActItems committeeScheduleActItems = scheduleVo.getCommitteeScheduleActItems();
 		CommitteeScheduleActItems scheduleActItem = new CommitteeScheduleActItems();
@@ -717,6 +719,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ScheduleVo jsonObj = mapper.readValue(formDataJSON, ScheduleVo.class);
+			List<CommitteeScheduleAttachType> committeeScheduleAttachTypes = scheduleDao.fetchAllCommitteeScheduleAttachType();
+			scheduleVo.setAttachmentTypes(committeeScheduleAttachTypes);//for attachments
 			CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(jsonObj.getScheduleId());
 			CommitteeScheduleAttachment newAttachment = jsonObj.getNewCommitteeScheduleAttachment();
 			List<CommitteeScheduleAttachment> attachments = new ArrayList<CommitteeScheduleAttachment>();
@@ -819,6 +823,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo) {
+		List<MinuteEntryType> minuteEntrytypes = scheduleDao.fetchAllMinuteEntryTypes();
+		vo.setMinuteEntrytypes(minuteEntrytypes);
+		List<ProtocolContingency> protocolContingencies = scheduleDao.fetchAllProtocolContingency();
+		vo.setProtocolContingencies(protocolContingencies);//for minutes
 		Committee committee = committeeDao.fetchCommitteeById(vo.getCommitteeId());
 		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
 		CommitteeScheduleMinutes scheduleMinutes = vo.getNewCommitteeScheduleMinute();
@@ -841,6 +849,28 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ScheduleVo loadScheduledProtocols(ScheduleVo vo) {
+		ArrayList<HashMap<String, Object>>  protocolSubmission = scheduleDao.loadScheduledProtocols(vo.getScheduleId());//for protocol submission				
+		List<ProtocolSubmission> submissions = new ArrayList<>();	
+		for(int i = 0; i < protocolSubmission.size() ; i++){
+			for (HashMap<String, Object> hashMap : protocolSubmission) {
+				submissions.get(i).setCommitteeId(hashMap.get("COMMITTEE_ID").toString());
+				submissions.get(i).setProtocolNumber(hashMap.get("PROTOCOL_NUMBER").toString());
+				//submissions.get(i).setSubmissionDate(hashMap.get("SUBMISSION_DATE").toString());
+				submissions.get(i).setProtocolTitle(hashMap.get("TITLE").toString());
+				submissions.get(i).setPersonName(hashMap.get("PERSON_NAME").toString());
+				submissions.get(i).getSubmissionStatus().setDescription(hashMap.get("SUBMISSION_STATUS").toString());
+				submissions.get(i).getProtocolReviewType().setDescription(hashMap.get("PROTOCOL_REVIEW_TYPE").toString());
+				submissions.get(i).getQualifierType().setDescription(hashMap.get("SUBMISSION_QUAL_TYPE").toString());
+				submissions.get(i).setCommitteeId(hashMap.get("PROTOCOL_NUMBER").toString());
+				submissions.get(i).setCommitteeId(hashMap.get("PROTOCOL_NUMBER").toString());
+				submissions.get(i).setCommitteeId(hashMap.get("PROTOCOL_NUMBER").toString());
+			}
+		}
 		return null;
 	}
 }

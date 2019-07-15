@@ -28,8 +28,7 @@ public class ScheduleController {
 	private ScheduleService scheduleService;
 	
 	@RequestMapping(value = "/loadScheduleById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody ScheduleVo loadScheduleById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Requesting for loadScheduleById");
+	public @ResponseBody ScheduleVo loadScheduleById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
 		logger.info("scheduleId : " + vo.getScheduleId());
 		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo.getScheduleId());
 		return ScheduleVo;
@@ -170,5 +169,12 @@ public class ScheduleController {
 		logger.info("CommitteeScheduleId : " + vo.getScheduleId());
 		ScheduleVo ScheduleVo =  scheduleService.updateCommitteeScheduleMinute(vo);
 		return ScheduleVo;
+	}
+	
+	@RequestMapping(value = "/loadScheduledProtocols", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadScheduledProtocols(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduledProtocols");
+		ScheduleVo scheduleVo = scheduleService.loadScheduledProtocols(vo);
+		return scheduleVo;
 	}
 }

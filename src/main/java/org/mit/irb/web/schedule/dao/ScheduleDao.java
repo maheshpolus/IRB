@@ -1,5 +1,7 @@
 package org.mit.irb.web.schedule.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
@@ -10,6 +12,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
+import org.mit.irb.web.committee.pojo.ProtocolSubmission;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
 import org.mit.irb.web.committee.view.ProtocolView;
 import org.springframework.stereotype.Service;
@@ -99,5 +102,11 @@ public interface ScheduleDao {
 	 * @return get scedule details
 	 */
 	public CommitteeSchedule getCommitteeScheduleDetail(Integer scheduleId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ArrayList<HashMap<String, Object>> loadScheduledProtocols(Integer scheduleId);
 
 }

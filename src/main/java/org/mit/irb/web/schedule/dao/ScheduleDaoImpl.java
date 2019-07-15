@@ -1,5 +1,7 @@
 package org.mit.irb.web.schedule.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -8,12 +10,14 @@ import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
@@ -22,12 +26,17 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
+import org.mit.irb.web.committee.pojo.ProtocolSubmission;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
 import org.mit.irb.web.committee.view.ProtocolView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.mit.irb.web.dbengine.DBEngine;
+import org.mit.irb.web.dbengine.DBEngineConstants;
+import org.mit.irb.web.dbengine.Parameter;
 
 @Transactional
 @Service(value = "scheduleDao")
@@ -37,6 +46,12 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	DBEngine dbEngine;	
+
+	ScheduleDaoImpl() {	
+		dbEngine = new DBEngine();
+	}
 
 	@Override
 	public ProtocolView fetchProtocolViewByParams(Integer protocolId, String personId, String fullName) {
@@ -152,5 +167,25 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			logger.info("Exception in getCommitteeScheduleDetail:" + e);
 		}
 		return committeeSchedule;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> loadScheduledProtocols(Integer scheduleId) {
+		List<Object> submittedProtocols = null;
+		ArrayList<HashMap<String, Object>> result  = new ArrayList<HashMap<String, Object>>();
+		try {
+			/*Query scheduledProtocols = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("select p.committeeId,p.protocolNumber,p.protocolSubmissionType,p.protocolReviewType,"
+							+ "p.submissionDate, g.protocolTitle ,pi.personName from ProtocolSubmission p INNER JOIN "
+							+ "ProtocolGeneralInfo g on p.protocolId = g.protocolId inner join ProtocolPersonnelInfo pi "
+							+ "on p.protocolId = pi.protocolGeneralInfo.protocolId and pi.protocolPersonRoleId ='PI'  "
+							+ "where p.committeeSchedule.scheduleId =:scheduleId");	*/	
+			ArrayList<Parameter> inParam = new ArrayList<>();			
+			inParam.add(new Parameter("<<AV_SCHEDULE_ID>>", DBEngineConstants.TYPE_INTEGER, scheduleId));
+			result  = dbEngine.executeQuery(inParam,"GET_SCHEDULED_PROTOCOLS");
+		} catch (Exception e) {
+			logger.info("Exception in loadScheduledProtocols:" + e);
+		}
+		return result;
 	}
 }

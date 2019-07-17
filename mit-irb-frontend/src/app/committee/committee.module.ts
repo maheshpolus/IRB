@@ -8,7 +8,7 @@ import { FileDropModule } from 'ngx-file-drop';
 import { RouterModule } from '@angular/router';
 
 import { CommitteeHomeComponent } from './committee-home/committee-home.component';
-import { CommitteeMembersComponent } from './committee-members/committee-members.component';
+import { CommitteeMembersComponent } from './committee-home/committee-members/committee-members.component';
 import { ScheduleHomeComponent } from './schedule/schedule-home/schedule-home.component';
 import { MinutesComponent } from './schedule/minutes/minutes.component';
 import { CommitteeComponent } from './committee.component';
@@ -31,13 +31,19 @@ import { CommitteeMemberEmployeeElasticService } from '../common/service/committ
 import { CommitteeMemberNonEmployeeElasticService } from '../common/service/committee-members-nonEmployee-elastic-search.service';
 import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
 import { ScheduleDetailsComponent } from './committee-home/schedule-details/schedule-details.component';
+import { MemberHomeComponent } from './committee-home/committee-members/member-home/member-home.component';
+import { MemberDetailsComponent } from './committee-home/committee-members/member-home/member-details/member-details.component';
+import { StatusHistoryComponent } from './committee-home/committee-members/member-home/status-history/status-history.component';
+import { AppCommonModule } from '../common/common/common.module';
+import { TrainingDetailsComponent } from './committee-home/committee-members/member-home/training-details/training-details.component';
 
 const routes = [
     {
         path: '', component: CommitteeComponent, resolve: { irb: DashboardResolverService },
         children: [{ path: '', redirectTo: 'committeeHome', pathMatch: 'full' },
         { path: 'committeeHome', component: CommitteeHomeComponent },
-        { path: 'committeeMembers', component: CommitteeMembersComponent },
+        { path: 'committeeMembers', component: CommitteeMembersComponent,  resolve: { irb: DashboardResolverService }},
+        { path: 'committeeMembers/memberHome', component: MemberHomeComponent, resolve: { irb: DashboardResolverService } },
         { path: 'scheduleDetails', component: ScheduleDetailsComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent }]
     },
@@ -57,6 +63,7 @@ const routes = [
     imports: [
         CommonModule,
         FormsModule,
+        AppCommonModule,
         ReactiveFormsModule,
         Ng2PageScrollModule,
         NgxSpinnerModule,
@@ -76,7 +83,11 @@ const routes = [
         ScheduleAttendanceComponent,
         ScheduleOtherActionsComponent,
         ScheduleAttachmentsComponent,
-        ScheduleDetailsComponent ],
+        ScheduleDetailsComponent,
+         MemberHomeComponent,
+        MemberDetailsComponent,
+        StatusHistoryComponent,
+        TrainingDetailsComponent ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [CommitteeConfigurationService,
                 CommitteeMemberEmployeeElasticService,

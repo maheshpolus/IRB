@@ -856,7 +856,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     line-height: 30px;
     font-size: 1em;
     padding-left: 10px;
-    margin-left: -7px;
+    /* margin-left: -7px; */
 }
 .person-unit input {
     border-radius: .25rem !important;

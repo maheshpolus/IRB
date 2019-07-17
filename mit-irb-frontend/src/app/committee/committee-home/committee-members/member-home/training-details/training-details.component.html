@@ -1,0 +1,119 @@
+<section class="row outerpadding ml-10 mr-10">
+  <div class="col-12 card search-card-view mb-2 mt-0 p-3">
+    <div class="row">
+      <div class="col-4">
+        <span class="txt-medium text-secondary">Person Name:</span>
+        <span class="txt-medium text-danger">{{irbPersonDetailedList?.FULL_NAME}}</span>
+      </div>
+      <div class="col-4">
+        <span class="txt-medium text-secondary">Email:</span>
+        <span class="txt-medium text-danger">{{irbPersonDetailedList?.EMAIL_ADDRESS}}</span>
+      </div>
+      <div class="col-4">
+        <span class="txt-medium text-secondary">Title:</span>
+        <span class="txt-medium text-danger">{{irbPersonDetailedList?.DIRECTORY_TITLE}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <span class="txt-medium text-secondary">Unit:</span>
+        <span class="txt-medium text-danger">{{irbPersonDetailedList?.UNIT_NAME}}</span>
+      </div>
+      <div class="col-4">
+        <span class="txt-medium text-secondary">Address:</span>
+        <span class="txt-medium text-danger">{{irbPersonDetailedList?.ADDRESS_LINE_1}}</span>
+      </div>
+      <div class="col-4">
+        <span class="txt-medium text-secondary">Phone:</span>
+        <span class="txt-medium text-danger">{{irbPersonDetailedList?.OFFICE_PHONE}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="w-100">
+        <table class="table tbl-p-clr txt-medium" *ngIf="irbPersonDetailedTraining.length > 0">
+          <thead class="tbl-head-clr thead-font-size">
+            <tr class="solid-bottom">
+              <th class="table-align-head" scope="col">Description</th>
+              <!-- <th scope="col">Score</th> -->
+              <th scope="col">Expiration Date</th>
+              <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
+            </tr>
+          </thead>
+          <tbody *ngFor="let info of irbPersonDetailedTraining; let l=index">
+            <tr>
+              <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}
+              </td>
+              <!-- <td>{{info.SCORE}}</td> -->
+              <td>
+                {{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}
+              </td>
+              <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
+              <td class="action-btn-list">
+                <button *ngIf="info?.attachment?.length > 0" title="Attachments" (click)="showTrainingAttachments(l)" type="button" class="btn icon-chatbox">
+                  <i class="fa fa-paperclip" aria-hidden="true"></i>
+                </button>
+                <button *ngIf="info?.comments?.length > 0" title="Comments" (click)="showTrainingComments(l)" type="button" class="btn icon-chatbox">
+                  <i class="fa fa-comments" aria-hidden="true"></i>
+                </button>
+
+              </td>
+            </tr>
+
+
+
+            <tr>
+              <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
+                <div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
+                  <table id="trainingTable" class="table table-striped">
+                    <tbody>
+                      <tr style="background-color: #f5f3f3!important">
+                        <td width="15%" class="label-font">Attachments</td>
+                        <td>
+                          <div class="filechipCollaboratorAttachment pdf" *ngIf="trainingAttachments?.length > 0">
+                            <span title="download" *ngFor="let attachment of trainingAttachments" (click)="downloadAttachment(attachment)">{{attachment?.FILE_NAME}}
+                              <i class="fa fa-download"></i>
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="12" class="hiddenRow padding0" *ngIf="commentIconValue==l">
+                <div style="background-color: #f5f3f3!important" id=comment+{{l}}>
+                  <table id="trainingTable" class="table table-striped">
+                    <tbody>
+                      <tr style="background-color: #f5f3f3!important">
+                        <td width="15%" class="label-font">Comments</td>
+                        <td>
+                          <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
+                                  </div> -->
+                          <ul *ngFor="let comment of trainingComments">
+                            <li title="{{comment?.COMMENT_DESCRIPTION}}">
+                              {{comment?.COMMENT_DESCRIPTION| slice:0:50}}
+                              <span *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50">
+                                ...</span>
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center p-2" *ngIf="irbPersonDetailedTraining?.length == 0">No Training Details to show</div>
+      </div>
+    </div>
+  </div>
+
+</section>

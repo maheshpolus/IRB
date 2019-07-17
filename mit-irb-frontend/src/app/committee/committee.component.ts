@@ -126,7 +126,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     this.result = data || [];
                     this._spinner.hide();
-                    this.loadScheduleList();
+                  //  this.loadScheduleList();
                     if ( this.result != null ) {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         const ts = new Date( this.result.committee.updateTimestamp );

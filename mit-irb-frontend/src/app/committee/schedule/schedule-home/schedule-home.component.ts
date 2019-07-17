@@ -54,6 +54,11 @@ export class ScheduleHomeComponent implements OnInit {
                 this.scheduleTime = new Date( this.result.committeeSchedule.time );
                 this.scheduleStartTime = new Date( this.result.committeeSchedule.startTime );
                 this.scheduleEndTime = new Date( this.result.committeeSchedule.endTime );
+                this.result.committeeSchedule.meetingDate =
+                    this.result.committeeSchedule.meetingDate != null ? new Date(this.result.committeeSchedule.meetingDate ) : null;
+                this.result.committeeSchedule.protocolSubDeadline =
+                    this.result.committeeSchedule.protocolSubDeadline != null ?
+                    new Date(this.result.committeeSchedule.protocolSubDeadline ) : null;
                 this.scheduleStatus = this.result.scheduleStatus;
                 this.scheduleStatusSelected = this.result.committeeSchedule.scheduleStatus.description;
             }
@@ -118,6 +123,11 @@ export class ScheduleHomeComponent implements OnInit {
         } );
         this.scheduleHomeService.saveScheduleData( this.result ).subscribe( data => {
             this.result = data;
+            this.result.committeeSchedule.meetingDate =
+                    this.result.committeeSchedule.meetingDate != null ? new Date(this.result.committeeSchedule.meetingDate ) : null;
+                this.result.committeeSchedule.protocolSubDeadline =
+                    this.result.committeeSchedule.protocolSubDeadline != null ?
+                    new Date(this.result.committeeSchedule.protocolSubDeadline ) : null;
         } );
     }
 

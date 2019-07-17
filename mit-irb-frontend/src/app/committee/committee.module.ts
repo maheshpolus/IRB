@@ -31,7 +31,6 @@ import { CommitteeMemberEmployeeElasticService } from '../common/service/committ
 import { CommitteeMemberNonEmployeeElasticService } from '../common/service/committee-members-nonEmployee-elastic-search.service';
 import { DashboardResolverService } from '../common/service/dashboard-resolver.service';
 import { ScheduleDetailsComponent } from './committee-home/schedule-details/schedule-details.component';
-import { CommitteeMemberDetailsComponent } from './committee-members/committee-member-details/committee-member-details.component';
 
 const routes = [
     {
@@ -40,10 +39,19 @@ const routes = [
         { path: 'committeeHome', component: CommitteeHomeComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent },
         { path: 'scheduleDetails', component: ScheduleDetailsComponent },
-        { path: 'committeeMembers', component: CommitteeMembersComponent },
-        { path: 'committeeMembers/personDetail', component: CommitteeMemberDetailsComponent }]
+        { path: 'committeeMembers', component: CommitteeMembersComponent }]
     },
-    { path: 'schedule', component: ScheduleComponent }];
+    { path: 'schedule', component: ScheduleComponent,
+    children: [ { path: '', redirectTo: 'scheduleHome', pathMatch: 'full' },
+                { path: 'scheduleHome', component: ScheduleHomeComponent },
+                { path: 'minutes', component: MinutesComponent },
+                { path: 'protocolSubmitted', component: ProtocolSubmittedComponent },
+                { path: 'attendance', component: ScheduleAttendanceComponent },
+                { path: 'otherAction', component: ScheduleOtherActionsComponent },
+                { path: 'attachment', component: ScheduleAttachmentsComponent },
+            ]
+    }
+];
 
 @NgModule( {
     imports: [
@@ -68,8 +76,7 @@ const routes = [
         ScheduleAttendanceComponent,
         ScheduleOtherActionsComponent,
         ScheduleAttachmentsComponent,
-        ScheduleDetailsComponent,
-        CommitteeMemberDetailsComponent ],
+        ScheduleDetailsComponent ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [CommitteeConfigurationService,
                 CommitteeMemberEmployeeElasticService,

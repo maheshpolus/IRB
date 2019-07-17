@@ -1,111 +1,149 @@
 <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
 <div>
-	<div class="container-fluid pushFixedHeaderFooter">
-		<div class="headerPush"></div>
-		<!-- Session handling component -->
-        <app-sessiontimeout> </app-sessiontimeout>
-        <div class="container-fluid position-relative">
-				<div class="exit-button" (click)="backClick()" title="Close">
-						<i class="fa fa-times mg-6">&nbsp;</i>
-				</div>
-                <section class="row sect-padding">
-                    <div class="col-12 top-aprv-details">
+    <div class="container-fluid pushFixedHeaderFooter">
+        <div class="headerPush"></div>
+
+        <!-- <div class="container-fluid position-relative">
+            <div class="exit-button" (click)="backClick()" title="Close">
+                <i class="fa fa-times mg-6">&nbsp;</i>
+            </div>
+            <section class="row sect-padding">
+                <div class="col-12 top-aprv-details">
+                    <div class="row">
+                        <div class="col-12 apprve-date">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-12">
+                                    <h4>
+                                        ID # :
+                                        <span>{{result?.committee?.committeeId}}</span>
+                                    </h4>
+                                    <p>
+                                        Home Unit :
+                                        <span>{{result?.committee?.homeUnitName}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-12">
+                                    <p>
+                                        Name :
+                                        <span>{{result?.committee?.committeeName}}</span>
+                                        <br /> Last updated User :
+                                        <span>{{result?.committeeSchedule?.updateUser}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-12">
+                                    <p>
+                                        Type:
+                                        <span>{{result?.committee?.committeeType?.description}}</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div> -->
+
+        <div class="position-relative">
+                <section class="card">
+                    <div class="col-12 card-body">
                         <div class="row">
                             <div class="col-12 apprve-date">
                                 <div class="row">
-                                    <div class="col-md-4 col-sm-4 col-12"> 
-                                        <h4>
-                                            ID # :
-                                            <span>{{result?.committee?.committeeId}}</span>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 text-right" (click)="backClick()" title="Close">
+                                        <i class="fa fa-times-circle btn-close-committe-lite" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-md-5 col-sm-4 col-12">
+                                        <h4 class="txt-large txt-dark normal">
+                                            Committee Id # :
+                                            <span class="text-danger">{{result?.committee?.committeeId}}</span>
                                         </h4>
-                                        <p>
+                                        <p class="txt-dark txt-large normal">
                                             Home Unit :
-                                            <span>{{result?.committee?.homeUnitName}}</span>
+                                            <span class="text-danger">{{result?.committee?.homeUnitName}}</span>
                                         </p>
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-12">
-                                        <p>
-                                            Name :
-                                            <span>{{result?.committee?.committeeName}}</span>
-                                            <br /> Last updated User :
-                                            <span>{{result?.committeeSchedule?.updateUser}}</span>
+                                        <p class="txt-dark txt-large normal">
+                                                Committee Name :
+                                            <span class="text-danger">{{result?.committee?.committeeName}}</span>
+                                        <br /> Last updated User :
+                                        <span class="text-danger">{{result?.committeeSchedule?.updateUser}}</span>
                                         </p>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-12">
-                                        <p>
-                                            Type:
-                                            <span>{{result?.committee?.committeeType?.description}}</span>
+                                    <div class="col-md-3 col-sm-4 col-12">
+                                        <p class="txt-dark txt-large normal">
+                                                Committee Type:
+                                            <span class="text-danger">{{result?.committee?.committeeType?.description}}</span>
                                         </p>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
-		   <section class="row" >
-            <!-- <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><br>
-               <div class="h6"> COMMITTEE</div>
-            </div>
-            
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-               
-                <div class="row">
-                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-                        <label>Id</label>
-                        <span>{{this.result?.committee?.committeeId}}</span>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-                        <label>Name</label>
-                        <span>{{this.result?.committee?.committeeName}}</span>
-                    </div>
-                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-                        <label>Type</label>
-                        <span>{{this.result?.committee?.committeeType?.description}}</span>
-                    </div>
-                      <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-                        <label>Home Unit</label>
-                        <span>{{this.result?.committee?.homeUnitName}}</span>
-                    </div>
-                      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-                        <label>Last Updated User</label>
-                        <span>{{this.result?.committee?.updateTimestamp | date:'shortDate'}} by {{this.result?.committee?.updateUser}}</span>
-                    </div>
-                </div>
-            </div>  -->
-            <!-- tabs in committee view -->
+
+        <!-- tabs in committee view -->
+        <!-- <section class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                	<section class="row btn-row-med sect-padding mr-2">
-							<button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'schedule_home')" [ngClass]="{'btnactive':currentTab=='schedule_home'}">
-									<i class="fa fa-calendar"></i>Schedule
-								</button>
-								<button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'btnactive':currentTab=='minutes'}" (click)="show_current_tab($event,'minutes')">
-								<i class="fa fa-users"></i>Minutes
-						  </button>
-                    <!-- <section class="row">
-             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <ul class="tabsIcon" style="margin-top:10px;">
-                    <li class="active" [ngClass]="{'active':currentTab=='schedule_home'}">
-	                    <a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'schedule_home');">
-	                    <i  class="fa fa-calendar"></i><span>Schedule</span></a>
-                    </li>
-                    <li [ngClass]="{'active':currentTab=='minutes'}">
-	                    <a href="#" (click)="show_current_tab($event,'minutes');">
-	                    <i class="fa fa-users"></i><span>Minutes</span></a>
-                    </li>
-                </ul>
-            </div>  -->
-		</section>
-      </div>
-    </section>
-   <div *ngIf="currentTab =='schedule_home'">
-	<app-schedule-home></app-schedule-home>
-   </div>
-   <div *ngIf="currentTab =='minutes'">
-	<app-minutes></app-minutes>
-	</div>
-	
-	<div class="footerPush"></div>
-	</div>
+                <section class="row btn-row-med sect-padding mr-2">
+                    <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'schedule_home')"
+                        [ngClass]="{'btnactive':currentTab=='schedule_home'}">
+                        <i class="fa fa-calendar"></i>Schedule
+                    </button>
+                    <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'btnactive':currentTab=='minutes'}"
+                        (click)="show_current_tab($event,'minutes')">
+                        <i class="fa fa-book"></i>Minutes
+                    </button>
+
+                </section>
+            </div>
+        </section> -->
+
+
+        <section class="row">
+			
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <section class="row btn-row-med-lite sect-padding-lite bg-clr mt-10">
+                            <button class="btn btn-primary tab_btn" data-toggle="modal" data-target="#warningModalMain" (click)="show_current_tab($event,'scheduleHome')"
+                            [ngClass]="{'nav-active':currentTab=='scheduleHome'}">
+                            <i class="fa fa-calendar"></i>Schedule
+                        </button>
+                        <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='protocolSubmitted'}"
+                            (click)="show_current_tab($event,'protocolSubmitted')">
+                            <i class="fa fa-book"></i>Protocol Submitted
+                        </button>
+                        <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='attendance'}"
+                            (click)="show_current_tab($event,'attendance')">
+                            <i class="fa fa-book"></i>Attendance
+                        </button>
+                        <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='otherAction'}"
+                            (click)="show_current_tab($event,'otherAction')">
+                            <i class="fa fa-book"></i>Other Actions
+                        </button>
+                        <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='attachment'}"
+                            (click)="show_current_tab($event,'attachment')">
+                            <i class="fa fa-book"></i>Attachments
+                        </button>
+                        <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='minutes'}"
+                            (click)="show_current_tab($event,'minutes')">
+                            <i class="fa fa-book"></i>Minutes
+                        </button>
+
+                    </section>
+                </div>
+            </section>
+
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
+
+        <!-- <div *ngIf="currentTab =='schedule_home'">
+            <app-schedule-home></app-schedule-home>
+        </div>
+        <div *ngIf="currentTab =='minutes'">
+            <app-minutes></app-minutes>
+        </div> -->
+
+        <div class="footerPush"></div>
+    </div>
 </div>

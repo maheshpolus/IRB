@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-3">
       <a class="pdf txt-medium text-danger" (click)="showSchedulePopUp()" data-toggle="modal" data-target="#exampleModalCenter,#editDetailsModal">
-        <i class="fa fa-plus icon-padding text-danger txt-medium"></i>Generate Schedule
+        <i class="fa fa-plus icon-padding text-danger txt-medium"></i>Generate Meeting
       </a>
     </div>
   </div>
@@ -32,11 +32,11 @@
         <table class="table tbl-p-clr" *ngIf="committeeSchedules?.length > 0">
           <thead class="tbl-head-clr thead-font-size">
             <tr class="solid-bottom">
-              <th scope="col">Schedule Id</th>
-              <th scope="col">Schedule Date
+              <th scope="col">Meeting Id</th>
+              <th scope="col">Meeting Date
                 <span *ngIf="isScheduleListItemEditMode" class="mandatory">*</span>
               </th>
-              <th scope="col">Day of Week</th>
+              <!-- <th scope="col">Day of Week</th> -->
               <th scope="col">Deadline</th>
               <th scope="col">Status</th>
               <th scope="col">Place
@@ -63,13 +63,13 @@
                       </span>
                     </div>
                   </span>
-                  <span *ngIf="!editSchedule[i]">{{committeScheduleData?.scheduledDate | date: 'MM/dd/yyyy'}}</span>
+                  <span *ngIf="!editSchedule[i]">{{committeScheduleData?.scheduledDate | date: 'fullDate'}}</span>
 
                   <!-- <input [owlDateTimeTrigger]="schdlDt" [owlDateTime]="schdlDt" [(ngModel)]="committeScheduleData.scheduledDate" [disabled]="!editSchedule[i] == true"
                                    [ngClass]="(editSchedule[i] == true)? 'scheduleBoxes' : 'committeeBoxNotEditable'" />
                                   <owl-date-time #schdlDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time> -->
                 </td>
-                <td class="align-middle">{{ committeScheduleData.dayOfWeek }}</td>
+                <!-- <td class="align-middle">{{ committeScheduleData.dayOfWeek }}</td> -->
                 <td class="align-middle">{{ committeScheduleData.protocolSubDeadline | date: 'MM/dd/yyyy' }}</td>
                 <td class="align-middle">
                   <span class="form-group" *ngIf="editSchedule[i] == true">
@@ -115,7 +115,7 @@
                     <i class="fa fa-eye" aria-hidden="true"></i>
                   </button>
                   <button title="Delete" type="button" class="btn log-user-icon-lite" data-toggle="modal" data-target="#deleteModal, #warningModal"
-                    (click)="showDeleteModal($event, committeScheduleData, result.committee.committeeId, committeScheduleData.scheduledDate)">
+                    (click)="showDeleteModal($event, committeScheduleData, committeeId, committeScheduleData.scheduledDate)">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </button>
                 </td>
@@ -128,6 +128,370 @@
     </div>
   </div>
 </div>
+
+
+<button type="button margin-class" id="skippedSchedulesButton" [hidden]="true" data-toggle="modal" data-target="#skippedSchedules"></button>
+
+<!--generate schedule modal-->
+<div class="modal fade bd-example-modal-lg" *ngIf="showGenerateSchedule" id="exampleModalCenter" tabindex="-1"
+role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+ <div class="modal-dialog modal-lg" role="document">
+   <div class="modal-content">
+     <div class="modal-header popup-header dotted-bottom">
+       <h5 class="modal-title text-black thick" id="exampleModalLongTitle">Generate Meeting
+       </h5>
+       <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+       </button>
+     </div>
+     <div class="modal-body modal-popup dotted-bottom txt-medium">
+       <div class="col-12  search-eidted-p padding-15" *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled">
+         <div class="alert alert-danger txt-medium">{{scheduleValidationMessage}}
+         </div>
+       </div>
+       <div class="col-12">
+         <div class="row">
+           <div class="col-4">
+             <div class="form-group">
+               <span class="text-secondary txt-medium">Start Date
+                 <span class="mandatory">*</span>
+               </span>
+               <div class="input-group  mb-2">
+                 <input type="text" class="form-control txt-small" [owlDateTime]="strdt" placeholder="mm/dd/yyyy" [min]="today" [(ngModel)]="result.scheduleData.scheduleStartDate">
+                 <owl-date-time [pickerType]="'calendar'" #strdt></owl-date-time>
+                 <div class="input-group-append" [owlDateTimeTrigger]="strdt">
+                   <span class="input-group-text ">
+                     <i class="fa fa-calendar" aria-hidden="true"></i>
+                   </span>
+                 </div>
+               </div>
+             </div>
+           </div>
+           <div class="col-4">
+             <div class="form-group">
+               <span class="text-secondary txt-medium">Start Time
+                 <span class="mandatory">*</span>
+               </span>
+               <div class="input-group  mb-2">
+                 <input type="text" class="form-control txt-small" [owlDateTime]="strTime" [(ngModel)]="displayTime">
+                 <owl-date-time #strTime [pickerType]="'timer'" [hour12Timer]=true></owl-date-time>
+                 <div class="input-group-append" [owlDateTimeTrigger]="strTime">
+                   <span class="input-group-text  ">
+                     <i class="fa fa fa-clock-o" aria-hidden="true"></i>
+                   </span>
+                 </div>
+               </div>
+             </div>
+           </div>
+           <div class="col-4">
+             <div class="form-group">
+               <span class="text-secondary txt-medium">Place
+                 <span class="mandatory">*</span>
+               </span>
+               <input type="text" class="form-control txt-small input-field-size" [(ngModel)]="result.scheduleData.place">
+             </div>
+           </div>
+
+         </div>
+       </div>
+       <div>
+         <ul class="nav nav-tabs tabsIcon" id="myTab" role="tablist">
+           <!-- <li class="nav-item">
+     <a class="nav-link active txt-medium" id="home-tab" data-toggle="tab" href="#Daily" role="tab" aria-controls="home"
+     aria-selected="true" (click)="showTab('DAILY')">Daily</a>
+   </li>
+   <li class="nav-item">
+     <a class="nav-link txt-medium" id="profile-tab" data-toggle="tab" href="#Weekly" role="tab" aria-controls="profile"
+     aria-selected="false" (click)="showTab('WEEKLY')">Weekly</a>
+   </li> -->
+           <li class="nav-item">
+             <a class="nav-link active txt-medium" id="home-tab" data-toggle="tab" href="#Monthly" role="tab" aria-controls="home" aria-selected="true"
+              (click)="showTab('MONTHLY')">Monthly</a>
+             <!-- </li>
+   <li class="nav-item">
+     <a class="nav-link txt-medium" id="contact-tab" data-toggle="tab" href="#Yearly" role="tab" aria-controls="contact"
+     aria-selected="false" (click)="showTab('YEARLY')">Yearly</a>
+   </li> -->
+             <li class="nav-item">
+               <a class="nav-link txt-medium" id="contact-tab" data-toggle="tab" href="#Never" role="tab" aria-controls="contact" aria-selected="false"
+                (click)="showTab('NEVER')">Never</a>
+             </li>
+         </ul>
+       </div>
+       <div class="tab-content" id="myTabContent">
+         <div class="tab-pane fade" id="Daily" role="tabpanel" aria-labelledby="contact-tab">
+           <div class="tabCover">
+             <ul class="tablelayout padding-0">
+               <li>
+                 <input type="radio" name="dayOption" value="XDAY" [(ngModel)]="optionDay" (click)="sentDayOption()" checked /> Every
+                 <input type="number" class="form-control txt-small select-size" min="1" max="100" [(ngModel)]="result.scheduleData.dailySchedule.day"
+                 /> day(s)
+               </li>
+               <li>
+                 <input type="radio" name="dayOption" value="WEEKDAY" [(ngModel)]="optionDay" (click)="sentDayOption()" /> Every Weekday</li>
+             </ul>
+
+             <div class="form-group row end-date-padding">
+               <span class="col-12 text-secondary txt-medium">Ending On
+                 <span class="mandatory">*</span>
+               </span>
+               <div class="col-4">
+                 <div class="input-group  mb-2">
+                   <input type="text" class="form-control txt-small" [owlDateTime]="endDt" placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate"
+                    [(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate">
+                   <owl-date-time [pickerType]="'calendar'" #endDt></owl-date-time>
+                   <div class="input-group-append" [owlDateTimeTrigger]="endDt">
+                     <span class="input-group-text ">
+                       <i class="fa fa-calendar" aria-hidden="true"></i>
+                     </span>
+                   </div>
+                 </div>
+
+
+                 <!-- <input [owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" [min]="result.scheduleData.dailySchedule.scheduleStartDate"
+        [(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate" class="committeeBox text-border-padding" />
+       <span class="fa fa-calendar fa-large" [owlDateTimeTrigger]="endDt"></span>
+       <owl-date-time #endDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time> -->
+               </div>
+             </div>
+
+             <!-- <ul class="tablelayout">
+       <li>
+       <span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+         {{scheduleValidationMessage}}</span>
+       </li>
+     </ul> -->
+           </div>
+         </div>
+         <div class="tab-pane fade" id="Weekly" role="tabpanel" aria-labelledby="profile-tab">
+           <div class="tabCover">
+             <ul class="tablelayout padding-0">
+               <li>Recur every
+                 <input type="number" class="form-control select-size" min="1" max="100" [(ngModel)]="result.scheduleData.weeklySchedule.week"
+                 /> week(s) on:</li>
+             </ul>
+             <ul class="tablelayout padding-0">
+               <li *ngFor="let option of dayOptions">
+                 <input type="checkbox" name="options" value="{{option.value}}" [(ngModel)]="option.checked" /> {{option.name}}
+               </li>
+             </ul>
+             <div class="form-group row end-date-padding">
+               <span class="col-12 txt-medium">Ending On
+                 <span class="mandatory">*</span>
+               </span>
+               <div class="col-4">
+                 <div class="input-group  mb-2">
+                   <input type="text" class="form-control txt-small" [owlDateTime]="wkendDt" placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate"
+                    [(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate">
+                   <owl-date-time [pickerType]="'calendar'" #wkendDt></owl-date-time>
+                   <div class="input-group-append" [owlDateTimeTrigger]="wkendDt">
+                     <span class="input-group-text  ">
+                       <i class="fa fa-calendar" aria-hidden="true"></i>
+                     </span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <!-- <ul class="tablelayout half-width">
+       <li>
+         <span class="mandatory">*&nbsp;</span>Ending on</li>
+       <li>
+         <input [owlDateTimeTrigger]="wkendDt" [owlDateTime]="wkendDt" [(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate"
+          class="committeeBox text-border-padding" />
+         <span class="fa fa-calendar fa-large" [owlDateTimeTrigger]="wkendDt"></span>
+         <owl-date-time #wkendDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
+       </li>
+       </ul> -->
+             <!-- <ul class="tablelayout">
+       <li>
+         <span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+         {{scheduleValidationMessage}}</span>
+       </li>
+       </ul> -->
+           </div>
+         </div>
+
+
+         <div class="tab-pane fade show active" id="Monthly" role="tabpanel" aria-labelledby="home-tab">
+           <div class="tabCover">
+             <ul class="tablelayout padding-0">
+               <li>
+                 <input type="radio" name="monthOptionDay" value="XDAYANDXMONTH" [(ngModel)]="monthOptionDay" (click)="sentMonthOption()"
+                  checked /> Day
+
+                 <input class="form-control select-size txt-small" type="number" min="1" max="31" [(ngModel)]="result.scheduleData.monthlySchedule.day"
+                 /> of every
+
+                 <input class="form-control select-size txt-small" type="number" min="1" max="100" [(ngModel)]="result.scheduleData.monthlySchedule.option1Month"
+                 /> month(s)
+
+               </li>
+             </ul>
+             <ul class="tablelayout padding-0">
+               <li>
+                 <input type="radio" name="monthOptionDay" value="XDAYOFWEEKANDXMONTH" [(ngModel)]="monthOptionDay" (click)="sentMonthOption()"
+                 /> The
+                 <select class="custom-select txt-small form-control  mr-sm-2 select-size" [(ngModel)]="result.scheduleData.monthlySchedule.selectedMonthsWeek">
+                   <option *ngFor="let day of selectedMonthWeek" [value]="day.value">{{day.name}}</option>
+                 </select>
+                 <select class="custom-select txt-small form-control select-size mr-sm-2" [(ngModel)]="result.scheduleData.monthlySchedule.selectedDayOfWeek">
+                   <option *ngFor="let day of dayOptions" [value]="day.value">{{day.name}}</option>
+                 </select> of every
+                 <input type="number" class="form-control txt-small select-size" min="1" max="100" [(ngModel)]="result.scheduleData.monthlySchedule.option2Month"
+                 /> month(s)
+               </li>
+             </ul>
+             <div class="form-group row end-date-padding">
+               <span class="col-12 text-secondary txt-medium">Ending On
+                 <span class="mandatory">*</span>
+               </span>
+               <div class="col-4">
+                 <div class="input-group  mb-2">
+                   <input type="text" class="form-control txt-small" [owlDateTime]="mnendDt" placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate"
+                    [(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate">
+                   <owl-date-time [pickerType]="'calendar'" #mnendDt></owl-date-time>
+                   <div class="input-group-append" [owlDateTimeTrigger]="mnendDt">
+                     <span class="input-group-text ">
+                       <i class="fa fa-calendar" aria-hidden="true"></i>
+                     </span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <!-- <ul class="tablelayout half-width">
+       <li>
+         <span class="mandatory">*&nbsp;</span>Ending on</li>
+       <li>
+         <input [owlDateTimeTrigger]="mnendDt" [owlDateTime]="mnendDt" [(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate"
+          class="committeeBox text-border-padding" />
+         <span class="fa fa-calendar fa-large" [owlDateTimeTrigger]="mnendDt"></span>
+         <owl-date-time #mnendDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
+       </li>
+       </ul> -->
+             <!-- <ul class="tablelayout">
+       <li>
+         <span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+         {{scheduleValidationMessage}}</span>
+       </li>
+       </ul> -->
+           </div>
+         </div>
+         <div class="tab-pane fade" id="Yearly" role="tabpanel" aria-labelledby="contact-tab">
+           <div class="tabCover">
+             <ul class="tablelayout padding-0">
+               <li>
+                 <input type="radio" name="yearOption" value="XDAY" [(ngModel)]="yearOption" (click)="sentYearOption()" /> Every
+                 <select class="custom-select form-control txt-small mr-sm-2 select-size" [(ngModel)]="result.scheduleData.yearlySchedule.selectedOption1Month">
+                   <option *ngFor="let day of yearMonthOptions" [value]="day.value">{{day.name}}</option>
+                 </select>
+                 <input class="form-control txt-small select-size" type="number" min="1" max="31" [(ngModel)]="result.scheduleData.yearlySchedule.day"
+                 /> of every
+                 <input class="form-control txt-small select-size" type="number" min="1" max="100" [(ngModel)]="result.scheduleData.yearlySchedule.option1Year"
+                 /> year(s)
+               </li>
+             </ul>
+             <ul class="tablelayout padding-0">
+               <li>
+                 <input type="radio" name="yearOption" value="CMPLX" [(ngModel)]="yearOption" (click)="sentYearOption()" /> The
+                 <select class="custom-select form-control txt-small mr-sm-2 select-size" [(ngModel)]="result.scheduleData.yearlySchedule.selectedMonthsWeek">
+                   <option *ngFor="let day of selectedMonthWeek" [value]="day.value">{{day.name}}</option>
+                 </select>
+                 <select class="custom-select form-control txt-small mr-sm-2 select-size" [(ngModel)]="result.scheduleData.yearlySchedule.selectedDayOfWeek">
+                   <option *ngFor="let day of dayOptions" [value]="day.value">{{day.name}}</option>
+                 </select>
+                 of
+                 <select class="custom-select form-control txt-small mr-sm-2 select-size" [(ngModel)]="result.scheduleData.yearlySchedule.selectedOption2Month">
+                   <option *ngFor="let day of yearMonthOptions" [value]="day.value">{{day.name}}</option>
+                 </select>
+                 of every
+                 <input type="number" class="form-control txt-small select-size" min="1" max="100" [(ngModel)]="result.scheduleData.yearlySchedule.option2Year"
+                 /> year(s)
+               </li>
+             </ul>
+             <!-- <ul class="tablelayout half-width">
+         <li><span class="mandatory">*&nbsp;</span>Ending on</li>
+         <li><input [owlDateTimeTrigger]="yrendDt"
+         [owlDateTime]="yrendDt"
+         [(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate"
+         class="committeeBox text-border-padding" /> <span
+         class="fa fa-calendar fa-large"
+         [owlDateTimeTrigger]="yrendDt"></span> <owl-date-time
+           #yrendDt [pickerType]="'calendar'"
+           [pickerMode]="'dialog'"></owl-date-time></li>
+       </ul> -->
+             <div class="form-group row end-date-padding">
+               <span class="col-12 txt-medium text-secondary">Ending On
+                 <span class="mandatory">*</span>
+               </span>
+               <div class="col-4">
+                 <div class="input-group  mb-2">
+                   <input type="text" class="form-control txt-small" [owlDateTime]="yrendDt" placeholder="mm/dd/yyyy" [min]="result.scheduleData.dailySchedule.scheduleStartDate"
+                    [(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate">
+                   <owl-date-time [pickerType]="'calendar'" #yrendDt></owl-date-time>
+                   <div class="input-group-append" [owlDateTimeTrigger]="yrendDt">
+                     <span class="input-group-text ">
+                       <i class="fa fa-calendar" aria-hidden="true"></i>
+                     </span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <!-- <ul class="tablelayout">
+         <li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
+           {{scheduleValidationMessage}}</span></li>
+       </ul> -->
+           </div>
+         </div>
+         <div class="tab-pane fade" id="Never" role="tabpanel" aria-labelledby="contact-tab">
+           <div class="tabCover">
+             <ul class="tablelayout padding-0">
+               <li>Do not repeat this event.</li>
+             </ul>
+             <!-- <ul class="tablelayout">
+       <li><span *ngIf="isStartDateBeforeToday || !isMandatoryFilled" class="mandatory"> {{scheduleValidationMessage}}</span></li>
+       </ul> -->
+           </div>
+         </div>
+       </div>
+     </div>
+     <div class="modal-footer btn-row-med p-2">
+       <!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal">Close</button> -->
+       <button type="button margin-class" class="btn btn-outline-success txt-small" data-toggle="modal" (click)="generateSchedule($event)">Generate Schedules</button>
+     </div>
+   </div>
+ </div>
+</div>
+
+
+<!--Skipped schedule modal-->
+<div class="modal fade" id="skippedSchedules" tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="modal-title text-black thick" id="skippedSchedulesLongTitle">Already scheduled for these dates?</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-pop-up dotted-bottom">
+          <div *ngIf="isConflictDates">
+            <p class="forSkipSchedule">Schedules can not be generated on the following date(s)</p>
+            <ul class="forSkipSchedule">
+              <li *ngFor="let conflictDate of conflictDates">
+                <span class="fa fa-calendar sp-color">&nbsp;&nbsp;{{ conflictDate| date: 'MM/dd/yyyy' }}&nbsp;&nbsp;</span>
+                is skipped in recurrence, meeting already scheduled.</li>
+            </ul>
+          </div>
+          <div *ngIf="result?.status == false">{{result?.message}}</div>
+        </div>
+        <div class="modal-footer btn-row-med p-2">
+          <button type="button margin-class" class="btn btn-outline-danger txt-small" data-dismiss="modal" (click)="closeConflictDateModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
 <!-- Modal for Show Warning on Delete Schedule from List -->
 <div class="modal fade" *ngIf="isTodelete" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
@@ -143,7 +507,7 @@
      </div>
      <div class="modal-body modal-pop-up dotted-bottom txt-medium">
        <p>
-         Are you sure you want to delete the schedule on the date
+         Are you sure you want to delete the meeting on the date
          <span>
            {{scheduledDate}}</span> ?
        </p>

@@ -14,7 +14,8 @@ import { ScheduleConfigurationService } from './schedule-configuration.service';
 export class ScheduleComponent implements OnInit, OnDestroy {
 
     currentTab = 'schedule_home';
-    scheduleId: number;
+    scheduleId = null;
+    committeeId = null;
     result: any = {};
     public loadScheduleDataSub: Subscription;
 
@@ -24,27 +25,39 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private scheduleConfigurationService: ScheduleConfigurationService ) {
+            this.scheduleId = this.activatedRoute.snapshot.queryParamMap.get( 'scheduleId' );
+            this.committeeId = this.activatedRoute.snapshot.queryParamMap.get( 'committeeId' );
     }
 
     ngOnInit() {
-        this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
+      //  this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
         this._spinner.show();
-        this.loadScheduleDataSub = this.scheduleService.loadScheduleData( this.scheduleId ).
+        const params = {
+            scheduleId: this.scheduleId,
+            committeeId: this.committeeId
+    };
+        this.loadScheduleDataSub = this.scheduleService.loadScheduleData( params ).
             subscribe( data => {
                 this.result = data;
                 this._spinner.hide();
                 if (this.result !== null) {
                     this.scheduleConfigurationService.changeScheduleData( this.result );
                 }
-            } );
+            });
+
     }
     ngOnDestroy() {
         this.loadScheduleDataSub.unsubscribe();
     }
 
+    onActivate( componentRef ) {
+        this.activatedRoute = componentRef;
+    }
     show_current_tab( e: any, current_tab ) {
         e.preventDefault();
         this.currentTab = current_tab;
+        this.router.navigate( ['irb/committee/schedule/' + this.currentTab],
+                { queryParams: { 'scheduleId': this.scheduleId, 'committeeId': this.committeeId } } );
     }
     backClick() {
         this._location.back();

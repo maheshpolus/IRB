@@ -164,7 +164,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         public keyPressEvent: KeyPressEvent,
         public committeeSaveService: CommitteeSaveService,
         private committeeConfigurationService: CommitteeConfigurationService,
-        , public toastr: ToastsManager) {
+        public toastr: ToastsManager) {
         this.committeeConfigurationService.currentMode.takeUntil(this.onDestroy$).subscribe(data => {
             this.mode = data;
         }, error => { }, () => {
@@ -268,6 +268,18 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         });
     }
 
+    changeCommitteeType(committeeTypeCode) {
+        const selectedType = this.committeeTypeList.filter(x => x.committeeTypeCode.toString() === committeeTypeCode);
+        if (selectedType.length > 0) {
+            this.result.committee.committeeType = this.result.committee.committeeType != null ? this.result.committee.committeeType : {};
+            this.result.committee.committeeType.description = selectedType[0].description;
+            this.result.committee.committeeType.committeeTypeCode = selectedType[0].committeeTypeCode;
+        } else {
+            this.result.committee.committeeType.description = null;
+            this.result.committee.committeeType.committeeTypeCode = null;
+        }
+    }
+
     showaddAreaOfResearch() {
         if (this.editDetails === true) {
             this.isEditDetailsModalOpen = true;
@@ -329,7 +341,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             });
             if (this.mode === 'create') {
                 this.result.updateType = 'SAVE';
-               // this.result.committee.committeeType.committeeTypeCode = '1';
+                this.result.committee.committeeType = {};
+                this.result.committee.committeeType.committeeTypeCode = '1';
+                this.result.committee.committeeType.description = 'IRB';
                 this.result.committee.createUser = localStorage.getItem('currentUser');
                 this.result.committee.createTimestamp = new Date().getTime();
                 this.result.committee.updateUser = localStorage.getItem('currentUser');

@@ -11,10 +11,7 @@ export class ScheduleService {
 
     }
 
-    public loadScheduleData( scheduleId: number ) {
-        const params = {
-                scheduleId: scheduleId
-        };
+    public loadScheduleData( params ) {
             return this.http.post( '/mit-irb/loadScheduleById', params )
                 .catch( error => {
                     console.error( error.message || error );

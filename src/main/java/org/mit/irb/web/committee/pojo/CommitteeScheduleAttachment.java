@@ -46,9 +46,6 @@ public class CommitteeScheduleAttachment implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_SCHE_ATTACH_TYPE"), name = "ATTACHMENT_TYPE_CODE", referencedColumnName = "ATTACHMENT_TYPE_CODE", insertable = false, updatable = false)
 	private CommitteeScheduleAttachType attachmentType;
 
-	@Column(name = "ATTACHMENT_ID")
-	private Integer attachmentId;
-
 	@Column(name = "ATTACHMENT_TYPE_CODE")
 	private Integer attachmentTypeCode;
 
@@ -87,14 +84,6 @@ public class CommitteeScheduleAttachment implements Serializable {
 
 	public void setCommitteeSchedule(CommitteeSchedule committeeSchedule) {
 		this.committeeSchedule = committeeSchedule;
-	}
-
-	public Integer getAttachmentId() {
-		return attachmentId;
-	}
-
-	public void setAttachmentId(Integer attachmentId) {
-		this.attachmentId = attachmentId;
 	}
 
 	public Integer getAttachmentTypeCode() {

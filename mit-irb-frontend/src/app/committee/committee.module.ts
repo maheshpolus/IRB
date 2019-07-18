@@ -36,20 +36,22 @@ import { MemberDetailsComponent } from './committee-home/committee-members/membe
 import { StatusHistoryComponent } from './committee-home/committee-members/member-home/status-history/status-history.component';
 import { AppCommonModule } from '../common/common/common.module';
 import { TrainingDetailsComponent } from './committee-home/committee-members/member-home/training-details/training-details.component';
+import { ScheduleMinutesComponent } from './schedule/schedule-home/schedule-minutes/schedule-minutes.component';
 
 const routes = [
     {
         path: '', component: CommitteeComponent, resolve: { irb: DashboardResolverService },
         children: [{ path: '', redirectTo: 'committeeHome', pathMatch: 'full' },
         { path: 'committeeHome', component: CommitteeHomeComponent },
-        { path: 'committeeMembers', component: CommitteeMembersComponent,  resolve: { irb: DashboardResolverService }},
-        { path: 'committeeMembers/memberHome', component: MemberHomeComponent, resolve: { irb: DashboardResolverService } },
+        { path: 'committeeMembers', component: CommitteeMembersComponent},
+        { path: 'committeeMembers/memberHome', component: MemberHomeComponent},
         { path: 'scheduleDetails', component: ScheduleDetailsComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent }]
     },
     { path: 'schedule', component: ScheduleComponent,
     children: [ { path: '', redirectTo: 'scheduleHome', pathMatch: 'full' },
                 { path: 'scheduleHome', component: ScheduleHomeComponent },
+                { path: 'minutes', component: ScheduleMinutesComponent },
                 { path: 'minutes', component: MinutesComponent },
                 { path: 'protocolSubmitted', component: ProtocolSubmittedComponent },
                 { path: 'attendance', component: ScheduleAttendanceComponent },
@@ -87,7 +89,8 @@ const routes = [
          MemberHomeComponent,
         MemberDetailsComponent,
         StatusHistoryComponent,
-        TrainingDetailsComponent ],
+        TrainingDetailsComponent,
+        ScheduleMinutesComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [CommitteeConfigurationService,
                 CommitteeMemberEmployeeElasticService,

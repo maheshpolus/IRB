@@ -18,4 +18,11 @@ export class ScheduleService {
                     return Observable.throw( error.message || error );
                 } );
     }
+    public loadScheduleMeetingComments( params ) {
+        return this.http.post( '/mit-irb/loadScheduleMeetingComments', params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error );
+            } );
+}
 }

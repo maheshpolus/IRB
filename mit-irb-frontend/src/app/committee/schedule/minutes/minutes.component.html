@@ -4,12 +4,9 @@
             <div class="col-12 border-box schedule-box">
                <h4 class="borderBoxHeading pointer text-color" title="add new entry" id="minutesAddBtn" data-target="#minuteModal" data-toggle="modal" (click)="showAddMinutes($event)">
 					<i class="fa fa-plus"></i> Minutes
-                    <!-- <button title="add new entry" id="minutesAddBtn" data-target="#minuteModal" data-toggle="modal" class="addBtn" (click)="showAddMinutes($event)">
-					<i class="fa fa-plus"></i>	
-					</button> -->
 				</h4>
 				
-				<div class="col-md-12 users-list-tbl"  *ngIf="result?.committeeSchedule?.committeeScheduleMinutes.length > 0">
+				<div class="col-md-12 users-list-tbl"  *ngIf="result?.committeeSchedule?.committeeScheduleMinutes?.length > 0">
 						<div class="row">
 						  <div class="table-responsive">
 							<table class="table table-striped tbl-p-clr">
@@ -45,14 +42,6 @@
 																	<i class="fa fa-trash" aria-hidden="true"></i>
 																</button>
 															</td>
-														<!-- <td>
-															<ul class="actionButtonGroup">
-																<li title="edit"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
-																<li title="delete"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="showDeleteModal($event, i, minute, result.committeeSchedule.committeeId, result.committeeSchedule.scheduleId)" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
-																<li title="save"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem($event, i, minute)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
-																<li title="cancel"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="cancelEditMinuteItem($event, i, minute)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
-															</ul>
-														</td> -->
 													</tr>
 										</tbody>
 								
@@ -63,31 +52,6 @@
 								<div *ngIf="result?.committeeSchedule?.committeeScheduleMinutes.length == 0">No Minutes added yet to display</div>
 								</div>
 
-
-				<!-- <div>
-					<table *ngIf="result?.committeeSchedule?.committeeScheduleMinutes.length == 0" class="table table-responsive tableSkin">
-						<tr><td>No Minutes added yet to display</td></tr>
-					</table>
-					<table *ngIf="result?.committeeSchedule?.committeeScheduleMinutes.length > 0" class="table table-responsive tableSkin">
-						
-						<tr *ngFor="let minute of result?.committeeSchedule?.committeeScheduleMinutes; let i=index">
-							<td>{{ i+1 }}</td>
-							<td>{{ minute.minuteEntrytype.description }}<span *ngIf="minute.minuteEntryTypeCode == 6 || minute.minuteEntryTypeCode == 3">&nbsp;-&nbsp;{{minute.protocolNumber}}</span></td>
-							<td><textarea [ngClass]="(!isEditMinuteItem[i] == false)? 'scheduleBoxes forTextAreaEntry' : 'committeeBoxNotEditable'" [disabled]="(!isEditMinuteItem[i] == true)" value="{{ minute.minuteEntry }}" row="4" [(ngModel)]="minute.minuteEntry"></textarea>
-							</td>
-							<td><i [ngClass]=" (minute.privateCommentFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
-							<td><i [ngClass]=" (minute.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
-							<td>
-								<ul class="actionButtonGroup">
-									<li title="edit"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
-									<li title="delete"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="showDeleteModal($event, i, minute, result.committeeSchedule.committeeId, result.committeeSchedule.scheduleId)" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
-									<li title="save"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem($event, i, minute)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
-									<li title="cancel"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="cancelEditMinuteItem($event, i, minute)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-				</div> -->
 			</div>
 		</div>
 		
@@ -231,9 +195,6 @@
 																										<i class="fa fa-search"></i>
 																									</span>
 																								</div>
-													<!-- <button class="searchBtn" id="searchContingency2" (click)="searchContigency()" data-target="#contigencyModal" data-toggle="modal">
-														&nbsp;<i class="fa fa-search"></i>
-													</button> -->
 													</div>
 																					</div>
 																					</div>

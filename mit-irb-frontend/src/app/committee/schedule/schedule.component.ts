@@ -30,8 +30,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-      //  this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this._spinner.show();
+       this._spinner.show();
         const params = {
             scheduleId: this.scheduleId,
             committeeId: this.committeeId
@@ -39,6 +38,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.loadScheduleDataSub = this.scheduleService.loadScheduleData( params ).
             subscribe( data => {
                 this.result = data;
+                this.result.committeeSchedule.meetingDate = this.result.committeeSchedule.meetingDate != null ?
+                    new Date(this.result.committeeSchedule.meetingDate) : null;
                 this._spinner.hide();
                 if (this.result !== null) {
                     this.scheduleConfigurationService.changeScheduleData( this.result );

@@ -1,0 +1,144 @@
+<div class="col-sm-12 p15">
+  <div class="row">
+    <ul class="nav nav-pills" role="tablist" style="background: none;">
+      <li class="nav-item">
+        <a class="nav-link active txt-small button-red-tab" (click)="showData(userDTO.role,'PENDING')" [ngClass]="{active:(tabSelected=='PENDING')}">
+          <i class="fa fa-hourglass txt-large" aria-hidden="true"></i> Meeting Comments</a>
+      </li>
+      <li class="nav-item border-left1">
+        <a class="nav-link txt-small button-red-tab" (click)="showData(userDTO.role,'STUDIES')" [ngClass]="{active:(tabSelected=='STUDIES')}">
+          <i class="fa fa-book txt-large mr-5" aria-hidden="true"></i>Protocol Comments
+        </a>
+      </li>
+      <li class="nav-item border-left1">
+        <a class="nav-link txt-small button-red-tab" (click)="showData(userDTO.role,'EN-ROUTE')" [ngClass]="{active:(tabSelected=='EN-ROUTE')}">
+          <i class="fa fa-sitemap txt-large mr-5" aria-hidden="true"></i>All Comments
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+<div class="card mt-5">
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+
+        <div class="col-md-12 users-list-tbl">
+						<div class="row">
+						  <div class="table-responsive">
+							<table class="table table-striped tbl-p-clr">
+							  <thead class="tbl-head-clr thead-font-size p-75">
+									<tr>
+											
+											<th title="">Entry Type</th>
+											<th title="">Entry</th>
+											<th title="">Private</th>
+											<th title="">Final</th>
+											<th title="">Action</th>
+										</tr>
+										</thead>
+										<tbody class="tbody-font-size p-75">
+												<tr *ngFor="let minute of result?.committeeSchedule?.committeeScheduleMinutes; let i=index">
+														
+														<td>{{ minute?.minuteEntrytype?.description }}<span *ngIf="minute.minuteEntryTypeCode == 6 || minute.minuteEntryTypeCode == 3">&nbsp;-&nbsp;{{minute?.protocolNumber}}</span></td>
+														<td class="form-group "><textarea class="form-control txt-area-fnt" [disabled]="(!isEditMinuteItem[i] == true)" value="{{ minute.minuteEntry }}" rows="3" cols ="50" [(ngModel)]="minute.minuteEntry"></textarea>
+														</td>
+														<td><i [ngClass]=" (minute?.privateCommentFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
+														<td><i [ngClass]=" (minute?.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i></td>
+														<td class="action-btn-list">
+																<button title="Edit" type="button" class="btn btn-primary edit-btn-1" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)">
+																	<i class="fa fa-pencil" aria-hidden="true"></i>
+																</button>
+																<button title="Save" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+																		<i class="fa fa-floppy-o" aria-hidden="true"></i>
+																	</button>
+																	<button title="Cancel" *ngIf="!isEditMinuteItem[i] == false" (click)="cancelEditMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+																		<i class="fa fa-times"></i>
+																	</button>
+																<button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="showDeleteModal($event, i, minute, result.committeeSchedule.committeeId, result.committeeSchedule.scheduleId)" data-toggle="modal" data-target="#deleteModal">
+																	<i class="fa fa-trash" aria-hidden="true"></i>
+																</button>
+															</td>
+													</tr>
+										</tbody>
+								
+								</table>
+								</div>
+								</div>
+								
+								<div *ngIf="result?.committeeSchedule?.committeeScheduleMinutes.length == 0">No Minutes added yet to display</div>
+								</div>
+
+
+
+      <!-- <div class="col-12  search-eidted-p padding-15">
+        <div class="row bottom-margin">
+          <div class="col-2">
+            <div class="form-group ">
+              111111
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="form-group ">
+              22222
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-group ">
+              3333
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-group">
+              44444
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="form-group">
+              55555
+            </div>
+          </div>
+
+        </div>
+        <div class="row bottom-margin">
+          <div class="col-2">
+            <div class="form-group ">
+              6666
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="form-group">
+              7777
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-group">
+              8888
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-group">
+              999
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="form-group">
+              10
+            </div>
+          </div>
+        </div>
+
+        <div class="row bottom-margin">
+          <div class="col-12">
+            <div class="form-group">
+              aaa
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  </div>

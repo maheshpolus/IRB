@@ -55,20 +55,20 @@
                                     </div>
                                     <div class="col-md-5 col-sm-4 col-12">
                                         <h4 class="txt-large txt-dark normal">
-                                            Committee Id # :
+                                            Committee ID # :
                                             <span class="text-danger">{{result?.committee?.committeeId}}</span>
                                         </h4>
                                         <p class="txt-dark txt-large normal">
-                                            Home Unit :
-                                            <span class="text-danger">{{result?.committee?.homeUnitName}}</span>
+                                            Meeting ID :
+                                            <span class="text-danger">{{result?.committeeSchedule?.scheduleId}}</span>
                                         </p>
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-12">
                                         <p class="txt-dark txt-large normal">
                                                 Committee Name :
                                             <span class="text-danger">{{result?.committee?.committeeName}}</span>
-                                        <br /> Last updated User :
-                                        <span class="text-danger">{{result?.committeeSchedule?.updateUser}}</span>
+                                        <br /> Meeting Date :
+                                        <span class="text-danger">{{result?.committeeSchedule?.meetingDate | date: 'MM/dd/yyyy'}}</span>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-sm-4 col-12">

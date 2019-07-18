@@ -67,7 +67,14 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
         this.id = this.route.snapshot.queryParamMap.get( 'id' );
         const test =  this.route.snapshot.firstChild.url[0].path;
-        this.currentTab = (test === 'committeeHome' ? 'committee_home' : 'committee_members');
+      //  this.currentTab = (test === 'committeeHome' ? 'committee_home' : 'committee_members');
+        if (test === 'committeeHome') {
+            this.currentTab = 'committee_home';
+        } else if (test === 'scheduleDetails') {
+            this.currentTab = 'committee_schedule';
+        } else if (test === 'committeeMembers') {
+            this.currentTab = 'committee_members';
+        }
     }
     ngOnDestroy() {
         this.onDestroy$.next();
@@ -77,7 +84,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.userDTO = this.route.snapshot.data['irb'];
-        localStorage.setItem('currentUser', this.userDTO.userName);
+        localStorage.setItem('currentUser', this.userDTO);
         this.initLoadParent();
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;

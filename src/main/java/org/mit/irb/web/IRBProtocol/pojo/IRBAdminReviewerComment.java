@@ -143,4 +143,8 @@ public class IRBAdminReviewerComment {
 		super();
 		this.comment = comment;
 	}
+
+	public IRBAdminReviewerComment() {
+		super();
+	}
 }

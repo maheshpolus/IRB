@@ -17,7 +17,9 @@ import org.mit.irb.web.committee.pojo.ProtocolContingency;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
 import org.mit.irb.web.committee.view.ProtocolView;
 import org.mit.irb.web.schedule.vo.ScheduleVo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 
@@ -153,5 +155,19 @@ public interface ScheduleDao {
 	 */
 	public void updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance);
 
+	/**
+	 * This method is used to getCommitteeScheduleAttachementById.
+	 * @param scheduleId - Id of the CommitteeSchedule.
+	 * @return committeeSchedule - committeeSchedule object.
+	 */
+	public List<CommitteeScheduleAttachment> getCommitteeScheduleAttachementById(Integer scheduleId);
+	
+	
+	ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment);
+
+	ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files,
+			CommitteeScheduleAttachment committeeScheduleAttachment, Integer scheduleId);
+	
+	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
 
 }

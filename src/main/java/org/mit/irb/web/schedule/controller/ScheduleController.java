@@ -213,4 +213,29 @@ public class ScheduleController {
 		ScheduleVo scheduleVo = scheduleService.updateMeetingAttendence(vo);
 		return scheduleVo;
 	}
+	
+	
+	@RequestMapping(value = "/loadMeetingAttachmentById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadMeetingAttachmentById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadMeetingAttachmentById(vo.getScheduleId());
+		return ScheduleVo;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdateMeetingAttachment", method = RequestMethod.POST)
+	public @ResponseBody ScheduleVo saveOrUpdateMeetingAttachment(
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson) {
+		logger.info("Request for saveOrUpdateMeetingAttachment");
+		ScheduleVo protocolVO = new ScheduleVo();
+		protocolVO = scheduleService.saveOrUpdateMeetingAttachment(files, formDataJson);
+		return protocolVO;
+	}
+	
+	
+	@RequestMapping(value = "/downloadMeetingAttachment", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadMeetingAttachment(HttpServletResponse response,
+			@RequestHeader("attachmentId") String attachmentId) {
+		return scheduleService.downloadMeetingAttachment(attachmentId);
+	}
 }

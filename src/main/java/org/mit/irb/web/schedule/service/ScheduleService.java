@@ -149,6 +149,25 @@ public interface ScheduleService {
 	 * @return
 	 */
 	public ScheduleVo updateMeetingAttendence(ScheduleVo vo);
-
+	/**
+	 * This method is used to load meeting attachment by Id.
+	 * @param scheduleId - Id of a schedule.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo loadMeetingAttachmentById(Integer scheduleId);
+	
+	/**
+	 * This method is used to saveOrUpdateMeetingAttachment.
+	 * @param files.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files, String formDataJson);
+	
+	
+	/**
+	 * @param attachmentId
+	 * Service to download the attachments
+	 */
+	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
 
 }

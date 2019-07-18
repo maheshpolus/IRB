@@ -1,6 +1,8 @@
 package org.mit.irb.web.schedule.dao;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,6 +10,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Predicate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -19,6 +25,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.mit.irb.web.committee.constants.Constants;
+import org.mit.irb.web.committee.dao.CommitteeDao;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
@@ -35,7 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.mit.irb.web.dbengine.DBEngine;
 import org.mit.irb.web.dbengine.DBEngineConstants;
 import org.mit.irb.web.dbengine.Parameter;
@@ -49,6 +56,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired 
+	private CommitteeDao committeeDao;
 	
 	DBEngine dbEngine;	
 
@@ -327,7 +337,94 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			
 		} catch (Exception e) {
 			logger.info("Exception in updateScheduleAttendance:" + e);
+		}		
+	}	
+
+	@Override
+	public List<CommitteeScheduleAttachment> getCommitteeScheduleAttachementById(Integer scheduleId) {
+		 Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		 Criteria criteria = session.createCriteria(CommitteeScheduleAttachment.class);
+		 ProjectionList projList = Projections.projectionList();
+		 //projList.add(Projections.property("attachmentId"),"attachmentId");
+		 projList.add(Projections.property("attachmentTypeCode"),"attachmentTypeCode");
+		 projList.add(Projections.property("description"),"description");
+		 projList.add(Projections.property("fileName"),"fileName");
+		 projList.add(Projections.property("mimeType"),"mimeType");
+		 projList.add(Projections.property("updateTimestamp"),"updateTimestamp");
+		 projList.add(Projections.property("updateUser"),"updateUser");
+		 projList.add(Projections.property("commScheduleAttachId"),"commScheduleAttachId");
+		 projList.add(Projections.property("attachmentType"),"attachmentType");
+		 criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleAttachment.class));
+		 criteria.add(Restrictions.eq("committeeSchedule.scheduleId",scheduleId));
+		 List<CommitteeScheduleAttachment> committeeScheduleAttachment = criteria.list();	
+		return committeeScheduleAttachment;
+	}
+
+	@Override
+	public ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment) {
+		ScheduleVo scheduleVo = new ScheduleVo();	
+		try{
+			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from CommitteeScheduleAttachment p where p.commScheduleAttachId =:commScheduleAttachId");
+			queryDeletAttachment.setInteger("commScheduleAttachId", committeeScheduleAttachment.getCommScheduleAttachId());
+			queryDeletAttachment.executeUpdate();
+		}catch (Exception e) {
+			logger.error("Error in deleteMeetingAttachment: ", e);
+		}			
+		return scheduleVo;
+	}
+
+	@Override
+	public ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files,
+			CommitteeScheduleAttachment committeeScheduleAttachment,Integer scheduleId) {
+		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleId);
+		ScheduleVo scheduleVo = new ScheduleVo();
+		try {
+			committeeScheduleAttachment.setCommitteeSchedule(committeeSchedule);
+			committeeScheduleAttachment.setMimeType(files[0].getContentType());
+			committeeScheduleAttachment.setFileName(files[0].getOriginalFilename());		
+			committeeScheduleAttachment.setAttachment(files[0].getBytes());
+			committeeScheduleAttachment.setUpdateTimestamp(getCurrentDate());
+			hibernateTemplate.saveOrUpdate(committeeScheduleAttachment);			
+		} catch (Exception e) {
+			logger.error("Error in saveOrUpdateInternalProtocolAttachment: ", e);
 		}
-		
+		scheduleVo.setScheduleId(scheduleId);
+		scheduleVo.setNewCommitteeScheduleAttachment(committeeScheduleAttachment);
+		return scheduleVo;
+	}
+
+	public Date getCurrentDate() {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		return c.getTime();
+	}
+	
+	@Override
+	public ResponseEntity<byte[]> downloadMeetingAttachment(String documentId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleAttachment> criteria = builder.createQuery(CommitteeScheduleAttachment.class);
+			Root<CommitteeScheduleAttachment> attachmentRoot=criteria.from(CommitteeScheduleAttachment.class);				
+			criteria.where(builder.equal(attachmentRoot.get("commScheduleAttachId"),Integer.parseInt(documentId)));
+			CommitteeScheduleAttachment protocolAttachment = session.createQuery(criteria).getResultList().get(0);	
+			if (protocolAttachment != null) {				
+				byte[] byteArray = null;				
+				byteArray = protocolAttachment.getAttachment();				
+    			HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType(protocolAttachment.getMimeType()));
+				String filename = protocolAttachment.getFileName();
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(byteArray.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(byteArray, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+		logger.error("Exception in downloadMeetingAttachment method:" + e);
+		}
+		return attachmentData;
 	}
 }

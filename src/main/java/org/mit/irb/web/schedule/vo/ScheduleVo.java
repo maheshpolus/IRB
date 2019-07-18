@@ -76,6 +76,8 @@ public class ScheduleVo {
 	
 	private List<CommitteeScheduleAttendance> guestMembers;
 	
+	private List<CommitteeScheduleAttachment> committeeScheduleAttachmentList;
+	
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;
 	}
@@ -298,5 +300,13 @@ public class ScheduleVo {
 
 	public void setGuestMembers(List<CommitteeScheduleAttendance> guestMembers) {
 		this.guestMembers = guestMembers;
+	}
+
+	public List<CommitteeScheduleAttachment> getCommitteeScheduleAttachmentList() {
+		return committeeScheduleAttachmentList;
+	}
+
+	public void setCommitteeScheduleAttachmentList(List<CommitteeScheduleAttachment> committeeScheduleAttachmentList) {
+		this.committeeScheduleAttachmentList = committeeScheduleAttachmentList;
 	}
 }

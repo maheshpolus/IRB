@@ -970,4 +970,40 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		return vo;
 	}
+	
+	@Override
+	public ScheduleVo loadMeetingAttachmentById(Integer scheduleId) {
+		ScheduleVo scheduleVo = new ScheduleVo();
+		List<CommitteeScheduleAttachType> committeeScheduleAttachTypes = scheduleDao.fetchAllCommitteeScheduleAttachType();
+		scheduleVo.setAttachmentTypes(committeeScheduleAttachTypes);
+		List<CommitteeScheduleAttachment> list = scheduleDao.getCommitteeScheduleAttachementById(scheduleId);
+		scheduleVo.setCommitteeScheduleAttachmentList(list);
+		return scheduleVo;
+	}
+
+	@Override
+	public ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files, String formDataJson) {	
+		ScheduleVo scheduleVo = new ScheduleVo();	
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			ScheduleVo jsonObj = mapper.readValue(formDataJson, ScheduleVo.class);
+			CommitteeScheduleAttachment committeeScheduleAttachment = jsonObj.getNewCommitteeScheduleAttachment();	
+			Integer scheduleId = jsonObj.getScheduleId();
+			
+		    if(committeeScheduleAttachment.getAcType().equals("D")){
+		    	scheduleVo = scheduleDao.deleteMeetingAttachment(committeeScheduleAttachment);
+			}else if(committeeScheduleAttachment.getAcType() != null){
+				scheduleVo = scheduleDao.saveOrUpdateMeetingAttachment(files,committeeScheduleAttachment,scheduleId);
+			}
+		} catch (Exception e) {
+			logger.error("Error in saveAttachement: ", e);
+		}
+		return scheduleVo;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId) {
+		ResponseEntity<byte[]> attachments = scheduleDao.downloadMeetingAttachment(attachmentId);
+		return attachments;
+	}
 }

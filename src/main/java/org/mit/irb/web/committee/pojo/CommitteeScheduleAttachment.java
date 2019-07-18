@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -69,6 +70,9 @@ public class CommitteeScheduleAttachment implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
+	@Transient
+	private String acType;
+	
 	public Integer getCommScheduleAttachId() {
 		return commScheduleAttachId;
 	}
@@ -159,5 +163,13 @@ public class CommitteeScheduleAttachment implements Serializable {
 
 	public void setAttachmentType(CommitteeScheduleAttachType attachmentType) {
 		this.attachmentType = attachmentType;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 }

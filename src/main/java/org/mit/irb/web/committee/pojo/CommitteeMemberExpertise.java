@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -53,6 +54,9 @@ public class CommitteeMemberExpertise implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
+	@Transient
+	private String acType;
+	
 	public Integer getCommMemberExpertiseId() {
 		return commMemberExpertiseId;
 	}
@@ -103,5 +107,13 @@ public class CommitteeMemberExpertise implements Serializable {
 
 	public void setResearchAreaDescription(String researchAreaDescription) {
 		this.researchAreaDescription = researchAreaDescription;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 }

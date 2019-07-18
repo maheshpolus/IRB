@@ -139,5 +139,13 @@ public class CommitteeMemberRoles implements Serializable {
 	public void setAcType(String acType) {
 		this.acType = acType;
 	}
-
+	public CommitteeMemberRoles(Integer commMemberRolesId, String membershipRoleCode, String membershipRoleDescription) {
+		super();
+		this.commMemberRolesId = commMemberRolesId;
+		this.membershipRoleCode = membershipRoleCode;
+		this.membershipRoleDescription = membershipRoleDescription;
+	}
+	public CommitteeMemberRoles() {
+		super();
+	}
 }

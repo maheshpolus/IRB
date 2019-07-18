@@ -121,6 +121,10 @@ public class CommitteeMemberships implements Serializable {
 	
 	@Transient
 	private String acType;
+	
+	@Transient
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean memberPresent;
 
 	public CommitteeMemberships() {
 		setCommitteeMemberRoles(new ArrayList<CommitteeMemberRoles>());
@@ -327,6 +331,16 @@ public class CommitteeMemberships implements Serializable {
 		this.committeeMembershipType = committeeMembershipType;
 	}
 
+	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
+			String personName) {
+		super();
+		this.commMembershipId = commMembershipId;
+		this.committee = committee;
+		this.personId = personId;
+		this.rolodexId = rolodexId;
+		this.personName = personName;
+	}
+	
 	public void setActive(boolean active) {
 		this.active = active;
 	}
@@ -361,5 +375,13 @@ public class CommitteeMemberships implements Serializable {
 
 	public void setPerviousTermEndDate(java.util.Date perviousTermEndDate) {
 		this.perviousTermEndDate = perviousTermEndDate;
+	}
+
+	public Boolean getMemberPresent() {
+		return memberPresent;
+	}
+
+	public void setMemberPresent(Boolean memberPresent) {
+		this.memberPresent = memberPresent;
 	}
 }

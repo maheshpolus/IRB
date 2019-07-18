@@ -82,6 +82,9 @@ public class CommitteeScheduleAttendance implements Serializable {
 
 	@Transient
 	private boolean guestMemberActive;
+	
+	@Transient
+	private String acType;
 
 	public Integer getCommitteeScheduleAttendanceId() {
 		return committeeScheduleAttendanceId;
@@ -198,5 +201,22 @@ public class CommitteeScheduleAttendance implements Serializable {
 	public void setMemberPresent(Boolean memberPresent) {
 		this.memberPresent = memberPresent;
 	}
+	public CommitteeScheduleAttendance(String personName, String personId, Boolean memberPresent) {
+		super();
+		this.personName = personName;
+		this.personId = personId;
+		this.memberPresent = memberPresent;
+	}
+	
+	public CommitteeScheduleAttendance() {
+		super();
+	}
 
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
 }

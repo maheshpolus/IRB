@@ -39,9 +39,9 @@ public class CommitteeVo {
 	
 	private ScheduleData scheduleData;
 
-	private List<PersonDetailsView> employees;
+	private PersonDetailsView employee;
 
-	private List<Rolodex> nonEmployees;
+	private Rolodex nonEmployee;
 
 	private List<CommitteeMembershipType> committeeMembershipTypes;
 
@@ -149,22 +149,6 @@ public class CommitteeVo {
 
 	public void setScheduleData(ScheduleData scheduleData) {
 		this.scheduleData = scheduleData;
-	}
-
-	public List<PersonDetailsView> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(List<PersonDetailsView> employees) {
-		this.employees = employees;
-	}
-
-	public List<Rolodex> getNonEmployees() {
-		return nonEmployees;
-	}
-
-	public void setNonEmployees(List<Rolodex> nonEmployees) {
-		this.nonEmployees = nonEmployees;
 	}
 
 	public List<CommitteeMembershipType> getCommitteeMembershipTypes() {
@@ -341,6 +325,22 @@ public class CommitteeVo {
 
 	public void setCommitteeMemberStatusChange(List<CommitteeMemberStatusChange> committeeMemberStatusChange) {
 		this.committeeMemberStatusChange = committeeMemberStatusChange;
+	}
+
+	public PersonDetailsView getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(PersonDetailsView employee) {
+		this.employee = employee;
+	}
+
+	public Rolodex getNonEmployee() {
+		return nonEmployee;
+	}
+
+	public void setNonEmployee(Rolodex nonEmployee) {
+		this.nonEmployee = nonEmployee;
 	}
 
 }

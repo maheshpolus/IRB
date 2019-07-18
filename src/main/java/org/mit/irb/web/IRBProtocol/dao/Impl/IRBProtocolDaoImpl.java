@@ -594,11 +594,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			status.setProtocolNumber(generalInfo.getProtocolNumber());
 			status.setProtocolId(generalInfo.getProtocolId());
 			status.setSequenceNumber(generalInfo.getSequenceNumber());
-			vo.setActionTypeCode("100");
+			/*vo.setActionTypeCode("100");
 			vo.setUpdateUser(generalInfo.getUpdateUser());
-			vo.setCreateUser(generalInfo.getCreateUser());
+			vo.setCreateUser(generalInfo.getCreateUser());*/
 			vo.setAcType("I");
-			vo.setProtocolStatus(generalInfo.getProtocolStatusCode());
+			//vo.setProtocolStatus(generalInfo.getProtocolStatusCode());
 		}
 		if (generalInfo.getAniticipatedStartDate() != null)
 			generalInfo.setProtocolStartDate(generateSqlDate(generalInfo.getAniticipatedStartDate()));
@@ -611,9 +611,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		hibernateTemplate.saveOrUpdate(generalInfo);
 		irbProtocolVO.setGeneralInfo(generalInfo);
 		if (vo.getAcType() != null) {
-			status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
+			/*status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
 			vo.setProtocolSubmissionStatuses(status);
-			irbAcionDao.updateActionStatus(vo);
+			irbAcionDao.updateActionStatus(vo);*/
 			IRBProtocolPersonRoles personRole = new IRBProtocolPersonRoles();
 			personRole.setProtocolId(generalInfo.getProtocolId());
 			personRole.setProtocolNumber(generalInfo.getProtocolNumber());

@@ -11,10 +11,10 @@ public interface ScheduleService {
 
 	/**
 	 * This method is used to load schedule by Id.
-	 * @param scheduleId - Id of a schedule.
+	 * @param vo - Id of a schedule.
 	 * @return a ScheduleVo of details of schedule.
 	 */
-	public ScheduleVo loadScheduleById(Integer scheduleId);
+	public ScheduleVo loadScheduleById(ScheduleVo vo);
 
 	/**
 	 * This method is used to update schedule.
@@ -108,6 +108,10 @@ public interface ScheduleService {
 	 */
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo);
 
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
 	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId);
 
 	/**
@@ -115,5 +119,36 @@ public interface ScheduleService {
 	 * @return
 	 */
 	public ScheduleVo loadScheduledProtocols(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduleMeetingComments(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduleProtocolComments(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo createAgendaForSchedule(ScheduleVo vo);
+	
+	/**
+	 * @param vo
+	 * @return load attendance detail of meeting
+	 */
+	public ScheduleVo loadMeetingAttendence(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo updateMeetingAttendence(ScheduleVo vo);
+
 
 }

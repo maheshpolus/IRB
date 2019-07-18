@@ -73,7 +73,7 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 	private Timestamp time;
 
 	@Column(name = "PROTOCOL_SUB_DEADLINE")
-	private Date protocolSubDeadline;
+	private java.util.Date protocolSubDeadline;
 
 	@Column(name = "SCHEDULE_STATUS_CODE")
 	private Integer scheduleStatusCode;
@@ -83,7 +83,7 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 	private ScheduleStatus scheduleStatus;
 
 	@Column(name = "MEETING_DATE")
-	private Date meetingDate;
+	private java.util.Date meetingDate;
 
 	@Column(name = "START_TIME")
 	private Timestamp startTime;
@@ -233,28 +233,12 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 		this.scheduledDate = scheduledDate;
 	}
 
-	public Date getProtocolSubDeadline() {
-		return protocolSubDeadline;
-	}
-
-	public void setProtocolSubDeadline(Date protocolSubDeadline) {
-		this.protocolSubDeadline = protocolSubDeadline;
-	}
-
 	public Integer getScheduleStatusCode() {
 		return scheduleStatusCode;
 	}
 
 	public void setScheduleStatusCode(Integer scheduleStatusCode) {
 		this.scheduleStatusCode = scheduleStatusCode;
-	}
-
-	public Date getMeetingDate() {
-		return meetingDate;
-	}
-
-	public void setMeetingDate(Date meetingDate) {
-		this.meetingDate = meetingDate;
 	}
 
 	public Timestamp getStartTime() {
@@ -493,6 +477,22 @@ public class CommitteeSchedule implements Serializable, Comparable<CommitteeSche
 
 	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public java.util.Date getMeetingDate() {
+		return meetingDate;
+	}
+
+	public void setMeetingDate(java.util.Date meetingDate) {
+		this.meetingDate = meetingDate;
+	}
+
+	public java.util.Date getProtocolSubDeadline() {
+		return protocolSubDeadline;
+	}
+
+	public void setProtocolSubDeadline(java.util.Date protocolSubDeadline) {
+		this.protocolSubDeadline = protocolSubDeadline;
 	}
 
 }

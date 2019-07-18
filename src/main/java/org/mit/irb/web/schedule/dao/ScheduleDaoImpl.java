@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Predicate;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -17,7 +18,9 @@ import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
-import org.mit.irb.web.committee.pojo.Committee;
+import org.mit.irb.web.committee.constants.Constants;
+import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
@@ -26,7 +29,6 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
-import org.mit.irb.web.committee.pojo.ProtocolSubmission;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
 import org.mit.irb.web.committee.view.ProtocolView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.mit.irb.web.dbengine.DBEngine;
 import org.mit.irb.web.dbengine.DBEngineConstants;
 import org.mit.irb.web.dbengine.Parameter;
+import org.mit.irb.web.schedule.vo.ScheduleVo;
 
 @Transactional
 @Service(value = "scheduleDao")
@@ -123,7 +126,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
 	@Override
 	public CommitteeScheduleMinutes addCommitteeScheduleMinute(CommitteeScheduleMinutes committeeScheduleMinutes) {
-		hibernateTemplate.save(committeeScheduleMinutes);
+		hibernateTemplate.saveOrUpdate(committeeScheduleMinutes);
 		return committeeScheduleMinutes;
 	}
 
@@ -170,8 +173,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> loadScheduledProtocols(Integer scheduleId) {
-		List<Object> submittedProtocols = null;
+	public ArrayList<HashMap<String, Object>> loadScheduledProtocols(Integer scheduleId) {	
 		ArrayList<HashMap<String, Object>> result  = new ArrayList<HashMap<String, Object>>();
 		try {
 			/*Query scheduledProtocols = hibernateTemplate.getSessionFactory().getCurrentSession()
@@ -187,5 +189,145 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			logger.info("Exception in loadScheduledProtocols:" + e);
 		}
 		return result;
+	}
+
+	@Override
+	public List<CommitteeScheduleMinutes> getScheduleMinutes(ScheduleVo vo) {
+		List<CommitteeScheduleMinutes> scheduleMinutes = new ArrayList<>();
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleMinutes> criteria = builder.createQuery(CommitteeScheduleMinutes.class);
+			Root<CommitteeScheduleMinutes> minutesRoot = criteria.from(CommitteeScheduleMinutes.class);		
+			criteria.multiselect(minutesRoot.get("commScheduleMinutesId"),minutesRoot.get("entryNumber")
+					,minutesRoot.get("minuteEntryTypeCode"),minutesRoot.get("minuteEntrytype")
+					,minutesRoot.get("protocolContingencyCode"),minutesRoot.get("protocolContingency")
+					,minutesRoot.get("protocolNumber"),minutesRoot.get("protocolId")
+					,minutesRoot.get("submissionId"),minutesRoot.get("privateCommentFlag")
+					,minutesRoot.get("minuteEntry"),minutesRoot.get("finalFlag"),minutesRoot.get("updateTimestamp"));
+			if(vo.getAcType() != null){
+				criteria.where(builder.equal(minutesRoot.get("committeeSchedule").get("scheduleId"),vo.getScheduleId()));
+			}else{
+				criteria.where(builder.equal(minutesRoot.get("committeeSchedule").get("scheduleId"),vo.getScheduleId()),builder.notEqual(minutesRoot.get("minuteEntryTypeCode"),Constants.PROTOCOL_REVIEWER_COMMENT));
+			}
+			scheduleMinutes =  session.createQuery(criteria).getResultList();
+		}catch (Exception e) {
+			logger.info("Exception in getScheduleMinutes:" + e);
+		}
+		return scheduleMinutes;
+	}
+
+	@Override
+	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(ScheduleVo vo) {
+	List<CommitteeScheduleMinutes> scheduleMinutes = new ArrayList<>();
+	try{
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CommitteeScheduleMinutes> criteria = builder.createQuery(CommitteeScheduleMinutes.class);
+		Root<CommitteeScheduleMinutes> minutesRoot = criteria.from(CommitteeScheduleMinutes.class);		
+		criteria.multiselect(minutesRoot.get("commScheduleMinutesId"),minutesRoot.get("entryNumber")
+				,minutesRoot.get("minuteEntryTypeCode"),minutesRoot.get("minuteEntrytype")
+				,minutesRoot.get("protocolContingencyCode"),minutesRoot.get("protocolContingency")
+				,minutesRoot.get("protocolNumber"),minutesRoot.get("protocolId")
+				,minutesRoot.get("submissionId"),minutesRoot.get("privateCommentFlag")
+				,minutesRoot.get("minuteEntry"),minutesRoot.get("finalFlag"),minutesRoot.get("updateTimestamp"));
+		criteria.where(builder.equal(minutesRoot.get("submissionId"),vo.getSubmissionId()));
+		scheduleMinutes =  session.createQuery(criteria).getResultList();
+	}catch (Exception e) {
+		logger.info("Exception in getProtocolCommitteeComments:" + e);
+	}
+	return scheduleMinutes;
+	}
+	
+
+	@Override
+	public List<CommitteeMemberships> fetchMeetingMembers(ScheduleVo vo) {
+		List<CommitteeMemberships> committeeMemberships = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeMemberships> criteria = builder.createQuery(CommitteeMemberships.class);
+			Root<CommitteeMemberships> committeeRoot = criteria.from(CommitteeMemberships.class);
+			criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
+					,committeeRoot.get("rolodexId"),committeeRoot.get("personName"));
+			criteria.where(builder.equal(committeeRoot.get("committee").get("committeeId"),vo.getCommitteeId()));
+			committeeMemberships = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.info("Exception in fetchMeetingMembers:" + e);
+		}
+		return committeeMemberships;
+	}
+
+	@Override
+	public List<CommitteeMemberRoles> fetchCommitteeMemberRoles(CommitteeMemberships committeeMemberships) {
+		List<CommitteeMemberRoles> committeeMembershipRoles = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeMemberRoles> criteria = builder.createQuery(CommitteeMemberRoles.class);
+			Root<CommitteeMemberRoles> committeeRoot = criteria.from(CommitteeMemberRoles.class);
+			criteria.multiselect(committeeRoot.get("commMemberRolesId"),committeeRoot.get("membershipRoleCode")
+					,committeeRoot.get("membershipRoleDescription"));
+			criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),committeeMemberships.getCommMembershipId()));
+			committeeMembershipRoles = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.info("Exception in fetchCommitteeMemberRoles:" + e);
+		}
+		return committeeMembershipRoles;
+	}
+
+	@Override
+	public List<CommitteeScheduleAttendance> fetchGuestMembers(Integer scheduleId) {
+		List<CommitteeScheduleAttendance> committeeScheduleAttendance = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
+			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
+			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
+					,committeeRoot.get("memberPresent"));
+			Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
+			Predicate predicateTwo = builder.equal(committeeRoot.get("guestFlag"), true);
+			criteria.where(builder.and(predicateOne, predicateTwo));
+
+			//criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),committeeMemberships.getCommMembershipId()));
+			committeeScheduleAttendance = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.info("Exception in fetchGuestMembers:" + e);
+		}
+		return committeeScheduleAttendance;
+	}
+
+	@Override
+	public Boolean fetchPresentFlag(Integer scheduleId, String committeePersonId) {
+		Boolean presentFlag = false;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
+			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
+			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
+					,committeeRoot.get("memberPresent"));
+			Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
+			Predicate predicateTwo = builder.equal(committeeRoot.get("personId"), committeePersonId);
+			criteria.where(builder.and(predicateOne, predicateTwo));
+
+			//criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),committeeMemberships.getCommMembershipId()));
+			List<CommitteeScheduleAttendance> committeeScheduleAttendance = session.createQuery(criteria).getResultList();
+			presentFlag = committeeScheduleAttendance.get(0).getMemberPresent();
+		} catch (Exception e) {
+			logger.info("Exception in fetchPresentFlag:" + e);
+		}
+		return presentFlag;
+	}
+
+	@Override
+	public void updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance) {
+		try{
+			
+		} catch (Exception e) {
+			logger.info("Exception in updateScheduleAttendance:" + e);
+		}
+		
 	}
 }

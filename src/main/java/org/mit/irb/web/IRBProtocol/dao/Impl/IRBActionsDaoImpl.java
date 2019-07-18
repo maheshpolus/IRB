@@ -934,7 +934,13 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				   vo.setTemplateTypeCode("11");				   
 			}
 			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
-			generateProtocolCorrespondence(vo);			
+			generateProtocolCorrespondence(vo);	
+			if(!result.isEmpty()){
+			    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			    vo.setSubmissionId(result.get(0).get("SUBMISSION_ID").toString());
+			    vo.setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
+			    vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Specific Minor Revisions Required successful");	
 		} catch (Exception e) {
@@ -962,6 +968,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			updateReviewComments(vo);
 			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
+			if(!result.isEmpty()){
+			    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			    vo.setSubmissionId(result.get(0).get("SUBMISSION_ID").toString());
+			    vo.setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
+			    vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Substantive Revisions Required successful");	
 		} catch (Exception e) {

@@ -85,6 +85,7 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments</value>	
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles</value>
+			    <value>org.mit.irb.web.IRBProtocol.pojo.IRBAdminReviewerComment</value>			
 				
 				<value>org.mit.irb.web.roles.pojo.PersonRoles</value>
 				<value>org.mit.irb.web.roles.pojo.Rights</value>

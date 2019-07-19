@@ -432,11 +432,13 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         this.showSaveAreaOfResearch = true;
         this.addResearchArea = '0';
         this.editAreaClass = 'committeeBoxNotEditable';
+        if ( this.result.committee.researchAreas != null ) {
         for (let i = 0; i < this.result.committee.researchAreas.length; i++) {
             if (Object.researchAreaCode === this.result.committee.researchAreas[i].researchAreaCode) {
                 this.addResearchArea = '1';
             }
         }
+    }
         if (this.addResearchArea === '1') {
             // this.showPopup = true;
             this.duplicateAreaOfResearch = true;

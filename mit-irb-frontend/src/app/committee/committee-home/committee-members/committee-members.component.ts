@@ -47,8 +47,10 @@ export class CommitteeMembersComponent implements OnInit {
 
     } else if (this.isActiveFilter === false && this.isInactiveFilter === true) {
       this.filteredCommitteMemberList = this.committeMemberList.filter(member => member.active === false);
-    } else {
+    } else if (this.isActiveFilter === true && this.isInactiveFilter === true) {
       this.filteredCommitteMemberList = Object.assign([], this.committeMemberList);
+    } else if ( this.isActiveFilter === false && this.isInactiveFilter === false ) {
+      this.filteredCommitteMemberList = [];
     }
   }
 

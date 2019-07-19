@@ -4,7 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class ScheduleService {
     constructor( private http: HttpClient ) {
@@ -31,4 +31,13 @@ export class ScheduleService {
       return Observable.throw(error.message || error);
     });
   }
+  createAgendaForSchedule(params) {
+  return this.http.post( '/mit-irb/createAgendaForSchedule', params );
+  }
+  downloadLatestAgenda(scheduleId) {
+    return this.http.get('/mit-irb/downloadScheduleAgenda', {
+        headers: new HttpHeaders().set('scheduleId', scheduleId.toString()),
+        responseType: 'blob'
+    });
+}
 }

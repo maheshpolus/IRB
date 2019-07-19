@@ -8,6 +8,7 @@
 
           <div class="col-12">
             <div class="row">
+              <div class="col-8">
               <ul class="nav nav-pills" role="tablist" style="background: none;">
                 <li class="nav-item" (click)="tabSelected='MEMBER_DETAILS'">
                   <a class="nav-link active txt-small button-red-tab" [ngClass]="{active:(tabSelected=='MEMBER_DETAILS')}">
@@ -20,11 +21,15 @@
                 </li>
                 <li class="nav-item border-left1" (click)="tabSelected='TRAINING_DETAILS'">
                   <a class="nav-link txt-small button-red-tab" [ngClass]="{active:(tabSelected=='TRAINING_DETAILS')}">
-                    <i class="fa fa-history txt-large mr-5" aria-hidden="true"></i>Training Details
+                    <i class="fa fa-graduation-cap txt-large mr-5" aria-hidden="true"></i>Training Details
                   </a>
                 </li>
               </ul>
-            </div>
+              </div>
+              <div class="col-4">
+               <span class="thick txt-large" style="float: right;"><span  routerLink='/irb/committee/committeeMembers' [queryParams]="{mode :'view', id: committeeId}" class="pointer text-danger p-2"><u style="font-size: 14px;"><i class="fa fa-mail-reply">&nbsp;</i>Return To Member List</u></span></span>
+              </div>
+              </div>
           </div>
           <app-member-details *ngIf="tabSelected=='MEMBER_DETAILS'"></app-member-details>
           <app-status-history *ngIf="tabSelected=='STATUS_HISTORY'"></app-status-history>

@@ -1594,8 +1594,8 @@ color: #5e5e5e !important;
     /* color:white;
     background-color: #505050; */
     border: 1px solid #a92135;
-    background-color: #a92135;
-    color: #fff;
+    /* background-color: #a92135; */
+    color: #a92135;
 
 }
 .filechipCollaboratorAttachment span i {
@@ -2653,4 +2653,13 @@ input:disabled,textarea:disabled{
     font-size: .9em;
     float: right;
     margin-right: 25px;
+}
+.color-grey {
+    color: gray;
+}
+.bg-none {
+    background: none !important;
+}
+.left-position {
+    left: -124px!important;
 }

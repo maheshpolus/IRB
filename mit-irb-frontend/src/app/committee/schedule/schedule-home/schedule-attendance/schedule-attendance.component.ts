@@ -9,15 +9,17 @@ import { ScheduleAttendanceService } from './schedule-attendance.service';
 import 'rxjs/add/operator/takeUntil';
 import { CommitteeMemberNonEmployeeElasticService } from '../../../../common/service/committee-members-nonEmployee-elastic-search.service';
 import { CommitteeMemberEmployeeElasticService } from '../../../../common/service/committee-members-employees-elastic-search.service';
+import { PiElasticService } from '../../../../common/service/pi-elastic.service';
 
 @Component( {
     selector: 'app-schedule-attendance',
     templateUrl: './schedule-attendance.component.html'
 } )
-export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ScheduleAttendanceComponent implements OnInit, OnDestroy {
     result: any = {};
     showCommentFlag = false;
     presentFlag = false;
+    isAddGuest = false;
     attendanceIndex: number;
     commentsIndex: number;
     searchText: FormControl = new FormControl( '' );
@@ -25,59 +27,81 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
     message: string;
     showAddMember = false;
     public onDestroy$ = new Subject<void>();
-    elasticSearchresults: any = [];
-    searchString: string;
-    hits_source;
-    hits_highlight: string;
-    first_name: string;
-    middle_name: string;
-    last_name: string;
-    organization: string;
-    prncpl_id: string;
-    full_name: string;
-    prncpl_nm: string;
-    email_addr: string;
-    unit_number: string;
-    unit_name: string;
-    addr_line_1: string;
-    phone_nbr: string;
-    rolodexId: string;
-    searchTextModel: string;
-    _results: Subject<Array<any>> = new Subject<Array<any>>();
     activeMembers = true;
     inactiveMembers: string;
     searchActive = false;
     iconClass = 'fa fa-search';
     selectedMember: any = {};
 
-    guestMemberObj: any = {};
     updatingMemberObj: any = {};
-    scheduleId: number;
-    committeeId: string;
+    // scheduleId: number;
+    // committeeId: string;
     attendanceShowFlag = false;
     editFlagEnabled = {};
     editIndex: number;
     tempAlternateFor: string;
     tempMemberPresent: boolean;
     tempComment: string;
-    userDTO: any;
     currentmember: string;
     showPopup: boolean;
     deletingMeberObj;
     commentFlgEnabled = {};
     placeHolderText = 'Search an employee';
 
+    clearField: any = 'true';
+    personType = 'employee';
+    elasticPlaceHolder: string;
+    committeeId = null;
+    scheduleId = null;
+
+    options: any = {};
+    userDTO: any = {};
+    guestMemberObj: any = {};
+    selectedPerson: any = {};
+    isPresent = null;
+
+    showPersonElasticBand = false;
+    showAllMembers = false;
+    committeeMemberActiveList: any = [];
+    alternateMember: any = [];
+    guestMembers: any = [];
+
     constructor( private scheduleConfigurationService: ScheduleConfigurationService,
         public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService,
-        private _ngZone: NgZone,
+        private _ngZone: NgZone, private _elasticsearchService: PiElasticService,
         public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService,
         private scheduleAttendanceService: ScheduleAttendanceService,
         private activatedRoute: ActivatedRoute ) {
-        this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
+
+            this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+            this.options.index = this._elasticsearchService.IRB_INDEX;
+            this.options.type = 'person';
+            this.options.size = 20;
+            this.options.contextField = 'full_name';
+            this.options.debounceTime = 500;
+            this.options.theme = '#a31f34';
+            this.options.width = '100%';
+            this.options.fontSize = '16px';
+            this.options.defaultValue = '';
+            this.options.formatString = 'full_name | email_address | home_unit_name';
+            this.options.fields = {
+              full_name: {},
+              first_name: {},
+              user_name: {},
+              email_address: {},
+              home_unit_name: {},
+              person_id: {}
+            };
+            this.elasticPlaceHolder = 'Search for an Employee Name';
+       // this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
+       this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     }
 
     ngOnInit() {
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.committeeId = params['committeeId'];
+            this.scheduleId = params['scheduleId'];
+          });
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
         } );
@@ -86,125 +110,9 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         this.onDestroy$.next();
         this.onDestroy$.complete();
     }
-    ngAfterViewInit() {
-        this.searchText
-            .valueChanges
-            .map(( text: any ) => text ? text.trim() : '' )
-            .do( searchString => searchString ? this.message = 'searching...' : this.message = '' )
-            .debounceTime( 500 )
-            .distinctUntilChanged()
-            .switchMap( searchString => {
-                return new Promise<Array<String>>(( resolve, reject ) => {
-                    if ( this.nonEmployeeFlag === false ) {
-                        this._ngZone.runOutsideAngular(() => {
-                            this.committeeMemberEmployeeElasticService.search( searchString )
-                                .then(( searchResult ) => {
-                                    this.elasticSearchresults = [];
-                                    this._ngZone.run(() => {
-                                        this.hits_source = ( ( searchResult.hits || {} ).hits || [] )
-                                            .map(( hit ) => hit._source );
-                                        this.hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
-                                            .map(( hit ) => hit.highlight );
 
-                                        this.hits_source.forEach(( elmnt, j ) => {
-                                            this.prncpl_id = this.hits_source[j].prncpl_id;
-                                            this.full_name = this.hits_source[j].full_name;
-                                            this.prncpl_nm = this.hits_source[j].prncpl_nm;
-                                            this.email_addr = this.hits_source[j].email_addr;
-                                            this.unit_number = this.hits_source[j].unit_number;
-                                            this.unit_name = this.hits_source[j].unit_name;
-                                            this.addr_line_1 = this.hits_source[j].addr_line_1;
-                                            this.phone_nbr = this.hits_source[j].phone_nbr;
-                                            this.elasticSearchresults.push( {
-                                                label: this.full_name,
-                                                id: this.prncpl_id
-                                            }
-                                            );
-                                        }
-                                        );
-                                        if ( this.elasticSearchresults.length > 0 ) {
-                                        } else {
-                                            if ( this.searchTextModel && this.searchTextModel.trim() ) {
-                                                this.message = '';
-                                            }
-                                        }
-                                        resolve( this.elasticSearchresults );
-                                    } );
-                                } )
-                                .catch(( error ) => {
-                                    console.log('error');
-                                } );
-                        } );
-                    }
-                    if ( this.nonEmployeeFlag === true ) {
-                        this._ngZone.runOutsideAngular(() => {
-                            this.committeeMemberNonEmployeeElasticService.search( searchString )
-                                .then(( searchResult ) => {
-                                    this._ngZone.run(() => {
-                                        this.hits_source = ( ( searchResult.hits || {} ).hits || [] )
-                                            .map(( hit ) => hit._source );
-                                        this.hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
-                                            .map(( hit ) => hit.highlight );
-                                        this.hits_source.forEach(( elmnt, j ) => {
-                                            this.rolodexId = this.hits_source[j].rolodex_id;
-                                            this.first_name = this.hits_source[j].first_name;
-                                            this.middle_name = this.hits_source[j].middle_name;
-                                            this.last_name = this.hits_source[j].last_name;
-                                            this.organization = this.hits_source[j].organization;
-                                            this.elasticSearchresults.push( {
-                                                label: this.first_name + '  ' + this.middle_name
-                                                + '  ' + this.last_name,
-                                                id: this.rolodexId
-                                            }
-                                            );
-                                        }
-                                        );
-                                        if ( this.elasticSearchresults.length > 0 ) {
-                                            this.message = '';
-                                        } else {
-                                            if ( this.searchTextModel && this.searchTextModel.trim() ) {
-                                                this.message = '';
-                                            }
-                                        }
-                                        resolve( this.elasticSearchresults );
-
-                                    } );
-
-                                } )
-                                .catch(( error ) => {
-                                    console.log( 'catch error', error );
-
-                                } );
-                        } );
-                    }
-                } );
-            } ).catch( this.handleError )
-            .takeUntil(this.onDestroy$).subscribe( this._results );
-    }
-
-    handleError(): any {
-        this.message = 'something went wrong';
-    }
-
-    employeeRadioChecked() {
-        this.nonEmployeeFlag = false;
-        this.searchTextModel = '';
-        this.placeHolderText = 'Search an employee';
-    }
-
-    nonEmployeeRadioChecked() {
-        this.nonEmployeeFlag = true;
-        this.searchTextModel = '';
-        this.placeHolderText = 'Search a non-employee';
-    }
-
-    clearsearchBox( e: any ) {
-        e.preventDefault();
-        this.searchTextModel = '';
-    }
 
     addMember() {
-        this.searchTextModel = '';
         this.guestMemberObj.alternateFlag = false;
         this.guestMemberObj.alternateFor = '';
         this.guestMemberObj.comments = null;
@@ -221,14 +129,6 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         .takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data;
         } );
-    }
-    selected( value ) {
-        this.searchTextModel = value.label;
-        this.selectedMember = value;
-    }
-
-    addMemberDiv( event: any ) {
-        event.preventDefault();
     }
 
     showComment( event: any, commentIndex: number ) {
@@ -261,7 +161,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         if ((!this.commentFlgEnabled[index]) === false) {
             this.commentFlgEnabled[index] = false;
         }
-        this.committeeId = this.result.committeeSchedule.committeeId;
+        // this.committeeId = this.result.committeeSchedule.committeeId;
         this.updatingMemberObj.alternateFor = memberObj.alternateFor;
         this.updatingMemberObj.committeeScheduleAttendanceId = memberObj.committeeScheduleAttendanceId;
         this.updatingMemberObj.memberPresent = memberObj.memberPresent;
@@ -298,7 +198,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         this.tempComment = memberObj.comments;
         this.tempMemberPresent = memberObj.memberPresent;
 
-        this.committeeId = this.result.committeeSchedule.committeeId;
+       // this.committeeId = this.result.committeeSchedule.committeeId;
         this.updatingMemberObj.alternateFor = memberObj.alternateFor;
         this.updatingMemberObj.committeeScheduleAttendanceId = memberObj.committeeScheduleAttendanceId;
         this.updatingMemberObj.memberPresent = memberObj.memberPresent;
@@ -319,7 +219,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
 
     deleteAttendance( event: any ) {
         this.showPopup = false;
-        this.committeeId = this.result.committeeSchedule.committeeId;
+       // this.committeeId = this.result.committeeSchedule.committeeId;
         this.scheduleAttendanceService.deleteScheduleMemberAttendance(
             this.committeeId, this.scheduleId, this.deletingMeberObj.committeeScheduleAttendanceId )
             .takeUntil(this.onDestroy$).subscribe( data => {
@@ -327,8 +227,72 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
             } );
     }
 
-    onSearchValueChange() {
-        this.iconClass = this.searchTextModel ? 'fa fa-times' : 'fa fa-search';
-        this.elasticSearchresults = [];
+    showMemberDetails() {
+        this.showAllMembers = true;
+        const requestObject = {committeeId: this.committeeId, scheduleId: this.scheduleId};
+        this.scheduleAttendanceService.getMeetingAttendenceList(requestObject).subscribe((data: any) => {
+            this.committeeMemberActiveList = data.committeeMember;
+            this.alternateMember = data.alternateMember;
+            this.guestMembers = data.guestMembers;
+        });
     }
+
+    changePersonType(type) {
+        // tslint:disable-next-line:no-construct
+        this.clearField = new String('true');
+        this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
+        this.options.index = this._elasticsearchService.IRB_INDEX;
+        this.options.defaultValue = '';
+        if (type === 'employee') {
+          this.options.index = this._elasticsearchService.IRB_INDEX;
+          this.options.type = 'person';
+          this.elasticPlaceHolder = 'Search for an Employee Name';
+          this.options.formatString = 'full_name | email_address | home_unit_name';
+          this.options.fields = {
+            full_name: {},
+            first_name: {},
+            user_name: {},
+            email_address: {},
+            home_unit_name: {},
+            person_id: {}
+          };
+        } else {
+          this.options.index = this._elasticsearchService.NON_EMPLOYEE_INDEX;
+          this.options.type = 'rolodex';
+          this.elasticPlaceHolder = 'Search for an Non-Employee Name';
+          this.options.formatString = 'full_name | email_address | title ';
+          this.options.fields = {
+            full_name: {},
+            first_name: {},
+            user_name: {},
+            email_address: {},
+            home_unit: {},
+            title: {},
+            rolodex_id: {}
+          };
+        }
+      }
+
+      selectPersonElasticResult(personDetails) {
+          this.showPersonElasticBand = true;
+        if (this.options.type === 'person') {
+          this.guestMemberObj.nonEmployeeFlag = false;
+          this.selectedPerson = {
+            fullName: personDetails.full_name, emailAddress: personDetails.email_address,
+            directoryTitle: personDetails.job_title, phoneNumber: personDetails.phone_nbr,
+            addressLine1: personDetails.addr_line_1, unitName: personDetails.home_unit_name
+          };
+        } else {
+          this.guestMemberObj.nonEmployeeFlag = true;
+          this.selectedPerson = {
+            fullName: personDetails.full_name, emailAddress: personDetails.email_address,
+            directoryTitle: personDetails.title, phoneNumber: personDetails.phone_number, addressLine1: personDetails.addr_line_1,
+            organization: personDetails.organization
+          };
+        }
+      }
+
+      changeAttendence() {
+          this.isPresent = false;
+      }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ScheduleConfigurationService } from '../../schedule-configuration.service';
@@ -6,105 +6,82 @@ import { ScheduleService } from '../../schedule.service';
 import { ScheduleOtherActionsService } from './schedule-other-actions.service';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component( {
     selector: 'app-schedule-other-actions',
     templateUrl: './schedule-other-actions.component.html'
 } )
 
-export class ScheduleOtherActionsComponent implements OnInit, OnDestroy {
+export class ScheduleOtherActionsComponent implements OnInit {
     result: any = {};
     committeeScheduleActItemsObject: any = {};
     otherActionsDescription = '';
     scheduleId: number;
-    tempOtherAction: any = {};
-    showPopup = false;
     isAddClicked = false;
     userDTO = JSON.parse(localStorage.getItem('currentUser'));
     isMandatoryFilled = true;
-    mandatoryMessage: string;
-    public onDestroy$ = new Subject<void>();
+    deleteIndex = null;
+    otherActionTypes: any = [];
+    committeeScheduleActItems: any = [];
 
     constructor( public scheduleOtherActionsService: ScheduleOtherActionsService,
         public activatedRoute: ActivatedRoute,
         public scheduleService: ScheduleService,
-        public scheduleConfigurationService: ScheduleConfigurationService) { }
+         private _spinner: NgxSpinnerService) { }
 
     ngOnInit() {
-        this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this.scheduleConfigurationService.currentScheduleData.takeUntil(this.onDestroy$).subscribe( data => {
-            this.result = data;
-        } );
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.scheduleId = params['scheduleId'];
+          });
+        this.getOtherActions();
     }
 
-    ngOnDestroy() {
-        this.onDestroy$.next();
-        this.onDestroy$.complete();
+    getOtherActions() {
+        const requestObject = { scheduleId: this.scheduleId };
+        this._spinner.show();
+        this.scheduleOtherActionsService.getOtherActions(requestObject).subscribe((data: any) => {
+            this._spinner.hide();
+            this.otherActionTypes = data.scheduleActItemTypes != null ? data.scheduleActItemTypes : [];
+            this.committeeScheduleActItems = data.committeeScheduleActItemsList != null ? data.committeeScheduleActItemsList : [];
+            this.committeeScheduleActItemsObject.scheduleActItemTypecode = '5';
+        });
     }
-
-    OtherActionsTypeChange( type ) {
-        const d = new Date();
-        const time = d.getTime();
-        for ( const actionType of this.result.scheduleActItemTypes ) {
-            if ( actionType.description === type ) {
-                this.committeeScheduleActItemsObject.scheduleActItemTypecode = actionType.scheduleActItemTypecode;
-                this.committeeScheduleActItemsObject.scheduleActItemTypeDescription = actionType.description;
-                this.committeeScheduleActItemsObject.updateUser = this.userDTO.userName;
-                this.committeeScheduleActItemsObject.updateTimestamp = time;
-                this.result.committeeScheduleActItems = this.committeeScheduleActItemsObject;
+    setActionItemType(typeCode) {
+        this.otherActionTypes.forEach(type => {
+            if ( type.scheduleActItemTypecode.toString() === typeCode ) {
+                this.committeeScheduleActItemsObject.scheduleActItemTypeDescription = type.description;
             }
-        }
+        });
     }
-
-    addOtherActions() {
-        if ( this.committeeScheduleActItemsObject.scheduleActItemTypeDescription == null ) {
-            const d = new Date();
-            const time = d.getTime();
-            for ( const actionType of this.result.scheduleActItemTypes ) {
-                if ( actionType.description === 'Adverse Event' ) {
-                    this.committeeScheduleActItemsObject.scheduleActItemTypecode = actionType.scheduleActItemTypecode;
-                    this.committeeScheduleActItemsObject.scheduleActItemTypeDescription = actionType.description;
-                    this.committeeScheduleActItemsObject.updateUser = this.userDTO.userName;
-                    this.committeeScheduleActItemsObject.updateTimestamp = time;
-                    this.result.committeeScheduleActItems = this.committeeScheduleActItemsObject;
-                }
-            }
-        }
-        if ( this.otherActionsDescription.trim().length !== 0 &&
-        this.otherActionsDescription !== '' && this.otherActionsDescription != null ) {
-            this.isMandatoryFilled = true;
-            this.mandatoryMessage = '';
-            this.committeeScheduleActItemsObject.itemDescription = this.otherActionsDescription;
-            this.result.committeeScheduleActItems = this.committeeScheduleActItemsObject;
-            this.scheduleOtherActionsService.addOtherActions(
-                this.result.committee.committeeId, this.scheduleId, this.result.committeeScheduleActItems )
-            .takeUntil(this.onDestroy$).subscribe( data => {
-                let temp: any = {};
-                temp = data;
-                this.result.committeeSchedule.committeeScheduleActItems = temp.committeeSchedule.committeeScheduleActItems;
-            } );
-        } else {
+    addOtherAction() {
+        if (this.committeeScheduleActItemsObject.itemDescription === '' || this.committeeScheduleActItemsObject.itemDescription == null) {
             this.isMandatoryFilled = false;
-            this.mandatoryMessage = '* Please fill mandatory fields';
+        } else {
+            this.isMandatoryFilled = true;
+            this.saveOtherActions('U', this.committeeScheduleActItemsObject);
         }
-        this.committeeScheduleActItemsObject = {};
-        this.otherActionsDescription = ' ';
     }
 
-    deleteOtherActions(  ) {
-        this.scheduleOtherActionsService.deleteOtherActions(
-            this.result.committee.committeeId, this.scheduleId, this.tempOtherAction.commScheduleActItemsId )
-        .takeUntil(this.onDestroy$).subscribe( data => {
-            let temp: any = {};
-            temp = data;
-            this.result.committeeSchedule.committeeScheduleActItems = temp.committeeSchedule.committeeScheduleActItems;
+    saveOtherActions(mode, otherActions ) {
+        otherActions.updateUser = this.userDTO.userName;
+        const requestObject = {acType: mode, scheduleId: this.scheduleId, committeeScheduleActItems: otherActions};
+        this._spinner.show();
+        this.scheduleOtherActionsService.updateOtherActions(requestObject).subscribe((data: any) => {
+            this._spinner.hide();
+            this.committeeScheduleActItems = data.committeeScheduleActItemsList != null ? data.committeeScheduleActItemsList : [];
+            this.committeeScheduleActItemsObject.scheduleActItemTypecode = '5';
+            this.committeeScheduleActItemsObject.itemDescription = null;
+
         });
     }
 
-    // save temporarily during modal pop up
-    tempSave( event: any, otherAction ) {
-        event.preventDefault();
-        this.showPopup = true;
-        this.tempOtherAction = otherAction;
+    deleteOtherActions(otherActionId) {
+        const requestObject = {acType: 'D', scheduleId: this.scheduleId, commScheduleActItemsId: otherActionId};
+        this._spinner.show();
+        this.scheduleOtherActionsService.updateOtherActions(requestObject).subscribe((data: any) => {
+            this._spinner.hide();
+            this.committeeScheduleActItems = data.committeeScheduleActItemsList != null ? data.committeeScheduleActItemsList : [];
+        });
     }
 }

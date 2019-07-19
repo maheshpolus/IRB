@@ -10,7 +10,7 @@
     <div class="col-12  search-eidted-p">
       <div class="alert-sp alert-warning mb-0">
         <p class="txt-small m-0 ml-10">
-          <span *ngIf="!showAllClicked">Meetings from {{committee?.scheduleStartDate | date: 'MM/dd/yyyy'}} to {{committee?.scheduleEndDate | date: 'MM/dd/yyyy'}}</span>
+          <span *ngIf="!showAllClicked">Showing Meetings from {{committee?.scheduleStartDate | date: 'MM/dd/yyyy'}} to {{committee?.scheduleEndDate | date: 'MM/dd/yyyy'}}</span>
           <span *ngIf="showAllClicked">Listing all Meetings</span>
           <span style="float: right">
             <input type="checkbox" [(ngModel)]="minuteFlag" (click)="showAll()" /> Show All

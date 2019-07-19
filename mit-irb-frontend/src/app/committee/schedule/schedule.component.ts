@@ -16,6 +16,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     currentTab = 'schedule_home';
     scheduleId = null;
     committeeId = null;
+    userDTO = JSON.parse(localStorage.getItem('currentUser'));
     result: any = {};
     public loadScheduleDataSub: Subscription;
 
@@ -63,4 +64,23 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     backClick() {
         this._location.back();
     }
+    createAgendaForSchedule() {
+        const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId, updateUser: this.userDTO.userName };
+        this.scheduleService.createAgendaForSchedule(requestObject).subscribe( data => {
+            this.downloadLatestAgenda();
+        });
+    }
+    downloadLatestAgenda() {
+        this.scheduleService.downloadLatestAgenda(this.scheduleId).subscribe(data => {
+            const a = document.createElement('a');
+      const blob = new Blob([data], { type: data.type });
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Agenda';
+      document.body.appendChild(a);
+      a.click();
+
+    },
+      error => console.log('Error downloading the file.', error),
+      () => console.log('OK'));
+             }
 }

@@ -208,7 +208,7 @@ export class MemberDetailsComponent implements OnInit {
       this.warningMessage = 'Role start date and role end date must be between term start date and term end date.';
     } else {
       this.isMandatoryFiled = true;
-      this.memberDetails.acType = 'U';
+      this.committeeVo.acType = 'U';
       if (this.isNewMember) {
         this.memberDetails.committeeMemberRoles[0] = this.committeeMemberRole;
       }

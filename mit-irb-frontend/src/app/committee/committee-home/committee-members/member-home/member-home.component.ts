@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-member-home',
@@ -8,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
 export class MemberHomeComponent implements OnInit {
 
   tabSelected = 'MEMBER_DETAILS';
+  committeeId = null;
 
-  constructor( ) { }
+  constructor( private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-  }
+    this._activatedRoute.queryParams.subscribe(params => {
+      this.committeeId = params['id'];
+  });
+}
 
 }

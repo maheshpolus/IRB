@@ -14,7 +14,7 @@ export class ScheduleAttachmentsService {
 
     public addAttachments( scheduleId, newCommitteeScheduleAttachment: Object, attachmentTypeCode, uploadedFile, Description, currentUser ):
      Observable<JSON> {
-        this.formData.delete( 'file' );
+        this.formData.delete( 'files' );
         this.formData.delete( 'formDataJson' );
         for ( let i = 0; i < uploadedFile.length; i++ ) {
             this.formData.append( 'files', uploadedFile[i] );
@@ -24,20 +24,25 @@ export class ScheduleAttachmentsService {
             newCommitteeScheduleAttachment: newCommitteeScheduleAttachment
         };
         this.formData.append( 'formDataJson', JSON.stringify( sendObject ) );
-        return this.http.post( '/mit-irb/addScheduleAttachment', this.formData )
+        return this.http.post( '/mit-irb/saveOrUpdateMeetingAttachment', this.formData )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error );
             } );
     }
 
-    public deleteAttachments( scheduleId, committeeId, commScheduleAttachId ): Observable<JSON> {
-        const params = {
-            committeeId: committeeId,
+    public deleteAttachments( scheduleId, commScheduleAttachId ): Observable<JSON> {
+        this.formData.delete( 'files' );
+        this.formData.delete( 'formDataJson' );
+        const sendObject = {
             scheduleId: scheduleId,
-            commScheduleAttachId: commScheduleAttachId
+            newCommitteeScheduleAttachment: {
+              acType: 'D',
+              commScheduleAttachId: commScheduleAttachId
+            }
         };
-        return this.http.post( '/mit-irb/deleteScheduleAttachment', params )
+        this.formData.append( 'formDataJson', JSON.stringify( sendObject ) );
+        return this.http.post( '/mit-irb/saveOrUpdateMeetingAttachment', this.formData )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error );
@@ -45,8 +50,8 @@ export class ScheduleAttachmentsService {
     }
 
     downloadAttachment( commScheduleAttachId: string, mimeType ): Observable<any> {
-        return this.http.get( '/mit-irb/downloadScheduleAttachment', {
-            headers: new HttpHeaders().set('commScheduleAttachId', commScheduleAttachId.toString()),
+        return this.http.get( '/mit-irb/downloadMeetingAttachment', {
+            headers: new HttpHeaders().set('attachmentId', commScheduleAttachId.toString()),
             responseType: 'blob'
         } );
     }

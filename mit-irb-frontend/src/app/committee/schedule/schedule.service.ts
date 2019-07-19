@@ -25,4 +25,10 @@ export class ScheduleService {
                 return Observable.throw( error.message || error );
             } );
 }
+  public loadAttachmentTypeData(scheduleId) {
+    return this.http.post('/mit-irb/loadMeetingAttachmentById', {'scheduleId': scheduleId}).catch(error => {
+      console.error(error.message || error);
+      return Observable.throw(error.message || error);
+    });
+  }
 }

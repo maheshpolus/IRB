@@ -40,4 +40,28 @@ export class ScheduleService {
         responseType: 'blob'
     });
 }
+  
+  saveMinuteData( minuteData: Object ): Observable<JSON> {
+      return this.http.post( '/mit-irb/addCommitteeScheduleMinute', minuteData )
+          .catch( error => {
+              console.error( error.message || error );
+              return Observable.throw( error.message || error );
+          } );
+  }
+
+  loadScheduleProtocolComments( params ): Observable<JSON> {
+      return this.http.post( '/mit-irb/loadScheduleProtocolComments', params )
+          .catch( error => {
+              console.error( error.message || error );
+              return Observable.throw( error.message || error );
+          } );
+  }
+
+  deleteMinuteData( minuteData: Object ): Observable<JSON> {
+      return this.http.post( '/mit-irb/deleteScheduleMinute', minuteData )
+          .catch( error => {
+              console.error( error.message || error );
+              return Observable.throw( error.message || error );
+          } );
+  }
 }

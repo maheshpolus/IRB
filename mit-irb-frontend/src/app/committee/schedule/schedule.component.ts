@@ -31,6 +31,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.currentTab = 'scheduleHome';
         this._spinner.show();
         const params = {
             scheduleId: this.scheduleId,

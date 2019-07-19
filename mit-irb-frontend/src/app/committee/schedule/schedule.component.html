@@ -139,23 +139,23 @@
                         </button>
                         <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='protocolSubmitted'}"
                             (click)="show_current_tab($event,'protocolSubmitted')">
-                            <i class="fa fa-book"></i>Protocol Submitted
+                            <i class="fa fa-file-text-o"></i>Protocol Submitted
                         </button>
                         <!-- <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='attendance'}"
                             (click)="show_current_tab($event,'attendance')">
-                            <i class="fa fa-book"></i>Attendance
+                            <i class="fa fa-hand-paper-o"></i>Attendance
                         </button> -->
                         <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='otherAction'}"
                             (click)="show_current_tab($event,'otherAction')">
-                            <i class="fa fa-book"></i>Other Actions
+                            <i class="fa fa-cog"></i>Other Actions
                         </button>
                         <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='attachment'}"
                             (click)="show_current_tab($event,'attachment')">
-                            <i class="fa fa-book"></i>Attachments
+                            <i class="fa fa-paperclip"></i>Attachments
                         </button>
                         <button class="btn btn-primary tab_btn" type="submit" data-toggle="modal" data-target="#warningModalMain" [ngClass]="{'nav-active':currentTab=='minutes'}"
                             (click)="show_current_tab($event,'minutes')">
-                            <i class="fa fa-book"></i>Minutes
+                            <i class="fa fa-pencil-square-o"></i>Minutes
                         </button>
                         <span class="thick txt-large" style="float: right;"><span  routerLink='/irb/committee/scheduleDetails' [queryParams]="{mode :'view', id: committeeId}" class="pointer text-danger p-2"><u style="font-size: 14px;"><i class="fa fa-mail-reply">&nbsp;</i>Return To Meeting List</u></span></span>
 

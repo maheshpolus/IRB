@@ -136,7 +136,7 @@
 				<value>org.mit.irb.web.committee.view.ProtocolView</value>
 			</list>
 		</property>
-		<!-- <property name="hibernateProperties">
+		 <property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
@@ -148,7 +148,7 @@
 				<prop key="cache.use_second_level_cache">true</prop>   
          		<prop key="cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 			</props>
-		</property> -->
+		</property> 
 	</bean>
 	<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager"
 		id="hibernateTransactionManager">

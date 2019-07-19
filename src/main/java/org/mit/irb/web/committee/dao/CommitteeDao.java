@@ -326,4 +326,14 @@ public interface CommitteeDao {
 	 * @return
 	 */
 	public CommitteeMemberships fetchCommitteeMemberDetail(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberStatusChange(Integer commMembershipId);
+
+	/**
+	 * @param commMemberExpertiseId
+	 */
+	public void deleteMemberExpertise(Integer commMemberExpertiseId);
 }

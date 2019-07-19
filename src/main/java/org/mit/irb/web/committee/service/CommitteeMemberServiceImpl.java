@@ -316,7 +316,11 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 		try{			
 			if(committeeVo.getAcType().equalsIgnoreCase("D")){
 				List<CommitteeMemberRoles> committeeMemberRoles= committeeDao.getCommitteeMemberRoles(committeeVo.getCommMembershipId());
+				List<CommitteeMemberStatusChange> committeeMemberStatusChange = committeeDao.getCommitteeMemberStatusChange(committeeVo.getCommMembershipId());
 				List<CommitteeMemberExpertise> committeeMemberExpertise= committeeDao.getCommitteeMemberExpertise(committeeVo.getCommMembershipId());
+				if(committeeMemberStatusChange != null){
+					committeeDao.deleteCommitteeMemberStatusChange(committeeVo.getCommMembershipId());
+				}
 				if(committeeMemberRoles != null){
 					committeeDao.deleteCommitteeMemberRoles(committeeVo.getCommMembershipId());
 				}
@@ -353,6 +357,8 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			CommitteeMemberships committeeMemberships = new CommitteeMemberships();
 			if(committeeVo.getCommMembershipId() != null){
 				committeeMemberships = committeeDao.fetchCommitteeMemberDetail(committeeVo.getCommMembershipId());
+				committeeMemberships.setCommitteeMemberRoles(committeeMemberships.getCommitteeMemberRoles());
+				committeeMemberships.setCommitteeMemberExpertises(committeeMemberships.getCommitteeMemberExpertises());
 				committeeMemberships.setPerviousTermEndDate(committeeMemberships.getTermEndDate());
 				committeeMemberships.setPerviousTermStartDate(committeeMemberships.getTermStartDate());
 				if (committeeMemberships.getNonEmployeeFlag()) {
@@ -387,6 +393,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 				committeeVo.setEmployee(personDetails);
 			}
 			List<CommitteeMemberStatusChange> committeeMemberStatusChange = committeeDao.getCommitteeMemberStatusChange(committeeVo.getCommMembershipId());
+			
 			committeeVo.setCommitteeMemberStatusChange(committeeMemberStatusChange);
 		} catch (Exception e) {
 			committeeVo.setStatus(false);
@@ -421,7 +428,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			CommitteeMemberships committeeMember = committeeVo.getCommitteeMemberships();
 			CommitteeMemberExpertise committeeMemberExpertise = committeeVo.getCommitteeMemberExpertise();
 			if(committeeMemberExpertise.getAcType().equalsIgnoreCase("D")){
-				committeeDao.deleteCommitteeMemberExpertise(committeeMemberExpertise.getCommMemberExpertiseId()); 
+				committeeDao.deleteMemberExpertise(committeeMemberExpertise.getCommMemberExpertiseId()); 
 			}else{
 				committeeMemberExpertise.setCommitteeMemberships(committeeMember);
 				committeeMemberExpertise = committeeDao.saveCommitteeMemberExpertise(committeeMemberExpertise);	

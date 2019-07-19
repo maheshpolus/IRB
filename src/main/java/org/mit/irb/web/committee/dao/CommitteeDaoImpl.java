@@ -622,7 +622,7 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	@Override
 	public void deleteCommitteeMemberExpertise(Integer commMemberExpertiseId) {
 		Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("delete from CommitteeMemberExpertise p where p.commMemberExpertiseId =:commMemberExpertiseId");
+				.createQuery("delete from CommitteeMemberExpertise p where p.committeeMemberships.commMembershipId =:commMemberExpertiseId");
 			queryDeleteResearchArea.setInteger("commMemberExpertiseId",commMemberExpertiseId);
 			queryDeleteResearchArea.executeUpdate();
 	}
@@ -639,10 +639,21 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange(Integer commMembershipId) {
 		List<CommitteeMemberStatusChange> committeeMemberStatusChange = null;
 	try{
-		Query queryCommitteeMemberRoles = hibernateTemplate.getSessionFactory().getCurrentSession()
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CommitteeMemberStatusChange> criteria = builder.createQuery(CommitteeMemberStatusChange.class);
+		Root<CommitteeMemberStatusChange> committeeRoot = criteria.from(CommitteeMemberStatusChange.class);
+		criteria.multiselect(committeeRoot.get("commMemberStatusChangeId"),committeeRoot.get("commMembershipId")
+				,committeeRoot.get("committeeMembershipStatus"),committeeRoot.get("startDate")
+				,committeeRoot.get("endDate"),committeeRoot.get("updateTimestamp"),committeeRoot.get("updateUser"));
+		criteria.where(builder.equal(committeeRoot.get("commMembershipId"),commMembershipId));
+		committeeMemberStatusChange = session.createQuery(criteria).getResultList();
+		
+		
+		/*Query queryCommitteeMemberRoles = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from CommitteeMemberStatusChange p where p.committeeMemberships.commMembershipId =:commMembershipId");
-		queryCommitteeMemberRoles.setInteger("commMembershipId", commMembershipId);		
-		committeeMemberStatusChange = queryCommitteeMemberRoles.list();			
+		queryCommitteeMemberRoles.setInteger("commMembershipId", commMembershipId);	
+		committeeMemberStatusChange = queryCommitteeMemberRoles.list();			*/	
 	}catch (Exception e) {
 		logger.error("Error in getCommitteeMemberStatusChange : ", e);
 	}
@@ -663,13 +674,13 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		        }
 			committeeMemberStatusChange.setMembershipStatusCode(activeStatusCode);
 			committeeMemberStatusChange.setCommMembershipId(committeeMember.getCommMembershipId());
-			committeeMemberStatusChange.setEndDate(new java.sql.Date(committeeMember.getPerviousTermEndDate().getTime()));
-			committeeMemberStatusChange.setStartDate(new java.sql.Date(committeeMember.getPerviousTermStartDate().getTime()));
+			committeeMemberStatusChange.setEndDate(committeeMember.getPerviousTermEndDate());
+			committeeMemberStatusChange.setStartDate(committeeMember.getPerviousTermStartDate());
 			committeeMemberStatusChange.setUpdateUser(committeeMember.getUpdateUser());
 			Date date= new Date();
-			long time = date. getTime();
-			Timestamp ts = new Timestamp(time);
-			committeeMemberStatusChange.setUpdateTimestamp(ts);
+			/*long time = date. getTime();
+			Timestamp ts = new Timestamp(time);*/
+			committeeMemberStatusChange.setUpdateTimestamp(date);
 			hibernateTemplate.saveOrUpdate(committeeMemberStatusChange);	
 		}catch (Exception e) {
 			logger.error("Error in saveCommitteeMemberStatusChange: ", e);
@@ -695,45 +706,30 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		Query queryCommitteeResearchAreas = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from CommitteeMemberships p where p.commMembershipId =:commMembershipId");
 		queryCommitteeResearchAreas.setInteger("commMembershipId", commMembershipId);		
-		List<CommitteeMemberships> committeeMemberships = queryCommitteeResearchAreas.list();
-		//return committeeResearchAreas;		
-		
-		
-		/*Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(CommitteeMemberships.class);
-	    ProjectionList projList = Projections.projectionList();
-	    projList.add(Projections.property("commMembershipId"), "commMembershipId");
-		projList.add(Projections.property("committee"), "committee");
-		projList.add(Projections.property("personId"), "personId");
-		projList.add(Projections.property("rolodexId"), "rolodexId");
-		projList.add(Projections.property("personName"), "personName");
-		projList.add(Projections.property("nonEmployeeFlag"), "nonEmployeeFlag");
-		projList.add(Projections.property("termStartDate"), "termStartDate");
-		projList.add(Projections.property("termEndDate"), "termEndDate");
-		projList.add(Projections.property("updateTimestamp"), "updateTimestamp");
-		projList.add(Projections.property("updateUser"), "updateUser");
-		projList.add(Projections.property("membershipTypeCode"), "membershipTypeCode");
-		projList.add(Projections.property("committeeMembershipType"), "committeeMembershipType");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeMemberships.class));
-		criteria.createAlias("committeeMemberships","committeeMemberships").add(Restrictions.eq("commMembershipId",commMembershipId));
-		List<CommitteeMemberships> committeeMemberships = criteria.list();*/
-		
-		
-		
-		/*Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<CommitteeMemberships> criteria = builder.createQuery(CommitteeMemberships.class);
-		Root<CommitteeMemberships> committeeRoot = criteria.from(CommitteeMemberships.class);
-		criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
-				,committeeRoot.get("rolodexId"),committeeRoot.get("personName")
-				,committeeRoot.get("nonEmployeeFlag"),committeeRoot.get("termStartDate")
-				,committeeRoot.get("termEndDate"),committeeRoot.get("updateTimestamp")
-				,committeeRoot.get("updateUser"),committeeRoot.get("membershipTypeCode"),committeeRoot.get("committeeMembershipType"));
-		criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),commMembershipId));
-		List<CommitteeMemberships> committeeMemberships = session.createQuery(criteria).getResultList();*/			
+		List<CommitteeMemberships> committeeMemberships = queryCommitteeResearchAreas.list();		
 		if(committeeMemberships == null){
 			return null;
 		}
 		return committeeMemberships.get(0);
+	}
+
+	@Override
+	public void deleteCommitteeMemberStatusChange(Integer commMembershipId) {
+		try{
+			Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from CommitteeMemberStatusChange p where p.commMembershipId =:commMembershipId");
+			queryDeleteResearchArea.setInteger("commMembershipId",commMembershipId);
+			queryDeleteResearchArea.executeUpdate();
+		}catch (Exception e) {
+			logger.error("Error in deleteCommitteeMemberStatusChange: ", e);
+		}	
+	}
+
+	@Override
+	public void deleteMemberExpertise(Integer commMemberExpertiseId) {
+		Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeMemberExpertise p where p.commMemberExpertiseId =:commMemberExpertiseId");
+			queryDeleteResearchArea.setInteger("commMemberExpertiseId",commMemberExpertiseId);
+			queryDeleteResearchArea.executeUpdate();	
 	}	
 }

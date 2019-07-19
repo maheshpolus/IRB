@@ -1,8 +1,7 @@
 package org.mit.irb.web.committee.pojo;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -55,7 +54,7 @@ public class CommitteeMemberStatusChange implements Serializable {
 	private Date endDate;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private Timestamp updateTimestamp;
+	private Date updateTimestamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
@@ -82,14 +81,6 @@ public class CommitteeMemberStatusChange implements Serializable {
 
 	public void setCommitteeMembershipStatus(CommitteeMembershipStatus committeeMembershipStatus) {
 		this.committeeMembershipStatus = committeeMembershipStatus;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
 	}
 
 	public String getUpdateUser() {
@@ -134,5 +125,28 @@ public class CommitteeMemberStatusChange implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public CommitteeMemberStatusChange(Integer commMemberStatusChangeId,Integer commMembershipId, CommitteeMembershipStatus committeeMembershipStatus, Date startDate,
+			Date endDate,Date updateTimestamp,String updateUser) {
+		super();
+		this.commMemberStatusChangeId = commMemberStatusChangeId;
+		this.commMembershipId = commMembershipId;
+		this.committeeMembershipStatus = committeeMembershipStatus;
+		this.startDate = startDate;
+		this.endDate = endDate;	
+		this.updateTimestamp = updateTimestamp;
+		this.updateUser = updateUser;
+	}
+	
+	public CommitteeMemberStatusChange() {
+		super();
+	}
+
+	public Date getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(Date updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
 	}
 }

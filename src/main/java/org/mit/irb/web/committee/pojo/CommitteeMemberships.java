@@ -99,6 +99,10 @@ public class CommitteeMemberships implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeMemberExpertise> committeeMemberExpertises;
+	
+	/*@JsonManagedReference
+	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
+	private List<CommitteeMemberStatusChange> committeeMemberStatusChange;*/
 
 	@ManyToOne(optional= true)
 	@JoinColumn(foreignKey=@ForeignKey(name="IRB_COMM_MEMBERSHIPS_FK3"),name="PERSON_ID",referencedColumnName="PERSON_ID", insertable = false, updatable = false)
@@ -332,13 +336,14 @@ public class CommitteeMemberships implements Serializable {
 	}
 
 	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
-			String personName) {
+			String personName, Boolean nonEmployeeFlag) {
 		super();
 		this.commMembershipId = commMembershipId;
 		this.committee = committee;
 		this.personId = personId;
 		this.rolodexId = rolodexId;
 		this.personName = personName;
+		this.nonEmployeeFlag = nonEmployeeFlag;
 	}
 	
 	public void setActive(boolean active) {
@@ -384,4 +389,12 @@ public class CommitteeMemberships implements Serializable {
 	public void setMemberPresent(Boolean memberPresent) {
 		this.memberPresent = memberPresent;
 	}
+
+	/*public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange() {
+		return committeeMemberStatusChange;
+	}
+
+	public void setCommitteeMemberStatusChange(List<CommitteeMemberStatusChange> committeeMemberStatusChange) {
+		this.committeeMemberStatusChange = committeeMemberStatusChange;
+	}*/
 }

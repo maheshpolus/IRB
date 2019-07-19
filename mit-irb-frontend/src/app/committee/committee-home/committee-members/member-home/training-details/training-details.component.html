@@ -1,4 +1,4 @@
-<section class="row outerpadding ml-10 mr-10">
+<section class="row outerpadding ml-10 mr-10 mt-10">
   <div class="col-12 card search-card-view mb-2 mt-0 p-3">
     <div class="row">
       <div class="col-4">
@@ -35,9 +35,10 @@
         <table class="table tbl-p-clr txt-medium" *ngIf="irbPersonDetailedTraining.length > 0">
           <thead class="tbl-head-clr thead-font-size">
             <tr class="solid-bottom">
-              <th class="table-align-head" scope="col">Description</th>
+              <th scope="col">Description</th>
               <!-- <th scope="col">Score</th> -->
               <th scope="col">Expiration Date</th>
+              <th></th>
               <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
             </tr>
           </thead>
@@ -94,10 +95,10 @@
                         <td>
                           <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
                                   </div> -->
-                          <ul *ngFor="let comment of trainingComments">
+                          <ul class="bg-none" *ngFor="let comment of trainingComments">
                             <li title="{{comment?.COMMENT_DESCRIPTION}}">
-                              {{comment?.COMMENT_DESCRIPTION| slice:0:50}}
-                              <span *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50">
+                              {{comment?.COMMENT_DESCRIPTION| slice:0:150}}
+                              <span *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 150">
                                 ...</span>
                             </li>
                           </ul>

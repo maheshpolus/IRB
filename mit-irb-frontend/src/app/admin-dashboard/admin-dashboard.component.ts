@@ -18,6 +18,7 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
+    localStorage.setItem('currentUser', JSON.stringify(this.userDTO));
     this.getUserPermissions();
   }
 

@@ -83,8 +83,8 @@ export class CommitteeComponent implements OnInit, OnDestroy {
 
 
     ngOnInit() {
-        this.userDTO = this.route.snapshot.data['irb'];
-        localStorage.setItem('currentUser', this.userDTO);
+      //  this.userDTO = this.route.snapshot.data['irb'];
+      //  localStorage.setItem('currentUser', JSON.stringify(this.userDTO));
         this.initLoadParent();
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;

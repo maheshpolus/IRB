@@ -40,7 +40,7 @@ import { ScheduleMinutesComponent } from './schedule/schedule-home/schedule-minu
 
 const routes = [
     {
-        path: '', component: CommitteeComponent, resolve: { irb: DashboardResolverService },
+        path: '', component: CommitteeComponent,
         children: [{ path: '', redirectTo: 'committeeHome', pathMatch: 'full' },
         { path: 'committeeHome', component: CommitteeHomeComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent},

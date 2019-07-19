@@ -46,6 +46,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     slNo = 0;
     public researchArea: any = {};
     public dataServiceArea: any = [];
+    userDTO: any;
 
 
     Id: string;
@@ -205,6 +206,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.committeeConfigurationService.changeActivatedtab('committee_home');
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
 
     }
 
@@ -344,16 +346,16 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.result.committee.committeeType = {};
                 this.result.committee.committeeType.committeeTypeCode = '1';
                 this.result.committee.committeeType.description = 'IRB';
-                this.result.committee.createUser = localStorage.getItem('currentUser');
+                this.result.committee.createUser = this.userDTO.userName;
                 this.result.committee.createTimestamp = new Date().getTime();
-                this.result.committee.updateUser = localStorage.getItem('currentUser');
+                this.result.committee.updateUser = this.userDTO.userName;
                 this.result.committee.updateTimestamp = new Date().getTime();
             } else if (this.mode === 'view') {
                 this.result.updateType = 'UPDATE';
-                this.result.committee.updateUser = localStorage.getItem('currentUser');
+                this.result.committee.updateUser = this.userDTO.userName;
                 this.result.committee.updateTimestamp = new Date().getTime();
             }
-            this.result.currentUser = localStorage.getItem('currentUser');
+            this.result.currentUser = this.userDTO.userName;
             if (this.editDetails === false) {
                 this.editClass = 'committeeBoxNotEditable';
             }
@@ -478,7 +480,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             if (value.description === this.areaInput.researchAreaDescription) {
                 this.areaInput.researchAreaCode = value.researchAreaCode;
                 this.areaInput.researchAreaDescription = value.description;
-                this.areaInput.updateUser = localStorage.getItem('currentUser');
+                this.areaInput.updateUser = this.userDTO.userName;
                 this.areaInput.updateTimestamp = new Date().getTime();
             }
         });
@@ -638,7 +640,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         this.sendScheduleRequestData.scheduleData.weeklySchedule = {};
         this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
         this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
-        this.sendScheduleRequestData.currentUser = localStorage.getItem('currentUser');
+        this.sendScheduleRequestData.currentUser = this.userDTO.userName;
         this.sendScheduleRequestData.committee = this.result.committee;
         if (this.result.scheduleData.scheduleStartDate < this.today) {
             this.isStartDateBeforeToday = true;
@@ -788,11 +790,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
         scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
         scheduleObject.scheduleStatus.updateTimestamp = new Date();
-        scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+        scheduleObject.scheduleStatus.updateUser = this.userDTO.userName;
         this.scheduleStatus.forEach((value, index) => {
             if (value.description === scheduleObject.scheduleStatus.description) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem('currentUser');
+                value.updateUser = this.userDTO.userName;
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
                 scheduleObject.scheduleStatus = value;
                 // this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;
@@ -846,11 +848,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
         scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
         scheduleObject.scheduleStatus.updateTimestamp = new Date();
-        scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+        scheduleObject.scheduleStatus.updateUser = this.userDTO.userName;
         this.scheduleStatus.forEach((value, index) => {
             if (value.description === scheduleObject.scheduleStatus.description) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem('currentUser');
+                value.updateUser = this.userDTO.userName;
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
                 scheduleObject.scheduleStatus = value;
                 this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;

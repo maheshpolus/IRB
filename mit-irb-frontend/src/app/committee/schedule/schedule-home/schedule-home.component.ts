@@ -39,6 +39,7 @@ export class ScheduleHomeComponent implements OnInit {
     scheduleEndTime: any;
     scheduleStatusSelected: string;
     scheduleStatus: any = [];
+    userDTO: any;
 
     constructor( public scheduleConfigurationService: ScheduleConfigurationService,
         private datePipe: DatePipe,
@@ -48,6 +49,7 @@ export class ScheduleHomeComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
             if ( this.result !== undefined && this.result.committeeSchedule !== undefined ) {
@@ -115,7 +117,7 @@ export class ScheduleHomeComponent implements OnInit {
         this.scheduleStatus.forEach(( value, index ) => {
             if ( value.description === this.scheduleStatusSelected ) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem( 'currentUser' );
+                value.updateUser = this.userDTO.userName;
                 this.result.committeeSchedule.scheduleStatus = value;
                 this.result.committeeSchedule.scheduleStatusCode = value.scheduleStatusCode;
                 this.scheduleStatusSelected = value.description;

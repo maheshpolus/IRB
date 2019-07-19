@@ -21,6 +21,7 @@ export class ScheduleDetailsComponent implements OnInit {
   scheduleStatus = [];
   showAllClicked = false;
   result: any;
+  userDTO: any;
 
 
   editSchedule = [];
@@ -91,10 +92,7 @@ export class ScheduleDetailsComponent implements OnInit {
     public router: Router) { }
 
   ngOnInit() {
-    //     this.$subscription = this.committeeConfigurationService.currentCommitteeData.subscribe(committee => {
-    //     const data: any = committee;
-    //     this.committee = data.committee;
-    // });
+    this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     this._activatedRoute.queryParams.subscribe(params => {
       this.committeeId = params['id'];
       this.loadScheduleList('F');
@@ -174,11 +172,11 @@ export class ScheduleDetailsComponent implements OnInit {
       scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
       scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
       scheduleObject.scheduleStatus.updateTimestamp = new Date();
-      scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+      scheduleObject.scheduleStatus.updateUser = this.userDTO.userName;
       this.scheduleStatus.forEach((value, index) => {
         if (value.description === scheduleObject.scheduleStatus.description) {
           value.updateTimestamp = new Date();
-          value.updateUser = localStorage.getItem('currentUser');
+          value.updateUser = this.userDTO.userName;
           scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
           scheduleObject.scheduleStatus = value;
           this.committeeSchedules[i].scheduleStatus.description = value.description;
@@ -320,7 +318,7 @@ sentYearOption() {
     this.sendScheduleRequestData.scheduleData.weeklySchedule = {};
     this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
     this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
-    this.sendScheduleRequestData.currentUser = localStorage.getItem('currentUser');
+    this.sendScheduleRequestData.currentUser = this.userDTO.userName;
     this.sendScheduleRequestData.committee = this.result.committee;
     if (this.result.scheduleData.scheduleStartDate < this.today) {
       this.isStartDateBeforeToday = true;
@@ -455,7 +453,7 @@ sentYearOption() {
     scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
     scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
     scheduleObject.scheduleStatus.updateTimestamp = new Date();
-    scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+    scheduleObject.scheduleStatus.updateUser = this.userDTO.userName;
     // this.scheduleStatus.forEach((value, index) => {
     //     if (value.description === scheduleObject.scheduleStatus.description) {
     //         value.updateTimestamp = new Date();

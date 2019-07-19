@@ -30,7 +30,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-       this._spinner.show();
+        this._spinner.show();
         const params = {
             scheduleId: this.scheduleId,
             committeeId: this.committeeId

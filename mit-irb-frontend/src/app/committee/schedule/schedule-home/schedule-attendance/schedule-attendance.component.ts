@@ -60,7 +60,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
     tempAlternateFor: string;
     tempMemberPresent: boolean;
     tempComment: string;
-    currentUser: string;
+    userDTO: any;
     currentmember: string;
     showPopup: boolean;
     deletingMeberObj;
@@ -74,7 +74,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         private scheduleAttendanceService: ScheduleAttendanceService,
         private activatedRoute: ActivatedRoute ) {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this.currentUser = localStorage.getItem( 'currentUser' );
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     }
 
     ngOnInit() {
@@ -216,7 +216,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         this.guestMemberObj.personName = this.selectedMember.label;
         this.guestMemberObj.roleName = '';
         this.guestMemberObj.updateTimestamp = new Date().getTime();
-        this.guestMemberObj.updateUser = this.currentUser;
+        this.guestMemberObj.updateUser = this.userDTO.userName;
         this.scheduleAttendanceService.addGuestMember( this.guestMemberObj, this.scheduleId )
         .takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data;
@@ -266,7 +266,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         this.updatingMemberObj.committeeScheduleAttendanceId = memberObj.committeeScheduleAttendanceId;
         this.updatingMemberObj.memberPresent = memberObj.memberPresent;
         this.updatingMemberObj.comments = memberObj.comments;
-        this.updatingMemberObj.updateUser = this.currentUser;
+        this.updatingMemberObj.updateUser = this.userDTO.userName;
         this.updatingMemberObj.updateTimestamp = new Date().getTime();
         this.scheduleAttendanceService.updateMemberattendanceDate( this.committeeId, this.scheduleId, this.updatingMemberObj )
             .takeUntil(this.onDestroy$).subscribe( data => {
@@ -303,7 +303,7 @@ export class ScheduleAttendanceComponent implements OnInit, OnDestroy, AfterView
         this.updatingMemberObj.committeeScheduleAttendanceId = memberObj.committeeScheduleAttendanceId;
         this.updatingMemberObj.memberPresent = memberObj.memberPresent;
         this.updatingMemberObj.comments = memberObj.comments;
-        this.updatingMemberObj.updateUser = this.currentUser;
+        this.updatingMemberObj.updateUser = this.userDTO.userName;
         this.updatingMemberObj.updateTimestamp = new Date().getTime();
         this.scheduleAttendanceService.updateMemberattendanceDate( this.committeeId, this.scheduleId, this.updatingMemberObj )
             .takeUntil(this.onDestroy$).subscribe( data => {

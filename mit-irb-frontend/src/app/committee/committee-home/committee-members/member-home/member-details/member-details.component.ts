@@ -72,7 +72,7 @@ export class MemberDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userDTO = localStorage.getItem('currentUser');
+    this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     this._activatedRoute.queryParams.subscribe(params => {
       this.memberId = params['membershipId'];
       this.committeId = params['id'];

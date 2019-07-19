@@ -20,7 +20,7 @@ export class ScheduleOtherActionsComponent implements OnInit, OnDestroy {
     tempOtherAction: any = {};
     showPopup = false;
     isAddClicked = false;
-    currentUser = localStorage.getItem( 'currentUser');
+    userDTO = JSON.parse(localStorage.getItem('currentUser'));
     isMandatoryFilled = true;
     mandatoryMessage: string;
     public onDestroy$ = new Subject<void>();
@@ -49,7 +49,7 @@ export class ScheduleOtherActionsComponent implements OnInit, OnDestroy {
             if ( actionType.description === type ) {
                 this.committeeScheduleActItemsObject.scheduleActItemTypecode = actionType.scheduleActItemTypecode;
                 this.committeeScheduleActItemsObject.scheduleActItemTypeDescription = actionType.description;
-                this.committeeScheduleActItemsObject.updateUser = this.currentUser;
+                this.committeeScheduleActItemsObject.updateUser = this.userDTO.userName;
                 this.committeeScheduleActItemsObject.updateTimestamp = time;
                 this.result.committeeScheduleActItems = this.committeeScheduleActItemsObject;
             }
@@ -64,7 +64,7 @@ export class ScheduleOtherActionsComponent implements OnInit, OnDestroy {
                 if ( actionType.description === 'Adverse Event' ) {
                     this.committeeScheduleActItemsObject.scheduleActItemTypecode = actionType.scheduleActItemTypecode;
                     this.committeeScheduleActItemsObject.scheduleActItemTypeDescription = actionType.description;
-                    this.committeeScheduleActItemsObject.updateUser = this.currentUser;
+                    this.committeeScheduleActItemsObject.updateUser = this.userDTO.userName;
                     this.committeeScheduleActItemsObject.updateTimestamp = time;
                     this.result.committeeScheduleActItems = this.committeeScheduleActItemsObject;
                 }

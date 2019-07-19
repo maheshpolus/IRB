@@ -24,7 +24,7 @@ export class CommitteeMembersComponent implements OnInit {
     private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.userDTO = localStorage.getItem('currentUser');
+    this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     this._activatedRoute.queryParams.subscribe(params => {
       this.committeId = params['id'];
     });

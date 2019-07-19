@@ -10,10 +10,13 @@ import {ScheduleService} from '../../schedule.service';
 })
 export class ScheduleMinutesComponent implements OnInit {
 
-  tabSelected =  'MEETING_COMMENTS';
+  tabSelected =  'meeting';
   scheduleId = null;
   scheduleMinutes = [];
-  
+  entryType = [];
+  addNewMinutes = false;
+  newCommitteeScheduleMinute: any = {};
+
   constructor(private scheduleService: ScheduleService, private activatedRoute: ActivatedRoute) {
     this.scheduleId = this.activatedRoute.snapshot.queryParamMap.get( 'scheduleId' );
   }
@@ -27,6 +30,8 @@ export class ScheduleMinutesComponent implements OnInit {
     this.scheduleService.loadScheduleMeetingComments(obj).subscribe( data => {
       const result = data;
       this.scheduleMinutes = result.scheduleMinutes;
+      this.entryType = result.minuteEntrytypes != null ? result.minuteEntrytypes : [];
+      this.newCommitteeScheduleMinute = result.newCommitteeScheduleMinute;
     });
   }
 

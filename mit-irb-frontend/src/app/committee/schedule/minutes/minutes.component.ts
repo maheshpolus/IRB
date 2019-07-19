@@ -12,6 +12,7 @@ declare var $: any;
 })
 export class MinutesComponent implements OnInit, OnDestroy {
 
+    userDTO: any;
     result: any;
     isMinuteEntryPoppedUp = false;
     isContigencyPoppedUp = false;
@@ -40,7 +41,9 @@ export class MinutesComponent implements OnInit, OnDestroy {
         this.initialLoad();
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
+     }
 
     initialLoad() {
         this.scheduleConfigurationService.currentScheduleData.takeUntil(this.onDestroy$).subscribe( data => {
@@ -180,8 +183,8 @@ export class MinutesComponent implements OnInit, OnDestroy {
         this.result.newCommitteeScheduleMinute.privateCommentFlag = this.privateCommentFlag;
         this.result.newCommitteeScheduleMinute.finalFlag = this.finalFlag;
         this.result.newCommitteeScheduleMinute.minuteEntry = this.entryDescription;
-        this.result.newCommitteeScheduleMinute.createUser = localStorage.getItem( 'currentUser' );
-        this.result.newCommitteeScheduleMinute.updateUser = localStorage.getItem( 'currentUser' );
+        this.result.newCommitteeScheduleMinute.createUser = this.userDTO.userName;
+        this.result.newCommitteeScheduleMinute.updateUser = this.userDTO.userName;
         this.result.newCommitteeScheduleMinute.createTimestamp = new Date();
         this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
         if ( this.isMandatoryFilled === true ) {
@@ -241,7 +244,7 @@ export class MinutesComponent implements OnInit, OnDestroy {
             this.result.committeeId = this.result.committeeSchedule.committeeId;
             this.result.scheduleId = this.result.committeeSchedule.scheduleId;
             this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
-            this.result.newCommitteeScheduleMinute.updateUser = localStorage.getItem('currentUser');
+            this.result.newCommitteeScheduleMinute.updateUser = this.userDTO.userName;
             this.minutesService.updateMinuteData( this.result ).takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
             } );

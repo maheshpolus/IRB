@@ -231,11 +231,38 @@ public class ScheduleController {
 		protocolVO = scheduleService.saveOrUpdateMeetingAttachment(files, formDataJson);
 		return protocolVO;
 	}
-	
-	
+		
 	@RequestMapping(value = "/downloadMeetingAttachment", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> downloadMeetingAttachment(HttpServletResponse response,
 			@RequestHeader("attachmentId") String attachmentId) {
 		return scheduleService.downloadMeetingAttachment(attachmentId);
+	}
+	
+	@RequestMapping(value = "/downloadScheduleAgenda", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadScheduleAgenda(HttpServletResponse response,
+			@RequestHeader("scheduleId") String scheduleId) {
+		return scheduleService.downloadScheduleAgenda(scheduleId);
+	}
+	
+	@RequestMapping(value = "/loadAllScheduleAgenda", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadAllScheduleAgenda(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadAllScheduleAgenda(vo.getScheduleId());
+		return ScheduleVo;
+	}
+	
+	@RequestMapping(value = "/loadMeetingOtherActions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadMettingOtherActions(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadMettingOtherActions");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadMeetingOtherActions(vo.getScheduleId());
+		return ScheduleVo;
+	}
+		
+	@RequestMapping(value = "/updateMeetingOtherActions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo updateMeetingOtherActions(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for addMeetingOtherActions");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo scheduleVo = scheduleService.updateMeetingOtherActions(vo);
+		return scheduleVo;
 	}
 }

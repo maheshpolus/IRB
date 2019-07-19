@@ -15,6 +15,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
+import org.mit.irb.web.committee.pojo.ScheduleAgenda;
 import org.mit.irb.web.committee.view.ProtocolView;
 import org.mit.irb.web.schedule.vo.ScheduleVo;
 import org.springframework.http.ResponseEntity;
@@ -162,11 +163,71 @@ public interface ScheduleDao {
 	 */
 	public List<CommitteeScheduleAttachment> getCommitteeScheduleAttachementById(Integer scheduleId);
 	
-	
-	ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment);
-
+	/**
+	 * @param files
+	 * @param committeeScheduleAttachment
+	 * @param scheduleId
+	 * @return
+	 */
 	ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files,
 			CommitteeScheduleAttachment committeeScheduleAttachment, Integer scheduleId);
+	
+	/**
+	 * To deleteMeetingAttachment.
+	 * @param committeeScheduleAttachment committeeScheduleAttachment
+	 * @param scheduleId scheduleId
+	 * @return List of CommitteeScheduleAttachment
+	 */
+	ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment, Integer scheduleId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ArrayList<HashMap<String, Object>> loadScheduleIdsForAgenda(Integer scheduleId, String committeeId);
+
+	/**
+	 * @param scheduleMinutes
+	 * @return
+	 */
+	public CommitteeScheduleMinutes updateScheduleMinutes(CommitteeScheduleMinutes scheduleMinutes);
+
+	/**
+	 * @param commScheduleMinuteId
+	 */
+	public void deleteScheduleMinute(Integer commScheduleMinuteId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleAgenda(String scheduleId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public List<ScheduleAgenda> loadAllScheduleAgenda(Integer scheduleId);
+	
+	/**
+	 * This method is used to getCommitteeScheduleAttachementById.
+	 * @param scheduleId - Id of the CommitteeSchedule.
+	 * @return committeeSchedule - committeeSchedule object.
+	 */
+	public List<CommitteeScheduleActItems> getCommitteeScheduleActItemsById(Integer scheduleId);
+	
+	
+	/**
+	 * This method is used to fetch all committee schedule attachment type.
+	 * @return a list of CommitteeScheduleAttachmentType.
+	 */
+	public List<CommitteeScheduleActItems> fetchAllCommitteeScheduleActItems();
+	
+	/**To deleteMeetingOtherActions.
+	 * 
+	 * @param committeeScheduleActItems
+	 */
+	void deleteMeetingOtherActions(Integer committeeScheduleActItems);
 	
 	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
 

@@ -169,5 +169,36 @@ public interface ScheduleService {
 	 * Service to download the attachments
 	 */
 	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
+	
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduleIdsForAgenda(ScheduleVo vo);
 
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleAgenda(String scheduleId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ScheduleVo loadAllScheduleAgenda(Integer scheduleId);
+	
+	/**
+	 * This method is used to loadMeetingOtherActions.
+	 * @param scheduleId - Id of a schedule.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo loadMeetingOtherActions(Integer scheduleId);
+	
+	/**
+	 * This method is used to addMeetingOtherActions.
+	 * @param scheduleId - Id of a schedule.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo updateMeetingOtherActions(ScheduleVo scheduleVo);
 }

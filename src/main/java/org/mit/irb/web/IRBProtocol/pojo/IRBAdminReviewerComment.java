@@ -140,11 +140,9 @@ public class IRBAdminReviewerComment {
 	}
 	
 	public IRBAdminReviewerComment(String comment) {
-		super();
 		this.comment = comment;
 	}
 
 	public IRBAdminReviewerComment() {
-		super();
 	}
 }

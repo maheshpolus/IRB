@@ -124,6 +124,9 @@ public class ProtocolSubmission implements Serializable {
 	
 	@Transient
 	private String submissionTypeDescription;
+	
+	@Transient
+	private String expirationDate;
 	//
 	
 	public String getProtocolNumber() {
@@ -346,5 +349,13 @@ public class ProtocolSubmission implements Serializable {
 		this.committeePriRev = committeePriRev;
 		this.committeeSecRev = committeeSecRev;
 		this.submissionTypeDescription = submissionTypeDescription;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 }

@@ -321,7 +321,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 		researchAreas.setResearchAreaDescription(committeeVo.getCommitteeResearchArea().getResearchAreaDescription());
 		researchAreas.setUpdateTimestamp(committeeVo.getCommitteeResearchArea().getUpdateTimestamp());
 		researchAreas.setUpdateUser(committeeVo.getCommitteeResearchArea().getUpdateUser());
-		committee.getResearchAreas().add(researchAreas);
+		//committee.getResearchAreas().add(researchAreas);
 		researchAreas = committeeDao.saveCommitteeResearchAreas(researchAreas);
 		committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 		committeeVo.setCommittee(committee);

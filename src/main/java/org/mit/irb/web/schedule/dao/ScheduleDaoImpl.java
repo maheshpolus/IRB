@@ -37,6 +37,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
+import org.mit.irb.web.committee.pojo.ScheduleAgenda;
 import org.mit.irb.web.committee.view.ProtocolView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -59,6 +60,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	
 	@Autowired 
 	private CommitteeDao committeeDao;
+	
+	@Autowired 
+	private ScheduleDao scheduleDao;
 	
 	DBEngine dbEngine;	
 
@@ -86,7 +90,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		projList.add(Projections.property("scheduleActItemTypecode"), "scheduleActItemTypecode");
 		projList.add(Projections.property("description"), "description");
 		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(ScheduleActItemType.class));
-		criteria.addOrder(Order.asc("description"));
+		criteria.addOrder(Order.asc("scheduleActItemTypecode"));
 		@SuppressWarnings("unchecked")
 		List<ScheduleActItemType> scheduleActItemTypes = criteria.list();
 		return scheduleActItemTypes;
@@ -201,26 +205,35 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<CommitteeScheduleMinutes> getScheduleMinutes(ScheduleVo vo) {
 		List<CommitteeScheduleMinutes> scheduleMinutes = new ArrayList<>();
-		try{
-			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<CommitteeScheduleMinutes> criteria = builder.createQuery(CommitteeScheduleMinutes.class);
-			Root<CommitteeScheduleMinutes> minutesRoot = criteria.from(CommitteeScheduleMinutes.class);		
-			criteria.multiselect(minutesRoot.get("commScheduleMinutesId"),minutesRoot.get("entryNumber")
-					,minutesRoot.get("minuteEntryTypeCode"),minutesRoot.get("minuteEntrytype")
-					,minutesRoot.get("protocolContingencyCode"),minutesRoot.get("protocolContingency")
-					,minutesRoot.get("protocolNumber"),minutesRoot.get("protocolId")
-					,minutesRoot.get("submissionId"),minutesRoot.get("privateCommentFlag")
-					,minutesRoot.get("minuteEntry"),minutesRoot.get("finalFlag"),minutesRoot.get("updateTimestamp"));
+		try{			
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(CommitteeScheduleMinutes.class);
+		    ProjectionList projList = Projections.projectionList();
+		    projList.add(Projections.property("commScheduleMinutesId"), "commScheduleMinutesId");
+			projList.add(Projections.property("entryNumber"), "entryNumber");
+			projList.add(Projections.property("minuteEntryTypeCode"), "minuteEntryTypeCode");
+			projList.add(Projections.property("minuteEntrytype"), "minuteEntrytype");
+			projList.add(Projections.property("protocolContingencyCode"), "protocolContingencyCode");
+			projList.add(Projections.property("protocolContingency"), "protocolContingency");
+			projList.add(Projections.property("protocolNumber"), "protocolNumber");
+			projList.add(Projections.property("protocolId"), "protocolId");
+			projList.add(Projections.property("submissionId"), "submissionId");
+			projList.add(Projections.property("privateCommentFlag"), "privateCommentFlag");
+			projList.add(Projections.property("minuteEntry"), "minuteEntry");
+			projList.add(Projections.property("finalFlag"), "finalFlag");
+			projList.add(Projections.property("updateTimestamp"), "updateTimestamp");
+			criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleMinutes.class));
 			if(vo.getAcType() != null){
-				criteria.where(builder.equal(minutesRoot.get("committeeSchedule").get("scheduleId"),vo.getScheduleId()));
+				criteria.add(Restrictions.eq("committeeSchedule.scheduleId",vo.getScheduleId()));
 			}else{
-				criteria.where(builder.equal(minutesRoot.get("committeeSchedule").get("scheduleId"),vo.getScheduleId()),builder.notEqual(minutesRoot.get("minuteEntryTypeCode"),Constants.PROTOCOL_REVIEWER_COMMENT));
+				criteria.add(Restrictions.eq("committeeSchedule.scheduleId",vo.getScheduleId()));
+				criteria.add(Restrictions.neOrIsNotNull("minuteEntryTypeCode",Integer.parseInt(Constants.PROTOCOL)));
 			}
-			scheduleMinutes =  session.createQuery(criteria).getResultList();
+			scheduleMinutes = criteria.list();
 		}catch (Exception e) {
 			logger.info("Exception in getScheduleMinutes:" + e);
 		}
@@ -230,19 +243,26 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	@Override
 	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(ScheduleVo vo) {
 	List<CommitteeScheduleMinutes> scheduleMinutes = new ArrayList<>();
-	try{
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<CommitteeScheduleMinutes> criteria = builder.createQuery(CommitteeScheduleMinutes.class);
-		Root<CommitteeScheduleMinutes> minutesRoot = criteria.from(CommitteeScheduleMinutes.class);		
-		criteria.multiselect(minutesRoot.get("commScheduleMinutesId"),minutesRoot.get("entryNumber")
-				,minutesRoot.get("minuteEntryTypeCode"),minutesRoot.get("minuteEntrytype")
-				,minutesRoot.get("protocolContingencyCode"),minutesRoot.get("protocolContingency")
-				,minutesRoot.get("protocolNumber"),minutesRoot.get("protocolId")
-				,minutesRoot.get("submissionId"),minutesRoot.get("privateCommentFlag")
-				,minutesRoot.get("minuteEntry"),minutesRoot.get("finalFlag"),minutesRoot.get("updateTimestamp"));
-		criteria.where(builder.equal(minutesRoot.get("submissionId"),vo.getSubmissionId()));
-		scheduleMinutes =  session.createQuery(criteria).getResultList();
+	try{		
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeScheduleMinutes.class);
+	    ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("commScheduleMinutesId"), "commScheduleMinutesId");
+		projList.add(Projections.property("entryNumber"), "entryNumber");
+		projList.add(Projections.property("minuteEntryTypeCode"), "minuteEntryTypeCode");
+		projList.add(Projections.property("minuteEntrytype"), "minuteEntrytype");
+		projList.add(Projections.property("protocolContingencyCode"), "protocolContingencyCode");
+		projList.add(Projections.property("protocolContingency"), "protocolContingency");
+		projList.add(Projections.property("protocolNumber"), "protocolNumber");
+		projList.add(Projections.property("protocolId"), "protocolId");
+		projList.add(Projections.property("submissionId"), "submissionId");
+		projList.add(Projections.property("privateCommentFlag"), "privateCommentFlag");
+		projList.add(Projections.property("minuteEntry"), "minuteEntry");
+		projList.add(Projections.property("finalFlag"), "finalFlag");
+		projList.add(Projections.property("updateTimestamp"), "updateTimestamp");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleMinutes.class));
+		criteria.add(Restrictions.eq("submissionId",vo.getSubmissionId()));		
+		scheduleMinutes = criteria.list();	
 	}catch (Exception e) {
 		logger.info("Exception in getProtocolCommitteeComments:" + e);
 	}
@@ -259,7 +279,10 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			CriteriaQuery<CommitteeMemberships> criteria = builder.createQuery(CommitteeMemberships.class);
 			Root<CommitteeMemberships> committeeRoot = criteria.from(CommitteeMemberships.class);
 			criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
-					,committeeRoot.get("rolodexId"),committeeRoot.get("personName"));
+					,committeeRoot.get("rolodexId"),committeeRoot.get("personName"),committeeRoot.get("nonEmployeeFlag"));
+			/*Predicate predicateOne = builder.equal(committeeRoot.get("committee").get("committeeId"),vo.getCommitteeId());
+			Predicate predicateTwo = builder.equal(committeeRoot.get("active"), true);
+			criteria.where(builder.and(predicateOne, predicateTwo));*/
 			criteria.where(builder.equal(committeeRoot.get("committee").get("committeeId"),vo.getCommitteeId()));
 			committeeMemberships = session.createQuery(criteria).getResultList();
 		} catch (Exception e) {
@@ -356,18 +379,23 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		 projList.add(Projections.property("attachmentType"),"attachmentType");
 		 criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleAttachment.class));
 		 criteria.add(Restrictions.eq("committeeSchedule.scheduleId",scheduleId));
+		 criteria.addOrder(Order.asc("commScheduleAttachId"));
+			@SuppressWarnings("unchecked")
 		 List<CommitteeScheduleAttachment> committeeScheduleAttachment = criteria.list();	
 		return committeeScheduleAttachment;
 	}
 
 	@Override
-	public ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment) {
+	public ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment,Integer scheduleId) {
 		ScheduleVo scheduleVo = new ScheduleVo();	
 		try{
 			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
 					.createQuery("delete from CommitteeScheduleAttachment p where p.commScheduleAttachId =:commScheduleAttachId");
 			queryDeletAttachment.setInteger("commScheduleAttachId", committeeScheduleAttachment.getCommScheduleAttachId());
 			queryDeletAttachment.executeUpdate();
+			List<CommitteeScheduleAttachment> committeeScheduleAttachmentList = scheduleDao.getCommitteeScheduleAttachementById(scheduleId);
+			scheduleVo.setCommitteeScheduleAttachmentList(committeeScheduleAttachmentList);
+			scheduleVo.setScheduleId(scheduleId);
 		}catch (Exception e) {
 			logger.error("Error in deleteMeetingAttachment: ", e);
 		}			
@@ -389,6 +417,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		} catch (Exception e) {
 			logger.error("Error in saveOrUpdateInternalProtocolAttachment: ", e);
 		}
+		List<CommitteeScheduleAttachment> committeeScheduleAttachmentList = scheduleDao.getCommitteeScheduleAttachementById(scheduleId);
+		scheduleVo.setCommitteeScheduleAttachmentList(committeeScheduleAttachmentList);
 		scheduleVo.setScheduleId(scheduleId);
 		scheduleVo.setNewCommitteeScheduleAttachment(committeeScheduleAttachment);
 		return scheduleVo;
@@ -427,4 +457,133 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		}
 		return attachmentData;
 	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> loadScheduleIdsForAgenda(Integer scheduleId, String committeeId) {	
+		ArrayList<HashMap<String, Object>> result  = new ArrayList<HashMap<String, Object>>();
+		try {			
+			ArrayList<Parameter> inParam = new ArrayList<>();			
+			inParam.add(new Parameter("<<AV_SCHEDULE_ID>>", DBEngineConstants.TYPE_INTEGER, scheduleId));
+			inParam.add(new Parameter("<<AV_COMMITTEE_ID>>", DBEngineConstants.TYPE_STRING, committeeId));
+			inParam.add(new Parameter("<<AV_SCHEDULE_ID1>>", DBEngineConstants.TYPE_INTEGER, scheduleId));
+			inParam.add(new Parameter("<<AV_COMMITTEE_ID1>>", DBEngineConstants.TYPE_STRING, committeeId));
+			result  = dbEngine.executeQuery(inParam,"get_schedule_ids_agenda");
+		} catch (Exception e) {
+			logger.info("Exception in loadScheduledProtocols:" + e);
+		}
+		return result;
+	}
+
+	@Override
+	public CommitteeScheduleMinutes updateScheduleMinutes(CommitteeScheduleMinutes scheduleMinutes) {
+		hibernateTemplate.saveOrUpdate(scheduleMinutes);
+		return scheduleMinutes;
+	}
+
+	@Override
+	public void deleteScheduleMinute(Integer commScheduleMinuteId) {
+		Query queryScheduleMinute = hibernateTemplate.getSessionFactory().getCurrentSession()
+		.createQuery("delete from CommitteeScheduleMinutes p where p.commScheduleMinutesId =:commScheduleMinutesId");
+		queryScheduleMinute.setInteger("commScheduleMinutesId",commScheduleMinuteId);
+		queryScheduleMinute.executeUpdate();
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadScheduleAgenda(String scheduleId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ScheduleAgenda> criteria = builder.createQuery(ScheduleAgenda.class);
+			Root<ScheduleAgenda> attachmentRoot=criteria.from(ScheduleAgenda.class);				
+			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),Integer.parseInt(scheduleId)));
+			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleAgendaId")));
+			ScheduleAgenda protocolAttachment = session.createQuery(criteria).getResultList().get(0);	
+			if (protocolAttachment != null) {				
+				byte[] byteArray = null;				
+				byteArray = protocolAttachment.getPdfStore();				
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType("application/pdf"));
+				String filename = "Agenda_"+scheduleId;
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(byteArray.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(byteArray, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.info("Exception in downloadScheduleAgenda:" + e);
+		}		
+		return attachmentData;
+	}
+
+	@Override
+	public List<ScheduleAgenda> loadAllScheduleAgenda(Integer scheduleId) {
+		List<ScheduleAgenda> attachment = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ScheduleAgenda> criteria = builder.createQuery(ScheduleAgenda.class);
+			Root<ScheduleAgenda> attachmentRoot=criteria.from(ScheduleAgenda.class);				
+			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),scheduleId));
+			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleAgendaId")));
+			attachment = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.info("Exception in loadAllScheduleAgenda:" + e);
+		}
+		return attachment;
+	}
+	
+	
+	@Override
+	public List<CommitteeScheduleActItems> getCommitteeScheduleActItemsById(Integer scheduleId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		 Criteria criteria = session.createCriteria(CommitteeScheduleActItems.class);
+		 ProjectionList projList = Projections.projectionList();
+		 projList.add(Projections.property("commScheduleActItemsId"),"commScheduleActItemsId");
+		 projList.add(Projections.property("actionItemNumber"),"actionItemNumber");
+		 projList.add(Projections.property("scheduleActItemTypecode"),"scheduleActItemTypecode");
+		 projList.add(Projections.property("itemDescription"),"itemDescription");
+		 projList.add(Projections.property("scheduleActItemTypeDescription"),"scheduleActItemTypeDescription");
+		 projList.add(Projections.property("updateTimestamp"),"updateTimestamp");
+		 projList.add(Projections.property("updateUser"),"updateUser");
+		 criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleActItems.class));
+		 criteria.add(Restrictions.eq("committeeSchedule.scheduleId",scheduleId));
+		 criteria.addOrder(Order.asc("commScheduleActItemsId"));
+			@SuppressWarnings("unchecked")
+		 List<CommitteeScheduleActItems> committeeScheduleActItems = criteria.list();	
+		return committeeScheduleActItems;
+	}
+
+	@Override
+	public List<CommitteeScheduleActItems> fetchAllCommitteeScheduleActItems() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeScheduleActItems.class);
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("commScheduleActItemsId"), "commScheduleActItemsId");
+		projList.add(Projections.property("actionItemNumber"), "actionItemNumber");
+		projList.add(Projections.property("scheduleActItemTypecode"), "scheduleActItemTypecode");
+		projList.add(Projections.property("itemDescription"), "itemDescription");
+		projList.add(Projections.property("scheduleActItemTypeDescription"), "scheduleActItemTypeDescription");
+		projList.add(Projections.property("updateTimestamp"), "updateTimestamp");
+		projList.add(Projections.property("updateUser"), "updateUser");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleActItems.class));
+		criteria.addOrder(Order.asc("commScheduleActItemsId"));
+		@SuppressWarnings("unchecked")
+		List<CommitteeScheduleActItems> scheduleActItemTypes = criteria.list();
+		return scheduleActItemTypes;
+	}
+
+	@Override
+	public void deleteMeetingOtherActions(Integer commScheduleActItemsId) {	
+		try{
+			Query queryDeletAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from CommitteeScheduleActItems p where p.commScheduleActItemsId =:commScheduleActItemsId");
+			queryDeletAttachment.setInteger("commScheduleActItemsId",commScheduleActItemsId);
+			queryDeletAttachment.executeUpdate();
+		}catch (Exception e) {
+			logger.error("Error in deleteMeetingOtherActions: ", e);
+		}
+	}
+
 }

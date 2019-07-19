@@ -7,6 +7,7 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "IRB_SCHEDULE_AGENDA")
@@ -24,8 +27,11 @@ public class ScheduleAgenda implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GenericGenerator(name = "agendaIdGererator", strategy = "increment", parameters = {
+			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
+	@GeneratedValue(generator = "agendaIdGererator")
 	@Column(name = "SCHEDULE_AGENDA_ID")
-	private Integer SCHEDULE_AGENDA_ID;
+	private Integer scheduleAgendaId;
 
 	@Column(name = "SCHEDULE_ID")
 	private Integer scheduleId;
@@ -54,14 +60,6 @@ public class ScheduleAgenda implements Serializable {
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
-
-	public Integer getSCHEDULE_AGENDA_ID() {
-		return SCHEDULE_AGENDA_ID;
-	}
-
-	public void setSCHEDULE_AGENDA_ID(Integer sCHEDULE_AGENDA_ID) {
-		SCHEDULE_AGENDA_ID = sCHEDULE_AGENDA_ID;
-	}
 
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;
@@ -137,6 +135,14 @@ public class ScheduleAgenda implements Serializable {
 
 	public void setScheduleId(Integer scheduleId) {
 		this.scheduleId = scheduleId;
+	}
+
+	public Integer getScheduleAgendaId() {
+		return scheduleAgendaId;
+	}
+
+	public void setScheduleAgendaId(Integer scheduleAgendaId) {
+		this.scheduleAgendaId = scheduleAgendaId;
 	}
 
 }

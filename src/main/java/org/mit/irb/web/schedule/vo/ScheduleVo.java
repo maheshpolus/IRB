@@ -15,6 +15,7 @@ import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
 import org.mit.irb.web.committee.pojo.ProtocolSubmission;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
+import org.mit.irb.web.committee.pojo.ScheduleAgenda;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 
 
@@ -77,6 +78,16 @@ public class ScheduleVo {
 	private List<CommitteeScheduleAttendance> guestMembers;
 	
 	private List<CommitteeScheduleAttachment> committeeScheduleAttachmentList;
+	
+	private ArrayList<HashMap<String, Object>> agendaScheduleIds;
+	
+	private String updateUser;
+		
+	private List<ScheduleAgenda> agendaList;
+	
+	private boolean flag;
+	
+	private List<CommitteeScheduleActItems> committeeScheduleActItemsList;
 	
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;
@@ -308,5 +319,45 @@ public class ScheduleVo {
 
 	public void setCommitteeScheduleAttachmentList(List<CommitteeScheduleAttachment> committeeScheduleAttachmentList) {
 		this.committeeScheduleAttachmentList = committeeScheduleAttachmentList;
+	}
+
+	public ArrayList<HashMap<String, Object>> getAgendaScheduleIds() {
+		return agendaScheduleIds;
+	}
+
+	public void setAgendaScheduleIds(ArrayList<HashMap<String, Object>> agendaScheduleIds) {
+		this.agendaScheduleIds = agendaScheduleIds;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public List<ScheduleAgenda> getAgendaList() {
+		return agendaList;
+	}
+
+	public void setAgendaList(List<ScheduleAgenda> agendaList) {
+		this.agendaList = agendaList;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public List<CommitteeScheduleActItems> getCommitteeScheduleActItemsList() {
+		return committeeScheduleActItemsList;
+	}
+
+	public void setCommitteeScheduleActItemsList(List<CommitteeScheduleActItems> committeeScheduleActItemsList) {
+		this.committeeScheduleActItemsList = committeeScheduleActItemsList;
 	}
 }

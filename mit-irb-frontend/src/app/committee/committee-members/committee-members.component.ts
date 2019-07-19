@@ -99,7 +99,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
     message: string;
     activeMembers = true;
     inactiveMembers;
-    currentUser = localStorage.getItem( 'currentUser' );
+    userDTO: any = JSON.parse(localStorage.getItem('currentUser'));
     searchText: FormControl = new FormControl( '' );
     placeHolderText = 'Search an employee';
     roleFieldsFilled = true;
@@ -287,7 +287,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                 const d = new Date();
                 const timestamp = d.getTime();
                 membertype.updateTimestamp = timestamp;
-                membertype.updateUser = this.currentUser;
+                membertype.updateUser = this.userDTO.userName;
                 member.committeeMembershipType = membertype;
                 member.membershipTypeCode = membertype.membershipTypeCode;
             }
@@ -324,7 +324,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
             const currentDate = new Date();
             const currentTime = currentDate.getTime();
             for ( const member1 of this.resultLoadedById.committee.committeeMemberships ) {
-                member1.updateUser = this.currentUser;
+                member1.updateUser = this.userDTO.userName;
                 member1.updateTimestamp = currentTime;
             }
             this.sendMemberObject = {};
@@ -648,7 +648,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                         const d = new Date();
                         const timestamp = d.getTime();
                         membertype.updateTimestamp = timestamp;
-                        membertype.updateUser = this.currentUser;
+                        membertype.updateUser = this.userDTO.userName;
                         this.memberList.committee.committeeMemberships[length - 1].committeeMembershipType = membertype;
                         this.memberList.committee.committeeMemberships[length - 1].membershipTypeCode = membertype.membershipTypeCode;
                     }
@@ -677,7 +677,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                         tempObj.startDate = this.membershipRoles[index].startDate;
                         tempObj.endDate = this.membershipRoles[index].endDate;
                         tempObj.updateTimestamp = timestamp;
-                        tempObj.updateUser = this.currentUser;
+                        tempObj.updateUser = this.userDTO.userName;
                         this.memberRoleObject = tempObj;
                     }
                 }
@@ -697,7 +697,7 @@ export class CommitteeMembersComponent implements OnInit, OnDestroy, AfterViewIn
                         tempObj.researchAreaCode = this.membershipExpertise[index].researchAreaCode;
                         tempObj.researchAreaDescription = this.membershipExpertise[index].description;
                         tempObj.updateTimestamp = timestamp;
-                        tempObj.updateUser = this.currentUser;
+                        tempObj.updateUser = this.userDTO.userName;
                         this.memberExpertiseObject = tempObj;
                     }
                 }

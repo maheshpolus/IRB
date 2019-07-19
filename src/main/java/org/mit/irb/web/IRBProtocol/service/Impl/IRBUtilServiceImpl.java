@@ -1,9 +1,12 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
@@ -13,6 +16,7 @@ import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +28,9 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 	
 	@Autowired
 	IRBUtilDao irbUtilDao;
+	
+	@Value("${system.timezone}")
+	private String timezone;
 	
 	protected static Logger logger = Logger.getLogger(IRBUtilServiceImpl.class.getName());
 
@@ -144,5 +151,18 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 			logger.info("Exception in checkUserPermission:" + e);
 		}
 		return vo;
+	}
+
+	@Override
+	public Date adjustTimezone(Date date) {		
+		try {
+			 SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yy");
+			 DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:SS z");
+		     df.setTimeZone(TimeZone.getTimeZone(timezone));		       
+		     return newFormat.parse(df.format(date));		       
+		}catch(Exception e) {
+			logger.debug("Error in adusting adjustTimezone, input date is "+date+" . Error "+e.getMessage());
+		}       
+        return date;
 	}	
 }

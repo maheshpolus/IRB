@@ -4,7 +4,11 @@
   <div class="container-fluid">
   
     <div class="card">
-      <h4 class="card-hedding txt-large dotted-bottom">Training Maintenance</h4>
+      <h4 class="thick card-hedding txt-large dotted-bottom">Training Maintenance
+          <span style="float: right;"><span  routerLink='/irb/admin-dashbord' class="pointer text-danger p-2"><u style="font-size: 14px;"><i class="fa fa-mail-reply">&nbsp;</i>Return To Administrative Dashboard</u></span></span>
+          <!-- <a title="back to committee" id="returnToCommiteeLink" class="return-committee-color float-right" routerLink='/irb/admin-dashbord'>
+            <i class="fa fa-mail-reply">&nbsp;</i>Return to Administrative dashboard</a> -->
+      </h4>
       <div class="text-right">
         <span class="txt-medium txt-dark p-2 pointer" *ngIf="userHasRightToEditTraining == 1"
           [routerLink]="['person-detail']">

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -45,9 +46,6 @@ public class CommitteeScheduleAttachment implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_SCHE_ATTACH_TYPE"), name = "ATTACHMENT_TYPE_CODE", referencedColumnName = "ATTACHMENT_TYPE_CODE", insertable = false, updatable = false)
 	private CommitteeScheduleAttachType attachmentType;
 
-	@Column(name = "ATTACHMENT_ID")
-	private Integer attachmentId;
-
 	@Column(name = "ATTACHMENT_TYPE_CODE")
 	private Integer attachmentTypeCode;
 
@@ -69,6 +67,9 @@ public class CommitteeScheduleAttachment implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
+	@Transient
+	private String acType;
+	
 	public Integer getCommScheduleAttachId() {
 		return commScheduleAttachId;
 	}
@@ -83,14 +84,6 @@ public class CommitteeScheduleAttachment implements Serializable {
 
 	public void setCommitteeSchedule(CommitteeSchedule committeeSchedule) {
 		this.committeeSchedule = committeeSchedule;
-	}
-
-	public Integer getAttachmentId() {
-		return attachmentId;
-	}
-
-	public void setAttachmentId(Integer attachmentId) {
-		this.attachmentId = attachmentId;
 	}
 
 	public Integer getAttachmentTypeCode() {
@@ -159,5 +152,13 @@ public class CommitteeScheduleAttachment implements Serializable {
 
 	public void setAttachmentType(CommitteeScheduleAttachType attachmentType) {
 		this.attachmentType = attachmentType;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
 	}
 }

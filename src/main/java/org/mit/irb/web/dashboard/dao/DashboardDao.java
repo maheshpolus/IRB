@@ -19,4 +19,6 @@ public interface DashboardDao {
 	public DashboardProfile getDashboardProtocolStatus();
 	
 	public DashboardProfile getProtocolSubmissionStatus();
+
+	public DashboardProfile getAdminDashBoardPermissions(String personId, String leadUnitNumber);
 }

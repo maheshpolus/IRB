@@ -8,10 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.committee.constants.Constants;
 import org.mit.irb.web.committee.dao.CommitteeDao;
 import org.mit.irb.web.committee.pojo.Committee;
@@ -26,13 +28,17 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
 import org.mit.irb.web.committee.pojo.ProtocolSubmission;
+import org.mit.irb.web.committee.pojo.Rolodex;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
+import org.mit.irb.web.committee.pojo.ScheduleAgenda;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.schedule.Time12HrFmt;
-import org.mit.irb.web.committee.view.ProtocolView;
+import org.mit.irb.web.committee.service.CommitteeService;
+import org.mit.irb.web.committee.view.PersonDetailsView;
 import org.mit.irb.web.schedule.dao.ScheduleDao;
 import org.mit.irb.web.schedule.vo.ScheduleVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,17 +58,24 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private CommitteeDao committeeDao;
 
 	@Autowired
+	IRBUtilService irbUtilService;
+	
+	@Autowired
 	private ScheduleDao scheduleDao;
+	
+	@Autowired
+	private MinutesAgendaService minutesAgendaService;
 
 	@Override
-	public ScheduleVo loadScheduleById(Integer scheduleId) {
-		ScheduleVo scheduleVo = new ScheduleVo();
-		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleId);
+	public ScheduleVo loadScheduleById(ScheduleVo scheduleVo) {
+		//ScheduleVo scheduleVo = new ScheduleVo();
+		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		scheduleVo.setCommitteeSchedule(committeeSchedule);
-		scheduleVo.setCommittee(committeeSchedule.getCommittee());
+		Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
+		scheduleVo.setCommittee(committee);
 		List<ScheduleStatus> scheduleStatus = committeeDao.fetchAllScheduleStatus();
 		scheduleVo.setScheduleStatus(scheduleStatus);
-		List<ScheduleActItemType> scheduleActItemTypes = scheduleDao.fetchAllScheduleActItemType();
+		/*List<ScheduleActItemType> scheduleActItemTypes = scheduleDao.fetchAllScheduleActItemType();
 		scheduleVo.setScheduleActItemTypes(scheduleActItemTypes);
 		List<MinuteEntryType> minuteEntrytypes = scheduleDao.fetchAllMinuteEntryTypes();
 		scheduleVo.setMinuteEntrytypes(minuteEntrytypes);
@@ -75,7 +88,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 			for (ProtocolSubmission protocolSubmission : protocolSubmissions) {
 				logger.info("protocolId : " + protocolSubmission.getProtocolId());
 				logger.info("piPersonId : " + protocolSubmission.getPiPersonId());
-				logger.info("piPersonName : " + protocolSubmission.getPiPersonName());
 				ProtocolView protocolView = scheduleDao.fetchProtocolViewByParams(protocolSubmission.getProtocolId().intValue(), protocolSubmission.getPiPersonId(), protocolSubmission.getPiPersonName());
 				if (protocolView != null) {
 					protocolSubmission.setDocumentNumber(protocolView.getDocumentNumber());
@@ -97,7 +109,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 				committeeSchedule.getCommitteeScheduleAttendances().addAll(activeMembers);
 				committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
 			}
-		}
+		}*/
 		return scheduleVo;
 	}
 
@@ -177,10 +189,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	protected boolean isActiveMembership(CommitteeMemberships committeeMembership, Date scheduledDate) {
 		return isActiveForScheduledDate(scheduledDate, committeeMembership.getTermStartDate(), committeeMembership.getTermEndDate())
-				&& hasActiveMembershipRoleForScheduledDate(committeeMembership.getCommitteeMemberRoles(), scheduledDate);
+				&& hasActiveMembershipRoleForScheduledDate((List<CommitteeMemberRoles>) committeeMembership.getCommitteeMemberRoles(), scheduledDate);
 	}
 
-	private boolean isActiveForScheduledDate(Date scheduledDate, Date startDate, Date endDate) {
+	private boolean isActiveForScheduledDate(java.util.Date scheduledDate, java.util.Date startDate, java.util.Date endDate) {
 		return startDate.before(scheduledDate) && endDate.after(scheduledDate);
 	}
 
@@ -391,17 +403,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public ScheduleVo updateSchedule(ScheduleVo scheduleVo) {
-		Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
+		Committee committee =scheduleVo.getCommittee(); /*committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());*/
 		CommitteeSchedule committeeSchedule = scheduleVo.getCommitteeSchedule();
-		committeeSchedule.setCommittee(committee);
+		committeeSchedule.setMeetingDate(irbUtilService.adjustTimezone(committeeSchedule.getMeetingDate()));
+		committeeSchedule.setProtocolSubDeadline(irbUtilService.adjustTimezone(committeeSchedule.getProtocolSubDeadline()));
 		committeeSchedule.setStartTime(addHrMinToDate(committeeSchedule.getViewStartTime()));
         committeeSchedule.setEndTime(addHrMinToDate(committeeSchedule.getViewEndTime()));
         committeeSchedule.setTime(addHrMinToDate(committeeSchedule.getViewTime()));
+        committeeSchedule.setCommittee(committee);
 		committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
 		scheduleVo.setCommitteeSchedule(committeeSchedule);
-		committee.getCommitteeSchedules().add(committeeSchedule);
-		committee = committeeDao.saveCommittee(committee);
-		scheduleVo.setCommittee(committee);
+		/*committee.getCommitteeSchedules().add(committeeSchedule);
+		scheduleVo.setCommittee(committee);*/
 		return scheduleVo;
 	}
 
@@ -424,6 +437,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public ScheduleVo addOtherActions(ScheduleVo scheduleVo) {
+		List<ScheduleActItemType> scheduleActItemTypes = scheduleDao.fetchAllScheduleActItemType();
+		scheduleVo.setScheduleActItemTypes(scheduleActItemTypes);//for other actions
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleActItems committeeScheduleActItems = scheduleVo.getCommitteeScheduleActItems();
 		CommitteeScheduleActItems scheduleActItem = new CommitteeScheduleActItems();
@@ -490,25 +505,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
 		CommitteeScheduleMinutes committeeScheduleMinute = scheduleVo.getNewCommitteeScheduleMinute();
 		String protocolNumber = null;
-		Integer submissionId = null;
 		Integer submissionNumber = null;
 
 		if (committeeScheduleMinute.getProtocolNumber() != null) {
 			protocolNumber = committeeScheduleMinute.getProtocolNumber();
-			for (ProtocolSubmission protocolSubmission : committeeSchedule.getProtocolSubmissions()) {
+			
+			/*for (ProtocolSubmission protocolSubmission : committeeSchedule.getProtocolSubmissions()) {
 				if (protocolSubmission.getProtocolNumber().equals(protocolNumber)) {
 					submissionId = protocolSubmission.getSubmissionId();
 					submissionNumber = protocolSubmission.getSubmissionNumber();
 				}
-			}
+			}*/
 		}
-		Integer entryNumber = getNextMinuteEntryNumber(committeeSchedule);
+	/*	Integer entryNumber = getNextMinuteEntryNumber(committeeSchedule);*/
 		String minuteEntryTypeCode = committeeScheduleMinute.getMinuteEntryTypeCode().toString();
-
-		committeeScheduleMinute.setSubmissionId(submissionId);
+		scheduleVo.setSubmissionId(committeeScheduleMinute.getSubmissionId());
+		committeeScheduleMinute.setSubmissionId(committeeScheduleMinute.getSubmissionId());
 		committeeScheduleMinute.setSubmissionNumber(submissionNumber);
-		committeeScheduleMinute.setProtocolNumber(protocolNumber);
-		committeeScheduleMinute.setEntryNumber(entryNumber);
+		committeeScheduleMinute.setProtocolNumber(committeeScheduleMinute.getProtocolNumber());
+	//	committeeScheduleMinute.setEntryNumber(entryNumber);
 		committeeScheduleMinute.setCommitteeSchedule(committeeSchedule);
 		if (Constants.ATTENDANCE.equals(minuteEntryTypeCode)) {
 			addAttendanceMinuteEntry(committeeSchedule, committeeScheduleMinute);
@@ -521,9 +536,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 			resetActionItemFields(committeeScheduleMinute);
 		}
 		committeeScheduleMinute = scheduleDao.addCommitteeScheduleMinute(committeeScheduleMinute);
-		committeeSchedule.getCommitteeScheduleMinutes().add(committeeScheduleMinute);
-		committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);
-		scheduleVo.setCommitteeSchedule(committeeSchedule);
+		//committeeSchedule.getCommitteeScheduleMinutes().add(committeeScheduleMinute);
+		/*committeeSchedule = scheduleDao.updateCommitteeSchedule(committeeSchedule);*/
+		scheduleVo.setNewCommitteeScheduleMinute(committeeScheduleMinute);
+		//scheduleVo.setCommitteeSchedule(committeeSchedule);
+		if(minuteEntryTypeCode.equals("3")){
+			List<CommitteeScheduleMinutes> scheduleMinutes = scheduleDao.getProtocolCommitteeComments(scheduleVo);
+			scheduleVo.setScheduleMinutes(scheduleMinutes);			
+		}else{
+			List<CommitteeScheduleMinutes> scheduleMinutes = scheduleDao.getScheduleMinutes(scheduleVo);
+			scheduleVo.setScheduleMinutes(scheduleMinutes);	
+		}			
 		return scheduleVo;
 	}
 
@@ -650,7 +673,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public ScheduleVo deleteScheduleMinute(ScheduleVo scheduleVo) {
 		try {
-			Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
+			scheduleDao.deleteScheduleMinute(scheduleVo.getCommScheduleMinuteId());						
+			/*Committee committee = committeeDao.fetchCommitteeById(scheduleVo.getCommitteeId());
 			List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
 			for (CommitteeSchedule committeeSchedule : committeeSchedules) {
 				if (committeeSchedule.getScheduleId().equals(scheduleVo.getScheduleId())) {
@@ -668,7 +692,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 				}
 			}
 			committee = committeeDao.saveCommittee(committee);
-			scheduleVo.setCommittee(committee);
+			scheduleVo.setCommittee(committee);*/
+			List<CommitteeScheduleMinutes> scheduleMinutes = null;
+			if(scheduleVo.getProtocolNumber() != null){
+				 scheduleMinutes =	scheduleDao.getProtocolCommitteeComments(scheduleVo);	
+			}else{
+				 scheduleMinutes = scheduleDao.getScheduleMinutes(scheduleVo);
+			}
+			scheduleVo.setScheduleMinutes(scheduleMinutes);
 			scheduleVo.setStatus(true);
 			scheduleVo.setMessage("Schedule minute deleted successfully");
 		} catch (Exception e) {
@@ -717,6 +748,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ScheduleVo jsonObj = mapper.readValue(formDataJSON, ScheduleVo.class);
+			List<CommitteeScheduleAttachType> committeeScheduleAttachTypes = scheduleDao.fetchAllCommitteeScheduleAttachType();
+			scheduleVo.setAttachmentTypes(committeeScheduleAttachTypes);//for attachments
 			CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(jsonObj.getScheduleId());
 			CommitteeScheduleAttachment newAttachment = jsonObj.getNewCommitteeScheduleAttachment();
 			List<CommitteeScheduleAttachment> attachments = new ArrayList<CommitteeScheduleAttachment>();
@@ -819,10 +852,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo) {
-		Committee committee = committeeDao.fetchCommitteeById(vo.getCommitteeId());
-		List<CommitteeSchedule> committeeSchedules = committee.getCommitteeSchedules();
-		CommitteeScheduleMinutes scheduleMinutes = vo.getNewCommitteeScheduleMinute();
-		for (CommitteeSchedule committeeSchedule : committeeSchedules) {
+		/*List<MinuteEntryType> minuteEntrytypes = scheduleDao.fetchAllMinuteEntryTypes();
+		vo.setMinuteEntrytypes(minuteEntrytypes);
+		List<ProtocolContingency> protocolContingencies = scheduleDao.fetchAllProtocolContingency();
+		vo.setProtocolContingencies(protocolContingencies);//for minutes
+		Committee committee = committeeDao.fetchCommitteeById(vo.getCommitteeId());*/
+		
+		CommitteeSchedule committeeSchedules = committeeDao.getCommitteeScheduleById(vo.getScheduleId());
+		CommitteeScheduleMinutes scheduleMinutes = new CommitteeScheduleMinutes();
+		scheduleMinutes = vo.getNewCommitteeScheduleMinute();
+		scheduleMinutes.setCommitteeSchedule(committeeSchedules);
+		scheduleMinutes= scheduleDao.updateScheduleMinutes(scheduleMinutes);
+		
+		/*for (CommitteeSchedule committeeSchedule : committeeSchedules) {
 			if (committeeSchedule.getScheduleId().equals(vo.getScheduleId())) {
 				List<CommitteeScheduleMinutes> minutes = committeeSchedule.getCommitteeScheduleMinutes();
 				for (CommitteeScheduleMinutes minute : minutes) {
@@ -832,9 +874,229 @@ public class ScheduleServiceImpl implements ScheduleService {
 				}
 				vo.setCommitteeSchedule(committeeSchedule);
 			}
-		}
-		committeeDao.saveCommittee(committee);
-		vo.setCommittee(committee);
+		}*/
+		vo.setNewCommitteeScheduleMinute(scheduleMinutes);
 		return vo;
+	}
+
+	@Override
+	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ScheduleVo loadScheduledProtocols(ScheduleVo vo) {
+		ArrayList<HashMap<String, Object>>  protocolSubmission = scheduleDao.loadScheduledProtocols(vo.getScheduleId());//for protocol submission				
+		List<ProtocolSubmission> submissions = new ArrayList<>();
+		for (HashMap<String, Object> hashMap : protocolSubmission) {
+			ProtocolSubmission singleSubmission = new ProtocolSubmission();
+			singleSubmission.setCommitteeId(hashMap.get("COMMITTEE_ID") == null ? null : hashMap.get("COMMITTEE_ID").toString());
+			singleSubmission.setProtocolNumber(hashMap.get("PROTOCOL_NUMBER") == null ? null : hashMap.get("PROTOCOL_NUMBER").toString());
+			singleSubmission.setSubmissionDate(hashMap.get("SUBMISSION_DATE") == null ? null : generateSqlDate(hashMap.get("SUBMISSION_DATE").toString()));
+			singleSubmission.setProtocolTitle(hashMap.get("TITLE") == null ? null : hashMap.get("TITLE").toString());
+			singleSubmission.setPersonName(hashMap.get("PERSON_NAME") == null ? null : hashMap.get("PERSON_NAME").toString());
+			singleSubmission.getSubmissionStatus().setDescription(hashMap.get("SUBMISSION_STATUS") == null ? null : hashMap.get("SUBMISSION_STATUS").toString());
+			singleSubmission.getProtocolReviewType().setDescription(hashMap.get("PROTOCOL_REVIEW_TYPE") == null ? null : hashMap.get("PROTOCOL_REVIEW_TYPE").toString());
+			singleSubmission.getQualifierType().setDescription(hashMap.get("SUBMISSION_QUAL_TYPE") == null ? null : hashMap.get("SUBMISSION_QUAL_TYPE").toString());			
+			singleSubmission.setSubmissionTypeDescription(hashMap.get("SUBMISSION_TYPE") == null ? null : hashMap.get("SUBMISSION_TYPE").toString());			
+			singleSubmission.setProtocolId(hashMap.get("PROTOCOL_ID") == null ? null :Integer.parseInt(hashMap.get("PROTOCOL_ID").toString()));
+			singleSubmission.setAdminName(hashMap.get("ASSIGNEE_PERSON_NAME") == null ? null : hashMap.get("ASSIGNEE_PERSON_NAME").toString());			
+			singleSubmission.setSubmissionId(hashMap.get("SUBMISSION_ID") == null ? null : Integer.parseInt(hashMap.get("SUBMISSION_ID").toString()));			
+			singleSubmission.setSubmissionTypeCode(hashMap.get("SUBMISSION_TYPE_CODE") == null ? null : hashMap.get("SUBMISSION_TYPE_CODE").toString());			
+			singleSubmission.setProtocolReviewTypeCode(hashMap.get("PROTOCOL_REVIEW_TYPE_CODE") == null ? null : hashMap.get("PROTOCOL_REVIEW_TYPE_CODE").toString());			
+			singleSubmission.setExpirationDate(hashMap.get("EXPIRATION_DATE") == null ? null : hashMap.get("EXPIRATION_DATE").toString());			
+			submissions.add(singleSubmission);
+		}	
+		vo.setSubmittedProtocolsList(protocolSubmission);
+		vo.setSubmittedProtocols(submissions);
+		return vo;
+	}
+	
+	public Date generateSqlDate(String date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date utilDate = null;
+		java.sql.Date sqlDate = null;
+		if (date != null) {
+			try {
+				utilDate = sdf.parse(date);
+				sqlDate = new java.sql.Date(utilDate.getTime());
+			} catch (Exception e) {
+				logger.info("Exception in generateSqlActionDate:" + e);
+			}
+		}
+		return sqlDate;
+	}
+
+	@Override
+	public ScheduleVo loadScheduleMeetingComments(ScheduleVo vo) {	
+		List<CommitteeScheduleMinutes> scheduleMinutes = scheduleDao.getScheduleMinutes(vo);
+		vo.setScheduleMinutes(scheduleMinutes);		
+		List<MinuteEntryType> minuteEntrytypes = scheduleDao.fetchAllMinuteEntryTypes();
+		vo.setMinuteEntrytypes(minuteEntrytypes);				
+		return vo;
+	}
+
+	@Override
+	public ScheduleVo loadScheduleProtocolComments(ScheduleVo vo) {
+		if(vo.getProtocolNumber() != null){
+			 List<CommitteeScheduleMinutes> protocolCommitteeCommmets =	scheduleDao.getProtocolCommitteeComments(vo);
+			 vo.setScheduleMinutes(protocolCommitteeCommmets);
+		}
+		List<ProtocolContingency> protocolContingencies = scheduleDao.fetchAllProtocolContingency();
+		vo = loadScheduledProtocols(vo);
+		vo.setProtocolContingencies(protocolContingencies);		
+		return vo;
+	}
+
+	@Override
+	public ScheduleVo createAgendaForSchedule(ScheduleVo vo) {
+		minutesAgendaService.generateAgenda(vo);
+		return null;
+	}
+	
+	@Override
+	public ScheduleVo loadMeetingAttendence(ScheduleVo vo) {
+		try{
+			List<CommitteeMemberships> committeeMembershipList = scheduleDao.fetchMeetingMembers(vo);
+			List<CommitteeMemberships> alternateMember = new ArrayList<CommitteeMemberships>();		
+			List<CommitteeMemberships> committeeMember = new ArrayList<CommitteeMemberships>();
+			for(CommitteeMemberships committeeMemberships : committeeMembershipList){
+				String committeePersonId = null;
+				if (committeeMemberships.getNonEmployeeFlag()) {
+					committeePersonId = String.valueOf(committeeMemberships.getRolodexId());
+					Rolodex rolodex = committeeDao.getRolodexById(committeeMemberships.getRolodexId());
+					committeeMemberships.setRolodex(rolodex);
+				} else {
+					committeePersonId = committeeMemberships.getPersonId();
+					PersonDetailsView personDetails = committeeDao.getPersonDetailsById(committeeMemberships.getPersonId());
+					committeeMemberships.setPersonDetails(personDetails);
+				}
+				committeeMemberships.setMemberPresent(scheduleDao.fetchPresentFlag(vo.getScheduleId(),committeePersonId));
+				List<CommitteeMemberRoles> committeeMemberRoles  = scheduleDao.fetchCommitteeMemberRoles(committeeMemberships);
+				committeeMemberships.setCommitteeMemberRoles(committeeMemberRoles);
+				if(committeeMemberRoles.size() == 1 && committeeMemberRoles.get(0).getMembershipRoleCode() == "12"){
+					alternateMember.add(committeeMemberships);
+				}else{
+					committeeMember.add(committeeMemberships);
+				}
+			}
+			vo.setAlternateMember(alternateMember);
+			vo.setCommitteeMember(committeeMember);
+			vo.setGuestMembers(scheduleDao.fetchGuestMembers(vo.getScheduleId()));
+		}catch (Exception e) {
+			logger.info("Exception in loadMeetingAttendence:" + e);
+		}
+		return vo;
+	}
+
+	@Override
+	public ScheduleVo updateMeetingAttendence(ScheduleVo vo) {
+		try{
+			CommitteeScheduleAttendance scheduleAttendance = vo.getUpdatedAttendance();
+			CommitteeSchedule committeeSchedule = vo.getCommitteeSchedule();
+			scheduleAttendance.setCommitteeSchedule(committeeSchedule);
+			scheduleDao.updateScheduleAttendance(scheduleAttendance);
+		}catch (Exception e) {
+			logger.info("Exception in updateMeetingAttendence:" + e);
+		}
+		return vo;
+	}
+	
+	@Override
+	public ScheduleVo loadMeetingAttachmentById(Integer scheduleId) {
+		ScheduleVo scheduleVo = new ScheduleVo();
+		List<CommitteeScheduleAttachType> committeeScheduleAttachTypes = scheduleDao.fetchAllCommitteeScheduleAttachType();
+		scheduleVo.setAttachmentTypes(committeeScheduleAttachTypes);
+		List<CommitteeScheduleAttachment> list = scheduleDao.getCommitteeScheduleAttachementById(scheduleId);
+		scheduleVo.setCommitteeScheduleAttachmentList(list);
+		return scheduleVo;
+	}
+
+	@Override
+	public ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files, String formDataJson) {	
+		ScheduleVo scheduleVo = new ScheduleVo();	
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			ScheduleVo jsonObj = mapper.readValue(formDataJson, ScheduleVo.class);
+			CommitteeScheduleAttachment committeeScheduleAttachment = jsonObj.getNewCommitteeScheduleAttachment();	
+			Integer scheduleId = jsonObj.getScheduleId();
+			
+		    if(committeeScheduleAttachment.getAcType().equals("D")){
+		    	scheduleVo = scheduleDao.deleteMeetingAttachment(committeeScheduleAttachment,scheduleId);
+			}else if(committeeScheduleAttachment.getAcType() != null){
+				scheduleVo = scheduleDao.saveOrUpdateMeetingAttachment(files,committeeScheduleAttachment,scheduleId);
+			}
+		} catch (Exception e) {
+			logger.error("Error in saveAttachement: ", e);
+		}
+		return scheduleVo;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId) {
+		ResponseEntity<byte[]> attachments = scheduleDao.downloadMeetingAttachment(attachmentId);
+		return attachments;
+	}
+	
+	@Override
+	public ScheduleVo loadScheduleIdsForAgenda(ScheduleVo vo) {
+		ArrayList<HashMap<String, Object>>  scheduleIds = scheduleDao.loadScheduleIdsForAgenda(vo.getScheduleId() ,vo.getCommitteeId());//for protocol submission						
+		vo.setAgendaScheduleIds(scheduleIds);
+		return vo;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadScheduleAgenda(String scheduleId) {
+		ResponseEntity<byte[]> attachments = scheduleDao.downloadScheduleAgenda(scheduleId);
+		return attachments;
+	}
+
+	@Override
+	public ScheduleVo loadAllScheduleAgenda(Integer scheduleId) {
+		ScheduleVo scheduleVo = new ScheduleVo();		
+		List<ScheduleAgenda> list = scheduleDao.loadAllScheduleAgenda(scheduleId);
+		scheduleVo.setAgendaList(list);
+		return scheduleVo;
+	}
+	
+	@Override
+	public ScheduleVo loadMeetingOtherActions(Integer scheduleId) {
+		ScheduleVo scheduleVo = new ScheduleVo();	
+		List<ScheduleActItemType> scheduleActItemTypes = scheduleDao.fetchAllScheduleActItemType();
+		scheduleVo.setScheduleActItemTypes(scheduleActItemTypes);
+		
+		List<CommitteeScheduleActItems> list = scheduleDao.getCommitteeScheduleActItemsById(scheduleId);
+		scheduleVo.setCommitteeScheduleActItemsList(list);
+		return scheduleVo;
+	}
+
+	@Override
+	public ScheduleVo updateMeetingOtherActions(ScheduleVo scheduleVo) {
+			
+	 if(scheduleVo.getAcType().equals("D")){
+		 scheduleDao.deleteMeetingOtherActions(scheduleVo.getCommScheduleActItemsId());
+		 List<CommitteeScheduleActItems> list = scheduleDao.getCommitteeScheduleActItemsById(scheduleVo.getScheduleId());
+		scheduleVo.setCommitteeScheduleActItemsList(list);
+	 }
+	 else if(scheduleVo.getAcType() != null){	
+		CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(scheduleVo.getScheduleId());
+		CommitteeScheduleActItems committeeScheduleActItems = scheduleVo.getCommitteeScheduleActItems();
+		CommitteeScheduleActItems scheduleActItem = new CommitteeScheduleActItems();
+		scheduleActItem.setCommitteeSchedule(committeeSchedule);
+		scheduleActItem.setScheduleActItemTypecode(committeeScheduleActItems.getScheduleActItemTypecode());
+		scheduleActItem.setItemDescription(committeeScheduleActItems.getItemDescription());
+		scheduleActItem.setScheduleActItemTypeDescription(committeeScheduleActItems.getScheduleActItemTypeDescription());
+		//scheduleActItem.setActionItemNumber(getNextActionItemNumber(committeeSchedule));
+		Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+		scheduleActItem.setUpdateTimestamp(timestamp1);
+		scheduleActItem.setUpdateUser(committeeScheduleActItems.getUpdateUser());
+		scheduleActItem = scheduleDao.addOtherActions(scheduleActItem);	
+		CommitteeScheduleMinutes nn= new CommitteeScheduleMinutes();
+		nn.setScheduleActItems(scheduleActItem);
+		List<CommitteeScheduleActItems> list = scheduleDao.getCommitteeScheduleActItemsById(scheduleVo.getScheduleId());
+		scheduleVo.setCommitteeScheduleActItemsList(list);	
+	}
+		return scheduleVo;
 	}
 }

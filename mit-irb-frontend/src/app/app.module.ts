@@ -13,7 +13,7 @@ import { ToastModule } from 'ng2-toastr';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppCommonModule } from './common/common/common.module';
-import { NgIdleKeepaliveModule } from "@ng-idle/keepalive";
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -27,7 +27,7 @@ import { IrbComponent } from './irb/irb.component';
 import { ExpandedViewComponent } from './expanded-view/expanded-view.component';
 import { ExemptQuestionaireComponent } from './exempt-questionaire/exempt-questionaire.component';
 import { ExemptCardComponent } from './dashboard/dashboard-list/exempt-card/exempt-card.component';
-import { LogoutComponent } from "./login/logout.component";
+import { LogoutComponent } from './login/logout.component';
 
 import { AuthGuard } from './common/service/auth-guard.service';
 import { ElasticService } from './common/service/elastic.service';
@@ -50,6 +50,7 @@ import { PersonTrainingService } from './person-training/person-training.service
 import { AssignModalComponent } from './common/assign-modal/assign-modal.component';
 import { PermissionWarningModalComponent } from './common/permission-warning-modal/permission-warning-modal.component';
 import { CommitteeScheduleListComponent } from './committee-schedule-list/committee-schedule-list.component';
+import { AdminDashboardService } from './admin-dashboard/admin-dashboard.service';
 
 enableProdMode();
 
@@ -74,7 +75,7 @@ enableProdMode();
         FundingSourceModalComponent,
         AssignModalComponent,
         PermissionWarningModalComponent,
-        CommitteeScheduleListComponent
+        CommitteeScheduleListComponent,
 
     ],
     imports: [
@@ -97,7 +98,7 @@ enableProdMode();
     providers: [AuthGuard, DashboardService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         LoginService, DashboardResolverService, ElasticService, IrbViewService, ExpandedViewService, PiElasticService,
-        SharedDataService, FundingSourceModalService, AssignModalServiceService, PersonTrainingService,
+        SharedDataService, FundingSourceModalService, AssignModalServiceService, PersonTrainingService, AdminDashboardService,
         KeyPressEvent, HeaderService],
         entryComponents: [FundingSourceModalComponent, AssignModalComponent, PermissionWarningModalComponent],
     bootstrap: [AppComponent]

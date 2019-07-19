@@ -8,9 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
+import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
@@ -44,7 +48,10 @@ public class IRBController {
 	@Autowired
 	@Qualifier(value = "irbExemptProtocolService")
 	IRBExemptProtocolService irbExemptProtocolService;
-
+	
+	@Autowired
+	IRBActionsDao irbAcionDao;
+	
 	@Autowired
 	IRBProtocolInitLoadService irbProtocolInitLoadService;
 
@@ -249,7 +256,26 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO updateProtocolGeneralInfo(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
+		Boolean logInitialData = false;
+		if(irbProtocolVO.getGeneralInfo().getProtocolId() == null){
+			logInitialData = true;
+		}
 		protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
+		if(logInitialData){
+			IRBActionsVO vo = new IRBActionsVO();
+			vo.setActionTypeCode("100");
+			vo.setUpdateUser(protocolVO.getGeneralInfo().getUpdateUser());
+			vo.setCreateUser(protocolVO.getGeneralInfo().getCreateUser());
+			vo.setAcType("I");
+			vo.setProtocolStatus(protocolVO.getGeneralInfo().getProtocolStatusCode());
+			ProtocolSubmissionStatuses status = new ProtocolSubmissionStatuses();
+			status.setProtocolNumber(protocolVO.getGeneralInfo().getProtocolNumber());
+			status.setProtocolId(protocolVO.getGeneralInfo().getProtocolId());
+			status.setSequenceNumber(protocolVO.getGeneralInfo().getSequenceNumber());
+			status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
+			vo.setProtocolSubmissionStatuses(status);
+			irbAcionDao.updateActionStatus(vo);	
+		}
 		return protocolVO;
 	}
 

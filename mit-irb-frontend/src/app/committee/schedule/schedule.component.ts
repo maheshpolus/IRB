@@ -14,7 +14,9 @@ import { ScheduleConfigurationService } from './schedule-configuration.service';
 export class ScheduleComponent implements OnInit, OnDestroy {
 
     currentTab = 'schedule_home';
-    scheduleId: number;
+    scheduleId = null;
+    committeeId = null;
+    userDTO = JSON.parse(localStorage.getItem('currentUser'));
     result: any = {};
     public loadScheduleDataSub: Subscription;
 
@@ -24,29 +26,62 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private scheduleConfigurationService: ScheduleConfigurationService ) {
+            this.scheduleId = this.activatedRoute.snapshot.queryParamMap.get( 'scheduleId' );
+            this.committeeId = this.activatedRoute.snapshot.queryParamMap.get( 'committeeId' );
     }
 
     ngOnInit() {
-        this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
+        this.currentTab = 'scheduleHome';
         this._spinner.show();
-        this.loadScheduleDataSub = this.scheduleService.loadScheduleData( this.scheduleId ).
+        const params = {
+            scheduleId: this.scheduleId,
+            committeeId: this.committeeId
+    };
+        this.loadScheduleDataSub = this.scheduleService.loadScheduleData( params ).
             subscribe( data => {
                 this.result = data;
+                this.result.committeeSchedule.meetingDate = this.result.committeeSchedule.meetingDate != null ?
+                    new Date(this.result.committeeSchedule.meetingDate) : null;
                 this._spinner.hide();
                 if (this.result !== null) {
                     this.scheduleConfigurationService.changeScheduleData( this.result );
                 }
-            } );
+            });
+
     }
     ngOnDestroy() {
         this.loadScheduleDataSub.unsubscribe();
     }
 
+    onActivate( componentRef ) {
+        this.activatedRoute = componentRef;
+    }
     show_current_tab( e: any, current_tab ) {
         e.preventDefault();
         this.currentTab = current_tab;
+        this.router.navigate( ['irb/committee/schedule/' + this.currentTab],
+                { queryParams: { 'scheduleId': this.scheduleId, 'committeeId': this.committeeId } } );
     }
     backClick() {
         this._location.back();
     }
+    createAgendaForSchedule() {
+        const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId, updateUser: this.userDTO.userName };
+        this.scheduleService.createAgendaForSchedule(requestObject).subscribe( data => {
+            this.downloadLatestAgenda();
+        });
+    }
+    downloadLatestAgenda() {
+        this.scheduleService.downloadLatestAgenda(this.scheduleId).subscribe(data => {
+            const a = document.createElement('a');
+      const blob = new Blob([data], { type: data.type });
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Agenda';
+      document.body.appendChild(a);
+      a.click();
+
+    },
+      error => console.log('Error downloading the file.', error),
+      () => console.log('OK'));
+             }
 }

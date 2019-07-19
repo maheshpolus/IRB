@@ -2,6 +2,8 @@ package org.mit.irb.web.committee.pojo;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -20,12 +22,14 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.mit.irb.web.IRBProtocol.pojo.IRBAdminReviewerComment;
 
 @Entity
 @Table(name="IRB_PROTOCOL_SUBMISSION")
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class ProtocolSubmission implements Serializable {
+public class ProtocolSubmission implements Serializable {	
+
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -53,7 +57,7 @@ public class ProtocolSubmission implements Serializable {
 	private String protocolNumber;
 
 	@Transient
-	private String piPersonName;
+	private String personName;
 	
 	@Transient
 	private String piPersonId;
@@ -64,8 +68,8 @@ public class ProtocolSubmission implements Serializable {
 /*	@Column(name = "PI_PERSON_ID")
 	private String piPersonId;*/
 
-/*	@Column(name = "PROTOCOL_TITLE")
-	private String protocolTitle;*/
+	@Transient
+	private String protocolTitle;
 
 	@Column(name = "SUBMISSION_TYPE_CODE")
 	private String submissionTypeCode;
@@ -101,33 +105,45 @@ public class ProtocolSubmission implements Serializable {
 /*	@Column(name = "PROTOCOL_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean protocolActive;*/
-
+	
+	@Transient
+	private String adminName;
+	
 	@Transient
 	private String documentNumber;
-
+	
+	//for templates
+	@Transient
+	private List<IRBAdminReviewerComment> adminComments;
+	
+	@Transient
+	private String committeePriRev;
+	
+	@Transient
+	private String committeeSecRev;
+	
+	@Transient
+	private String submissionTypeDescription;
+	
+	@Transient
+	private String expirationDate;
+	//
+	
 	public String getProtocolNumber() {
 		return protocolNumber;
 	}
 
 	public void setProtocolNumber(String protocolNumber) {
 		this.protocolNumber = protocolNumber;
-	}
+	}	
 
-	public String getPiPersonName() {
-		return piPersonName;
-	}
-
-	public void setPiPersonName(String piPersonName) {
-		this.piPersonName = piPersonName;
-	}
-
-	/*public String getProtocolTitle() {
+	public String getProtocolTitle() {
 		return protocolTitle;
 	}
 
 	public void setProtocolTitle(String protocolTitle) {
 		this.protocolTitle = protocolTitle;
-	}*/
+	}
 
 	public String getSubmissionTypeCode() {
 		return submissionTypeCode;
@@ -269,4 +285,77 @@ public class ProtocolSubmission implements Serializable {
 		this.protocolId = protocolId;
 	}
 
+	public String getPersonName() {
+		return personName;
+	}
+
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+
+	public ProtocolSubmission() {
+		setProtocolReviewType(new ProtocolReviewType());
+		setSubmissionStatus(new ProtocolSubmissionStatus());
+        setQualifierType(new ProtocolSubmissionQualifierType());
+        setProtocolSubmissionType(new ProtocolSubmissionType()); 
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public List<IRBAdminReviewerComment> getAdminComments() {
+		return adminComments;
+	}
+
+	public void setAdminComments(List<IRBAdminReviewerComment> adminComments) {
+		this.adminComments = adminComments;
+	}
+
+	public String getSubmissionTypeDescription() {
+		return submissionTypeDescription;
+	}
+
+	public void setSubmissionTypeDescription(String submissionTypeDescription) {
+		this.submissionTypeDescription = submissionTypeDescription;
+	}
+
+	public void setCommitteeSecRev(String committeeSecRev) {
+		this.committeeSecRev = committeeSecRev;
+	}
+
+	public String getCommitteePriRev() {
+		return committeePriRev;
+	}
+
+	public void setCommitteePriRev(String committeePriRev) {
+		this.committeePriRev = committeePriRev;
+	}
+
+	public String getCommitteeSecRev() {
+		return committeeSecRev;
+	}
+
+	public ProtocolSubmission(String protocolNumber, String personName, String protocolTitle, String committeePriRev,
+			String committeeSecRev, String submissionTypeDescription) {
+		super();
+		this.protocolNumber = protocolNumber;
+		this.personName = personName;
+		this.protocolTitle = protocolTitle;
+		this.committeePriRev = committeePriRev;
+		this.committeeSecRev = committeeSecRev;
+		this.submissionTypeDescription = submissionTypeDescription;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
 }

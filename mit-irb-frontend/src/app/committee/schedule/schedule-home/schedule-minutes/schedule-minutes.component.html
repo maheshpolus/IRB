@@ -1,0 +1,303 @@
+<div class="col-sm-12 p15">
+  <div class="row">
+    <div class="col-md-6">
+      <ul class="nav nav-pills" role="tablist" style="background: none;">
+        <li class="nav-item pointer">
+          <a class="nav-link active txt-small button-red-tab" (click)="tabSelected = 'meeting';getMinutes()" [ngClass]="{active:(tabSelected=='meeting')}">
+            <i class="fa fa-hourglass txt-large" aria-hidden="true"></i> Meeting Comments</a>
+        </li>
+        <li class="nav-item border-left1 pointer">
+          <a class="nav-link txt-small button-red-tab" (click)="tabSelected = 'protocol';getSubmittedProtocols(null, null)" [ngClass]="{active:(tabSelected=='protocol')}">
+            <i class="fa fa-book txt-large mr-5" aria-hidden="true"></i>Protocol Comments
+          </a>
+        </li>
+        <li class="nav-item border-left1 pointer">
+          <a class="nav-link txt-small button-red-tab" (click)="tabSelected = 'all';getMinutes()" [ngClass]="{active:(tabSelected=='all')}">
+            <i class="fa fa-sitemap txt-large mr-5" aria-hidden="true"></i>All Comments
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-6 text-right" *ngIf="tabSelected == 'meeting'" (click)="addNewMinutes = !addNewMinutes">
+      <span class="txt-medium txt-dark p-2 pointer">
+        <i class="fa fa-plus-circle text-success icon-padding"></i>
+        <u>Add Minutes</u>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-5" *ngIf="tabSelected == 'meeting' && addNewMinutes">
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <div class="col-12  search-eidted-p padding-15">
+        <div class="row bottom-margin">
+          <div class="col-5">
+            <div class="form-group ">
+              <span class="text-secondary txt-medium">Entry Type
+                <span class="mandatory">*</span>
+              </span>
+              <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect" [(ngModel)]="newCommitteeScheduleMinute.minuteEntryTypeCode">
+                <option value="" selected>Select</option>
+                <option value="{{type.minuteEntryTypecode}}" *ngFor="let type of entryType" [attr.disabled]="type.minuteEntryTypecode == '3' || type.minuteEntryTypecode == '6' ? true : null">{{type.description}}</option>
+              </select>
+            </div>
+          </div>
+          <!-- <div class="col-3" *ngIf="newCommitteeScheduleMinute.minuteEntryTypeCode == 4">
+            <div class="form-group ">
+              <span class="text-secondary txt-medium">Other Bussiness Type
+                <span class="mandatory">*</span>
+              </span>
+              <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect" [(ngModel)]="newCommitteeScheduleMinute.minuteEntryTypeCode">
+                <option value="" selected>Select</option>
+                <option value="{{type.minuteEntryTypecode}}" *ngFor="let type of entryType" [attr.disabled]="type.minuteEntryTypecode == '3' || type.minuteEntryTypecode == '6' ? true : null">{{type.description}}</option>
+              </select>
+            </div>
+          </div> -->
+          <div class="col-2  mt-25">
+            <div class="form-group ">
+              <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.privateCommentFlag" /> Include in Minutes
+            </div>
+          </div>
+          <div class="col-2  mt-25">
+            <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.finalFlag" /> Include in Letter
+          </div>
+        </div>
+        <div class="row bottom-margin">
+          <div class="col-11">
+            <div class="form-group ">
+              <span class="text-secondary txt-medium">Entry
+                <span class="mandatory">*</span>
+              </span>
+              <textarea class="form-control txt-small txt-area-fnt" [(ngModel)]="newCommitteeScheduleMinute.minuteEntry"></textarea>
+            </div>
+          </div>
+          <div class="col-1 add-btn-1">
+            <button title="Add" type="button" class="btn top-butn" (click)="saveMinutes()">
+              <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-sm-12" *ngIf="tabSelected == 'protocol'">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mt-5 card-fixed">
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">Protocols Submitted</h4>
+
+            <ul class="tablist minutes-card">
+              <li class="nav-item pointer" [ngClass]="{'selected-li':selectedProtocolIndex == j}" *ngFor="let protocol of submittedProtocols; let j=index"
+                (click)="selectProtocol(protocol,j)">
+                <a class="nav-link active ">
+                  <span>
+                    <b>#{{protocol.protocolNumber}}</b>
+                  </span>
+                  <span class="ml-10">
+                    <b>PI:</b> {{protocol.personName}}</span>
+                  <div>
+                    <b>Title:</b> {{protocol.protocolTitle}}</div>
+                </a>
+              </li>
+            </ul>
+            <div class="text-center txt-small" *ngIf="submittedProtocols.length == 0">No Protocols submitted added yet to display</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mt-5 card-fixed">
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h4 class="card-hedding dotted-bottom">Add Minutes for Protocol #{{selectedProtocol?.protocolNumber}}</h4>
+            <div class="col-12  search-eidted-p padding-15" *ngIf="selectedProtocol != null">
+              <div class="text-right">
+                <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.privateCommentFlag" /> Include in Minutes
+                <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.finalFlag" /> Include in Letter
+              </div>
+              <div class="row bottom-margin">
+                <div class="col-6">
+                  <div class="form-group ">
+                    <span class="text-secondary txt-medium">Entry Type
+                      <span class="mandatory">*</span>
+                    </span>
+                    <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect" disabled="true">
+                      <option value="3" selected>Protocol</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <span class="text-secondary txt-medium">Contingency Code </span>
+                    <div class="input-group  mb-2">
+                      <input type="text" class="form-control input-field-size" disabled="disabled" [(ngModel)]="newCommitteeScheduleMinute.protocolContingencyCode"
+                      />
+                      <div class="input-group-append input-span-1" title="Search" data-target="#contigencyModal" data-toggle="modal">
+                        <span class="input-group-text">
+                          <i class="fa fa-search"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row bottom-margin">
+                <div class="col-10">
+                  <div class="form-group ">
+                    <span class="text-secondary txt-medium">Entry
+                      <span class="mandatory">*</span>
+                    </span>
+                    <textarea class="form-control txt-small txt-area-fnt" [(ngModel)]="newCommitteeScheduleMinute.minuteEntry"></textarea>
+                  </div>
+                </div>
+                <div class="col-1 add-btn-1">
+                  <button title="Add" type="button" class="btn top-butn" (click)="saveProtocolMinutes()">
+                    <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="text-center txt-small" *ngIf="selectedProtocol == null">No Minutes added yet to display</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="col-md-12 users-list-tbl">
+  <div class="row">
+    <div class="card mt-5">
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <h4 class="card-hedding dotted-bottom" *ngIf="tabSelected == 'protocol'">Showing Minutes of Protocol #{{selectedProtocol?.protocolNumber}}</h4>
+          <div class="table-responsive">
+            <table class="table table-striped tbl-p-clr">
+              <thead class="tbl-head-clr thead-font-size p-75">
+                <tr>
+                  <th title="">Entry Type</th>
+                  <th title="">Entry</th>
+                  <th title="">Included in Minutes</th>
+                  <th title="">Included in Letter</th>
+                  <th title="" *ngIf="tabSelected != 'all'">Action</th>
+                </tr>
+              </thead>
+              <tbody class="tbody-font-size p-75">
+                <tr *ngFor="let minute of scheduleMinutes; let i=index">
+                  <td>{{ minute?.minuteEntrytype?.description }}
+                    <span *ngIf="minute.minuteEntryTypeCode == 6 || minute.minuteEntryTypeCode == 3">&nbsp;-&nbsp;{{minute?.protocolNumber}}</span>
+                  </td>
+                  <td class="form-group "> {{ minute.minuteEntry }} </td>
+                  <td>
+                    <i [ngClass]=" (minute?.privateCommentFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i>
+                  </td>
+                  <td>
+                    <i [ngClass]=" (minute?.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i>
+                  </td>
+                  <td class="action-btn-list" *ngIf="tabSelected != 'all'">
+                    <!-- <button title="Edit" type="button" class="btn btn-primary edit-btn-1" *ngIf="tabSelected == 'meeting'" (click)="editMinuteItem(minute, i)">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button title="Save" *ngIf="tabSelected == 'meeting'" (click)="updateMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    </button>
+                    <button title="Cancel" *ngIf="tabSelected == 'meeting'" (click)="cancelEditMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+                      <i class="fa fa-times"></i>
+                    </button> -->
+                    <button title="Delete" type="button" class="btn btn-primary delete-btn-1" (click)="showDeleteModal(minute)" data-toggle="modal"
+                      data-target="#deleteModal">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center txt-small" *ngIf="scheduleMinutes.length == 0">No Minutes added yet to display</div>
+</div>
+
+
+
+
+
+<!-- Modal for contigency list -->
+<div class="modal fade bd-example-modal-lg" id="contigencyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Contigency LookUp
+        </h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-popup">
+
+        <div class="table-responsive">
+          <table class="table table-striped tbl-p-clr">
+            <thead class="tbl-head-clr thead-font-size p-75">
+              <tr>
+
+                <th title="">Code</th>
+                <th title="">Description</th>
+              </tr>
+            </thead>
+            <tbody class="tbody-font-size p-75">
+              <tr *ngFor="let contigencyItem of protocolContingencies">
+                <td class="pointer" data-dismiss="modal" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.protocolContingencyCode}}</td>
+                <td class="pointer" data-dismiss="modal" (click)="selectContigencyItem($event, contigencyItem)">{{contigencyItem?.description}}</td>
+              </tr>
+
+            </tbody>
+
+
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer btn-row-med">
+        <button type="button" class="btn btn-primary tab_btn proceed-btn btn-mt-10" data-dismiss="modal">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal for contigency list Ends -->
+
+
+
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="isToDelete" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-text-color">
+      <div class="modal-header popup-header">
+        <h5 class="modal-title">Want to delete?</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="modal-footer btn-row-med">
+        <button type="button" class="btn tab_btn" data-dismiss="modal" data-toggle="modal" (click)="isToDelete = false">No</button>
+        <button type="button" class="btn btn-primary tab_btn" (click)="deleteMinuteItem($event)" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

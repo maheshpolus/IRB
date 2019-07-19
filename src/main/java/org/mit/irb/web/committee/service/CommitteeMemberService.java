@@ -1,7 +1,7 @@
 package org.mit.irb.web.committee.service;
 
 import org.springframework.stereotype.Service;
-
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.vo.CommitteeVo;
 
 @Service
@@ -64,4 +64,34 @@ public interface CommitteeMemberService {
 	 */
 	public CommitteeVo saveCommitteeMembersExpertise(CommitteeVo committeeVo);
 
+
+	/**
+	 * @param vo
+	 * @return add,update,delete committee members
+	 */
+	public CommitteeVo updateCommitteeMemberDetails(CommitteeVo vo);
+
+	/**
+	 * @param vo
+	 * @return load Committee member term history
+	 */
+	public CommitteeVo loadTerHistory(CommitteeVo vo);
+
+	/**
+	 * @param vo
+	 * @return load committee members details
+	 */
+	public CommitteeVo loadCommitteeMemberDetails(CommitteeVo vo);
+
+	/**
+	 * @param vo
+	 * @return update committee members role
+	 */
+	public CommitteeVo updateMemberRole(CommitteeVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public CommitteeVo updateMemberExpertise(CommitteeVo vo);
 }

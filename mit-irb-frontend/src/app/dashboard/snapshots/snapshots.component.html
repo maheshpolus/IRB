@@ -1,6 +1,6 @@
 <!-- Snapshot of PI -->
 <section class="row snapshot-responsive" *ngIf="roleType != 'ADMIN'">
-		<div class="col-md-6 col-sm-6 col-lg-3 col-12">
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pointer">
 			<div class="card pull-up">
 				<div class="card-content">
 					<div class="card-body" (click)="expandedView('REVISION_REQ')">
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 col-lg-3 col-12 p-0">
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 p-0 pointer">
 			<div class="card pull-up">
 				<div class="card-content">
 					<div class="card-body" (click)="expandedView('AMMEND_RENEW')">
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0">
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0 pointer">
 			<div class="card pull-up">
 				<div class="card-content">
 					<div class="card-body" (click)="expandedView('AWAITING_RESP')">
@@ -85,7 +85,7 @@
 	<!-- Snapshot of ADMIN -->
 	<section class="row snapshot-responsive" *ngIf="roleType == 'ADMIN'">
 		<div class="headerPush"></div>
-		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" (click)="openNewSubmission('NEW_SUBMISSION', false, $event)">
+		<div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0 pointer" (click)="openNewSubmission('NEW_SUBMISSION', false, $event)">
 			<div class="card pull-up">
 				<div class="card-content">
 					<div class="card-body">

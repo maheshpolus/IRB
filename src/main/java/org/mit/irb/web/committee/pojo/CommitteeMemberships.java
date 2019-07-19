@@ -2,7 +2,6 @@ package org.mit.irb.web.committee.pojo;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import org.hibernate.annotations.Parameter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.mit.irb.web.committee.schedule.DateUtils;
-import org.mit.irb.web.committee.constants.Constants;
 import org.mit.irb.web.committee.pojo.Rolodex;
 import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 import org.mit.irb.web.committee.view.PersonDetailsView;
@@ -51,13 +49,7 @@ public class CommitteeMemberships implements Serializable {
 	@ManyToOne(cascade = { CascadeType.REFRESH })
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBERSHIPS"), name = "COMMITTEE_ID", referencedColumnName = "COMMITTEE_ID")
 	private Committee committee;
-
-	@Column(name = "MEMBERSHIP_ID")
-	private String membershipId;
-
-	@Column(name = "SEQUENCE_NUMBER")
-	private Integer sequenceNumber;
-
+	
 	@Column(name = "PERSON_ID")
 	private String personId;
 
@@ -76,10 +68,10 @@ public class CommitteeMemberships implements Serializable {
 	private Boolean paidMemberFlag;
 
 	@Column(name = "TERM_START_DATE")
-	private Date termStartDate;
+	private java.util.Date termStartDate;
 
 	@Column(name = "TERM_END_DATE")
-	private Date termEndDate;
+	private java.util.Date termEndDate;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_IRB_COMM_MEMBERSHIPS_2"), name = "MEMBERSHIP_TYPE_CODE", referencedColumnName = "MEMBERSHIP_TYPE_CODE", insertable = false, updatable = false)
@@ -89,7 +81,7 @@ public class CommitteeMemberships implements Serializable {
 	private String membershipTypeCode;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private Timestamp updateTimestamp;
+	private java.util.Date updateTimestamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
@@ -107,6 +99,10 @@ public class CommitteeMemberships implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeMemberExpertise> committeeMemberExpertises;
+	
+	/*@JsonManagedReference
+	@OneToMany(mappedBy = "committeeMemberships", orphanRemoval = true, cascade = { CascadeType.ALL })
+	private List<CommitteeMemberStatusChange> committeeMemberStatusChange;*/
 
 	@ManyToOne(optional= true)
 	@JoinColumn(foreignKey=@ForeignKey(name="IRB_COMM_MEMBERSHIPS_FK3"),name="PERSON_ID",referencedColumnName="PERSON_ID", insertable = false, updatable = false)
@@ -120,6 +116,19 @@ public class CommitteeMemberships implements Serializable {
 
 	@Transient
 	private Rolodex rolodex;
+	
+	@Transient
+	private java.util.Date perviousTermStartDate;
+	
+	@Transient
+	private java.util.Date perviousTermEndDate;
+	
+	@Transient
+	private String acType;
+	
+	@Transient
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean memberPresent;
 
 	public CommitteeMemberships() {
 		setCommitteeMemberRoles(new ArrayList<CommitteeMemberRoles>());
@@ -140,22 +149,6 @@ public class CommitteeMemberships implements Serializable {
 
 	public void setCommittee(Committee committee) {
 		this.committee = committee;
-	}
-
-	public String getMembershipId() {
-		return membershipId;
-	}
-
-	public void setMembershipId(String membershipId) {
-		this.membershipId = membershipId;
-	}
-
-	public Integer getSequenceNumber() {
-		return sequenceNumber;
-	}
-
-	public void setSequenceNumber(Integer sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
 	}
 
 	public String getPersonId() {
@@ -190,14 +183,6 @@ public class CommitteeMemberships implements Serializable {
 		this.comments = comments;
 	}
 
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
 	public String getUpdateUser() {
 		return updateUser;
 	}
@@ -224,30 +209,6 @@ public class CommitteeMemberships implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public Date getTermStartDate() {
-		return termStartDate;
-	}
-
-	public void setTermStartDate(Date termStartDate) {
-		this.termStartDate = termStartDate;
-	}
-
-	public Date getTermEndDate() {
-		return termEndDate;
-	}
-
-	public void setTermEndDate(Date termEndDate) {
-		this.termEndDate = termEndDate;
-	}
-
-	public List<CommitteeMemberRoles> getCommitteeMemberRoles() {
-		return committeeMemberRoles;
-	}
-
-	public void setCommitteeMemberRoles(List<CommitteeMemberRoles> committeeMemberRoles) {
-		this.committeeMemberRoles = committeeMemberRoles;
 	}
 
 	public List<CommitteeMemberExpertise> getCommitteeMemberExpertises() {
@@ -283,16 +244,11 @@ public class CommitteeMemberships implements Serializable {
      */
     public boolean isActive(Date date) {
         boolean isActive = false;
-        for (CommitteeMemberRoles role : committeeMemberRoles) {
-            if (role.getStartDate() != null && role.getEndDate() != null && !date.before(role.getStartDate()) && !date.after(role.getEndDate())) {
-                if (role.getMembershipRoleCode().equals(Constants.INACTIVE_ROLE)) {
-                    isActive = false;
-                    break;
-                } else {
+            if (termStartDate != null && termEndDate != null && (date.before(termEndDate) || date.equals(termEndDate))) {              
                     isActive = true;
-                }
-            }
-        }
+                } else {
+                    isActive = false;
+                }                    
         this.active = isActive;
         return this.active;
     }
@@ -337,4 +293,108 @@ public class CommitteeMemberships implements Serializable {
 		this.paidMemberFlag = paidMemberFlag;
 	}
 
+	public java.util.Date getTermStartDate() {
+		return termStartDate;
+	}
+
+	public void setTermStartDate(java.util.Date termStartDate) {
+		this.termStartDate = termStartDate;
+	}
+
+	public java.util.Date getTermEndDate() {
+		return termEndDate;
+	}
+
+	public void setTermEndDate(java.util.Date termEndDate) {
+		this.termEndDate = termEndDate;
+	}
+
+	public java.util.Date getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(java.util.Date updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
+
+	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
+			String personName, Boolean nonEmployeeFlag, java.util.Date termStartDate, java.util.Date termEndDate,
+			java.util.Date updateTimestamp, String updateUser,String membershipTypeCode , CommitteeMembershipType committeeMembershipType) {
+		super();
+		this.commMembershipId = commMembershipId;
+		this.committee = committee;
+		this.personId = personId;
+		this.rolodexId = rolodexId;
+		this.personName = personName;
+		this.nonEmployeeFlag = nonEmployeeFlag;
+		this.termStartDate = termStartDate;
+		this.termEndDate = termEndDate;
+		this.updateTimestamp = updateTimestamp;
+		this.updateUser = updateUser;
+		this.membershipTypeCode = membershipTypeCode;
+		this.committeeMembershipType = committeeMembershipType;
+	}
+
+	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
+			String personName, Boolean nonEmployeeFlag) {
+		super();
+		this.commMembershipId = commMembershipId;
+		this.committee = committee;
+		this.personId = personId;
+		this.rolodexId = rolodexId;
+		this.personName = personName;
+		this.nonEmployeeFlag = nonEmployeeFlag;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public List<CommitteeMemberRoles> getCommitteeMemberRoles() {
+		return committeeMemberRoles;
+	}
+
+	public void setCommitteeMemberRoles(List<CommitteeMemberRoles> committeeMemberRoles) {
+		this.committeeMemberRoles = committeeMemberRoles;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+
+	public java.util.Date getPerviousTermStartDate() {
+		return perviousTermStartDate;
+	}
+
+	public void setPerviousTermStartDate(java.util.Date perviousTermStartDate) {
+		this.perviousTermStartDate = perviousTermStartDate;
+	}
+
+	public java.util.Date getPerviousTermEndDate() {
+		return perviousTermEndDate;
+	}
+
+	public void setPerviousTermEndDate(java.util.Date perviousTermEndDate) {
+		this.perviousTermEndDate = perviousTermEndDate;
+	}
+
+	public Boolean getMemberPresent() {
+		return memberPresent;
+	}
+
+	public void setMemberPresent(Boolean memberPresent) {
+		this.memberPresent = memberPresent;
+	}
+
+	/*public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange() {
+		return committeeMemberStatusChange;
+	}
+
+	public void setCommitteeMemberStatusChange(List<CommitteeMemberStatusChange> committeeMemberStatusChange) {
+		this.committeeMemberStatusChange = committeeMemberStatusChange;
+	}*/
 }

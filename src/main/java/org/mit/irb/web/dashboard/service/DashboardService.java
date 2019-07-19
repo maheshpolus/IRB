@@ -56,4 +56,11 @@ public interface DashboardService {
 	 * @return List of Submission status
 	 */
 	public DashboardProfile getprotocolSubmissionStatus();
+
+	/**
+	 * @param personId
+	 * @param leadUnitNumber 
+	 * @return permission of given personId
+	 */
+	public DashboardProfile getAdminDashBoardPermissions(String personId, String leadUnitNumber);
 }

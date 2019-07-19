@@ -25,10 +25,9 @@ public class CommitteeController {
 	private CommitteeService committeeService;
 
 	@RequestMapping(value = "/createCommittee", method = RequestMethod.POST)
-	public @ResponseBody CommitteeVo createCommittee(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody CommitteeVo createCommittee(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for createCommittee");
-		logger.info("Committee Type Code : " + vo.getCommitteeTypeCode());
-		CommitteeVo committeeVo = committeeService.createCommittee(vo.getCommitteeTypeCode());
+		CommitteeVo committeeVo = committeeService.createCommittee();
 		return committeeVo;
 	}
 
@@ -133,7 +132,13 @@ public class CommitteeController {
 	
 	@RequestMapping(value = "/loadScheduleDetailsById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CommitteeVo loadScheduleDetailsById(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
-		CommitteeVo committeeVo = committeeService.loadScheduleDetailsById(vo.getCommitteeId());
+		CommitteeVo committeeVo = committeeService.loadScheduleDetailsById(vo.getCommitteeId(),vo.getAcType());
+		return committeeVo;
+	}
+	
+	@RequestMapping(value = "/loadCommitteeMemberById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CommitteeVo loadCommitteeMembers(@RequestBody CommitteeVo vo, HttpServletRequest request, HttpServletResponse response)  {
+		CommitteeVo committeeVo = committeeService.loadCommitteeMembers(vo.getCommitteeId());
 		return committeeVo;
 	}
 }

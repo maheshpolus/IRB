@@ -67,7 +67,14 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
         this.id = this.route.snapshot.queryParamMap.get( 'id' );
         const test =  this.route.snapshot.firstChild.url[0].path;
-        this.currentTab = (test === 'committeeHome' ? 'committee_home' : 'committee_members');
+      //  this.currentTab = (test === 'committeeHome' ? 'committee_home' : 'committee_members');
+        if (test === 'committeeHome') {
+            this.currentTab = 'committee_home';
+        } else if (test === 'scheduleDetails') {
+            this.currentTab = 'committee_schedule';
+        } else if (test === 'committeeMembers') {
+            this.currentTab = 'committee_members';
+        }
     }
     ngOnDestroy() {
         this.onDestroy$.next();
@@ -76,8 +83,8 @@ export class CommitteeComponent implements OnInit, OnDestroy {
 
 
     ngOnInit() {
-        this.userDTO = this.route.snapshot.data['irb'];
-        localStorage.setItem('currentUser', this.userDTO.userName);
+      //  this.userDTO = this.route.snapshot.data['irb'];
+      //  localStorage.setItem('currentUser', JSON.stringify(this.userDTO));
         this.initLoadParent();
         this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;
@@ -101,7 +108,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
         this._spinner.show();
         if ( this.mode === 'create' ) {
             this.editFlag = true;
-            this.committeCreateService.getCommitteeData( '1' )
+            this.committeCreateService.getCommitteeData()
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     this._spinner.hide();
                     this.result = data || [];
@@ -126,7 +133,7 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                 .takeUntil( this.onDestroy$ ).subscribe( data => {
                     this.result = data || [];
                     this._spinner.hide();
-                    this.loadScheduleList();
+                  //  this.loadScheduleList();
                     if ( this.result != null ) {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         const ts = new Date( this.result.committee.updateTimestamp );
@@ -216,6 +223,12 @@ export class CommitteeComponent implements OnInit, OnDestroy {
                 this.router.navigate( ['irb/committee/committeeHome'],
                 { queryParams: { 'mode': this.route.snapshot.queryParamMap.get( 'mode' ), 'id': this.id } } );
             // }
+        } else if (current_tab === 'committee_schedule') {
+            this.currentTab = current_tab;
+            // this.router.navigate( ['irb/committee/committeeMembers'],
+            // { queryParams: { 'mode': this.mode, 'id': this.id } } );
+             this.router.navigate( ['irb/committee/scheduleDetails'],
+             { queryParams: { 'mode': this.route.snapshot.queryParamMap.get( 'mode' ), 'id': this.id } } )
         }
     }
 

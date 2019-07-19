@@ -48,4 +48,7 @@ export class ScheduleAttendanceService {
                 return Observable.throw( error );
             } );
     }
+    getMeetingAttendenceList(params) {
+        return this.http.post( '/mit-irb/loadMeetingAttendence', params );
+    }
 }

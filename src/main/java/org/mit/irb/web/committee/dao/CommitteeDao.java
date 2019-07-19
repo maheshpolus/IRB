@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange;
 import org.mit.irb.web.committee.pojo.CommitteeMembershipType;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
 import org.mit.irb.web.committee.pojo.MembershipRole;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.pojo.Rolodex;
@@ -31,13 +32,13 @@ public interface CommitteeDao {
 	 * @param committeeTypeCode - code of committee type.
 	 * @return committeeType.
 	 */
-	public CommitteeType fetchCommitteeType(Integer committeeTypeCode);
+	public List<CommitteeType> fetchCommitteeType();
 
 	/**
 	 * This method is used to fetch all ProtocolReviewTypes.
 	 * @return list of ProtocolReviewTypes.
 	 */
-	public List<ProtocolReviewType> fetchAllReviewType();
+	/*public List<ProtocolReviewType> fetchAllReviewType();*/
 
 	/**
 	 * This method is used to fetch list of Lead Units.
@@ -224,8 +225,8 @@ public interface CommitteeDao {
 	 * @param committeeVo
 	 * @return
 	 */
-	@Async
-	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo);
+	/*@Async
+	public Future<CommitteeVo> loadAllReviewType(CommitteeVo committeeVo);*/
 
 	/**
 	 * @param committeeVo
@@ -236,9 +237,10 @@ public interface CommitteeDao {
 
 	/**
 	 * @param committeeId
+	 * @param acType 
 	 * @return
 	 */
-	public Committee loadScheduleDetailsById(String committeeId);
+	public Committee loadScheduleDetailsById(String committeeId, String acType);
 	
 	/**
 	 * @param committeeSchedule
@@ -251,4 +253,87 @@ public interface CommitteeDao {
 	 */
 	public CommitteeSchedule updateCommitteeSchedule(CommitteeSchedule committeeSchedule);
 
+	/**
+	 * @param commResearchAreasId
+	 */
+	public void deleteCommitteeResearchArea(Integer commResearchAreasId);
+	
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	public List<CommitteeResearchAreas> getResearchAreasByCommitteeId(String committeeId);
+
+	/**
+	 * @param committeeId
+	 * @return
+	 */
+	public Committee loadCommitteeMembers(String committeeId);
+
+	public Boolean checkUniqueCommitteeId(Committee committee);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public List<CommitteeMemberRoles> getCommitteeMemberRoles(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public List<CommitteeMemberExpertise> getCommitteeMemberExpertise(Integer commMembershipId);
+
+	/**
+	 * @param committeeMember
+	 * @return 
+	 */
+	public CommitteeMemberships saveCommitteeMemberships(CommitteeMemberships committeeMember);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberRoles(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberExpertise(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberships(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange(Integer commMembershipId);
+
+	/**
+	 * @param committeeMember
+	 */
+	public void saveCommitteeMemberStatusChange(CommitteeMemberships committeeMember);
+
+	/**
+	 * @param commMemberRolesId
+	 */
+	public void deleteCommitteeMemberRole(Integer commMemberRolesId);
+
+	/**
+	 * @param commMembershipId
+	 * @return
+	 */
+	public CommitteeMemberships fetchCommitteeMemberDetail(Integer commMembershipId);
+
+	/**
+	 * @param commMembershipId
+	 */
+	public void deleteCommitteeMemberStatusChange(Integer commMembershipId);
+
+	/**
+	 * @param commMemberExpertiseId
+	 */
+	public void deleteMemberExpertise(Integer commMemberExpertiseId);
 }

@@ -14,4 +14,12 @@ export class ScheduleHomeService {
               return Observable.throw( error.message || error );
           } );
   }
+
+  loadScheduledProtocols( params ) {
+    return this.http.post( '/mit-irb/loadScheduledProtocols', params )
+    .catch( error => {
+        console.error( error.message || error );
+        return Observable.throw( error.message || error );
+    } );
+  }
 }

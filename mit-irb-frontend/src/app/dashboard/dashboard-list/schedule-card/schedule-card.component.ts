@@ -14,7 +14,7 @@ export class ScheduleCardComponent implements OnInit {
 
   ngOnInit() { }
 
-  openIrb(scheduleId) {
-        this._router.navigate(['/irb/committee/schedule'], { queryParams: { 'scheduleId': scheduleId } });
+  openIrb(scheduleId, committeeId) {
+        this._router.navigate(['/irb/committee/schedule'], { queryParams: { 'scheduleId': scheduleId, 'committeeId': committeeId} });
       }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { CommitteeSaveService } from '../committee-save.service';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
@@ -45,6 +46,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     slNo = 0;
     public researchArea: any = {};
     public dataServiceArea: any = [];
+    userDTO: any;
 
 
     Id: string;
@@ -54,7 +56,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
     unitName: string;
     editFlag: boolean;
     modeFlag: string;
-    reviewTypes: any[];
+    committeeTypeList: any[];
     areaList: any = [];
     scheduleStatus: any[];
     committeeData: any = {};
@@ -162,7 +164,8 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         private completerService: CompleterService,
         public keyPressEvent: KeyPressEvent,
         public committeeSaveService: CommitteeSaveService,
-        private committeeConfigurationService: CommitteeConfigurationService) {
+        private committeeConfigurationService: CommitteeConfigurationService,
+        public toastr: ToastsManager) {
         this.committeeConfigurationService.currentMode.takeUntil(this.onDestroy$).subscribe(data => {
             this.mode = data;
         }, error => { }, () => {
@@ -182,10 +185,10 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                 this.unitname = this.resultTemp.committee.homeUnitName;
                 this.Id = this.resultTemp.committee.committeeId;
                 this.Name = this.resultTemp.committee.committeeName;
-                this.Type = this.resultTemp.committee.committeeType.description;
+                this.Type = this.resultTemp.committee.committeeType != null ? this.resultTemp.committee.committeeType.description : null;
                 this.Unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitName = this.resultTemp.committee.homeUnitName;
-                this.reviewTypes = this.resultTemp.reviewTypes;
+                this.committeeTypeList = this.resultTemp.committeeTypeList;
                 if (this.resultTemp.homeUnits != null || this.resultTemp.homeUnits !== undefined) {
                     this.homeUnitList = this.resultTemp.homeUnits;
                     this.dataServiceHomeUnit = this.completerService.local(this.homeUnitList, 'unitName', 'unitName');
@@ -203,6 +206,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.committeeConfigurationService.changeActivatedtab('committee_home');
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
 
     }
 
@@ -266,6 +270,18 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         });
     }
 
+    changeCommitteeType(committeeTypeCode) {
+        const selectedType = this.committeeTypeList.filter(x => x.committeeTypeCode.toString() === committeeTypeCode);
+        if (selectedType.length > 0) {
+            this.result.committee.committeeType = this.result.committee.committeeType != null ? this.result.committee.committeeType : {};
+            this.result.committee.committeeType.description = selectedType[0].description;
+            this.result.committee.committeeType.committeeTypeCode = selectedType[0].committeeTypeCode;
+        } else {
+            this.result.committee.committeeType.description = null;
+            this.result.committee.committeeType.committeeTypeCode = null;
+        }
+    }
+
     showaddAreaOfResearch() {
         if (this.editDetails === true) {
             this.isEditDetailsModalOpen = true;
@@ -308,14 +324,10 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.result = dataObject.result;
             this.committeeConfigurationService.changeCommmitteeData(this.result);
         }
-        if ((this.result.committee.minimumMembersRequired == null ||
-            this.result.committee.advSubmissionDaysReq === null ||
-            this.result.committee.maxProtocols === null || this.Type === null ||
+        if ((this.result.committee.committeeId == null ||
             this.result.committee.committeeName === null || this.result.committee.committeeName === '' ||
             this.result.committee.committeeName === undefined ||
-            this.result.committee.homeUnitName === null || this.result.committee.homeUnitName === '' ||
-            this.result.committee.homeUnitNumber == null || this.result.committee.homeUnitNumber === '')
-            || (this.result.committee.reviewTypeDescription === 'Select' || this.result.committee.reviewTypeDescription === '')) {
+            this.result.committee.committeeTypeCode === null || this.result.committee.committeeTypeCode === '')) {
             this.errorFlag = true;
             this.error = '*Please fill all the mandatory fields marked';
         } else {
@@ -331,29 +343,27 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             });
             if (this.mode === 'create') {
                 this.result.updateType = 'SAVE';
+                this.result.committee.committeeType = {};
                 this.result.committee.committeeType.committeeTypeCode = '1';
-                this.result.committee.createUser = localStorage.getItem('currentUser');
+                this.result.committee.committeeType.description = 'IRB';
+                this.result.committee.createUser = this.userDTO.userName;
                 this.result.committee.createTimestamp = new Date().getTime();
-                this.result.committee.updateUser = localStorage.getItem('currentUser');
+                this.result.committee.updateUser = this.userDTO.userName;
                 this.result.committee.updateTimestamp = new Date().getTime();
             } else if (this.mode === 'view') {
                 this.result.updateType = 'UPDATE';
-                this.result.committee.updateUser = localStorage.getItem('currentUser');
+                this.result.committee.updateUser = this.userDTO.userName;
                 this.result.committee.updateTimestamp = new Date().getTime();
             }
-            this.result.currentUser = localStorage.getItem('currentUser');
+            this.result.currentUser = this.userDTO.userName;
             if (this.editDetails === false) {
                 this.editClass = 'committeeBoxNotEditable';
             }
-            this.reviewTypes.forEach((value, index) => {
-                if (value.description === this.result.committee.reviewTypeDescription) {
-                    this.result.committee.applicableReviewTypecode = value.reviewTypeCode;
-                    this.result.committee.reviewTypeDescription = value.description;
-                }
-            });
             this.committeeSaveService.saveCommitteeData(this.result).takeUntil(this.onDestroy$).subscribe(data => {
                 this.result = data || [];
+                if (this.result.status === true) {
                 if (this.result != null) {
+                    this.toastr.success('Committee saved successfully', null, { toastLife: 2000 });
                     this.committeeConfigurationService.changeCommmitteeData(this.result);
                     this.saveCommitteeFlag = true;
                     if (this.mode === 'view') {
@@ -373,6 +383,9 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
                         this.router.navigate(['irb/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } });
                     }
                 });
+            } else {
+                this.toastr.error(this.result.message, null, { toastLife: 2000 });
+            }
             });
         }
     }
@@ -419,11 +432,13 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         this.showSaveAreaOfResearch = true;
         this.addResearchArea = '0';
         this.editAreaClass = 'committeeBoxNotEditable';
+        if ( this.result.committee.researchAreas != null ) {
         for (let i = 0; i < this.result.committee.researchAreas.length; i++) {
             if (Object.researchAreaCode === this.result.committee.researchAreas[i].researchAreaCode) {
                 this.addResearchArea = '1';
             }
         }
+    }
         if (this.addResearchArea === '1') {
             // this.showPopup = true;
             this.duplicateAreaOfResearch = true;
@@ -467,7 +482,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             if (value.description === this.areaInput.researchAreaDescription) {
                 this.areaInput.researchAreaCode = value.researchAreaCode;
                 this.areaInput.researchAreaDescription = value.description;
-                this.areaInput.updateUser = localStorage.getItem('currentUser');
+                this.areaInput.updateUser = this.userDTO.userName;
                 this.areaInput.updateTimestamp = new Date().getTime();
             }
         });
@@ -540,17 +555,22 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
             this.result.scheduleData.monthlySchedule = {};
             this.result.scheduleData.yearlySchedule = {};
             this.result.scheduleData.scheduleStartDate = this.today;
-            this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
-            this.result.scheduleData.recurrenceType = 'DAILY';
+            // this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
+            // this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
+            // this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
+            // this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
+            this.result.scheduleData.recurrenceType = 'MONTHLY';
             this.result.scheduleData.dailySchedule.day = 1;
             this.displayTime = null;
             this.isDatePrevious = false;
             this.isMandatoryFilled = true;
             this.isStartDateBeforeToday = false;
-            this.optionDay = 'XDAY';
+            this.monthOptionDay = 'XDAYANDXMONTH';
+                this.result.scheduleData.monthlySchedule.day = 1;
+                this.result.scheduleData.monthlySchedule.option1Month = 1;
+                this.result.scheduleData.monthlySchedule.selectedMonthsWeek = '';
+                this.result.scheduleData.monthlySchedule.selectedDayOfWeek = '';
+                this.result.scheduleData.monthlySchedule.option2Month = null;
         }
     }
 
@@ -622,7 +642,7 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         this.sendScheduleRequestData.scheduleData.weeklySchedule = {};
         this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
         this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
-        this.sendScheduleRequestData.currentUser = localStorage.getItem('currentUser');
+        this.sendScheduleRequestData.currentUser = this.userDTO.userName;
         this.sendScheduleRequestData.committee = this.result.committee;
         if (this.result.scheduleData.scheduleStartDate < this.today) {
             this.isStartDateBeforeToday = true;
@@ -772,11 +792,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
         scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
         scheduleObject.scheduleStatus.updateTimestamp = new Date();
-        scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+        scheduleObject.scheduleStatus.updateUser = this.userDTO.userName;
         this.scheduleStatus.forEach((value, index) => {
             if (value.description === scheduleObject.scheduleStatus.description) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem('currentUser');
+                value.updateUser = this.userDTO.userName;
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
                 scheduleObject.scheduleStatus = value;
                 // this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;
@@ -830,11 +850,11 @@ export class CommitteeHomeComponent implements OnInit, OnDestroy {
         scheduleObject.viewTime.time = this.datePipe.transform(this.scheduleTime, 'hh:mm');
         scheduleObject.viewTime.meridiem = this.datePipe.transform(this.scheduleTime, 'aa');
         scheduleObject.scheduleStatus.updateTimestamp = new Date();
-        scheduleObject.scheduleStatus.updateUser = localStorage.getItem('currentUser');
+        scheduleObject.scheduleStatus.updateUser = this.userDTO.userName;
         this.scheduleStatus.forEach((value, index) => {
             if (value.description === scheduleObject.scheduleStatus.description) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem('currentUser');
+                value.updateUser = this.userDTO.userName;
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
                 scheduleObject.scheduleStatus = value;
                 this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;

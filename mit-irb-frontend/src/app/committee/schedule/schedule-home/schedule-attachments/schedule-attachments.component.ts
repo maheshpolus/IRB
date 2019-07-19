@@ -27,7 +27,7 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
     uploadedFile: any[] = [];
     attachmentList: any[] = [];
     tempSaveAttachment: any = {};
-    currentUser: string;
+    userDTO: any;
     fileName: string;
     nullAttachmentData = false;
     attachmentEditIndex: number;
@@ -41,17 +41,17 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
         public scheduleConfigurationService: ScheduleConfigurationService,
         public scheduleService: ScheduleService,
         public activatedRoute: ActivatedRoute ) {
-        this.currentUser = localStorage.getItem( 'currentUser');
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     }
 
     ngOnInit() {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this.scheduleConfigurationService.currentScheduleData.takeUntil(this.onDestroy$).subscribe( data => {
-            this.result = data;
-            if ( this.result !== null ) {
-                this.nullAttachmentData = true;
-            }
-        } );
+
+        this.scheduleService
+      .loadAttachmentTypeData(this.scheduleId)
+      .subscribe(data => {
+        this.result = data;
+      });
     }
 
     ngOnDestroy() {
@@ -78,7 +78,7 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
                 this.attachmentObject.description = attachmentType.description;
                 this.attachment.description = attachmentType.description;
                 this.attachmentObject.updateTimestamp = timestamp;
-                this.attachmentObject.updateUser = this.currentUser;
+                this.attachmentObject.updateUser = this.userDTO.userName;
             }
         }
     }
@@ -130,26 +130,36 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
             this.showAddAttachment = false;
             const d = new Date();
             const timestamp = d.getTime();
-            this.newCommitteeScheduleAttachment.attachmentType = this.attachmentObject;
+            this.newCommitteeScheduleAttachment.acType = 'I';
             this.newCommitteeScheduleAttachment.attachmentTypeCode = this.attachmentObject.attachmentTypecode;
             this.newCommitteeScheduleAttachment.description = this.attachmentTypeDescription;
-            this.newCommitteeScheduleAttachment.updateTimestamp = timestamp;
-            this.newCommitteeScheduleAttachment.updateUser = this.currentUser;
+            // this.newCommitteeScheduleAttachment.updateTimestamp = timestamp;
+            this.newCommitteeScheduleAttachment.updateUser = this.userDTO.userName;
             this.result.newCommitteeScheduleAttachment = this.newCommitteeScheduleAttachment;
             $('#addAttachment').modal('toggle');
-            this.scheduleAttachmentsService.addAttachments(
-                this.result.committeeSchedule.scheduleId,
-                this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode,
-                 this.uploadedFile, this.attachmentTypeDescription, this.currentUser )
-                 .takeUntil(this.onDestroy$).subscribe( data => {
-                this.uploadedFile = [];
-                let temp: any = {};
-                temp = data;
-                this.result.committeeSchedule = temp.committeeSchedule;
+            this.scheduleAttachmentsService
+          .addAttachments(
+            this.scheduleId,
+            this.result.newCommitteeScheduleAttachment,
+            this.result.newCommitteeScheduleAttachment.attachmentTypeCode,
+            this.uploadedFile,
+            this.attachmentTypeDescription,
+            this.userDTO.userName
+          )
+          .takeUntil(this.onDestroy$)
+          .subscribe(
+            ( data: any) => {
+              this.result.committeeScheduleAttachmentList = data.committeeScheduleAttachmentList;
+              // console.log("list is this" + JSON.stringify(data.committeeScheduleAttachmentList));
+              this.uploadedFile = [];
+              let temp: any = {};
+              temp = data;
+              this.result.committeeSchedule = temp.committeeSchedule;
             },
-                error => {
-                    console.log( 'error', error );
-                } );
+            error => {
+              console.log("error", error);
+            }
+          );
         }
     }
 
@@ -163,8 +173,10 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
         event.preventDefault();
         this.showPopup = false;
         this.scheduleAttachmentsService.deleteAttachments(
-            this.result.committeeSchedule.scheduleId, this.result.committee.committeeId, this.tempSaveAttachment.commScheduleAttachId )
-        .takeUntil(this.onDestroy$).subscribe( data => {
+          this.scheduleId,
+          this.tempSaveAttachment.commScheduleAttachId )
+        .takeUntil(this.onDestroy$).subscribe(( data: any) => {
+          this.result.committeeScheduleAttachmentList = data.committeeScheduleAttachmentList;
         let temp: any = {};
         temp = data;
         this.result.committeeSchedule = temp.committeeSchedule;
@@ -197,7 +209,7 @@ export class ScheduleAttachmentsComponent implements OnInit, OnDestroy {
         this.attachmentObject = {};
         this.attachmentObject.description = attachments.description;
         this.attachmentObject.updateTimestamp = new Date().getTime();
-        this.attachmentObject.updateUser = this.currentUser;
+        this.attachmentObject.updateUser = this.userDTO.userName;
         this.attachmentObject.commScheduleAttachId = attachments.commScheduleAttachId;
         this.scheduleAttachmentsService.updateScheduleAttachments(
             this.result.committee.committeeId, this.result.committeeSchedule.scheduleId, this.attachmentObject)

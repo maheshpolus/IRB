@@ -82,32 +82,33 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	private ArrayList<HashMap<String, Object>> actionsAvaliableForUser(IRBActionsVO vo,ArrayList<HashMap<String, Object>> intialResult) {
 		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
-		if(intialResult !=null && !intialResult.isEmpty()){			
-            for(HashMap<String, Object> action : intialResult){	           	
-            	Object temp = action.get("ACTION_CODE"); 
+		if(intialResult !=null && !intialResult.isEmpty()){		
+			for(int i = 0; i< intialResult.size(); i++)
+             {	           	
+            	Object temp = intialResult.get(i).get("ACTION_CODE"); 
             	switch (temp.toString()) {
             		case "205":
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}					 
             			else if(!reviewTypeCode.equals("2")){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;
             		case "208":
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}					 
             			else if(!reviewTypeCode.equals("6")){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;
             		case "210":
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}					 
             			else if(!reviewTypeCode.equals("5")){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;
             		case "204":
@@ -115,7 +116,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
             		case "203":	
             		case "202":	
             			if(reviewTypeCode == null){
-            				intialResult.remove(action);
+            				intialResult.remove(i);
             			}
             			break;			
             	}	          
@@ -606,8 +607,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() > 10)
+			if(vo.getProtocolNumber().length() > 10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}				
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
@@ -876,8 +880,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() >10)
+			if(vo.getProtocolNumber().length() >10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}				
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);
@@ -927,7 +934,13 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				   vo.setTemplateTypeCode("11");				   
 			}
 			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
-			generateProtocolCorrespondence(vo);			
+			generateProtocolCorrespondence(vo);	
+			if(!result.isEmpty()){
+			    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			    vo.setSubmissionId(result.get(0).get("SUBMISSION_ID").toString());
+			    vo.setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
+			    vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Specific Minor Revisions Required successful");	
 		} catch (Exception e) {
@@ -955,6 +968,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			updateReviewComments(vo);
 			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
+			if(!result.isEmpty()){
+			    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			    vo.setSubmissionId(result.get(0).get("SUBMISSION_ID").toString());
+			    vo.setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
+			    vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Substantive Revisions Required successful");	
 		} catch (Exception e) {
@@ -969,8 +988,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() > 10)
+			if(vo.getProtocolNumber().length() > 10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}
 			updateSubmissionDetail(vo);										
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
@@ -1012,8 +1034,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO responseApprovalAdminActions(IRBActionsVO vo) {
 		try {
-			if(vo.getProtocolNumber().length() > 10)
+			if(vo.getProtocolNumber().length() > 10){
 				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
 			if(result != null && !result.isEmpty()){

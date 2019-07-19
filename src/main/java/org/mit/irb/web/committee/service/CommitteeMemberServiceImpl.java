@@ -13,6 +13,7 @@ import org.mit.irb.web.committee.dao.CommitteeDao;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.vo.CommitteeVo;
 import org.mit.irb.web.committee.pojo.Rolodex;
@@ -24,8 +25,12 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 
 	protected static Logger logger = Logger.getLogger(CommitteeMemberServiceImpl.class.getName());
 
-	@Autowired
+	@Autowired 
 	private CommitteeDao committeeDao;
+
+	
+	@Autowired 
+	private CommitteeService committeeService;
 
 	@Override
 	public CommitteeVo addCommitteeMembership(CommitteeVo committeeVo) {
@@ -43,7 +48,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			membership.setPersonId(personDetails.getPersonId());
 			membership.setPersonName(personDetails.getFullName());
 		}
-		membership.setMembershipId("0");
+		/*membership.setMembershipId("0");*/
 
 		committee.getCommitteeMemberships().add(membership);
 		committeeVo.setCommittee(committee);
@@ -61,7 +66,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 				if (committeeMember.getCommMembershipId() == null) {
 					committeeMember.setCommittee(committee);
 					committeeMember.setCommitteeMembershipType(committeeDao.getCommitteeMembershipTypeById(committeeMember.getMembershipTypeCode()));
-					List<CommitteeMemberRoles> committeeMemberRoles = committeeMember.getCommitteeMemberRoles();
+					List<CommitteeMemberRoles> committeeMemberRoles = (List<CommitteeMemberRoles>) committeeMember.getCommitteeMemberRoles();
 					if (committeeMemberRoles != null && !committeeMemberRoles.isEmpty()) {
 						for (CommitteeMemberRoles memberRole : committeeMemberRoles) {
 							if (memberRole.getCommMemberRolesId() == null) {
@@ -126,7 +131,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					CommitteeMemberRoles memberRole = new CommitteeMemberRoles();
+					CommitteeMemberRoles memberRole = new CommitteeMemberRoles(null, null, null);
 					memberRole.setCommitteeMemberships(committeeMembership);
 					memberRole.setEndDate(role.getEndDate());
 					memberRole.setMembershipRoleCode(role.getMembershipRoleCode());
@@ -164,7 +169,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					List<CommitteeMemberRoles> list = committeeMembership.getCommitteeMemberRoles();
+					List<CommitteeMemberRoles> list = (List<CommitteeMemberRoles>) committeeMembership.getCommitteeMemberRoles();
 					List<CommitteeMemberRoles> updatedlist = new ArrayList<CommitteeMemberRoles>(list);
 					Collections.copy(updatedlist, list);
 					for (CommitteeMemberRoles role : list) {
@@ -202,7 +207,7 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 			List<CommitteeMemberships> memberships = committee.getCommitteeMemberships();
 			for (CommitteeMemberships committeeMembership : memberships) {
 				if (committeeMembership.getCommMembershipId().equals(committeeVo.getCommMembershipId())) {
-					List<CommitteeMemberRoles> memberRoles = committeeMembership.getCommitteeMemberRoles();
+					List<CommitteeMemberRoles> memberRoles = (List<CommitteeMemberRoles>) committeeMembership.getCommitteeMemberRoles();
 					for (CommitteeMemberRoles role : memberRoles) {
 						if (role.getCommMemberRolesId().equals(committeeVo.getCommMemberRolesId())) {
 							role.setStartDate(committeeVo.getCommitteeMemberRole().getStartDate());
@@ -306,4 +311,133 @@ public class CommitteeMemberServiceImpl implements CommitteeMemberService {
 		return committeeVo;
 	}
 
+	@Override
+	public CommitteeVo updateCommitteeMemberDetails(CommitteeVo committeeVo) {
+		try{			
+			if(committeeVo.getAcType().equalsIgnoreCase("D")){
+				List<CommitteeMemberRoles> committeeMemberRoles= committeeDao.getCommitteeMemberRoles(committeeVo.getCommMembershipId());
+				List<CommitteeMemberStatusChange> committeeMemberStatusChange = committeeDao.getCommitteeMemberStatusChange(committeeVo.getCommMembershipId());
+				List<CommitteeMemberExpertise> committeeMemberExpertise= committeeDao.getCommitteeMemberExpertise(committeeVo.getCommMembershipId());
+				if(committeeMemberStatusChange != null){
+					committeeDao.deleteCommitteeMemberStatusChange(committeeVo.getCommMembershipId());
+				}
+				if(committeeMemberRoles != null){
+					committeeDao.deleteCommitteeMemberRoles(committeeVo.getCommMembershipId());
+				}
+				if(committeeMemberExpertise != null){
+					committeeDao.deleteCommitteeMemberExpertise(committeeVo.getCommMembershipId());
+				}
+				committeeDao.deleteCommitteeMemberships(committeeVo.getCommMembershipId());
+				committeeVo = committeeService.loadCommitteeMembers(committeeVo.getCommitteeId());
+			}else{
+				CommitteeMemberships committeeMember = committeeVo.getCommitteeMemberships();
+				if(committeeMember.getCommMembershipId() != null){
+					if(committeeMember.getTermStartDate().compareTo(committeeMember.getPerviousTermStartDate()) != 0 ||
+							committeeMember.getTermEndDate().compareTo(committeeMember.getPerviousTermEndDate()) != 0){
+							committeeDao.saveCommitteeMemberStatusChange(committeeMember);
+					}
+				}	
+				committeeMember.setCommittee(committeeVo.getCommittee());
+				committeeMember.setCommitteeMembershipType(committeeDao.getCommitteeMembershipTypeById(committeeMember.getMembershipTypeCode()));
+				committeeMember = committeeDao.saveCommitteeMemberships(committeeMember); 
+				committeeVo.setCommMembershipId(committeeMember.getCommMembershipId());
+				committeeVo = loadCommitteeMemberDetails(committeeVo); 
+			}	
+		} catch (Exception e) {
+			committeeVo.setStatus(false);
+			committeeVo.setMessage("Problem occurred in updateCommitteeMemberDetails");
+		}
+		return committeeVo;
+	}
+
+	@Override
+	public CommitteeVo loadCommitteeMemberDetails(CommitteeVo committeeVo) {
+		try{
+			committeeVo.setCommittee(committeeDao.fetchCommitteeById(committeeVo.getCommitteeId()));
+			CommitteeMemberships committeeMemberships = new CommitteeMemberships();
+			if(committeeVo.getCommMembershipId() != null){
+				committeeMemberships = committeeDao.fetchCommitteeMemberDetail(committeeVo.getCommMembershipId());
+				committeeMemberships.setCommitteeMemberRoles(committeeMemberships.getCommitteeMemberRoles());
+				committeeMemberships.setCommitteeMemberExpertises(committeeMemberships.getCommitteeMemberExpertises());
+				committeeMemberships.setPerviousTermEndDate(committeeMemberships.getTermEndDate());
+				committeeMemberships.setPerviousTermStartDate(committeeMemberships.getTermStartDate());
+				if (committeeMemberships.getNonEmployeeFlag()) {
+					Rolodex rolodex = committeeDao.getRolodexById(committeeVo.getRolodexId());
+					committeeMemberships.setRolodex(rolodex);
+				} else {
+					PersonDetailsView personDetails = committeeDao.getPersonDetailsById(committeeVo.getPersonId());
+					committeeMemberships.setPersonDetails(personDetails);
+				}
+			}
+			/*List<CommitteeMemberRoles> committeeMemberRoles= committeeDao.getCommitteeMemberRoles(committeeVo.getCommMembershipId());
+			committeeMemberships.setCommitteeMemberRoles(committeeMemberRoles);
+			List<CommitteeMemberExpertise> committeeMemberExpertise= committeeDao.getCommitteeMemberExpertise(committeeVo.getCommMembershipId());
+			committeeMemberships.setCommitteeMemberExpertises(committeeMemberExpertise);*/
+			committeeVo.setCommitteeMembershipTypes(committeeDao.getMembershipTypes());
+			committeeVo.setMembershipRoles(committeeDao.getMembershipRoles());
+			committeeVo.setCommitteeMemberships(committeeMemberships);
+		}catch (Exception e) {
+			logger.error("Error in loadCommitteeMemberDetails method : "+e.getMessage());	
+		}
+		return committeeVo;
+	}
+
+	@Override
+	public CommitteeVo loadTerHistory(CommitteeVo committeeVo) {
+		try{
+			if (committeeVo.getRolodexId() != null) {
+				Rolodex rolodex = committeeDao.getRolodexById(committeeVo.getRolodexId());
+				committeeVo.setNonEmployee(rolodex);
+			} else {
+				PersonDetailsView personDetails = committeeDao.getPersonDetailsById(committeeVo.getPersonId());
+				committeeVo.setEmployee(personDetails);
+			}
+			List<CommitteeMemberStatusChange> committeeMemberStatusChange = committeeDao.getCommitteeMemberStatusChange(committeeVo.getCommMembershipId());
+			
+			committeeVo.setCommitteeMemberStatusChange(committeeMemberStatusChange);
+		} catch (Exception e) {
+			committeeVo.setStatus(false);
+			committeeVo.setMessage("Problem occurred in loadTerHistory");
+			logger.error("Error in loadTerHistory method : "+e.getMessage());	
+		}
+		return committeeVo;
+	}
+
+	@Override
+	public CommitteeVo updateMemberRole(CommitteeVo committeeVo) {
+		try{
+			CommitteeMemberships committeeMember = committeeVo.getCommitteeMemberships();
+			CommitteeMemberRoles committeeMemberRole = committeeVo.getCommitteeMemberRole();
+			if(committeeMemberRole.getAcType().equalsIgnoreCase("D")){
+				committeeDao.deleteCommitteeMemberRole(committeeMemberRole.getCommMemberRolesId()); 
+			}else{
+				committeeMemberRole.setCommitteeMemberships(committeeMember);
+				committeeMemberRole = committeeDao.saveCommitteeMemberRole(committeeMemberRole); 
+			}
+			List<CommitteeMemberRoles> committeeMemberRoles= committeeDao.getCommitteeMemberRoles(committeeVo.getCommMembershipId());
+			committeeMember.setCommitteeMemberRoles(committeeMemberRoles);
+		}catch (Exception e) {
+			logger.error("Error in updateMemberRole method : "+e.getMessage());	
+		}
+		return committeeVo;
+	}
+
+	@Override
+	public CommitteeVo updateMemberExpertise(CommitteeVo committeeVo) {
+		try{
+			CommitteeMemberships committeeMember = committeeVo.getCommitteeMemberships();
+			CommitteeMemberExpertise committeeMemberExpertise = committeeVo.getCommitteeMemberExpertise();
+			if(committeeMemberExpertise.getAcType().equalsIgnoreCase("D")){
+				committeeDao.deleteMemberExpertise(committeeMemberExpertise.getCommMemberExpertiseId()); 
+			}else{
+				committeeMemberExpertise.setCommitteeMemberships(committeeMember);
+				committeeMemberExpertise = committeeDao.saveCommitteeMemberExpertise(committeeMemberExpertise);	
+			}
+			List<CommitteeMemberExpertise> committeeMemberExpertiseList= committeeDao.getCommitteeMemberExpertise(committeeVo.getCommMembershipId());
+			committeeMember.setCommitteeMemberExpertises(committeeMemberExpertiseList);
+		}catch (Exception e) {
+			logger.error("Error in updateMemberExpertise method : "+e.getMessage());	
+		}
+		return committeeVo;
+	}
 }

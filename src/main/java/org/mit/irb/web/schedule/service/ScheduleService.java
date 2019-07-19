@@ -11,10 +11,10 @@ public interface ScheduleService {
 
 	/**
 	 * This method is used to load schedule by Id.
-	 * @param scheduleId - Id of a schedule.
+	 * @param vo - Id of a schedule.
 	 * @return a ScheduleVo of details of schedule.
 	 */
-	public ScheduleVo loadScheduleById(Integer scheduleId);
+	public ScheduleVo loadScheduleById(ScheduleVo vo);
 
 	/**
 	 * This method is used to update schedule.
@@ -108,4 +108,97 @@ public interface ScheduleService {
 	 */
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo);
 
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduledProtocols(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduleMeetingComments(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduleProtocolComments(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo createAgendaForSchedule(ScheduleVo vo);
+	
+	/**
+	 * @param vo
+	 * @return load attendance detail of meeting
+	 */
+	public ScheduleVo loadMeetingAttendence(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo updateMeetingAttendence(ScheduleVo vo);
+	/**
+	 * This method is used to load meeting attachment by Id.
+	 * @param scheduleId - Id of a schedule.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo loadMeetingAttachmentById(Integer scheduleId);
+	
+	/**
+	 * This method is used to saveOrUpdateMeetingAttachment.
+	 * @param files.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files, String formDataJson);
+	
+	
+	/**
+	 * @param attachmentId
+	 * Service to download the attachments
+	 */
+	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
+	
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo loadScheduleIdsForAgenda(ScheduleVo vo);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleAgenda(String scheduleId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ScheduleVo loadAllScheduleAgenda(Integer scheduleId);
+	
+	/**
+	 * This method is used to loadMeetingOtherActions.
+	 * @param scheduleId - Id of a schedule.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo loadMeetingOtherActions(Integer scheduleId);
+	
+	/**
+	 * This method is used to addMeetingOtherActions.
+	 * @param scheduleId - Id of a schedule.
+	 * @return a ScheduleVo of details of schedule.
+	 */
+	public ScheduleVo updateMeetingOtherActions(ScheduleVo scheduleVo);
 }

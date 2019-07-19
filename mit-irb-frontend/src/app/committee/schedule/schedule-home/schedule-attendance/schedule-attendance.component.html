@@ -1,362 +1,312 @@
-<div class="col-12 border-box schedule-box mt15">
-		<h4 class="borderBoxHeading pointer text-color"  (click)="isAddClicked = !isAddClicked">
-				<i class="fa fa-plus"></i> Add Guest
-		</h4>
-	<div class="row">
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode">
-			<div class="row">
-				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-left">
-						<!-- <div class="col-md-4">
-								<a class="pdf generate-schedule"  (click)="isAddClicked = !isAddClicked">
-									<i class="fa fa-plus icon-padding"></i>Add Guest
-								</a>
-							</div> -->
-				</div>
-				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-right">
-					<i class="fa fa-user-o" aria-hidden="true"> &nbsp;Guest</i> &nbsp;
-					<i class="fa fa-user-circle" aria-hidden="true">&nbsp;
-						Alternate</i>
-				</div>
-			</div>
-
-			
-
-			<div class="row form-group padding-15" *ngIf="isAddClicked">
-					<div class="col-12">
-						<div class="form-check-inline">
-							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="member" id="employeeRadio" (change)="employeeRadioChecked()" checked>Employee
-							</label>
-						</div>
-						<div class="form-check-inline">
-							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="member" id="nonEmployeeRadio" (change)="nonEmployeeRadioChecked()">Non-Employee
-							</label>
-						</div>
-						<!-- <label class="containerCheckBox">Employee <input
-									type="radio" name="member" id="employeeRadio"
-									(change)="employeeRadioChecked()" checked> <span
-									class="checkmark"></span>
-								</label> 
-								<label class="containerCheckBox">Non Employee <input 
-									(change)="nonEmployeeRadioChecked()"
-									type="radio" name="member" id="nonEmployeeRadio"> <span
-									class="checkmark"></span>
-								</label> -->
-					</div>
-
-					<div class="col-12">
-						<div class="row">
-							<div class="col-11">
-								<input type="text" class="form-control input-field-size" placeholder="{{placeHolderText}}" [(ngModel)]="searchTextModel"
-								 (blur)="searchActive = false" (focus)="searchActive = true" id="member_search" [formControl]="searchText" (ngModelChange)="onSearchValueChange()"
-								/>
-								<!-- <a href="#" class="searchButton" (click)="clearsearchBox($event)"> 
-								<i [ngClass]="iconClass"></i></a>-->
-								<div class="sb-seachresults" *ngIf="searchActive">
-									<ul class="sb-results-dropdown-menu text-left">
-										<li *ngFor="let result of this.elasticSearchresults " (mousedown)="selected(result)">
-											<span [innerHTML]="result.label"></span>
-										</li>
-									</ul>
-								</div>
-								<div>
-									<p class="searchMessage text-left">{{message}}</p>
-								</div>
-							</div>
-
-							<div class="col-1 add-btn-1">
-								<button title="Add" type="button" class="btn btn-success"  (click)="addMember()">
-									<i class="fa fa-plus" aria-hidden="true"></i>
-								</button>
-							</div>
-
-						</div>
-					</div>
-					<!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-						<button class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#modalWarning"
-							(click)="addMember()">Add</button>
-					</div> -->
-
-				</div>
-
-
-
-
-
-
-
-			
-			
-			
-			<!-- <div class="row">
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
-					<label class="containerCheckBox">Employee <input
-						type="radio" name="member" id="employeeRadio"
-						(change)="employeeRadioChecked()" checked> <span
-						class="checkmark"></span>
-					</label> <label class="containerCheckBox"
-						(change)="nonEmployeeRadioChecked()">Non Employee <input
-						type="radio" name="member" id="nonEmployeeRadio"> <span
-						class="checkmark"></span>
-					</label>
-				</div>
-			</div>
-			<div class="row text-center">
-				<div class="col-xl-3 col-lg-3 col-md-3 hidden-sm"></div>
-				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-					<div class="searchBox">
-						<input type="text" placeholder="{{placeHolderText}}"
-							[(ngModel)]="searchTextModel"
-							(blur)="this.searchActive = false" (ngModelChange)="onSearchValueChange()"
-							(focus)="this.searchActive = true" id="member_search"
-							[formControl]="searchText" />
-							<a href="#" class="searchButton" (click)="clearsearchBox($event)"><i [ngClass]="iconClass"></i></a>
-						<div class="sb-seachresults">
-							<ul class="sb-results-dropdown-menu text-left" *ngIf="searchActive">
-								<li *ngFor="let result of this.elasticSearchresults "
-									(mousedown)="selected(result)"><span [innerHTML]="result.label"></span></li>
-							</ul>
-						</div>
-						<div><p class="searchMessage text-left">{{message}}</p></div>
-					</div>
-				</div>
-				<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-					<button class="btnSkin btnSkinPrimary" (click)="addMember()">Add</button>
-				</div>
-			</div> -->
+<div class="card mt-5">
+		<div class="col-md-12 col-sm-12 col-12 list-des button-responsive">
+				<div class="text-right ">
+				<a
+				class="btn btn-blue btn-sm text-right txt-medium" (click)="showMemberDetails()">
+	<i class="fa fa-users" aria-hidden="true"></i> Add All Members
+  </a>
 		</div>
-	</div>
-	
+		</div>
 
-	<div class="col-md-12 users-list-tbl"  *ngIf="result?.committeeSchedule?.committeeScheduleAttendances?.length > 0">
-			<div class="row">
-			  <div class="table-responsive">
-				<table class="table table-striped tbl-p-clr">
-				  <thead class="tbl-head-clr thead-font-size p-75">
-					<tr>
 
-							<th scope="col">Name</th>
-							<th scope="col">Alternate For</th>
-							<th scope="col"><span *ngIf="attendanceShowFlag">Comments</span></th>
-							<th scope="col">Action</th>
-							
-						</tr>
-						</thead>
-						<tbody class="tbody-font-size">
-								<tr
-									*ngFor="let member of this.result?.committeeSchedule?.committeeScheduleAttendances;let i = index;">
-									<td><i *ngIf="member.alternateFlag" class="fa fa-user-circle"
-										aria-hidden="true"></i> <i *ngIf="member.guestFlag"
-										class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;
-										{{member.personName}}</td>
-									<td>
-											<!-- <select class="custom-select  mr-sm-2" id="inlineFormCustomSelect" [(ngModel)]="member.alternateFor" *ngIf="member.alternateFlag" [ngClass]="(!editFlagEnabled[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-											(ngModelChange)="changes(member.alternateFor)"
-											[disabled]="(editFlagEnabled[i] !== true)">
-												<option selected>Select alternate User</option>
-												<ng-container *ngFor="let  memberAtt of this.result.committeeSchedule.committeeScheduleAttendances">
-														<ng-template [ngIf]="member !== memberAtt && memberAtt.memberPresent == false && memberAtt.guestFlag !== true">
-														<option 
-															[ngValue]="memberAtt.personName">
-															 <span>{{memberAtt.personName}}</span>
-														</option>
-														</ng-template>
-														</ng-container>
-												  </select> -->
-										<select [(ngModel)]="member.alternateFor"
-											*ngIf="member.alternateFlag" class="custom-select  mr-sm-2 select-font-size"
-											[ngClass]="(!editFlagEnabled[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-											(ngModelChange)="changes(member.alternateFor)"
-											[disabled]="(editFlagEnabled[i] !== true)">
-												<option selected>Select alternate User</option>
-												<ng-container *ngFor="let  memberAtt of this.result.committeeSchedule.committeeScheduleAttendances">
-												<ng-template [ngIf]="member !== memberAtt && memberAtt.memberPresent == false && memberAtt.guestFlag !== true">
-												<option 
-													[ngValue]="memberAtt.personName">
-													 <span>{{memberAtt.personName}}</span>
-												</option>
-												</ng-template>
-												</ng-container>
-										</select>
-									</td>
-									
-									<td>
-									<input *ngIf="(showCommentFlag == true && commentsIndex == i)" type="text" class="form-control input-field-size" [(ngModel)]="member.comments">
+	  </div>
+<div class="card mt-5" *ngIf="showAllMembers">
+		<div class="tab-content">
+		  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+				<h4 class="card-hedding dotted-bottom">Members</h4>
+			<!-- <span (click)="changeAttendence()">
+					<i aria-hidden="true" class="fa" [ngClass]="{'fa-check-circle training-complete-color': isPresent == true,
+					'fa-times-circle-o training-incomplete-color': isPresent == false,
+					'fa-check-circle color-grey': isPresent == null, 'fa-check-circle': isPresent == true || isPresent == null}"></i>
+			</span> -->
+			  <div class="col-md-12 users-list-tbl" *ngIf="committeeMemberActiveList.length > 0">
+							  <div class="row">
+								<div class="table-responsive">
+								  <table class="table table-striped tbl-p-clr">
+									<thead class="tbl-head-clr thead-font-size p-75">
+										  <tr>
+												  
+												  <th title="">Name</th>
+												  <th title="">Comment</th>
+												  <th title="">Action</th>
+											  </tr>
+											  </thead>
+											  <tbody class="tbody-font-size p-75">
+													  <tr *ngFor="let person of committeeMemberActiveList; let i=index">
+															  
+															  <td *ngIf="person?.personId != null">{{ person?.personDetails?.fullName }}</td>
+															  <td *ngIf="person?.personId == null">{{ person?.rolodex?.fullName }}</td>
+															  <td></td>
+															  <td width="15%" class="action-btn-list align-middle">
+																	<button *ngIf="editRoleIndex != i" title="Edit" type="button" class="btn mb-3" (click)="editMemberRole(role,i)">
+																	  <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+																	</button>
+																	<button *ngIf="editRoleIndex == i" title="Save" type="button" class="btn mb-3" (click)="saveMemberRole(committeeMemberRoleEdit)">
+																	  <i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>
+																	</button>
+																	<button title="Delete" type="button" class="btn mb-3" (click)="checkCanDelete(i)">
+																	  <i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
+																	</button>
+																  </td>
+														  </tr>
+											  </tbody>
+									  
+									  </table>
+									  </div>
+									  </div>
+									  
+									  
+									  </div>
+									  <div class="text-center" *ngIf="committeeMemberActiveList?.length == 0">No Active Committee Members to show</div>
+	  
+		  </div>
+		</div>
+		</div>
 
+		<div class="card mt-5"  *ngIf="showAllMembers">
+				<div class="tab-content">
+				  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+						<h4 class="card-hedding dotted-bottom">Alternates</h4>
+			  
+					  <div class="col-md-12 users-list-tbl" *ngIf="alternateMember?.length > 0">
+									  <div class="row">
+										<div class="table-responsive">
+										  <table class="table table-striped tbl-p-clr">
+											<thead class="tbl-head-clr thead-font-size p-75">
+												  <tr>
+														  
+														  <th title="">Name</th>
+														  <th title="">Alternate For</th>
+														  <th title="">Action</th>
+													  </tr>
+													  </thead>
+													  <tbody class="tbody-font-size p-75">
+															  <tr *ngFor="let person of alternateMember; let i=index">
+																	  
+																	<td *ngIf="person?.personId != null">{{ person?.personDetails?.fullName }}</td>
+																	<td *ngIf="person?.personId == null">{{ person?.rolodex?.fullName }}</td>
+																	<td></td>
+																	<td width="15%" class="action-btn-list align-middle">
+																		  <button *ngIf="editRoleIndex != i" title="Edit" type="button" class="btn mb-3" (click)="editMemberRole(role,i)">
+																			<i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+																		  </button>
+																		  <button *ngIf="editRoleIndex == i" title="Save" type="button" class="btn mb-3" (click)="saveMemberRole(committeeMemberRoleEdit)">
+																			<i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>
+																		  </button>
+																		  <button title="Delete" type="button" class="btn mb-3" (click)="checkCanDelete(i)">
+																			<i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
+																		  </button>
+																		</td>
+																  </tr>
+													  </tbody>
+											  
+											  </table>
+											  </div>
+											  </div>
+											  
+											  
+											  </div>
+											  <div class="text-center"*ngIf="alternateMember?.length == 0">No Members with Alternate Role to Show</div>
+			  
+			  
+			  
+					
+				  </div>
+				</div>
+				</div>
+
+
+				<div class="card mt-5"  *ngIf="showAllMembers">
+						<div class="tab-content">
+						  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+								<h4 class="card-hedding dotted-bottom">Guests</h4>
+								<!-- <span style="float: right;" >
+									<span (click)="isAddGuest = !isAddGuest" class="pointer text-danger p-2">
+										<u style="font-size: 14px;"><i class="fa fa-plus">&nbsp;</i>Add Guest</u>
+									</span>
+							 </span> -->
+							 <div class="text-right">
+									<span class="welcome-popup text-danger txt-medium p-2" 
+									 (click)="isAddGuest = !isAddGuest;">
+									  <i class="fa fa-plus icon-padding"></i>Add Guest
+									</span>
+								  </div>
+
+							 <div class="col-md-12" *ngIf="isAddGuest">
+								 <div class="row">
+								 <div class="col-md-11">
+									<div class="form-group">
+									  <div class="form-check-inline">
+										<label class="form-check-label">
+										  <input type="radio" class="form-check-input" name="empOptradio" value="employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">
+										  <span class="txt-medium text-secondary">Employee</span>
+										</label>
+									  </div>
+									  <div class="form-check-inline">
+										<label class="form-check-label">
+										  <input type="radio" class="form-check-input" name="nonEmpOptradio" value="non-employee" [(ngModel)]="personType" (ngModelChange)="changePersonType(personType)">
+										  <span class="txt-medium text-secondary">Non-Employee</span>
+										</label>
+									  </div>
+									  <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder" [clearField]="clearField" (selectedResult)="selectPersonElasticResult($event)"></app-elastic>
+									</div>
+									</div>
+									<div class="col-md-1">
+											<button title="Add" (click)="addMemberRole()" type="button" class="btn btn-outline-success txt-small btn-size mt-25">
+											  Add
+											</button>
+										  </div>
+									</div>
+									<div class="col-md-12" *ngIf="showPersonElasticBand">
+											<div class="row">
+									  <div class="col-md-12 card search-card-view mb-2 mt-0 p-3">
+											<div class="row">
+													<div class="col-sm-12 col-md-12 col-lg-12 text-right" title="Remove"
+													(click)="showPersonElasticBand = false">
+													<i aria-hidden="true" class="fa fa-times-circle btn-close-lite-sr"></i>
+												  </div>
+											  <div class="col-4">
+												<span class="txt-medium text-secondary">Person Name:</span>
+												<span class="txt-medium text-danger">{{selectedPerson?.fullName}}</span>
+											  </div>
+											  <div class="col-4">
+												<span class="txt-medium text-secondary">Email:</span>
+												<span class="txt-medium text-danger">{{selectedPerson?.emailAddress}}</span>
+											  </div>
+											  <div class="col-4">
+												<span class="txt-medium text-secondary">Title:</span>
+												<span class="txt-medium text-danger" *ngIf="guestMemberObj.nonEmployeeFlag">{{selectedPerson?.title}}</span>
+												<span class="txt-medium text-danger" *ngIf="!guestMemberObj.nonEmployeeFlag">{{selectedPerson?.directoryTitle}}</span>
+											  </div>
+											</div>
+											<div class="row">
+											  <div class="col-4">
+												<span class="txt-medium text-secondary">Unit:</span>
+												<span class="txt-medium text-danger" *ngIf="guestMemberObj.nonEmployeeFlag">{{selectedPerson?.organization}}</span>
+												<span class="txt-medium text-danger" *ngIf="!guestMemberObj.nonEmployeeFlag">{{selectedPerson?.unitName}}</span>
+											  </div>
+											  <div class="col-4">
+												<span class="txt-medium text-secondary">Address:</span>
+												<span class="txt-medium text-danger">{{selectedPerson?.addressLine1}}</span>
+											  </div>
+											  <div class="col-4">
+												<span class="txt-medium text-secondary">Phone:</span>
+												<span class="txt-medium text-danger">{{selectedPerson?.phoneNumber}}</span>
+											  </div>
+											</div>
+										  </div>
+										  </div>
+										  </div>
+								  </div>
 								
-								</td>
-								<td class="action-btn-list">
-										<button title="Mark Attendence" type="button" class="btn btn-primary"  (click)="markAttendance($event,member,i)"
-										[ngClass]="{'attendence-present':(member.memberPresent == true),
-										'edit-btn-1':(member.memberPresent == false)
-									}">
-												<i class="fa fa-check-circle" aria-hidden="true"></i>
-											</button>
-										<button title="Edit" type="button" class="btn btn-primary edit-btn-1"  *ngIf="(!editFlagEnabled[i] == true || !commentFlgEnabled[i] == true) && member.alternateFlag" (click)="editAttendanceData($event,i,member)">
-											<i class="fa fa-pencil" aria-hidden="true"></i>
-										</button>
-										<button title="Save" *ngIf="(!editFlagEnabled[i] == false) || (!commentFlgEnabled[i] == false)" (click)="saveAttendanceEditedData($event, i, member)" class="btn btn-primary edit-btn-1">
-												<i class="fa fa-floppy-o" aria-hidden="true"></i>
-											</button>
-											<button title="Cancel" *ngIf="(!editFlagEnabled[i] == false && member.alternateFlag)" (click)="cancelEditAttenfance($event, i, member)" type="button" class="btn btn-primary edit-btn-1">
-												<i class="fa fa-times"></i>
-											</button>
-										<button title="Comments" type="button" class="btn btn-primary view-btn-1" (click)="showComment($event,i)">
-											<i class="fa fa-comment-o" aria-hidden="true"></i>
-										</button>
-										<button title="Delete" type="button" class="btn btn-primary delete-btn-1" *ngIf="member.guestFlag" (click)="showDeleteModal($event,member)" data-toggle="modal" data-target="#deleteGuestAttendance">
-											<i class="fa fa-trash" aria-hidden="true"></i>
-										</button>
-									</td>
-		
-									
-									<!-- <td>
-											<ul class="actionButtonGroup statusIndicator">
-												<li><a href="#" (click)="markAttendance($event,member,i)"
-													[ngClass]="{'present':(member.memberPresent == true)}"
-													class="current" title="Mark Attendance"><i
-														class="fa fa-check-circle"></i></a></li>
-												<li><a href="#" (click)="showComment($event,i)"><i
-														class="fa fa-comment-o" aria-hidden="true"></i></a></li>
-												<li *ngIf="(!editFlagEnabled[i] == true || !commentFlgEnabled[i] == true) && member.alternateFlag"><a href="#" 
-													(click)="editAttendanceData($event,i,member)"><i
-														class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
-												<li *ngIf="member.guestFlag" ><a href="#"
-													(click)="showDeleteModal($event,member)" data-toggle="modal" data-target="#deleteGuestAttendance"><i
-														class="fa fa-trash-o" aria-hidden="true"></i></a></li>
-												<li *ngIf="(!editFlagEnabled[i] == false) || (!commentFlgEnabled[i] == false)"><a href="#" 
-													(click)="saveAttendanceEditedData($event, i, member)"><i
-														class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
-												<li *ngIf="(!editFlagEnabled[i] == false && member.alternateFlag)"><a href="#" 
-													(click)="cancelEditAttenfance($event, i, member)"><i
-														class="fa fa-times" aria-hidden="true"></i></a></li>
-											</ul>
-										</td> -->
-								</tr>
-							</tbody>
-						</table>
+								
+					  
+							  <div class="col-md-12 users-list-tbl" *ngIf="guestMembers?.length > 0">
+											  <div class="row">
+												<div class="table-responsive">
+												  <table class="table table-striped tbl-p-clr">
+													<thead class="tbl-head-clr thead-font-size p-75">
+														  <tr>
+																  
+																  <th title="">Name</th>
+																  <th title="">comments</th>
+																  <th title="">Action</th>
+															  </tr>
+															  </thead>
+															  <tbody class="tbody-font-size p-75">
+																	  <tr *ngFor="let person of guestMembers; let i=index">
+																			  
+																			<td *ngIf="person?.personId != null">{{ person?.personDetails?.fullName }}</td>
+																			<td *ngIf="person?.personId == null">{{ person?.rolodex?.fullName }}</td>
+																			<td></td>
+																			<td width="15%" class="action-btn-list align-middle">
+																				  <button *ngIf="editRoleIndex != i" title="Edit" type="button" class="btn mb-3" (click)="editMemberRole(role,i)">
+																					<i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
+																				  </button>
+																				  <button *ngIf="editRoleIndex == i" title="Save" type="button" class="btn mb-3" (click)="saveMemberRole(committeeMemberRoleEdit)">
+																					<i class="fa fa-floppy-o log-user-icon-lite" aria-hidden="true"></i>
+																				  </button>
+																				  <button title="Delete" type="button" class="btn mb-3" (click)="checkCanDelete(i)">
+																					<i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
+																				  </button>
+																				</td>
+																		  </tr>
+															  </tbody>
+													  
+													  </table>
+													  </div>
+													  </div>
+													  
+													  <div  class="text-center" *ngIf="guestMembers?.length == 0">No Guest Members added to show</div>
+													  </div>
+					  
+					  
+					  
+							<!-- <div class="col-12  search-eidted-p padding-15">
+							  <div class="row bottom-margin">
+								<div class="col-2">
+								  <div class="form-group ">
+									111111
+								  </div>
+								</div>
+								<div class="col-2">
+								  <div class="form-group ">
+									22222
+								  </div>
+								</div>
+								<div class="col-3">
+								  <div class="form-group ">
+									3333
+								  </div>
+								</div>
+								<div class="col-3">
+								  <div class="form-group">
+									44444
+								  </div>
+								</div>
+								<div class="col-2">
+								  <div class="form-group">
+									55555
+								  </div>
+								</div>
+					  
+							  </div>
+							  <div class="row bottom-margin">
+								<div class="col-2">
+								  <div class="form-group ">
+									6666
+								  </div>
+								</div>
+								<div class="col-2">
+								  <div class="form-group">
+									7777
+								  </div>
+								</div>
+								<div class="col-3">
+								  <div class="form-group">
+									8888
+								  </div>
+								</div>
+								<div class="col-3">
+								  <div class="form-group">
+									999
+								  </div>
+								</div>
+								<div class="col-2">
+								  <div class="form-group">
+									10
+								  </div>
+								</div>
+							  </div>
+					  
+							  <div class="row bottom-margin">
+								<div class="col-12">
+								  <div class="form-group">
+									aaa
+								  </div>
+								</div>
+							  </div>
+							</div> -->
+						  </div>
 						</div>
 						</div>
-						</div>
-
-
-
-
-
-
-
-	<!-- <table *ngIf="this.result?.committeeSchedule?.committeeScheduleAttendances?.length > 0" class="table tableSkin">
-		<thead>
-			<tr>
-				<th>Sl no</th>
-				<th>Name</th>
-				<th>Alternate For</th>
-				<th>Action</th>
-				<th *ngIf="attendanceShowFlag">Comments</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr
-				*ngFor="let member of this.result?.committeeSchedule?.committeeScheduleAttendances;let i = index;">
-				<td>{{i+1}}</td>
-				<td><i *ngIf="member.alternateFlag" class="fa fa-user-circle"
-					aria-hidden="true"></i> <i *ngIf="member.guestFlag"
-					class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;
-					{{member.personName}}</td>
-				<td>
-					<select [(ngModel)]="member.alternateFor"
-						*ngIf="member.alternateFlag"
-						[ngClass]="(!editFlagEnabled[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-						(ngModelChange)="changes(member.alternateFor)"
-						[disabled]="(editFlagEnabled[i] !== true)">
-							<option selected>Select alternate User</option>
-							<ng-container *ngFor="let  memberAtt of this.result.committeeSchedule.committeeScheduleAttendances">
-							<ng-template [ngIf]="member !== memberAtt && memberAtt.memberPresent == false && memberAtt.guestFlag !== true">
-							<option 
-								[ngValue]="memberAtt.personName">
-								 <span>{{memberAtt.personName}}</span>
-							</option>
-							</ng-template>
-							</ng-container>
-					</select>
-				</td>
-				<td>
-					<ul class="actionButtonGroup statusIndicator">
-						<li><a href="#" (click)="markAttendance($event,member,i)"
-							[ngClass]="{'present':(member.memberPresent == true)}"
-							class="current" title="Mark Attendance"><i
-								class="fa fa-check-circle"></i></a></li>
-						<li><a href="#" (click)="showComment($event,i)"><i
-								class="fa fa-comment-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="(!editFlagEnabled[i] == true || !commentFlgEnabled[i] == true) && member.alternateFlag"
-							(click)="editAttendanceData($event,i,member)"><i
-								class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
-						<li><a *ngIf="member.guestFlag" href="#"
-							(click)="showDeleteModal($event,member)" data-toggle="modal" data-target="#deleteGuestAttendance"><i
-								class="fa fa-trash-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="(!editFlagEnabled[i] == false) || (!commentFlgEnabled[i] == false)"
-							(click)="saveAttendanceEditedData($event, i, member)"><i
-								class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="(!editFlagEnabled[i] == false && member.alternateFlag)"
-							(click)="cancelEditAttenfance($event, i, member)"><i
-								class="fa fa-times" aria-hidden="true"></i></a></li>
-					</ul>
-				</td>
-				<td *ngIf="(showCommentFlag == true && commentsIndex == i)">
-				<input type="text" [(ngModel)]="member.comments" class="committeeBox"></td>
-			</tr>
-		</tbody>
-	</table> -->
-	<div class="noDataOnChart" *ngIf="this.result?.committeeSchedule?.committeeScheduleAttendances?.length == 0">
-		No Attendance data associated with this schedule
-	</div>
-	
-	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup" id="deleteGuestAttendance" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content modal-text-color">
-                  <div class="modal-header popup-header">
-                    <h5 class="modal-title modal-text-color">Want to delete?</h5>
-
-                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <p>Are you sure you want to delete this item?</p>
-                  </div>
-                  <div class="modal-footer btn-row-med">
-                    <button type="button" class="btn tab_btn" data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
-                    <button type="button" class="btn btn-primary tab_btn" (click)="deleteAttendance($event)" data-dismiss="modal">Yes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-	<!--  DELETE WARNING MODAL -->
-	<!-- <div id="deleteGuestAttendance" class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
-		 tabindex="-1" role="dialog"
-		aria-labelledby="deleteModalTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Want to delete?</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<p>Are you sure you want to delete this
-					item?</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btnSkin btn-secondary"
-						data-dismiss="modal" data-toggle="modal" (click)="showPopup=false">No</button>
-					<button type="button" class="btnSkin btnSkinPrimary"
-						(click)="deleteAttendance($event)" data-dismiss="modal">Yes</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> -->

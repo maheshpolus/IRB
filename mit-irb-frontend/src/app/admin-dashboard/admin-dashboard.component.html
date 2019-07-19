@@ -1,0 +1,115 @@
+<div class="pageMinHeight white-smoke">
+    <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner>
+  <div class="container-fluid pushFixedHeaderFooter">
+    <div class="headerPush"></div>
+      <div class="col-12 head-margin pl-0">
+        <h5>Administrative Dashboard</h5>
+      </div>
+      <!-- <div class="col-12">
+          <div class="searchBox" id="searchElastic">
+              <input  type="text" ng-reflect-model="" placeholder="search..." class="ng-pristine ng-valid ng-touched"> 
+              <a class="searchButton">
+                  <i class="fa fa-search"></i>
+              </a>
+            </div>
+      </div> -->
+    <section class="row">
+      <div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" *ngIf="hasPermissions?.IS_MAINTAIN_QUESTION_RIGHT == 'Y'">
+        <div class="col-12 card pull-up padding-10">
+          <a class="no-underline"[routerLink]="['/irb/configure-questionnaire']">
+            <div class="media">
+              <div class="media-left cards-icon1">
+                <!-- <img src="assets/images/qstnr.png"> -->
+                <i class="fa fa-question icons" title="Configure Questionnaire"></i>
+              </div>
+              <div class="media-body card-top-body">
+                <h6 class="media-heading irb-color line-space">Questionnaire</h6>
+                <p class="gr-grey">Questionnaire</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" *ngIf="hasPermissions?.IS_CODE_TABLE_RIGHT == 'Y'">
+        <div class="col-12 card pull-up padding-10">
+          <a class="no-underline" [routerLink]="['/irb/code-table']">
+            <div class="media">
+              <div class="media-left cards-icon1">
+                <!-- <img src="assets/images/table-code.png"> -->
+                <i class="fa fa-table icons" title="Table Maintenance"></i>
+              </div>
+              <div class="media-body card-top-body cap2">
+                <h6 class="media-heading irb-color line-space">Code Table Maintenance</h6>
+                <p class="gr-grey">Code Table Maintenance</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" *ngIf="hasPermissions?.MAINTAIN_TRAINING_RIGHT == 'Y'">
+        <div class="col-12 card pull-up padding-10">
+          <a class="no-underline" [routerLink]="['/irb/training-maintenance']">
+            <div class="media">
+              <div class="media-left cards-icon1">
+                <!-- <img src="assets/images/role-settings.png"> -->
+                <i class="fa fa-graduation-cap icons" title="Training Maintenance"></i>
+              </div>
+              <div class="media-body card-top-body cap3">
+                <h6 class="media-heading irb-color line-space">Training Maintenance</h6>
+                <p class="gr-grey">Training Maintenance</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-3 col-12" *ngIf="hasPermissions?.IS_ROLE_MAINTAIN_RIGHT == 'Y'">
+        <div class="col-12 card pull-up padding-10">
+          <a class="no-underline" [routerLink]="['/irb/role-maintainance']" [queryParams]="{ unitId: '000001' }">
+            <div class="media">
+              <div class="media-left cards-icon1">
+                <!-- <img src="assets/images/role-settings.png"> -->
+                <i class="fa fa-key icons" title="Role Maintenance"></i>
+              </div>
+              <div class="media-body card-top-body cap3">
+                <h6 class="media-heading irb-color line-space">Role Maintenance</h6>
+                <p class="gr-grey">Role Maintenance</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" *ngIf="hasPermissions?.IS_MAINTAIN_COMMITEE_RIGHT == 'Y'">
+        <div class="col-12 card pull-up padding-10">
+          <a class="no-underline" [routerLink]="['/irb/committee-schedule-list']" [queryParams]="{ isCommitteeList: true }">
+            <div class="media">
+              <div class="media-left cards-icon1">
+                <!-- <img src="assets/images/rolodex.png"> -->
+                <i class="fa fa-university icons"></i>
+              </div>
+              <div class="media-body card-top-body cap3">
+                <h6 class="media-heading irb-color line-space">Committee Maintenance</h6>
+                <p class="gr-grey">Committee Maintenance</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-3 col-12 pr-0" *ngIf="hasPermissions?.IS_MAINTAIN_COMMITEE_RIGHT == 'Y'">
+        <div class="col-12 card pull-up padding-10">
+          <a class="no-underline" [routerLink]="['/irb/committee-schedule-list']" [queryParams]="{ isCommitteeList: false }">
+            <div class="media">
+              <div class="media-left cards-icon1">
+                <!-- <img src="assets/images/custom-data.png"> -->
+                <i class="fa fa-calendar icons" aria-hidden="true"></i>
+              </div>
+              <div class="media-body card-top-body cap3">
+                <h6 class="media-heading irb-color line-space">Schedule Maintenance</h6>
+                <p class="gr-grey">Schedule Maintenance</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

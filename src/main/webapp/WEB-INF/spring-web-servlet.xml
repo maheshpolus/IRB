@@ -85,6 +85,7 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments</value>	
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles</value>
+			    <value>org.mit.irb.web.IRBProtocol.pojo.IRBAdminReviewerComment</value>			
 				
 				<value>org.mit.irb.web.roles.pojo.PersonRoles</value>
 				<value>org.mit.irb.web.roles.pojo.Rights</value>
@@ -135,9 +136,9 @@
 				<value>org.mit.irb.web.committee.view.ProtocolView</value>
 			</list>
 		</property>
-		<property name="hibernateProperties">
+		<!-- <property name="hibernateProperties">
 			<props>
-				<!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
 				<prop key="hibernate.c3p0.minPoolSize">${hibernate.c3p0.minPoolSize}</prop>
@@ -147,7 +148,7 @@
 				<prop key="cache.use_second_level_cache">true</prop>   
          		<prop key="cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 			</props>
-		</property>
+		</property> -->
 	</bean>
 	<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager"
 		id="hibernateTransactionManager">

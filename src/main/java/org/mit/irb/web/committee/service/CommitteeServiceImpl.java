@@ -8,22 +8,21 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.Future;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.committee.dao.CommitteeDao;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.schedule.CronSpecialChars;
@@ -56,6 +55,9 @@ public class CommitteeServiceImpl implements CommitteeService {
 
 	@Autowired
 	private CommitteeScheduleService committeeScheduleService;
+	
+	@Autowired
+	IRBUtilService irbUtilService;
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
@@ -139,7 +141,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 		CronSpecialChars weekOfMonth = null;
 		CronSpecialChars dayOfWeek = null;
 		CronSpecialChars month = null;
-
+		scheduleData.setScheduleStartDate(irbUtilService.adjustTimezone(scheduleData.getScheduleStartDate()));
 		Time24HrFmt time = getTime24hFmt(scheduleData.getScheduleStartDate(), scheduleData.getTime().findMinutes());
 		Date dt = scheduleData.getScheduleStartDate();
 
@@ -356,9 +358,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 			}
 			committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),null);
 			committeeVo.setCommittee(committee);*/
-			committeeDao.deleteCommitteeSchedule(committeeVo.getCommitteeSchedule());
-			Committee committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),"F");
+			committeeDao.deleteCommitteeSchedule(committeeVo.getCommitteeSchedule());			
+			Committee committee = new Committee();
+			committee = committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),"F");
 			committeeVo.setCommittee(committee);
+			committeeVo.setCommitteeSchedule(null);
 			committeeVo.setStatus(true);
 			committeeVo.setMessage("Committee schedule deleted successfully");
 		} catch (Exception e) {

@@ -162,7 +162,9 @@ public class CommitteeDaoImpl implements CommitteeDao {
 				committeeRoot.get("updateUser"),/*attachmentRoot.get("researchAreas"),*/
 				committeeRoot.get("homeUnitName"));
 		criteria.where(builder.equal(committeeRoot.get("committeeId"),committeeId));
-		Committee committee = session.createQuery(criteria).getResultList().get(0);		
+		Committee committee = null;
+		if(session.createQuery(criteria).getResultList() != null && !session.createQuery(criteria).getResultList().isEmpty())
+		committee = session.createQuery(criteria).getResultList().get(0);		
 		List<CommitteeResearchAreas> committeeResearchAreas= getResearchAreasByCommitteeId(committeeId);
 		committee.setResearchAreas(committeeResearchAreas);
 		return committee;
@@ -285,8 +287,32 @@ public class CommitteeDaoImpl implements CommitteeDao {
 
 	@Override
 	public CommitteeSchedule getCommitteeScheduleById(Integer scheduleId) {
-		CommitteeSchedule committeeSchedule = hibernateTemplate.get(CommitteeSchedule.class, scheduleId);
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(CommitteeSchedule.class);
+	    ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("scheduleId"), "scheduleId");
+		projList.add(Projections.property("scheduledDate"), "scheduledDate");
+		projList.add(Projections.property("place"), "place");
+		projList.add(Projections.property("time"), "time");
+		projList.add(Projections.property("protocolSubDeadline"), "protocolSubDeadline");
+		projList.add(Projections.property("scheduleStatus"), "scheduleStatus");
+		projList.add(Projections.property("meetingDate"), "meetingDate");
+		projList.add(Projections.property("startTime"), "startTime");
+		projList.add(Projections.property("endTime"), "endTime");
+		projList.add(Projections.property("maxProtocols"), "maxProtocols");
+		projList.add(Projections.property("comments"), "comments");
+		projList.add(Projections.property("availableToReviewers"), "availableToReviewers");
+		projList.add(Projections.property("place"), "place");
+		//projList.add(Projections.property("committee"), "committee");
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeSchedule.class));
+		criteria.add(Restrictions.eq("scheduleId",scheduleId));		
+		CommitteeSchedule committeeSchedule = null;		
+		if(criteria.list() != null && !criteria.list().isEmpty())
+		committeeSchedule = (CommitteeSchedule) criteria.list().get(0);		
 		return committeeSchedule;
+		
+	/*	CommitteeSchedule committeeSchedule = hibernateTemplate.get(CommitteeSchedule.class, scheduleId);
+		return committeeSchedule;*/
 	}
 
 	@Override
@@ -311,13 +337,13 @@ public class CommitteeDaoImpl implements CommitteeDao {
 
 	@Override
 	public CommitteeMemberRoles saveCommitteeMemberRole(CommitteeMemberRoles memberRole) {
-		hibernateTemplate.save(memberRole);
+		hibernateTemplate.saveOrUpdate(memberRole);
 		return memberRole;
 	}
 
 	@Override
 	public CommitteeMemberExpertise saveCommitteeMemberExpertise(CommitteeMemberExpertise expertise) {
-		hibernateTemplate.save(expertise);
+		hibernateTemplate.saveOrUpdate(expertise);
 		return expertise;
 	}
 
@@ -455,9 +481,38 @@ public class CommitteeDaoImpl implements CommitteeDao {
 		committee.setCommitteeSchedules(committeeSchedule);
 		return committee;
 	}
+	
 	@Override
-	public void deleteCommitteeSchedule(CommitteeSchedule committeeSchedule) {
-		hibernateTemplate.delete(committeeSchedule);	
+	public void deleteCommitteeSchedule(CommitteeSchedule committeeSchedule) {				
+		Query queryScheduleAttendence = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeScheduleAttendance p where p.committeeSchedule.scheduleId =:scheduleId");
+		queryScheduleAttendence.setInteger("scheduleId",committeeSchedule.getScheduleId());
+		queryScheduleAttendence.executeUpdate();
+		
+		Query queryScheduleAction = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeScheduleActItems p where p.committeeSchedule.scheduleId =:scheduleId");
+		queryScheduleAction.setInteger("scheduleId",committeeSchedule.getScheduleId());
+		queryScheduleAction.executeUpdate();
+		  
+		Query queryScheduleMinutes = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeScheduleMinutes p where p.committeeSchedule.scheduleId =:scheduleId");
+		queryScheduleMinutes.setInteger("scheduleId",committeeSchedule.getScheduleId());
+		queryScheduleMinutes.executeUpdate();
+		
+		Query queryScheduleAttachment = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeScheduleAttachment p where p.committeeSchedule.scheduleId =:scheduleId");
+		queryScheduleAttachment.setInteger("scheduleId",committeeSchedule.getScheduleId());
+		queryScheduleAttachment.executeUpdate();		
+		
+		Query queryScheduleSubmission = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("update ProtocolSubmission p set committeeSchedule.scheduleId = null where p.committeeSchedule.scheduleId =:scheduleId");
+		queryScheduleSubmission.setInteger("scheduleId",committeeSchedule.getScheduleId());
+		queryScheduleSubmission.executeUpdate();	
+		
+		Query querySchedule = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("delete from CommitteeSchedule p where p.scheduleId =:scheduleId");
+		querySchedule.setInteger("scheduleId",committeeSchedule.getScheduleId());
+		querySchedule.executeUpdate();
 	}
 	
 	public CommitteeSchedule updateCommitteeSchedule(CommitteeSchedule committeeSchedule) {
@@ -469,8 +524,10 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	public List<CommitteeResearchAreas> getResearchAreasByCommitteeId(String committeeId){
 		Query queryCommitteeResearchAreas = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("from CommitteeResearchAreas p where p.committee.committeeId =:committeeId");
-		queryCommitteeResearchAreas.setString("committeeId", committeeId);		
-		List<CommitteeResearchAreas> committeeResearchAreas = queryCommitteeResearchAreas.list();
+		queryCommitteeResearchAreas.setString("committeeId", committeeId);
+		List<CommitteeResearchAreas> committeeResearchAreas = null;
+		if(queryCommitteeResearchAreas.list() != null && !queryCommitteeResearchAreas.list().isEmpty())
+		committeeResearchAreas = queryCommitteeResearchAreas.list();
 		return committeeResearchAreas;		
 	}
 
@@ -563,11 +620,11 @@ public class CommitteeDaoImpl implements CommitteeDao {
 	} 
 
 	@Override
-	public void deleteCommitteeMemberExpertise(Integer commMembershipId) {
+	public void deleteCommitteeMemberExpertise(Integer commMemberExpertiseId) {
 		Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("delete from CommitteeMemberExpertise p where p.committeeMemberships.commMembershipId =:commMembershipId");
-		queryDeleteResearchArea.setInteger("commMembershipId",commMembershipId);
-		queryDeleteResearchArea.executeUpdate();			
+				.createQuery("delete from CommitteeMemberExpertise p where p.commMemberExpertiseId =:commMemberExpertiseId");
+			queryDeleteResearchArea.setInteger("commMemberExpertiseId",commMemberExpertiseId);
+			queryDeleteResearchArea.executeUpdate();
 	}
 
 	@Override
@@ -678,5 +735,5 @@ public class CommitteeDaoImpl implements CommitteeDao {
 			return null;
 		}
 		return committeeMemberships.get(0);
-	}
+	}	
 }

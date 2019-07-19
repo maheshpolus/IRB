@@ -11,7 +11,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> personActionsList;
 	private HashMap<String, Object> personAction;
-	private Integer personID;
+	private String personID;
 	private String protocolNumber;
 	private String submissionStatus;
 	private String protocolStatus;
@@ -56,6 +56,7 @@ public class IRBActionsVO {
 	private String correspTemplateTypeCode;
 	private String correspTypeDescription;
 	private Integer actionId;
+	
 	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
 	}
@@ -70,14 +71,6 @@ public class IRBActionsVO {
 
 	public void setPersonActionsList(ArrayList<HashMap<String, Object>> personActionsList) {
 		this.personActionsList = personActionsList;
-	}
-
-	public Integer getPersonID() {
-		return personID;
-	}
-
-	public void setPersonID(Integer personID) {
-		this.personID = personID;
 	}
 
 	public String getProtocolNumber() {
@@ -430,5 +423,13 @@ public class IRBActionsVO {
 
 	public void setActionId(Integer actionId) {
 		this.actionId = actionId;
+	}
+
+	public String getPersonID() {
+		return personID;
+	}
+
+	public void setPersonID(String personID) {
+		this.personID = personID;
 	}
 }

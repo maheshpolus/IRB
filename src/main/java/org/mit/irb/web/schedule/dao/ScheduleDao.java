@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
@@ -12,10 +14,12 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
-import org.mit.irb.web.committee.pojo.ProtocolSubmission;
 import org.mit.irb.web.committee.pojo.ScheduleActItemType;
 import org.mit.irb.web.committee.view.ProtocolView;
+import org.mit.irb.web.schedule.vo.ScheduleVo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 
@@ -108,5 +112,62 @@ public interface ScheduleDao {
 	 * @return
 	 */
 	public ArrayList<HashMap<String, Object>> loadScheduledProtocols(Integer scheduleId);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public List<CommitteeScheduleMinutes> getScheduleMinutes(ScheduleVo vo);
+
+	/**
+	 * @param vo
+	 * @return 
+	 */
+	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(ScheduleVo vo);
+	
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public List<CommitteeMemberships> fetchMeetingMembers(ScheduleVo vo);
+
+	/**
+	 * @param committeeMemberships
+	 * @return
+	 */
+	public List<CommitteeMemberRoles> fetchCommitteeMemberRoles(CommitteeMemberships committeeMemberships);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public List<CommitteeScheduleAttendance> fetchGuestMembers(Integer scheduleId);
+
+	/**
+	 * @param scheduleId
+	 * @param committeePersonId
+	 * @return
+	 */
+	public Boolean fetchPresentFlag(Integer scheduleId, String committeePersonId);
+
+	/**
+	 * @param scheduleAttendance
+	 */
+	public void updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance);
+
+	/**
+	 * This method is used to getCommitteeScheduleAttachementById.
+	 * @param scheduleId - Id of the CommitteeSchedule.
+	 * @return committeeSchedule - committeeSchedule object.
+	 */
+	public List<CommitteeScheduleAttachment> getCommitteeScheduleAttachementById(Integer scheduleId);
+	
+	
+	ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment);
+
+	ScheduleVo saveOrUpdateMeetingAttachment(MultipartFile[] files,
+			CommitteeScheduleAttachment committeeScheduleAttachment, Integer scheduleId);
+	
+	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
 
 }

@@ -30,7 +30,7 @@ public class ScheduleController {
 	@RequestMapping(value = "/loadScheduleById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody ScheduleVo loadScheduleById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
 		logger.info("scheduleId : " + vo.getScheduleId());
-		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo);
 		return ScheduleVo;
 	}
 	
@@ -38,7 +38,7 @@ public class ScheduleController {
 	public @ResponseBody ScheduleVo loadScheduleHeaderDetails(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for loadScheduleById");
 		logger.info("scheduleId : " + vo.getScheduleId());
-		ScheduleVo ScheduleVo = scheduleService.loadScheduleById(vo.getScheduleId());
+		ScheduleVo ScheduleVo = null ; /*scheduleService.loadScheduleById(vo.getScheduleId());*/
 		return ScheduleVo;
 	}
 	
@@ -176,5 +176,66 @@ public class ScheduleController {
 		logger.info("Requesting for loadScheduledProtocols");
 		ScheduleVo scheduleVo = scheduleService.loadScheduledProtocols(vo);
 		return scheduleVo;
+	}
+	
+	@RequestMapping(value = "/loadScheduleMeetingComments", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadScheduleMeetingComments(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduleMeetingComments");
+		ScheduleVo scheduleVo = scheduleService.loadScheduleMeetingComments(vo);
+		return scheduleVo;
+	}
+	
+	@RequestMapping(value = "/loadScheduleProtocolComments", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadScheduleProtocolComments(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduleMeetingComments");
+		ScheduleVo scheduleVo = scheduleService.loadScheduleProtocolComments(vo);
+		return scheduleVo;
+	}
+	
+	@RequestMapping(value = "/createAgendaForSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo createAgendaForSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for createAgendaForSchedule");
+		ScheduleVo scheduleVo = scheduleService.createAgendaForSchedule(vo);
+		return scheduleVo;
+	}
+	
+	
+	@RequestMapping(value = "/loadMeetingAttendence", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadMeetingAttendence(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduledProtocols");
+		ScheduleVo scheduleVo = scheduleService.loadMeetingAttendence(vo);
+		return scheduleVo;
+	}
+	
+	@RequestMapping(value = "/updateMeetingAttendence", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo updateMeetingAttendence(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduledProtocols");
+		ScheduleVo scheduleVo = scheduleService.updateMeetingAttendence(vo);
+		return scheduleVo;
+	}
+	
+	
+	@RequestMapping(value = "/loadMeetingAttachmentById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadMeetingAttachmentById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadMeetingAttachmentById(vo.getScheduleId());
+		return ScheduleVo;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdateMeetingAttachment", method = RequestMethod.POST)
+	public @ResponseBody ScheduleVo saveOrUpdateMeetingAttachment(
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson) {
+		logger.info("Request for saveOrUpdateMeetingAttachment");
+		ScheduleVo protocolVO = new ScheduleVo();
+		protocolVO = scheduleService.saveOrUpdateMeetingAttachment(files, formDataJson);
+		return protocolVO;
+	}
+	
+	
+	@RequestMapping(value = "/downloadMeetingAttachment", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadMeetingAttachment(HttpServletResponse response,
+			@RequestHeader("attachmentId") String attachmentId) {
+		return scheduleService.downloadMeetingAttachment(attachmentId);
 	}
 }

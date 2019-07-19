@@ -11,7 +11,7 @@ public class ScheduleData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Date scheduleStartDate;
+	private java.util.Date scheduleStartDate;
 
 	private Time12HrFmt time;
 
@@ -45,14 +45,6 @@ public class ScheduleData implements Serializable {
 		this.setWeeklySchedule(new WeeklyScheduleDetails());
 		this.setMonthlySchedule(new MonthlyScheduleDetails());
 		this.setYearlySchedule(new YearlyScheduleDetails());
-	}
-
-	public Date getScheduleStartDate() {
-		return scheduleStartDate;
-	}
-
-	public void setScheduleStartDate(Date scheduleStartDate) {
-		this.scheduleStartDate = scheduleStartDate;
 	}
 
 	public Time12HrFmt getTime() {
@@ -157,5 +149,13 @@ public class ScheduleData implements Serializable {
 
 	public static CronSpecialChars[] convertToWeekdays(String[] daysOfWeek) {
 		return ScheduleOptionsUtil.convertToWeekdays(daysOfWeek);
+	}
+
+	public java.util.Date getScheduleStartDate() {
+		return scheduleStartDate;
+	}
+
+	public void setScheduleStartDate(java.util.Date scheduleStartDate) {
+		this.scheduleStartDate = scheduleStartDate;
 	}
 }

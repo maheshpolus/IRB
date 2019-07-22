@@ -40,7 +40,7 @@ export class ScheduleService {
         responseType: 'blob'
     });
 }
-  
+
   saveMinuteData( minuteData: Object ): Observable<JSON> {
       return this.http.post( '/mit-irb/addCommitteeScheduleMinute', minuteData )
           .catch( error => {
@@ -63,5 +63,31 @@ export class ScheduleService {
               console.error( error.message || error );
               return Observable.throw( error.message || error );
           } );
+  }
+
+  loadAllScheduleAgenda(scheduleId) {
+    return this.http.post('/mit-irb/loadAllScheduleAgenda', {scheduleId: scheduleId})
+      .catch( error => {
+        console.error( error.message || error );
+        return Observable.throw( error.message || error );
+      } );
+  }
+
+  downloadAgendaAttachment(scheduleAgendaId) {
+    return this.http.get('/mit-irb/downloadScheduleAgendaById', {
+      headers: new HttpHeaders().set('scheduleAgendaId', scheduleAgendaId.toString()),
+      responseType: 'blob'
+    });
+  }
+
+  createMinutesForSchedule(params) {
+    return this.http.post( '/mit-irb/createMinuteForSchedule', params );
+  }
+
+  downloadLatestMinutes(scheduleId) {
+    return this.http.get('/mit-irb/downloadScheduleMinute', {
+      headers: new HttpHeaders().set('scheduleId', scheduleId.toString()),
+      responseType: 'blob'
+  });
   }
 }

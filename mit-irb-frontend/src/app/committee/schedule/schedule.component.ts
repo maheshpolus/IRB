@@ -13,6 +13,9 @@ import { ScheduleConfigurationService } from './schedule-configuration.service';
 } )
 export class ScheduleComponent implements OnInit, OnDestroy {
 
+    agendaList: any = {};
+    modalTitle = '';
+    modalPara = '';
     currentTab = 'schedule_home';
     scheduleId = null;
     committeeId = null;
@@ -53,6 +56,36 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.loadScheduleDataSub.unsubscribe();
     }
 
+    showModal(type) {
+      if (type === 'agenda') {
+        this.modalTitle = 'Agenda';
+        this.modalPara = 'List of all generated agendas';
+        this.scheduleService.loadAllScheduleAgenda(this.scheduleId).subscribe(
+          data => {
+            this.agendaList = data.agendaList;
+          }
+        );
+      } else {
+        this.agendaList = [];
+        this.modalTitle = 'Mintues';
+        this.modalPara = 'List of all generated minutes';
+      }
+    }
+
+    downloadAgendaAttachment(scheduleAgendaId) {
+      this.scheduleService.downloadAgendaAttachment(scheduleAgendaId).subscribe(data => {
+        const a = document.createElement('a');
+        const blob = new Blob ([data], {type: 'application/pdf'});
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Agenda';
+        document.body.appendChild(a);
+        a.click();
+      },
+        error => console.log('Error downloading the file.', error),
+        () => console.log('OK')
+      );
+    }
+
     onActivate( componentRef ) {
         this.activatedRoute = componentRef;
     }
@@ -79,9 +112,26 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       a.download = 'Agenda';
       document.body.appendChild(a);
       a.click();
+      },
+        error => console.log('Error downloading the file.', error),
+        () => console.log('OK'));
+    }
 
-    },
+    createMinutesForSchedule() {
+      const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId };
+      this.scheduleService.createMinutesForSchedule(requestObject).subscribe(data => this.downloadLatestMinutes());
+    }
+
+    downloadLatestMinutes() {
+      this.scheduleService.downloadLatestMinutes(this.scheduleId).subscribe(data => {
+      const a = document.createElement('a');
+      const blob = new Blob([data], { type: data.type });
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Mintues';
+      document.body.appendChild(a);
+      a.click();
+      },
       error => console.log('Error downloading the file.', error),
       () => console.log('OK'));
-             }
+    }
 }

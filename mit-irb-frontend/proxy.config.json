@@ -1,203 +1,203 @@
 {
 	"/mit-irb/loginCheck": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getDashboardSnapshot": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getDashboardProtocolList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getUserDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolPersons": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolFundingSource": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolVulnerableSubject": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolLocation": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getDashboardProtocolStatus":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getDashboardProtocolSubmissionStatus": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolSpecialReview": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBprotocolDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getMITKCPersonInfo": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/logout": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getAttachmentList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getExpandedSnapShotView": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getDashboardProtocolType": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getProtocolHistotyGroupList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getProtocolHistotyGroupDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/savePersonExemptForm": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getPersonExemptForm": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getPersonExemptFormList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getLeadunitAutoCompleteList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getEvaluateMessage": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/resources/string_config_json": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getExemptProtocolActivityLogs": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/approveOrDisapproveExemptProtocols": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addExemptProtocolAttachments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 					"secure" : false
 	},
 	"/mit-irb/getExemptProtocolAttachmentList":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/downloadExemptProtocolAttachments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/createIRBProtocol":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateProtocolGeneralInfo":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateProtocolPersonInfo":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateFundingSource":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateSubject":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateCollaborator":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/addProtocolAttachments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadAttachmentType":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadIRBProtocolAttachments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/saveScienceOfProtocol":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/addCollaboratorAttachments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	}
 	,
 	"/mit-irb/loadCollaboratorPersonsAndAttachments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/addCollaboratorPersons":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadSponsorTypes":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/createCommittee": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveCommittee": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeById": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadScheduleDetailsById": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveAreaOfResearch": {
@@ -205,179 +205,179 @@
 		"secure": false
 	},
 	"/mit-irb/deleteAreaOfResearch": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addSchedule": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteSchedule": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateSchedule": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/filterCommitteeScheduleDates": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/resetCommitteeScheduleDates": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeSchedule": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addCommitteeMembership": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveCommitteeMembers": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteMemberRoles": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteMemberExpertise": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteCommitteeMembers": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveCommitteeMembersRole": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveCommitteeMembersExpertise": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateMemberRoles": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadScheduleById": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addOtherActions": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteOtherActions": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addScheduleAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteScheduleAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addCommitteeScheduleMinute": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeScheduleMinute": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/addOthersPresent": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateScheduleAttendance": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/deleteScheduleAttendance": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadScheduleAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateScheduleAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeScheduleList": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadProtocolHistoryCorrespondanceLetter":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadProtocolHistoryActionComments":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/checkingPersonsRightToViewProtocol":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getApplicableQuestionnaire":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/editQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/showAllQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/configureQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/createQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/getQuestionnaire": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "mit-irb/saveQuestionnaireModule": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/getCodeTableMetaData": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/getCodeTable": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/updateCodeTableRecord": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/deleteCodeTableRecord": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/mit-irb/addCodeTableRecord": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	  },
 	  "/saveQuestionnaire": {
@@ -385,352 +385,368 @@
 		"secure": false
 	  },
 	  "/mit-irb/generateCorrespondence":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadHomeUnits":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadResearchAreas":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getExemptProtocolFundingSource":{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateExemptFundingSource": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadHomeUnitsIRB": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateUnitDetails": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadPersonTrainingList": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadTrainingList": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updatePersonTraining": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateAdminContact": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getPersonTrainingInfo": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/downloadFileData": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/addTrainingComments": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/addTrainingAttachments": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getIRBprotocolUnits": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getIRBprotocolAdminContact": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getIRBprotocolCollaboratorDetails": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/downloadCollaboratorFileData": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getUserTrainingRight": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getProtocolSubmissionDetails": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getActionList": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/performProtocolActions" :{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getAmendRenwalSummary" :{
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateAmendRenwalSummary": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadCollaborators": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/loadProtocolHistoryGroupComments": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/getIRBAdminList": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 	"/mit-irb/updateIRBAdmin": {
-		"target" : "http://192.168.1.137:8080",
+		"target" : "http://192.168.1.93:8082",
 		"secure" : false
 	},
 
 	"/mit-irb/getActionLookup": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getCommitteeScheduledDates": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getSubmissionLookups": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateIRBAdminReviewer": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBAdminReviewers": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getIRBAdminReviewDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getSubmissionBasicDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateIRBAdminComment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateIRBAdminAttachments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getSubmissionHistory": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadAdminRevAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateBasicSubmissionDetail": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeMembers": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeReviewers": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeVotingDetail": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeReviewerAttachments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeReviewerDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getPastSubmission": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeReviewerComments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadCommitteeFileData": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadInternalProtocolAttachments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadPreviousProtocolAttachments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadInternalProtocolAttachments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 		"/mit-irb/getProtocolPermissionDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateProtocolPermission": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/unassignedRoleOfPerson": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/assignedRoleOfPerson": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getUnitName": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/savePersonRoles": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/roleInformation": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/syncPersonRole": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getPersonDetailById": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/findPersons": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/findDepartment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/fetchAllRoles": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getAssignedRole": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCollaboratorAttachmentType": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/checkUserPermission": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveOrUpdateInternalProtocolAttachments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadQuesAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/getAdminDashBoardPermissions": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeMemberById": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadCommitteeMemberDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateCommitteeMemberDetails": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadTerHistory": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateMemberRole": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/updateMemberExpertise": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadScheduledProtocols": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadScheduleMeetingComments": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	}	,
 	"/mit-irb/loadMeetingAttachmentById": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/saveOrUpdateMeetingAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/downloadMeetingAttachment": {
-		"target": "http://192.168.1.137:8080",
+		"target": "http://192.168.1.93:8082",
 		"secure": false
 	},
 	"/mit-irb/loadMeetingAttendence": {
-		"target": "http://192.168.1.137:8080",
-		"secure": false	
+		"target": "http://192.168.1.93:8082",
+		"secure": false
 	},
 	"/mit-irb/loadMeetingOtherActions": {
-		"target": "http://192.168.1.137:8080",
-		"secure": false	
+		"target": "http://192.168.1.93:8082",
+		"secure": false
 	},
 	"/mit-irb/updateMeetingOtherActions": {
-		"target": "http://192.168.1.137:8080",
-		"secure": false	
+		"target": "http://192.168.1.93:8082",
+		"secure": false
 	},
 	"/mit-irb/createAgendaForSchedule": {
 		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"secure": false
 	},
 	"/mit-irb/downloadScheduleAgenda": {
 		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"secure": false
 	},
 	"/mit-irb/loadScheduleProtocolComments": {
 		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"secure": false
+	},
+	"/mit-irb/loadAllScheduleAgenda": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false
+	},
+	"/mit-irb/downloadScheduleAgendaById": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false
+	},
+	"/mit-irb/createMinuteForSchedule": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false
+	},
+	"/mit-irb/downloadScheduleMinute": {
+		"target": "http://192.168.1.93:8082",
+		"secure": false
 	}
 }

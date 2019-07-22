@@ -93,8 +93,8 @@ public class ScheduleController {
 		logger.info("Requesting for updateScheduleAttendance");
 		logger.info("CommitteeId : " + vo.getCommitteeId());
 		logger.info("ScheduleId : " + vo.getScheduleId());
-		logger.info("AttendanceId : " + vo.getUpdatedAttendance().getCommitteeScheduleAttendanceId());
-		logger.info("MemberPresent : " + vo.getUpdatedAttendance().getMemberPresent());
+		/*logger.info("AttendanceId : " + vo.getUpdatedAttendance().getCommitteeScheduleAttendanceId());
+		logger.info("MemberPresent : " + vo.getUpdatedAttendance().getMemberPresent());*/
 		ScheduleVo scheduleVo =  scheduleService.updateScheduleAttendance(vo);
 		return scheduleVo;
 	}
@@ -198,8 +198,7 @@ public class ScheduleController {
 		ScheduleVo scheduleVo = scheduleService.createAgendaForSchedule(vo);
 		return scheduleVo;
 	}
-	
-	
+		
 	@RequestMapping(value = "/loadMeetingAttendence", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody ScheduleVo loadMeetingAttendence(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Requesting for loadScheduledProtocols");
@@ -264,5 +263,37 @@ public class ScheduleController {
 		logger.info("scheduleId : " + vo.getScheduleId());
 		ScheduleVo scheduleVo = scheduleService.updateMeetingOtherActions(vo);
 		return scheduleVo;
+	}
+	
+	@RequestMapping(value = "/createMinuteForSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo createMinuteForSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for createMinuteForSchedule");
+		ScheduleVo scheduleVo = scheduleService.createMinuteForSchedule(vo);
+		return scheduleVo;
+	}
+	
+	@RequestMapping(value = "/downloadScheduleAgendaById", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadScheduleAgendaById(HttpServletResponse response,
+			@RequestHeader("scheduleAgendaId") String scheduleAgendaId) {
+		return scheduleService.downloadScheduleAgendaById(scheduleAgendaId);
+	}
+		
+	@RequestMapping(value = "/downloadScheduleMinute", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadScheduleMinute(HttpServletResponse response,
+			@RequestHeader("scheduleId") String scheduleId) {
+		return scheduleService.downloadScheduleMinute(scheduleId);
+	}
+	
+	@RequestMapping(value = "/downloadScheduleMinuteById", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> downloadScheduleMinuteById(HttpServletResponse response,
+			@RequestHeader("scheduleMinuteDocId") String scheduleMinuteDocId) {
+		return scheduleService.downloadScheduleMinuteById(scheduleMinuteDocId);
+	}
+	
+	@RequestMapping(value = "/loadAllScheduleMinutes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo loadAllScheduleMinutes(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
+		logger.info("scheduleId : " + vo.getScheduleId());
+		ScheduleVo ScheduleVo = scheduleService.loadAllScheduleMinutes(vo.getScheduleId());
+		return ScheduleVo;
 	}
 }

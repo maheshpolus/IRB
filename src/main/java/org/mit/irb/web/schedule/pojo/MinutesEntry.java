@@ -2,6 +2,7 @@ package org.mit.irb.web.schedule.pojo;
 
 public class MinutesEntry {	
 	
+	private String otherTitle;
 	private String minuteEntry;
 
 	public String getMinuteEntry() {
@@ -12,7 +13,16 @@ public class MinutesEntry {
 		this.minuteEntry = minuteEntry;
 	}
 
-	public MinutesEntry(String minuteEntry) {
+	public String getOtherTitle() {
+		return otherTitle;
+	}
+
+	public void setOtherTitle(String otherTitle) {
+		this.otherTitle = otherTitle;
+	}
+
+	public MinutesEntry(String otherTitle, String minuteEntry) {
+		this.otherTitle = otherTitle;
 		this.minuteEntry = minuteEntry;
 	}
 }

@@ -13,9 +13,13 @@ public class ProtocolDetails {
 	private String previousSchMeetingDate;
 	private String nextSchMeetingDate;
 	private String nextMeetingPlace;
+	private Integer noVote;
+	private Integer yesVote;
+	private Integer abstainers;
+	private String minuteEntry;
 	
 	public ProtocolDetails(String protocolNumber, String personName, String protocolTitle, String committeePriRev,
-			String committeeSecRev, String submissionTypeDescription, String adminComments,String expirationDate) {
+			String committeeSecRev, String submissionTypeDescription, String adminComments,String expirationDate, Integer noVote, Integer yesVote, Integer abstainers, String minuteEntry) {
 		super();
 		this.protocolNumber = protocolNumber;
 		this.personName = personName;
@@ -25,6 +29,10 @@ public class ProtocolDetails {
 		this.submissionTypeDescription = submissionTypeDescription;
 		this.adminComments = adminComments;
 		this.expirationDate = expirationDate;
+		this.noVote = noVote;
+		this.yesVote = yesVote;
+		this.abstainers = abstainers;
+		this.minuteEntry = minuteEntry;
 	}
 
 	public String getProtocolNumber() {
@@ -117,6 +125,38 @@ public class ProtocolDetails {
 
 	public ProtocolDetails() {
 		super();
+	}
+
+	public Integer getNoVote() {
+		return noVote;
+	}
+
+	public void setNoVote(Integer noVote) {
+		this.noVote = noVote;
+	}
+
+	public Integer getYesVote() {
+		return yesVote;
+	}
+
+	public void setYesVote(Integer yesVote) {
+		this.yesVote = yesVote;
+	}
+
+	public Integer getAbstainers() {
+		return abstainers;
+	}
+
+	public void setAbstainers(Integer abstainers) {
+		this.abstainers = abstainers;
+	}
+
+	public String getMinuteEntry() {
+		return minuteEntry;
+	}
+
+	public void setMinuteEntry(String minuteEntry) {
+		this.minuteEntry = minuteEntry;
 	}
 
 }

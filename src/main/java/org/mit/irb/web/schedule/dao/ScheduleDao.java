@@ -11,6 +11,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachment;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
+import org.mit.irb.web.committee.pojo.CommitteeScheduleMinuteDoc;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
@@ -121,10 +122,11 @@ public interface ScheduleDao {
 	public List<CommitteeScheduleMinutes> getScheduleMinutes(ScheduleVo vo);
 
 	/**
-	 * @param vo
+	 * @param submissionId
+	 * @param schedulke 
 	 * @return 
 	 */
-	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(ScheduleVo vo);
+	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(Integer submissionId, Integer scheduleId);
 	
 	/**
 	 * @param vo
@@ -145,16 +147,10 @@ public interface ScheduleDao {
 	public List<CommitteeScheduleAttendance> fetchGuestMembers(Integer scheduleId);
 
 	/**
-	 * @param scheduleId
-	 * @param committeePersonId
-	 * @return
-	 */
-	public Boolean fetchPresentFlag(Integer scheduleId, String committeePersonId);
-
-	/**
 	 * @param scheduleAttendance
+	 * @return 
 	 */
-	public void updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance);
+	public CommitteeScheduleAttendance updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance);
 
 	/**
 	 * This method is used to getCommitteeScheduleAttachementById.
@@ -229,6 +225,49 @@ public interface ScheduleDao {
 	 */
 	void deleteMeetingOtherActions(Integer committeeScheduleActItems);
 	
+	/**
+	 * @param attachmentId
+	 * @return
+	 */
 	ResponseEntity<byte[]> downloadMeetingAttachment(String attachmentId);
+
+	/**
+	 * @param scheduleAgendaId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleAgendaById(String scheduleAgendaId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleMinute(String scheduleId);
+
+	/**
+	 * @param scheduleMinuteDocId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleMinuteById(String scheduleMinuteDocId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public List<CommitteeScheduleMinuteDoc> loadAllScheduleMinutes(Integer scheduleId);
+	
+	/**
+	 * @param committeeScheduleAttendanceId
+	 */
+	public void deleteMeetingAttendence(Integer committeeScheduleAttendanceId);
+
+	/**
+	 * @param scheduleId
+	 * @param committeePersonId
+	 * @param committeeMemberships
+	 * @return
+	 */
+	public CommitteeMemberships fetchAttendenceData(Integer scheduleId, String committeePersonId,
+			CommitteeMemberships committeeMemberships);
+
 
 }

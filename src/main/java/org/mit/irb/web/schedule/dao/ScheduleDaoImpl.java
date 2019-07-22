@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -33,6 +35,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachment;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
+import org.mit.irb.web.committee.pojo.CommitteeScheduleMinuteDoc;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
@@ -241,7 +244,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(ScheduleVo vo) {
+	public List<CommitteeScheduleMinutes> getProtocolCommitteeComments(Integer submissionId, Integer scheduleId) {
 	List<CommitteeScheduleMinutes> scheduleMinutes = new ArrayList<>();
 	try{		
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -260,8 +263,11 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		projList.add(Projections.property("minuteEntry"), "minuteEntry");
 		projList.add(Projections.property("finalFlag"), "finalFlag");
 		projList.add(Projections.property("updateTimestamp"), "updateTimestamp");
-		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleMinutes.class));
-		criteria.add(Restrictions.eq("submissionId",vo.getSubmissionId()));		
+		criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleMinutes.class));		
+		Criterion sub=Restrictions.eq("submissionId",submissionId);
+		Criterion sche=Restrictions.eq("committeeSchedule.scheduleId",scheduleId);
+		LogicalExpression andExp=Restrictions.and(sub,sche);
+		criteria.add(andExp);
 		scheduleMinutes = criteria.list();	
 	}catch (Exception e) {
 		logger.info("Exception in getProtocolCommitteeComments:" + e);
@@ -279,7 +285,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			CriteriaQuery<CommitteeMemberships> criteria = builder.createQuery(CommitteeMemberships.class);
 			Root<CommitteeMemberships> committeeRoot = criteria.from(CommitteeMemberships.class);
 			criteria.multiselect(committeeRoot.get("commMembershipId"),committeeRoot.get("committee"),committeeRoot.get("personId")
-					,committeeRoot.get("rolodexId"),committeeRoot.get("personName"),committeeRoot.get("nonEmployeeFlag"));
+					,committeeRoot.get("rolodexId"),committeeRoot.get("personName"),committeeRoot.get("nonEmployeeFlag")
+					,committeeRoot.get("termStartDate"),committeeRoot.get("termEndDate"));
 			/*Predicate predicateOne = builder.equal(committeeRoot.get("committee").get("committeeId"),vo.getCommitteeId());
 			Predicate predicateTwo = builder.equal(committeeRoot.get("active"), true);
 			criteria.where(builder.and(predicateOne, predicateTwo));*/
@@ -318,7 +325,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
 			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
 			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
-					,committeeRoot.get("memberPresent"));
+					,committeeRoot.get("memberPresent"),committeeRoot.get("guestFlag"),committeeRoot.get("committeeScheduleAttendanceId")
+					,committeeRoot.get("comments"),committeeRoot.get("alternateFor"));
 			Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
 			Predicate predicateTwo = builder.equal(committeeRoot.get("guestFlag"), true);
 			criteria.where(builder.and(predicateOne, predicateTwo));
@@ -332,35 +340,13 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public Boolean fetchPresentFlag(Integer scheduleId, String committeePersonId) {
-		Boolean presentFlag = false;
+	public CommitteeScheduleAttendance updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance) {
 		try{
-			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
-			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
-			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
-					,committeeRoot.get("memberPresent"));
-			Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
-			Predicate predicateTwo = builder.equal(committeeRoot.get("personId"), committeePersonId);
-			criteria.where(builder.and(predicateOne, predicateTwo));
-
-			//criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),committeeMemberships.getCommMembershipId()));
-			List<CommitteeScheduleAttendance> committeeScheduleAttendance = session.createQuery(criteria).getResultList();
-			presentFlag = committeeScheduleAttendance.get(0).getMemberPresent();
-		} catch (Exception e) {
-			logger.info("Exception in fetchPresentFlag:" + e);
-		}
-		return presentFlag;
-	}
-
-	@Override
-	public void updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance) {
-		try{
-			
+			hibernateTemplate.saveOrUpdate(scheduleAttendance);
 		} catch (Exception e) {
 			logger.info("Exception in updateScheduleAttendance:" + e);
-		}		
+		}	
+		return scheduleAttendance;
 	}	
 
 	@Override
@@ -524,7 +510,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ScheduleAgenda> criteria = builder.createQuery(ScheduleAgenda.class);
-			Root<ScheduleAgenda> attachmentRoot=criteria.from(ScheduleAgenda.class);				
+			Root<ScheduleAgenda> attachmentRoot=criteria.from(ScheduleAgenda.class);	
+			criteria.multiselect(attachmentRoot.get("scheduleAgendaId"),attachmentRoot.get("scheduleId")
+					,attachmentRoot.get("agendaNumber"),attachmentRoot.get("createTimestamp"),attachmentRoot.get("createUser"));
 			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),scheduleId));
 			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleAgendaId")));
 			attachment = session.createQuery(criteria).getResultList();
@@ -584,6 +572,154 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		}catch (Exception e) {
 			logger.error("Error in deleteMeetingOtherActions: ", e);
 		}
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadScheduleAgendaById(String scheduleAgendaId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ScheduleAgenda> criteria = builder.createQuery(ScheduleAgenda.class);
+			Root<ScheduleAgenda> attachmentRoot=criteria.from(ScheduleAgenda.class);				
+			criteria.where(builder.equal(attachmentRoot.get("scheduleAgendaId"),Integer.parseInt(scheduleAgendaId)));
+			ScheduleAgenda protocolAttachment = session.createQuery(criteria).getResultList().get(0);	
+			if (protocolAttachment != null) {				
+				byte[] byteArray = null;				
+				byteArray = protocolAttachment.getPdfStore();				
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType("application/pdf"));
+				String filename = "Agenda_"+scheduleAgendaId;
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(byteArray.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(byteArray, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.info("Exception in downloadScheduleAgenda:" + e);
+		}		
+		return attachmentData;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadScheduleMinute(String scheduleId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleMinuteDoc> criteria = builder.createQuery(CommitteeScheduleMinuteDoc.class);
+			Root<CommitteeScheduleMinuteDoc> attachmentRoot=criteria.from(CommitteeScheduleMinuteDoc.class);				
+			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),Integer.parseInt(scheduleId)));
+			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleMinuteDocId")));
+			CommitteeScheduleMinuteDoc attachment = null;
+			if(session.createQuery(criteria).getResultList() != null && !session.createQuery(criteria).getResultList().isEmpty())
+			attachment = session.createQuery(criteria).getResultList().get(0);	
+			if (attachment != null) {				
+				byte[] byteArray = null;				
+				byteArray = attachment.getPdfStore();				
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType("application/pdf"));
+				String filename = "Minute"+scheduleId;
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(byteArray.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(byteArray, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.info("Exception in downloadScheduleMinute:" + e);
+		}		
+		return attachmentData;
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadScheduleMinuteById(String scheduleMinuteDocId) {
+		ResponseEntity<byte[]> attachmentData = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleMinuteDoc> criteria = builder.createQuery(CommitteeScheduleMinuteDoc.class);
+			Root<CommitteeScheduleMinuteDoc> attachmentRoot=criteria.from(CommitteeScheduleMinuteDoc.class);				
+			criteria.where(builder.equal(attachmentRoot.get("scheduleMinuteDocId"),Integer.parseInt(scheduleMinuteDocId)));
+			CommitteeScheduleMinuteDoc attachment  = null;
+			if(session.createQuery(criteria).getResultList() != null && !session.createQuery(criteria).getResultList().isEmpty())
+			attachment = session.createQuery(criteria).getResultList().get(0);	
+			if (attachment != null) {				
+				byte[] byteArray = null;				
+				byteArray = attachment.getPdfStore();				
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.parseMediaType("application/pdf"));
+				String filename = "Minute"+scheduleMinuteDocId;
+				headers.setContentDispositionFormData(filename, filename);
+				headers.setContentLength(byteArray.length);
+				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+				headers.setPragma("public");
+				attachmentData = new ResponseEntity<byte[]>(byteArray, headers, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.info("Exception in downloadScheduleMinuteById:" + e);
+		}		
+		return attachmentData;
+	}
+
+	@Override
+	public List<CommitteeScheduleMinuteDoc> loadAllScheduleMinutes(Integer scheduleId) {
+		List<CommitteeScheduleMinuteDoc> attachment = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleMinuteDoc> criteria = builder.createQuery(CommitteeScheduleMinuteDoc.class);
+			Root<CommitteeScheduleMinuteDoc> attachmentRoot=criteria.from(CommitteeScheduleMinuteDoc.class);	
+			criteria.multiselect(attachmentRoot.get("scheduleMinuteDocId"),attachmentRoot.get("scheduleId")
+					,attachmentRoot.get("minuteNumber"),attachmentRoot.get("createTimestamp"),attachmentRoot.get("createUser"));
+			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),scheduleId));
+			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleMinuteDocId")));
+			attachment = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.info("Exception in loadAllScheduleMinutes:" + e);
+		}
+		return attachment;
+	}
+	
+	@Override
+	public void deleteMeetingAttendence(Integer committeeScheduleAttendanceId) {
+		try{
+			Query queryMeetingAttendence = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from CommitteeScheduleAttendance p where p.committeeScheduleAttendanceId =:committeeScheduleAttendanceId");
+			queryMeetingAttendence.setInteger("committeeScheduleAttendanceId",committeeScheduleAttendanceId);
+			queryMeetingAttendence.executeUpdate();
+		}catch (Exception e) {
+			logger.error("Error in deleteMeetingAttendence: ", e);
+		}		
+	}
+
+	@Override
+	public CommitteeMemberships fetchAttendenceData(Integer scheduleId, String committeePersonId,
+			CommitteeMemberships committeeMemberships) {
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
+			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
+			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
+					,committeeRoot.get("memberPresent"),committeeRoot.get("guestFlag"),committeeRoot.get("committeeScheduleAttendanceId")
+					,committeeRoot.get("comments"),committeeRoot.get("alternateFor"));
+			Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
+			Predicate predicateTwo = builder.equal(committeeRoot.get("personId"), committeePersonId);
+			criteria.where(builder.and(predicateOne, predicateTwo));
+
+			List<CommitteeScheduleAttendance> committeeScheduleAttendance = session.createQuery(criteria).getResultList();
+			if(!committeeScheduleAttendance.isEmpty()){
+				committeeMemberships.setMemberPresent(committeeScheduleAttendance.get(0).getMemberPresent());
+				committeeMemberships.setAttendanceComment(committeeScheduleAttendance.get(0).getComments());
+				committeeMemberships.setScheduleAttendanceId(committeeScheduleAttendance.get(0).getCommitteeScheduleAttendanceId());
+				committeeMemberships.setAlternateFor(committeeScheduleAttendance.get(0).getAlternateFor());
+			}		
+		} catch (Exception e) {
+			logger.info("Exception in fetchAttendenceData:" + e);
+		}
+		return committeeMemberships;
 	}
 
 }

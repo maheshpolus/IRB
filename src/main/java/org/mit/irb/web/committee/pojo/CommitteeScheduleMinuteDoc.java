@@ -2,11 +2,13 @@ package org.mit.irb.web.committee.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "IRB_COMM_SCHEDULE_MINUTE_DOC")
@@ -24,6 +28,9 @@ public class CommitteeScheduleMinuteDoc implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GenericGenerator(name = "minuteIdGererator", strategy = "increment", parameters = {
+			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
+	@GeneratedValue(generator = "minuteIdGererator")
 	@Column(name = "SCHEDULE_MINUTE_DOC_ID")
 	private Integer scheduleMinuteDocId;
 
@@ -44,7 +51,7 @@ public class CommitteeScheduleMinuteDoc implements Serializable {
 	private byte[] pdfStore;
 
 	@Column(name = "CREATE_TIMESTAMP")
-	private Timestamp createTimestamp;
+	private java.util.Date createTimestamp;
 
 	@Column(name = "CREATE_USER")
 	private String createUser;
@@ -95,14 +102,6 @@ public class CommitteeScheduleMinuteDoc implements Serializable {
 		this.pdfStore = pdfStore;
 	}
 
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
-	}
-
 	public String getCreateUser() {
 		return createUser;
 	}
@@ -137,6 +136,28 @@ public class CommitteeScheduleMinuteDoc implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public java.util.Date getCreateTimestamp() {
+		return createTimestamp;
+	}
+
+	public void setCreateTimestamp(java.util.Date createTimestamp) {
+		this.createTimestamp = createTimestamp;
+	}
+
+	public CommitteeScheduleMinuteDoc(Integer scheduleMinuteDocId, Integer scheduleId, Integer minuteNumber,
+			Date createTimestamp,String createUser) {
+		super();
+		this.scheduleMinuteDocId = scheduleMinuteDocId;
+		this.scheduleId = scheduleId;
+		this.minuteNumber = minuteNumber;
+		this.createTimestamp = createTimestamp;
+		this.createUser = createUser;
+	}
+
+	public CommitteeScheduleMinuteDoc() {
+		// TODO Auto-generated constructor stub
 	}
 
 }

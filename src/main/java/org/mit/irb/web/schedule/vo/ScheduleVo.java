@@ -10,6 +10,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachment;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
+import org.mit.irb.web.committee.pojo.CommitteeScheduleMinuteDoc;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
@@ -51,7 +52,7 @@ public class ScheduleVo {
 
 	private List<CommitteeScheduleAttachType> attachmentTypes;
 
-	private CommitteeScheduleAttendance updatedAttendance;
+	private List<CommitteeScheduleAttendance> updatedAttendance;
 
 	private Integer commScheduleMinuteId;
 
@@ -87,7 +88,17 @@ public class ScheduleVo {
 	
 	private boolean flag;
 	
+	private String templateCode;
+	
 	private List<CommitteeScheduleActItems> committeeScheduleActItemsList;
+	
+	private List<CommitteeScheduleMinuteDoc> minuteList;
+	
+	private ScheduleAgenda agendaDetails;
+	
+	private CommitteeScheduleMinuteDoc minuteDetails;
+	
+	private CommitteeScheduleAttendance committeeScheduleAttendance;
 	
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;
@@ -207,14 +218,6 @@ public class ScheduleVo {
 
 	public void setAttachmentTypes(List<CommitteeScheduleAttachType> attachmentTypes) {
 		this.attachmentTypes = attachmentTypes;
-	}
-
-	public CommitteeScheduleAttendance getUpdatedAttendance() {
-		return updatedAttendance;
-	}
-
-	public void setUpdatedAttendance(CommitteeScheduleAttendance updatedAttendance) {
-		this.updatedAttendance = updatedAttendance;
 	}
 
 	public Integer getCommScheduleMinuteId() {
@@ -359,5 +362,53 @@ public class ScheduleVo {
 
 	public void setCommitteeScheduleActItemsList(List<CommitteeScheduleActItems> committeeScheduleActItemsList) {
 		this.committeeScheduleActItemsList = committeeScheduleActItemsList;
+	}
+
+	public String getTemplateCode() {
+		return templateCode;
+	}
+
+	public void setTemplateCode(String templateCode) {
+		this.templateCode = templateCode;
+	}
+
+	public List<CommitteeScheduleMinuteDoc> getMinuteList() {
+		return minuteList;
+	}
+
+	public void setMinuteList(List<CommitteeScheduleMinuteDoc> minuteList) {
+		this.minuteList = minuteList;
+	}
+
+	public ScheduleAgenda getAgendaDetails() {
+		return agendaDetails;
+	}
+
+	public void setAgendaDetails(ScheduleAgenda agendaDetails) {
+		this.agendaDetails = agendaDetails;
+	}
+
+	public CommitteeScheduleMinuteDoc getMinuteDetails() {
+		return minuteDetails;
+	}
+
+	public void setMinuteDetails(CommitteeScheduleMinuteDoc minuteDetails) {
+		this.minuteDetails = minuteDetails;
+	}
+
+	public List<CommitteeScheduleAttendance> getUpdatedAttendance() {
+		return updatedAttendance;
+	}
+
+	public void setUpdatedAttendance(List<CommitteeScheduleAttendance> updatedAttendance) {
+		this.updatedAttendance = updatedAttendance;
+	}
+
+	public CommitteeScheduleAttendance getCommitteeScheduleAttendance() {
+		return committeeScheduleAttendance;
+	}
+
+	public void setCommitteeScheduleAttendance(CommitteeScheduleAttendance committeeScheduleAttendance) {
+		this.committeeScheduleAttendance = committeeScheduleAttendance;
 	}
 }

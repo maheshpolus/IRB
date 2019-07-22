@@ -2675,3 +2675,13 @@ input:disabled,textarea:disabled{
       height: 275px;
       overflow-y: auto;
   }
+  .tabDisabled {
+    pointer-events:none; 
+    opacity:0.6;
+}
+.fontsize-20 {
+    font-size: 20px !important;
+}
+.present-color {
+    color: #0fbb37;
+}

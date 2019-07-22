@@ -13,7 +13,8 @@ import { ScheduleConfigurationService } from './schedule-configuration.service';
 } )
 export class ScheduleComponent implements OnInit, OnDestroy {
 
-    agendaList: any = {};
+    agendaList: any = [];
+    minutelist = [];
     modalTitle = '';
     modalPara = '';
     currentTab = 'schedule_home';
@@ -62,13 +63,20 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         this.modalPara = 'List of all generated agendas';
         this.scheduleService.loadAllScheduleAgenda(this.scheduleId).subscribe(
           data => {
-            this.agendaList = data.agendaList;
+            this.minutelist = [];
+            this.agendaList = data.agendaList != null ? data.agendaList : [];
           }
         );
       } else {
         this.agendaList = [];
         this.modalTitle = 'Mintues';
         this.modalPara = 'List of all generated minutes';
+        this.scheduleService.loadAllScheduleMinutes(this.scheduleId).subscribe(
+            data => {
+                this.agendaList = [];
+                this.minutelist = data.minuteList != null ? data.minuteList : [];
+            }
+          );
       }
     }
 
@@ -101,6 +109,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     createAgendaForSchedule() {
         const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId, updateUser: this.userDTO.userName };
         this.scheduleService.createAgendaForSchedule(requestObject).subscribe( data => {
+            const result: any = data;
+            this.result.agendaDetails = result.agendaDetails;
             this.downloadLatestAgenda();
         });
     }
@@ -119,7 +129,11 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     createMinutesForSchedule() {
       const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId };
-      this.scheduleService.createMinutesForSchedule(requestObject).subscribe(data => this.downloadLatestMinutes());
+      this.scheduleService.createMinutesForSchedule(requestObject).subscribe(data => {
+        const result: any = data;
+        this.result.minuteDetails = result.minuteDetails;
+        this.downloadLatestMinutes();
+      });
     }
 
     downloadLatestMinutes() {

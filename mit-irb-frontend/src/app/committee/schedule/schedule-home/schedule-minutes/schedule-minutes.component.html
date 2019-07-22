@@ -4,16 +4,16 @@
       <ul class="nav nav-pills" role="tablist" style="background: none;">
         <li class="nav-item pointer">
           <a class="nav-link active txt-small button-red-tab" (click)="tabSelected = 'meeting';getMinutes()" [ngClass]="{active:(tabSelected=='meeting')}">
-            <i class="fa fa-hourglass txt-large" aria-hidden="true"></i> Meeting Comments</a>
+            <i class="fa fa-comments" aria-hidden="true"></i> Meeting Comments</a>
         </li>
         <li class="nav-item border-left1 pointer">
           <a class="nav-link txt-small button-red-tab" (click)="tabSelected = 'protocol';getSubmittedProtocols(null, null)" [ngClass]="{active:(tabSelected=='protocol')}">
-            <i class="fa fa-book txt-large mr-5" aria-hidden="true"></i>Protocol Comments
+              <i class="fa fa-comments" aria-hidden="true"></i> Protocol Comments
           </a>
         </li>
         <li class="nav-item border-left1 pointer">
           <a class="nav-link txt-small button-red-tab" (click)="tabSelected = 'all';getMinutes()" [ngClass]="{active:(tabSelected=='all')}">
-            <i class="fa fa-sitemap txt-large mr-5" aria-hidden="true"></i>All Comments
+              <i class="fa fa-comments" aria-hidden="true"></i> All Comments
           </a>
         </li>
       </ul>
@@ -37,30 +37,32 @@
               <span class="text-secondary txt-medium">Entry Type
                 <span class="mandatory">*</span>
               </span>
-              <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect" [(ngModel)]="newCommitteeScheduleMinute.minuteEntryTypeCode">
+              <select class="custom-select  mr-sm-2 form-control txt-small" [class.poping-border]="editIndex != null" id="inlineFormCustomSelect"
+                [(ngModel)]="newCommitteeScheduleMinute.minuteEntryTypeCode"(ngModelChange)="changeMinuteType(newCommitteeScheduleMinute.minuteEntryTypeCode)">
                 <option value="" selected>Select</option>
                 <option value="{{type.minuteEntryTypecode}}" *ngFor="let type of entryType" [attr.disabled]="type.minuteEntryTypecode == '3' || type.minuteEntryTypecode == '6' ? true : null">{{type.description}}</option>
               </select>
             </div>
           </div>
-          <!-- <div class="col-3" *ngIf="newCommitteeScheduleMinute.minuteEntryTypeCode == 4">
+          <div class="col-3" *ngIf="newCommitteeScheduleMinute.minuteEntryTypeCode == 4">
             <div class="form-group ">
-              <span class="text-secondary txt-medium">Other Bussiness Type
-                <span class="mandatory">*</span>
-              </span>
-              <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect" [(ngModel)]="newCommitteeScheduleMinute.minuteEntryTypeCode">
+              <span class="text-secondary txt-medium">Other Bussiness Type </span>
+              <select class="custom-select  mr-sm-2 form-control txt-small" id="inlineFormCustomSelect" [(ngModel)]="newCommitteeScheduleMinute.commScheduleActItemsId"
+              (ngModelChange)="selectOtherBussinessType(newCommitteeScheduleMinute.commScheduleActItemsId)">
                 <option value="" selected>Select</option>
-                <option value="{{type.minuteEntryTypecode}}" *ngFor="let type of entryType" [attr.disabled]="type.minuteEntryTypecode == '3' || type.minuteEntryTypecode == '6' ? true : null">{{type.description}}</option>
+                <option value="{{type.commScheduleActItemsId}}" *ngFor="let type of committeeScheduleActItemsList">{{type.itemDescription}}</option>
               </select>
             </div>
-          </div> -->
+          </div>
           <div class="col-2  mt-25">
-            <div class="form-group ">
+            <div class="form-group" [class.poping-border]="editIndex != null">
               <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.privateCommentFlag" /> Include in Minutes
             </div>
           </div>
           <div class="col-2  mt-25">
-            <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.finalFlag" /> Include in Letter
+            <div class="form-group" [class.poping-border]="editIndex != null">
+              <input type="checkbox" [(ngModel)]="newCommitteeScheduleMinute.finalFlag" /> Include in Letter
+            </div>
           </div>
         </div>
         <div class="row bottom-margin">
@@ -69,12 +71,15 @@
               <span class="text-secondary txt-medium">Entry
                 <span class="mandatory">*</span>
               </span>
-              <textarea class="form-control txt-small txt-area-fnt" [(ngModel)]="newCommitteeScheduleMinute.minuteEntry"></textarea>
+              <textarea class="form-control txt-small txt-area-fnt" [class.poping-border]="editIndex != null" [(ngModel)]="newCommitteeScheduleMinute.minuteEntry"></textarea>
             </div>
           </div>
           <div class="col-1 add-btn-1">
-            <button title="Add" type="button" class="btn top-butn" (click)="saveMinutes()">
+            <button title="Add" type="button" class="btn top-butn" *ngIf="editIndex == null" (click)="saveMinutes()">
               <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+            </button>
+            <button title="Save" *ngIf="editIndex != null" (click)="updateMinuteItem()" type="button" class="btn top-butn">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -180,8 +185,8 @@
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
           <h4 class="card-hedding dotted-bottom" *ngIf="tabSelected == 'protocol'">Showing Minutes of Protocol #{{selectedProtocol?.protocolNumber}}</h4>
           <div class="table-responsive">
-            <table class="table table-striped tbl-p-clr">
-              <thead class="tbl-head-clr thead-font-size p-75">
+            <table class="table m-0">
+              <thead class="tbl-head-clr thead-font-size solid-bottom">
                 <tr>
                   <th title="">Entry Type</th>
                   <th title="">Entry</th>
@@ -190,8 +195,8 @@
                   <th title="" *ngIf="tabSelected != 'all'">Action</th>
                 </tr>
               </thead>
-              <tbody class="tbody-font-size p-75">
-                <tr *ngFor="let minute of scheduleMinutes; let i=index">
+              <tbody class="tbody-font-size text-secondary">
+                <tr *ngFor="let minute of scheduleMinutes; let i=index" [class.poping-border]="i == editIndex">
                   <td>{{ minute?.minuteEntrytype?.description }}
                     <span *ngIf="minute.minuteEntryTypeCode == 6 || minute.minuteEntryTypeCode == 3">&nbsp;-&nbsp;{{minute?.protocolNumber}}</span>
                   </td>
@@ -203,10 +208,10 @@
                     <i [ngClass]=" (minute?.finalFlag == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i>
                   </td>
                   <td class="action-btn-list" *ngIf="tabSelected != 'all'">
-                    <!-- <button title="Edit" type="button" class="btn btn-primary edit-btn-1" *ngIf="tabSelected == 'meeting'" (click)="editMinuteItem(minute, i)">
+                    <button title="Edit" type="button" class="btn btn-primary edit-btn-1" *ngIf="tabSelected == 'meeting'" (click)="editMinuteItem(minute, i)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
-                    <button title="Save" *ngIf="tabSelected == 'meeting'" (click)="updateMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
+                    <!--  <button title="Save" *ngIf="tabSelected == 'meeting'" (click)="updateMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">
                       <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
                     <button title="Cancel" *ngIf="tabSelected == 'meeting'" (click)="cancelEditMinuteItem($event, i, minute)" type="button" class="btn btn-primary edit-btn-1">

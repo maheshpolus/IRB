@@ -243,7 +243,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
       this.scheduleList = result.scheduleDates != null ? result.scheduleDates : [];
       this.committeeList = result.committeeList != null ? result.committeeList : [];
-      this.committeeID = this.submissionVo.committeeId != null ? this.submissionVo.committeeId :
+      this.committeeID = result.committeeId != null ? result.committeeId :
         (this.committeeList.length > 0 ? this.committeeList[0].COMMITTEE_ID : null);
       this.scheduleID = this.submissionVo.sceduleId != null ?
         this.submissionVo.sceduleId : (this.scheduleList.length > 0 ? this.scheduleList[0].SCHEDULE_ID : null);

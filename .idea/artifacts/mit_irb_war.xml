@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="mit-irb:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="mit-irb.war">
-      <element id="artifact" artifact-name="mit-irb:war exploded" />
-    </root>
-  </artifact>
-</component>

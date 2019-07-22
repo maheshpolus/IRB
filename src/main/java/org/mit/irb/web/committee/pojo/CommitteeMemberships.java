@@ -127,8 +127,16 @@ public class CommitteeMemberships implements Serializable {
 	private String acType;
 	
 	@Transient
-	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean memberPresent;
+	private String memberPresent;
+	
+	@Transient
+	private String attendanceComment;
+	
+	@Transient
+	private Integer scheduleAttendanceId;
+	
+	@Transient
+	private String alternateFor;
 
 	public CommitteeMemberships() {
 		setCommitteeMemberRoles(new ArrayList<CommitteeMemberRoles>());
@@ -336,7 +344,7 @@ public class CommitteeMemberships implements Serializable {
 	}
 
 	public CommitteeMemberships(Integer commMembershipId, Committee committee, String personId, Integer rolodexId,
-			String personName, Boolean nonEmployeeFlag) {
+			String personName, Boolean nonEmployeeFlag, java.util.Date termStartDate, java.util.Date termEndDate) {
 		super();
 		this.commMembershipId = commMembershipId;
 		this.committee = committee;
@@ -344,6 +352,8 @@ public class CommitteeMemberships implements Serializable {
 		this.rolodexId = rolodexId;
 		this.personName = personName;
 		this.nonEmployeeFlag = nonEmployeeFlag;
+		this.termStartDate = termStartDate;
+		this.termEndDate = termEndDate;
 	}
 	
 	public void setActive(boolean active) {
@@ -382,19 +392,35 @@ public class CommitteeMemberships implements Serializable {
 		this.perviousTermEndDate = perviousTermEndDate;
 	}
 
-	public Boolean getMemberPresent() {
+	public String getMemberPresent() {
 		return memberPresent;
 	}
 
-	public void setMemberPresent(Boolean memberPresent) {
+	public void setMemberPresent(String memberPresent) {
 		this.memberPresent = memberPresent;
 	}
 
-	/*public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange() {
-		return committeeMemberStatusChange;
+	public String getAttendanceComment() {
+		return attendanceComment;
 	}
 
-	public void setCommitteeMemberStatusChange(List<CommitteeMemberStatusChange> committeeMemberStatusChange) {
-		this.committeeMemberStatusChange = committeeMemberStatusChange;
-	}*/
+	public void setAttendanceComment(String attendanceComment) {
+		this.attendanceComment = attendanceComment;
+	}
+
+	public Integer getScheduleAttendanceId() {
+		return scheduleAttendanceId;
+	}
+
+	public void setScheduleAttendanceId(Integer scheduleAttendanceId) {
+		this.scheduleAttendanceId = scheduleAttendanceId;
+	}
+
+	public String getAlternateFor() {
+		return alternateFor;
+	}
+
+	public void setAlternateFor(String alternateFor) {
+		this.alternateFor = alternateFor;
+	}
 }

@@ -94,6 +94,20 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       );
     }
 
+    downloadMinuteAttachment(scheduleMinuteDocId) {
+      this.scheduleService.downloadMinuteAttachment(scheduleMinuteDocId).subscribe(data => {
+        const a = document.createElement('a');
+        const blob = new Blob([data], { type: data.type });
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Minutes';
+        document.body.appendChild(a);
+        a.click();
+      },
+        error => console.log('Error downloading the file.', error),
+        () => console.log('OK')
+      );
+    }
+
     onActivate( componentRef ) {
         this.activatedRoute = componentRef;
     }

@@ -632,7 +632,7 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			CriteriaQuery<CommitteeScheduleMinuteDoc> criteria = builder.createQuery(CommitteeScheduleMinuteDoc.class);
 			Root<CommitteeScheduleMinuteDoc> attachmentRoot=criteria.from(CommitteeScheduleMinuteDoc.class);	
 			criteria.multiselect(attachmentRoot.get("scheduleMinuteDocId"),attachmentRoot.get("scheduleId")
-					,attachmentRoot.get("minuteNumber"),attachmentRoot.get("createTimestamp"));
+					,attachmentRoot.get("minuteNumber"),attachmentRoot.get("createTimestamp"),attachmentRoot.get("createUser"));
 			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),scheduleId));
 			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleMinuteDocId")));
 			if( session.createQuery(criteria).getResultList() != null && ! session.createQuery(criteria).getResultList().isEmpty())
@@ -646,5 +646,9 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			logger.info("Exception in getPrevMinuteDetails method:" + e);
 		}
 	return attachment;	
+	}
+	
+	public void loadMeetingAttendance(ScheduleVo vo){
+		vo = scheduleService.loadMeetingAttendence(vo);
 	}
 }

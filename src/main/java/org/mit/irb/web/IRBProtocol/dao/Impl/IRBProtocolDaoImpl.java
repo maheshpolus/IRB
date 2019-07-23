@@ -1644,13 +1644,14 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 	}
 
 	@Override
-	public Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId, Integer actionId) {
+	public Integer getNextGroupActionId(Integer protocolId, Integer nextGroupActionId, Integer actionId, String groupListProtocolNumber) {
 		Integer nextGroupAction_id = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
 		inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER, protocolId));
 		inputParam.add(new InParameter("AV_NEXT_GROUP_ACTION_ID", DBEngineConstants.TYPE_INTEGER, nextGroupActionId));
 		inputParam.add(new InParameter("AV_ACTION_ID", DBEngineConstants.TYPE_INTEGER, actionId));
+		inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, groupListProtocolNumber));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		ArrayList<HashMap<String, Object>> result = null;
 		try {

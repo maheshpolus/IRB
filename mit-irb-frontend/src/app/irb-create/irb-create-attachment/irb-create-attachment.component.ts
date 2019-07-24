@@ -295,7 +295,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
                 this.irbAttachmentProtocol.acType = 'I';
                 this.irbAttachmentProtocol.protocolNumber = this.requestObject.protocolNumber;
                 this.irbAttachmentProtocol.protocolId = this.requestObject.protocolId;
-                this.irbAttachmentProtocol.sequenceNumber = 1;
+                this.irbAttachmentProtocol.sequenceNumber = this.generalInfo.sequenceNumber;
                 this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
                 this.irbAttachmentProtocol.documentId = 1;
                 this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;

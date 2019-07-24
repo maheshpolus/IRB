@@ -69,7 +69,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         );
       } else {
         this.agendaList = [];
-        this.modalTitle = 'Mintues';
+        this.modalTitle = 'Minutes';
         this.modalPara = 'List of all generated minutes';
         this.scheduleService.loadAllScheduleMinutes(this.scheduleId).subscribe(
             data => {
@@ -142,7 +142,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     }
 
     createMinutesForSchedule() {
-      const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId };
+      const requestObject = { scheduleId: this.scheduleId, committeeId: this.committeeId, updateUser: this.userDTO.userName };
       this.scheduleService.createMinutesForSchedule(requestObject).subscribe(data => {
         const result: any = data;
         this.result.minuteDetails = result.minuteDetails;

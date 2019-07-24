@@ -40,15 +40,7 @@ public class ScheduleController {
 		logger.info("scheduleId : " + vo.getScheduleId());
 		ScheduleVo ScheduleVo = null ; /*scheduleService.loadScheduleById(vo.getScheduleId());*/
 		return ScheduleVo;
-	}
-	
-	@RequestMapping(value = "/loadScheduleBasicDetail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody ScheduleVo loadScheduleBasicDetail(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Requesting for loadScheduleById");
-		logger.info("scheduleId : " + vo.getScheduleId());
-		ScheduleVo ScheduleVo = scheduleService.loadScheduleBasicDetail(vo.getScheduleId());
-		return ScheduleVo;
-	}
+	}	
 
 	@RequestMapping(value = "/updateSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody ScheduleVo updateSchedule(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
@@ -212,8 +204,7 @@ public class ScheduleController {
 		ScheduleVo scheduleVo = scheduleService.updateMeetingAttendence(vo);
 		return scheduleVo;
 	}
-	
-	
+		
 	@RequestMapping(value = "/loadMeetingAttachmentById", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody ScheduleVo loadMeetingAttachmentById(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {		logger.info("Requesting for loadScheduleById");
 		logger.info("scheduleId : " + vo.getScheduleId());
@@ -295,5 +286,12 @@ public class ScheduleController {
 		logger.info("scheduleId : " + vo.getScheduleId());
 		ScheduleVo ScheduleVo = scheduleService.loadAllScheduleMinutes(vo.getScheduleId());
 		return ScheduleVo;
+	}
+	
+	@RequestMapping(value = "/showAllMeetingAttendence", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ScheduleVo showAllMeetingAttendence(@RequestBody ScheduleVo vo, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Requesting for loadScheduledProtocols");
+		ScheduleVo scheduleVo = scheduleService.showAllMeetingAttendence(vo);
+		return scheduleVo;
 	}
 }

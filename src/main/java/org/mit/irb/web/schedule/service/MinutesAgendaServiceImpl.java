@@ -3,60 +3,45 @@ package org.mit.irb.web.schedule.service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
-import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
-import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
-import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAdminReviewerComment;
-import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
-import org.mit.irb.web.IRBProtocol.pojo.IRBFileData;
-import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
-import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.committee.dao.CommitteeDao;
+import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
+import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinuteDoc;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.ProtocolSubmission;
+import org.mit.irb.web.committee.pojo.Rolodex;
 import org.mit.irb.web.committee.pojo.ScheduleAgenda;
-import org.mit.irb.web.committee.pojo.ScheduleStatus;
-import org.mit.irb.web.committee.schedule.Time24HrFmt;
+import org.mit.irb.web.committee.view.PersonDetailsView;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.correspondence.dao.DocxDocumentMergerAndConverter;
+import org.mit.irb.web.schedule.dao.MemberAttandance;
 import org.mit.irb.web.schedule.dao.ScheduleDao;
 import org.mit.irb.web.schedule.pojo.MinutesEntry;
 import org.mit.irb.web.schedule.pojo.ProtocolDetails;
 import org.mit.irb.web.schedule.vo.ScheduleVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -94,8 +79,6 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 	
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
-	
-	private static final String COLON = ":";
 	
 	private List<ProtocolSubmission> allProtocolDetails(ScheduleVo vo){
 		vo = scheduleService.loadScheduledProtocols(vo);
@@ -384,11 +367,6 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleAgendaId")));
 			if( session.createQuery(criteria).getResultList() != null && ! session.createQuery(criteria).getResultList().isEmpty())
 			attachment = (ScheduleAgenda) session.createQuery(criteria).getResultList().get(0);							
-			/*Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
-					"from ScheduleAgenda p where p.scheduleId =:scheduleId order by p.updateTimestamp DESC");
-			queryGeneral.setInteger("scheduleId",scheduleId);			
-			if(queryGeneral.list() != null && !queryGeneral.list().isEmpty())
-			attachment =  (ScheduleAgenda) queryGeneral.list().get(0);*/
 		} catch (Exception e) {
 			logger.info("Exception in getPrevAgendaDetails method:" + e);
 		}
@@ -491,12 +469,10 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			context.put("scheduleMeetingTime",vo.getCommitteeSchedule().getTime() == null ? "" : dateFormat.format(vo.getCommitteeSchedule().getTime()));
 			context.put("scheduleLocation",vo.getCommitteeSchedule().getPlace() == null ? "" : vo.getCommitteeSchedule().getPlace());
 			context.put("previousMeetingDate",details.get(0).getPreviousSchMeetingDate() == null ? "" : details.get(0).getPreviousSchMeetingDate());
-			context.put("nextMeetingDate",details.get(1).getNextSchMeetingDate() == null ? "" : details.get(1).getNextSchMeetingDate());
-			context.put("meetingPlace",details.get(1).getNextMeetingPlace() == null ? "" : details.get(1).getNextMeetingPlace());			
-			context.put("yesVote",vo.getCommitteeSchedule().getPlace() == null ? "" : vo.getCommitteeSchedule().getPlace());
-			context.put("noVote",vo.getCommitteeSchedule().getPlace() == null ? "" : vo.getCommitteeSchedule().getPlace());
-			context.put("abstainers",vo.getCommitteeSchedule().getPlace() == null ? "" : vo.getCommitteeSchedule().getPlace());
-
+			if(details.size() > 1){
+				context.put("nextMeetingDate",details.get(1).getPreviousSchMeetingDate() == null ? "" : details.get(1).getPreviousSchMeetingDate());
+				context.put("meetingPlace",details.get(1).getNextMeetingPlace() == null ? "" : details.get(1).getNextMeetingPlace());				
+			}						
 		}catch (Exception e) {
 			logger.info("Exception in setPlaceHolderData method:" + e);
 		}
@@ -568,7 +544,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			FieldsMetadata fieldsMetadata5 = report.createFieldsMetadata();
 			FieldsMetadata fieldsMetadata6 = report.createFieldsMetadata();
 			FieldsMetadata fieldsMetadata7 = report.createFieldsMetadata();
-			FieldsMetadata fieldsMetadata8 = report.createFieldsMetadata();			
+			FieldsMetadata fieldsMetadata8 = report.createFieldsMetadata();		
+			FieldsMetadata fieldsMetadata9 = report.createFieldsMetadata();	
+			FieldsMetadata fieldsMetadata10 = report.createFieldsMetadata();			
+			FieldsMetadata fieldsMetadata11 = report.createFieldsMetadata();	
+			FieldsMetadata fieldsMetadata12 = report.createFieldsMetadata();			
 			List<ProtocolSubmission> submissions = allProtocolDetails(vo);	
 			fieldsMetadata.load("otherList", MinutesEntry.class, true);
 			fieldsMetadata1.load("fullIntialApp", ProtocolDetails.class, true);
@@ -579,6 +559,10 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			fieldsMetadata6.load("ExpAmd", ProtocolDetails.class, true);					
 			fieldsMetadata7.load("fullRes", ProtocolDetails.class, true);	
 			fieldsMetadata8.load("ExpRes", ProtocolDetails.class, true);
+			fieldsMetadata9.load("MemPretList", MemberAttandance.class, true);
+			fieldsMetadata10.load("MemAlterList", MemberAttandance.class, true);
+			fieldsMetadata11.load("MemOtherList", MemberAttandance.class, true);
+			fieldsMetadata12.load("MemAbstList", MemberAttandance.class, true);
 			List<MinutesEntry> otherList = setMinuteEntry(vo);
 			List<ProtocolDetails> fullIntialApp = setProtocolDetailsFullIntial(submissions);
 			List<ProtocolDetails> fullAmd = setProtocolDetailsfullAmd(submissions);
@@ -588,6 +572,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			List<ProtocolDetails> ExpCon = setProtocolDetailsExpCon(submissions);
 			List<ProtocolDetails> ExpIntial = setProtocolDetailsExpIntial(submissions);
 			List<ProtocolDetails> ExpRes = setProtocolDetailsExpRes(submissions);
+			vo = loadMeetingAttendenceForMinutes(vo);
+			List<MemberAttandance> MemPretList = setMemberPretList(vo.getCommitteeMemberMinutes());
+			List<MemberAttandance> MemAlterList = setMemAlterList(vo.getAlternateMemberMinutes());
+			List<MemberAttandance> MemOtherList = setMemOtherList(vo.getGuestMembersMinutes());
+			List<MemberAttandance> MemAbstList = setMemAbstList(vo.getCommitteeMemberMinutes());
 			context.put("otherList", otherList);
 			context.put("fullIntialApp", fullIntialApp);
 			context.put("fullAmd", fullAmd);
@@ -597,6 +586,10 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			context.put("ExpCon", ExpCon);
 			context.put("ExpIntial", ExpIntial);
 			context.put("ExpRes", ExpRes);
+			context.put("MemPretList", MemPretList);
+			context.put("MemAlterList", MemAlterList);
+			context.put("MemOtherList", MemOtherList);
+			context.put("MemAbstList", MemAbstList);
 			context.put("fullIntCount", fullIntialApp.size());
 			context.put("fullAmdCnt", fullAmd.size());
 			context.put("fullConCnt", fullCon.size());
@@ -605,6 +598,10 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			context.put("ExpAmdCnt", ExpAmd.size());
 			context.put("ExpConCnt", ExpCon.size());
 			context.put("ExpRes", ExpRes.size());
+			context.put("memPreCnt", MemPretList.size());
+			context.put("memAlterCnt", MemAlterList.size());
+			context.put("memOtherCnt", MemOtherList.size());
+			context.put("memAbstCnt", MemAbstList.size());
 		    context = setPlaceHolderData(context,vo);
 			DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
 			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);
@@ -614,6 +611,109 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		return mergedOutput;
 	}	
 	
+	private List<MemberAttandance> setMemAbstList(List<CommitteeMemberships> committeeMember) {				
+		List<MemberAttandance> attendance = new ArrayList<>();		
+		for (CommitteeMemberships member : committeeMember) {
+			if(member.getMemberPresent() != null){
+				if(member.getMemberPresent().equals("N"))
+					if(member.getNonEmployeeFlag()){
+						attendance.add(new MemberAttandance(member.getRolodex().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+					}else{
+						attendance.add(new MemberAttandance(member.getPersonDetails().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+					}
+			}			
+		}					
+		return attendance;		
+	}
+
+	private List<MemberAttandance> setMemOtherList(List<CommitteeScheduleAttendance> guestMembers) {				
+		List<MemberAttandance> attendance = new ArrayList<>();		
+		for (CommitteeScheduleAttendance member : guestMembers) {
+			attendance.add(new MemberAttandance(member.getPersonName(),member.getComments() == null? "" : member.getComments(),null,member.getAlternateFor()));		
+		}					
+		return attendance;		
+	}
+	
+    public ScheduleVo loadMeetingAttendenceForMinutes(ScheduleVo vo) {
+        try{
+                List<CommitteeMemberships> committeeMembershipList = scheduleDao.fetchMeetingMembers(vo);
+                List<CommitteeMemberships> alternateMember = new ArrayList<CommitteeMemberships>();                
+                List<CommitteeMemberships> committeeMember = new ArrayList<CommitteeMemberships>();
+                for(CommitteeMemberships committeeMemberships : committeeMembershipList){
+                        String committeePersonId = null;
+                         Date currentDate = org.mit.irb.web.committee.schedule.DateUtils.clearTimeFields( new java.sql.Date(System.currentTimeMillis()));
+                     if (committeeMemberships.getTermStartDate() != null && committeeMemberships.getTermEndDate() != null && (currentDate.before(committeeMemberships.getTermEndDate()) || currentDate.equals(committeeMemberships.getTermEndDate()))) {                                                     
+                             if (committeeMemberships.getNonEmployeeFlag()) {
+                                     committeePersonId = String.valueOf(committeeMemberships.getRolodexId());
+                                         Rolodex rolodex = committeeDao.getRolodexById(committeeMemberships.getRolodexId());
+                                         committeeMemberships.setRolodex(rolodex);
+                                } else {
+                                         committeePersonId = committeeMemberships.getPersonId();
+                                         PersonDetailsView personDetails = committeeDao.getPersonDetailsById(committeeMemberships.getPersonId());
+                                         committeeMemberships.setPersonDetails(personDetails);
+                                }
+                                committeeMemberships = scheduleDao.fetchAttendenceDataForMinutes(vo.getScheduleId(),committeePersonId,committeeMemberships);
+                                List<CommitteeMemberRoles> committeeMemberRoles  = scheduleDao.fetchCommitteeMemberRoles(committeeMemberships);
+                                committeeMemberships.setCommitteeMemberRoles(committeeMemberRoles);
+                                if(committeeMemberRoles.size() == 1 && committeeMemberRoles.get(0).getMembershipRoleCode().equalsIgnoreCase("12")){
+                                        alternateMember.add(committeeMemberships);
+                                }else{
+                                        committeeMember.add(committeeMemberships);
+                                }
+                    }
+                }
+                vo.setAlternateMemberMinutes(alternateMember);
+                vo.setCommitteeMemberMinutes(committeeMember);
+                vo.setCommitteeScheduleAttendance(new CommitteeScheduleAttendance());
+                vo.setGuestMembersMinutes(scheduleDao.fetchGuestMembersForMinutes(vo.getScheduleId()));
+        }catch (Exception e) {
+                logger.info("Exception in loadMeetingAttendence:" + e);
+        }
+        return vo;
+    }	
+	
+	private List<MemberAttandance> setMemAlterList(List<CommitteeMemberships> list) {				
+		List<MemberAttandance> attendance = new ArrayList<>();		
+		for (CommitteeMemberships member : list) {
+			if(member.getMemberPresent() != null){
+				if(member.getMemberPresent().equals("Y"))
+					if(member.getNonEmployeeFlag()){
+						attendance.add(new MemberAttandance(member.getRolodex().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+					}else{
+						attendance.add(new MemberAttandance(member.getPersonDetails().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+					}
+			}			
+		}					
+		return attendance;		
+	}
+
+	private List<MemberAttandance> setMemberPretList(List<CommitteeMemberships> committeeMember) {				
+		List<MemberAttandance> attendance = new ArrayList<>();		
+		for (CommitteeMemberships member : committeeMember) {
+			if(member.getMemberPresent() != null){
+				if(member.getMemberPresent().equals("Y"))
+					if(member.getNonEmployeeFlag()){
+						attendance.add(new MemberAttandance(member.getRolodex().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+					}else{
+						attendance.add(new MemberAttandance(member.getPersonDetails().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+					}
+			}				
+		}					
+		return attendance;		
+	}
+	
+	private String memberRoles(List<CommitteeMemberRoles> roles){			
+		String role = null;
+			for (CommitteeMemberRoles object : roles) {
+					if(role == null || role.isEmpty()){
+						role = object.getMembershipRoleDescription() ==  null ? null : object.getMembershipRoleDescription() ;
+					}else{
+						role = role.concat(object.getMembershipRoleDescription() ==  null ? "" :"\n "+object.getMembershipRoleDescription());
+					}	
+				}														
+		return role;		
+	}
+
 	private List<MinutesEntry> setMinuteEntry(ScheduleVo vo) {				
 		List<MinutesEntry> otherEntry = new ArrayList<>();		
 		List<CommitteeScheduleActItems> list = scheduleDao.getCommitteeScheduleActItemsById(vo.getScheduleId());
@@ -636,12 +736,7 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			criteria.where(builder.equal(attachmentRoot.get("committeeSchedule").get("scheduleId"),scheduleId));
 			criteria.orderBy(builder.desc(attachmentRoot.get("scheduleMinuteDocId")));
 			if( session.createQuery(criteria).getResultList() != null && ! session.createQuery(criteria).getResultList().isEmpty())
-			attachment = (CommitteeScheduleMinuteDoc) session.createQuery(criteria).getResultList().get(0);				
-			/*Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession().createQuery(
-					"from CommitteeScheduleMinuteDoc p where p.scheduleId =:scheduleId order by p.updateTimestamp DESC");
-			queryGeneral.setInteger("scheduleId",scheduleId);			
-			if(queryGeneral.list() != null && !queryGeneral.list().isEmpty())
-			attachment =  (CommitteeScheduleMinuteDoc) queryGeneral.list().get(0);*/
+			attachment = (CommitteeScheduleMinuteDoc) session.createQuery(criteria).getResultList().get(0);					
 		} catch (Exception e) {
 			logger.info("Exception in getPrevMinuteDetails method:" + e);
 		}
@@ -649,6 +744,5 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 	}
 	
 	public void loadMeetingAttendance(ScheduleVo vo){
-		vo = scheduleService.loadMeetingAttendence(vo);
 	}
 }

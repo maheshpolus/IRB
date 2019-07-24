@@ -144,8 +144,14 @@ public interface ScheduleDao {
 	 * @param scheduleId
 	 * @return
 	 */
-	public List<CommitteeScheduleAttendance> fetchGuestMembers(Integer scheduleId);
+	/*public List<CommitteeScheduleAttendance> fetchGuestMembers(Integer scheduleId);*/
 
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public List<CommitteeScheduleAttendance> fetchAttendenceData(Integer scheduleId);
+	
 	/**
 	 * @param scheduleAttendance
 	 * @return 
@@ -266,8 +272,12 @@ public interface ScheduleDao {
 	 * @param committeeMemberships
 	 * @return
 	 */
-	public CommitteeMemberships fetchAttendenceData(Integer scheduleId, String committeePersonId,
+	public CommitteeMemberships fetchAttendenceDataForMinutes(Integer scheduleId, String committeePersonId,
 			CommitteeMemberships committeeMemberships);
 
-
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public List<CommitteeScheduleAttendance> fetchGuestMembersForMinutes(Integer scheduleId);
 }

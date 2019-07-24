@@ -109,12 +109,6 @@ public interface ScheduleService {
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo);
 
 	/**
-	 * @param scheduleId
-	 * @return
-	 */
-	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId);
-
-	/**
 	 * @param vo
 	 * @return
 	 */
@@ -231,4 +225,10 @@ public interface ScheduleService {
 	 * @return
 	 */
 	public ScheduleVo loadAllScheduleMinutes(Integer scheduleId);
+	
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo showAllMeetingAttendence(ScheduleVo vo);
 }

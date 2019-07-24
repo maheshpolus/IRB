@@ -12,7 +12,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -230,8 +229,6 @@ public class CommitteeServiceImpl implements CommitteeService {
 		logger.info("skippedDates : " + skippedDates);
 		Committee comSche=committeeDao.loadScheduleDetailsById(committeeVo.getCommittee().getCommitteeId(),"F");
 		committeeVo.getCommittee().setCommitteeSchedules(comSche.getCommitteeSchedules());
-		/*committee = committeeDao.saveCommittee(committee);
-		committeeVo.setCommittee(committee);*/
 		return committeeVo;
 	}
 
@@ -272,8 +269,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			committeeSchedule.setScheduleStatus(defaultStatus);
 			committeeSchedule.setUpdateTimestamp(committeeDao.getCurrentTimestamp());
 			committeeSchedule.setUpdateUser(committeeVo.getCurrentUser());
-			hibernateTemplate.saveOrUpdate(committeeSchedule); //code is changes since schedule is not saved properly
-			/*committee.getCommitteeSchedules().add(committeeSchedule);*/
+			hibernateTemplate.saveOrUpdate(committeeSchedule); //code is changes since schedule is not saved properly		
 		}
 	}
 
@@ -321,7 +317,6 @@ public class CommitteeServiceImpl implements CommitteeService {
 		researchAreas.setResearchAreaDescription(committeeVo.getCommitteeResearchArea().getResearchAreaDescription());
 		researchAreas.setUpdateTimestamp(committeeVo.getCommitteeResearchArea().getUpdateTimestamp());
 		researchAreas.setUpdateUser(committeeVo.getCommitteeResearchArea().getUpdateUser());
-		//committee.getResearchAreas().add(researchAreas);
 		researchAreas = committeeDao.saveCommitteeResearchAreas(researchAreas);
 		committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 		committeeVo.setCommittee(committee);
@@ -347,17 +342,6 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo deleteSchedule(CommitteeVo committeeVo) {
 		try {
-		/*	Committee committee = committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),null);
-			List<CommitteeSchedule> list = committee.getCommitteeSchedules();
-			List<CommitteeSchedule> updatedlist = new ArrayList<CommitteeSchedule>(list);
-			Collections.copy(updatedlist, list);
-			for (CommitteeSchedule schedule : list) {
-				if (schedule.getScheduleId().equals(committeeVo.getScheduleId())) {
-					committeeDao.deleteCommitteeSchedule(schedule);
-				}
-			}
-			committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),null);
-			committeeVo.setCommittee(committee);*/
 			committeeDao.deleteCommitteeSchedule(committeeVo.getCommitteeSchedule());			
 			Committee committee = new Committee();
 			committee = committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),"F");

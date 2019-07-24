@@ -316,7 +316,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		return committeeMembershipRoles;
 	}
 
-	@Override
+	/*@Override
 	public List<CommitteeScheduleAttendance> fetchGuestMembers(Integer scheduleId) {
 		List<CommitteeScheduleAttendance> committeeScheduleAttendance = null;
 		try{
@@ -337,7 +337,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			logger.info("Exception in fetchGuestMembers:" + e);
 		}
 		return committeeScheduleAttendance;
-	}
+	}*/
 
 	@Override
 	public CommitteeScheduleAttendance updateScheduleAttendance(CommitteeScheduleAttendance scheduleAttendance) {
@@ -695,7 +695,53 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public CommitteeMemberships fetchAttendenceData(Integer scheduleId, String committeePersonId,
+	public List<CommitteeScheduleAttendance> fetchAttendenceData(Integer scheduleId) {
+		List<CommitteeScheduleAttendance> committeeScheduleAttendance = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			 Criteria criteria = session.createCriteria(CommitteeScheduleAttendance.class);
+			 ProjectionList projList = Projections.projectionList();
+			 projList.add(Projections.property("committeeScheduleAttendanceId"),"committeeScheduleAttendanceId");
+			 projList.add(Projections.property("personId"),"personId");
+			 projList.add(Projections.property("personName"),"personName");
+			 projList.add(Projections.property("guestFlag"),"guestFlag");
+			 projList.add(Projections.property("alternateFlag"),"alternateFlag");
+			 projList.add(Projections.property("alternateFor"),"alternateFor");
+			 projList.add(Projections.property("nonEmployeeFlag"),"nonEmployeeFlag"); 
+			 projList.add(Projections.property("comments"),"comments");
+			 projList.add(Projections.property("updateTimestamp"),"updateTimestamp");
+			 projList.add(Projections.property("updateUser"),"updateUser");
+			 projList.add(Projections.property("memberPresent"),"memberPresent");
+			 criteria.setProjection(projList).setResultTransformer(Transformers.aliasToBean(CommitteeScheduleAttendance.class));
+			criteria.add(Restrictions.eq("committeeSchedule.scheduleId", scheduleId));
+			committeeScheduleAttendance = criteria.list();		
+			/*Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
+			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
+			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
+					,committeeRoot.get("memberPresent"),committeeRoot.get("guestFlag"),committeeRoot.get("committeeScheduleAttendanceId")
+					,committeeRoot.get("comments"),committeeRoot.get("alternateFor"),committeeRoot.get("nonEmployeeFlag"));
+			criteria.where(builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId));
+			/*Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
+			Predicate predicateTwo = builder.equal(committeeRoot.get("personId"), committeePersonId);
+			criteria.where(builder.and(predicateOne, predicateTwo));*/
+
+			/*committeeScheduleAttendance = session.createQuery(criteria).getResultList();*/
+			/*if(!committeeScheduleAttendance.isEmpty()){
+				committeeMemberships.setMemberPresent(committeeScheduleAttendance.get(0).getMemberPresent());
+				committeeMemberships.setAttendanceComment(committeeScheduleAttendance.get(0).getComments());
+				committeeMemberships.setScheduleAttendanceId(committeeScheduleAttendance.get(0).getCommitteeScheduleAttendanceId());
+				committeeMemberships.setAlternateFor(committeeScheduleAttendance.get(0).getAlternateFor());
+			}*/		
+		} catch (Exception e) {
+			logger.info("Exception in fetchAttendenceData:" + e);
+		}
+		return committeeScheduleAttendance;
+	}
+
+	@Override
+	public CommitteeMemberships fetchAttendenceDataForMinutes(Integer scheduleId, String committeePersonId,
 			CommitteeMemberships committeeMemberships) {
 		try{
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
@@ -720,6 +766,29 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			logger.info("Exception in fetchAttendenceData:" + e);
 		}
 		return committeeMemberships;
+	}
+
+	@Override
+	public List<CommitteeScheduleAttendance> fetchGuestMembersForMinutes(Integer scheduleId) {
+		List<CommitteeScheduleAttendance> committeeScheduleAttendance = null;
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CommitteeScheduleAttendance> criteria = builder.createQuery(CommitteeScheduleAttendance.class);
+			Root<CommitteeScheduleAttendance> committeeRoot = criteria.from(CommitteeScheduleAttendance.class);
+			criteria.multiselect(committeeRoot.get("personName"),committeeRoot.get("personId")
+					,committeeRoot.get("memberPresent"),committeeRoot.get("guestFlag"),committeeRoot.get("committeeScheduleAttendanceId")
+					,committeeRoot.get("comments"),committeeRoot.get("alternateFor"));
+			Predicate predicateOne = builder.equal(committeeRoot.get("committeeSchedule").get("scheduleId"),scheduleId);
+			Predicate predicateTwo = builder.equal(committeeRoot.get("guestFlag"), true);
+			criteria.where(builder.and(predicateOne, predicateTwo));
+
+			//criteria.where(builder.equal(committeeRoot.get("committeeMemberships").get("commMembershipId"),committeeMemberships.getCommMembershipId()));
+			committeeScheduleAttendance = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.info("Exception in fetchGuestMembers:" + e);
+		}
+		return committeeScheduleAttendance;
 	}
 
 }

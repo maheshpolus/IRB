@@ -72,9 +72,9 @@ public class ScheduleVo {
 	
 	private String acType;
 
-	private List<CommitteeMemberships> alternateMember;
+	private List<CommitteeScheduleAttendance> alternateMember;
 	
-	private List<CommitteeMemberships> committeeMember;
+	private List<CommitteeScheduleAttendance> committeeMember;
 	
 	private List<CommitteeScheduleAttendance> guestMembers;
 	
@@ -99,6 +99,12 @@ public class ScheduleVo {
 	private CommitteeScheduleMinuteDoc minuteDetails;
 	
 	private CommitteeScheduleAttendance committeeScheduleAttendance;
+	
+	private List<CommitteeMemberships> alternateMemberMinutes;
+	
+	private List<CommitteeMemberships> committeeMemberMinutes;
+	
+	private List<CommitteeScheduleAttendance> guestMembersMinutes;
 	
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;
@@ -292,22 +298,6 @@ public class ScheduleVo {
 		this.acType = acType;
 	}
 
-	public List<CommitteeMemberships> getAlternateMember() {
-		return alternateMember;
-	}
-
-	public void setAlternateMember(List<CommitteeMemberships> alternateMember) {
-		this.alternateMember = alternateMember;
-	}
-
-	public List<CommitteeMemberships> getCommitteeMember() {
-		return committeeMember;
-	}
-
-	public void setCommitteeMember(List<CommitteeMemberships> committeeMember) {
-		this.committeeMember = committeeMember;
-	}
-
 	public List<CommitteeScheduleAttendance> getGuestMembers() {
 		return guestMembers;
 	}
@@ -411,4 +401,45 @@ public class ScheduleVo {
 	public void setCommitteeScheduleAttendance(CommitteeScheduleAttendance committeeScheduleAttendance) {
 		this.committeeScheduleAttendance = committeeScheduleAttendance;
 	}
+
+	public List<CommitteeScheduleAttendance> getAlternateMember() {
+		return alternateMember;
+	}
+
+	public void setAlternateMember(List<CommitteeScheduleAttendance> alternateMember) {
+		this.alternateMember = alternateMember;
+	}
+
+	public List<CommitteeScheduleAttendance> getCommitteeMember() {
+		return committeeMember;
+	}
+
+	public void setCommitteeMember(List<CommitteeScheduleAttendance> committeeMember) {
+		this.committeeMember = committeeMember;
+	}
+
+	public List<CommitteeMemberships> getAlternateMemberMinutes() {
+		return alternateMemberMinutes;
+	}
+
+	public void setAlternateMemberMinutes(List<CommitteeMemberships> alternateMemberMinutes) {
+		this.alternateMemberMinutes = alternateMemberMinutes;
+	}
+
+	public List<CommitteeMemberships> getCommitteeMemberMinutes() {
+		return committeeMemberMinutes;
+	}
+
+	public void setCommitteeMemberMinutes(List<CommitteeMemberships> committeeMemberMinutes) {
+		this.committeeMemberMinutes = committeeMemberMinutes;
+	}
+
+	public List<CommitteeScheduleAttendance> getGuestMembersMinutes() {
+		return guestMembersMinutes;
+	}
+
+	public void setGuestMembersMinutes(List<CommitteeScheduleAttendance> guestMembersMinutes) {
+		this.guestMembersMinutes = guestMembersMinutes;
+	}
+	
 }

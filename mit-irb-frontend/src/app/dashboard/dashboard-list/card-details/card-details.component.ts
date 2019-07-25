@@ -32,7 +32,8 @@ export class CardDetailsComponent  {
    */
   EditIrb (protocolNumber, protocolId) {
     const requestObject = {
-      acType: 'E', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: protocolId
+      acType: 'E', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: protocolId,
+      protocolNumber: protocolNumber
   };
   this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
   const hasPermission = data.successCode;

@@ -603,7 +603,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges 
      */
     openIrb(protocolNumber) {
         const requestObject = {
-            acType: 'V', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: this.protocolId
+            acType: 'V', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: this.protocolId,
+            protocolNumber: protocolNumber
         };
         this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
         const hasPermission = data.successCode;

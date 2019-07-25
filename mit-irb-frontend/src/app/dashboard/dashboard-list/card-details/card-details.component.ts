@@ -40,8 +40,8 @@ export class CardDetailsComponent  {
   if (hasPermission) {
      this._router.navigate( ['/irb/irb-create'], {queryParams: {protocolNumber: protocolNumber, protocolId: protocolId}});
 } else {
-  const alertMessage = 'You do not have permission to edit this protocol';
-  this.openPermissionWarningModal(alertMessage);
+  const alertMessage = data.successMessage;
+  this.openPermissionWarningModal(alertMessage, protocolNumber);
 }
 });
   }
@@ -69,9 +69,11 @@ export class CardDetailsComponent  {
       });
   }
 
- openPermissionWarningModal(alertMessage) {
+ openPermissionWarningModal(alertMessage, protocolNumber) {
      const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
      modalRef.componentInstance.alertMessage = alertMessage;
+     modalRef.componentInstance.openProtocol = true;
+     modalRef.componentInstance.protocolNumber = protocolNumber;
    }
 }
 

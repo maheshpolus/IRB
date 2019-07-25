@@ -768,5 +768,13 @@
 	"/mit-irb/getIRBprotocolScienificData": {
 		"target": "http://192.168.1.137:8080",
 		"secure": false
+	},
+	"/mit-irb/releaseProtocolLock": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/mit-irb/loadProtocolLock": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	}
 }

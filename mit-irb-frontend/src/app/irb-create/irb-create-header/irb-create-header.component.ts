@@ -78,10 +78,18 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
     }
+    if (this.protocolNumber) {
+      const reqstObj = { protocolNumber: this.protocolNumber };
+      this._sharedDataService.releaseProtocolLock(reqstObj).subscribe(
+        data => {
+          console.log('Lock Released Successfully');
+        });
+    }
   }
 
   getIRBProtocol() {
-    const requestObject = { protocolId: this.protocolId, protocolNumber: this.protocolNumber };
+    const requestObject = { protocolId: this.protocolId, protocolNumber: this.protocolNumber,
+      personId: this.userDTO.personID, updateUser: this.userDTO.userName };
     this._spinner.show();
     this._irbCreateService.getEditDetails(requestObject).subscribe(
       data => {

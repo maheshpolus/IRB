@@ -1,4 +1,4 @@
-package org.mit.irb.web.schedule.dao;
+package org.mit.irb.web.schedule.pojo;
 
 public class MemberAttandance {
 

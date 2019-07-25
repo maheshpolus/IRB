@@ -16,6 +16,8 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 })
 export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
+  editDetails = false;
+  reviewTabSelected = 'ADMIN';
   isExpanded = false;
   lookUpData: any;
   headerDetails: any;
@@ -97,7 +99,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   reviewedBy = null;
   showProtocolReviewsOf = 'All Protocol Reviewers';
   attachmentDescription = '';
-  tabSelectedCommittee: string;
+  tabSelectedCommittee = 'PROTOCOL_COMMENTS';
   warningMessage: string;
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
@@ -595,6 +597,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   saveSubmissionBasicDetails() {
+    this.editDetails = !this.editDetails;
     if (this.submissionVo.submissionTypeCode == null) {
       this.invalidData.invalidBasicDetails = true;
     } else {

@@ -310,13 +310,14 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 
 	@Override
 	public ArrayList<HashMap<String, Object>> fetchUserPermission(String personId) {
-		ArrayList<Parameter> inputParam = new ArrayList<>();
-		inputParam.add(new Parameter("<<AV_PERSON_ID>>", DBEngineConstants.TYPE_STRING, personId));
+		ArrayList<HashMap<String, Object>> userPermissionMap = null;
 		try {
-			questionnaireAttachmentMap = dbEngineGeneric.executeQuery(inputParam,"CHECK_PERSON_PERMISSION");
+			ArrayList<Parameter> inputParam = new ArrayList<>();
+			inputParam.add(new Parameter("<<AV_PERSON_ID>>", DBEngineConstants.TYPE_STRING, personId));
+			userPermissionMap = dbEngineGeneric.executeQuery(inputParam,"CHECK_PERSON_PERMISSION");
 		} catch (Exception e) {
 			logger.info("Exception in fetchUserPermission method" + e);
 		}
-		return questionnaireAttachmentMap;
+		return userPermissionMap;
 	}
 }

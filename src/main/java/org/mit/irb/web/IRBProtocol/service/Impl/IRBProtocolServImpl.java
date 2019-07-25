@@ -44,9 +44,6 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 	IRBProtocolDao irbProtocolDao;
 	
 	@Autowired
-	IRBUtilService irbUtilService;
-	
-	@Autowired
 	HibernateTemplate hibernateTemplate;
 	
 	@Autowired
@@ -258,7 +255,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
  		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAdminContactTypes = initLoadService.loadProtocolAdminContactType(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
-		    irbUtilService.createLock(irbProtocolVO);
+		   
 		    irbProtocolVO = riskLevelTypes.get();
 		    irbProtocolVO = fdaRiskLevelTypes.get();
 		    irbProtocolVO = protocolTypes.get();
@@ -496,4 +493,12 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		}
 		return irbProtocolVO;
 	}
+	
+	@Override
+	public IRBViewProfile getIRBprotocolScienificData(String protocolNumber) {
+	IRBViewProfile irbViewProfile = new IRBViewProfile();
+    HashMap<String, Object> irbProtocolScienificDetail = irbProtocolDao.getIRBprotocolScienificData(protocolNumber);
+    irbViewProfile.setIrbViewScienceOfProtocol(irbProtocolScienificDetail);
+    return irbViewProfile;
+}
 }

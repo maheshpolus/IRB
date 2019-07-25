@@ -247,10 +247,12 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO createIRBProtocol(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody CommonVO vo) throws Exception {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+		irbProtocolVO.setPersonId(vo.getPersonId());
+		irbProtocolVO.setUpdateUser(vo.getUpdateUser());
 		irbProtocolVO = irbProtocolService.modifyProtocolDetails(vo.getProtocolNumber(),vo.getProtocolId(), irbProtocolVO);
 		return irbProtocolVO;
 	}
-
+ 
 	@RequestMapping(value = "/updateProtocolGeneralInfo", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateProtocolGeneralInfo(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
@@ -549,5 +551,13 @@ public class IRBController {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
 		protocolVO = irbProtocolService.saveOrUpdateInternalProtocolAttachments(files, formDataJson);
 		return protocolVO;
+	}
+		
+	@RequestMapping(value = "/getIRBprotocolScienificData", method = RequestMethod.POST)
+	public @ResponseBody IRBViewProfile getIRBprotocolScienificCData(@RequestBody CommonVO vo, HttpServletRequest request,
+			HttpServletResponse response) throws JsonProcessingException {
+		String protocolNumber = vo.getProtocolNumber();
+		IRBViewProfile irbViewProfile = irbProtocolService.getIRBprotocolScienificData(protocolNumber);
+		return irbViewProfile;
 	}
 }

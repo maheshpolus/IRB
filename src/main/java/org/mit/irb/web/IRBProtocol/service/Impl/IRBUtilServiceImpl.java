@@ -21,6 +21,8 @@ import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.common.constants.KeyConstants;
+import org.mit.irb.web.dbengine.DBEngineConstants;
+import org.mit.irb.web.dbengine.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -160,12 +162,12 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 			}
 			if(lockPresent){
 				vo.setSuccessCode(false);
-				vo.setSuccessMessage("Protocol is locked by Other user");
+				vo.setSuccessMessage("Protocol is locked by other user, Do you want to open in View Mode?");
 			}else{
 				hasPermission = irbUtilDao.checkUserPermission(vo.getProtocolNumber() ,vo.getDepartment(),vo.getPersonId(),vo.getAcType());						
 				if(!hasPermission){
 					vo.setSuccessCode(hasPermission);
-					vo.setSuccessMessage("User do not have permission");
+					vo.setSuccessMessage("You do not have permission to edit this protocol");
 				}else{
 					vo.setSuccessCode(true);
 					vo.setSuccessMessage("User has permission");
@@ -200,6 +202,7 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 				lockPresent = true;
 			}
 			vo.setLockPresent(lockPresent);
+			
 		}catch(Exception e) {
 			logger.debug("Error in checkLockPresent"+e.getMessage());
 		}  
@@ -216,9 +219,32 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 			lock.setUpdateUser(irbProtocolVO.getUpdateUser());
 			lock.setUpdateTimestamp(new Date());
 			lock = irbUtilDao.createProtocolLock(lock);
+			ArrayList<HashMap<String, Object>> questionnaireAttachmentMap = irbUtilDao.fetchUserPermission(irbProtocolVO.getPersonId());
+		System.out.println(questionnaireAttachmentMap);
 		}catch(Exception e) {
 			logger.debug("Error in createLock"+e.getMessage());
 		}
 		return new AsyncResult<>(irbProtocolVO);
+	}
+
+	@Override
+	public IRBUtilVO releaseProtocolLock(IRBUtilVO vo) {
+		try{
+			irbUtilDao.releaseProtocolLock(vo.getProtocolNumber());
+		}catch(Exception e) {
+			logger.debug("Error in releaseProtocolLock"+e.getMessage());
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBUtilVO loadProtocolLock(IRBUtilVO vo) {
+		try{
+			ArrayList<HashMap<String, Object>> questionnaireAttachmentMap = irbUtilDao.fetchUserPermission(vo.getPersonId());
+			
+		}catch(Exception e) {
+			logger.debug("Error in loadProtocolLock"+e.getMessage());
+		}
+		return null;
 	}	
 }

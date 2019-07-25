@@ -61,6 +61,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.Sponsor;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.IRBProtocol.service.IRBWatermarkService;
 import org.mit.irb.web.committee.pojo.Unit;
 import org.mit.irb.web.common.constants.KeyConstants;
@@ -90,7 +91,10 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Autowired
 	IRBActionsDao irbAcionDao;
-
+	
+	@Autowired
+	IRBUtilService irbUtilService;
+	
 	@Autowired
 	IRBProtocolInitLoadService initLoadService;
 
@@ -966,6 +970,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			protocolId = irbProtocolVO.getProtocolId();
 			ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
 			if (protocolId != null) {
+				irbUtilService.createLock(irbProtocolVO);
 				getGeneralPersonnelInfoList(irbProtocolVO);
 				getDepartmentList(irbProtocolVO);
 				getSubjectoList(irbProtocolVO);
@@ -2143,5 +2148,25 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		irbProtocolVO.setProtocolId(internalProtocolAttachment.getProtocolId());
 		irbProtocolVO = loadInternalProtocolAttachments(irbProtocolVO);
 		return irbProtocolVO;
+	}
+
+	@Override
+	public HashMap<String, Object> getIRBprotocolScienificData(String protocolNumber) {
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING, protocolNumber));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PROTO_SCIENTIFIC_DATA", outputParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("DBException in getIRBProtocolScienificData:" + e);
+		}
+		if(result != null && !result.isEmpty()){
+			return result.get(0);
+		}else{ 
+			return null;
+		}
 	}
 }

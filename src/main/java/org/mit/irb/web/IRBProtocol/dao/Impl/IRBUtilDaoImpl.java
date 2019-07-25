@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
@@ -23,6 +24,7 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
+import org.mit.irb.web.dbengine.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,16 +32,20 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service(value = "irbUtilDao")
+@Transactional
 public class IRBUtilDaoImpl implements IRBUtilDao{
 	DBEngine dbEngine;
+	org.mit.irb.web.dbengine.DBEngine dbEngineGeneric;
 	
 	IRBUtilDaoImpl() {
 		dbEngine = new DBEngine();
+		dbEngineGeneric = new org.mit.irb.web.dbengine.DBEngine();
 	}
-
+	
 	@Autowired
 	HibernateTemplate hibernateTemplate;
 	
@@ -268,11 +274,11 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 
 	@Override
 	public List<Lock> fetchProtocolLockData(String moduleItemKey) {
-		List<Lock> lockList =new ArrayList<Lock>();
+		List<Lock> lockList = new ArrayList<Lock>();
 		try{
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 			Criteria criteria = session.createCriteria(Lock.class);
-			criteria.add(Restrictions.eq("MODULE_ITEM_KEY", moduleItemKey));
+			criteria.add(Restrictions.eq("moduleItemKey", moduleItemKey));
 			lockList = criteria.list();
 		} catch (Exception e) {
 			logger.info("Exception in fetchProtocolLockData method" + e);
@@ -286,8 +292,31 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 			hibernateTemplate.saveOrUpdate(lock);
 		} catch (Exception e) {
 			logger.info("Exception in createProtocolLock method" + e);
-		}
-		
+		}	
 		return lock;	
+	}
+
+	@Override
+	public void releaseProtocolLock(String protocolNumber) {
+		try{
+			Query queryDeleteResearchArea = hibernateTemplate.getSessionFactory().getCurrentSession()
+					.createQuery("delete from Lock p where p.moduleItemKey =:moduleItemKey");
+			queryDeleteResearchArea.setString("moduleItemKey",protocolNumber);
+			queryDeleteResearchArea.executeUpdate();
+		} catch (Exception e) {
+			logger.info("Exception in releaseProtocolLock method" + e);
+		}		
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> fetchUserPermission(String personId) {
+		ArrayList<Parameter> inputParam = new ArrayList<>();
+		inputParam.add(new Parameter("<<AV_PERSON_ID>>", DBEngineConstants.TYPE_STRING, personId));
+		try {
+			questionnaireAttachmentMap = dbEngineGeneric.executeQuery(inputParam,"CHECK_PERSON_PERMISSION");
+		} catch (Exception e) {
+			logger.info("Exception in fetchUserPermission method" + e);
+		}
+		return questionnaireAttachmentMap;
 	}
 }

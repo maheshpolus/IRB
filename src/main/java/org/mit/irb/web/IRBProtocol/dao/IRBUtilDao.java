@@ -48,4 +48,11 @@ public interface IRBUtilDao {
 	 * @return 
 	 */
 	Lock createProtocolLock(Lock lock);
+
+	/**
+	 * @param protocolNumber
+	 */
+	void releaseProtocolLock(String protocolNumber);
+
+	ArrayList<HashMap<String, Object>> fetchUserPermission(String personId);
 }

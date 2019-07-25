@@ -133,4 +133,6 @@ public interface IRBProtocolDao {
 
 	IRBProtocolVO saveOrUpdateInternalProtocolAttachments(MultipartFile[] files,
 			IRBProtocolCorrespondence internalProtocolAttachment);
+	
+	HashMap<String, Object> getIRBprotocolScienificData(String protocolNumber);
 }

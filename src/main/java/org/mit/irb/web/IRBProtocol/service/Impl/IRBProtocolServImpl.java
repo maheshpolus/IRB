@@ -22,6 +22,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
@@ -42,6 +42,9 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 
 	@Autowired
 	IRBProtocolDao irbProtocolDao;
+	
+	@Autowired
+	IRBUtilService irbUtilService;
 	
 	@Autowired
 	HibernateTemplate hibernateTemplate;
@@ -255,6 +258,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
  		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAdminContactTypes = initLoadService.loadProtocolAdminContactType(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
+		    irbUtilService.createLock(irbProtocolVO);
 		    irbProtocolVO = riskLevelTypes.get();
 		    irbProtocolVO = fdaRiskLevelTypes.get();
 		    irbProtocolVO = protocolTypes.get();

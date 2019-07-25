@@ -7,7 +7,6 @@ import org.mit.irb.web.IRBProtocol.pojo.PersonTraining;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 
-
 public class IRBUtilVO {
 private List<HashMap<String, Object>> personTrainingList;
 private HashMap<String, Object> personnelTrainingInfo;
@@ -29,6 +28,8 @@ private ProtocolRenewalDetails protocolRenewalDetail;
 private String protocolRenewalComments;
 private List<HashMap<String, Object>> protocolReviewerComments;
 private List<HashMap<String, Object>> submissionCheckListData;
+private Boolean lockPresent;
+private String protocolNumber;
 
 public List<HashMap<String, Object>> getPersonTrainingList() {
 	return personTrainingList;
@@ -188,5 +189,21 @@ public String getProtocolRenewalComments() {
 
 public void setProtocolRenewalComments(String protocolRenewalComments) {
 	this.protocolRenewalComments = protocolRenewalComments;
+}
+
+public Boolean getLockPresent() {
+	return lockPresent;
+}
+
+public void setLockPresent(Boolean lockPresent) {
+	this.lockPresent = lockPresent;
+}
+
+public String getProtocolNumber() {
+	return protocolNumber;
+}
+
+public void setProtocolNumber(String protocolNumber) {
+	this.protocolNumber = protocolNumber;
 }
 }

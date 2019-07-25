@@ -42,6 +42,7 @@ import org.mit.irb.web.committee.pojo.Unit;
 public class IRBProtocolVO {
 	private String protocolNumber;
 	private Integer protocolId;
+	private String personId;
 	private ProtocolGeneralInfo generalInfo;
 	private List<ProtocolType> protocolType;
 	private List<SponsorType> sponsorType;
@@ -481,5 +482,13 @@ public class IRBProtocolVO {
 
 	public void setQuestionnaireAttachmentList(List<IRBQuestionnaireAnswerAttachment> questionnaireAttachmentList) {
 		this.questionnaireAttachmentList = questionnaireAttachmentList;
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
 	}
 }

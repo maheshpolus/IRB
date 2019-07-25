@@ -6,10 +6,15 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
+import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTraining;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
@@ -18,10 +23,12 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +40,9 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		dbEngine = new DBEngine();
 	}
 
+	@Autowired
+	HibernateTemplate hibernateTemplate;
+	
 	Logger logger = Logger.getLogger(IRBUtilDaoImpl.class.getName());
 
 	@Override
@@ -234,14 +244,14 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 	}
 
 	@Override
-	public Boolean checkUserPermission(Integer protocolId,String department, String personId,String acType) {
+	public Boolean checkUserPermission(String protocolNumber,String department, String personId,String acType) {
 		Boolean hasPermission = false;
 		try{
 			ArrayList<OutParameter> outParam = new ArrayList<OutParameter>();
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,personId));			
 			inputParam.add(new InParameter("AV_UNIT_NUMBER", DBEngineConstants.TYPE_STRING,department));
-			inputParam.add(new InParameter("AV_PROTOCOL_ID", DBEngineConstants.TYPE_INTEGER,protocolId));
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,protocolNumber));
 			inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,acType));	
 			outParam.add(new OutParameter("hasPermission",DBEngineConstants.TYPE_STRING));
 			ArrayList<HashMap<String,Object>> result = 
@@ -254,5 +264,30 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 			logger.info("Exception in checkUserPermission method" + e);
 		}	
 		return hasPermission;
+	}
+
+	@Override
+	public List<Lock> fetchProtocolLockData(String moduleItemKey) {
+		List<Lock> lockList =new ArrayList<Lock>();
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(Lock.class);
+			criteria.add(Restrictions.eq("MODULE_ITEM_KEY", moduleItemKey));
+			lockList = criteria.list();
+		} catch (Exception e) {
+			logger.info("Exception in fetchProtocolLockData method" + e);
+		}		
+		return lockList;
+	}
+
+	@Override
+	public Lock createProtocolLock(Lock lock) {
+		try{
+			hibernateTemplate.saveOrUpdate(lock);
+		} catch (Exception e) {
+			logger.info("Exception in createProtocolLock method" + e);
+		}
+		
+		return lock;	
 	}
 }

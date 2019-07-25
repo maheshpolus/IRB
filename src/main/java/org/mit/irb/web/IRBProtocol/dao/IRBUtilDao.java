@@ -3,8 +3,10 @@ package org.mit.irb.web.IRBProtocol.dao;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
+import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTraining;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
@@ -33,5 +35,17 @@ public interface IRBUtilDao {
 
 	Integer createPersonTrainingId();
 
-	Boolean checkUserPermission(Integer protocolId, String username,String acType, String department);
+	Boolean checkUserPermission(String protocolNumber, String username,String acType, String department);
+
+	/**
+	 * @param moduleItemKey
+	 * @return lock object for given protocol number
+	 */
+	List<Lock> fetchProtocolLockData(String moduleItemKey);
+
+	/**
+	 * @param lock
+	 * @return 
+	 */
+	Lock createProtocolLock(Lock lock);
 }

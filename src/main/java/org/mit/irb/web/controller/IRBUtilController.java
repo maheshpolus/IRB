@@ -94,5 +94,11 @@ public class IRBUtilController {
 		return vo;
 	}
 	
+	@RequestMapping(value = "/checkProtocolLock", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO checkProtocolLock(@RequestBody IRBUtilVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbUtilService.checkLockPresent(vo);
+		return vo;
+	}
 
 }

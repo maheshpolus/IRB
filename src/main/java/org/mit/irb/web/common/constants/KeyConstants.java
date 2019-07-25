@@ -23,6 +23,9 @@ public final class KeyConstants {
 	public static final String CREATE_AMENDMENT_ACTION_CODE = "103";
 	public static final String NOTIFY_COHEUS_ACTION_CODE = "116";
 	
+	/*Module Code*/
+	public static final Integer PROTOCOL_MODULE_CODE = 7;
+	
 	public static final String ROLE_WITH_UNIT = "SELECT DISTINCT T1.PERSON_ID,T2.FULL_NAME,T2.EMAIL_ADDRESS,T2.USER_NAME,T3.UNIT_NAME,T1.UNIT_NUMBER\r\n" + 
 			"FROM IRB_PERSON_ROLES_ASSIGN T1 \r\n" + 
 			"INNER JOIN WHOSP_PERSON_HISTORY T2 ON T1.PERSON_ID = T2.PERSON_ID\r\n" + 

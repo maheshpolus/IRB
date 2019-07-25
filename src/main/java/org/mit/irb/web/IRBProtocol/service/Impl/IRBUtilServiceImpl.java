@@ -6,28 +6,40 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
+
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
+import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
+import org.mit.irb.web.common.constants.KeyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service(value = "irbUtilService")
+@Service(value = "irbUtilService") 
 public class IRBUtilServiceImpl implements IRBUtilService {
 	
 	@Autowired
 	IRBUtilDao irbUtilDao;
+	
+	@Autowired
+	HibernateTemplate hibernateTemplate;
 	
 	@Value("${system.timezone}")
 	private String timezone;
@@ -138,15 +150,28 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 	@Override
 	public IRBPermissionVO checkUserPermission(IRBPermissionVO vo) {
 		try{
-			Boolean hasPermission = null;			
-			hasPermission = irbUtilDao.checkUserPermission(vo.getProtocolId() ,vo.getDepartment(),vo.getPersonId(),vo.getAcType());						
-			if(!hasPermission){
-				vo.setSuccessCode(hasPermission);
-				vo.setSuccessMessage("User do not have permission");
-			}else{
-				vo.setSuccessCode(true);
-				vo.setSuccessMessage("User has permission");
+			Boolean hasPermission = null;	
+			Boolean lockPresent = false;
+			if(vo.getAcType().equalsIgnoreCase("E")){
+				List<Lock> lockList = irbUtilDao.fetchProtocolLockData(vo.getProtocolNumber());
+				if(!lockList.isEmpty()){
+					lockPresent = true;
+				}
 			}
+			if(lockPresent){
+				vo.setSuccessCode(false);
+				vo.setSuccessMessage("Protocol is locked by Other user");
+			}else{
+				hasPermission = irbUtilDao.checkUserPermission(vo.getProtocolNumber() ,vo.getDepartment(),vo.getPersonId(),vo.getAcType());						
+				if(!hasPermission){
+					vo.setSuccessCode(hasPermission);
+					vo.setSuccessMessage("User do not have permission");
+				}else{
+					vo.setSuccessCode(true);
+					vo.setSuccessMessage("User has permission");
+				}
+			}
+			
 		} catch (Exception e) {
 			logger.info("Exception in checkUserPermission:" + e);
 		}
@@ -164,5 +189,36 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 			logger.debug("Error in adusting adjustTimezone, input date is "+date+" . Error "+e.getMessage());
 		}       
         return date;
+	}
+
+	@Override
+	public IRBUtilVO checkLockPresent(IRBUtilVO vo) {
+		Boolean lockPresent = false;
+		try{
+			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(vo.getProtocolNumber());
+			if(!lockList.isEmpty()){
+				lockPresent = true;
+			}
+			vo.setLockPresent(lockPresent);
+		}catch(Exception e) {
+			logger.debug("Error in checkLockPresent"+e.getMessage());
+		}  
+		return vo;
+	}
+
+	@Async
+	public Future<IRBProtocolVO> createLock(IRBProtocolVO irbProtocolVO) {
+		try{
+			Lock lock = new Lock();
+			lock.setModuleCode(KeyConstants.PROTOCOL_MODULE_CODE);
+			lock.setModuleItemKey(irbProtocolVO.getProtocolNumber());
+			lock.setPersonId(irbProtocolVO.getPersonId());
+			lock.setUpdateUser(irbProtocolVO.getUpdateUser());
+			lock.setUpdateTimestamp(new Date());
+			lock = irbUtilDao.createProtocolLock(lock);
+		}catch(Exception e) {
+			logger.debug("Error in createLock"+e.getMessage());
+		}
+		return new AsyncResult<>(irbProtocolVO);
 	}	
 }

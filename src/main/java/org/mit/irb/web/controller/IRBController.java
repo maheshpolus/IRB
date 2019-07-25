@@ -13,7 +13,6 @@ import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
-import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;

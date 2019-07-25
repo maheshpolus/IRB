@@ -513,4 +513,18 @@ public class ProtocolGeneralInfo {
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName;
 	}
+
+	public ProtocolGeneralInfo(Integer protocolId, String protocolStatusCode, String protocolNumber,
+			Integer sequenceNumber, String updateUser) {
+		super();
+		this.protocolId = protocolId;
+		this.protocolStatusCode = protocolStatusCode;
+		this.protocolNumber = protocolNumber;
+		this.sequenceNumber = sequenceNumber;
+		this.updateUser = updateUser;
+	}
+
+	public ProtocolGeneralInfo() {
+		super();
+	}
 }

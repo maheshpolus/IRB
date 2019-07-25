@@ -36,7 +36,7 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
 import org.mit.irb.web.correspondence.dao.DocxDocumentMergerAndConverter;
-import org.mit.irb.web.schedule.dao.MemberAttandance;
+import org.mit.irb.web.schedule.pojo.MemberAttandance;
 import org.mit.irb.web.schedule.dao.ScheduleDao;
 import org.mit.irb.web.schedule.pojo.MinutesEntry;
 import org.mit.irb.web.schedule.pojo.ProtocolDetails;

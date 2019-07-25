@@ -51,4 +51,5 @@ public final class KeyConstants {
 			"			INNER JOIN WHOSP_PERSON_HISTORY T2 ON T1.PERSON_ID = T2.PERSON_ID \r\n" + 
 			"			INNER JOIN UNIT T3 ON T1.UNIT_NUMBER = T3.UNIT_NUMBER WHERE T1.PERSON_ID = :person_id\r\n" ; 
 			//"			GROUP BY T1.UNIT_NUMBER ";
+	public static final String LOCK_MESSAGE_ACTION = "Protocol was updated by another user. Please reload the Protocol";
 }

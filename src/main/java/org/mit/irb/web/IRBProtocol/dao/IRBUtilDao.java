@@ -74,4 +74,6 @@ public interface IRBUtilDao {
 	 * @return
 	 */
 	List<Lock> fetchPIUserLockList(String personId);
+
+	Integer generateLockId();
 }

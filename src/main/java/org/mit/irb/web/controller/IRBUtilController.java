@@ -115,4 +115,11 @@ public class IRBUtilController {
 		return vo;
 	}	
 
+	@RequestMapping(value = "/checkSubmissionLock", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO checkSubmissionLock(@RequestBody IRBUtilVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbUtilService.checkSubmissionLock(vo);
+		return vo;
+	}
+	
 }

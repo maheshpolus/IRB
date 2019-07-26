@@ -10,6 +10,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewComment;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
@@ -31,6 +32,9 @@ public class IRBActionsServImpl implements IRBActionsService {
 	
 	@Autowired
 	IRBProtocolInitLoadService initLoadService;
+	
+	@Autowired
+	IRBUtilDao irbUtilDao;
 	
 	protected static Logger logger = Logger.getLogger(IRBActionsServImpl.class.getName());
 
@@ -679,6 +683,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Override
 	public SubmissionDetailVO updateBasicSubmissionDetail(SubmissionDetailVO submissionDetailvo) {
 		try{
+			String protocolNumber = submissionDetailvo.getProtocolNumber();
 			irbActionsDao.updateSubmissionDetail(submissionDetailvo);
 			submissionDetailvo = getSubmissionBasicDetails(submissionDetailvo);
 			if(submissionDetailvo.getSubmissionDetail() != null && !submissionDetailvo.getSubmissionDetail().isEmpty()){
@@ -720,6 +725,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 					submissionDetailvo.setSceduleId(submissionDetailvo.getScheduleId());
 				}
 			}	
+			irbUtilDao.releaseProtocolLock(protocolNumber);
 			submissionDetailvo.setSuccessCode(true);
 			submissionDetailvo.setSuccessMessage("Submission details saved successfully");
 		} catch (Exception e) {

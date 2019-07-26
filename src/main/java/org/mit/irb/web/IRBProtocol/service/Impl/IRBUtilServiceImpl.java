@@ -21,6 +21,7 @@ import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.roles.pojo.PersonRoles;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -222,7 +223,7 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 	public IRBProtocolVO createLock(IRBProtocolVO irbProtocolVO) {
 		try{
 			Lock lock = new Lock();
-			lock.setLockId(generateLockId());
+			lock.setLockId(irbUtilDao.generateLockId());
 			lock.setModuleCode(KeyConstants.PROTOCOL_MODULE_CODE);
 			lock.setModuleItemKey(irbProtocolVO.getProtocolNumber());
 			lock.setPersonId(irbProtocolVO.getPersonId());
@@ -272,6 +273,32 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 			vo.setLockList(lockList);
 		}catch(Exception e) {
 			logger.debug("Error in loadProtocolLock"+e.getMessage());
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBUtilVO checkSubmissionLock(IRBUtilVO vo) {
+		try{
+			Boolean cancreateLock = null;
+			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(vo.getProtocolNumber());
+			for(Lock lock :lockList){
+					if(lock.getPersonId().equalsIgnoreCase(vo.getPersonId())){
+						cancreateLock = false;
+					}else{
+						cancreateLock = true;
+					}	
+				}
+			vo.setLockPresent(cancreateLock);
+			if(lockList.isEmpty()){
+				vo.setLockPresent(false);
+				IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+				BeanUtils.copyProperties( vo ,irbProtocolVO );
+				createLock(irbProtocolVO);
+			}
+			
+		}catch(Exception e) {
+			logger.debug("Error in checkSubmissionLock"+e.getMessage());
 		}
 		return vo;
 	}	

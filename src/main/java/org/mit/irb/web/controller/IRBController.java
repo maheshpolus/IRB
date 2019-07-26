@@ -24,6 +24,7 @@ import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /*
@@ -293,50 +295,85 @@ public class IRBController {
 				protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
 				protocolVO.setSuccessCode(true);
 			}else{
+				BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
 				protocolVO.setSuccessCode(false);
 			}		
 		}
 		return protocolVO;
 	}
 	
-
 	@RequestMapping(value = "/updateProtocolPersonInfo", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateProtocolPersonInfo(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo(), irbProtocolVO.getGeneralInfo());
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.updateProtocolPersonInfo(irbProtocolVO.getPersonnelInfo(), irbProtocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}		
 		return protocolVO;
 	}
 
 	@RequestMapping(value = "/updateUnitDetails", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateUnitDetails(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateUnitDetails(irbProtocolVO.getProtocolLeadUnits(), irbProtocolVO.getGeneralInfo());
+		IRBProtocolVO protocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.updateUnitDetails(irbProtocolVO.getProtocolLeadUnits(), irbProtocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}	
 		return protocolVO;
 	}
 	
 	@RequestMapping(value = "/updateFundingSource", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateFundingSource(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateFundingSource(irbProtocolVO.getFundingSource(),irbProtocolVO.getGeneralInfo());
+		IRBProtocolVO protocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.updateFundingSource(irbProtocolVO.getFundingSource(),irbProtocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}			
 		return protocolVO;
 	}
 
 	@RequestMapping(value = "/updateSubject", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateSubject(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateSubject(irbProtocolVO.getProtocolSubject(),irbProtocolVO.getGeneralInfo());
+		IRBProtocolVO protocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.updateSubject(irbProtocolVO.getProtocolSubject(),irbProtocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}					
 		return protocolVO;
 	}
 
 	@RequestMapping(value = "/updateCollaborator", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateCollaborator(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateCollaborator(irbProtocolVO.getProtocolCollaborator(),irbProtocolVO.getGeneralInfo());
+		IRBProtocolVO protocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.updateCollaborator(irbProtocolVO.getProtocolCollaborator(),irbProtocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}					
 		return protocolVO;
 	}
 
@@ -370,8 +407,15 @@ public class IRBController {
 	@RequestMapping(value = "/saveScienceOfProtocol", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO saveScienceOfProtocol(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO protocolVO) throws JsonProcessingException {
-		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
-		irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol(),protocolVO.getGeneralInfo());
+		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol(),protocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}	
 		return irbProtocolVO;
 	}
 
@@ -389,8 +433,15 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO addCollaboratorPersons(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO irbProtocolVO) throws JsonProcessingException {
 		logger.info("Request for addCollaboratorPersons");
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.addCollaboratorPersons(irbProtocolVO.getProtocolCollaboratorPersons());
+		IRBProtocolVO protocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.addCollaboratorPersons(irbProtocolVO.getProtocolCollaboratorPersons());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}		
 		return protocolVO;
 	}
 
@@ -450,8 +501,15 @@ public class IRBController {
 	@RequestMapping(value = "/updateAdminContact", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateAdminContact(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
-		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		protocolVO = irbProtocolService.updateAdminContact(irbProtocolVO.getProtocolAdminContact(), irbProtocolVO.getGeneralInfo());
+		IRBProtocolVO protocolVO = new IRBProtocolVO();	
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		if(!lockList.isEmpty()){
+			protocolVO = irbProtocolService.updateAdminContact(irbProtocolVO.getProtocolAdminContact(), irbProtocolVO.getGeneralInfo());
+			protocolVO.setSuccessCode(true);
+		}else{
+			BeanUtils.copyProperties(irbProtocolVO ,protocolVO );
+			protocolVO.setSuccessCode(false);
+		}		
 		return protocolVO;
 	}
 	

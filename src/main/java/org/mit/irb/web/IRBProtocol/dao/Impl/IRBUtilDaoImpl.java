@@ -362,4 +362,15 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 		}	
 		return lockList;
 	}
+
+	@Override
+	public Integer generateLockId() {
+		Integer lockId = null;
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("SELECT NVL(MAX(LOCK_ID),0)+1 FROM Lock");
+		if (!queryGeneral.list().isEmpty()) {
+			lockId = Integer.parseInt(queryGeneral.list().get(0).toString());
+		}
+		return lockId;
+	}
 }

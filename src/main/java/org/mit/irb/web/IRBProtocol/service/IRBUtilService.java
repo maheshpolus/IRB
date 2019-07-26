@@ -3,14 +3,12 @@ package org.mit.irb.web.IRBProtocol.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.Future;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IRBUtilService {
@@ -67,5 +65,11 @@ public interface IRBUtilService {
 	 * @param vo
 	 * @return List 
 	 */
-	IRBUtilVO loadProtocolLock(IRBUtilVO vo); 
+	IRBUtilVO loadProtocolLock(IRBUtilVO vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	IRBUtilVO checkSubmissionLock(IRBUtilVO vo); 
 }

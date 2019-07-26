@@ -1000,7 +1000,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	@Override
 	public ScheduleVo loadScheduleIdsForAgenda(ScheduleVo vo) {
-		ArrayList<HashMap<String, Object>>  scheduleIds = scheduleDao.loadScheduleIdsForAgenda(vo.getScheduleId() ,vo.getCommitteeId());//for protocol submission						
+		ArrayList<HashMap<String, Object>>  scheduleIds = scheduleDao.loadScheduleIdsForAgenda(vo.getCommitteeSchedule() ,vo.getCommitteeId());//for protocol submission						
 		vo.setAgendaScheduleIds(scheduleIds);
 		return vo;
 	}

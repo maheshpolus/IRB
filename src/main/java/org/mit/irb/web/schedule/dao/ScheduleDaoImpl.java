@@ -1,5 +1,6 @@
 package org.mit.irb.web.schedule.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -445,21 +446,39 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> loadScheduleIdsForAgenda(Integer scheduleId, String committeeId) {	
+	public ArrayList<HashMap<String, Object>> loadScheduleIdsForAgenda(CommitteeSchedule committeeSchedule, String committeeId) {	
 		ArrayList<HashMap<String, Object>> result  = new ArrayList<HashMap<String, Object>>();
-		try {			
-			ArrayList<Parameter> inParam = new ArrayList<>();			
-			inParam.add(new Parameter("<<AV_SCHEDULE_ID>>", DBEngineConstants.TYPE_INTEGER, scheduleId));
+		try {	
+			java.sql.Date sqlDate= null;
+			sqlDate = new java.sql.Date(committeeSchedule.getMeetingDate().getTime()); 
+			ArrayList<Parameter> inParam = new ArrayList<>();	
 			inParam.add(new Parameter("<<AV_COMMITTEE_ID>>", DBEngineConstants.TYPE_STRING, committeeId));
-			inParam.add(new Parameter("<<AV_SCHEDULE_ID1>>", DBEngineConstants.TYPE_INTEGER, scheduleId));
+			inParam.add(new Parameter("<<AV_MEETING_DATE>>", DBEngineConstants.TYPE_DATE,sqlDate));
 			inParam.add(new Parameter("<<AV_COMMITTEE_ID1>>", DBEngineConstants.TYPE_STRING, committeeId));
+			inParam.add(new Parameter("<<AV_MEETING_DATE1>>", DBEngineConstants.TYPE_DATE,sqlDate));
+			inParam.add(new Parameter("<<AV_COMMITTEE_ID2>>", DBEngineConstants.TYPE_STRING, committeeId));
 			result  = dbEngine.executeQuery(inParam,"get_schedule_ids_agenda");
 		} catch (Exception e) {
 			logger.info("Exception in loadScheduledProtocols:" + e);
 		}
 		return result;
 	}
-
+	
+	public Date generateSqlDate(String date){
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		java.util.Date utilDate = null;
+		java.sql.Date sqlDate= null;
+		if(date != null){
+		try{
+			utilDate = sdf.parse(date);
+			sqlDate = new java.sql.Date(utilDate.getTime());
+		}catch (Exception e) {
+			logger.info("Exception in generateSqlActionDate:" + e);
+		}
+	  }
+		return sqlDate;
+	}
+	
 	@Override
 	public CommitteeScheduleMinutes updateScheduleMinutes(CommitteeScheduleMinutes scheduleMinutes) {
 		hibernateTemplate.saveOrUpdate(scheduleMinutes);

@@ -459,15 +459,16 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 	
 	private IContext setPlaceHolderData(IContext context,ScheduleVo vo) {
 		try{
-			List<ProtocolDetails> details = loadScheduleIdsForAgenda(vo);
-			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy"); 
 			CommitteeSchedule committeeSchedule = committeeDao.getCommitteeScheduleById(vo.getScheduleId());
 			vo.setCommitteeSchedule(committeeSchedule);	
+			List<ProtocolDetails> details = loadScheduleIdsForAgenda(vo);
+			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy"); 
 			String pattern = "hh:mm a";
 	        DateFormat dateFormat = new SimpleDateFormat(pattern);
 			context.put("scheduleMeetingDate",vo.getCommitteeSchedule().getMeetingDate()  == null ? "" : formatter.format(vo.getCommitteeSchedule().getMeetingDate()));
 			context.put("scheduleMeetingTime",vo.getCommitteeSchedule().getTime() == null ? "" : dateFormat.format(vo.getCommitteeSchedule().getTime()));
 			context.put("scheduleLocation",vo.getCommitteeSchedule().getPlace() == null ? "" : vo.getCommitteeSchedule().getPlace());
+			if(details != null)
 			context.put("previousMeetingDate",details.get(0).getPreviousSchMeetingDate() == null ? "" : details.get(0).getPreviousSchMeetingDate());
 			if(details.size() > 1){
 				context.put("nextMeetingDate",details.get(1).getPreviousSchMeetingDate() == null ? "" : details.get(1).getPreviousSchMeetingDate());

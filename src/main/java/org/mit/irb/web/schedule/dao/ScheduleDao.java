@@ -183,10 +183,10 @@ public interface ScheduleDao {
 	ScheduleVo deleteMeetingAttachment(CommitteeScheduleAttachment committeeScheduleAttachment, Integer scheduleId);
 
 	/**
-	 * @param scheduleId
+	 * @param committeeSchedule
 	 * @return
 	 */
-	public ArrayList<HashMap<String, Object>> loadScheduleIdsForAgenda(Integer scheduleId, String committeeId);
+	public ArrayList<HashMap<String, Object>> loadScheduleIdsForAgenda(CommitteeSchedule committeeSchedule, String committeeId);
 
 	/**
 	 * @param scheduleMinutes

@@ -186,5 +186,8 @@ loadInternalProtocolAttachments(params) {
         responseType: 'blob'
     });
 }
+getIRBprotocolScienificData(params) {
+    return this._http.post('/mit-irb/getIRBprotocolScienificData', params);
+  }
 
 }

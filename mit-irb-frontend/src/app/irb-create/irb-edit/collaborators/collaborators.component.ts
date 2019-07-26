@@ -222,7 +222,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     if (mode !== 'DELETE') {
       this.protocolCollaborator.updateTimestamp = new Date();
       this.protocolCollaborator.updateUser = this.userDTO.userName;
-      this.protocolCollaborator.sequenceNumber = 1;
+      this.protocolCollaborator.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
       this.protocolCollaborator.protocolOrgTypeCode = 1;
       this.protocolCollaborator.protocolNumber = this.protocolNumber;
       this.protocolCollaborator.protocolId = this.generalInfo.protocolId;

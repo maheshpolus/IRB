@@ -207,29 +207,59 @@
                       *ngFor="let adminContact of irbAdminContactList;let i= index">
 
                       <div class="row">
+                        <div class="col-md-10">
 
                         <div class="vertical-middle width-100 pd-card-row">
+                            <h5 class="txt-large">
+                                {{adminContact.PERSON_NAME}}
+                              </h5>
                           <p class="txt-dark txt-medium mb-5">
-                            Person Name:
+                            <!-- Person Name:
                             <span class="text-danger mr-20">
                               {{adminContact.PERSON_NAME}}
-                            </span>
+                            </span> -->
 
 
-                            Type:
-                            <span class="text-danger mr-20">
-                              {{adminContact.ADMIN_CONTACT_TYPE}}
-                            </span>
+                           
+                            Training Status:
+                                <span class="font-size-23">
+                                  <i *ngIf="adminContact.IS_TRAINING_COMPLETED=='COMPLETED'"
+                                    class="training-complete-color fa fa-check text-small" title="Complete"
+                                    aria-hidden="true" style="font-size:16px"></i>
+                                  <i *ngIf="adminContact.IS_TRAINING_COMPLETED=='INCOMPLETE'"
+                                    class="training-incomplete-color fa fa-times" title="Not Complete"
+                                    aria-hidden="true" style="font-size:16px"></i>
+                                </span>
+                                 Role:
+                                <span class="text-danger mr-20">
+                                  {{adminContact.ADMIN_CONTACT_TYPE}}
+                                </span>
+
+                             
                           </p>
                           <p class="txt-dark txt-medium mb-5">
-                            Description:
-                            <span class="text-danger mr-20">
-                              {{adminContact.DESCRIPTION}}
-                            </span>
+                              Affiliation:
+                              <span class="text-danger ">{{adminContact.AFFILIATION_TYPE}}</span> 
+                              Email:
+                              <span class="text-danger ">{{adminContact.EMAIL_ADDRESS}}</span>
+                              | Office:
+                              <span class="text-danger mr-20">{{adminContact.OFFICE_PHONE}}</span>
+                              | Unit:
+                              <span class="text-danger mr-20">{{adminContact.UNIT_NAME}}</span>
                           </p>
                         </div>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12 list-des button-responsive vertical-middle mtr-15">
+                            <a>
+                              <button type="button" class="btn btn-blue btn-sm text-right" data-toggle="modal"
+                                data-target="#personModal" (click)="showpersonData(adminContact?.PERSON_ID)">
+                                <i class="fa fa-eye"></i> View
+                              </button>
+                            </a>
                       </div>
                     </div>
+                    
+
                   </div>
                 </div>
               </div>
@@ -237,10 +267,11 @@
 
           </div>
           <div class="col-12 card-list-no-data" *ngIf="noAdminContacts">
-            <div class="col-12">No Administrative Contact details found</div>
+            <div class="col-12">No Points of Contact found</div>
           </div>
         </div>
       </div>
+    </div>
     </div>
     <!--  end  -->
 

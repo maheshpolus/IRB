@@ -136,6 +136,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   getLookUpData() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
+    this.reviewedBy = this.userDTO.userName;
     this._irbViewService.getSubmissionLookups(null).subscribe(data => {
       this.lookUpData = data || [];
       this.irbAdminsReviewerType = this.lookUpData.irbAdminsReviewerType != null ? this.lookUpData.irbAdminsReviewerType : [];

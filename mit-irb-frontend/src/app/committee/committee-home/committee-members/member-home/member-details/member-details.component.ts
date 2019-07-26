@@ -212,6 +212,7 @@ export class MemberDetailsComponent implements OnInit {
       if (this.isNewMember) {
         this.memberDetails.committeeMemberRoles[0] = this.committeeMemberRole;
       }
+      this.memberDetails.personName = this.selectedPerson.fullName;
       this.memberDetails.updateTimeStamp = new Date().getTime();
       this.memberDetails.updateUser = this.userDTO.userName;
       this.committeeVo.committeeMemberships = this.memberDetails;

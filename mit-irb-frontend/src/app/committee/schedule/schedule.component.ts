@@ -82,10 +82,16 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     downloadAgendaAttachment(scheduleAgendaId) {
       this.scheduleService.downloadAgendaAttachment(scheduleAgendaId).subscribe(data => {
-        const a = document.createElement('a');
-        const blob = new Blob ([data], {type: 'application/pdf'});
-        a.href = URL.createObjectURL(blob);
-        a.download = 'Agenda';
+        // const a = document.createElement('a');
+        // const blob = new Blob ([data], {type: 'application/pdf'});
+        // a.href = URL.createObjectURL(blob);
+        // a.download = 'Agenda' + '.pdf';
+        // document.body.appendChild(a);
+        // a.click();
+        const a = document.createElement( 'a' );
+        const blob = new Blob( [data], { type: data.type} );
+        a.href = URL.createObjectURL( blob );
+        a.download = 'Agenda.pdf';
         document.body.appendChild(a);
         a.click();
       },
@@ -99,7 +105,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         const a = document.createElement('a');
         const blob = new Blob([data], { type: data.type });
         a.href = URL.createObjectURL(blob);
-        a.download = 'Minutes';
+        a.download = 'Minutes.pdf';
         document.body.appendChild(a);
         a.click();
       },
@@ -133,7 +139,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             const a = document.createElement('a');
       const blob = new Blob([data], { type: data.type });
       a.href = URL.createObjectURL(blob);
-      a.download = 'Agenda';
+      a.download = 'Agenda.pdf';
       document.body.appendChild(a);
       a.click();
       },
@@ -155,7 +161,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       const a = document.createElement('a');
       const blob = new Blob([data], { type: data.type });
       a.href = URL.createObjectURL(blob);
-      a.download = 'Mintues';
+      a.download = 'Minutes.pdf';
       document.body.appendChild(a);
       a.click();
       },

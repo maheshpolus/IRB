@@ -216,7 +216,9 @@
                     <tr *ngFor="let item of protocolFundingSourceList let j=index"
                         [class.poping-border]="j == fundingEditIndex" class="pull-up solid-bottom">
                       <td class="align-middle">{{item.protocolFundingSourceTypes?.description}}</td>
-                      <td class="align-middle">{{item.sourceName}}</td>
+                      <td class="align-middle" *ngIf="item.fundingSourceTypeCode != 3">{{item.sourceName}}</td>
+                      <!-- for other type -->
+                      <td class="align-middle" *ngIf="item.fundingSourceTypeCode == 3">{{item.fundingSource}}</td>
                       <td class="align-middle">{{item.fundingNumber}}</td>
                       <td title="{{item.title}}" class="align-middle">{{item.title| slice:0:25}}<span
                         *ngIf="item.title != null && item.title.length > 25"> ...</span></td>

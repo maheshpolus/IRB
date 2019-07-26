@@ -190,4 +190,7 @@ getIRBprotocolScienificData(params) {
     return this._http.post('/mit-irb/getIRBprotocolScienificData', params);
   }
 
+checkSubmissionLock(params) {
+    return this._http.post('/mit-irb/checkSubmissionLock', params);
+  }
 }

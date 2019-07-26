@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 
 import { IrbCreateService } from '../../irb-create.service';
@@ -56,7 +57,8 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _spinner: NgxSpinnerService,
-    public keyPressEvent: KeyPressEvent) { }
+    public keyPressEvent: KeyPressEvent,
+    public toastr: ToastsManager) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
@@ -243,6 +245,11 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         data => {
           this.result = data;
           this._spinner.hide();
+          if (this.result.successCode) {
+            this.toastr.success('Protocol Details saved successfully', null, { toastLife: 2000 });
+          } else {
+            this.toastr.error('Failed to perform Save action', null, { toastLife: 2000 });
+          }
           if (this.protocolNumber == null) {
             this.personalDataList = this.result.generalInfo.personnelInfos;
             this.personnelInfo = {};

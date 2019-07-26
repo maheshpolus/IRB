@@ -104,6 +104,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   warningMessage: string;
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
+  lockPresent = false;
 
   private $subscription: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
@@ -171,6 +172,22 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this._irbViewService.getPastSubmission(reqstObj).subscribe(data => {
       const result: any = data || [];
       this.submissionVo.pastSubmission = result.pastSubmission != null ? result.pastSubmission : [];
+    });
+  }
+
+  editSubmissionDetailsClick() {
+    const reqstObj = {
+      protocolNumber: this.headerDetails.PROTOCOL_NUMBER,
+      personId: this.userDTO.personID,
+      updateUser: this.userDTO.userName
+    };
+    this._irbViewService.checkSubmissionLock(reqstObj).subscribe(data => {
+      const result: any = data || [];
+      this.lockPresent = result.lockPresent;
+      this.editDetails = this.lockPresent === true ? false : true;
+      if (this.lockPresent) {
+        this.toastr.error('You cannot Edit Submission Details. Protocol is locked by another user', null, { toastLife: 5000 });
+      }
     });
   }
 
@@ -610,6 +627,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
       this.submissionVo.committeeId = this.committeeID;
       this.submissionVo.sceduleId = this.scheduleID;
+      this.submissionVo.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
       this._spinner.show();
       this._irbViewService.updateBasicSubmissionDetail(this.submissionVo).subscribe((data: any) => {
         // this.submissionVo = data;

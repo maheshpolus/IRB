@@ -16,6 +16,7 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 })
 export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
+  showEdit = true;
   editDetails = false;
   reviewTabSelected = 'ADMIN';
   isExpanded = false;
@@ -115,6 +116,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.getLookUpData();
     this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
       if (data !== undefined && data != null) {
+        if (+data.PROTOCOL_STATUS_CODE >= 200) { // check if edit is allowed
+          this.showEdit = false;
+        }
         this.headerDetails = Object.assign({}, data);
         this.getIRBAdminReviewers();
         this.getIRBAdminReviewDetails();
@@ -207,7 +211,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   getIRBAdminReviewDetails() {
     this.showReviewsOf = 'All Administrative Reviewers';
-    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
     this._spinner.show();
     this._irbViewService.getIRBAdminReviewDetails(reqstObj).subscribe(data => {
       this._spinner.hide();

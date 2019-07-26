@@ -120,7 +120,7 @@
                       <button *ngIf="editDetails" type="button margin-class"
                         class="btn btn-outline-success txt-small mt-4" (click)="saveSubmissionBasicDetails()">Save
                       </button>
-                      <button *ngIf="editDetails == false" type="button margin-class"
+                      <button *ngIf="editDetails == false && showEdit == true" type="button margin-class"
                         class="btn btn-outline-success txt-small mt-4" (click)="editDetails=true">Edit
                       </button>
                     </div>
@@ -142,12 +142,12 @@
     </div>
 
     <ul class="nav nav-pills mx-3 my-2" role="tablist" style="background: none;">
-      <li class="nav-item">
+      <li class="nav-item pointer">
         <a class="nav-link active txt-small button-red-tab" (click)="reviewTabSelected='ADMIN'"
         [ngClass]="{active:(reviewTabSelected=='ADMIN')}">
           <i class="fa fa-university txt-large" aria-hidden="true"></i> Administrative Review</a>
       </li>
-      <li class="nav-item border-left1">
+      <li class="nav-item border-left1 pointer">
         <a class="nav-link txt-small button-red-tab" (click)="reviewTabSelected='PROTOCOL'"
         [ngClass]="{active:(reviewTabSelected=='PROTOCOL')}">
           <i class="fa fa-file-text-o txt-large mr-5" aria-hidden="true"></i> Protocol Review
@@ -175,46 +175,47 @@
                 <div class="alert alert-danger ">{{validationTextadmin}}
                 </div>
               </div>
-              <div class="col-12  search-eidted-p padding-15" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
-                <div class="text-right txt-medium txt-underline mb-2">
-                    <span class="pointer" data-toggle="collapse"
-                    href="#collapseAdmin" role="button" aria-expanded="false"
-                    aria-controls="collapseAdmin">
-                      <i class="fa fa-plus-circle text-success icon-padding"></i> Add Reviewer</span>
-                </div>
-                <div class="row mb15 collapse" id="collapseAdmin">
-                  <div class="col-md-5 pr-0">
-                    <div class="form-group">
-                      <span class="txt-medium text-secondary"> Review Type
-                        <span class="mandatory">*</span>
-                      </span>
-                      <select class="txt-small form-control" id="inlineFormCustomSelect"
-                        [(ngModel)]="adminReviewer.reviewTypeCode">
-                        <option selected value=null>Please Select</option>
-                        <option *ngFor="let type of irbAdminsReviewerType" value="{{type.REVIEW_TYPE_CODE}}">
-                          {{type.DESCRIPTION}}</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-5 pl-0 pr-0">
-                    <div class="form-group" style="margin-left: 20px;">
-                      <span class="txt-medium text-secondary">Administrators
-                        <span class="mandatory">*</span> <br>
-                      </span>
-                      <ng2-completer class="mr-sm-2 select-notify-popup isEditIRBReviewer w-100"
-                        [datasource]="adminListDataSource" [minSearchLength]="0" [placeholder]="'Search IRB Admin'"
-                        [openOnFocus]="true" [inputClass]="'ng-pristine ng-valid ng-touched'"
-                        [(ngModel)]="adminReviewer.personName" (selected)="setAdmin($event)">
-                      </ng2-completer>
-                    </div>
-                  </div>
-                  <div class="col-md-1 add-btn-1">
-                    <button title="Add" (click)="addAdminReviwever('I')" type="button" class="btn top-butn">
-                      <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                </div>
+              <div class="col-12  search-eidted-p padding-15" >
 
+                <div *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
+                  <div class="text-right txt-medium txt-underline mb-2">
+                    <span class="pointer" data-toggle="collapse" href="#collapseAdmin" role="button" aria-expanded="false"
+                      aria-controls="collapseAdmin">
+                      <i class="fa fa-plus-circle text-success icon-padding"></i> Add Reviewer</span>
+                  </div>
+                  <div class="row mb15 collapse" id="collapseAdmin">
+                    <div class="col-md-5 pr-0">
+                      <div class="form-group">
+                        <span class="txt-medium text-secondary"> Review Type
+                          <span class="mandatory">*</span>
+                        </span>
+                        <select class="txt-small form-control" id="inlineFormCustomSelect" [(ngModel)]="adminReviewer.reviewTypeCode">
+                          <option selected value=null>Please Select</option>
+                          <option *ngFor="let type of irbAdminsReviewerType" value="{{type.REVIEW_TYPE_CODE}}">
+                            {{type.DESCRIPTION}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-5 pl-0 pr-0">
+                      <div class="form-group" style="margin-left: 20px;">
+                        <span class="txt-medium text-secondary">Administrators
+                          <span class="mandatory">*</span> <br>
+                        </span>
+                        <ng2-completer class="mr-sm-2 select-notify-popup isEditIRBReviewer w-100" [datasource]="adminListDataSource"
+                          [minSearchLength]="0" [placeholder]="'Search IRB Admin'" [openOnFocus]="true"
+                          [inputClass]="'ng-pristine ng-valid ng-touched'" [(ngModel)]="adminReviewer.personName"
+                          (selected)="setAdmin($event)">
+                        </ng2-completer>
+                      </div>
+                    </div>
+                    <div class="col-md-1 add-btn-1">
+                      <button title="Add" (click)="addAdminReviwever('I')" type="button" class="btn top-butn">
+                        <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
 
 
                 <div class="col-md-12 users-list-tbl"
@@ -298,19 +299,19 @@
                   <div class="col-md-12 mb-15">
                     <div class="row justify-content-between">
                       <ul class="nav nav-pills" role="tablist" style="background: none;">
-                        <li class="nav-item">
+                        <li class="nav-item pointer">
                           <a class="nav-link txt-small button-red-tab" (click)="tabSelected='IRBCOMMENTS'"
                             [ngClass]="{active:(tabSelected=='IRBCOMMENTS')}">
                             <i class="fa fa-commenting-o pr-8" aria-hidden="true"></i>Review Comments & Attachments
                           </a>
                         </li>
-                        <li class="nav-item border-left1">
+                        <li class="nav-item border-left1 pointer">
                           <a class="nav-link txt-small button-red-tab" (click)="tabSelected='CHECKLIST'"
                             [ngClass]="{active:(tabSelected=='CHECKLIST')}">
                             <i class="fa fa-list-ul pr-8" aria-hidden="true"></i>Checklist
                           </a>
                         </li>
-                        <li class="nav-item border-left1">
+                        <li class="nav-item border-left1 pointer">
                           <a class="nav-link txt-small button-red-tab" (click)="tabSelected='IRBHISTORY'"
                             [ngClass]="{active:(tabSelected=='IRBHISTORY')}">
                             <i class="fa fa-history pr-8" aria-hidden="true"></i>Submission History
@@ -507,7 +508,7 @@
               </div>
             </div>
             <div class="card-body p-3">
-                <div class="col-12  search-eidted-p padding-15"
+              <div class="col-12  search-eidted-p padding-15"
                 *ngIf="invalidData.invalidProtocolReviewer == true || this.invalidData.invalidReviewer == true">
                 <div class="alert alert-danger " [innerHTML]="warningMessage">
 
@@ -686,20 +687,20 @@
                 <div class="col-sm-12 p15">
                   <div class="row">
                     <ul class="nav nav-pills" role="tablist" style="background: none;">
-                      <li class="nav-item">
+                      <li class="nav-item pointer">
                         <a class="nav-link txt-small button-red-tab active"
                           (click)="tabSelectedCommittee='PROTOCOL_COMMENTS'"
                           [ngClass]="{active:(tabSelectedCommittee=='PROTOCOL_COMMENTS')}">
                           <i class="fa fa-commenting-o pr-8" aria-hidden="true"></i>Reviews and Attachments
                         </a>
                       </li>
-                      <li class="nav-item border-left1">
+                      <li class="nav-item border-left1 pointer">
                         <a class="nav-link txt-small button-red-tab" (click)="tabSelectedCommittee='VOTES'"
                           [ngClass]="{active:(tabSelectedCommittee=='VOTES')}">
                           <i class="fa fa-thumbs-o-up pr-8" aria-hidden="true"></i>Voting Details
                         </a>
                       </li>
-                      <li class="nav-item border-left1">
+                      <li class="nav-item border-left1 pointer">
                         <a class="nav-link txt-small button-red-tab" (click)="tabSelectedCommittee='HISTORY'"
                           [ngClass]="{active:(tabSelectedCommittee=='HISTORY')}">
                           <i class="fa fa-history pr-8" aria-hidden="true"></i>Submission History

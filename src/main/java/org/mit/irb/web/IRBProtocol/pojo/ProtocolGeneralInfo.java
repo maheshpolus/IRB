@@ -170,6 +170,15 @@ public class ProtocolGeneralInfo {
 	@Transient
 	private String createUserName;
 	
+	@Transient
+	private String strApprovalDate;
+	
+	@Transient
+	private String strExpirationDate;
+	
+	@Transient
+	private String strLastApprovalDate;
+	
 	public String getAniticipatedStartDate() {
 		return aniticipatedStartDate;
 	}
@@ -526,5 +535,29 @@ public class ProtocolGeneralInfo {
 
 	public ProtocolGeneralInfo() {
 		super();
+	}
+
+	public String getStrApprovalDate() {
+		return strApprovalDate;
+	}
+
+	public void setStrApprovalDate(String strApprovalDate) {
+		this.strApprovalDate = strApprovalDate;
+	}
+
+	public String getStrExpirationDate() {
+		return strExpirationDate;
+	}
+
+	public void setStrExpirationDate(String strExpirationDate) {
+		this.strExpirationDate = strExpirationDate;
+	}
+
+	public String getStrLastApprovalDate() {
+		return strLastApprovalDate;
+	}
+
+	public void setStrLastApprovalDate(String strLastApprovalDate) {
+		this.strLastApprovalDate = strLastApprovalDate;
 	}
 }

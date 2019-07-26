@@ -1042,7 +1042,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
 				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
 			}
-			ArrayList<HashMap<String, Object>> result = null;			
+			ArrayList<HashMap<String, Object>> result = null;
+			updateSubmissionDetail(vo);
 			result = protocolActionSP(vo,null);	
 			if(result != null && !result.isEmpty()){
 				   vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));

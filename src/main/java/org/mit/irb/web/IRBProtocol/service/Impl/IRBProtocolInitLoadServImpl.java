@@ -451,6 +451,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();	
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getPersonID()));
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> irbAdminCommentList = dbEngine.executeProcedure(inputParam,"GET_IRB_PROTO_ADMIN_REVW_CMMNT",outputParam);
 			submissionDetailvo.setIrbAdminCommentList(irbAdminCommentList);
@@ -466,6 +467,7 @@ public class IRBProtocolInitLoadServImpl implements IRBProtocolInitLoadService{
 			ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 			ArrayList<OutParameter> outputParam  = new ArrayList<OutParameter>();	
 			inputParam.add(new InParameter("AV_SUBMISSION_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getSubmissionId()));
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailvo.getPersonID()));
 			outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> irbAdminAttachmentList = dbEngine.executeProcedure(inputParam,"GET_IRB_PROTO_ADMIN_REVW_ATMNT",outputParam);
 			submissionDetailvo.setIrbAdminAttachmentList(irbAdminAttachmentList);

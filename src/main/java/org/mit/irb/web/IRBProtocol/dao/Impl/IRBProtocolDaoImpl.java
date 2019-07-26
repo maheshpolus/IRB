@@ -617,6 +617,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			generalInfo.setRiskLvlDateAssigned(generateSqlDate(generalInfo.getStringRiskLvlDate()));
 		if (generalInfo.getStringFDARiskLvlDate() != null)
 			generalInfo.setFdaRiskLvlDateAssigned(generateSqlDate(generalInfo.getStringFDARiskLvlDate()));
+		if (generalInfo.getStrExpirationDate() != null)
+			generalInfo.setPrtocolExpirationDate(generateSqlDate(generalInfo.getStrExpirationDate()));
+		if (generalInfo.getStrApprovalDate() != null)
+			generalInfo.setApprovalDate(generateSqlDate(generalInfo.getStrApprovalDate()));
+		if (generalInfo.getStrLastApprovalDate() != null)
+			generalInfo.setLastApprovalDate(generateSqlDate(generalInfo.getStrLastApprovalDate()));
 		hibernateTemplate.saveOrUpdate(generalInfo);
 		irbProtocolVO.setGeneralInfo(generalInfo);
 		if (vo.getAcType() != null) {

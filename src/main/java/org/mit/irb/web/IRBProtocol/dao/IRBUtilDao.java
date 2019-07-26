@@ -10,6 +10,7 @@ import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTraining;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
+import org.mit.irb.web.roles.pojo.PersonRoles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,4 +56,22 @@ public interface IRBUtilDao {
 	void releaseProtocolLock(String protocolNumber);
 
 	ArrayList<HashMap<String, Object>> fetchUserPermission(String personId);
+
+	/**
+	 * @param personId
+	 * @return
+	 */
+	List<PersonRoles> fetchUserRoles(String personId);
+
+	/**
+	 * @param personId
+	 * @return
+	 */
+	List<Lock> fetchAdminUserLockList(String personId);
+
+	/**
+	 * @param personId
+	 * @return
+	 */
+	List<Lock> fetchPIUserLockList(String personId);
 }

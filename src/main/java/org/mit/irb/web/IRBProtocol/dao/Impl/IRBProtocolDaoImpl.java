@@ -38,6 +38,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
 import org.mit.irb.web.IRBProtocol.pojo.Award;
 import org.mit.irb.web.IRBProtocol.pojo.CollaboratorNames;
 import org.mit.irb.web.IRBProtocol.pojo.EpsProposal;
@@ -47,6 +48,7 @@ import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles;
 import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswer;
 import org.mit.irb.web.IRBProtocol.pojo.IRBWatermark;
+import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.Proposal;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaborator;
@@ -91,6 +93,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 
 	@Autowired
 	IRBActionsDao irbAcionDao;
+	
+	@Autowired
+	IRBUtilDao irbUtilDao;
 	
 	@Autowired
 	IRBUtilService irbUtilService;
@@ -858,8 +863,9 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			}
 		}
 		Query queryPersonactiveList = hibernateTemplate.getSessionFactory().getCurrentSession()
-				.createQuery("from ProtocolPersonnelInfo p where p.protocolNumber =:protocolNumber");
+				.createQuery("from ProtocolPersonnelInfo p where p.protocolNumber =:protocolNumber and p.protocolGeneralInfo.protocolId =:protocolId");
 		queryPersonactiveList.setString("protocolNumber", personnelInfo.getProtocolNumber());
+		queryPersonactiveList.setInteger("protocolId",generalInfo.getProtocolId() );
 		List<ProtocolPersonnelInfo> protocolPersonnelInfoList = queryPersonactiveList.list();
 		for (ProtocolPersonnelInfo person : protocolPersonnelInfoList) {
 			person.setTrainingInfo(getTrainingFlag(person.getPersonId()));
@@ -969,9 +975,12 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			Integer protocolId = null;
 			protocolId = irbProtocolVO.getProtocolId();
 			ProtocolGeneralInfo protocolGeneralInfo = new ProtocolGeneralInfo();
-			if (protocolId != null) {
-				irbUtilService.createLock(irbProtocolVO);
-				getGeneralPersonnelInfoList(irbProtocolVO);
+			if (protocolId != null) {		
+				getGeneralPersonnelInfoList(irbProtocolVO); 
+				Boolean canCreateLock = fetchLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber(),irbProtocolVO.getPersonId());
+				if(canCreateLock){
+					irbUtilService.createLock(irbProtocolVO);
+				}
 				getDepartmentList(irbProtocolVO);
 				getSubjectoList(irbProtocolVO);
 				getScienceOfProtocol(irbProtocolVO);
@@ -995,6 +1004,22 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			logger.error("Error in loadProtocolDetails method" + e.getMessage());
 		}
 		return irbProtocolVO;
+	}
+
+	private Boolean fetchLockData(String protocolNumber,String personId) {
+		Boolean canCreateLock = false;
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(protocolNumber);
+		if(lockList.isEmpty()){
+			canCreateLock = true;
+		}
+		/*for(Lock lock :lockList){
+				if(lock.getPersonId().equalsIgnoreCase(personId)){
+					canCreateLock = false;
+				}else{
+					canCreateLock = true;
+				}	
+			}*/
+		return canCreateLock;
 	}
 
 	private ProtocolRenewalDetails fetchAmendRenewalDetails(List<HashMap<String, Object>> amendRenewalModule) {
@@ -1519,8 +1544,11 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		if (!queryGeneral.list().isEmpty()) {
 			List<ProtocolAdminContact> adminContactList = queryGeneral.list();
+			for (ProtocolAdminContact person : adminContactList) {
+				person.setTrainingInfo(getTrainingFlag(person.getPersonId()));
+			}
 			irbProtocolVO.setProtocolAdminContactList(adminContactList);
-		}
+		}	
 		return new AsyncResult<>(irbProtocolVO);
 	}
 
@@ -1560,17 +1588,33 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		ArrayList<HashMap<String, Object>> result = null;
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_ADMIN_CONTACTS_DTLS", outputParam);
-		} catch (DBException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("DBException in getIRBProtocolDetails:" + e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.info("IOException in getIRBProtocolDetails:" + e);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.info("SQLException in getIRBProtocolDetails:" + e);
+			logger.info("Exception in getIRBProtocolDetails:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
+			for (HashMap<String, Object> personInfo : result) {
+				ArrayList<InParameter> inParam = new ArrayList<>();
+				ArrayList<OutParameter> outParam = new ArrayList<>();
+				outParam.add(new OutParameter("trainingStatus", DBEngineConstants.TYPE_INTEGER));
+				if (personInfo != null) {
+					inParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,
+							personInfo.get("PERSON_ID")));
+					try {
+						ArrayList<HashMap<String, Object>> trainingStatus = dbEngine.executeFunction(inParam,
+								"fn_irb_per_training_completed", outParam);
+						String trainingInfo = (String) trainingStatus.get(0).get("trainingStatus");
+						if (trainingInfo.equals("1")) {
+							personInfo.put("IS_TRAINING_COMPLETED", "COMPLETED");
+						} else {
+							personInfo.put("IS_TRAINING_COMPLETED", "INCOMPLETE");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.info("Exception in getIRBProtocolDetails:" + e);
+					} 
+				}
+			}
 			irbViewProfile.setIrbViewProtocolAdminContact(result);
 		}
 		return irbViewProfile;

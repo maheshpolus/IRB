@@ -1547,7 +1547,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getContingencyCode()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));	
-				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));			
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));
+				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,null));
+				inputParam.add(new InParameter("AV_MINUTE_ENTRY_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,KeyConstants.PROTOCOL_MINUTE_ENTRY_TYPE));
 			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1968,7 +1970,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ProtocolSubmissionStatuses> criteria = builder.createQuery(ProtocolSubmissionStatuses.class);
 			Root<ProtocolSubmissionStatuses> submissionRoot=criteria.from(ProtocolSubmissionStatuses.class);			
-			criteria.where(builder.equal(submissionRoot.get("PROTOCOL_NUMBER"),vo.getProtocolNumber()));
+			criteria.where(builder.equal(submissionRoot.get("protocolNumber"),vo.getProtocolNumber()));
 			criteria.orderBy(builder.desc(submissionRoot.get("submission_Id")));
 			if(session.createQuery(criteria).getResultList() != null)
 			protocolSubmissionStatuses = session.createQuery(criteria).getResultList().get(0);					

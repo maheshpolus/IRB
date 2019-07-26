@@ -3,6 +3,7 @@ package org.mit.irb.web.controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,10 +14,13 @@ import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
+import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 import org.mit.irb.web.IRBProtocol.service.IRBExemptProtocolService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
@@ -50,6 +54,12 @@ public class IRBController {
 	
 	@Autowired
 	IRBActionsDao irbAcionDao;
+	
+	@Autowired
+	IRBUtilService irbUtilService;
+	
+	@Autowired
+	IRBUtilDao irbUtilDao;
 	
 	@Autowired
 	IRBProtocolInitLoadService irbProtocolInitLoadService;
@@ -257,28 +267,38 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO updateProtocolGeneralInfo(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody IRBProtocolVO irbProtocolVO) throws Exception {
 		IRBProtocolVO protocolVO = new IRBProtocolVO();
-		Boolean logInitialData = false;
 		if(irbProtocolVO.getGeneralInfo().getProtocolId() == null){
-			logInitialData = true;
-		}
-		protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
-		if(logInitialData){
-			IRBActionsVO vo = new IRBActionsVO();
-			vo.setActionTypeCode("100");
-			vo.setUpdateUser(protocolVO.getGeneralInfo().getUpdateUser());
-			vo.setCreateUser(protocolVO.getGeneralInfo().getCreateUser());
-			vo.setAcType("I");
-			vo.setProtocolStatus(protocolVO.getGeneralInfo().getProtocolStatusCode());
-			ProtocolSubmissionStatuses status = new ProtocolSubmissionStatuses();
-			status.setProtocolNumber(protocolVO.getGeneralInfo().getProtocolNumber());
-			status.setProtocolId(protocolVO.getGeneralInfo().getProtocolId());
-			status.setSequenceNumber(protocolVO.getGeneralInfo().getSequenceNumber());
-			status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
-			vo.setProtocolSubmissionStatuses(status);
-			irbAcionDao.updateActionStatus(vo);	
+			protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
+				irbProtocolVO.setProtocolNumber(protocolVO.getGeneralInfo().getProtocolNumber());
+				irbProtocolVO.setUpdateUser(protocolVO.getGeneralInfo().getUpdateUser());
+				irbUtilService.createLock(irbProtocolVO);
+				
+				IRBActionsVO vo = new IRBActionsVO();
+				vo.setActionTypeCode("100");
+				vo.setUpdateUser(protocolVO.getGeneralInfo().getUpdateUser());
+				vo.setCreateUser(protocolVO.getGeneralInfo().getCreateUser());
+				vo.setAcType("I");
+				vo.setProtocolStatus(protocolVO.getGeneralInfo().getProtocolStatusCode());
+				ProtocolSubmissionStatuses status = new ProtocolSubmissionStatuses();
+				status.setProtocolNumber(protocolVO.getGeneralInfo().getProtocolNumber());
+				status.setProtocolId(protocolVO.getGeneralInfo().getProtocolId());
+				status.setSequenceNumber(protocolVO.getGeneralInfo().getSequenceNumber());
+				status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
+				vo.setProtocolSubmissionStatuses(status);
+				irbAcionDao.updateActionStatus(vo);	
+			
+		}else{
+			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(protocolVO.getGeneralInfo().getProtocolNumber());
+			if(lockList.isEmpty()){
+				protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
+				protocolVO.setSuccessCode(true);
+			}else{
+				protocolVO.setSuccessCode(false);
+			}		
 		}
 		return protocolVO;
 	}
+	
 
 	@RequestMapping(value = "/updateProtocolPersonInfo", method = RequestMethod.POST)
 	public @ResponseBody IRBProtocolVO updateProtocolPersonInfo(HttpServletRequest request,

@@ -46,6 +46,29 @@ public class IRBActionsServImpl implements IRBActionsService {
 		case "101":	
 			vo = irbActionsDao.getProtocolCurrentStatus(vo);
 			if(vo.isSuccessCode()){
+				switch (vo.getProtocolStatus()) {
+				case "100": //intial
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("100");					
+					break;
+				case "102": //smr
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("103");								
+					break;
+				case "104": //srr
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("103");								
+					break;
+				case "105": //amend
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("102");								
+					break;
+				case "106": //renew
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("101");								
+					break;
+				case "103": //defer
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("103");								
+					break;
+				case "107": //return to pi
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("100");								
+					break;
+				}
 				vo = irbActionsDao.submitForReviewProtocolActions(vo);			
 			}
 			break;

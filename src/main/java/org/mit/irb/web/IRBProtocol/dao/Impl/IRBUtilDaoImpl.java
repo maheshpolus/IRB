@@ -24,7 +24,7 @@ import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.DBException;
 import org.mit.irb.web.common.utils.InParameter;
 import org.mit.irb.web.common.utils.OutParameter;
-import org.mit.irb.web.dbengine.Parameter;
+import org.mit.irb.web.roles.pojo.PersonRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -312,12 +312,54 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 	public ArrayList<HashMap<String, Object>> fetchUserPermission(String personId) {
 		ArrayList<HashMap<String, Object>> userPermissionMap = null;
 		try {
-			ArrayList<Parameter> inputParam = new ArrayList<>();
+			/*ArrayList<Parameter> inputParam = new ArrayList<>();
 			inputParam.add(new Parameter("<<AV_PERSON_ID>>", DBEngineConstants.TYPE_STRING, personId));
-			userPermissionMap = dbEngineGeneric.executeQuery(inputParam,"CHECK_PERSON_PERMISSION");
+			userPermissionMap = dbEngineGeneric.executeQuery(inputParam,"CHECK_PERSON_PERMISSION");*/
 		} catch (Exception e) {
 			logger.info("Exception in fetchUserPermission method" + e);
 		}
 		return userPermissionMap;
+	}
+
+	@Override
+	public List<PersonRoles> fetchUserRoles(String personId) {
+		List<PersonRoles> personRolesList = new ArrayList<PersonRoles>();
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(PersonRoles.class);
+			criteria.add(Restrictions.eq("personId", personId));
+			personRolesList = criteria.list();
+		} catch (Exception e) {
+			logger.info("Exception in fetchProtocolLockData method" + e);
+		}		
+		return personRolesList;
+	}
+
+	@Override
+	public List<Lock> fetchAdminUserLockList(String personId) {
+		List<Lock> lockList = new ArrayList<Lock>();
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(Lock.class);
+			//criteria.add(Restrictions.eq("moduleItemKey", moduleItemKey));
+			lockList = criteria.list();
+		} catch (Exception e) {
+			logger.info("Exception in fetchAdminUserLockList method" + e);
+		}	
+		return lockList;
+	}
+
+	@Override
+	public List<Lock> fetchPIUserLockList(String personId) {
+		List<Lock> lockList = new ArrayList<Lock>();
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(Lock.class);
+			criteria.add(Restrictions.eq("personId", personId));
+			lockList = criteria.list();
+		} catch (Exception e) {
+			logger.info("Exception in fetchAdminUserLockList method" + e);
+		}	
+		return lockList;
 	}
 }

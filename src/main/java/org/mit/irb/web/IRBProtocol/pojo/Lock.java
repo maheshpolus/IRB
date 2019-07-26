@@ -6,14 +6,11 @@ import java.util.Date;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "APPLICATION_LOCKS")
@@ -24,9 +21,9 @@ public class Lock implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GenericGenerator(name = "lockIdGererator", strategy = "increment", parameters = {
+	/*@GenericGenerator(name = "lockIdGererator", strategy = "increment", parameters = {
 			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
-	@GeneratedValue(generator = "lockIdGererator")
+	@GeneratedValue(generator = "lockIdGererator")*/
 	@Column(name = "LOCK_ID", updatable = false, nullable = false)
 	private Integer lockId;
 

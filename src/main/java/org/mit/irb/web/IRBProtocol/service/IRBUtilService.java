@@ -55,8 +55,7 @@ public interface IRBUtilService {
 	 * @param irbProtocolVO
 	 * @return
 	 */
-	@Async
-	public Future<IRBProtocolVO> createLock(IRBProtocolVO irbProtocolVO);
+	public IRBProtocolVO createLock(IRBProtocolVO irbProtocolVO);
 
 	/**
 	 * @param vo

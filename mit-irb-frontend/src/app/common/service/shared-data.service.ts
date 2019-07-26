@@ -53,4 +53,12 @@ checkUserPermission(params) {
   return this._http.post('/mit-irb/checkUserPermission', params);
 }
 
+releaseProtocolLock(params) {
+  return this._http.post('/mit-irb/releaseProtocolLock', params);
+}
+
+loadProtocolLock(params) {
+  return this._http.post('/mit-irb/loadProtocolLock', params);
+}
+
 }

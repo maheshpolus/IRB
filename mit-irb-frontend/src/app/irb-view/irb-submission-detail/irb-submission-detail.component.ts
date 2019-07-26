@@ -133,6 +133,13 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     if (this.$subscription) {
       this.$subscription.unsubscribe();
     }
+    if (this.headerDetails.PROTOCOL_NUMBER && this.editDetails) {
+      const reqstObj = { protocolNumber: this.headerDetails.PROTOCOL_NUMBER };
+      this._sharedDataService.releaseProtocolLock(reqstObj).subscribe(
+        data => {
+          console.log('Lock Released Successfully');
+        });
+    }
   }
 
   getLookUpData() {

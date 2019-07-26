@@ -101,4 +101,13 @@ public class QuestionnaireController {
 	public ResponseEntity<byte[]> downloadAttachment(HttpServletResponse response, @RequestBody QuestionnaireModuleDataBus questionnaireDataBus) {
 		return questionnaireModuleService.downloadAttachments(questionnaireDataBus, response);
 	}
+	
+	@RequestMapping(value = "/updateQuestionnarireSortOrder", method = RequestMethod.POST)
+	public ResponseEntity<String> updateQuestionnarireSortOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody QuestionnaireModuleDataBus questionnaireDataBus) throws Exception{
+		ObjectMapper mapper=new ObjectMapper();
+		HttpStatus status = HttpStatus.OK;		
+		questionnaireDataBus = questionnaireModuleService.updateHeaderInfo(questionnaireDataBus);	
+		String responseData = mapper.writeValueAsString(questionnaireDataBus);
+		return new ResponseEntity<String>(responseData, status);
+	}
 }

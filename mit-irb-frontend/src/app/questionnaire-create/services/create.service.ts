@@ -16,4 +16,7 @@ export class CreateQuestionnaireService {
   saveQuestionnaireList(data) {
      return this.http.post('/mit-irb/configureQuestionnaire', data);
   }
+  updateQuestionnarireSortOrder(data) {
+    return this.http.post('/mit-irb/updateQuestionnarireSortOrder', data);
+  }
 }

@@ -2675,3 +2675,25 @@ input:disabled,textarea:disabled{
       height: 275px;
       overflow-y: auto;
   }
+  .tabDisabled {
+    pointer-events:none; 
+    opacity:0.6;
+}
+.fontsize-20 {
+    font-size: 20px !important;
+}
+.present-color {
+    color: #0fbb37;
+}
+.btn-green {
+    /* background-color: rgba(88, 103, 221, 0.1) !important; */
+    background-color: #dbece0  !important;
+	color: #0fbb37 !important;
+}
+
+.btn-green:hover {
+	background-color: #0fbb37 !important;
+	color: #ffffff !important;
+	-webkit-box-shadow: 0 4px 7px 0 #dbece0 !important;
+	box-shadow: 0 8px 15px 0 #dbece0  !important;
+}

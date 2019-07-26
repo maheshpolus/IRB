@@ -92,6 +92,7 @@
 				<value>org.mit.irb.web.roles.pojo.RoleRights</value>
 				<value>org.mit.irb.web.roles.pojo.RoleType</value>
 				<value>org.mit.irb.web.roles.pojo.Role</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.Lock</value>
 				
 					<value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
 					<value>org.mit.irb.web.committee.pojo.Committee</value>

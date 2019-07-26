@@ -10,6 +10,7 @@ import org.mit.irb.web.IRBProtocol.VO.IRBActionsVO;
 import org.mit.irb.web.IRBProtocol.VO.SubmissionDetailVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
+import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewComment;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
@@ -32,6 +33,9 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Autowired
 	IRBProtocolInitLoadService initLoadService;
 	
+	@Autowired
+	IRBUtilDao irbUtilDao;
+	
 	protected static Logger logger = Logger.getLogger(IRBActionsServImpl.class.getName());
 
 	@Override
@@ -43,128 +47,243 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Override
 	public IRBActionsVO performProtocolActions(IRBActionsVO vo,MultipartFile[] files) {		
 		switch (vo.getActionTypeCode()) {
-		case "101":			
-			vo = irbActionsDao.submitForReviewProtocolActions(vo);
-			
+		case "101":	
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				switch (vo.getProtocolStatus()) {
+				case "100": //intial
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("100");					
+					break;
+				case "102": //smr
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("103");								
+					break;
+				case "104": //srr
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("103");								
+					break;
+				case "105": //amend
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("102");								
+					break;
+				case "106": //renew
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("101");								
+					break;
+				case "103": //defer
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("103");								
+					break;
+				case "107": //return to pi
+					vo.getProtocolSubmissionStatuses().setSubmissionTypeCode("100");								
+					break;
+				}
+				vo = irbActionsDao.submitForReviewProtocolActions(vo);			
+			}
 			break;
 		case "303":
-		   vo = irbActionsDao.withdrawProtocolActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				   vo = irbActionsDao.withdrawProtocolActions(vo);
+			}
 			break;
 		case "103":
-			vo = irbActionsDao.createAmendmentProtocolActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.createAmendmentProtocolActions(vo);
+			}
 			break;
 		case "102":
-			vo = irbActionsDao.createRenewalProtocolActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.createRenewalProtocolActions(vo);
+			}
 			break;
 		case "992":
-			if(vo.getProtocolNumber().contains("A")){
-				vo.setActionTypeCode("120");
-			}else if(vo.getProtocolNumber().contains("R")){
-				vo.setActionTypeCode("121");
-			}else{
-				vo.setActionTypeCode("124");
-			}
-			vo = irbActionsDao.deleteProtocolAmendmentRenewalProtocolActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				if(vo.getProtocolNumber().contains("A")){
+					vo.setActionTypeCode("120");
+				}else if(vo.getProtocolNumber().contains("R")){
+					vo.setActionTypeCode("121");
+				}else{
+					vo.setActionTypeCode("124");
+				}
+				vo = irbActionsDao.deleteProtocolAmendmentRenewalProtocolActions(vo);
+			}			
 			break;			
-		case "116":			
-			vo = irbActionsDao.notifyIRBProtocolActions(vo,files);
+		case "116":
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.notifyIRBProtocolActions(vo,files);
+			}
 			break;
 		case "114":
-			vo = irbActionsDao.requestForDataAnalysisProtocolActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.requestForDataAnalysisProtocolActions(vo,files);
+			}
 			break;
 		case "105":
-			vo = irbActionsDao.requestForCloseProtocolActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.requestForCloseProtocolActions(vo,files);
+			}
 			break;
 		case "108":
-			vo = irbActionsDao.requestForCloseEnrollmentProtocolActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.requestForCloseEnrollmentProtocolActions(vo,files);
+			}
 			break;
 		case "115":
-			vo = irbActionsDao.requestForReopenEnrollmentProtocolActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.requestForReopenEnrollmentProtocolActions(vo,files);
+			}
 			break;
 		case "911":
-			vo = irbActionsDao.copyProtocolActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.copyProtocolActions(vo);
+			}
 			break;
 			
 			
 			     //*****************************admin actions*****************************//
 			
 			
-		case "213":								
-			vo = irbActionsDao.returnToPiAdminActions(vo,files);
+		case "213":	
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.returnToPiAdminActions(vo,files);
+			}
 			break;
 		case "300":
-			vo = irbActionsDao.closeAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.closeAdminActions(vo);
+			}
 			break;
 		case "304":
-			vo = irbActionsDao.disapproveAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.disapproveAdminActions(vo);
+			}
 			break;
 		case "209":
-			vo = irbActionsDao.irbAcknowledgementAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.irbAcknowledgementAdminActions(vo,files);
+			}
 			break;
 		case "212":
-			if(vo.getSelectedCommitteeId() != null)
-			{
-			vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
-			}
-			vo = irbActionsDao.reOpenEnrollmentAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				if(vo.getSelectedCommitteeId() != null)
+				{
+				vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
+				}
+				vo = irbActionsDao.reOpenEnrollmentAdminActions(vo,files);			
+			}		
 			break;
 		case "211":
-			vo = irbActionsDao.dataAnalysisOnlyAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.dataAnalysisOnlyAdminActions(vo);
+			}
 			break;
 		case "207":
-			vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.closedForEnrollmentAdminActions(vo);
+			}
 			break;
 		case "301":
-			vo = irbActionsDao.terminateAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.terminateAdminActions(vo,files);
+			}
 			break;	
 		case "302":
-			vo = irbActionsDao.suspendAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.suspendAdminActions(vo,files);
+			}
 			break;	
 		/*case "109":
 			vo = irbActionsDao.notifyCommiteeAdminActions(vo);
 			break;*/
 		case "201":
-			vo = irbActionsDao.deferAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.deferAdminActions(vo,files);
+			}
 			break;
 		case "119":
-			vo = irbActionsDao.adandonAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.adandonAdminActions(vo,files);
+			}
 			break;	
 		case "200":
-			if(vo.getSelectedCommitteeId() != null && vo.getSelectedScheduleId() != null)
-			{
-			vo.getProtocolSubmissionStatuses().setScheduleId(Integer.parseInt(vo.getSelectedScheduleId()));
-			vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
-			}
-			vo = irbActionsDao.assignToAgendaAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				if(vo.getSelectedCommitteeId() != null && vo.getSelectedScheduleId() != null)
+				{
+				vo.getProtocolSubmissionStatuses().setScheduleId(Integer.parseInt(vo.getSelectedScheduleId()));
+				vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
+				}
+				vo = irbActionsDao.assignToAgendaAdminActions(vo,files);			
+			}		
 			break;		
 		case "210":
-			vo = irbActionsDao.reviewNotRequiredAdminActions(vo,files);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.reviewNotRequiredAdminActions(vo,files);
+			}
 			break;
 		case "204":
-			vo = irbActionsDao.approvedAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.approvedAdminActions(vo);
+			}
 			break;
 		case "203":
-	    	vo = irbActionsDao.SMRRAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+		    	vo = irbActionsDao.SMRRAdminActions(vo);
+			}
 			break;
 		case "202":
-			vo = irbActionsDao.SRRAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.SRRAdminActions(vo);
+			}
 			break;
 		case "205":
-			if(vo.getSelectedCommitteeId() != null && vo.getSelectedScheduleId() != null)
-			{
-			vo.getProtocolSubmissionStatuses().setScheduleId(Integer.parseInt(vo.getSelectedScheduleId()));
-			vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
-			}
-			vo = irbActionsDao.expeditedApprovalAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				if(vo.getSelectedCommitteeId() != null && vo.getSelectedScheduleId() != null)
+				{
+				vo.getProtocolSubmissionStatuses().setScheduleId(Integer.parseInt(vo.getSelectedScheduleId()));
+				vo.getProtocolSubmissionStatuses().setCommitteeId(vo.getSelectedCommitteeId());
+				}
+				vo = irbActionsDao.expeditedApprovalAdminActions(vo);
+			}		
 			break;
 		case "208":
-			vo = irbActionsDao.responseApprovalAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.responseApprovalAdminActions(vo);
+			}
 			break;
 		case "113":
-			vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.administrativeCorrectionAdminActions(vo);
+			}
 			break;	
 		case "910":
-			vo = irbActionsDao.undoLastActionAdminActions(vo);
+			vo = irbActionsDao.getProtocolCurrentStatus(vo);
+			if(vo.isSuccessCode()){
+				vo = irbActionsDao.undoLastActionAdminActions(vo);
+			}
 			break;	
 		}
 		return vo;
@@ -564,6 +683,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Override
 	public SubmissionDetailVO updateBasicSubmissionDetail(SubmissionDetailVO submissionDetailvo) {
 		try{
+			String protocolNumber = submissionDetailvo.getProtocolNumber();
 			irbActionsDao.updateSubmissionDetail(submissionDetailvo);
 			submissionDetailvo = getSubmissionBasicDetails(submissionDetailvo);
 			if(submissionDetailvo.getSubmissionDetail() != null && !submissionDetailvo.getSubmissionDetail().isEmpty()){
@@ -605,6 +725,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 					submissionDetailvo.setSceduleId(submissionDetailvo.getScheduleId());
 				}
 			}	
+			irbUtilDao.releaseProtocolLock(protocolNumber);
 			submissionDetailvo.setSuccessCode(true);
 			submissionDetailvo.setSuccessMessage("Submission details saved successfully");
 		} catch (Exception e) {

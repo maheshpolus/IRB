@@ -50,7 +50,7 @@ public class ScheduleAgenda implements Serializable {
 	private byte[] pdfStore;
 
 	@Column(name = "CREATE_TIMESTAMP")
-	private Timestamp createTimestamp;
+	private java.util.Date createTimestamp;
 
 	@Column(name = "CREATE_USER")
 	private String createUser;
@@ -91,14 +91,6 @@ public class ScheduleAgenda implements Serializable {
 
 	public void setPdfStore(byte[] pdfStore) {
 		this.pdfStore = pdfStore;
-	}
-
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
 	}
 
 	public String getCreateUser() {
@@ -143,6 +135,27 @@ public class ScheduleAgenda implements Serializable {
 
 	public void setScheduleAgendaId(Integer scheduleAgendaId) {
 		this.scheduleAgendaId = scheduleAgendaId;
+	}
+
+	public ScheduleAgenda(Integer scheduleAgendaId, Integer scheduleId, Integer agendaNumber, java.util.Date createTimestamp,
+			String createUser) {
+		super();
+		this.scheduleAgendaId = scheduleAgendaId;
+		this.scheduleId = scheduleId;
+		this.agendaNumber = agendaNumber;
+		this.createTimestamp = createTimestamp;
+		this.createUser = createUser;
+	}
+
+	public ScheduleAgenda() {
+	}
+
+	public java.util.Date getCreateTimestamp() {
+		return createTimestamp;
+	}
+
+	public void setCreateTimestamp(java.util.Date createTimestamp) {
+		this.createTimestamp = createTimestamp;
 	}
 
 }

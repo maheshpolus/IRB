@@ -226,6 +226,8 @@ public class QuestionnaireDAO {
 			inParam.add(new Parameter("<<UPDATE_USER>>", DBEngineConstants.TYPE_STRING, hmHeader.get("UPDATE_USER")));
 			inParam.add(new Parameter("<<QUEST_GROUP_TYPE_CODE>>", DBEngineConstants.TYPE_STRING,
 					hmHeader.get("QUEST_GROUP_TYPE_CODE")));
+			inParam.add(new Parameter("<<SORT_ORDER>>", DBEngineConstants.TYPE_INTEGER,
+					hmHeader.get("SORT_ORDER")));
 			inParam.add(new Parameter("<<IS_FINAL>>", DBEngineConstants.TYPE_STRING, (hmHeader.get("IS_FINAL") == null ? "N" : ((Boolean)hmHeader.get("IS_FINAL") == true ? "Y": "N"))));
 			Integer isInserted = dbEngine.executeUpdate(inParam, "INSERT_QUESTIONNAIRE_HEADER");
 		} catch (Exception e) {
@@ -246,6 +248,8 @@ public class QuestionnaireDAO {
 			inParam.add(new Parameter("<<QUEST_GROUP_TYPE_CODE>>", DBEngineConstants.TYPE_STRING,
 					hmHeader.get("QUEST_GROUP_TYPE_CODE")));
 			inParam.add(new Parameter("<<IS_FINAL>>", DBEngineConstants.TYPE_STRING, (hmHeader.get("IS_FINAL") == null ? "N" : ((Boolean)hmHeader.get("IS_FINAL") == true ? "Y": "N"))));
+			inParam.add(new Parameter("<<SORT_ORDER>>", DBEngineConstants.TYPE_INTEGER,
+					hmHeader.get("SORT_ORDER")));
 			inParam.add(new Parameter("<<QUESTIONNAIRE_ID>>", DBEngineConstants.TYPE_INTEGER,
 					hmHeader.get("QUESTIONNAIRE_ID")));
 			Integer isUpdated = dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_HEADER");
@@ -651,5 +655,34 @@ public class QuestionnaireDAO {
 			logger.error("Exception in getQuestionnaireQuestionsOptions" + e.getMessage());
 			return new ArrayList<HashMap<String, Object>>();
 		}
+	}	
+
+	public Integer getNextSortOrder() {
+		Integer maxSortOrder = null;
+		try {
+			ArrayList<Parameter> inputParam = new ArrayList<>();
+			ArrayList<HashMap<String, Object>> result = dbEngine.executeQuery(inputParam, "GET_MAX_QUESTIONNAIRE_SORT_ORDER");
+			HashMap<String, Object> hmResult = result.get(0);
+			maxSortOrder = Integer.parseInt(hmResult.get("MAX_SORT_ORDER").toString());			
+			return ++maxSortOrder;
+		} catch (Exception e) {
+			logger.error("Exception in getNextSortOrder" + e.getMessage());
+			return null;
+		}	
 	}
+
+	public void updateHeaderForSortOrder(QuestionnaireModuleDataBus questionnaireDataBus) {
+		try {
+			HashMap<String, Object> hmHeader = questionnaireDataBus.getHeader();
+			ArrayList<Parameter> inParam = new ArrayList<>();
+			inParam.add(new Parameter("<<SORT_ORDER>>", DBEngineConstants.TYPE_INTEGER,
+					hmHeader.get("SORT_ORDER")));
+			inParam.add(new Parameter("<<QUESTIONNAIRE_ID>>", DBEngineConstants.TYPE_INTEGER,
+					hmHeader.get("QUESTIONNAIRE_ID")));
+			Integer isUpdated = dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_HEADER_FOR_SORT");
+		} catch (Exception e) {
+			logger.error("Exception in updateHeaderForSortOrder" + e.getMessage());
+		}
+	}
+
 }

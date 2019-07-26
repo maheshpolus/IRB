@@ -5,10 +5,15 @@
     </button>
   </div>
   <div class="modal-body modal-popup">
-    <ul>
+    <ul class="pl-0">
   {{alertMessage}}
     </ul>
   </div>
-  <div class="modal-footer btn-row-med">
-    <button type="button margin-class" class="btn btn-primary tab_btn"  data-dismiss="modal" (click)="activeModal.dismiss('Cross click')">Ok</button>
+  <div class="modal-footer btn-row-med" *ngIf="!openProtocol">
+    <button type="button margin-class" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="activeModal.dismiss('Cross click')">Ok</button>
   </div>
+
+  <div class="modal-footer btn-row-med" *ngIf="openProtocol">
+      <button type="button margin-class" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="openProtocolViewMode()">Open</button>
+      <button type="button margin-class" class="btn btn-primary tab_btn" data-dismiss="modal" (click)="activeModal.dismiss('Cross click')">Cancel</button>
+    </div>

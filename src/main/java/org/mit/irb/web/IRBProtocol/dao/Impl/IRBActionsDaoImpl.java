@@ -21,7 +21,9 @@ import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.AdminCheckListDetail;
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
+import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
@@ -42,6 +44,7 @@ import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
+import org.mit.irb.web.common.constants.KeyConstants;;
 
 @Service(value = "irbActionsDao")
 @Transactional
@@ -1039,7 +1042,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
 				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
 			}
-			ArrayList<HashMap<String, Object>> result = null;			
+			ArrayList<HashMap<String, Object>> result = null;
+			updateSubmissionDetail(vo);
 			result = protocolActionSP(vo,null);	
 			if(result != null && !result.isEmpty()){
 				   vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
@@ -1544,7 +1548,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getContingencyCode()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));	
-				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));			
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));
+				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,null));
+				inputParam.add(new InParameter("AV_MINUTE_ENTRY_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,KeyConstants.PROTOCOL_MINUTE_ENTRY_TYPE));
 			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1607,7 +1613,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,null));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,submissionDetailVO.getAcType()));			
-				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getIrbCommitteeReviewerComments().getLetterFlag()));			
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getIrbCommitteeReviewerComments().getLetterFlag()));
+				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSceduleId()));
+				inputParam.add(new InParameter("AV_MINUTE_ENTRY_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,KeyConstants.PROTOCOL_MINUTE_ENTRY_TYPE));
 				dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1909,5 +1917,67 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			logger.info("Exception in getPastSubmission method:" + e);
 		}
 		return  Integer.parseInt(isRequested.get(0).get("resultset").toString());	
+	}
+
+	@Override
+	public IRBActionsVO getProtocolCurrentStatus(IRBActionsVO vo) {		
+		ProtocolSubmissionStatuses protocolSubmission = new ProtocolSubmissionStatuses();
+		ProtocolGeneralInfo protocolInfo = new ProtocolGeneralInfo();
+		if(vo.getSubmissionId() != null){
+			protocolSubmission  = fetchSubmissionDetailsForLock(vo,protocolSubmission);
+		}
+		protocolInfo = fetchProtocolStatusForLock(vo,protocolInfo);
+		vo.setProtocolInfo(protocolInfo);		
+		if(vo.getProtocolSubmissionStatuses().getSubmissionStatusCode() != null && protocolSubmission != null ){
+			if(vo.getProtocolSubmissionStatuses().getSubmissionStatusCode().equals(protocolSubmission.getSubmissionStatusCode())){
+				vo.setSuccessCode(true);
+			}else{
+				vo.setSuccessCode(false);
+			    vo.setSuccessMessage(KeyConstants.LOCK_MESSAGE_ACTION);	
+				return(vo);
+			}
+		}
+		if(protocolInfo.getProtocolStatusCode().equals(vo.getProtocolStatus())){
+			vo.setSuccessCode(true);
+		}else{
+			vo.setSuccessCode(false);
+		    vo.setSuccessMessage(KeyConstants.LOCK_MESSAGE_ACTION);	
+		}		
+	    return vo;
+	}
+
+	private ProtocolGeneralInfo fetchProtocolStatusForLock(IRBActionsVO vo, ProtocolGeneralInfo protocolInfo) {
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProtocolGeneralInfo> criteria = builder.createQuery(ProtocolGeneralInfo.class);
+			Root<ProtocolGeneralInfo> protocolRoot=criteria.from(ProtocolGeneralInfo.class);	
+			criteria.multiselect(protocolRoot.get("protocolId"),protocolRoot.get("protocolStatusCode")
+					,protocolRoot.get("protocolNumber"),protocolRoot.get("sequenceNumber")
+					,protocolRoot.get("updateUser"));
+			criteria.where(builder.equal(protocolRoot.get("protocolNumber"),vo.getProtocolNumber()));
+			criteria.orderBy(builder.desc(protocolRoot.get("protocolId")));
+			if(session.createQuery(criteria).getResultList() != null)
+				protocolInfo = session.createQuery(criteria).getResultList().get(0);					
+		}catch (Exception e) {
+			logger.info("Exception in fetchProtocolStatus:" + e);		
+		}
+		return protocolInfo;
+	}
+	
+	private ProtocolSubmissionStatuses fetchSubmissionDetailsForLock(IRBActionsVO vo,ProtocolSubmissionStatuses protocolSubmissionStatuses) {
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProtocolSubmissionStatuses> criteria = builder.createQuery(ProtocolSubmissionStatuses.class);
+			Root<ProtocolSubmissionStatuses> submissionRoot=criteria.from(ProtocolSubmissionStatuses.class);			
+			criteria.where(builder.equal(submissionRoot.get("protocolNumber"),vo.getProtocolNumber()));
+			criteria.orderBy(builder.desc(submissionRoot.get("submission_Id")));
+			if(session.createQuery(criteria).getResultList() != null)
+			protocolSubmissionStatuses = session.createQuery(criteria).getResultList().get(0);					
+		}catch (Exception e) {
+			logger.info("Exception in getProtocolSubmissionDetails:" + e);		
+		}
+		return protocolSubmissionStatuses;
 	}
 }

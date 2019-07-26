@@ -22,6 +22,7 @@ import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubject;
 import org.mit.irb.web.IRBProtocol.pojo.ScienceOfProtocol;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolService;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.common.pojo.IRBViewProfile;
 import org.mit.irb.web.questionnaire.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
@@ -130,13 +130,14 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 			for(HashMap<String, Object> s1 : irbViewProfile.getIrbViewProtocolHistoryGroupList()){
 				Integer nextGroupActionId = Integer.parseInt(s1.get("NEXT_GROUP_ACTION_ID").toString());  
 				Integer actionId = Integer.parseInt(s1.get("ACTION_ID").toString());
-				Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());			
-				nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId,actionId);				
+				Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());	
+				String groupListProtocolNumber = s1.get("PROTOCOL_NUMBER").toString();	
+				nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId,actionId,groupListProtocolNumber);				
 				List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
 				for(HashMap<String, Object> detailObject :result){
 					Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
-					Integer detailProtocolId = Integer.parseInt(detailObject.get("PROTOCOL_ID").toString());				
-					if(detailactionId >= actionId && detailactionId <= nextGroupActionId){	
+					String detailProtocolNumber = detailObject.get("PROTOCOL_NUMBER").toString();				
+					if(detailactionId >= actionId && detailactionId <= nextGroupActionId && detailProtocolNumber.equals(groupListProtocolNumber)){	
 						s2List.add(detailObject);
 					/*	if(detailProtocolId.equals(protocolId)){						
 						s2List.add(detailObject);
@@ -254,6 +255,7 @@ public class IRBProtocolServImpl implements IRBProtocolService {
  		    Future<IRBProtocolVO> protocolFundingSourceTypes = initLoadService.loadProtocolFundingSourceTypes(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolAdminContactTypes = initLoadService.loadProtocolAdminContactType(irbProtocolVO);
 		    Future<IRBProtocolVO> protocolDetailsVo = irbProtocolService.loadProtocolDetails(irbProtocolVO);
+		   
 		    irbProtocolVO = riskLevelTypes.get();
 		    irbProtocolVO = fdaRiskLevelTypes.get();
 		    irbProtocolVO = protocolTypes.get();
@@ -491,4 +493,12 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 		}
 		return irbProtocolVO;
 	}
+	
+	@Override
+	public IRBViewProfile getIRBprotocolScienificData(String protocolNumber) {
+	IRBViewProfile irbViewProfile = new IRBViewProfile();
+    HashMap<String, Object> irbProtocolScienificDetail = irbProtocolDao.getIRBprotocolScienificData(protocolNumber);
+    irbViewProfile.setIrbViewScienceOfProtocol(irbProtocolScienificDetail);
+    return irbViewProfile;
+}
 }

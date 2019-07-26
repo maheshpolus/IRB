@@ -19,7 +19,8 @@
 									<span class="text-secondary txt-medium">Committee ID
 										<span class="mandatory">*</span>
 									</span>
-									<input type="text" [(ngModel)]="result.committee.committeeId" *ngIf="mode === 'create'" class="form-control input-field-size txt-small">
+									<span class="sub-label"> (Maximum 15 characters)</span>
+									<input type="text" maxlength="15" [(ngModel)]="result.committee.committeeId" *ngIf="mode === 'create'" class="form-control input-field-size txt-small">
 									<div *ngIf="mode != 'create'">{{result?.committee?.committeeId}}</div>
 								</div>
 							</div>

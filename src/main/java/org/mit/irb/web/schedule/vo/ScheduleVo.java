@@ -10,6 +10,7 @@ import org.mit.irb.web.committee.pojo.CommitteeScheduleActItems;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachType;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttachment;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleAttendance;
+import org.mit.irb.web.committee.pojo.CommitteeScheduleMinuteDoc;
 import org.mit.irb.web.committee.pojo.CommitteeScheduleMinutes;
 import org.mit.irb.web.committee.pojo.MinuteEntryType;
 import org.mit.irb.web.committee.pojo.ProtocolContingency;
@@ -51,7 +52,7 @@ public class ScheduleVo {
 
 	private List<CommitteeScheduleAttachType> attachmentTypes;
 
-	private CommitteeScheduleAttendance updatedAttendance;
+	private List<CommitteeScheduleAttendance> updatedAttendance;
 
 	private Integer commScheduleMinuteId;
 
@@ -71,9 +72,9 @@ public class ScheduleVo {
 	
 	private String acType;
 
-	private List<CommitteeMemberships> alternateMember;
+	private List<CommitteeScheduleAttendance> alternateMember;
 	
-	private List<CommitteeMemberships> committeeMember;
+	private List<CommitteeScheduleAttendance> committeeMember;
 	
 	private List<CommitteeScheduleAttendance> guestMembers;
 	
@@ -87,7 +88,23 @@ public class ScheduleVo {
 	
 	private boolean flag;
 	
+	private String templateCode;
+	
 	private List<CommitteeScheduleActItems> committeeScheduleActItemsList;
+	
+	private List<CommitteeScheduleMinuteDoc> minuteList;
+	
+	private ScheduleAgenda agendaDetails;
+	
+	private CommitteeScheduleMinuteDoc minuteDetails;
+	
+	private CommitteeScheduleAttendance committeeScheduleAttendance;
+	
+	private List<CommitteeMemberships> alternateMemberMinutes;
+	
+	private List<CommitteeMemberships> committeeMemberMinutes;
+	
+	private List<CommitteeScheduleAttendance> guestMembersMinutes;
 	
 	public CommitteeSchedule getCommitteeSchedule() {
 		return committeeSchedule;
@@ -209,14 +226,6 @@ public class ScheduleVo {
 		this.attachmentTypes = attachmentTypes;
 	}
 
-	public CommitteeScheduleAttendance getUpdatedAttendance() {
-		return updatedAttendance;
-	}
-
-	public void setUpdatedAttendance(CommitteeScheduleAttendance updatedAttendance) {
-		this.updatedAttendance = updatedAttendance;
-	}
-
 	public Integer getCommScheduleMinuteId() {
 		return commScheduleMinuteId;
 	}
@@ -289,22 +298,6 @@ public class ScheduleVo {
 		this.acType = acType;
 	}
 
-	public List<CommitteeMemberships> getAlternateMember() {
-		return alternateMember;
-	}
-
-	public void setAlternateMember(List<CommitteeMemberships> alternateMember) {
-		this.alternateMember = alternateMember;
-	}
-
-	public List<CommitteeMemberships> getCommitteeMember() {
-		return committeeMember;
-	}
-
-	public void setCommitteeMember(List<CommitteeMemberships> committeeMember) {
-		this.committeeMember = committeeMember;
-	}
-
 	public List<CommitteeScheduleAttendance> getGuestMembers() {
 		return guestMembers;
 	}
@@ -360,4 +353,93 @@ public class ScheduleVo {
 	public void setCommitteeScheduleActItemsList(List<CommitteeScheduleActItems> committeeScheduleActItemsList) {
 		this.committeeScheduleActItemsList = committeeScheduleActItemsList;
 	}
+
+	public String getTemplateCode() {
+		return templateCode;
+	}
+
+	public void setTemplateCode(String templateCode) {
+		this.templateCode = templateCode;
+	}
+
+	public List<CommitteeScheduleMinuteDoc> getMinuteList() {
+		return minuteList;
+	}
+
+	public void setMinuteList(List<CommitteeScheduleMinuteDoc> minuteList) {
+		this.minuteList = minuteList;
+	}
+
+	public ScheduleAgenda getAgendaDetails() {
+		return agendaDetails;
+	}
+
+	public void setAgendaDetails(ScheduleAgenda agendaDetails) {
+		this.agendaDetails = agendaDetails;
+	}
+
+	public CommitteeScheduleMinuteDoc getMinuteDetails() {
+		return minuteDetails;
+	}
+
+	public void setMinuteDetails(CommitteeScheduleMinuteDoc minuteDetails) {
+		this.minuteDetails = minuteDetails;
+	}
+
+	public List<CommitteeScheduleAttendance> getUpdatedAttendance() {
+		return updatedAttendance;
+	}
+
+	public void setUpdatedAttendance(List<CommitteeScheduleAttendance> updatedAttendance) {
+		this.updatedAttendance = updatedAttendance;
+	}
+
+	public CommitteeScheduleAttendance getCommitteeScheduleAttendance() {
+		return committeeScheduleAttendance;
+	}
+
+	public void setCommitteeScheduleAttendance(CommitteeScheduleAttendance committeeScheduleAttendance) {
+		this.committeeScheduleAttendance = committeeScheduleAttendance;
+	}
+
+	public List<CommitteeScheduleAttendance> getAlternateMember() {
+		return alternateMember;
+	}
+
+	public void setAlternateMember(List<CommitteeScheduleAttendance> alternateMember) {
+		this.alternateMember = alternateMember;
+	}
+
+	public List<CommitteeScheduleAttendance> getCommitteeMember() {
+		return committeeMember;
+	}
+
+	public void setCommitteeMember(List<CommitteeScheduleAttendance> committeeMember) {
+		this.committeeMember = committeeMember;
+	}
+
+	public List<CommitteeMemberships> getAlternateMemberMinutes() {
+		return alternateMemberMinutes;
+	}
+
+	public void setAlternateMemberMinutes(List<CommitteeMemberships> alternateMemberMinutes) {
+		this.alternateMemberMinutes = alternateMemberMinutes;
+	}
+
+	public List<CommitteeMemberships> getCommitteeMemberMinutes() {
+		return committeeMemberMinutes;
+	}
+
+	public void setCommitteeMemberMinutes(List<CommitteeMemberships> committeeMemberMinutes) {
+		this.committeeMemberMinutes = committeeMemberMinutes;
+	}
+
+	public List<CommitteeScheduleAttendance> getGuestMembersMinutes() {
+		return guestMembersMinutes;
+	}
+
+	public void setGuestMembersMinutes(List<CommitteeScheduleAttendance> guestMembersMinutes) {
+		this.guestMembersMinutes = guestMembersMinutes;
+	}
+	
 }

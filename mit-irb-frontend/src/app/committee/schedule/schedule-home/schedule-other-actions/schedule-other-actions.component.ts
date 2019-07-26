@@ -45,6 +45,7 @@ export class ScheduleOtherActionsComponent implements OnInit {
             this.otherActionTypes = data.scheduleActItemTypes != null ? data.scheduleActItemTypes : [];
             this.committeeScheduleActItems = data.committeeScheduleActItemsList != null ? data.committeeScheduleActItemsList : [];
             this.committeeScheduleActItemsObject.scheduleActItemTypecode = '5';
+            this.setActionItemType(this.committeeScheduleActItemsObject.scheduleActItemTypecode);
         });
     }
     setActionItemType(typeCode) {
@@ -71,6 +72,7 @@ export class ScheduleOtherActionsComponent implements OnInit {
             this._spinner.hide();
             this.committeeScheduleActItems = data.committeeScheduleActItemsList != null ? data.committeeScheduleActItemsList : [];
             this.committeeScheduleActItemsObject.scheduleActItemTypecode = '5';
+            this.setActionItemType(this.committeeScheduleActItemsObject.scheduleActItemTypecode);
             this.committeeScheduleActItemsObject.itemDescription = null;
 
         });

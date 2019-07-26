@@ -99,6 +99,8 @@ public class CommonVO {
 	
 	private String adminPersonId;
 	
+	private String updateUser;
+	
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}
@@ -440,5 +442,13 @@ public class CommonVO {
 
 	public void setAdminPersonId(String adminPersonId) {
 		this.adminPersonId = adminPersonId;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
 	}
 }

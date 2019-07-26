@@ -20,7 +20,6 @@ export class QuestionnaireTreeComponent implements OnInit, OnChanges {
     private _changeRef: ChangeDetectorRef) { }
   @Input() data: any;
   @Input() nodes: any;
-  @Input() editIndex: any;
   highlightNode = null;
   treeData = [];
 
@@ -32,7 +31,7 @@ export class QuestionnaireTreeComponent implements OnInit, OnChanges {
     this.createTreeNodes();
     // this.highlightNode = this.editIndex;
   }
-  updateHighlightNode(questionId){
+  updateHighlightNode(questionId) {
     this.highlightNode = questionId;
     this._createQuestionnaireService.updateSelectedQuestionId.next(questionId);
   }

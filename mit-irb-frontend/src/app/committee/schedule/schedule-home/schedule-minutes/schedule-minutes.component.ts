@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ScheduleService } from '../../schedule.service';
 
@@ -15,6 +16,7 @@ export class ScheduleMinutesComponent implements OnInit {
   scheduleMinutes = [];
   // protocolMinutesList = [];
   entryType = [];
+  committeeScheduleActItemsList = [];
   submittedProtocols = [];
   protocolContingencies = [];
   addNewMinutes = false;
@@ -24,20 +26,28 @@ export class ScheduleMinutesComponent implements OnInit {
   selectedProtocolIndex = null;
   isToDelete = false;
   deleteMinuteObj: any = {};
+  editIndex = null;
+  userDTO: any;
 
-  constructor(private scheduleService: ScheduleService, private activatedRoute: ActivatedRoute) {
+  constructor(private scheduleService: ScheduleService, private activatedRoute: ActivatedRoute,
+    private _spinner: NgxSpinnerService) {
     this.scheduleId = this.activatedRoute.snapshot.queryParamMap.get('scheduleId');
   }
 
   ngOnInit() {
+    this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     this.getMinutes();
   }
 
   getMinutes() {
     const obj = { acType: this.tabSelected === 'all' ? 'A' : null, scheduleId: this.scheduleId };
+    this._spinner.show();
     this.scheduleService.loadScheduleMeetingComments(obj).subscribe(data => {
+      this._spinner.hide();
       this.result = data;
       this.scheduleMinutes = this.result.scheduleMinutes;
+      this.committeeScheduleActItemsList = this.result.committeeScheduleActItemsList != null ?
+        this.result.committeeScheduleActItemsList : [];
       this.entryType = this.result.minuteEntrytypes != null ? this.result.minuteEntrytypes : [];
       this.newCommitteeScheduleMinute = this.result.newCommitteeScheduleMinute != null ? this.result.newCommitteeScheduleMinute : {};
     });
@@ -45,7 +55,9 @@ export class ScheduleMinutesComponent implements OnInit {
 
   getSubmittedProtocols(protocolNumber, submissionId) {
     const obj = { scheduleId: this.scheduleId, protocolNumber: protocolNumber, submissionId: submissionId };
+    this._spinner.show();
     this.scheduleService.loadScheduleProtocolComments(obj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data;
       this.protocolContingencies = result.protocolContingencies != null ? result.protocolContingencies : [];
       this.submittedProtocols = result.submittedProtocols != null ? result.submittedProtocols : [];
@@ -60,15 +72,39 @@ export class ScheduleMinutesComponent implements OnInit {
     });
   }
 
+  changeMinuteType(code) {
+    const selectedType = this.entryType.filter(x => x.minuteEntryTypecode.toString() === code);
+      if (selectedType.length > 0) {
+          this.newCommitteeScheduleMinute.minuteEntrytype = this.newCommitteeScheduleMinute.minuteEntrytype != null ?
+            this.newCommitteeScheduleMinute.minuteEntrytype : {};
+          this.newCommitteeScheduleMinute.minuteEntrytype.description = selectedType[0].description;
+          this.newCommitteeScheduleMinute.minuteEntrytype.minuteEntryTypecode = selectedType[0].minuteEntryTypecode;
+      } else {
+          this.newCommitteeScheduleMinute.minuteEntrytype.description = null;
+          this.newCommitteeScheduleMinute.minuteEntrytype.minuteEntryTypecode = null;
+      }
+  }
+  selectOtherBussinessType(commScheduleActItemsId) {
+    const selectedType = this.committeeScheduleActItemsList.filter(x => x.commScheduleActItemsId.toString() === commScheduleActItemsId);
+    if (selectedType.length > 0) {
+      this.newCommitteeScheduleMinute.minuteEntry = selectedType[0].itemDescription;
+    } else {
+      this.newCommitteeScheduleMinute.minuteEntry = null;
+    }
+  }
 
-  selectContigencyItem( e, contigencyItem ) {
+  selectContigencyItem(e, contigencyItem) {
     this.newCommitteeScheduleMinute.protocolContingencyCode = contigencyItem.protocolContingencyCode;
     this.newCommitteeScheduleMinute.minuteEntry = contigencyItem.description;
-}
+  }
 
   saveMinutes() {
     this.result.newCommitteeScheduleMinute = this.newCommitteeScheduleMinute;
+    this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
+    this.result.newCommitteeScheduleMinute.updateUser = this.userDTO.userName;
+    this._spinner.show();
     this.scheduleService.saveMinuteData(this.result).subscribe(data => {
+      this._spinner.hide();
       const result: any = data;
       this.newCommitteeScheduleMinute = {};
       this.scheduleMinutes = result.scheduleMinutes;
@@ -76,7 +112,7 @@ export class ScheduleMinutesComponent implements OnInit {
   }
 
 
-  saveProtocolMinutes () {
+  saveProtocolMinutes() {
     this.newCommitteeScheduleMinute.minuteEntryTypeCode = 3;
     this.newCommitteeScheduleMinute.protocolNumber = this.selectedProtocol.protocolNumber;
     this.newCommitteeScheduleMinute.protocolId = this.selectedProtocol.protocolId;
@@ -85,8 +121,26 @@ export class ScheduleMinutesComponent implements OnInit {
     this.saveMinutes();
   }
 
-  editMinuteItem(minute, i) {
+  editMinuteItem(minute, index) {
+    this.addNewMinutes = true;
+    this.editIndex = index;
+    this.newCommitteeScheduleMinute = minute;
+  }
 
+  updateMinuteItem() {
+    this.result.newCommitteeScheduleMinute = this.newCommitteeScheduleMinute;
+    this.result.scheduleId = this.scheduleId;
+    this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
+    this.result.newCommitteeScheduleMinute.updateUser = this.userDTO.userName;
+    this._spinner.show();
+    this.scheduleService.updateMinuteData(this.result).subscribe(data => {
+      this._spinner.hide();
+      const result: any = data || [];
+      this.scheduleMinutes[this.editIndex] = result.newCommitteeScheduleMinute;
+      this.newCommitteeScheduleMinute = {};
+      this.addNewMinutes = false;
+      this.editIndex = null;
+    });
   }
 
   selectProtocol(protocol, index) {
@@ -96,7 +150,9 @@ export class ScheduleMinutesComponent implements OnInit {
       scheduleId: this.scheduleId, protocolNumber: protocol.protocolNumber,
       submissionId: protocol.submissionId
     };
+    this._spinner.show();
     this.scheduleService.loadScheduleProtocolComments(obj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data;
       this.scheduleMinutes = result.scheduleMinutes != null ? result.scheduleMinutes : [];
     });
@@ -105,21 +161,23 @@ export class ScheduleMinutesComponent implements OnInit {
   showDeleteModal(minuteItem) {
     this.isToDelete = true;
     this.deleteMinuteObj = minuteItem;
-}
+  }
 
-deleteMinuteItem() {
+  deleteMinuteItem() {
     const deleteRequestData: any = {};
     deleteRequestData.scheduleId = this.scheduleId;
     deleteRequestData.commScheduleMinuteId = this.deleteMinuteObj.commScheduleMinutesId;
     deleteRequestData.protocolNumber = this.deleteMinuteObj.protocolNumber;
     deleteRequestData.protocolId = this.deleteMinuteObj.protocolId;
     deleteRequestData.submissionId = this.deleteMinuteObj.submissionId;
-    if ( this.isToDelete === true ) {
-        this.isToDelete = false;
+    if (this.isToDelete === true) {
+      this.isToDelete = false;
     }
-    this.scheduleService.deleteMinuteData( deleteRequestData ).subscribe( data => {
+    this._spinner.show();
+    this.scheduleService.deleteMinuteData(deleteRequestData).subscribe(data => {
+      this._spinner.hide();
       const result: any = data;
       this.scheduleMinutes = result.scheduleMinutes != null ? result.scheduleMinutes : [];
-    } );
-}
+    });
+  }
 }

@@ -106,6 +106,15 @@ public class ProtocolSubmission implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean protocolActive;*/
 	
+	@Column(name = "YES_VOTE_COUNT")
+	private Integer yesVoteCount;
+	
+	@Column(name = "NO_VOTE_COUNT")
+	private Integer noVoteCount;
+	
+	@Column(name = "ABSTAINER_COUNT")
+	private Integer abstainerCount;
+	
 	@Transient
 	private String adminName;
 	
@@ -298,6 +307,7 @@ public class ProtocolSubmission implements Serializable {
 		setSubmissionStatus(new ProtocolSubmissionStatus());
         setQualifierType(new ProtocolSubmissionQualifierType());
         setProtocolSubmissionType(new ProtocolSubmissionType()); 
+        setCommitteeSchedule(new CommitteeSchedule());
 	}
 
 	public String getAdminName() {
@@ -357,5 +367,29 @@ public class ProtocolSubmission implements Serializable {
 
 	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public Integer getYesVoteCount() {
+		return yesVoteCount;
+	}
+
+	public void setYesVoteCount(Integer yesVoteCount) {
+		this.yesVoteCount = yesVoteCount;
+	}
+
+	public Integer getNoVoteCount() {
+		return noVoteCount;
+	}
+
+	public void setNoVoteCount(Integer noVoteCount) {
+		this.noVoteCount = noVoteCount;
+	}
+
+	public Integer getAbstainerCount() {
+		return abstainerCount;
+	}
+
+	public void setAbstainerCount(Integer abstainerCount) {
+		this.abstainerCount = abstainerCount;
 	}
 }

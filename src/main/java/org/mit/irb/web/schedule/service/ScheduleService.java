@@ -109,12 +109,6 @@ public interface ScheduleService {
 	public ScheduleVo updateCommitteeScheduleMinute(ScheduleVo vo);
 
 	/**
-	 * @param scheduleId
-	 * @return
-	 */
-	public ScheduleVo loadScheduleBasicDetail(Integer scheduleId);
-
-	/**
 	 * @param vo
 	 * @return
 	 */
@@ -201,4 +195,40 @@ public interface ScheduleService {
 	 * @return a ScheduleVo of details of schedule.
 	 */
 	public ScheduleVo updateMeetingOtherActions(ScheduleVo scheduleVo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo createMinuteForSchedule(ScheduleVo vo);
+
+	/**
+	 * @param scheduleAgendaId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleAgendaById(String scheduleAgendaId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleMinute(String scheduleId);
+
+	/**
+	 * @param scheduleMinuteDocId
+	 * @return
+	 */
+	public ResponseEntity<byte[]> downloadScheduleMinuteById(String scheduleMinuteDocId);
+
+	/**
+	 * @param scheduleId
+	 * @return
+	 */
+	public ScheduleVo loadAllScheduleMinutes(Integer scheduleId);
+	
+	/**
+	 * @param vo
+	 * @return
+	 */
+	public ScheduleVo showAllMeetingAttendence(ScheduleVo vo);
 }

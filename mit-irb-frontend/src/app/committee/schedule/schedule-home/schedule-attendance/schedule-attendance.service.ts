@@ -51,4 +51,10 @@ export class ScheduleAttendanceService {
     getMeetingAttendenceList(params) {
         return this.http.post( '/mit-irb/loadMeetingAttendence', params );
     }
+    updateMeetingAttendence(params) {
+        return this.http.post( '/mit-irb/updateMeetingAttendence', params );
+    }
+    getAllActiveMembers(params) {
+        return this.http.post( '/mit-irb/showAllMeetingAttendence', params );
+    }
 }

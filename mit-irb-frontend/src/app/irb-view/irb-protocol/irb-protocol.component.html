@@ -1,0 +1,42 @@
+<div class="container-fluid">
+    <section class="row">
+
+        <div class="col-12">
+            <div class="row cards-in">
+              <div class="col-12 mb-2">
+                <div class="card mt-5">
+      
+                  <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                      <h4 class="card-hedding dotted-bottom">Protocol
+                        <a class="tooltip float-right"> <i class="fa fa-info-circle text-secondary"
+                            aria-hidden="true"></i>
+                          <!-- <span class="tooltiptext-right">{{PROTOCOL_ENGAGED_INSTITUTIONS_INFO}}</span> -->
+                        </a>
+      
+                      </h4>
+      
+                      <div class="col-sm-12 col-md-12 col-12 main-list" *ngIf="scienceOfProtocol != null" >
+                        <div class="row px-">
+                          <div class="table">
+                            <div class="dashboard-table">
+                                <div class="row margin-15" [innerHTML]="scienceOfProtocol?.DESCRIPTION">
+                              
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 card-list-no-data" *ngIf="scienceOfProtocol == null">
+                        <div class="col-12">No Details Found</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+          </div>
+
+      </section>
+      </div>

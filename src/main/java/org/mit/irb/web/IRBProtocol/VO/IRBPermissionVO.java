@@ -15,6 +15,7 @@ public class IRBPermissionVO {
 	private boolean successCode;
 	private String successMessage;
 	private Integer protocolId;
+	private String protocolNumber;
 	private String acType;
 	
 	/*public List<String> getPermissions() {
@@ -76,5 +77,11 @@ public class IRBPermissionVO {
 	}
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+	public String getProtocolNumber() {
+		return protocolNumber;
+	}
+	public void setProtocolNumber(String protocolNumber) {
+		this.protocolNumber = protocolNumber;
 	}
 }

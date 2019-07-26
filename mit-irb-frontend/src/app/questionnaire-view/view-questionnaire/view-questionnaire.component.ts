@@ -302,6 +302,11 @@ export class ViewQuestionnaireComponent implements OnInit {
           queryParamsHandling: 'merge',
         });
         this.showToast(toastId);
+        if (this.result.questionnaire_complete_flag  === 'Y') {
+          this._router.navigate(['/irb/irb-create/irbQuestionnaireList'], {
+            queryParamsHandling: 'merge',
+          });
+        }
     });
   }
   /** assigns help link message of a question

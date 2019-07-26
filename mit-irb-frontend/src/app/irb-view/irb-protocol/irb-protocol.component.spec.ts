@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QuestionnaireTreeComponent } from './questionnaire-tree.component';
+import { IrbProtocolComponent } from './irb-protocol.component';
 
-describe('QuestionnaireTreeComponent', () => {
-  let component: QuestionnaireTreeComponent;
-  let fixture: ComponentFixture<QuestionnaireTreeComponent>;
+describe('IrbProtocolComponent', () => {
+  let component: IrbProtocolComponent;
+  let fixture: ComponentFixture<IrbProtocolComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuestionnaireTreeComponent ]
+      declarations: [ IrbProtocolComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QuestionnaireTreeComponent);
+    fixture = TestBed.createComponent(IrbProtocolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

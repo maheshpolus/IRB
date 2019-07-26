@@ -94,5 +94,32 @@ public class IRBUtilController {
 		return vo;
 	}
 	
+	@RequestMapping(value = "/checkProtocolLock", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO checkProtocolLock(@RequestBody IRBUtilVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbUtilService.checkLockPresent(vo);
+		return vo;
+	}
+	
+	@RequestMapping(value = "/releaseProtocolLock", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO releaseProtocolLock(@RequestBody IRBUtilVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbUtilService.releaseProtocolLock(vo); 
+		return vo;
+	}	
+	
+	@RequestMapping(value = "/loadProtocolLock", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO loadProtocolLock(@RequestBody IRBUtilVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbUtilService.loadProtocolLock(vo); 
+		return vo;
+	}	
 
+	@RequestMapping(value = "/checkSubmissionLock", method = RequestMethod.POST)
+	public @ResponseBody IRBUtilVO checkSubmissionLock(@RequestBody IRBUtilVO vo, HttpServletRequest request,HttpServletResponse response)
+	{
+		vo = irbUtilService.checkSubmissionLock(vo);
+		return vo;
+	}
+	
 }

@@ -222,7 +222,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     if (mode !== 'DELETE') {
       this.protocolCollaborator.updateTimestamp = new Date();
       this.protocolCollaborator.updateUser = this.userDTO.userName;
-      this.protocolCollaborator.sequenceNumber = 1;
+      this.protocolCollaborator.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
       this.protocolCollaborator.protocolOrgTypeCode = 1;
       this.protocolCollaborator.protocolNumber = this.protocolNumber;
       this.protocolCollaborator.protocolId = this.generalInfo.protocolId;
@@ -420,7 +420,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       this.irbAttachmentProtocol.acType = 'I';
       this.irbAttachmentProtocol.protocolNumber = this.protocolNumber;
       this.irbAttachmentProtocol.protocolId = this.protocolId;
-      this.irbAttachmentProtocol.sequenceNumber = 1;
+      this.irbAttachmentProtocol.sequenceNumber = this.generalInfo.sequenceNumber;
       this.irbAttachmentProtocol.typeCode = this.requestObject.attachmentTypeCode;
       this.irbAttachmentProtocol.documentId = 1;
       this.irbAttachmentProtocol.description = this.requestObject.attachmentDescription;

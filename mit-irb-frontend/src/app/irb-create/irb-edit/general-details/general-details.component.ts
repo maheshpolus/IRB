@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 
 import { IrbCreateService } from '../../irb-create.service';
@@ -39,6 +40,7 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   isElasticResultPerson = false;
   isLeadUnitSearch = false;
   isGeneralInfoEditable = true;
+  isAdminCorrection = false;
   message = '';
   personType = 'employee';
   warningMessage: string;
@@ -55,13 +57,15 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _spinner: NgxSpinnerService,
-    public keyPressEvent: KeyPressEvent) { }
+    public keyPressEvent: KeyPressEvent,
+    public toastr: ToastsManager) { }
 
   ngOnInit() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
     this._activatedRoute.queryParams.subscribe(params => {
       this.protocolId = params['protocolId'];
       this.protocolNumber = params['protocolNumber'];
+      this.isAdminCorrection = params['isAdminCorrection'] != null ? true : false;
       if (this.protocolId != null && this.protocolNumber != null) {
         this.isGeneralInfoSaved = true;
       }
@@ -114,6 +118,12 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       this.generalInfo.protocolStatusCode = 100;
       this.generalInfo.protocolStatus = { description: 'In Progress', protocolStatusCode: 100 };
     }
+    this.generalInfo.strApprovalDate = this.generalInfo.approvalDate != null ?
+    this.GetFormattedDateFromString(this.generalInfo.approvalDate) : null;
+    this.generalInfo.strExpirationDate = this.generalInfo.prtocolExpirationDate != null ?
+    this.GetFormattedDateFromString(this.generalInfo.prtocolExpirationDate) : null;
+    this.generalInfo.strLastApprovalDate = this.generalInfo.lastApprovalDate != null ?
+    this.GetFormattedDateFromString(this.generalInfo.lastApprovalDate) : null;
     this._sharedDataService.setGeneralInfo(Object.assign({}, this.generalInfo));
     this.personnelInfo = this.commonVo.personnelInfo;
     this.personalDataList = this.commonVo.protocolPersonnelInfoList != null ? this.commonVo.protocolPersonnelInfoList : [];
@@ -218,6 +228,12 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.GetFormattedDate(this.generalInfo.protocolStartDate) : null;
         this.generalInfo.aniticipatedEndDate = this.generalInfo.protocolEndDate != null ?
         this.GetFormattedDate(this.generalInfo.protocolEndDate) : null;
+        this.generalInfo.strApprovalDate = this.generalInfo.strApprovalDate != null ?
+        this.GetFormattedDate(this.generalInfo.strApprovalDate) : null;
+        this.generalInfo.strExpirationDate = this.generalInfo.strExpirationDate != null ?
+        this.GetFormattedDate(this.generalInfo.strExpirationDate) : null;
+        this.generalInfo.strLastApprovalDate = this.generalInfo.strLastApprovalDate != null ?
+        this.GetFormattedDate(this.generalInfo.strLastApprovalDate) : null;
         this.generalInfo.createUserId = this.userDTO.personID;
         this.generalInfo.createUserName = this.userDTO.fullName;
       this.generalInfo.updateTimestamp = new Date();
@@ -229,6 +245,11 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         data => {
           this.result = data;
           this._spinner.hide();
+          if (this.result.successCode) {
+            this.toastr.success('Protocol Details saved successfully', null, { toastLife: 2000 });
+          } else {
+            this.toastr.error('Failed to perform Save action', null, { toastLife: 2000 });
+          }
           if (this.protocolNumber == null) {
             this.personalDataList = this.result.generalInfo.personnelInfos;
             this.personnelInfo = {};
@@ -376,5 +397,12 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     this.ProtocolPI.LeadUnitName = unitName;
     this.ProtocolPI.unitNumber = unitNumber;
     this.isLeadUnitSearch = false;
+  }
+
+  changeApprovalDate(date) {
+    const ApprovalDate = date;
+    this.generalInfo.strExpirationDate = new Date(ApprovalDate);
+    this.generalInfo.strLastApprovalDate = new Date(ApprovalDate);
+    this.generalInfo.strExpirationDate.setYear(this.generalInfo.strExpirationDate.getFullYear() + 1);
   }
 }

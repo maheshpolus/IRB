@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 
 public class IRBActionsVO {
@@ -56,6 +57,8 @@ public class IRBActionsVO {
 	private String correspTemplateTypeCode;
 	private String correspTypeDescription;
 	private Integer actionId;
+	private ProtocolGeneralInfo protocolInfo;
+	private boolean flag; 
 	
 	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
@@ -431,5 +434,21 @@ public class IRBActionsVO {
 
 	public void setPersonID(String personID) {
 		this.personID = personID;
+	}
+
+	public ProtocolGeneralInfo getProtocolInfo() {
+		return protocolInfo;
+	}
+
+	public void setProtocolInfo(ProtocolGeneralInfo protocolInfo) {
+		this.protocolInfo = protocolInfo;
+	}
+	
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}
 }

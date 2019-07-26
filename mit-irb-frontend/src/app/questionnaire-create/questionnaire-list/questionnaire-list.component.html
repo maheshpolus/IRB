@@ -31,15 +31,21 @@
                     <table class="table table-striped table-fixed">
                       <thead class="bg-gradient irb-qst-bg-head">
                       <tr class="fl-1">
-                          <th class="col-4 txt-medium txt-dark">Questionnaire ID</th>
-                          <th class="col-7 txt-medium txt-dark">Name</th>
+                          <th class="col-2 txt-medium txt-dark">Questionnaire ID</th>
+                          <th class="col-2 txt-medium txt-dark">Sort Order</th>
+                          <th class="col-6 txt-medium txt-dark">Name</th>
                           <th class="col-1 txt-medium txt-dark"></th>
                       </tr>
                       </thead>
                       <tbody class="fl-2">
-                       <tr *ngFor = "let questionnaire of questionnairelist">
-                          <td class="col-4">{{questionnaire.QUESTIONNAIRE_ID}}</td>
+                       <tr *ngFor = "let questionnaire of questionnairelist; let index = index;">
+                          <td class="col-2">{{questionnaire.QUESTIONNAIRE_ID}}</td>
+                          <td class="col-1">{{questionnaire.SORT_ORDER}}</td>
                           <td class="col-7">{{questionnaire.QUESTIONNAIRE_LABEL}}</td>
+                          <td class="col-1">
+                            <i class="fa fa-arrow-up mr-20" *ngIf ="index != 0" (click) ="changeSortOrder(index,'positive')" aria-hidden="true"></i>
+                            <i class="fa fa-arrow-down"  *ngIf ="index != questionnairelist.length-1 " (click) = "changeSortOrder(index,'negative')"aria-hidden="true"></i>
+                          </td>
                           <td class="col-1">
                             <span class="icon-t">
                               <a (click) = "navigateToCreate(questionnaire.QUESTIONNAIRE_ID,true)"><i class="fa fa-eye view-btn-1"></i></a></span>

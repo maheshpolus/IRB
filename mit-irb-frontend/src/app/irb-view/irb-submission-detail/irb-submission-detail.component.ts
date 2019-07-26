@@ -16,6 +16,9 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 })
 export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
+  showEdit = true;
+  editDetails = false;
+  reviewTabSelected = 'ADMIN';
   isExpanded = false;
   lookUpData: any;
   headerDetails: any;
@@ -97,10 +100,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   reviewedBy = null;
   showProtocolReviewsOf = 'All Protocol Reviewers';
   attachmentDescription = '';
-  tabSelectedCommittee: string;
+  tabSelectedCommittee = 'PROTOCOL_COMMENTS';
   warningMessage: string;
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
+  lockPresent = false;
 
   private $subscription: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
@@ -113,6 +117,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.getLookUpData();
     this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
       if (data !== undefined && data != null) {
+        if (+data.PROTOCOL_STATUS_CODE >= 200) { // check if edit is allowed
+          this.showEdit = false;
+        }
         this.headerDetails = Object.assign({}, data);
         this.getIRBAdminReviewers();
         this.getIRBAdminReviewDetails();
@@ -130,6 +137,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   getLookUpData() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
+    this.reviewedBy = this.userDTO.userName;
     this._irbViewService.getSubmissionLookups(null).subscribe(data => {
       this.lookUpData = data || [];
       this.irbAdminsReviewerType = this.lookUpData.irbAdminsReviewerType != null ? this.lookUpData.irbAdminsReviewerType : [];
@@ -164,6 +172,22 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this._irbViewService.getPastSubmission(reqstObj).subscribe(data => {
       const result: any = data || [];
       this.submissionVo.pastSubmission = result.pastSubmission != null ? result.pastSubmission : [];
+    });
+  }
+
+  editSubmissionDetailsClick() {
+    const reqstObj = {
+      protocolNumber: this.headerDetails.PROTOCOL_NUMBER,
+      personId: this.userDTO.personID,
+      updateUser: this.userDTO.userName
+    };
+    this._irbViewService.checkSubmissionLock(reqstObj).subscribe(data => {
+      const result: any = data || [];
+      this.lockPresent = result.lockPresent;
+      this.editDetails = this.lockPresent === true ? false : true;
+      if (this.lockPresent) {
+        this.toastr.error('You cannot Edit Submission Details. Protocol is locked by another user', null, { toastLife: 5000 });
+      }
     });
   }
 
@@ -205,7 +229,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   getIRBAdminReviewDetails() {
     this.showReviewsOf = 'All Administrative Reviewers';
-    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
     this._spinner.show();
     this._irbViewService.getIRBAdminReviewDetails(reqstObj).subscribe(data => {
       this._spinner.hide();
@@ -243,7 +267,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
       this.scheduleList = result.scheduleDates != null ? result.scheduleDates : [];
       this.committeeList = result.committeeList != null ? result.committeeList : [];
-      this.committeeID = this.submissionVo.committeeId != null ? this.submissionVo.committeeId :
+      this.committeeID = result.committeeId != null ? result.committeeId :
         (this.committeeList.length > 0 ? this.committeeList[0].COMMITTEE_ID : null);
       this.scheduleID = this.submissionVo.sceduleId != null ?
         this.submissionVo.sceduleId : (this.scheduleList.length > 0 ? this.scheduleList[0].SCHEDULE_ID : null);
@@ -595,6 +619,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   saveSubmissionBasicDetails() {
+    this.editDetails = !this.editDetails;
     if (this.submissionVo.submissionTypeCode == null) {
       this.invalidData.invalidBasicDetails = true;
     } else {
@@ -602,6 +627,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
       this.submissionVo.committeeId = this.committeeID;
       this.submissionVo.sceduleId = this.scheduleID;
+      this.submissionVo.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
       this._spinner.show();
       this._irbViewService.updateBasicSubmissionDetail(this.submissionVo).subscribe((data: any) => {
         // this.submissionVo = data;

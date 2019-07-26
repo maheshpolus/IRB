@@ -68,6 +68,16 @@ public class ProtocolAdminContact {
 	@Transient
 	private String acType;
 	
+	@Column(name = "AFFILIATION_TYPE_CODE")
+	private Integer affiliationTypeCode;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTO_ADMIN_CONTACTS_FK3"), name = "AFFILIATION_TYPE_CODE", referencedColumnName = "AFFILIATION_TYPE_CODE", insertable = false, updatable = false)
+	private ProtocolAffiliationTypes protocolAffiliationTypes;
+	
+	@Transient
+	private String trainingInfo;
+	
 	public Integer getAdminContactTypeCode() {
 		return adminContactTypeCode;
 	}
@@ -170,5 +180,29 @@ public class ProtocolAdminContact {
 
 	public void setSequenceNumber(Integer sequenceNumber) {
 		this.sequenceNumber = sequenceNumber;
+	}
+
+	public ProtocolAffiliationTypes getProtocolAffiliationTypes() {
+		return protocolAffiliationTypes;
+	}
+
+	public void setProtocolAffiliationTypes(ProtocolAffiliationTypes protocolAffiliationTypes) {
+		this.protocolAffiliationTypes = protocolAffiliationTypes;
+	}
+
+	public Integer getAffiliationTypeCode() {
+		return affiliationTypeCode;
+	}
+
+	public void setAffiliationTypeCode(Integer affiliationTypeCode) {
+		this.affiliationTypeCode = affiliationTypeCode;
+	}
+
+	public String getTrainingInfo() {
+		return trainingInfo;
+	}
+
+	public void setTrainingInfo(String trainingInfo) {
+		this.trainingInfo = trainingInfo;
 	}
 }

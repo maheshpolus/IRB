@@ -38,6 +38,7 @@ public class IRBViewProfile {
 	private Integer userHasRightToEditTraining;
 	private List<CollaboratorNames> collaboratorList;
 	private ArrayList<HashMap<String, Object>> irbProtocolHistoryGroupComments;		
+	private HashMap<String, Object> irbViewScienceOfProtocol;
 	
 	public ArrayList<HashMap<String, Object>> getIrbViewProtocolHistoryGroupList() {
 		return irbViewProtocolHistoryGroupList;
@@ -257,5 +258,13 @@ public class IRBViewProfile {
 
 	public void setIrbProtocolHistoryGroupComments(ArrayList<HashMap<String, Object>> irbProtocolHistoryGroupComments) {
 		this.irbProtocolHistoryGroupComments = irbProtocolHistoryGroupComments;
+	}
+
+	public HashMap<String, Object> getIrbViewScienceOfProtocol() {
+		return irbViewScienceOfProtocol;
+	}
+
+	public void setIrbViewScienceOfProtocol(HashMap<String, Object> irbViewScienceOfProtocol) {
+		this.irbViewScienceOfProtocol = irbViewScienceOfProtocol;
 	}	
 }

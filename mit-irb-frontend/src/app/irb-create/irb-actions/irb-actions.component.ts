@@ -380,11 +380,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this._router.navigate(['/irb/dashboard']);
         }
       } else {
-        this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+        this.toastr.error(this.IRBActionsResult.successMessage, null, { toastLife: 5000 });
+        this.cancelActionPerform();
       }
     },
       error => {
-        this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+        this.toastr.error(this.IRBActionsResult.successMessage, null, { toastLife: 2000 });
         console.log('Error in perform action ', error);
       }
     );

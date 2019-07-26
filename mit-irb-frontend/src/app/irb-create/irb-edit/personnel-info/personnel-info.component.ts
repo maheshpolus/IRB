@@ -60,7 +60,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
   warningMessage: string;
   isProtocolValidated: string;
   alertMessage: string;
-  irbPersonDetailedList: any;
+  irbPersonDetailedList: any = {};
   trainingStatus: string;
   invalidData = {
     invalidGeneralInfo: false, invalidStartDate: false, invalidEndDate: false,
@@ -444,7 +444,7 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       personnelInfo.acType = 'U';
       personnelInfo.updateTimestamp = new Date();
       personnelInfo.updateUser = localStorage.getItem('userName');
-      personnelInfo.sequenceNumber = 1;
+      personnelInfo.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
       personnelInfo.protocolNumber = this.protocolNumber;
       // Setting Person Lead Unit Details
       // personnelInfo.protocolLeadUnits[0].protocolPersonId = this.personnelInfo.personId;
@@ -511,14 +511,14 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
     this.trainingComments = [];
     this._spinner.show();
     const params = { protocolNumber: this.protocolNumber, avPersonId: item.personId };
-    this._irbViewService.getIrbPersonDetailedList(params).subscribe(data => {
+    this._irbCreateService.getIrbPersonDetailedList(params).subscribe(data => {
       this._spinner.hide();
       this.result = data || [];
       if (this.result != null) {
         this.irbPersonDetailedList = this.result.irbViewProtocolMITKCPersonInfo;
         this.irbPersonDetailedTraining = this.result.irbViewProtocolMITKCPersonTrainingInfo;
         this.trainingStatus = this.result.trainingStatus;
-        this.checkUserHasMaintainRight();
+        // this.checkUserHasMaintainRight();
       }
     },
       error => {

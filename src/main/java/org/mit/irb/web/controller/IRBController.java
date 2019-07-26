@@ -288,8 +288,8 @@ public class IRBController {
 				irbAcionDao.updateActionStatus(vo);	
 			
 		}else{
-			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(protocolVO.getGeneralInfo().getProtocolNumber());
-			if(lockList.isEmpty()){
+			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+			if(!lockList.isEmpty()){
 				protocolVO = irbProtocolService.updateGeneralInfo(irbProtocolVO.getGeneralInfo());
 				protocolVO.setSuccessCode(true);
 			}else{

@@ -1549,7 +1549,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));	
 				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));
-				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,null));
+				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));
 				inputParam.add(new InParameter("AV_MINUTE_ENTRY_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,KeyConstants.PROTOCOL_MINUTE_ENTRY_TYPE));
 			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {

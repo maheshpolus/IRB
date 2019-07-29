@@ -920,5 +920,43 @@ export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges 
         this.adminSearchText = adminName;
         this.requestObject.adminPersonId = personId;
     }
+    exportDashboardProtocolList() {
+        let fileName;
+        if (this.requestObject.dashboardType === 'ALL') {
+            fileName = 'All Protocols';
+        } else if ( this.requestObject.dashboardType === 'ACTIVE' ) {
+            fileName = 'Active Protocols';
+        } else if ( this.requestObject.dashboardType === 'NEW_SUBMISSION' ) {
+            fileName = 'New Submissions';
+        } else if ( this.requestObject.dashboardType === 'INPROGRESS' ) {
+            fileName = 'In Progress Protocols';
+        }
+        const requestObject = {     personId: this.requestObject.personId, protocolNumber: this.requestObject.protocolNumber,
+            title: this.requestObject.title,
+        piName: this.requestObject.piName, protocolTypeCode: this.requestObject.protocolTypeCode,
+        personRoleType: this.requestObject.personRoleType,
+        protocolStatusCode: this.requestObject.protocolStatusCode, protocolSubmissionStatus: this.requestObject.protocolSubmissionStatus,
+        dashboardType: this.requestObject.dashboardType, adminPersonId: this.requestObject.adminPersonId,
+        approvalDate: this.requestObject.approvalDate, expirationDate: this.requestObject.expirationDate,
+        fundingSource: this.requestObject.fundingSource, isAdvancedSearch: this.requestObject.isAdvancedSearch,
+        documentHeading: fileName, exportType: 'excel'
+        };
+        this._spinner.show();
+        this._dashboardService.exportDashboardProtocolList(requestObject).subscribe( data => {
+            this._spinner.hide();
+            const tempData: any = data || {};
+            if (window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveBlob(new Blob([tempData.body], { type: 'xlsx' }),
+                    requestObject.documentHeading + '.' + 'xlsx');
+            } else {
+                const DOWNLOAD_BTN = document.createElement('a');
+                DOWNLOAD_BTN.href = URL.createObjectURL(tempData.body);
+                DOWNLOAD_BTN.download = requestObject.documentHeading + '.' + 'xlsx';
+                document.body.appendChild(DOWNLOAD_BTN);
+                DOWNLOAD_BTN.click();
+            }
+
+        });
+    }
 }
 

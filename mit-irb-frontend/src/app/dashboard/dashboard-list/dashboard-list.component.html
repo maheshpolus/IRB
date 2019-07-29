@@ -19,6 +19,17 @@
 			<li [ngClass]="{activenav:(lastClickedTab == 'EXEMPT')}">
 			  <a (click)="getExemptListData('EXEMPT')">Exempt Evaluations</a>
 			</li>
+			<!-- <a class="float-right mt-15" *ngIf="lastClickedTab != 'EXEMPT'" (click)="exportDashboardProtocolList()">
+				<span class="exportIcon-margin exportButton mr-0">Export as</span>
+				<a title="Export data to Excel sheet" class="mr-5 pointer" id="export-prop-excel-btn" >
+						<i class="fa fa-file-excel-o"></i>
+				</a>
+			</a> -->
+			<a *ngIf="lastClickedTab != 'EXEMPT'"
+			class="btn float-right box-shadow-2 btn-sm btn-secondary advanced-search-btn mobile-absolute color-white" role="button" aria-expanded="false"
+			aria-controls="collapseExample" (click)="exportDashboardProtocolList()">
+			<i  class="fa fa-file-excel-o mr-5"></i><a class="mobile-hide">Export</a>
+		</a>
 			<a class="btn float-right box-shadow-2 btn-sm btn-danger advanced-search-btn mobile-absolute" data-toggle="collapse"
 			  href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"
 			  (click)="showAdvanceSearch()">
@@ -51,6 +62,17 @@
 			<li [ngClass]="{activenav:(lastClickedTab == 'SCHEDULE')}">
 			  <a (click)="getCommitteeScheduleListData('SCHEDULE')">Schedules</a>
 			</li> -->
+			<a *ngIf="lastClickedTab != 'EXEMPT'"
+			  class="btn float-right box-shadow-2 btn-sm btn-secondary advanced-search-btn mobile-absolute color-white" role="button" aria-expanded="false"
+			  aria-controls="collapseExample" (click)="exportDashboardProtocolList()">
+			  <i  class="fa fa-file-excel-o mr-5"></i><a class="mobile-hide">Export</a>
+			</a>
+			<!-- <a class="float-right mt-15" *ngIf="lastClickedTab != 'EXEMPT'" (click)="exportDashboardProtocolList()">
+				<span class="exportIcon-margin exportButton mr-0">Export as</span>
+				<a title="Export data to Excel sheet" class="mr-5 pointer" id="export-prop-excel-btn" >
+						<i class="fa fa-file-excel-o"></i>
+				</a>
+			</a> -->
 			<a *ngIf="lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'"
 			  class="btn float-right box-shadow-2 btn-sm btn-danger advanced-search-btn mobile-absolute"
 			  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
@@ -58,6 +80,8 @@
 			  <i *ngIf="isAdvancesearch" class="fa fa-sliders"></i>
 			  <i *ngIf="!isAdvancesearch" class="fa fa-sliders"></i><a class="mobile-hide"> Advanced Search</a>
 			</a>
+					
+
 			<!-- <span >
 			  <a (click)="showAdvanceSearch()">
 				<i *ngIf="isAdvancesearch" class="fa fa-minus-circle"></i>

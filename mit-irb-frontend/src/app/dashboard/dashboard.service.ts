@@ -47,4 +47,10 @@ checkingPersonsRightToViewProtocol(params) {
     getIRBAdminList(params) {
         return this._http.post('/mit-irb/getIRBAdminList', params);
       }
+      exportDashboardProtocolList(params) {
+        return this._http.post('/mit-irb/exportDashboardProtocolList', params, {
+            observe: 'response',
+          responseType: 'blob'
+        });
+      }
 }

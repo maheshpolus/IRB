@@ -100,7 +100,7 @@ export class IrbCreateAttachmentComponent implements OnInit, OnDestroy {
             this.$subscription2 = this._sharedDataService.viewProtocolDetailsVariable.subscribe(commonVo => {
                 if (commonVo !== undefined && commonVo != null) {
                   this.protocolStatusCode = commonVo.PROTOCOL_STATUS_CODE;
-                  this.generalInfo = { protocolId: this.requestObject.protocolId };
+                  this.generalInfo = { protocolId: this.requestObject.protocolId, sequenceNumber: commonVo.SEQUENCE_NUMBER };
                 }
             });
 

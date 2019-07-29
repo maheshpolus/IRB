@@ -32,7 +32,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     private modalService: NgbModal) {
       this._router.events.subscribe((evt: any) => {
         if (evt instanceof NavigationEnd) {
-          if (evt.url === '/irb/irb-create/irbHome?protocolNumber=' + this.protocolNumber + '&protocolId=' + this.protocolId) {
+          if (evt.url.includes('irbHome')) {debugger;
             this.getIRBProtocol();
           }
         }

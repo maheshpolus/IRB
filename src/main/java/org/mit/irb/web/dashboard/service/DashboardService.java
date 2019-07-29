@@ -2,7 +2,10 @@ package org.mit.irb.web.dashboard.service;
 
 import java.text.ParseException;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /*
@@ -63,4 +66,22 @@ public interface DashboardService {
 	 * @return permission of given personId
 	 */
 	public DashboardProfile getAdminDashBoardPermissions(String personId, String leadUnitNumber);
+	
+	/**
+	 * getXSSFWorkbookDashboardProtocolList.
+	 * @param vo vo
+	 * @return XSSFWorkbook
+	 * @throws Exception
+	 */
+	public XSSFWorkbook getXSSFWorkbookDashboardProtocolList(CommonVO vo) throws Exception;
+	
+	
+	/**
+	 * getResponseEntityForDownload.
+	 * @param vo vo
+	 * @param workbook workbook
+	 * @return ResponseEntity
+	 * @throws Exception
+	 */
+	public ResponseEntity<byte[]> getResponseEntityForDownload(CommonVO vo, XSSFWorkbook workbook) throws Exception;
 }

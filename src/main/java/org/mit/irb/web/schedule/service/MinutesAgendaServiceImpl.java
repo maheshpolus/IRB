@@ -186,9 +186,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> fullIntial = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("1"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("100")){
-				fullIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				fullIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return fullIntial;		
@@ -198,9 +200,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> fullAmed = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("1"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("102")){
-				fullAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				fullAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return fullAmed;		
@@ -210,9 +214,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> fullCon = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("1"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("101")){
-				fullCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				fullCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return fullCon;		
@@ -222,9 +228,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> fullRes = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("1"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("103")){
-				fullRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				fullRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return fullRes;		
@@ -234,9 +242,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> expIntial = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("2"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("100")){
-				expIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				expIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return expIntial;		
@@ -246,9 +256,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> expAmed = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("2"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("102")){
-				expAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				expAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return expAmed;		
@@ -258,9 +270,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> expCon = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("2"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("101")){
-				expCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				expCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return expCon;		
@@ -270,9 +284,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		List<ProtocolDetails> expRes = new ArrayList<>();
 		
 		for (ProtocolSubmission submission : submissions) {
+			if(submission.getProtocolReviewTypeCode() != null)
 			if(submission.getProtocolReviewTypeCode().equals("2"))
+				if(submission.getSubmissionTypeCode() != null)
 			if(submission.getSubmissionTypeCode().equals("103")){
-				expRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount(),submission.getNoVoteCount(),submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+				expRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return expRes;		
@@ -293,6 +309,7 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 	private String  minuteComments(List<CommitteeScheduleMinutes> adminComments){			
 		String minuteComment = null;
 			for (CommitteeScheduleMinutes object : adminComments) {
+				if(object.getPrivateCommentFlag())
 					if(minuteComment == null || minuteComment.isEmpty()){
 						minuteComment = object.getMinuteEntry() ==  null ? null : object.getMinuteEntry() ;
 					}else{

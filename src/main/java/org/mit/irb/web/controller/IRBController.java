@@ -288,7 +288,7 @@ public class IRBController {
 				status.setProtocolId(irbProtocolVO.getGeneralInfo().getProtocolId());
 				vo.setProtocolSubmissionStatuses(status);
 				irbAcionDao.updateActionStatus(vo);	
-			
+				protocolVO.setSuccessCode(true);
 		}else{
 			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
 			if(!lockList.isEmpty()){
@@ -408,7 +408,7 @@ public class IRBController {
 	public @ResponseBody IRBProtocolVO saveScienceOfProtocol(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody IRBProtocolVO protocolVO) throws JsonProcessingException {
 		IRBProtocolVO irbProtocolVO = new IRBProtocolVO();	
-		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(irbProtocolVO.getGeneralInfo().getProtocolNumber());
+		List<Lock> lockList = irbUtilDao.fetchProtocolLockData(protocolVO.getGeneralInfo().getProtocolNumber());
 		if(!lockList.isEmpty()){
 			irbProtocolVO = irbProtocolService.saveScienceOfProtocol(protocolVO.getScienceOfProtocol(),protocolVO.getGeneralInfo());
 			protocolVO.setSuccessCode(true);

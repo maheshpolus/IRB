@@ -6,11 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.mit.irb.web.common.VO.CommonVO;
 import org.mit.irb.web.common.pojo.DashboardProfile;
 import org.mit.irb.web.dashboard.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,5 +82,13 @@ public class DashboardController {
 			HttpServletResponse response) {
 		DashboardProfile profile = dashboardService.getAdminDashBoardPermissions(vo.getPersonId(),vo.getLeadunitNumber());
 		return profile;
+	}
+	
+	
+	@RequestMapping(value = "/exportDashboardProtocolList", method = RequestMethod.POST)
+	public ResponseEntity<byte[]> exportDashboardData(HttpServletRequest request, @RequestBody CommonVO vo) throws Exception {
+		logger.info("Requesting for exportDashboardProtocolList");
+		XSSFWorkbook workbook = dashboardService.getXSSFWorkbookDashboardProtocolList(vo);
+		return dashboardService.getResponseEntityForDownload(vo, workbook);
 	}
 }

@@ -2697,3 +2697,8 @@ input:disabled,textarea:disabled{
 	-webkit-box-shadow: 0 4px 7px 0 #dbece0 !important;
 	box-shadow: 0 8px 15px 0 #dbece0  !important;
 }
+  .color-white {
+      color: #fff !important;
+  }
+  
+  

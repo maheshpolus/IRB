@@ -101,6 +101,26 @@ public class CommonVO {
 	
 	private String updateUser;
 	
+	private String documentHeading;
+	
+	private String exportType;
+	
+	public String getDocumentHeading() {
+		return documentHeading;
+	}
+
+	public void setDocumentHeading(String documentHeading) {
+		this.documentHeading = documentHeading;
+	}
+
+	public String getExportType() {
+		return exportType;
+	}
+
+	public void setExportType(String exportType) {
+		this.exportType = exportType;
+	}
+
 	public ArrayList<HashMap<String, Object>> getExemptQuestionList() {
 		return exemptQuestionList;
 	}

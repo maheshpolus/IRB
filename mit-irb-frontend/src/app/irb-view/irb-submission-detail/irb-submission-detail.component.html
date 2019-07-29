@@ -181,7 +181,7 @@
                   <div class="text-right txt-medium txt-underline mb-2">
                     <span class="pointer" data-toggle="collapse" href="#collapseAdmin" role="button" aria-expanded="false"
                       aria-controls="collapseAdmin">
-                      <i class="fa fa-plus-circle text-success icon-padding"></i> Add Reviewer</span>
+                      <i class="fa fa-plus-circle text-success icon-padding"></i> Add Reviewers</span>
                   </div>
                   <div class="row mb15 collapse" id="collapseAdmin">
                     <div class="col-md-5 pr-0">
@@ -236,8 +236,8 @@
                         <tbody class="txt-small">
                           <tr class="solid-bottom pull-up"
                             *ngFor="let irbAdminsReviewer of submissionVo.irbAdminsReviewers; let i=index"
-                            [class.poping-border]="i == IRBReviweverSelectedRow"
-                            (click)="showReviewById(irbAdminsReviewer)">
+                            [class.poping-border]="i == rowSelectedAdmin"
+                            (click)="showReviewById(irbAdminsReviewer, i)">
                             <td class="align-middle" *ngIf="i != IRBReviweverSelectedRow"> {{irbAdminsReviewer.REVIEW_TYPE}}</td>
                             <td class="align-middle" *ngIf="i == IRBReviweverSelectedRow">
                               <select class="custom-select mr-sm-2 select-notify-popup" id="inlineFormCustomSelect"
@@ -376,6 +376,9 @@
                     <i class="ml-10">Showing reviews by</i> <b>{{showReviewsOf}}</b>
                     <span *ngIf="tabSelected=='IRBCOMMENTS'" class="filterLink">
                       <a class="a-right pointer" (click)="getIRBAdminReviewDetails()">Show All</a>
+                    </span>
+                    <span class="float-right txt-small pr-3 text-secondary">
+                      <input type="checkbox" [checked]="filterPublic == true" (click)="filterPublicReviews()"> Filter Public
                     </span>
                   </div>
                   <ng-container
@@ -521,7 +524,7 @@
                     <span class="pointer" data-toggle="collapse"
                     href="#collapseProtocol" role="button" aria-expanded="false"
                     aria-controls="collapseProtocol">
-                      <i class="fa fa-plus-circle text-success icon-padding"></i> Add Reviewer</span>
+                      <i class="fa fa-plus-circle text-success icon-padding"></i> Add Reviewers</span>
                 </div>
                 <div class="row collapse" id="collapseProtocol">
                   <div class="col-md-5">
@@ -583,8 +586,8 @@
                       <tbody class="txt-small">
                         <tr class="solid-bottom pull-up"
                           *ngFor="let reviewer of committeeReviewers; let i=index"
-                          [class.poping-border]="i == protocolReviewerSelectedRow"
-                          (click)="showProtocolReviewerCommentsById(reviewer)">
+                          [class.poping-border]="i == rowSelectedProtocol"
+                          (click)="showProtocolReviewerCommentsById(reviewer, i)">
                           <td class="align-middle" *ngIf="i != protocolReviewerSelectedRow">{{reviewer?.REVIEWER_TYPE_DESC}}</td>
                           <td class="align-middle" *ngIf="i == protocolReviewerSelectedRow"> <select
                               class="custom-select  mr-sm-2 select-notify-popup" id="inlineFormCustomSelect"

@@ -377,7 +377,7 @@
                     <span *ngIf="tabSelected=='IRBCOMMENTS'" class="filterLink">
                       <a class="a-right pointer" (click)="getIRBAdminReviewDetails()">Show All</a>
                     </span>
-                    <span class="float-right txt-small pr-3 text-secondary">
+                    <span class="float-right txt-small pr-3 text-secondary" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false">
                       <input type="checkbox" [checked]="filterPublic == true" (click)="filterPublicReviews()"> Filter Public
                     </span>
                   </div>
@@ -784,7 +784,7 @@
                     <span *ngIf="tabSelectedCommittee=='PROTOCOL_COMMENTS'" class="filterLink">
                       <a class="a-right pointer" (click)="loadCommitteeReviewerDetails()">Show All</a>
                     </span>
-                    <span class="float-right txt-small text-secondary pr-3"> Filter By
+                    <span class="float-right txt-small text-secondary pr-3" *ngIf="(userDTO.role=='ADMIN' || userDTO.role=='CHAIR') && viewMode==false"> Filter By
                       <input type="checkbox" [checked]="filterMinutes == true" (click)="filterMinutesReviews()"> Minutes
                       <input type="checkbox" [checked]="filterLetter == true" (click)="filterLetterReviews()"> Letter
                     </span>

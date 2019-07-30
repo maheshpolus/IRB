@@ -784,6 +784,10 @@
                     <span *ngIf="tabSelectedCommittee=='PROTOCOL_COMMENTS'" class="filterLink">
                       <a class="a-right pointer" (click)="loadCommitteeReviewerDetails()">Show All</a>
                     </span>
+                    <span class="float-right txt-small text-secondary pr-3"> Filter By
+                      <input type="checkbox" [checked]="filterMinutes == true" (click)="filterMinutesReviews()"> Minutes
+                      <input type="checkbox" [checked]="filterLetter == true" (click)="filterLetterReviews()"> Letter
+                    </span>
                   </div>
                   <ng-container
                     *ngIf="submissionVo?.committeeReviewerCommentsandAttachment != null && submissionVo?.committeeReviewerCommentsandAttachment.length > 0">

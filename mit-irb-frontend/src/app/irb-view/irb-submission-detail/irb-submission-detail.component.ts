@@ -17,9 +17,12 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   adminSearchPersonId = null;
+  protocolSearchPersonId = null;
   rowSelectedAdmin: number;
   rowSelectedProtocol: number;
   filterPublic = false;
+  filterMinutes = false;
+  filterLetter = false;
   showEdit = true;
   editDetails = false;
   reviewTabSelected = 'ADMIN';
@@ -556,12 +559,10 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.isIRBReviewAttachmentEdited = false;
   }
 
-  filterPublicReviews() { debugger
+  filterPublicReviews() {
     this.filterPublic = !this.filterPublic;
-    if ( this.filterPublic ) {
-
+    if (this.filterPublic) {
       if (+this.adminSearchPersonId > 0 && this.adminSearchPersonId != null) {
-
          this.submissionVo.irbAdminCommentAttachment =
          this.submissionVo.irbAdminCommentAttachment.filter(x => x.publicFlag === 'Y');
       } else {
@@ -579,6 +580,61 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  filterMinutesReviews() {
+    this.filterMinutes = !this.filterMinutes;
+    if (this.filterMinutes) {
+      if (+this.protocolSearchPersonId > 0 && this.protocolSearchPersonId != null) {
+        this.filterIfMinutes();
+      } else {
+        this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_MINUTES === 'Y');
+      }
+    } else {
+      this.filterIfPerson();
+    }
+    this.filterIfLetters();
+  }
+
+  filterLetterReviews() {
+    this.filterLetter = !this.filterLetter;
+    if (this.filterLetter) {
+      if (+this.protocolSearchPersonId > 0 && this.protocolSearchPersonId != null) {
+        this.filterIfLetters();
+      } else {
+        this.submissionVo.committeeReviewerCommentsandAttachment =
+          this.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_LETTER === 'Y');
+      }
+    } else {
+      this.filterIfPerson();
+    }
+    this.filterIfMinutes();
+  }
+
+  filterIfLetters() { // filter letters from already filtered list
+    if (this.filterLetter) {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.submissionVo.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_LETTER === 'Y');
+    }
+  }
+
+  filterIfMinutes() { // filter minutes from already filtered list
+    if (this.filterMinutes) {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.submissionVo.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_MINUTES === 'Y');
+    }
+  }
+
+  filterIfPerson() { // filter person else return full list
+    if (+this.protocolSearchPersonId > 0 && this.protocolSearchPersonId != null) {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.committeeReviewerCommentsandAttachment.filter(x => x.PERSON_ID === this.protocolSearchPersonId);
+    } else {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.committeeReviewerCommentsandAttachment;
+    }
+  }
+
 
   showReviewById(irbAdminsReviewer, index) {
     this.rowSelectedAdmin = index;
@@ -896,6 +952,9 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   loadCommitteeReviewerDetails() {
     this.rowSelectedProtocol = null;
+    this.protocolSearchPersonId = null;
+    this.filterLetter = false;
+    this.filterMinutes = false;
     this.showProtocolReviewsOf = 'All Protocol Reviewers';
     const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
     this._spinner.show();
@@ -1000,10 +1059,13 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   showProtocolReviewerCommentsById(protocolReviewer, index) {
+    this.filterMinutes = false;
+    this.filterLetter = false;
     this.rowSelectedProtocol = index;
     this.showProtocolReviewsOf = protocolReviewer.FULL_NAME;
     this.submissionVo.committeeReviewerCommentsandAttachment =
       this.committeeReviewerCommentsandAttachment.filter(x => x.PERSON_ID === protocolReviewer.PERSON_ID);
+    this.protocolSearchPersonId = protocolReviewer.PERSON_ID;
   }
 
   expandProtocolReviwers() {

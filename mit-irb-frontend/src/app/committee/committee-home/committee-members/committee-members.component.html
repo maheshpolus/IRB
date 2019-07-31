@@ -13,13 +13,13 @@
                 (ngModelChange)="filterMemberList()">&nbsp;Inactive
             </div>
             <div class="col-md-6 text-right">
-              <span class="txt-medium txt-dark p-2 pointer" [routerLink]="['memberHome']" [queryParams]="{mode: _activatedRoute.snapshot.queryParamMap.get( 'mode' ), id: this.committeId}">
+              <span class="txt-medium text-secondary p-2 pointer" [routerLink]="['memberHome']" [queryParams]="{mode: _activatedRoute.snapshot.queryParamMap.get( 'mode' ), id: this.committeId}">
                 <i class="fa fa-plus-circle text-success icon-padding"></i>
                 <u>Add Members</u>
               </span>
               </div>
-              
-									<!-- <span class="welcome-popup text-danger txt-medium" 
+
+									<!-- <span class="welcome-popup text-danger txt-medium"
                   [routerLink]="['memberHome']" [queryParams]="{mode: _activatedRoute.snapshot.queryParamMap.get( 'mode' ), id: this.committeId}">
 									  <i class="fa fa-plus icon-padding"></i>Add Member
 									</span>
@@ -55,7 +55,7 @@
                         <th scope="col" width="15%">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="txt-small">
                       <tr class="solid-bottom pull-up" *ngFor="let member of filteredCommitteMemberList">
                         <td *ngIf="member?.nonEmployeeFlag" class="align-middle">
                           <i class="fa fa-user-o" aria-hidden="true"></i> {{ member?.rolodex?.fullName}}</td>

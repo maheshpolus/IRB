@@ -821,14 +821,15 @@
               </div>
             </div>
             <div class="row" *ngIf="currentActionPerformed?.ACTION_CODE != '102'">
-              <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
+              <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment; let i = index">
                 <input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG"
-                       (ngModelChange)="module.AC_TYPE='U'"/>
+                       (ngModelChange)="setAcTypeForModule(i)"/>
   
                 <span [ngStyle]="{'color': module.IS_EDITABLE == 'N' ? 'grey' : ''}"
                       *ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
   
               </div>
+
             </div>
   
   
@@ -892,6 +893,7 @@
               <span class="txt-medium"
                     *ngIf="currentActionPerformed?.ACTION_CODE == '115'">Reason to Reopen Enrollment</span>
               <span class="txt-medium" *ngIf="currentActionPerformed?.ACTION_CODE == '116'">Notification Comment</span>
+              <span class="txt-medium" *ngIf="currentActionPerformed?.ACTION_CODE == '303'">Reason to Withdraw</span>
               <textarea class="form-control txt-area-fnt txt-small" [(ngModel)]="IRBActionsVO.comment"
                         placeholder="Reason"></textarea>
             </div>

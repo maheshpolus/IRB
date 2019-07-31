@@ -25,7 +25,7 @@
 						<i class="fa fa-file-excel-o"></i>
 				</a>
 			</a> -->
-			<a *ngIf="lastClickedTab != 'EXEMPT'"
+			<a *ngIf="lastClickedTab != 'EXEMPT' && irbListData?.length > 0"
 			class="btn float-right box-shadow-2 btn-sm btn-secondary advanced-search-btn mobile-absolute color-white" role="button" aria-expanded="false"
 			aria-controls="collapseExample" (click)="exportDashboardProtocolList()">
 			<i  class="fa fa-file-excel-o mr-5"></i><a class="mobile-hide">Export</a>
@@ -62,7 +62,7 @@
 			<li [ngClass]="{activenav:(lastClickedTab == 'SCHEDULE')}">
 			  <a (click)="getCommitteeScheduleListData('SCHEDULE')">Schedules</a>
 			</li> -->
-			<a *ngIf="lastClickedTab != 'EXEMPT'"
+			<a *ngIf="lastClickedTab != 'EXEMPT' && irbListData?.length > 0"
 			  class="btn float-right box-shadow-2 btn-sm btn-secondary advanced-search-btn mobile-absolute color-white" role="button" aria-expanded="false"
 			  aria-controls="collapseExample" (click)="exportDashboardProtocolList()">
 			  <i  class="fa fa-file-excel-o mr-5"></i><a class="mobile-hide">Export</a>

@@ -30,17 +30,17 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     private _irbCreateService: IrbCreateService,
     private _spinner: NgxSpinnerService,
     private modalService: NgbModal) {
-      this._router.events.subscribe((evt: any) => {
-        if (evt instanceof NavigationEnd) {
-          if (evt.url.includes('irbHome')) {debugger;
-            this.getIRBProtocol();
-          }
-        }
-        if (evt.snapshot != null && evt.snapshot.params != null  && evt.snapshot.params.queryParams != null) {
-          this.protocolId = evt.snapshot.params.queryParams.protocolId;
-          this.protocolNumber = evt.snapshot.params.queryParams.protocolNumber;
-        }
-    });
+     // this._router.events.subscribe((evt: any) => {
+    //     if (evt instanceof NavigationEnd) {
+    //       if (evt.url.includes('irbHome')) {
+    //         this.getIRBProtocol();
+    //       }
+    //     }
+    //     if (evt.snapshot != null && evt.snapshot.params != null  && evt.snapshot.params.queryParams != null) {
+    //       this.protocolId = evt.snapshot.params.queryParams.protocolId;
+    //       this.protocolNumber = evt.snapshot.params.queryParams.protocolNumber;
+    //     }
+    // });
      }
 
   ngOnInit() {
@@ -68,7 +68,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
         this.isCreateNewProtocol = false;
       }
     });
-    this.getIRBProtocol();
+   this.getIRBProtocol();
     if (this.isAmmendmentOrRenewal()) {
       this.show_current_tab('irbSummaryDetails');
     }

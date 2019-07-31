@@ -280,7 +280,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     this.commentList = [];
     if (action.ACTION_CODE === '101') { // Submit
       this.validateQuetionnaireList();
-    } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
+    } else if (action.ACTION_CODE === '992' ||
       action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
       || action.ACTION_CODE === '113' || action.ACTION_CODE === '119' ||
       action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '910' || action.ACTION_CODE === '113') {
@@ -302,7 +302,7 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
       }
       document.getElementById('commentModalBtn').click();
     } else if (action.ACTION_CODE === '114' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
-      action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
+      action.ACTION_CODE === '108' || action.ACTION_CODE === '115' || action.ACTION_CODE === '303') {
       // Rqst Data Analysis, Rqst to close, notify irb, rqst close enrollment,rqst reopen enrollment, make admin corrections
       document.getElementById('commentAttachmentModalBtn').click();
     } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '103') {
@@ -389,7 +389,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '119' ||
           this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '910'
           || this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '210' ||
-          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ) {
+          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ||
+          this.currentActionPerformed.ACTION_CODE === '303' ) {
           // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-view/irbOverview'],
             { queryParams: { protocolNumber: this.protocolNumber } });
@@ -401,8 +402,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         }
 
         // create amendment, create renewal, withdrawn, copy protocol
-        if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102' ||
-          this.currentActionPerformed.ACTION_CODE === '303' || this.currentActionPerformed.ACTION_CODE === '911') {
+        if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102'
+        || this.currentActionPerformed.ACTION_CODE === '911') {
          // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-create/irbHome'],
             { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber, protocolId: this.IRBActionsResult.protocolId } });
@@ -606,5 +607,16 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 }
   deleteReviewComments(index) {
     this.commentList.splice(index, 1);
+  }
+
+  setAcTypeForModule(index) {
+    if (this.moduleAvailableForAmendment[index].PROTO_AMEND_RENEWAL_ID != null) {
+      this.moduleAvailableForAmendment[index].AC_TYPE = 'U';
+
+    }
+    if (this.moduleAvailableForAmendment[index].PROTO_AMEND_RENEWAL_ID == null) {
+      this.moduleAvailableForAmendment[index].AC_TYPE = this.moduleAvailableForAmendment[index].STATUS_FLAG === true ? 'U' : null;
+
+    }
   }
 }

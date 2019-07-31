@@ -77,12 +77,13 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   files: UploadFile[] = [];
   fil: FileList;
   attachmentList: any[] = [];
+  applicableQuestionnaire = [];
 
   private $subscription1: ISubscription;
   private $subscription2: ISubscription;
 
   invalidData = {
-    noPiExists: true, noLeadUnit: true, invalidReviewComments: false
+    noPiExists: true, noLeadUnit: true, invalidReviewComments: false, questionnaireIncomplete: false
   };
 
 
@@ -235,12 +236,50 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
 
   }
+
+  validateQuetionnaireList() {
+    let moduleSubItemCodeList: any = [];
+    if (this.protocolNumber.includes('A')) {
+      moduleSubItemCodeList = [0, 4];
+    } else if (this.protocolNumber.includes('R')) {
+      moduleSubItemCodeList = [0, 3];
+    } else {
+      moduleSubItemCodeList = [0];
+    }
+    const requestObject = { 'module_item_key': this.protocolNumber,
+                            'module_sub_item_key': this.IRBActionsVO.sequenceNumber,
+                            'moduleSubItemCodeList': moduleSubItemCodeList,
+                            'module_item_code': 7 };
+    this._irbCreateService.getApplicableQuestionnaire(requestObject).subscribe(
+      data => {
+        const result: any = data;
+        this.applicableQuestionnaire = result.applicableQuestionnaire != null ? result.applicableQuestionnaire : [];
+        this.invalidData.questionnaireIncomplete = false;
+        this.applicableQuestionnaire.forEach((questionnaire) => {
+          if (questionnaire.IS_MANDATORY === 'Y' && questionnaire.QUESTIONNAIRE_COMPLETED_FLAG !== 'Y') {
+            this.invalidData.questionnaireIncomplete = true;
+          }
+        });
+        if (this.invalidData.questionnaireIncomplete) {
+          document.getElementById('validationModalBtn').click();
+        } else {
+          document.getElementById('submitModalBtn').click();
+        }
+      });
+  }
+
+  openQuestionnaireInEditMode() {
+    this._router.navigate(['/irb/irb-create/irbQuestionnaireList'],
+            { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId,
+              sequenceNumber: this.IRBActionsVO.sequenceNumber} });
+  }
+
   openActionDetails(action) {
     this.currentActionPerformed = action;
     this.uploadedFile = [];
     this.commentList = [];
     if (action.ACTION_CODE === '101') { // Submit
-      document.getElementById('submitModalBtn').click();
+      this.validateQuetionnaireList();
     } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
       action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
       || action.ACTION_CODE === '113' || action.ACTION_CODE === '119' ||

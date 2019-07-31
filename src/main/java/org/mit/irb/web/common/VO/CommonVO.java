@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.mit.irb.web.common.dto.PersonDTO;
 import org.mit.irb.web.common.pojo.IRBExemptForm;
+import org.mit.irb.web.common.view.IRBViews;
 import org.mit.irb.web.questionnaire.dto.QuestionnaireDto;
 
 /**
@@ -104,6 +105,8 @@ public class CommonVO {
 	private String documentHeading;
 	
 	private String exportType;
+	
+	private IRBViews searchCriteria;
 	
 	public String getDocumentHeading() {
 		return documentHeading;
@@ -471,4 +474,12 @@ public class CommonVO {
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
+	
+	public IRBViews getSearchCriteria() {
+		return searchCriteria;
+	}
+
+	public void setSearchCriteria(IRBViews searchCriteria) {
+		this.searchCriteria = searchCriteria;
+	}	
 }

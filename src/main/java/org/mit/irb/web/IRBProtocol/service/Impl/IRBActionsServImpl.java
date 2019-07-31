@@ -13,6 +13,7 @@ import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.IRBReviewComment;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.service.IRBActionsService;
 import org.mit.irb.web.IRBProtocol.service.IRBProtocolInitLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +77,10 @@ public class IRBActionsServImpl implements IRBActionsService {
 				vo = irbActionsDao.submitForReviewProtocolActions(vo);			
 			}
 			break;
-		case "303":
+		case "303": //withdraw
 			vo = irbActionsDao.getProtocolCurrentStatus(vo);
 			if(vo.isSuccessCode()){
-				   vo = irbActionsDao.withdrawProtocolActions(vo);
+				   vo = irbActionsDao.withdrawProtocolActions(vo,files);
 			}
 			break;
 		case "103":
@@ -292,11 +293,19 @@ public class IRBActionsServImpl implements IRBActionsService {
 	@Override
 	public IRBActionsVO getAmendRenwalSummary(IRBActionsVO vo) {
 		IRBActionsVO irbActionsVO = new IRBActionsVO();
-		try{
+		try{ 
 			ArrayList<HashMap<String, Object>> renewalModules =irbActionsDao.iterateAmendRenewalModule(vo);	
 			irbActionsVO.setModuleAvailableForAmendment(renewalModules);
 			irbActionsVO.setComment(irbActionsDao.getAmendRenewalSummary(vo));
 			irbActionsVO.setProtocolStatus(vo.getPrevProtocolStatusCode());
+			if (vo.getProtocolNumber().contains("A")) {
+				List<HashMap<String, Object>> amendRenewalModule = irbActionsDao.getAmendRenewalModules(vo.getProtocolNumber());
+				irbActionsVO.setProtocolRenewalDetails(fetchAmendRenewalDetails(amendRenewalModule));
+			} else if (vo.getProtocolNumber().contains("R")) {
+				ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
+				protocolRenewalDetail.setAddModifyNoteAttachments(true);
+				irbActionsVO.setProtocolRenewalDetails(protocolRenewalDetail);
+			}	
 			irbActionsVO.setSuccessCode(true);
 		} catch (Exception e) {
 			irbActionsVO.setSuccessCode(false);
@@ -321,6 +330,63 @@ public class IRBActionsServImpl implements IRBActionsService {
 		}
 		return irbActionsVO;
 	}	
+
+	private ProtocolRenewalDetails fetchAmendRenewalDetails(List<HashMap<String, Object>> amendRenewalModule) {
+		ProtocolRenewalDetails protocolRenewalDetail = new ProtocolRenewalDetails();
+		try {
+			for (HashMap<String, Object> protocolDetailKey : amendRenewalModule) {
+				if (protocolDetailKey.get("STATUS_FLAG").equals("Y")) {
+					switch (protocolDetailKey.get("PROTOCOL_MODULE_CODE").toString()) {
+					case "001":
+						protocolRenewalDetail.setGeneralInfo(true);
+						break;
+					case "002":
+						protocolRenewalDetail.setProtocolPersonel(true);
+						break;
+					case "003":
+						protocolRenewalDetail.setKeyStudyPersonnel(true);
+						break;
+					case "008":
+						protocolRenewalDetail.setAddModifyNoteAttachments(true);
+						break;
+					case "024":
+						protocolRenewalDetail.setFundingSource(true);
+						break;
+					case "004":
+						protocolRenewalDetail.setAreaOfResearch(true);
+						break;
+					case "009":
+						protocolRenewalDetail.setProtocolCorrespondents(true);
+						break;
+					case "015":
+						protocolRenewalDetail.setNotes(true);
+						break;
+					case "027":
+						protocolRenewalDetail.setProtocolUnits(true);
+						break;
+					case "007":
+						protocolRenewalDetail.setSpecialReview(true);
+						break;
+					case "028":
+						protocolRenewalDetail.setPointOFContact(true);
+						break;
+					case "006":
+						protocolRenewalDetail.setSubject(true);
+						break;
+					case "029":
+						protocolRenewalDetail.setEngangedInstitution(true);
+						break;
+					case "Questionnaire":
+						protocolRenewalDetail.setQuestionnaire(true);
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.info("Exception in fetchAmendRenewalDetails:" + e);
+		}
+		return protocolRenewalDetail;
+	}
 
 	@Override
 	public IRBActionsVO getActionLookup(IRBActionsVO vo) {

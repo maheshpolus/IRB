@@ -7,6 +7,7 @@ import java.util.List;
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 
 public class IRBActionsVO {
@@ -59,6 +60,7 @@ public class IRBActionsVO {
 	private Integer actionId;
 	private ProtocolGeneralInfo protocolInfo;
 	private boolean flag; 
+	private ProtocolRenewalDetails protocolRenewalDetails;
 	
 	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
@@ -450,5 +452,13 @@ public class IRBActionsVO {
 
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+	}
+
+	public ProtocolRenewalDetails getProtocolRenewalDetails() {
+		return protocolRenewalDetails;
+	}
+
+	public void setProtocolRenewalDetails(ProtocolRenewalDetails protocolRenewalDetails) {
+		this.protocolRenewalDetails = protocolRenewalDetails;
 	}
 }

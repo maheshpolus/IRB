@@ -44,7 +44,6 @@ import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
-import org.mit.irb.web.common.constants.KeyConstants;;
 
 @Service(value = "irbActionsDao")
 @Transactional
@@ -233,9 +232,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 	
 	@Override
-	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo) {			
+	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo, MultipartFile[] files) {			
 		try {			
 			protocolActionSP(vo,null);
+			protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Withdrawn successfully");	
 		} catch (Exception e) {
@@ -526,8 +526,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 						vo.setSuccessMessage("Amendment creation Failed");
 						logger.info("Exception in updateAmendRenewModule:" + e);	
 						}	
-					}			
-			});
+					}	
+				});
 			updateSummarryData(vo);
 			} catch (Exception e) {
 				vo.setSuccessCode(false);

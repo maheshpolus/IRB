@@ -2,19 +2,19 @@
 <div class="container-fluid">
     <div class="row">
       <!--collapse-->
-  
-  
+
+
       <div class="col-12">
         <div class="row cards-in">
           <div class="col-12 mb-10">
             <div class="card mt-5">
-  
+
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                   <h4 class="card-hedding dotted-bottom">Request An Action</h4>
                 </div>
               </div>
-  
+
               <div class="card-body collapse-card-body pad_top-bottom">
                 <div class="container-fluid">
                   <div class="row">
@@ -52,22 +52,22 @@
                                   </div>
                                   </div>
                                   </div> -->
-  
-  
+
+
                       <div class="col-md-12" id="actionScreen"
                            *ngIf="currentActionPerformed?.ACTION_CODE == '200' || currentActionPerformed?.ACTION_CODE == '205' || currentActionPerformed?.ACTION_CODE == '204' || currentActionPerformed.ACTION_CODE == '202' || currentActionPerformed.ACTION_CODE == '301' ||
                                     currentActionPerformed.ACTION_CODE == '203' || currentActionPerformed.ACTION_CODE == '304' || currentActionPerformed.ACTION_CODE == '209' || currentActionPerformed.ACTION_CODE == '201' || currentActionPerformed.ACTION_CODE == '210' || currentActionPerformed.ACTION_CODE == '302'||
                                     currentActionPerformed.ACTION_CODE == '207' || currentActionPerformed?.ACTION_CODE == '208'">
                         <div class="card">
-  
+
                           <h4 class="card-hedding dotted-bottom" id="headingOne">
-  
+
                             {{currentActionPerformed?.ACTION_NAME}}
-  
-  
+
+
                           </h4>
-  
-  
+
+
                           <div id="collapseTwo" class="collapse show">
                             <div class="card-body qs-bdy background-white padding0 tbl-list1">
                               <div class="row ml-0 mr-0">
@@ -130,7 +130,7 @@
                                     <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
                                   </div>
                                 </div>
-  
+
                                 <div class="col-md-4">
                                   <div class="form-group">
                                     <span class="txt-medium">Action Date</span>
@@ -149,7 +149,7 @@
                                     <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
                                   </div>
                                 </div>
-  
+
                                 <!-- <div class="col-md-2" *ngIf="currentActionPerformed?.ACTION_CODE == '205'">
                                   <div class="form-group">
                                     <div class="mt-33">
@@ -183,7 +183,7 @@
                                         {{ (scheduleDate.TIME
                                         == '' || scheduleDate.TIME == null) ? '' : scheduleDate.TIME| date:'shortTime'}}
                                       </option>
-  
+
                                     </select>
                                   </div>
                                 </div>
@@ -197,7 +197,7 @@
                                       <option *ngFor="let notifyType of notifyTypeQualifier"
                                               value="{{notifyType.SUBMISSION_TYPE_QUAL_CODE}}">{{notifyType.DESCRIPTION}}
                                       </option>
-  
+
                                     </select>
                                   </div>
                                 </div>
@@ -208,7 +208,7 @@
                                   <textarea class="form-control txt-area-fnt txt-small" [(ngModel)]="IRBActionsVO.comment"
                                             placeholder="Reason to perform Action"></textarea>
                                 </div>
-  
+
                               </div>
                               <div>
                                 <div class="col-md-12 mb-15">
@@ -274,9 +274,9 @@
                                       <div class="input-group date-pickr-1 mb-3">
                                         <input type="text" class="form-control txt-small" [(ngModel)]="riskLevelDetail.riskLevelDateAssigned" [owlDateTime]="dateAssigned" placeholder="mm/dd/yyyy">
                                         <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssigned">
-  
+
                                           <i class="fa fa-calendar" aria-hidden="true"></i>
-  
+
                                         </div>
                                         <owl-date-time [pickerType]="'calendar'" #dateAssigned></owl-date-time>
                                       </div>
@@ -305,9 +305,9 @@
                                       <div class="input-group date-pickr-1 mb-3">
                                         <input type="text" class="form-control txt-small" [(ngModel)]="riskLevelDetail.fdariskLevelDateAssigned" [owlDateTime]="dateAssignedFDA" placeholder="mm/dd/yyyy">
                                         <div class="input-group-append input-span-1" [owlDateTimeTrigger]="dateAssignedFDA">
-  
+
                                           <i class="fa fa-calendar" aria-hidden="true"></i>
-  
+
                                         </div>
                                         <owl-date-time [pickerType]="'calendar'" #dateAssignedFDA></owl-date-time>
                                       </div>
@@ -354,12 +354,12 @@
                                   </div>
                                 </div>
                               </div>
-  
-  
+
+
                               <div class="mb-15" *ngIf="tabSelected=='CHECKLIST'">
                                 <div class="row mr-0 ml-0 padding-exempt"
                                      *ngFor="let checkList of expeditedCheckList; let i=index">
-  
+
                                   <div class="col-md-1">
                                     <input class="align-center mt-10" type="checkbox" [(ngModel)]="isItemChecked[i]"
                                            (ngModelChange)="setSelectedCheckList(checkList.EXPEDITED_REV_CHKLST_CODE,isItemChecked[i])"/>
@@ -387,7 +387,7 @@
                                       </div>
                                     </div>
                                   </div>
-  
+
                                   <div class="col-md-2 mt-33 txt-medium">
                                     <input type="checkbox" [(ngModel)]="minuteFlag" /> Include in Minutes
                                   </div>
@@ -400,7 +400,7 @@
                                       <i class="fa fa-plus-circle text-success half-size" aria-hidden="true"></i>
                                     </button>
                                   </div>
-  
+
                                 </div>
                                 <div class="col-md-12 users-list-tbl"
                                      *ngIf="commentList.length > 0 && commentList != null ">
@@ -431,11 +431,11 @@
                                     </div>
                                   </div>
                                 </div>
-  
+
                               </div>
                               <div class="mb-15" *ngIf="tabSelected=='ATTACHMENT'">
                                 <div class="col-md-12 mr-0 ml-0">
-  
+
                                   <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
                                     <button title="Choose Files" class="btn btn-outline-danger txt-small mt-40"
                                             (click)="triggerAdd()">Choose Files
@@ -452,21 +452,21 @@
                                       <i class="fa fa-close pdf" title="Remove Attachment"
                                          (click)="deleteFromUploadedFileList(item)"></i>
                                     </span>
-  
+
                                 </div>
                               </div>
                               <div class="mb-15" *ngIf="tabSelected=='VOTES'">
                                 <div class="col-12  search-eidted-p padding-15">
                                   <div class="row mb15">
-  
-  
+
+
                                     <div class="col-md-2">
                                       <div class="form-group">
                                         <span class="txt-medium text-secondary">Vote Count:
                                         </span>
-  
+
                                       </div>
-  
+
                                     </div>
                                     <div class="col-md-2">
                                       <div class="form-group">
@@ -474,7 +474,7 @@
                                         </span>
                                         <input type="number"  [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.yesVoteCount" min="0" class="form-control txt-small font-size-13 select-notify-popup" >
                                       </div>
-  
+
                                     </div>
                                     <div class="col-md-2">
                                       <div class="form-group">
@@ -482,7 +482,7 @@
                                         </span>
                                         <input type="number"  [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.noVoteCount" min="0" class="form-control txt-small font-size-13 select-notify-popup" >
                                       </div>
-  
+
                                     </div>
                                     <div class="col-md-3">
                                       <div class="form-group">
@@ -490,23 +490,23 @@
                                         </span>
                                         <input  type="number" [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.abstainerCount" min="0" class="form-control txt-small font-size-13 select-notify-popup" >
                                       </div>
-  
+
                                     </div>
                                   </div>
                                   <div class="row mb15">
-  
-  
+
+
                                     <div class="col-md-2">
                                       <div class="form-group">
                                         <span class="txt-medium text-secondary">Comments:
                                         </span>
-  
+
                                       </div>
                                     </div>
                                     <div class="col-md-10">
                                       <div class="form-group">
                                         <textarea class="form-control txt-small txt-area-fnt" [(ngModel)]="IRBActionsVO.protocolSubmissionStatuses.votingComments" placeholder="Comments"></textarea>
-  
+
                                       </div>
                                     </div>
                                   </div>
@@ -515,7 +515,7 @@
                                     </button>
                                   </div>
                                 </div>
-  
+
                               </div>
                               <div class="btn-row-med text-center padding-exempt">
                                 <button type="button margin-class" class="btn btn-outline-success txt-small"
@@ -524,14 +524,14 @@
                                 <button id="dismissModal" class="btn btn-outline-danger txt-small" data-dismiss="modal"
                                         aria-label="Close">Cancel
                                 </button>
-  
+
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-  
-  
+
+
                     </ng-container>
                     <ng-container *ngIf="personActionsList == null || personActionsList.length == 0">
                       <div class="col-12 text-center">You don't have any available actions in this protocol</div>
@@ -539,18 +539,18 @@
                   </div>
                 </div>
               </div>
-  
+
             </div>
           </div>
         </div>
       </div>
-  
-  
+
+
       <div class="col-12">
         <div class="row cards-in">
           <div class="col-12 mb-10">
             <div class="card mt-5">
-  
+
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                   <h4 class="card-hedding dotted-bottom">Print
@@ -627,7 +627,7 @@
                       <tr>
                         <td class="text-right" scope="row" colspan="4">
                           <button type="button" class="btn btn-outline-success txt-small hvr-icon-back">
-  
+
                             Print selected
                           </button>
                         </td>
@@ -642,17 +642,17 @@
                        data-toggle="collapse" data-target="#collapseThree" aria-expanded="true"
                        aria-controls="collapseOne"></i>
                   </h4>
-  
+
                 </div>
               </div>
-  
+
             </div>
           </div>
         </div>
       </div>
     </div>
-  
-  
+
+
     <!--Submit modal-->
     <div class="modal fade" id="submitModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -672,13 +672,13 @@
                     data-dismiss="modal">Yes
             </button>
             <button class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">Cancel</button>
-  
+
           </div>
         </div>
       </div>
     </div>
   <!--modal end-->
-  
+
     <!--validation  modal-->
     <div class="modal fade" id="validationModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -705,7 +705,7 @@
       </div>
     </div>
   <!--modal end-->
-  
+
     <!--Modal with comments-->
     <div class="modal fade" id="commentModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -718,7 +718,7 @@
             </button>
           </div>
           <div class="modal-body txt-medium dotted-bottom">
-  
+
             <div class="col-md-12">
               <div class="form-group">
                   <span class="txt-medium"
@@ -743,7 +743,7 @@
                 </select>
               </div>
             </div>
-  
+
             <div class="mb-15"
                  *ngIf="currentActionPerformed?.ACTION_CODE == '212' || currentActionPerformed?.ACTION_CODE == '213' || currentActionPerformed?.ACTION_CODE == '119'">
               <file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
@@ -778,8 +778,8 @@
                 <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
               </div>
             </div>
-  
-  
+
+
           </div>
           <div class="modal-footer btn-row-med text-center p-2">
             <button *ngIf="currentActionPerformed?.ACTION_CODE == '992'" type="button margin-class"
@@ -792,7 +792,7 @@
             <button id="dismissModal" class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">
               Cancel
             </button>
-  
+
           </div>
         </div>
       </div>
@@ -811,7 +811,7 @@
             </button>
           </div>
           <div class="modal-body dotted-bottom txt-medium">
-  
+
             <div class="col-md-12">
               <div class="form-group">
                 <span class="txt-medium" *ngIf="currentActionPerformed?.ACTION_CODE == '102'">Renewal Summary</span>
@@ -824,15 +824,15 @@
               <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment; let i = index">
                 <input type="checkbox" [disabled]="module.IS_EDITABLE == 'N'" [(ngModel)]="module.STATUS_FLAG"
                        (ngModelChange)="setAcTypeForModule(i)"/>
-  
+
                 <span [ngStyle]="{'color': module.IS_EDITABLE == 'N' ? 'grey' : ''}"
                       *ngIf="!isSubmittedStatusSearch">{{module?.DESCRIPTION}}</span>
-  
+
               </div>
 
             </div>
-  
-  
+
+
           </div>
           <div class="modal-footer btn-row-med text-center p-2">
             <button type="button margin-class" class="btn btn-outline-success txt-small" (click)="performAction()"
@@ -841,9 +841,9 @@
             <button id="dismissModal" class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">
               Cancel
             </button>
-  
+
           </div>
-  
+
         </div>
       </div>
     </div>
@@ -865,14 +865,14 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <span class="txt-medium">Submission Type: </span>
-  
+
                   <span> FYI</span>
                 </div>
               </div>
               <div class="col-md-9">
                 <div class="form-group">
                   <span class="txt-medium">Submission Type Qualifier: </span>
-  
+
                   <select class="custom-select select-notify-popup form-control txt-small" id="inlineFormCustomSelect"
                           [(ngModel)]="IRBActionsVO.selectedTypeQualifier">
                     <option value=null selected>Please Select</option>
@@ -882,7 +882,7 @@
                   </select>
                 </div>
               </div>
-  
+
             </div>
             <div class="form-group">
               <span class="txt-medium"
@@ -909,8 +909,8 @@
                   <i class="fa fa-close pdf" title="Remove Attachment" (click)="deleteFromUploadedFileList(item)"></i>
                 </span>
             </div>
-  
-  
+
+
           </div>
           <div class="modal-footer btn-row-med text-center p-2">
             <button type="button margin-class" class="btn btn-outline-success txt-small" (click)="performAction()"
@@ -919,14 +919,14 @@
             <button id="dismissModal" class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">
               Cancel
             </button>
-  
+
           </div>
-  
+
         </div>
       </div>
     </div>
     <!--model end -->
-  
+
     <!--Modal with comments and dates-->
     <div class="modal fade" id="commentDatesModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -972,7 +972,7 @@
                   <!-- <span *ngIf="invalidData.invalidExpirationDate" class="error">Expiration Date should be greater than Approval Date</span> -->
                 </div>
               </div>
-  
+
               <div class="col-md-4">
                 <div class="form-group">
                   <span class="txt-medium">Action Date</span>
@@ -995,9 +995,9 @@
               <textarea class="form-control mt-1 txt-area-fnt" [(ngModel)]="IRBActionsVO.comment"
                         placeholder="Reason"></textarea>
             </div>
-  
+
           </div>
-  
+
           <div class="modal-footer btn-row-med text-center p-2">
             <button type="button margin-class" class="btn btn-outline-success txt-small" (click)="performAction()"
                     data-dismiss="modal">{{actionButtonName}}
@@ -1005,14 +1005,14 @@
             <button id="dismissModal" class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">
               Cancel
             </button>
-  
+
           </div>
-  
+
         </div>
       </div>
     </div>
     <!--modal end -->
-   
+
     <!--confirm modal-->
     <div class="modal fade" id="confirmModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -1029,19 +1029,19 @@
             <p *ngIf="currentActionPerformed?.ACTION_CODE == '911'">Are you sure to copy this Protocol?</p>
           </div>
           <div class="modal-footer btn-row-med align-center mt-0 p-2">
-            <button type="button margin-class" class="btn btn-outline-success txt-small hvr-icon-back "
+            <button type="button margin-class" class="btn btn-outline-success btn-size txt-small hvr-icon-back "
                     (click)="performAction()" data-dismiss="modal">Yes
             </button>
-            <button class="btn btn-outline-danger txt-small hvr-icon-back" data-dismiss="modal"
+            <button class="btn btn-outline-danger btn-size txt-small hvr-icon-back" data-dismiss="modal"
                     aria-label="Close">Cancel
             </button>
-  
+
           </div>
         </div>
       </div>
     </div>
     <!-- modal end-->
-  
+
     <!--canned comments modal-->
     <div class="modal fade bd-example-modal-lg" id="cannedCommentsModal" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1055,12 +1055,12 @@
             </button>
           </div>
           <div class="modal-body modal-popup dotted-bottom">
-  
+
             <div class="w-100">
               <table class="table tbl-p-clr">
                 <thead class="tbl-head-clr thead-font-size p-75">
                 <tr class="solid-bottom">
-  
+
                   <th title="">Code</th>
                   <th title="">Description</th>
                 </tr>
@@ -1076,16 +1076,16 @@
                     {{comment?.DESCRIPTION}}
                   </td>
                 </tr>
-  
+
                 </tbody>
-  
-  
+
+
               </table>
             </div>
           </div>
           <div class="modal-footer btn-row-med text-center p-2">
             <button class="btn tab_btn" data-dismiss="modal" aria-label="Close">Ok</button>
-  
+
           </div>
         </div>
       </div>
@@ -1101,4 +1101,3 @@
     <button id="commentDatesModalBtn" [hidden]="true" data-toggle="modal" data-target="#commentDatesModal"></button>
     <button id="confirmModalBtn" [hidden]="true" data-toggle="modal" data-target="#confirmModal"></button>
     <button id="expeditedApprovalModalBtn" [hidden]="true" data-toggle="modal" data-target="#expeditedApprovalModal"></button>
-  

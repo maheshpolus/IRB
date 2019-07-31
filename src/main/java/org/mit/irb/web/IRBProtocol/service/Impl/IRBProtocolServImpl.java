@@ -132,13 +132,20 @@ public class IRBProtocolServImpl implements IRBProtocolService {
 				Integer actionId = Integer.parseInt(s1.get("ACTION_ID").toString());
 				Integer protocolId = Integer.parseInt(s1.get("PROTOCOL_ID").toString());	
 				String groupListProtocolNumber = s1.get("PROTOCOL_NUMBER").toString();	
+				String actionTypeCode = s1.get("PROTOCOL_ACTION_TYPE_CODE").toString();
 				nextGroupActionId = irbProtocolDao.getNextGroupActionId(protocolId,nextGroupActionId,actionId,groupListProtocolNumber);				
 				List<HashMap<String, Object>> s2List = new ArrayList<HashMap<String,Object>>();
 				for(HashMap<String, Object> detailObject :result){
 					Integer detailactionId = Integer.parseInt(detailObject.get("ACTION_ID").toString()); 
-					String detailProtocolNumber = detailObject.get("PROTOCOL_NUMBER").toString();				
+					String detailProtocolNumber = detailObject.get("PROTOCOL_NUMBER").toString();	
+					String detailActionTyeCode = detailObject.get("PROTOCOL_ACTION_TYPE_CODE").toString();
 					if(detailactionId >= actionId && detailactionId <= nextGroupActionId && detailProtocolNumber.equals(groupListProtocolNumber)){	
-						s2List.add(detailObject);
+						if(actionTypeCode.equals("113") && detailActionTyeCode.equals("113")){
+							s2List.add(detailObject);
+							break;
+						}else{
+							s2List.add(detailObject);
+						}
 					/*	if(detailProtocolId.equals(protocolId)){						
 						s2List.add(detailObject);
 					  }*/

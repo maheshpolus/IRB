@@ -32,7 +32,8 @@ public class LoginDaoImpl implements LoginDao{
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("USER_ID ", DBEngineConstants.TYPE_STRING, userName));
+		//inputParam.add(new InParameter("PERSON_ID", DBEngineConstants.TYPE_STRING, userName));
+		inputParam.add(new InParameter("USER_ID", DBEngineConstants.TYPE_STRING, userName));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		try {
 			result = dbEngine.executeProcedure(inputParam, "GET_IRB_PERSON_ROLE", outputParam);

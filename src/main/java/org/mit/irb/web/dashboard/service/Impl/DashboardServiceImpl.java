@@ -156,7 +156,7 @@ public class DashboardServiceImpl implements DashboardService {
 			row1 = sheet.createRow(rowNumberCount++);
 			cell2.setCellStyle(headerStyleCriteria);
 			cell2 = row1.createCell(cellNumberValue);
-			if (iRBViewsnew.getProtocolNumberNew() != null) {
+			if (iRBViewsnew.getProtocolNumberNew() != null && !iRBViewsnew.getProtocolNumberNew().equals("")) {
 				cell2.setCellValue("Protocol Number");
 				cell2 = row1.createCell(cellNumberValue + 1);
 				cell2.setCellValue(iRBViewsnew.getProtocolNumberNew());
@@ -184,14 +184,14 @@ public class DashboardServiceImpl implements DashboardService {
 				row1 = sheet.createRow(rowNumberCount++);
 			}
 			cell2 = row1.createCell(cellNumberValue);
-			if (iRBViewsnew.getTitle() != null) {
+			if (iRBViewsnew.getTitle() != null && !iRBViewsnew.getTitle().equals("")) {
 				cell2.setCellValue("Title");
 				cell2 = row1.createCell(cellNumberValue + 1);
 				cell2.setCellValue(iRBViewsnew.getTitle());
 				row1 = sheet.createRow(rowNumberCount++);
 			}
 			cell2 = row1.createCell(cellNumberValue);
-			if (iRBViewsnew.getProtocolPersonName() != null) {
+			if (iRBViewsnew.getProtocolPersonName() != null && !iRBViewsnew.getProtocolPersonName().equals("")) {
 				cell2.setCellValue("protocol Person Name");
 				cell2 = row1.createCell(cellNumberValue + 1);
 				cell2.setCellValue(iRBViewsnew.getProtocolPersonName());
@@ -212,18 +212,20 @@ public class DashboardServiceImpl implements DashboardService {
 				row1 = sheet.createRow(rowNumberCount++);
 			}
 			cell2 = row1.createCell(cellNumberValue);
-			if (iRBViewsnew.getFundingSource() != null) {
+			if (iRBViewsnew.getFundingSource() != null && !iRBViewsnew.getFundingSource().equals("")) {
 				cell2.setCellValue("Funding Source");
 				cell2 = row1.createCell(cellNumberValue + 1);
 				cell2.setCellValue(iRBViewsnew.getFundingSource());
 				row1 = sheet.createRow(rowNumberCount++);
 			}
 			cell2 = row1.createCell(cellNumberValue);
-			if (iRBViewsnew.getIrbAdmin() != null) {
+			if (iRBViewsnew.getIrbAdmin() != null && !iRBViewsnew.getIrbAdmin().equals("")) {
 				cell2.setCellValue("Irb Admin");
 				cell2 = row1.createCell(cellNumberValue + 1);
 				cell2.setCellValue(iRBViewsnew.getIrbAdmin());
+				row1 = sheet.createRow(rowNumberCount++);
 			}
+		
 		} catch (Exception e) {
 			logger.error("Error in Excel Search criteria", e);
 		}

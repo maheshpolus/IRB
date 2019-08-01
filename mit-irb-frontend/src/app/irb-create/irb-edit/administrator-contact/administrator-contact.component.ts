@@ -18,7 +18,6 @@ export class AdministratorContactComponent implements OnInit {
   commonVo: any = {};
   options: any = {};
   protocolAdminContactType: any = [];
-  affiliationTypes: any = [];
   protocolAdminContact: any = {};
   irbPersonDetailedList: any = {};
   protocolAdminContactList = [];
@@ -29,6 +28,7 @@ export class AdministratorContactComponent implements OnInit {
   personType = 'employee';
   elasticPlaceHolder: string;
   trainingStatus: string;
+  warningMessage: string;
   clearField: any = 'true';
   protocolId = null;
   protocolNumber = null;
@@ -97,7 +97,7 @@ export class AdministratorContactComponent implements OnInit {
   loadEditDetails() {
     this.isAdminContactEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.pointOFContact : true;
     this.protocolAdminContactType = this.commonVo.protocolAdminContactType;
-    this.affiliationTypes = this.commonVo.affiliationTypes;
+    // this.affiliationTypes = this.commonVo.affiliationTypes;
     this.protocolAdminContactList = this.commonVo.protocolAdminContactList != null ? this.commonVo.protocolAdminContactList : [];
     this.protocolAdminContact = this.commonVo.protocolAdminContact;
     this.protocolAdminContact.adminContactType = {};
@@ -162,16 +162,6 @@ export class AdministratorContactComponent implements OnInit {
     }
   }
 
-  setPersonAffiliation(affiliation) {
-    this.affiliationTypes.forEach(personAffiliation => {
-      if (personAffiliation.affiliationTypeCode.toString() === affiliation) {
-          this.protocolAdminContact.protocolAffiliationTypes = { affiliationTypeCode: affiliation,
-            description: personAffiliation.description };
-          }
-    });
-
-  }
-
 
   /**
    * @param  {} typeCode set Admin contact type code and description to return object
@@ -190,12 +180,22 @@ export class AdministratorContactComponent implements OnInit {
    */
   addAdminContact(mode) {
     if (this.protocolAdminContact.personId != null && this.protocolAdminContact.adminContactTypeCode != null &&
-      this.protocolAdminContact.adminContactTypeCode !== 'null' && this.protocolAdminContact.affiliationTypeCode != null
-      && this.protocolAdminContact !== null) {
-      this.saveAdminContact(mode);
+      this.protocolAdminContact.adminContactTypeCode !== 'null' && this.protocolAdminContact !== null) {
       this.mandatoryFieldMissing = false;
+      this.protocolAdminContactList.forEach(personData => {
+        if (personData.personId === this.protocolAdminContact.personId &&
+          personData.adminContactId !== this.protocolAdminContact.adminContactId ) {
+          this.mandatoryFieldMissing = true;
+          this.warningMessage = 'Person already added please choose a different person';
+        }
+
+      });
+      if (this.mandatoryFieldMissing === false) {
+        this.saveAdminContact(mode);
+      }
     } else {
       this.mandatoryFieldMissing = true;
+      this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
     }
   }
 

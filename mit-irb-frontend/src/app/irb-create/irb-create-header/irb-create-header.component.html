@@ -283,6 +283,10 @@
 					<i class="fa fa-file-text-o" aria-hidden="true"></i><span *ngIf="protocolNumber.includes('A')">Amendment Summary</span>
 					<span *ngIf="protocolNumber.includes('R')">Renewal Summary</span>
 				</button>
+				<button *ngIf="generalInfo?.protocolStatus?.protocolStatusCode != 100" class="btn btn-primary tab_btn" type="submit" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
+				routerLinkActive="nav-active" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbSubmissionDetails')">
+				<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
+			</button>
 				<button class="btn btn-primary tab_btn" [routerLink]="['irbActions']" type="submit"
 					[routerLink]="['irbActions']" routerLinkActive="nav-active"
 					[ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol"

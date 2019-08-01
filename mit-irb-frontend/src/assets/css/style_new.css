@@ -3803,7 +3803,7 @@ h4, h5, h6 {
     position: relative;
     background-color: #eaeaea !important;
     width: 25px !important;
-    height: 25px !important; 
+    height: 25px !important;
     border-radius: 50% !important;
     margin-right: 5px;
   }
@@ -3828,7 +3828,7 @@ h4, h5, h6 {
     margin-left: 0 !important;
     background-color: #eef0fc !important;
     line-height: 8px !important;
-    
+
   }
 
   .checklist-input {
@@ -3842,7 +3842,7 @@ h4, h5, h6 {
     /* background-color: #28a745;
     color: #fff; */
   }
-  
+
   .mt-25 {
     margin-top: 25px;
   }
@@ -3898,7 +3898,7 @@ margin-top: 13px;
     color: #252525;
     border-radius: 5px;
     box-shadow: 1px 1px 1px #a2a2a2;
-} 
+}
 
 .sub-desc-align {
     align-self: flex-end !important;
@@ -3906,12 +3906,12 @@ margin-top: 13px;
 }
 
 
-  
+
 @media screen and (max-width : 600px) {
     .mobile-hide {
       display: none;
     }
-  
+
     .mobile-absolute {
       position: absolute;
     }
@@ -3921,4 +3921,93 @@ margin-top: 13px;
     margin: 150px auto;
   }
 
-  
+}
+
+.btn-align-r {
+	text-align:right !important;
+}
+
+.training-complete-color
+{
+    color:  #28A745;
+}
+.training-incomplete-color
+{
+    color: red;
+}
+
+@media screen and (max-width : 600px) {
+    .mobile-hide {
+      display: none;
+    }
+
+    .mobile-absolute {
+      position: absolute;
+    }
+
+    .list-view span {
+        width: 100%;
+  }
+
+  .sm-100 {
+      width: 100% !important;
+  }
+
+  .btn-align-r {
+      text-align: left !important;
+  }
+
+  .btn-style-sm {
+      width: 100%;
+      text-align: center !important;
+      background-color: #5867dd !important;
+      color: white !important;
+  }
+
+  .btn-style-admin {
+    width: 100%;
+    text-align: center !important;
+    background-color: #fd8383 !important;
+    color: white !important;
+  }
+
+  .btn-style-admin:hover {
+    background-color: #f16363 !important;
+    box-shadow: none;
+  }
+
+  .btn-style-fund {
+    width: 100%;
+    text-align: center !important;
+    background-color: #6c6c6c !important;
+    color: white !important;
+
+  }
+  .btn-style-fund:hover {
+      background-color: #555555 !important;
+  }
+
+  .card-p-0 {
+      padding : 0;
+  }
+
+  .mob-info-icon {
+    position: absolute !important;
+    right: 10px !important;
+
+  }
+
+  .mob-mr-1 {
+      padding-right: 0.25rem;
+  }
+
+  .mob-ml-1 {
+      padding-left: 0.25rem;
+  }
+
+  .mob-mt-1 {
+      margin-top: 0.25rem ;
+  }
+
+
+}

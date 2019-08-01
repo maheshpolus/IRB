@@ -376,7 +376,7 @@ public class IRBActionsServImpl implements IRBActionsService {
 					case "029":
 						protocolRenewalDetail.setEngangedInstitution(true);
 						break;
-					case "Questionnaire":
+					case "026":
 						protocolRenewalDetail.setQuestionnaire(true);
 						break;
 					}

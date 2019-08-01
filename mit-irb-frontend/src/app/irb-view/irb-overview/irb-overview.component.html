@@ -205,8 +205,6 @@
 
                     <div class="row dotted-bottom" [ngClass]="{'row-line':i!=0}"
                       *ngFor="let adminContact of irbAdminContactList;let i= index">
-
-                      <div class="row">
                         <div class="col-md-10">
 
                         <div class="vertical-middle width-100 pd-card-row">
@@ -221,7 +219,7 @@
 
 
                            
-                            Training Status:
+                            <!-- Training Status:
                                 <span class="font-size-23">
                                   <i *ngIf="adminContact.IS_TRAINING_COMPLETED=='COMPLETED'"
                                     class="training-complete-color fa fa-check text-small" title="Complete"
@@ -229,7 +227,7 @@
                                   <i *ngIf="adminContact.IS_TRAINING_COMPLETED=='INCOMPLETE'"
                                     class="training-incomplete-color fa fa-times" title="Not Complete"
                                     aria-hidden="true" style="font-size:16px"></i>
-                                </span>
+                                </span> -->
                                  Role:
                                 <span class="text-danger mr-20">
                                   {{adminContact.ADMIN_CONTACT_TYPE}}
@@ -238,8 +236,8 @@
                              
                           </p>
                           <p class="txt-dark txt-medium mb-5">
-                              Affiliation:
-                              <span class="text-danger ">{{adminContact.AFFILIATION_TYPE}}</span> 
+                              <!-- Affiliation:
+                              <span class="text-danger ">{{adminContact.AFFILIATION_TYPE}}</span>  -->
                               Email:
                               <span class="text-danger ">{{adminContact.EMAIL_ADDRESS}}</span>
                               | Office:
@@ -249,7 +247,7 @@
                           </p>
                         </div>
                         </div>
-                        <div class="col-md-1 col-sm-12 col-12 list-des button-responsive vertical-middle mtr-15">
+                        <div class="col-md-2 col-sm-12 col-12 list-des button-responsive vertical-middle mtr-15">
                             <a>
                               <button type="button" class="btn btn-blue btn-sm text-right" data-toggle="modal"
                                 data-target="#personModal" (click)="showpersonData(adminContact?.PERSON_ID)">
@@ -257,7 +255,6 @@
                               </button>
                             </a>
                       </div>
-                    </div>
                     
 
                   </div>
@@ -954,7 +951,7 @@
                     <td>{{attachment?.UPDATE_USER}}</td>
                     <td class="action-btn-list">
                       <button title="View" type="button" class="btn btn-primary view-btn-1"
-                        (click)="downloadAttachment(attachment)">
+                        (click)="downloadCollaboratorAttachment(attachment)">
                         <i class="fa fa-download" aria-hidden="true"></i>
                       </button>
                     </td>

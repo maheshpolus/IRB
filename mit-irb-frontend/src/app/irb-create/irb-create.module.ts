@@ -28,6 +28,7 @@ import { SubmissionDetailsComponent } from './irb-create-histroy/submission-deta
 import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-details.component';
 import { RiskLevelsComponent } from './irb-edit/risk-levels/risk-levels.component';
 import { IrbPermissionComponent } from './irb-permission/irb-permission.component';
+import { IrbSubmissionDetailsComponent } from './irb-submission-details/irb-submission-details.component';
 
 @NgModule({
   imports: [
@@ -48,8 +49,8 @@ import { IrbPermissionComponent } from './irb-permission/irb-permission.componen
     IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent,
     FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
     IrbQuestionnaireListComponent,
-    ProtocolUnitsComponent,
-    AdministratorContactComponent, SubmissionDetailsComponent, IrbSummaryDetailsComponent, RiskLevelsComponent, IrbPermissionComponent],
+    ProtocolUnitsComponent, AdministratorContactComponent, SubmissionDetailsComponent,
+     IrbSummaryDetailsComponent, RiskLevelsComponent, IrbPermissionComponent, IrbSubmissionDetailsComponent],
     exports: [IrbActionsComponent, IrbSummaryDetailsComponent, IrbPermissionComponent, IrbCreateAttachmentComponent]
 })
 export class IrbCreateModule { }

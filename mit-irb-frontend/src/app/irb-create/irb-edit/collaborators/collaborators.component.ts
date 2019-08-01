@@ -303,9 +303,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.personsSelected.push({
           collaboratorId: this.protocolCollaboratorSelected.protocolLocationId,
           personId: this.personalDataList[index].protocolPersonId,
-          protocolId: this.protocolCollaborator.protocolId,
-          protocolNumber: this.protocolCollaborator.protocolNumber,
-          sequenceNumber: 1,
+          protocolId: this.commonVo.protocolId,
+          protocolNumber: this.commonVo.protocolNumber,
+          sequenceNumber: this.commonVo.generalInfo.sequenceNumber,
           updateTimestamp: new Date(),
           updateUser: this.userDTO.userName,
           acType: 'U'

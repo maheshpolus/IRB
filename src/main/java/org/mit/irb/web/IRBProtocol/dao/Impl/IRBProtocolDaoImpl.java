@@ -2062,7 +2062,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		List<IRBWatermark> watermarkDetails = session.createQuery(criteria).getResultList();
 		if(watermarkDetails != null && !watermarkDetails.isEmpty()){
 			IRBWatermark watermark = watermarkDetails.get(0);
-			byteArray = irbWatermarkService.generateTimestampAndUsernameForPdf(byteArray, watermark ,protocolAttachment);
+			byteArray = irbWatermarkService.generateWaterMarkForPdf(byteArray, watermark ,protocolAttachment);
 		}
 		return byteArray;
 	}

@@ -85,33 +85,35 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	private ArrayList<HashMap<String, Object>> actionsAvaliableForUser(IRBActionsVO vo,ArrayList<HashMap<String, Object>> intialResult) {
 		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
+		ArrayList<HashMap<String, Object>> finalResult = new ArrayList<>();
 		if(intialResult !=null && !intialResult.isEmpty()){		
 			for(int i = 0; i< intialResult.size(); i++)
-             {	           	
+             {	 
+				finalResult.add(intialResult.get(i));
             	Object temp = intialResult.get(i).get("ACTION_CODE"); 
             	switch (temp.toString()) {
             		case "205":
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}					 
             			else if(!reviewTypeCode.equals("2")){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1); 
             			}
             			break;
             		case "208":
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}					 
             			else if(!reviewTypeCode.equals("6")){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}
             			break;
             		case "210":
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1); 
             			}					 
             			else if(!reviewTypeCode.equals("5")){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}
             			break;
             		case "204":
@@ -119,14 +121,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
             		case "203":	
             		case "202":	
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1); 
             			}
-            			break;			
-            	}	          
+            			else if(!reviewTypeCode.equals("1")){
+            				finalResult.remove(finalResult.size()-1); 
+            			}
+            			break;
+            	}     
             }
-		}
-		return intialResult;
-	}         
+		}		
+		return finalResult;
+	}       
 
 	public IRBActionsVO getProtocolActionDetails(IRBActionsVO vo){
 		try{
@@ -1142,7 +1147,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
 		ResponseEntity<byte[]> attachmentData = null;
 		try{
-			byte[] data = getTemplateData(vo);
+			
+			byte[] data = getTemplateData(vo);			
 			byte[] mergedOutput = mergePlaceHolders(data,vo);
 			String generatedFileName = vo.getCorrespTypeDescription()+".pdf";
 			HttpHeaders headers = new HttpHeaders();

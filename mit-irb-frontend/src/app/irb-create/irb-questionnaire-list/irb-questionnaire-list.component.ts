@@ -29,22 +29,17 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
       this.protocolNumber = params['protocolNumber'];
       this.protocolId = params['protocolId'];
       this.sequenceNumber = params['sequenceNumber'];
-      // const qnrId = params['qnrId'];
-      // const ansHdrId = params['ansHdrId'];debugger
-      // const completed =  params['completed'];
-      // if (qnrId !== undefined && ansHdrId !== undefined && completed != null) {
-      //   this.applicableQuestionnaire.forEach(element => {
-      //     if (element.QUESTIONNAIRE_ID.toString() === qnrId ) {
-      //       element.QUESTIONNAIRE_COMPLETED_FLAG = 'Y';
-      //     }
-      //   });
-      //   this._router.navigate([], {
-      //     queryParams: {
-      //       completed: null
-      //     },
-      //     queryParamsHandling: 'merge',
-      //   });
-      // }
+       const qnrId = params['qnrId'];
+       const completed =  params['completed'];
+      if (completed != null) {
+        this.getQuetionnaireList(qnrId);
+        this._router.navigate([], {
+             queryParams: {
+             completed: null
+             },
+             queryParamsHandling: 'merge',
+           });
+      }
     });
     const path = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
     if (path === 'irb-view') {
@@ -66,7 +61,7 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
     }
   }
 
-  getQuetionnaireList() {
+  getQuetionnaireList(qnrId) {
     let moduleSubItemCodeList: any = [];
     if (this.protocolNumber.includes('A')) {
       moduleSubItemCodeList = [0, 4];
@@ -85,8 +80,14 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
         const result: any = data;
         this._spinner.hide();
         this.applicableQuestionnaire = result.applicableQuestionnaire != null ? result.applicableQuestionnaire : [];
-        if (this.applicableQuestionnaire.length > 0) {
+        if (this.applicableQuestionnaire.length > 0 &&  qnrId == null) {
           this.openEachQuestionaire(this.applicableQuestionnaire[0]);
+        } else if (this.applicableQuestionnaire.length > 0 &&  qnrId != null) {
+          const selectedQuestionnaire =
+            this.applicableQuestionnaire.filter(questionnaire => questionnaire.QUESTIONNAIRE_ID.toString() === qnrId.toString());
+          if (selectedQuestionnaire.length > 0) {
+            this.openEachQuestionaire(selectedQuestionnaire[0]);
+          }
         }
       });
   }

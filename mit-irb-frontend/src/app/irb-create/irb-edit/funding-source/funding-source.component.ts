@@ -396,7 +396,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     let URL_FOR_KC_AWARD = null;
     let URL_FOR_KC_IP = null;
     // LOCAL BUILD
-    /*BASE_URL_KC = 'http://192.168.1.139:8080/kc-dev';
+    BASE_URL_KC = 'http://192.168.1.139:8080/kc-dev';
     URL_FOR_KC_FRAME = '/kc-krad/landingPage?viewId=Kc-Header-IframeView&href=';
     URL_FOR_KC_AWARD = '/awardHome.do?methodToCall=docHandler&placeHolderAwardId={awardId}&docId={docId}&command=displayDocSearchView&businessObjectClassName=org.kuali.kra.award.home.Award&docFormKey=88888888&__login_user={user}&kcComp=true';
     URL_FOR_KC_IP = '/institutionalProposalHome.do?viewDocument=true&docId={docId}&docTypeName=InstitutionalProposalDocument&methodToCall=docHandler&docOpenedfromIPSearch=true&command=displayDocSearchView&formKey=ed9b8b81-209b-4ec9-b2bb-4f401f3edcf0&__login_user={user}&kcComp=true';
@@ -406,42 +406,43 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
       URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{user}', this.userDTO.userName);
 
       const url_KCAward = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_AWARD;
-      const win = window.open('about:blank', '_blank');
-      win.location.href = url_KCAward;
+      const win = window.open(url_KCAward, '_blank');
+     //  win.location.href = url_KCAward;
+
     } else if (item.fundingSourceTypeCode === '5' || item.fundingSourceTypeCode === '4') {
       URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{docId}', item.docId);
       URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{user}', this.userDTO.userName);
 
       const url_KCIp = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_IP;
-      const win = window.open('about:blank', '_blank');
-      win.location.href = url_KCIp;
-    }*/
+      const win = window.open(url_KCIp, '_blank');
+    //  win.location.href = url_KCIp;
+    }
     // PRODUCTION BUILD
-    this.get_externalLinks_config().subscribe(data => {
-      const externalLinks_config: any = data;
-      BASE_URL_KC = externalLinks_config.KC_BASE_URL;
-      URL_FOR_KC_FRAME = externalLinks_config.URL_FOR_KC_FRAME;
-      URL_FOR_KC_AWARD = externalLinks_config.URL_FOR_KC_AWARD;
-      URL_FOR_KC_IP = externalLinks_config.URL_FOR_KC_IP;
+    // this.get_externalLinks_config().subscribe(data => {
+    //   const externalLinks_config: any = data;
+    //   BASE_URL_KC = externalLinks_config.KC_BASE_URL;
+    //   URL_FOR_KC_FRAME = externalLinks_config.URL_FOR_KC_FRAME;
+    //   URL_FOR_KC_AWARD = externalLinks_config.URL_FOR_KC_AWARD;
+    //   URL_FOR_KC_IP = externalLinks_config.URL_FOR_KC_IP;
 
-      if (item.fundingSourceTypeCode === '6') {
-        URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{awardId}', item.awardId);
-        URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{docId}', item.docId);
-        URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{user}', this.userDTO.userName);
+    //   if (item.fundingSourceTypeCode === '6') {
+    //     URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{awardId}', item.awardId);
+    //     URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{docId}', item.docId);
+    //     URL_FOR_KC_AWARD = URL_FOR_KC_AWARD.replace('{user}', this.userDTO.userName);
 
-        const url_KCAward = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_AWARD;
-        const win = window.open('about:blank', '_blank');
-        win.location.href = url_KCAward;
-      } else if (item.fundingSourceTypeCode === '5' || item.fundingSourceTypeCode === '4') {
-        URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{docId}', item.docId);
-        URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{user}', this.userDTO.userName);
+    //     const url_KCAward = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_AWARD;
+    //     const win = window.open('about:blank', '_blank');
+    //     win.location.href = url_KCAward;
+    //   } else if (item.fundingSourceTypeCode === '5' || item.fundingSourceTypeCode === '4') {
+    //     URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{docId}', item.docId);
+    //     URL_FOR_KC_IP = URL_FOR_KC_IP.replace('{user}', this.userDTO.userName);
 
-        const url_KCIp = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_IP;
-        const win = window.open('about:blank', '_blank');
-        win.location.href = url_KCIp;
-      }
+    //     const url_KCIp = BASE_URL_KC + URL_FOR_KC_FRAME + BASE_URL_KC + URL_FOR_KC_IP;
+    //     const win = window.open('about:blank', '_blank');
+    //     win.location.href = url_KCIp;
+    //   }
 
-    });
+    // });
   }
 
   get_externalLinks_config() {

@@ -12,29 +12,29 @@ export class ElasticService {
     IP_INDEX: string;
     DP_INDEX: string;
     constructor( private _http: HttpClient ) {
-       /* this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+        this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
         this.IRB_INDEX = 'irbprotocol';
         this.AWARD_INDEX = 'award';
         this.IP_INDEX = 'proposal';
         this.DP_INDEX = 'devproposal';
         if ( !this._client ) {
             this._connect();
-       }*/
-         this.get_elastic_config().subscribe(
-            data => {
-                 const elastic_config: any = data;
-                 if (elastic_config) {
-                     this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
-                     this.IRB_INDEX = elastic_config.IRB_INDEX;
-                     this.AWARD_INDEX = elastic_config.AWARD_INDEX;
-                     this.IP_INDEX = elastic_config.IP_INDEX;
-                     this.DP_INDEX = elastic_config.DP_INDEX;
-                     if ( !this._client ) {
-                         this._connect();
-                    }
-                }
-             }
-         );
+       }
+        //  this.get_elastic_config().subscribe(
+        //     data => {
+        //          const elastic_config: any = data;
+        //          if (elastic_config) {
+        //              this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
+        //              this.IRB_INDEX = elastic_config.IRB_INDEX;
+        //              this.AWARD_INDEX = elastic_config.AWARD_INDEX;
+        //              this.IP_INDEX = elastic_config.IP_INDEX;
+        //              this.DP_INDEX = elastic_config.DP_INDEX;
+        //              if ( !this._client ) {
+        //                  this._connect();
+        //             }
+        //         }
+        //      }
+        //  );
     }
 
     private _connect() {

@@ -11,27 +11,27 @@ export class PiElasticService {
   PERSON_INDEX: string;
   NON_EMPLOYEE_INDEX: string;
   constructor( private _http: HttpClient ) {
-     /* this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
+     this.URL_FOR_ELASTIC = 'http://192.168.1.76:9200';
       this.IRB_INDEX = 'mitperson';
       this.PERSON_INDEX = 'fibirolodex';
-      this.NON_EMPLOYEE_INDEX = 'mitrolodex';*/
-       this.get_elastic_config().subscribe(
-          data => {
-               const elastic_config: any = data;
-               if (elastic_config) {
-                   this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
-                   this.IRB_INDEX = elastic_config.PERSON_INDEX;
-                   this.NON_EMPLOYEE_INDEX = elastic_config.NON_EMPLOYEE_INDEX;
+      this.NON_EMPLOYEE_INDEX = 'mitrolodex';
+      //  this.get_elastic_config().subscribe(
+      //     data => {
+      //          const elastic_config: any = data;
+      //          if (elastic_config) {
+      //              this.URL_FOR_ELASTIC = elastic_config.URL_FOR_ELASTIC;
+      //              this.IRB_INDEX = elastic_config.PERSON_INDEX;
+      //              this.NON_EMPLOYEE_INDEX = elastic_config.NON_EMPLOYEE_INDEX;
                    
-			if ( !this._client ) {
-                       this._connect();
-                  }
-              }
-           }
-       );
-     /*if ( !this._client ) {
+			// if ( !this._client ) {
+      //                  this._connect();
+      //             }
+      //         }
+      //      }
+      //  );
+     if ( !this._client ) {
            this._connect();
-      }*/
+      }
   }
 
   private _connect() {

@@ -29,8 +29,8 @@
                         <div class="col-md-9">
               
                           <ul class="nav nav-pills">
-                            <li class="nav-item" *ngFor = "let questionnaire of applicableQuestionnaire">
-                              <a (click)="openEachQuestionaire(questionnaire)" class="nav-link txt-small button-red-tab pointer font-bold"
+                            <li class="nav-item border-left1" *ngFor = "let questionnaire of applicableQuestionnaire">
+                              <a (click)="openEachQuestionaire(questionnaire)" class="nav-link txt-medium button-red-tab pointer font-bold"
                                 [ngClass]="{'active':selectedQuestionnaire?.QUESTIONNAIRE_ID == questionnaire.QUESTIONNAIRE_ID}">
                                 <i class="fa fa-check pr-5" [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y','txt-orange':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG != 'Y'}"
                                 aria-hidden="true" title="{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' ? 'Completed' : 'Not Completed'}}"></i>{{questionnaire?.QUESTIONNAIRE}}

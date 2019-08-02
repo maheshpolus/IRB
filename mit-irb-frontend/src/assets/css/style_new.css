@@ -4032,3 +4032,22 @@ margin-top: 13px;
 .txt-green {
 	color: #28D094!important;
 }
+.modal-widener {
+    width: 1080px;
+    left: -110px;
+}
+.border-left1{
+    border-left: 1px solid #ccc !important;
+  }
+  
+  .txt-lite {
+      cursor: pointer;
+      position: absolute;
+      right: 14px;
+      bottom: -6px;
+      z-index: 1;
+      margin-bottom: 5px;
+      color: #002cd0;
+      text-decoration: underline;
+      font-size: 12px;
+  }

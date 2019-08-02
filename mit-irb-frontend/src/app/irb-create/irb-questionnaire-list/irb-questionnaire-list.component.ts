@@ -52,7 +52,7 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
         this.isQstnrEditable = commonVo.protocolRenewalDetails != null ? commonVo.protocolRenewalDetails.questionnaire : true;
       }
     });
-    this.getQuetionnaireList();
+    this.getQuetionnaireList(null);
   }
 
   ngOnDestroy() {

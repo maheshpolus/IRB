@@ -31,7 +31,7 @@
                                   <tr>
                                       <th scope="col">Name</th>
                                       <th scope="col">Completed</th>
-                                      <th scope="col">Last Updated</th>
+                                      <th scope="col">Last Updated By</th>
                                       <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -41,7 +41,7 @@
                                         <td>
                                           <span >{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y' ? 'Yes' : 'No'}}</span>
                                         </td>
-                                        <td>{{questionnaire.UPDATE_USER}} On {{questionnaire?.UPDATE_TIMESTAMP| date: 'MM/dd/yyyy'}}</td>
+                                        <td><span *ngIf="questionnaire.UPDATE_USER != null">{{questionnaire.UPDATE_USER}} On {{questionnaire?.UPDATE_TIMESTAMP| date: 'MM/dd/yyyy'}}</span></td>
                                         <td>
 
                                             <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
@@ -55,7 +55,9 @@
                                               </button>
                                             </a>
       
-                                            <a *ngIf="isQstnrEditable" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
+                                            <a *ngIf="isEditMode && ((isQstnrEditable && questionnaire.MODULE_SUB_ITEM_CODE == 0) || 
+                                                                     (questionnaire.MODULE_SUB_ITEM_CODE == 4 && protocolNumber.includes('A')) || 
+                                                                     (questionnaire.MODULE_SUB_ITEM_CODE == 3 && protocolNumber.includes('R')))" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
                                                                                                                            protocolId: protocolId,
                                                                                                                            sequenceNumber: sequenceNumber,
                                                                                                                            ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,

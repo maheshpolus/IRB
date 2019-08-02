@@ -112,6 +112,7 @@ export class IrbSubmissionDetailsComponent implements OnInit, OnDestroy {
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
   lockPresent = false;
+  isReviewerAttachment = false;
 
   private $subscription: ISubscription;
   private $subscription1: ISubscription;

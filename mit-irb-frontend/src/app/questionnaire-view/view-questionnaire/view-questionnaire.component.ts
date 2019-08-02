@@ -173,7 +173,7 @@ export class ViewQuestionnaireComponent implements OnInit {
     let result = false;
     _.forEach(question.ANSWERS, function(answer, key) {
       if (question.ANSWER_TYPE === 'Checkbox' ) {
-        if (answer === true && condition.CONDITION_VALUE === key ) {
+        if (answer.toString() === 'true' && condition.CONDITION_VALUE === key ) {
           result = true;
           return false;
         }

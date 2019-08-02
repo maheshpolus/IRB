@@ -34,6 +34,7 @@ export class CreateMainComponent implements OnInit, OnDestroy {
   errorList = [];
   groupLabels = {};
   isSaving = false;
+  isViewmode = false;
   $goToQuestion: ISubscription;
   /**
    * takes the data from the resolver output,

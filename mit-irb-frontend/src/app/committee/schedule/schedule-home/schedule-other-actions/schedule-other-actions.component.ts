@@ -22,6 +22,7 @@ export class ScheduleOtherActionsComponent implements OnInit {
     userDTO = JSON.parse(localStorage.getItem('currentUser'));
     isMandatoryFilled = true;
     deleteIndex = null;
+    isAddOtherAction = false;
     otherActionTypes: any = [];
     committeeScheduleActItems: any = [];
 

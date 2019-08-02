@@ -21,7 +21,7 @@ export class CommitteeMembersComponent implements OnInit {
   isInactiveFilter = false;
 
   constructor(private _committeeSaveService: CommitteeSaveService, private _router: Router, private _spinner: NgxSpinnerService,
-    private _activatedRoute: ActivatedRoute) { }
+    public _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.userDTO = JSON.parse(localStorage.getItem('currentUser'));

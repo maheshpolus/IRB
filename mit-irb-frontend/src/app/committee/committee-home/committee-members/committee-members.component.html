@@ -8,8 +8,8 @@
           <div class="row ml-10 mr-10">
             <div class="col-md-6 txt-medium">
               <label>Filter Members: &nbsp;</label>
-              <input type="checkbox" name="filterMember" id="activeMembers" [checked]="activeMembers" [(ngModel)]="isActiveFilter" (ngModelChange)="filterMemberList()">&nbsp;Active &nbsp;&nbsp;
-              <input type="checkbox" name="filterMember" id="inactiveMembers" [checked]="inactiveMembers" [(ngModel)]="isInactiveFilter"
+              <input type="checkbox" name="filterMember" id="activeMembers" [(ngModel)]="isActiveFilter" (ngModelChange)="filterMemberList()">&nbsp;Active &nbsp;&nbsp;
+              <input type="checkbox" name="filterMember" id="inactiveMembers" [(ngModel)]="isInactiveFilter"
                 (ngModelChange)="filterMemberList()">&nbsp;Inactive
             </div>
             <div class="col-md-6 text-right">
@@ -124,7 +124,7 @@
         <p>Are you sure you want to delete this item?</p>
       </div>
       <div class="modal-footer p-2">
-        <button class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close" (click)="showPopup = false">No</button>
+        <button class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">No</button>
         <!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button> -->
         <button class="btn btn-outline-success txt-small" (click)="updateCommitteMember()" data-dismiss="modal">Yes</button>
       </div>

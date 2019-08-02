@@ -16,6 +16,7 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
   protocolId = null;
   sequenceNumber = null;
   applicableQuestionnaire = [];
+  isEditMode = false;
   isQstnrEditable = true;
   private $subscription1: ISubscription;
   constructor(private _irbCreateService: IrbCreateService, private _activatedRoute: ActivatedRoute,
@@ -29,9 +30,11 @@ export class IrbQuestionnaireListComponent implements OnInit, OnDestroy {
     });
     const path = this._router.parseUrl(this._router.url).root.children['primary'].segments[1].path;
     if (path === 'irb-view') {
-      this.isQstnrEditable = false;
+      this.isEditMode = false;
+    } else {
+      this.isEditMode = true;
     }
-    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {
+    this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe(commonVo => {debugger
       if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
         this.isQstnrEditable = commonVo.protocolRenewalDetails != null ? commonVo.protocolRenewalDetails.questionnaire : true;
       }

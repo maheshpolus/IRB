@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 import { PiElasticService } from '../../common/service/pi-elastic.service';
 import { PersonTrainingService } from '../person-training.service';
+import { KeyPressEvent } from '../../common/directives/keyPressEvent.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +41,8 @@ export class DashboardComponent implements OnInit {
   trainingCount: number;
 
   constructor(private _elasticsearchService: PiElasticService, private _personTrainingService: PersonTrainingService,
-    private _activatedRoute: ActivatedRoute, private _router: Router, private _spinner: NgxSpinnerService) {
+    private _activatedRoute: ActivatedRoute, private _router: Router, private _spinner: NgxSpinnerService,
+    public keyPressEvent: KeyPressEvent) {
     this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
     this.options.index = this._elasticsearchService.IRB_INDEX;
     this.options.type = 'person';

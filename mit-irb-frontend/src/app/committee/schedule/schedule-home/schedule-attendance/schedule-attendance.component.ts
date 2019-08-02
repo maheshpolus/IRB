@@ -34,6 +34,7 @@ export class ScheduleAttendanceComponent implements OnInit {
     editAlternateAttendenceIndex = null;
     editGuestAttendenceIndex = null;
     updatedAttendance = [];
+    isAddGuest = false;
 
     constructor(private scheduleConfigurationService: ScheduleConfigurationService, private _elasticsearchService: PiElasticService,
         private scheduleAttendanceService: ScheduleAttendanceService,

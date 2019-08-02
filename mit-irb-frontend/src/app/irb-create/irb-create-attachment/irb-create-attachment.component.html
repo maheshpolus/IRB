@@ -43,8 +43,8 @@
           
                       <!--         start           -->
                       <div>
-                        <a *ngIf="(isAttachmentEditable  && tabSelected == 'STUDY' && (protocolStatusCode == 100 || protocolStatusCode == 104 || protocolStatusCode == 105 || protocolStatusCode == 106
-                        || protocolStatusCode == 304 || protocolStatusCode == 107 || protocolStatusCode == 102 || protocolStatusCode == 103)) || (userDTO.role == 'ADMIN' && tabSelected == 'INTERNAL')" class="pdf btn" data-toggle="modal"
+                        <a *ngIf="(isAttachmentEditable  && tabSelected == 'STUDY' && (protocolStatusCode == '100' || protocolStatusCode == '104' || protocolStatusCode == '105' || protocolStatusCode == '106'
+                        || protocolStatusCode == '304' || protocolStatusCode == '107' || protocolStatusCode == '102' || protocolStatusCode == '103')) || (userDTO.role == 'ADMIN' && tabSelected == 'INTERNAL')" class="pdf btn" data-toggle="modal"
                           data-target="#attachmentModal" (click)="clearAttachmentPopup()"
                           style="float: right;margin-bottom: 10px;">
                           <i class="fa fa-plus-circle text-success"></i>

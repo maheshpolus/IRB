@@ -21,6 +21,41 @@
               </div>
 
               <div class="card-body card-paddng">
+                <div class="col-12  search-eidted-p padding-15">
+              
+                  <div class="row">
+                    <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+                      <div class="row">
+                        <div class="col-md-9">
+              
+                          <ul class="nav nav-pills">
+                            <li class="nav-item" *ngFor = "let questionnaire of applicableQuestionnaire">
+                              <a (click)="openEachQuestionaire(questionnaire)" class="nav-link txt-small button-red-tab pointer font-bold"
+                                [ngClass]="{'active':selectedQuestionnaire?.QUESTIONNAIRE_ID == questionnaire.QUESTIONNAIRE_ID}">
+                                <i class="fa fa-check pr-5" [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y','txt-orange':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG != 'Y'}"
+                                aria-hidden="true" title="{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' ? 'Completed' : 'Not Completed'}}"></i>{{questionnaire?.QUESTIONNAIRE}}
+                                <span class="mandatory" *ngIf="questionnaire.IS_MANDATORY == 'Y'" title="Mandatory">*</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+              
+                      </div>
+              
+                      <!-- <div class="col-12 mt-10">
+                        <p class="noAttachments txt-small">
+                           Questionaire associated with this protocol will be released soon. 
+                          </p>
+                      </div> -->
+              
+              
+                    </div>
+                  </div>
+              
+                </div>
+              </div>
+              <router-outlet></router-outlet>
+              <!-- <div class="card-body card-paddng">
 
 
                   <div class="col-md-12 users-list-tbl">
@@ -67,13 +102,6 @@
                                                   <i class="fa fa-pencil log-user-icon-lite"></i>
                                                 </button>
                                               </a>
-      
-                                          <!-- <a [routerLink]="['../irbQuestionnaireView']" 
-                                            [queryParams]="{ protocolNumber: protocolNumber,
-                                                             protocolId: protocolId,
-                                                             ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
-                                                             qnrId: questionnaire.QUESTIONNAIRE_ID}"> dfsdfsd
-                                          </a> -->
                                         </td>
                                       </tr>
                                 </tbody>
@@ -81,7 +109,7 @@
                             </div>
                             </div>
                             </div>
-              </div>
+              </div> -->
 
 
             </div>

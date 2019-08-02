@@ -11,6 +11,7 @@ import { IrbQuestionnaireListComponent } from './irb-questionnaire-list/irb-ques
 import { SubmissionDetailsComponent } from './irb-create-histroy/submission-details/submission-details.component';
 import { IrbPermissionComponent } from './irb-permission/irb-permission.component';
 import { IrbSubmissionDetailsComponent } from './irb-submission-details/irb-submission-details.component';
+import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-details.component';
 
 const routes: Routes = [
   {
@@ -24,10 +25,12 @@ const routes: Routes = [
       { path: 'irbPermission', component: IrbPermissionComponent , resolve: { irb: DashboardResolverService }},
       { path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent },
       { path: 'irbActions', component: IrbActionsComponent, resolve: { irb: DashboardResolverService } },
+      { path: 'irbSummaryDetails', component: IrbSummaryDetailsComponent, resolve: { irb: DashboardResolverService } },
       {path: 'irbSubmissionDetails', component: IrbSubmissionDetailsComponent,
       resolve: { irb: DashboardResolverService }},
       { path: 'irbProtocol', component: IrbProtocolComponent,  resolve: { irb: DashboardResolverService } },
-      { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },
+      { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent,
+        children: [{ path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }] },
       { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }
     ]
   }

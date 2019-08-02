@@ -2700,5 +2700,15 @@ input:disabled,textarea:disabled{
   .color-white {
       color: #fff !important;
   }
-  
+  .padding-15
+{
+	padding: 15px;
+	padding-bottom: 0;
+}
+
+.search-eidted-p
+{
+	background: #fff;
+}
+
   

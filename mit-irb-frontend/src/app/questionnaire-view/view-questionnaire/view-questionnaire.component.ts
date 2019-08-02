@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ViewQuestionnaireService } from '../view.service';
 import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
@@ -25,7 +26,8 @@ import * as _ from 'lodash';
 export class ViewQuestionnaireComponent implements OnInit {
 
   constructor(private _questionService: ViewQuestionnaireService,
-              private _activatedRoute: ActivatedRoute, private _router: Router) { }
+              private _activatedRoute: ActivatedRoute, private _router: Router,
+              private _spinner: NgxSpinnerService) { }
   userDTO = null;
   questionnaire: any = {};
   attachmentIndex    = null;
@@ -44,18 +46,20 @@ export class ViewQuestionnaireComponent implements OnInit {
     this.requestObject.questionnaire_id = params.qnrId;
     this.requestObject.questionnaire_answer_header_id = params.ansHdrId;
     this.isViewmode = params.mode === 'view' ? true : false;
-    });
+    this._spinner.show();
     this._questionService.getQuestionnaire(this.requestObject).subscribe(
-    data => {
-      this.result  = data;
-      this.questionnaire = this.result.questionnaire;
-      const tempLabels: any = {};
-      this.questionnaire.questions.forEach(question => {
-        if (!tempLabels[question.GROUP_NAME]) {
-          // question.SHOW_LABEL = true;
-          tempLabels[question.GROUP_NAME] = question.GROUP_NAME;
-        }
-        this.showChildQuestions(question);
+      data => {
+        this._spinner.hide();
+        this.result  = data;
+        this.questionnaire = this.result.questionnaire;
+        const tempLabels: any = {};
+        this.questionnaire.questions.forEach(question => {
+          if (!tempLabels[question.GROUP_NAME]) {
+            // question.SHOW_LABEL = true;
+            tempLabels[question.GROUP_NAME] = question.GROUP_NAME;
+          }
+          this.showChildQuestions(question);
+        });
       });
     });
   }
@@ -303,9 +307,21 @@ export class ViewQuestionnaireComponent implements OnInit {
         });
         this.showToast(toastId);
         if (this.result.questionnaire_complete_flag  === 'Y') {
-          this._router.navigate(['/irb/irb-create/irbQuestionnaireList'], {
-            queryParamsHandling: 'merge',
-          });
+          // this._router.navigate([], {
+          //   queryParams: {
+          //     ansHdrId: this.result.questionnaire_answer_header_id,
+          //     completed: true
+          //   },
+          //   queryParamsHandling: 'merge',
+          // });
+        } else {
+          // this._router.navigate([], {
+          //   queryParams: {
+          //     ansHdrId: this.result.questionnaire_answer_header_id,
+          //     completed: false
+          //   },
+          //   queryParamsHandling: 'merge',
+          // });
         }
     });
   }

@@ -301,8 +301,7 @@ export class ViewQuestionnaireComponent implements OnInit {
         this.questionnaire = this.result.questionnaire;
         this._router.navigate([], {
           queryParams: {
-            ansHdrId: this.result.questionnaire_answer_header_id,
-            completed: true
+            ansHdrId: this.result.questionnaire_answer_header_id
           },
           queryParamsHandling: 'merge',
         });

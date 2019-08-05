@@ -80,7 +80,7 @@
 			  <i *ngIf="isAdvancesearch" class="fa fa-sliders"></i>
 			  <i *ngIf="!isAdvancesearch" class="fa fa-sliders"></i><a class="mobile-hide"> Advanced Search</a>
 			</a>
-					
+
 
 			<!-- <span >
 			  <a (click)="showAdvanceSearch()">
@@ -173,12 +173,12 @@
 						  </div>
 						</div>
 						</div>
-				
+
 
 					  </div>
 					  <div class="row mt-10">
 							<div class="col-xl-12 col-lg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 col-12 text-right">
-									<button class="btn btn-outline-success txt-small hvr-icon-back" (click)="getAdvanceSearch(lastClickedTab)">
+									<button class="btn btn-success txt-small hvr-icon-back" (click)="getAdvanceSearch(lastClickedTab)">
 										<i class="fa fa-search pr-10"></i>Search
 									</button>
 									<button class="btn btn-outline-secondary txt-small" (click)="clear()">
@@ -193,15 +193,15 @@
 				<div class="row">
 				  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 col-lg-12">
 					<div class="searchBox mt-10" *ngIf="lastClickedTab == 'ALL'">
-	  
-	  
-	  
-	  
+
+
+
+
 					  <!-- <app-elastic [options]="options" [placeHolder]="elasticPlaceHolder"  [clearField]="true"
 						(selectedResult)="selectProposalElasticResult($event)"></app-elastic> -->
-	  
-	  
-	  
+
+
+
 					  <input class="form-control txt-small" type="text" placeholder="Search: Protocol#, Type, Title, PI Name, Status" [formControl]="searchText" [(ngModel)]="searchTextModel"
 					   (ngModelChange)="protocolSearchValueChange()" (focus)="IsElasticResult = true" (focusout)="IsElasticResult = false" (keydown.arrowdown)="keyPressEvent.onKeyDown($event,'protocolDropDown')"
 					   (keydown.arrowup)="keyPressEvent.onKeyDown($event,'protocolDropDown')" (keydown.Enter)="onKeyEnterElastic('protocolDropDown')"
@@ -231,7 +231,7 @@
 					  <button class="closeResultCard" >
 						<i class="fa fa-times"></i>
 					  </button>
-	  
+
 					  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
 						<label> Protocol# </label>
 						<span class="nav-advance-search text-danger">
@@ -279,9 +279,9 @@
 					</div>
 					</div>
 				  </div>
-	  
+
 				  <div class="row">
-	  
+
 				  </div>
 				  </div>
 			  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 sort-labels">
@@ -289,12 +289,12 @@
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 col-lg-12" *ngIf="(lastClickedTab !== 'EXEMPT' && lastClickedTab !== 'COMMITTEE' && lastClickedTab !== 'SCHEDULE')">
 					  <div class="form-check form-check-inline sort-fields">
 						<p class="txt-small mtb10-lite">Sort by :
-	  
+
 							<a  class="hvr-icon-down btn-sort  btn-orange pointer mob-mt-1" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_NUMBER'}" (click)="sortField = 'PROTOCOL_NUMBER';updateSortOrder()">Protocol Number
 						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_NUMBER'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-down':'fa-long-arrow-up'"
 						   aria-hidden="true"></i>
 							</a>
-	  
+
 						<a  class="hvr-icon-down btn-sort btn-orange pointer mob-mt-1" [ngClass]="{'sort-field-selected': sortField == 'PROTOCOL_STATUS'}" (click)="sortField = 'PROTOCOL_STATUS';updateSortOrder()">Protocol Status
 						  <i class="fa fa-long-arrow-down hvr-icon text-lightash" *ngIf="sortField == 'PROTOCOL_STATUS'" (click)="updateSortOrder();" [ngClass]="(sortOrder == '-1')?'fa-long-arrow-up':'fa-long-arrow-down'"
 						   aria-hidden="true"></i>
@@ -406,7 +406,7 @@
 						</div>
 						</div>
 						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
-						<button class="btn btn-outline-success txt-small mr-10 hvr-icon-back" (click)="getExemptListData('EXEMPT')">
+						<button class="btn btn-success txt-small mr-10 hvr-icon-back" (click)="getExemptListData('EXEMPT')">
 						  <i class="fa fa-search pr-10"></i>Search
 						</button>
 						<button class="btn btn-outline-secondary txt-small" (click)="clearExemptSearch()">
@@ -418,7 +418,7 @@
 					</div>
 						</div>
 			</div>
-	  
+
 			<ng-container *ngIf="lastClickedTab != 'EXEMPT' && lastClickedTab != 'COMMITTEE' && lastClickedTab != 'SCHEDULE'">
 			  <div class="col-sm-12" *ngIf="noIrbList">No IRB protocol found for this status</div>
 			  <div *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
@@ -439,10 +439,10 @@
 				<!-- PAGINATION - END -->
 			  </div>
 			</ng-container>
-	  
+
 			<!-- <ng-container *ngIf="lastClickedTab == 'COMMITTEE'">
 			  <div class="col-sm-12" *ngIf="noIrbList">No COMMITTEE found</div>
-			
+
 			  <app-committee-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 				|| (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
 			   [irbList]="paginatedIrbListData"  [userDTO]="userDTO"></app-committee-card>
@@ -458,14 +458,14 @@
 				</nav>
 			  </div>
 			</ng-container>
-	  
+
 			<ng-container *ngIf="lastClickedTab == 'SCHEDULE'">
 			  <div class="col-sm-12" *ngIf="noIrbList">No SCHEDULE found</div>
-			 
+
 			  <app-schedule-card *ngIf="(lastClickedTab !== 'ALL'&&(roleType !== 'CHAIR' || roleType !== 'ADMIN'))
 				  || (lastClickedTab == 'ALL'&&(roleType == 'CHAIR' || roleType == 'ADMIN') && isAdvancsearchPerformed == true) ||(roleType == 'PI' || roleType == 'DEPT_ADMIN')"
 			   [irbList]="paginatedIrbListData"  [userDTO]="userDTO"></app-schedule-card>
-	
+
 			  <div class="text-right pagiSkin margin8" style="float:right" *ngIf="paginatedIrbListData.length > 0">
 				<nav class="paginationSkin text-right pagination txt-small">
 				  <div class="margin8">
@@ -478,7 +478,7 @@
 				</nav>
 			  </div>
 			</ng-container> -->
-	  
+
 			<ng-container *ngIf="lastClickedTab == 'EXEMPT'">
 			  <div class="col-sm-12" *ngIf="noIrbList">No Exempt studies found </div>
 			  <app-exempt-card #childExempt [exemptList]="exemptListData" [userDTO]="userDTO" [showBtn]="noIrbList"></app-exempt-card>
@@ -497,18 +497,18 @@
 			  </div>
 			  <!-- PAGINATION - EXEMPT - END -->
 			</ng-container>
-	  
+
 		  </div>
 		</div>
 	  </section>
-	  
+
 	  <div class="modal fade mySkinDialog modalFallBack" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModal"
 	   aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 		  <div class="modal-content modal-text-color">
 			<div class="modal-header popup-header dotted-bottom">
 			  <h5 class="modal-title text-black text-body thick txt-large">Alert!</h5>
-	  
+
 			  <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			  </button>
@@ -526,7 +526,7 @@
 			  </div>
 			</div>
 			<div class="modal-footer">
-	  
+
 			</div>
 		  </div>
 		</div>
@@ -571,7 +571,7 @@
 			</div>
 			<section class="row sect-confirm-padding proceed-btn-align mg-top pt-2">
 			  <div class="col">
-				<button class="btn btn-outline-success txt-small" (click)="setProtocolStatus()" data-dismiss="modal">Search</button>
+				<button class="btn btn-success txt-small" (click)="setProtocolStatus()" data-dismiss="modal">Search</button>
 				<button class="btn btn-outline-secondary txt-small" (click)="clearStatus()">Clear</button>
 			  </div>
 			</section>
@@ -580,4 +580,3 @@
 		<!--Hidden Button for warning modal-->
 		<button id="openWarningModalButton" [hidden]="true" data-toggle="modal" data-target="#warningModal"></button>
 		<button id="openStatusModalButton" [hidden]="true" data-toggle="modal" data-target="#statusSearchModal"></button>
-	  

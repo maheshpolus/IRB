@@ -25,9 +25,10 @@ public interface IRBActionsDao {
 
 	/**
 	 * @param vo
+	 * @param files 
 	 * @return
 	 */
-	IRBActionsVO withdrawProtocolActions(IRBActionsVO vo);
+	IRBActionsVO withdrawProtocolActions(IRBActionsVO vo, MultipartFile[] files);
 
 	/**
 	 * @param vo

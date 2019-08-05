@@ -1180,7 +1180,7 @@ export class ExemptQuestionaireComponent implements OnInit, AfterViewInit {
         });
     }
 
-    addAttachments(index) {
+    addAttachments() {
         if (this.attachmentDescription === null || this.attachmentDescription === undefined || this.attachmentDescription === '') {
             this.isEmptyCheckListDescr = true;
         } else {

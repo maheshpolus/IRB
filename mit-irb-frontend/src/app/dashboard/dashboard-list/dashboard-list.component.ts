@@ -931,21 +931,27 @@ export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges 
         } else if ( this.requestObject.dashboardType === 'INPROGRESS' ) {
             fileName = 'In Progress Protocols';
         }
-        const requestObject = {     personId: this.requestObject.personId, protocolNumber: this.requestObject.protocolNumber,
+        const protocolType = this.requestObject.protocolTypeCode !== '' ? this.protocolTypeList.filter(type =>
+            type.PROTOCOL_TYPE_CODE === this.requestObject.protocolTypeCode) : [];
+        const typeDescription = protocolType.length > 0 ? protocolType[0].PROTOCOL_TYPE : null;
+        const admin = this.requestObject.adminPersonId !== '' ? this.irbAdminsList.filter(person =>
+            person.PERSON_ID === this.requestObject.adminPersonId) : [];
+        const adminName = admin.length > 0 ? admin[0].FULL_NAME : null;
+        const searchCriteria = { protocolNumberNew: this.requestObject.protocolNumber,
             title: this.requestObject.title,
-        piName: this.requestObject.piName, protocolTypeCode: this.requestObject.protocolTypeCode,
-        personRoleType: this.requestObject.personRoleType,
-        protocolStatusCode: this.requestObject.protocolStatusCode, protocolSubmissionStatus: this.requestObject.protocolSubmissionStatus,
-        dashboardType: this.requestObject.dashboardType, adminPersonId: this.requestObject.adminPersonId,
-        approvalDate: this.requestObject.approvalDate, expirationDate: this.requestObject.expirationDate,
-        fundingSource: this.requestObject.fundingSource, isAdvancedSearch: this.requestObject.isAdvancedSearch,
-        documentHeading: fileName, exportType: 'excel'
+            protocolPersonName: this.requestObject.piName, protocolType: typeDescription,
+        protocolStatus: this.protocolStatus, submissionStatus: this.submissionStatus, irbAdmin: adminName,
+        approvalDateNew: this.requestObject.approvalDate, expirationDateNew: this.requestObject.expirationDate,
+        fundingSource: this.requestObject.fundingSource
         };
+        const requestObject = {searchCriteria: searchCriteria, documentHeading: fileName, exportType: 'excel',
+        personRoleType: this.requestObject.personRoleType,  isAdvancedSearch: this.requestObject.isAdvancedSearch,
+        dashboardType: this.requestObject.dashboardType, personId: this.requestObject.personId};
         this._spinner.show();
         this._dashboardService.exportDashboardProtocolList(requestObject).subscribe( data => {
             this._spinner.hide();
             const tempData: any = data || {};
-            if (window.navigator.msSaveOrOpenBlob) {
+            if (window.navigator.msSaveOrOpenBlob) { // for IE and Edge
                 window.navigator.msSaveBlob(new Blob([tempData.body], { type: 'xlsx' }),
                     requestObject.documentHeading + '.' + 'xlsx');
             } else {

@@ -255,6 +255,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			CommitteeSchedule committeeSchedule = new CommitteeSchedule();
 			committeeSchedule.setCommittee(committee);
 			committeeSchedule.setScheduledDate(sqldate);
+			committeeSchedule.setMeetingDate(sqldate);
 			committeeSchedule.setPlace(location);
 			committeeSchedule.setTime(new Timestamp(date.getTime()));
 

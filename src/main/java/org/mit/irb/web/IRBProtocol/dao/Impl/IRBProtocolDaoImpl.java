@@ -1073,7 +1073,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 					case "029":
 						protocolRenewalDetail.setEngangedInstitution(true);
 						break;
-					case "Questionnaire":
+					case "026":
 						protocolRenewalDetail.setQuestionnaire(true);
 						break;
 					}
@@ -1550,9 +1550,6 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		queryGeneral.setInteger("protocolId", irbProtocolVO.getProtocolId());
 		if (!queryGeneral.list().isEmpty()) {
 			List<ProtocolAdminContact> adminContactList = queryGeneral.list();
-			for (ProtocolAdminContact person : adminContactList) {
-				person.setTrainingInfo(getTrainingFlag(person.getPersonId()));
-			}
 			irbProtocolVO.setProtocolAdminContactList(adminContactList);
 		}	
 		return new AsyncResult<>(irbProtocolVO);
@@ -1599,7 +1596,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 			logger.info("Exception in getIRBProtocolDetails:" + e);
 		}
 		if (result != null && !result.isEmpty()) {
-			for (HashMap<String, Object> personInfo : result) {
+		/*	for (HashMap<String, Object> personInfo : result) {
 				ArrayList<InParameter> inParam = new ArrayList<>();
 				ArrayList<OutParameter> outParam = new ArrayList<>();
 				outParam.add(new OutParameter("trainingStatus", DBEngineConstants.TYPE_INTEGER));
@@ -1620,7 +1617,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 						logger.info("Exception in getIRBProtocolDetails:" + e);
 					} 
 				}
-			}
+			}*/
 			irbViewProfile.setIrbViewProtocolAdminContact(result);
 		}
 		return irbViewProfile;
@@ -2065,7 +2062,7 @@ public class IRBProtocolDaoImpl implements IRBProtocolDao {
 		List<IRBWatermark> watermarkDetails = session.createQuery(criteria).getResultList();
 		if(watermarkDetails != null && !watermarkDetails.isEmpty()){
 			IRBWatermark watermark = watermarkDetails.get(0);
-			byteArray = irbWatermarkService.generateTimestampAndUsernameForPdf(byteArray, watermark ,protocolAttachment);
+			byteArray = irbWatermarkService.generateWaterMarkForPdf(byteArray, watermark ,protocolAttachment);
 		}
 		return byteArray;
 	}

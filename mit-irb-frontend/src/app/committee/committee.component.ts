@@ -7,14 +7,13 @@ import { CommitteeHomeComponent } from './committee-home/committee-home.componen
 import { CommitteCreateEditService } from './committee-create-edit.service';
 import { CommitteeSaveService } from './committee-save.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { CommitteeMembersComponent } from './committee-members/committee-members.component';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import { CommitteeConfigurationService } from '../common/service/committee-configuration.service';
 @Component( {
     selector: 'app-committee',
     templateUrl: './committee.component.html',
-    providers: [CommitteCreateEditService, CommitteeSaveService, CommitteeHomeComponent, CommitteeMembersComponent]
+    providers: [CommitteCreateEditService, CommitteeSaveService, CommitteeHomeComponent]
 } )
 
 export class CommitteeComponent implements OnInit, OnDestroy {
@@ -51,7 +50,6 @@ export class CommitteeComponent implements OnInit, OnDestroy {
     alertMsgMemberMiddleOfEdit: string;
     public onDestroy$ = new Subject<void>();
     activatedRoute;
-    @ContentChild( CommitteeMembersComponent )
     @ContentChild( CommitteeHomeComponent )
     private committeeHomeObj: CommitteeHomeComponent;
 

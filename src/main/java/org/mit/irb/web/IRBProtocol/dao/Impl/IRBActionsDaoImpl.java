@@ -44,7 +44,6 @@ import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
-import org.mit.irb.web.common.constants.KeyConstants;;
 
 @Service(value = "irbActionsDao")
 @Transactional
@@ -71,8 +70,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));		
 		try {
 			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,String.valueOf(vo.getPersonID())));				
-			inputParam.add(new InParameter("AV_PROTOCOL_STATUS", DBEngineConstants.TYPE_STRING,vo.getProtocolStatus()));				
-			inputParam.add(new InParameter("AV_PROTOCOL_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING,vo.getSubmissionStatus()));				
+			inputParam.add(new InParameter("AV_PROTOCOL_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING,vo.getSubmissionStatus()));
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));				
+			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));				
 			result = dbEngine.executeProcedure(inputParam,"GET_IRB_AVAILABLE_ACTION", outputParam);													
 			vo = getProtocolActionDetails(vo);	
 			ArrayList<HashMap<String, Object>> finalResult = actionsAvaliableForUser(vo,result);			
@@ -85,33 +85,35 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	private ArrayList<HashMap<String, Object>> actionsAvaliableForUser(IRBActionsVO vo,ArrayList<HashMap<String, Object>> intialResult) {
 		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
+		ArrayList<HashMap<String, Object>> finalResult = new ArrayList<>();
 		if(intialResult !=null && !intialResult.isEmpty()){		
 			for(int i = 0; i< intialResult.size(); i++)
-             {	           	
+             {	 
+				finalResult.add(intialResult.get(i));
             	Object temp = intialResult.get(i).get("ACTION_CODE"); 
             	switch (temp.toString()) {
             		case "205":
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}					 
             			else if(!reviewTypeCode.equals("2")){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1); 
             			}
             			break;
             		case "208":
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}					 
             			else if(!reviewTypeCode.equals("6")){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}
             			break;
             		case "210":
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1); 
             			}					 
             			else if(!reviewTypeCode.equals("5")){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1);
             			}
             			break;
             		case "204":
@@ -119,14 +121,17 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
             		case "203":	
             		case "202":	
             			if(reviewTypeCode == null){
-            				intialResult.remove(i);
+            				finalResult.remove(finalResult.size()-1); 
             			}
-            			break;			
-            	}	          
+            			else if(!reviewTypeCode.equals("1")){
+            				finalResult.remove(finalResult.size()-1); 
+            			}
+            			break;
+            	}     
             }
-		}
-		return intialResult;
-	}         
+		}		
+		return finalResult;
+	}       
 
 	public IRBActionsVO getProtocolActionDetails(IRBActionsVO vo){
 		try{
@@ -233,9 +238,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 	
 	@Override
-	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo) {			
+	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo, MultipartFile[] files) {			
 		try {			
 			protocolActionSP(vo,null);
+			protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Withdrawn successfully");	
 		} catch (Exception e) {
@@ -526,8 +532,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 						vo.setSuccessMessage("Amendment creation Failed");
 						logger.info("Exception in updateAmendRenewModule:" + e);	
 						}	
-					}			
-			});
+					}	
+				});
 			updateSummarryData(vo);
 			} catch (Exception e) {
 				vo.setSuccessCode(false);
@@ -1141,7 +1147,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
 		ResponseEntity<byte[]> attachmentData = null;
 		try{
-			byte[] data = getTemplateData(vo);
+			
+			byte[] data = getTemplateData(vo);			
 			byte[] mergedOutput = mergePlaceHolders(data,vo);
 			String generatedFileName = vo.getCorrespTypeDescription()+".pdf";
 			HttpHeaders headers = new HttpHeaders();
@@ -1430,6 +1437,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getUpdateUser()));
 			inputParam.add(new InParameter("AV_PUBLIC_FLAG", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPublicFLag()));
 			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonID().toString()));
+			inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getIncludeInLetter()));
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTO_ADMIN_REVW_CMMNT",outputparam);
 			if(result != null && !result.isEmpty()){

@@ -277,12 +277,16 @@
 					<i class="fa fa-history" aria-hidden="true"></i>History
 				</button>
 				<button class="btn btn-primary tab_btn" *ngIf="isAmmendmentOrRenewal()" [routerLink]="['irbSummaryDetails']"
-					type="submit" [routerLink]="['irbSummaryDetails']" routerLinkActive="nav-active"
-					[ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol"
+					type="submit" routerLinkActive="nav-active" [ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol"
 					(click)="show_current_tab('irbSummaryDetails')">
 					<i class="fa fa-file-text-o" aria-hidden="true"></i><span *ngIf="protocolNumber.includes('A')">Amendment Summary</span>
 					<span *ngIf="protocolNumber.includes('R')">Renewal Summary</span>
 				</button>
+				<button *ngIf="generalInfo?.protocolSubmissionStatuses != null" class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbSubmissionDetails']"
+				[ngClass]=" isCreateNewProtocol ? '':'tab_btn'"
+				routerLinkActive="nav-active" [disabled]="isCreateNewProtocol" (click)="show_current_tab('irbSubmissionDetails')">
+				<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details
+			</button>
 				<button class="btn btn-primary tab_btn" [routerLink]="['irbActions']" type="submit"
 					[routerLink]="['irbActions']" routerLinkActive="nav-active"
 					[ngClass]=" isCreateNewProtocol ? '':'tab_btn'" [disabled]="isCreateNewProtocol"

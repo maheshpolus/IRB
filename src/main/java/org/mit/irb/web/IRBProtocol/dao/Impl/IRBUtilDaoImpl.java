@@ -364,7 +364,7 @@ public class IRBUtilDaoImpl implements IRBUtilDao{
 	}
 
 	@Override
-	public Integer generateLockId() {
+	public synchronized Integer generateLockId() {
 		Integer lockId = null;
 		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
 				.createQuery("SELECT NVL(MAX(LOCK_ID),0)+1 FROM Lock");

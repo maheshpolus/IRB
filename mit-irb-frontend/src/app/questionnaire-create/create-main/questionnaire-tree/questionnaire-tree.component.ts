@@ -110,7 +110,7 @@ export class QuestionnaireTreeComponent implements OnInit, OnChanges {
   }
   updateSelectedQuestion() {
     this._createQuestionnaireService.updateSelectedQuestionId.subscribe(
-      (data: number) =>{
+      (data: number) => {
          this.highlightNode = data;
          this._changeRef.markForCheck();
       });
@@ -124,7 +124,7 @@ export class QuestionnaireTreeComponent implements OnInit, OnChanges {
     this.nodes.nodes.push({ questionId: questionId, name: 'Q ' + questionId, groupName: groupName, children: [] });
   }
   /**u
-   * used to create expanded tree with full question and its conditions. 
+   * used to create expanded tree with full question and its conditions.
    *@returns create a tree heirachy with all data
    */
   createExpandedTreeData() {
@@ -142,7 +142,7 @@ export class QuestionnaireTreeComponent implements OnInit, OnChanges {
         newNode.children.push({'condition': conditon.CONDITION_VALUE, children: [],
         'conditionGroup': conditon.GROUP_NAME, 'type': conditon.CONDITION_TYPE, 'questionId': conditon.QUESTION_ID});
       });
-      if(question.GROUP_NAME === 'G0') {
+      if (question.GROUP_NAME === 'G0') {
         this.expandedTreeData.push(newNode);
       } else {
         this.addChildToExpandedTree(this.expandedTreeData, newNode, question.PARENT_QUESTION_ID);
@@ -154,7 +154,7 @@ export class QuestionnaireTreeComponent implements OnInit, OnChanges {
    * @param  {} nodes
    * @param  {} newNode
    * @param  {} parentId
-   * add child to expandedTreeData according to the group name in the data groupname of the 
+   * add child to expandedTreeData according to the group name in the data groupname of the
    * node is used to match with treeData
    */
   addChildToExpandedTree(nodes, newNode, parentId) {

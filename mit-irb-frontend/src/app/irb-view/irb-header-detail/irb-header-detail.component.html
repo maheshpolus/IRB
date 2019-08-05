@@ -334,7 +334,7 @@
 				(click)="show_current_tab('irb_history')">
 				<i class="fa fa-history" aria-hidden="true"></i>History
 			</button>
-			<button *ngIf="irbHeaderDetails?.PROTOCOL_STATUS_CODE != 100" class="btn btn-primary tab_btn" type="submit"
+			<button *ngIf="irbHeaderDetails?.SUBMISSION_STATUS_CODE != null" class="btn btn-primary tab_btn" type="submit"
 				[routerLink]="['irbSubmissionDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
 				routerLinkActive="nav-active" (click)="show_current_tab('irbSubmissionDetails')">
 				<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details

@@ -85,8 +85,8 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 		for (ProtocolSubmission submission : vo.getSubmittedProtocols()) {
 			List<IRBAdminReviewerComment> adminComment = loadAdminCommentsInProtocol(submission.getSubmissionId());
 			submission.setAdminComments(adminComment);
-			submission.setCommitteePriRev(loadProtocolPrimaryCommitteeReviewers(submission.getSubmissionId()));
-			submission.setCommitteeSecRev(loadProtocolSecondaryCommitteeReviewers(submission.getSubmissionId()));
+			submission.setCommitteePriRev(loadProtocolPrimaryCommitteeReviewers(submission.getSubmissionId()) == null? "" : loadProtocolPrimaryCommitteeReviewers(submission.getSubmissionId()) );
+			submission.setCommitteeSecRev(loadProtocolSecondaryCommitteeReviewers(submission.getSubmissionId()) == null? "" : loadProtocolSecondaryCommitteeReviewers(submission.getSubmissionId()));
 		}
 		if( vo.getSubmittedProtocols() != null)
 		return  vo.getSubmittedProtocols();
@@ -176,120 +176,160 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 
 	private List<MinutesEntry> setMinutes(List<CommitteeScheduleMinutes> scheduleMinutes){				
 		List<MinutesEntry> minutes = new ArrayList<>();		
-		for(CommitteeScheduleMinutes minute: scheduleMinutes){			
+		for(CommitteeScheduleMinutes minute: scheduleMinutes){	
 			minutes.add(new MinutesEntry(null,minute.getMinuteEntry()));
 		}
 		return minutes;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsFullIntial(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> fullIntial = new ArrayList<>();
-		
+		List<ProtocolDetails> fullIntial = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("1"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("100")){
-				fullIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("1") && submission.getSubmissionTypeCode().equals("100"))
+			{
+				fullIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+				submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+				submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+				submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+				submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+			    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+				submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+		     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
 			}
 		}		
 		return fullIntial;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsfullAmd(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> fullAmed = new ArrayList<>();
-		
+		List<ProtocolDetails> fullAmed = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("1"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("102")){
-				fullAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
-			}
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("1") && submission.getSubmissionTypeCode().equals("102"))
+			{
+				fullAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));			}
 		}		
 		return fullAmed;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsfullCon(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> fullCon = new ArrayList<>();
-		
+		List<ProtocolDetails> fullCon = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("1"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("101")){
-				fullCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("1") && submission.getSubmissionTypeCode().equals("101"))
+			{
+				fullCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));					
 			}
+				
 		}		
 		return fullCon;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsfullRes(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> fullRes = new ArrayList<>();
-		
+		List<ProtocolDetails> fullRes = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("1"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("103")){
-				fullRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
-			}
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("1") && submission.getSubmissionTypeCode().equals("103"))
+			{
+				fullRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));			
+				}			
 		}		
 		return fullRes;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsExpIntial(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> expIntial = new ArrayList<>();
-		
+		List<ProtocolDetails> expIntial = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("2"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("100")){
-				expIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
-			}
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("2") && submission.getSubmissionTypeCode().equals("100"))
+			{
+				expIntial.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));			
+				}			
 		}		
 		return expIntial;		
 	}
 		
 	private List<ProtocolDetails> setProtocolDetailsExpAmd(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> expAmed = new ArrayList<>();
-		
+		List<ProtocolDetails> expAmed = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("2"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("102")){
-				expAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
-			}
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("2") && submission.getSubmissionTypeCode().equals("102"))
+			{
+				expAmed.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));			
+				}		
 		}		
 		return expAmed;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsExpCon(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> expCon = new ArrayList<>();
-		
+		List<ProtocolDetails> expCon = new ArrayList<>();		
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("2"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("101")){
-				expCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
-			}
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("2") && submission.getSubmissionTypeCode().equals("101"))
+			{
+				expCon.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));			
+				}			
 		}		
 		return expCon;		
 	}
 	
 	private List<ProtocolDetails> setProtocolDetailsExpRes(List<ProtocolSubmission> submissions){				
-		List<ProtocolDetails> expRes = new ArrayList<>();
-		
+		List<ProtocolDetails> expRes = new ArrayList<>();	
 		for (ProtocolSubmission submission : submissions) {
-			if(submission.getProtocolReviewTypeCode() != null)
-			if(submission.getProtocolReviewTypeCode().equals("2"))
-				if(submission.getSubmissionTypeCode() != null)
-			if(submission.getSubmissionTypeCode().equals("103")){
-				expRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId())) == null ? "": minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));
-			}
+			if(submission.getProtocolReviewTypeCode() != null && submission.getSubmissionTypeCode() != null)
+			if(submission.getProtocolReviewTypeCode().equals("2") && submission.getSubmissionTypeCode().equals("103"))
+			{
+				expRes.add(new ProtocolDetails(submission.getProtocolNumber(),submission.getPersonName(),
+						submission.getProtocolTitle(),submission.getCommitteePriRev(),submission.getCommitteeSecRev(),
+						submission.getSubmissionTypeDescription(),adminComments(submission.getAdminComments()),
+						submission.getExpirationDate() ==  null ? "" : submission.getExpirationDate(),
+						submission.getYesVoteCount() == null? 0 : submission.getYesVoteCount(),
+					    submission.getNoVoteCount() ==  null ? 0 :submission.getNoVoteCount() ,
+						submission.getAbstainerCount() == null ? 0 :submission.getAbstainerCount(),
+				     	minuteComments(scheduleDao.getProtocolCommitteeComments(submission.getSubmissionId(),submission.getCommitteeSchedule().getScheduleId()))));			
+			}				
 		}		
 		return expRes;		
 	}
@@ -300,23 +340,24 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 					if(adminComment == null || adminComment.isEmpty()){
 						adminComment = object.getComment() ==  null ? null : object.getComment() ;
 					}else{
-						adminComment = adminComment.concat(object.getComment() ==  null ? "" :"\n "+object.getComment());
+						adminComment = adminComment.concat(object.getComment() ==  null ? "" :"\n"+"\n0 "+object.getComment());
 					}	
 				}														
-		return adminComment;		
+		return adminComment == null? "" : adminComment;		
 	}
 	
-	private String  minuteComments(List<CommitteeScheduleMinutes> adminComments){			
+	private String  minuteComments(List<CommitteeScheduleMinutes> minuteComments){			
 		String minuteComment = null;
-			for (CommitteeScheduleMinutes object : adminComments) {
-				if(object.getPrivateCommentFlag())
+			for (CommitteeScheduleMinutes object : minuteComments) {
+				if(object.getPrivateCommentFlag() != null)
+					if(object.getPrivateCommentFlag())
 					if(minuteComment == null || minuteComment.isEmpty()){
 						minuteComment = object.getMinuteEntry() ==  null ? null : object.getMinuteEntry() ;
 					}else{
-						minuteComment = minuteComment.concat(object.getMinuteEntry() ==  null ? "" :"\n "+object.getMinuteEntry());
+						minuteComment = minuteComment.concat(object.getMinuteEntry() ==  null ? "" :"\n"+"\n "+object.getMinuteEntry());
 					}	
 				}														
-		return minuteComment;		
+		return minuteComment == null ?"": minuteComment;		
 	}
 	
 	@Override
@@ -485,6 +526,9 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			context.put("scheduleMeetingDate",vo.getCommitteeSchedule().getMeetingDate()  == null ? "" : formatter.format(vo.getCommitteeSchedule().getMeetingDate()));
 			context.put("scheduleMeetingTime",vo.getCommitteeSchedule().getTime() == null ? "" : dateFormat.format(vo.getCommitteeSchedule().getTime()));
 			context.put("scheduleLocation",vo.getCommitteeSchedule().getPlace() == null ? "" : vo.getCommitteeSchedule().getPlace());
+			context.put("previousMeetingDate", " ");
+			context.put("nextMeetingDate"," ");
+			context.put("meetingPlace"," ");				
 			if(details != null)
 			context.put("previousMeetingDate",details.get(0).getPreviousSchMeetingDate() == null ? "" : details.get(0).getPreviousSchMeetingDate());
 			if(details.size() > 1){
@@ -591,10 +635,11 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			List<ProtocolDetails> ExpIntial = setProtocolDetailsExpIntial(submissions);
 			List<ProtocolDetails> ExpRes = setProtocolDetailsExpRes(submissions);
 			vo = loadMeetingAttendenceForMinutes(vo);
+			vo = scheduleService.loadMeetingAttendence(vo);
 			List<MemberAttandance> MemPretList = setMemberPretList(vo.getCommitteeMemberMinutes());
 			List<MemberAttandance> MemAlterList = setMemAlterList(vo.getAlternateMemberMinutes());
 			List<MemberAttandance> MemOtherList = setMemOtherList(vo.getGuestMembersMinutes());
-			List<MemberAttandance> MemAbstList = setMemAbstList(vo.getCommitteeMemberMinutes());
+			List<MemberAttandance> MemAbstList = setMemAbstList(vo.getCommitteeMemberMinutes(),vo.getAlternateMember());
 			context.put("otherList", otherList);
 			context.put("fullIntialApp", fullIntialApp);
 			context.put("fullAmd", fullAmd);
@@ -624,22 +669,26 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			DocxDocumentMergerAndConverter docxDocumentMergerAndConverter = new DocxDocumentMergerAndConverter();
 			mergedOutput = docxDocumentMergerAndConverter.mergeAndGeneratePDFOutput(myInputStream,report,null, TemplateEngineKind.Velocity,context);
 		}catch (Exception e) {
-			logger.info("Exception in mergePlaceHolders method:" + e);
+			logger.error("Exception in mergePlaceHolders method:" + e);
 		}
 		return mergedOutput;
 	}	
 	
-	private List<MemberAttandance> setMemAbstList(List<CommitteeMemberships> committeeMember) {				
+	private List<MemberAttandance> setMemAbstList(List<CommitteeMemberships> committeeMember, List<CommitteeScheduleAttendance> alternates) {				
 		List<MemberAttandance> attendance = new ArrayList<>();		
 		for (CommitteeMemberships member : committeeMember) {
 			if(member.getMemberPresent() != null){
 				if(member.getMemberPresent().equals("N"))
-					if(member.getNonEmployeeFlag()){
-						attendance.add(new MemberAttandance(member.getRolodex().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
-					}else{
-						attendance.add(new MemberAttandance(member.getPersonDetails().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
-					}
-			}			
+			for(CommitteeScheduleAttendance eachAlternate : alternates ){
+						if(member.getNonEmployeeFlag()){
+							if(!member.getRolodex().getFullName().equals(eachAlternate.getAlternateFor()))
+							attendance.add(new MemberAttandance(member.getRolodex().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+						}else{
+							if(!member.getPersonDetails().getFullName().equals(eachAlternate.getAlternateFor()))
+							attendance.add(new MemberAttandance(member.getPersonDetails().getFullName(),member.getAttendanceComment() == null? "":member.getAttendanceComment(),memberRoles(member.getCommitteeMemberRoles()),member.getAlternateFor()));		
+						}
+				}
+			}						
 		}					
 		return attendance;		
 	}
@@ -659,8 +708,8 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
                 List<CommitteeMemberships> committeeMember = new ArrayList<CommitteeMemberships>();
                 for(CommitteeMemberships committeeMemberships : committeeMembershipList){
                         String committeePersonId = null;
-                         Date currentDate = org.mit.irb.web.committee.schedule.DateUtils.clearTimeFields( new java.sql.Date(System.currentTimeMillis()));
-                     if (committeeMemberships.getTermStartDate() != null && committeeMemberships.getTermEndDate() != null && (currentDate.before(committeeMemberships.getTermEndDate()) || currentDate.equals(committeeMemberships.getTermEndDate()))) {                                                     
+                        // Date currentDate = org.mit.irb.web.committee.schedule.DateUtils.clearTimeFields( new java.sql.Date(System.currentTimeMillis()));
+                     if (committeeMemberships.getTermStartDate() != null && committeeMemberships.getTermEndDate() != null) {                                                     
                              if (committeeMemberships.getNonEmployeeFlag()) {
                                      committeePersonId = String.valueOf(committeeMemberships.getRolodexId());
                                          Rolodex rolodex = committeeDao.getRolodexById(committeeMemberships.getRolodexId());
@@ -759,8 +808,5 @@ public class MinutesAgendaServiceImpl implements MinutesAgendaService {
 			logger.info("Exception in getPrevMinuteDetails method:" + e);
 		}
 	return attachment;	
-	}
-	
-	public void loadMeetingAttendance(ScheduleVo vo){
 	}
 }

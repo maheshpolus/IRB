@@ -13,7 +13,7 @@
           <span *ngIf="!showAllClicked">Showing Meetings from {{committee?.scheduleStartDate | date: 'MM/dd/yyyy'}} to {{committee?.scheduleEndDate | date: 'MM/dd/yyyy'}}</span>
           <span *ngIf="showAllClicked">Listing all Meetings</span>
           <span style="float: right">
-            <input type="checkbox" [(ngModel)]="minuteFlag" (click)="showAll()" /> Show All
+            <input type="checkbox" (click)="showAll()" /> Show All
           </span>
         </p>
 
@@ -48,7 +48,7 @@
               <th scope="col" width="12%">Action</th>
             </tr>
           </thead>
-          <tbody class="tbody-font-size">
+          <tbody class="txt-small">
             <tr class="solid-bottom pull-up" *ngFor="let committeScheduleData of committeeSchedules; let i = index;">
               <ng-container *ngIf="committeScheduleData.filter">
                 <td class="align-middle">{{ committeScheduleData.scheduleId }}</td>

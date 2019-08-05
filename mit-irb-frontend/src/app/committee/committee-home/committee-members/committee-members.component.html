@@ -8,18 +8,18 @@
           <div class="row ml-10 mr-10">
             <div class="col-md-6 txt-medium">
               <label>Filter Members: &nbsp;</label>
-              <input type="checkbox" name="filterMember" id="activeMembers" [checked]="activeMembers" [(ngModel)]="isActiveFilter" (ngModelChange)="filterMemberList()">&nbsp;Active &nbsp;&nbsp;
-              <input type="checkbox" name="filterMember" id="inactiveMembers" [checked]="inactiveMembers" [(ngModel)]="isInactiveFilter"
+              <input type="checkbox" name="filterMember" id="activeMembers" [(ngModel)]="isActiveFilter" (ngModelChange)="filterMemberList()">&nbsp;Active &nbsp;&nbsp;
+              <input type="checkbox" name="filterMember" id="inactiveMembers" [(ngModel)]="isInactiveFilter"
                 (ngModelChange)="filterMemberList()">&nbsp;Inactive
             </div>
             <div class="col-md-6 text-right">
-              <span class="txt-medium txt-dark p-2 pointer" [routerLink]="['memberHome']" [queryParams]="{mode: _activatedRoute.snapshot.queryParamMap.get( 'mode' ), id: this.committeId}">
+              <span class="txt-medium text-secondary p-2 pointer" [routerLink]="['memberHome']" [queryParams]="{mode: _activatedRoute.snapshot.queryParamMap.get( 'mode' ), id: this.committeId}">
                 <i class="fa fa-plus-circle text-success icon-padding"></i>
                 <u>Add Members</u>
               </span>
               </div>
-              
-									<!-- <span class="welcome-popup text-danger txt-medium" 
+
+									<!-- <span class="welcome-popup text-danger txt-medium"
                   [routerLink]="['memberHome']" [queryParams]="{mode: _activatedRoute.snapshot.queryParamMap.get( 'mode' ), id: this.committeId}">
 									  <i class="fa fa-plus icon-padding"></i>Add Member
 									</span>
@@ -55,7 +55,7 @@
                         <th scope="col" width="15%">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="txt-small">
                       <tr class="solid-bottom pull-up" *ngFor="let member of filteredCommitteMemberList">
                         <td *ngIf="member?.nonEmployeeFlag" class="align-middle">
                           <i class="fa fa-user-o" aria-hidden="true"></i> {{ member?.rolodex?.fullName}}</td>
@@ -124,7 +124,7 @@
         <p>Are you sure you want to delete this item?</p>
       </div>
       <div class="modal-footer p-2">
-        <button class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close" (click)="showPopup = false">No</button>
+        <button class="btn btn-outline-danger txt-small" data-dismiss="modal" aria-label="Close">No</button>
         <!-- <button type="button margin-class"  class="btn btn-primary tab_btn proceed-btn" data-dismiss="modal" (click)="cancelDelete()">No</button> -->
         <button class="btn btn-outline-success txt-small" (click)="updateCommitteMember()" data-dismiss="modal">Yes</button>
       </div>

@@ -21,9 +21,7 @@
                   </div>
                   <div class="card-body card-paddng">
                       <div class="col-12  search-eidted-p padding-15" *ngIf="mandatoryFieldMissing">
-                        <div class="alert alert-danger txt-medium">
-                            Please fill all mandatory fields marked
-                          <strong>*</strong>
+                        <div class="alert alert-danger txt-medium" [innerHTML]="warningMessage">
                         </div>
                       </div>
                       <div class="col-12  search-eidted-p" *ngIf="isAdminContactEditable">
@@ -56,9 +54,9 @@
                                   </select>
                                   </div>
                                   </div>
-                                  <div class="col-md-3">
+                                  <!-- <div class="col-md-3">
                                       <div class="form-group">
-                                        <span class="txt-medium txt-dark">Affilate</span>
+                                        <span class="txt-medium txt-dark">Affiliation</span>
                                           <span class="mandatory">*</span>
                                           <select [class.poping-border]="isAdminContactEdit" class="txt-small form-control" id="inlineFormCustomSelect" [(ngModel)]="protocolAdminContact.affiliationTypeCode"
                                           (ngModelChange)="setPersonAffiliation(protocolAdminContact.affiliationTypeCode)">
@@ -66,7 +64,7 @@
                                           <option *ngFor="let type of affiliationTypes" value="{{type.affiliationTypeCode}}">{{type.description}}</option>
                                         </select>
                                         </div>
-                                        </div>
+                                        </div> -->
 <!--                                  <div class="col-md-4">-->
 <!--                                      <div class="form-group">-->
 <!--                                          <span class="txt-medium txt-dark">Description</span>-->
@@ -186,8 +184,8 @@
                                 <tr class="solid-bottom">
                                   <th class="align-middle" scope="col">Name</th>
                                   <th class="align-middle" scope="col">Role</th>
-                                  <th class="align-middle" scope="col">Affiliation</th>
-                                  <th  class="align-middle text-center" scope="col">Training Completed</th>
+                                  <!-- <th class="align-middle" scope="col">Affiliation</th> -->
+                                  <!-- <th  class="align-middle text-center" scope="col">Training Completed</th> -->
                                   <th class="align-middle" scope="col">Action</th>
                                 </tr>
                               </thead>
@@ -196,13 +194,13 @@
                                   class="solid-bottom pull-up">
                                   <td  scope="col" class="align-middle"><i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item?.personName}}</td>
                                   <td  scope="col" class="align-middle">{{item?.adminContactType?.description}}</td>
-                                  <td  scope="col" class="align-middle">{{item?.protocolAffiliationTypes?.description}}</td>
-                                  <td  scope="col" class="align-middle text-center">
+                                  <!-- <td  scope="col" class="align-middle">{{item?.protocolAffiliationTypes?.description}}</td> -->
+                                  <!-- <td  scope="col" class="align-middle text-center">
                                       <i *ngIf="item?.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check"
                                       title="Complete" aria-hidden="true"></i>
                                     <i *ngIf="item?.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times"
                                       title="Not Complete" aria-hidden="true"></i>
-                                  </td>
+                                  </td> -->
          
                                   <td  scope="col" class="action-btn-list align-middle">
                                     <a *ngIf="isAdminContactEditable" title="Edit" (click)="editAdminContact(item,i)" class="btn mb-2">

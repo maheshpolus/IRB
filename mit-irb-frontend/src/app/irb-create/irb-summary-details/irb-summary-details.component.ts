@@ -23,6 +23,7 @@ export class IrbSummaryDetailsComponent implements OnInit, OnDestroy {
   moduleAvailableForAmendment: any = [];
   irbSummaryVo: any = {};
   userDTO: any = {};
+  commonVo: any = {};
   requestObject = {
     protocolNumber: null
   };
@@ -61,6 +62,7 @@ export class IrbSummaryDetailsComponent implements OnInit, OnDestroy {
       this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe((commonVo: any) => {
         // this._spinner.hide();
         if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
+          this.commonVo = commonVo;
           this.protocolStatus = commonVo.generalInfo.protocolStatus.protocolStatusCode;
           this.sequenceNumber = commonVo.generalInfo.sequenceNumber;
         }
@@ -99,11 +101,27 @@ saveAmendmentDetails() {
     this._spinner.hide();
     this.irbSummaryVo = data;
     this.moduleAvailableForAmendment = this.irbSummaryVo.moduleAvailableForAmendment;
-    if (this.irbSummaryVo.successCode === true) {
+    if (this.irbSummaryVo.protocolRenewalDetails != null) {
+      this.commonVo.protocolRenewalDetails = Object.assign({}, this.irbSummaryVo.protocolRenewalDetails);
+      this._sharedDataService.setCommonVo(this.commonVo);
+    }
+      if (this.irbSummaryVo.successCode === true) {
       this.toastr.success('Saved Successfully', null, { toastLife: 2000 });
     } else {
       this.toastr.error('Failed to Save', null, { toastLife: 2000 });
     }
   });
+}
+
+
+setAcTypeForModule(index) {
+  if (this.moduleAvailableForAmendment[index].PROTO_AMEND_RENEWAL_ID != null) {
+    this.moduleAvailableForAmendment[index].AC_TYPE = 'U';
+
+  }
+  if (this.moduleAvailableForAmendment[index].PROTO_AMEND_RENEWAL_ID == null) {
+    this.moduleAvailableForAmendment[index].AC_TYPE = this.moduleAvailableForAmendment[index].STATUS_FLAG === true ? 'U' : null;
+
+  }
 }
 }

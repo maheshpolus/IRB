@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 // import _.forEach from 'lodash/forEach';
@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { CreateQuestionnaireService } from '../services/create.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
+import { BasicDetailsComponent } from './basic-details/basic-details.component';
 
 @Component({
   selector: 'app-create-main',
@@ -19,6 +20,7 @@ export class CreateMainComponent implements OnInit, OnDestroy {
               private _createQuestionnaireService: CreateQuestionnaireService,
               private _spinner: NgxSpinnerService,
               private _changeRef: ChangeDetectorRef) { }
+  @ViewChild(BasicDetailsComponent) basicDetailsComponent: BasicDetailsComponent;
   data: any = {};
   toast_message = 'Questionnaire Saved Sucessfully';
   QuestionnaireCommonValues: any = {
@@ -34,6 +36,7 @@ export class CreateMainComponent implements OnInit, OnDestroy {
   errorList = [];
   groupLabels = {};
   isSaving = false;
+  isViewmode = false;
   $goToQuestion: ISubscription;
   /**
    * takes the data from the resolver output,
@@ -96,6 +99,9 @@ export class CreateMainComponent implements OnInit, OnDestroy {
    */
   saveQuestionniare() {
     if (!this.isSaving) {
+      if (this.basicDetailsComponent) {
+        this.basicDetailsComponent.addNewUsage();
+      }
       this.isSaving = true;
       document.getElementById('app-spinner').style.display = 'block';
       this.updateGroupLabel();

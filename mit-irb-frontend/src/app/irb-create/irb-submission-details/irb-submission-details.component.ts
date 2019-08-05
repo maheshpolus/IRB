@@ -1,20 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ISubscription } from 'rxjs/Subscription';
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
-import { IrbViewService } from '../irb-view.service';
+import { IrbViewService } from '../../irb-view/irb-view.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
 
 @Component({
-  selector: 'app-irb-submission-detail',
-  templateUrl: './irb-submission-detail.component.html',
-  styleUrls: ['./irb-submission-detail.component.css'],
+  selector: 'app-irb-submission-details',
+  templateUrl: './irb-submission-details.component.html',
+  styleUrls: ['./irb-submission-details.component.css']
 })
-export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
+export class IrbSubmissionDetailsComponent implements OnInit, OnDestroy {
 
   adminSearchPersonId = null;
   protocolSearchPersonId = null;
@@ -28,7 +28,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   reviewTabSelected = 'ADMIN';
   isExpanded = false;
   lookUpData: any;
-  headerDetails: any;
+  headerDetails: any = {};
   userDTO: any;
   irbAdminsReviewerType = [];
   irbAdminsList = [];
@@ -116,7 +116,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   private $subscription: ISubscription;
   private $subscription1: ISubscription;
-  constructor(private _activatedRoute: ActivatedRoute,
+  constructor(private _activatedRoute: ActivatedRoute, private _router: Router,
     private _irbViewService: IrbViewService, private _completerService: CompleterService,
     private _sharedDataService: SharedDataService, private _spinner: NgxSpinnerService, public toastr: ToastsManager) {
       this.adminReviewer.reviewTypeCode = null;
@@ -124,12 +124,18 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getLookUpData();
-      this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
-        if (data !== undefined && data != null) {
-          if (+data.PROTOCOL_STATUS_CODE >= 200) { // check if edit is allowed
+      this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe((commonVo: any) => {
+        if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
+          if (+commonVo.generalInfo.protocolStatusCode >= 200) { // check if edit is allowed
             this.showEdit = false;
           }
-          this.headerDetails = Object.assign({}, data);
+          this.headerDetails.SUBMISSION_ID = commonVo.generalInfo.protocolSubmissionStatuses != null ?
+          commonVo.generalInfo.protocolSubmissionStatuses.submission_Id : null;
+          this.headerDetails.SUBMISSION_NUMBER =  commonVo.generalInfo.protocolSubmissionStatuses != null ?
+          commonVo.generalInfo.protocolSubmissionStatuses.submissionNumber : null;
+          this.headerDetails.PROTOCOL_ID = commonVo.protocolId;
+          this.headerDetails.PROTOCOL_NUMBER = commonVo.protocolNumber;
+          this.headerDetails.SEQUENCE_NUMBER = commonVo.generalInfo.sequenceNumber;
           this.getIRBAdminReviewers();
           this.getIRBAdminReviewDetails();
           this.getSubmissionBasicDetails();
@@ -225,18 +231,23 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   showCurrentSubmission() {
-      this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
-        if (data !== undefined && data != null) {
-          if (+data.PROTOCOL_STATUS_CODE >= 200) { // check if edit is allowed
+      this.$subscription1 = this._sharedDataService.CommonVoVariable.subscribe((commonVo: any) => {
+        if (commonVo !== undefined && commonVo.generalInfo !== undefined && commonVo.generalInfo !== null) {
+          if (+commonVo.generalInfo.protocolStatusCode >= 200) { // check if edit is allowed
             this.showEdit = false;
           }
-          this.headerDetails = Object.assign({}, data);
+          this.headerDetails.SUBMISSION_ID = commonVo.protocolSubmissionStatuses != null ?
+          commonVo.protocolSubmissionStatuses.submission_Id : null;
+          this.headerDetails.SUBMISSION_NUMBER =  commonVo.protocolSubmissionStatuses != null ?
+          commonVo.protocolSubmissionStatuses.submissionNumber : null;
+          this.headerDetails.PROTOCOL_ID = commonVo.protocolId;
+          this.headerDetails.PROTOCOL_NUMBER = commonVo.protocolNumber;
+          this.headerDetails.SEQUENCE_NUMBER = commonVo.generalInfo.sequenceNumber;
           this.getIRBAdminReviewers();
           this.getIRBAdminReviewDetails();
           this.getSubmissionBasicDetails();
           this.getSubmissionHistory();
           this.loadCommitteeReviewerDetails();
-          this.viewMode = false;
         }
       });
   }
@@ -1081,4 +1092,5 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.tabSelectedCommittee =  this.isExpanded === true ? 'PROTOCOL_COMMENTS' : '';
     this.reviewedBy = this.userDTO.userName;
   }
+
 }

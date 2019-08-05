@@ -181,12 +181,12 @@ public class LoginValidator extends BaseController {
 		return role;
 	}
 
-	public ArrayList<HashMap<String, Object>> checkIRBUserRoles(String personId) {
+	public ArrayList<HashMap<String, Object>> checkIRBUserRoles(String userName) {
 		ArrayList<HashMap<String, Object>> result = null;
 		ArrayList<InParameter> inputParam = new ArrayList<>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		inputParam.add(new InParameter("PERSON_ID", DBEngineConstants.TYPE_STRING, personId));
-		inputParam.add(new InParameter("USER_ID ", DBEngineConstants.TYPE_STRING, personId));
+		//inputParam.add(new InParameter("PERSON_ID", DBEngineConstants.TYPE_STRING, userName));
+		inputParam.add(new InParameter("USER_ID", DBEngineConstants.TYPE_STRING, userName));
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 		try {
 			result = dbUtils.executeProcedure(inputParam, "GET_IRB_PERSON_ROLE", outputParam);

@@ -41,6 +41,7 @@ public class SubmissionDetailVO {
 	private String submissionReviewType;
 	private String committeeName;
 	private Integer scheduleId;
+	private String includeInLetter;
 	
 	private ArrayList<HashMap<String, Object>> irbAdminsList;
 	private ArrayList<HashMap<String, Object>> irbAdminsReviewers;
@@ -491,4 +492,11 @@ public class SubmissionDetailVO {
 	public void setCompleteTimeStamp(String completeTimeStamp) {
 		this.completeTimeStamp = completeTimeStamp;
 	}
+	public String getIncludeInLetter() {
+		return includeInLetter;
+	}
+	public void setIncludeInLetter(String includeInLetter) {
+		this.includeInLetter = includeInLetter;
+	}
+	
 }

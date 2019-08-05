@@ -206,18 +206,14 @@
                       <div class="row dotted-bottom" [ngClass]="{'row-line':i!=0}"
                         *ngFor="let adminContact of irbAdminContactList;let i= index">
   
-                        <div class="row">
+                        <div class="col-md-11">
             
   
-                          <div class="vertical-middle width-100 pd-card-row">
+                          <div class="vertical-middle width-100 p-2">
                               <h5 class="txt-large" style="display:inline">
                                   {{adminContact.PERSON_NAME}}
                                 </h5>
-                                <button type="button" class="btn btn-blue btn-sm text-right exp_colapse" data-toggle="modal"
-                                  data-target="#personModal" (click)="showpersonData(adminContact?.PERSON_ID)">
-                                  <i class="fa fa-eye"></i> View
-                                </button>
-                            <p class="text-secondary txt-medium mb-5">
+                            <p class="text-secondary txt-medium mb-0">
                               <!-- Person Name:
                               <span class="text-danger mr-20">
                                 {{adminContact.PERSON_NAME}}
@@ -225,7 +221,7 @@
   
   
                              
-                              Training Status:
+                              <!-- Training Status:
                                   <span class="font-size-23">
                                     <i *ngIf="adminContact.IS_TRAINING_COMPLETED=='COMPLETED'"
                                       class="training-complete-color fa fa-check text-small txt-green" title="Complete"
@@ -233,7 +229,7 @@
                                     <i *ngIf="adminContact.IS_TRAINING_COMPLETED=='INCOMPLETE'"
                                       class="training-incomplete-color fa fa-times" title="Not Complete"
                                       aria-hidden="true" style="font-size:16px"></i>
-                                  </span>
+                                  </span> -->
                                    Role:
                                   <span class="text-danger mr-20">
                                     {{adminContact.ADMIN_CONTACT_TYPE}}
@@ -242,8 +238,8 @@
                                
                             </p>
                             <p class="text-secondary txt-medium mb-5">
-                                Affiliation:
-                                <span class="text-danger ">{{adminContact.AFFILIATION_TYPE}}</span> 
+                                <!-- Affiliation:
+                                <span class="text-danger ">{{adminContact.AFFILIATION_TYPE}}</span>  -->
                                 Email:
                                 <span class="text-danger ">{{adminContact.EMAIL_ADDRESS}}</span>
                                 | Office:
@@ -254,6 +250,13 @@
                           </div>
                           
                          
+                      </div>
+                      <div class="col-md-1 col-sm-12 col-12 list-des button-responsive vertical-middle mt-3">
+                        
+                        <button type="button" class="btn btn-blue btn-sm text-right exp_colapse" data-toggle="modal"
+                        data-target="#personModal" (click)="showpersonData(adminContact?.PERSON_ID)">
+                        <i class="fa fa-eye"></i> View
+                      </button>
                       </div>
                       
   

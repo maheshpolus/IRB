@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolRiskLevel;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolRenewalDetails;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
 
 public class IRBActionsVO {
 	private ArrayList<HashMap<String, Object>> personActionsList;
 	private HashMap<String, Object> personAction;
-	private Integer personID;
+	private String personID;
 	private String protocolNumber;
 	private String submissionStatus;
 	private String protocolStatus;
@@ -56,6 +58,10 @@ public class IRBActionsVO {
 	private String correspTemplateTypeCode;
 	private String correspTypeDescription;
 	private Integer actionId;
+	private ProtocolGeneralInfo protocolInfo;
+	private boolean flag; 
+	private ProtocolRenewalDetails protocolRenewalDetails;
+	
 	public ArrayList<HashMap<String, Object>> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
 	}
@@ -70,14 +76,6 @@ public class IRBActionsVO {
 
 	public void setPersonActionsList(ArrayList<HashMap<String, Object>> personActionsList) {
 		this.personActionsList = personActionsList;
-	}
-
-	public Integer getPersonID() {
-		return personID;
-	}
-
-	public void setPersonID(Integer personID) {
-		this.personID = personID;
 	}
 
 	public String getProtocolNumber() {
@@ -430,5 +428,37 @@ public class IRBActionsVO {
 
 	public void setActionId(Integer actionId) {
 		this.actionId = actionId;
+	}
+
+	public String getPersonID() {
+		return personID;
+	}
+
+	public void setPersonID(String personID) {
+		this.personID = personID;
+	}
+
+	public ProtocolGeneralInfo getProtocolInfo() {
+		return protocolInfo;
+	}
+
+	public void setProtocolInfo(ProtocolGeneralInfo protocolInfo) {
+		this.protocolInfo = protocolInfo;
+	}
+	
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public ProtocolRenewalDetails getProtocolRenewalDetails() {
+		return protocolRenewalDetails;
+	}
+
+	public void setProtocolRenewalDetails(ProtocolRenewalDetails protocolRenewalDetails) {
+		this.protocolRenewalDetails = protocolRenewalDetails;
 	}
 }

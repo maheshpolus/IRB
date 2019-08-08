@@ -5,7 +5,7 @@
         <div class="col-12">
           <div class="row">
             <div class=" col-lg-2 col-2 ">
-              <app-questionnaire-tree [nodes]='nodes' [data]='data' [editIndex]= "editIndex" [errorList]= "errorList" (viewQuestion)="viewQuestion($event)"></app-questionnaire-tree>
+              <app-questionnaire-tree [nodes]='nodes' [data]='data' ></app-questionnaire-tree>
           </div>
           <div class="col-9">
             <div class="row qst-preview-qstn-header">
@@ -29,8 +29,7 @@
             </ng-container>
             <ng-container *ngIf="currentTab == 'create'">
               <app-create-questionnaire [questionnaire]="data.questionnaire" [commonValues]="QuestionnaireCommonValues"
-                [nodes]="nodes" [groupLabels]="groupLabels" [errorList] = "errorList" [isFinal] ="data.header.IS_FINAL" (saveQuestionniare)="confirmSave($event)"
-                (createTree)="createTreeNodes($event)" (previewTab)="changeCurrentTab($event)">
+                [nodes]="nodes" [groupLabels]="groupLabels" [isFinal] ="data.header.IS_FINAL" >
               </app-create-questionnaire>
             </ng-container>
             <ng-container *ngIf="currentTab == 'preview'">

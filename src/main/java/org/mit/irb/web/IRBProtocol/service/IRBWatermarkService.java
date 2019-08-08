@@ -35,5 +35,5 @@ public interface IRBWatermarkService {
 	 * @param attachment - Object of IRBWatermark class.
 	 * @return byte array of attachment pdf.
 	 */
-	public byte[] generateTimestampAndUsernameForPdf(byte[] byteArray, IRBWatermark watermark, IRBAttachmentProtocol protocolAttachment); 
+	public byte[] generateWaterMarkForPdf(byte[] byteArray, IRBWatermark watermark, IRBAttachmentProtocol protocolAttachment); 
 }

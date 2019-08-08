@@ -79,4 +79,11 @@ public interface QuestionnaireModuleService {
 	 * @return download attachments
 	 */
 	ResponseEntity<byte[]> downloadAttachments(QuestionnaireModuleDataBus questionnaireDataBus, HttpServletResponse response);
+
+	/**
+	 * This method is used to update the questionnaire sort order
+	 * @param questionnaireDataBus
+	 * @return QuestionnaireModuleDataBus
+	 */
+	QuestionnaireModuleDataBus updateHeaderInfo(QuestionnaireModuleDataBus questionnaireDataBus);
 }

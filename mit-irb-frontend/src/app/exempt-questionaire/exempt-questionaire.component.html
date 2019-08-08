@@ -603,7 +603,7 @@
 							</table>
 							<span *ngIf="isEmptyCheckListDescr" class="desc-warning">* Please provide checklist description to proceed</span>
 
-							<file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+							<file-drop customstyle="file-drop-color" (onFileDrop)="dropped($event)">
 								<button class="btn btn-outline-danger txt-small mt-40" (click)="triggerAdd()">Choose Files
 								</button>
 								<input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none" />
@@ -806,11 +806,6 @@
           </div>
         </div>
 
-			</div>
-			<div class="row" *ngIf="finalStatus != null">
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					<label class="routeLogStatus">finalStatus</label>
-				</div>
 			</div>
 			<div class="col-12 cardTable pad-Bottom0 dotted-bottom">
 				<div class="pullSide">

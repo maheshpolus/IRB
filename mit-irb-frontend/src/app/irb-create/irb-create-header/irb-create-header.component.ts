@@ -30,17 +30,17 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     private _irbCreateService: IrbCreateService,
     private _spinner: NgxSpinnerService,
     private modalService: NgbModal) {
-      this._router.events.subscribe((evt: any) => {
-        if (evt instanceof NavigationEnd) {
-          if (evt.url === '/irb/irb-create/irbHome?protocolNumber=' + this.protocolNumber + '&protocolId=' + this.protocolId) {
-            this.getIRBProtocol();
-          }
-        }
-        if (evt.snapshot != null && evt.snapshot.params != null  && evt.snapshot.params.queryParams != null) {
-          this.protocolId = evt.snapshot.params.queryParams.protocolId;
-          this.protocolNumber = evt.snapshot.params.queryParams.protocolNumber;
-        }
-    });
+     // this._router.events.subscribe((evt: any) => {
+    //     if (evt instanceof NavigationEnd) {
+    //       if (evt.url.includes('irbHome')) {
+    //         this.getIRBProtocol();
+    //       }
+    //     }
+    //     if (evt.snapshot != null && evt.snapshot.params != null  && evt.snapshot.params.queryParams != null) {
+    //       this.protocolId = evt.snapshot.params.queryParams.protocolId;
+    //       this.protocolNumber = evt.snapshot.params.queryParams.protocolNumber;
+    //     }
+    // });
      }
 
   ngOnInit() {
@@ -68,7 +68,7 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
         this.isCreateNewProtocol = false;
       }
     });
-    this.getIRBProtocol();
+   this.getIRBProtocol();
     if (this.isAmmendmentOrRenewal()) {
       this.show_current_tab('irbSummaryDetails');
     }
@@ -78,10 +78,18 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
     }
+    if (this.protocolNumber) {
+      const reqstObj = { protocolNumber: this.protocolNumber };
+      this._sharedDataService.releaseProtocolLock(reqstObj).subscribe(
+        data => {
+          console.log('Lock Released Successfully');
+        });
+    }
   }
 
   getIRBProtocol() {
-    const requestObject = { protocolId: this.protocolId, protocolNumber: this.protocolNumber };
+    const requestObject = { protocolId: this.protocolId, protocolNumber: this.protocolNumber,
+      personId: this.userDTO.personID, updateUser: this.userDTO.userName };
     this._spinner.show();
     this._irbCreateService.getEditDetails(requestObject).subscribe(
       data => {
@@ -107,7 +115,8 @@ export class IrbCreateHeaderComponent implements OnInit, OnDestroy {
   show_current_tab(current_tab) {
     if (this.protocolNumber !== null && this.protocolId !== null) {
       this._router.navigate(['/irb/irb-create/' + current_tab],
-        { queryParamsHandling: 'merge', queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId } });
+        { queryParamsHandling: 'merge', queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId,
+          sequenceNumber : this.generalInfo.sequenceNumber} });
     }
   }
   toggle() {

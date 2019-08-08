@@ -134,7 +134,7 @@
                     </div>
                     <div class="alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
                       <p class="txt-small m-0">
-                        <i>Research cannot commence before IRB approval.</i></p>
+                        <i>Research cannot commence before COUHES approval.</i></p>
                     </div>
                     <span *ngIf="invalidData.invalidStartDate" class="error txt-small">Start Date should be less than End
                       Date</span>
@@ -167,6 +167,64 @@
                   </div>
                 </div>
               </div>
+              <div class="row" *ngIf="isAdminCorrection && generalInfo?.protocolStatusCode >='200'">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                          <span class="txt-medium text-secondary">Approval Date</span>
+                          <div class="input-group">
+                            <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control txt-small"
+                              [owlDateTime]="approvalDate" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.strApprovalDate"
+                              (ngModelChange)="changeApprovalDate(generalInfo.strApprovalDate)" [max]="generalInfo.strExpirationDate">
+                            <owl-date-time [pickerType]="'calendar'" #approvalDate></owl-date-time>
+                            <div class="input-group-append" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="approvalDate">
+                              <span class="input-group-text">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                          </div>
+                          <span *ngIf="invalidData.invalidStartDate" class="error txt-small">Start Date should be less than End
+                            Date</span>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-group">
+                            <span class="txt-medium text-secondary">Expiration Date</span>
+                            <div class="input-group">
+                              <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control txt-small" [min]="generalInfo.strApprovalDate"
+                                [owlDateTime]="expirationDate" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.strExpirationDate">
+                              <owl-date-time [pickerType]="'calendar'" #expirationDate></owl-date-time>
+                              <div class="input-group-append" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="expirationDate">
+                                <span class="input-group-text">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <span *ngIf="invalidData.invalidStartDate" class="error txt-small">Start Date should be less than End
+                              Date</span>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                              <span class="txt-medium text-secondary">Last Approval Date</span>
+                              <div class="input-group">
+                                <input [disabled]="isGeneralInfoEditable == false" type="text" class="form-control txt-small" [min]="generalInfo.strApprovalDate"
+                                  [owlDateTime]="lastApprovalDate" placeholder="mm/dd/yyyy" [(ngModel)]="generalInfo.strLastApprovalDate">
+                                <owl-date-time [pickerType]="'calendar'" #lastApprovalDate></owl-date-time>
+                                <div class="input-group-append" *ngIf="isGeneralInfoEditable" [owlDateTimeTrigger]="lastApprovalDate">
+                                  <span class="input-group-text">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                  </span>
+                                </div>
+                              </div>
+                              <!-- <div class="alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
+                                <p class="txt-small m-0">
+                                  <i>Research cannot commence before COUHES approval.</i></p>
+                              </div> -->
+                              <span *ngIf="invalidData.invalidStartDate" class="error txt-small">Start Date should be less than End
+                                Date</span>
+                            </div>
+                          </div>
+                </div>
   
   
               <div class="row bottom-margin">
@@ -181,7 +239,7 @@
                     <div class="alert-sp alert-warning mb-0" style="margin-bottom: 5px !important;">
                       <p class="txt-small m-0">
                         <i>Please provide a concise statement of the background, nature and reasons for the proposed
-                          study. Use non-technical language that can be understood by non-scientist members of IRB.
+                          study. Use non-technical language that can be understood by non-scientist members of COUHES.
                           This section cannot exceed 7500 characters.</i></p>
                     </div>
                   </div>

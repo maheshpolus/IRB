@@ -16,6 +16,14 @@ public class IRBViews {
 	private String submissionStatus;
 	private Date approvalDate;
 	private Date expirationDate;
+	private String emergencyUse;
+	private String protocolStatus;
+	private String fundingSource;
+	private String protocolPersonName;
+	private String irbAdmin;
+	private String approvalDateNew;
+	private String expirationDateNew;
+	private String protocolNumberNew;
 
 	public String getStatus() {
 		return status;
@@ -96,4 +104,70 @@ public class IRBViews {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public String getEmergencyUse() {
+		return emergencyUse;
+	}
+
+	public void setEmergencyUse(String emergencyUse) {
+		this.emergencyUse = emergencyUse;
+	}
+
+	public String getProtocolStatus() {
+		return protocolStatus;
+	}
+
+	public void setProtocolStatus(String protocolStatus) {
+		this.protocolStatus = protocolStatus;
+	}
+
+	public String getFundingSource() {
+		return fundingSource;
+	}
+
+	public void setFundingSource(String fundingSource) {
+		this.fundingSource = fundingSource;
+	}
+
+	public String getProtocolPersonName() {
+		return protocolPersonName;
+	}
+
+	public void setProtocolPersonName(String protocolPersonName) {
+		this.protocolPersonName = protocolPersonName;
+	}
+
+	public String getIrbAdmin() {
+		return irbAdmin;
+	}
+
+	public void setIrbAdmin(String irbAdmin) {
+		this.irbAdmin = irbAdmin;
+	}
+
+	public String getApprovalDateNew() {
+		return approvalDateNew;
+	}
+
+	public void setApprovalDateNew(String approvalDateNew) {
+		this.approvalDateNew = approvalDateNew;
+	}
+
+	public String getExpirationDateNew() {
+		return expirationDateNew;
+	}
+
+	public void setExpirationDateNew(String expirationDateNew) {
+		this.expirationDateNew = expirationDateNew;
+	}
+
+	public String getProtocolNumberNew() {
+		return protocolNumberNew;
+	}
+
+	public void setProtocolNumberNew(String protocolNumberNew) {
+		this.protocolNumberNew = protocolNumberNew;
+	}
+	
+	
 }

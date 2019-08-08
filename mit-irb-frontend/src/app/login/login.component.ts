@@ -17,9 +17,9 @@ export class LoginComponent{
     password: String;
 
     constructor(  private idle: Idle, private _loginService: LoginService, private _router: Router ) {
-       // if (sessionStorage.getItem('ActivatedUser') != null) {
-       //     this._router.navigate( ['/irb/dashboard'] );
-       // }
+        if (sessionStorage.getItem('ActivatedUser') != null) {
+            this._router.navigate( ['/irb/dashboard'] );
+        }
         this.idle.stop();
     }
 

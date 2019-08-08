@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -59,6 +60,9 @@ public class CommitteeMemberRoles implements Serializable {
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+	
+	@Transient
+	private String acType;
 
 	public Integer getCommMemberRolesId() {
 		return commMemberRolesId;
@@ -128,4 +132,20 @@ public class CommitteeMemberRoles implements Serializable {
 		this.membershipRoleDescription = membershipRoleDescription;
 	}
 
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+	public CommitteeMemberRoles(Integer commMemberRolesId, String membershipRoleCode, String membershipRoleDescription) {
+		super();
+		this.commMemberRolesId = commMemberRolesId;
+		this.membershipRoleCode = membershipRoleCode;
+		this.membershipRoleDescription = membershipRoleDescription;
+	}
+	public CommitteeMemberRoles() {
+		super();
+	}
 }

@@ -18,6 +18,7 @@ import { IrbCreateModule } from '../irb-create/irb-create.module';
 import { IrbViewRoutingModule } from './irb-view-routing.module';
 import { SubmissionDetailsComponent } from './irb-history/submission-details/submission-details.component';
 import { IrbSubmissionDetailComponent } from './irb-submission-detail/irb-submission-detail.component';
+import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { IrbSubmissionDetailComponent } from './irb-submission-detail/irb-submis
     NgbModule.forRoot()
   ],
   declarations: [IrbOverviewComponent, IrbHeaderDetailComponent,
-    IrbQuestionaireComponent, IrbAttachmentsComponent, IrbHistoryComponent, SubmissionDetailsComponent, IrbSubmissionDetailComponent]
+    IrbQuestionaireComponent, IrbAttachmentsComponent,
+    IrbHistoryComponent, SubmissionDetailsComponent, IrbSubmissionDetailComponent, IrbProtocolComponent]
 })
 export class IrbViewModule {}

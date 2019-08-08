@@ -5,11 +5,13 @@ import { CreateQuestionnaireService } from '../services/create.service';
 import * as _ from 'lodash';
 // import _.filter from 'lodash/filter';
 import { Router, ActivatedRoute } from '@angular/router';
+import { easeInOUt } from './../services/animations';
 
 @Component({
   selector: 'app-questionnaire-list',
   templateUrl: './questionnaire-list.component.html',
-  styleUrls: ['./questionnaire-list.component.css']
+  styleUrls: ['./questionnaire-list.component.css'],
+  animations: [easeInOUt]
 })
 export class QuestionnaireListComponent implements OnInit {
   result: any = {
@@ -18,6 +20,7 @@ export class QuestionnaireListComponent implements OnInit {
   };
   selectedGroup     = null;
   questionnairelist = [];
+  deBounceTimer: any;
   constructor( private _createQuestionnaireService: CreateQuestionnaireService,
                private _spinner: NgxSpinnerService,
                private _router: Router,
@@ -45,4 +48,24 @@ export class QuestionnaireListComponent implements OnInit {
     this._router.navigate(['../create'],
     { queryParams: { id: questionnaireId , viewmode: viewMode} , relativeTo: this._activatedRoute});
   }
+
+  changeSortOrder(index, type) {
+     const nextValue = type === 'positive' ?  index - 1 : index + 1;
+      const sortOrder = this.result.questionnaireList[index].SORT_ORDER;
+      this.result.questionnaireList[index].SORT_ORDER =  this.result.questionnaireList[nextValue].SORT_ORDER;
+      this.result.questionnaireList[nextValue].SORT_ORDER = sortOrder;
+      [this.result.questionnaireList[index] , this.result.questionnaireList[nextValue] ] =
+              [this.result.questionnaireList[nextValue] , this.result.questionnaireList[index] ];
+      this.updateQuestionnarireSortOrder();
+    }
+
+    updateQuestionnarireSortOrder() {
+      clearTimeout(this.deBounceTimer);
+      this.deBounceTimer = setTimeout(() => {
+        this._createQuestionnaireService.updateQuestionnarireSortOrder(this.result).subscribe(data => {
+          this.result = data;
+          this.questionnairelist = this.result.questionnaireList;
+        });
+      }, 1000);
+    }
 }

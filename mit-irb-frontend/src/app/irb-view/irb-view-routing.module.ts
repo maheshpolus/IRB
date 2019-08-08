@@ -13,6 +13,7 @@ import { IrbSummaryDetailsComponent } from '../irb-create/irb-summary-details/ir
 import { IrbSubmissionDetailComponent } from './irb-submission-detail/irb-submission-detail.component';
 import { IrbPermissionComponent } from '../irb-create/irb-permission/irb-permission.component';
 import { IrbQuestionnaireListComponent } from '../irb-create/irb-questionnaire-list/irb-questionnaire-list.component';
+import { IrbProtocolComponent } from './irb-protocol/irb-protocol.component';
 
 const routes: Routes = [
                         {path: '', component: IrbHeaderDetailComponent, resolve: { irb: DashboardResolverService },
@@ -24,13 +25,15 @@ const routes: Routes = [
                           { path: 'irbAttatchments', component: IrbCreateAttachmentComponent,
                           resolve: { irb: DashboardResolverService } },
                           {path: 'irbHistory', component: IrbHistoryComponent},
+                          {path: 'irbProtocol', component: IrbProtocolComponent},
                           {path: 'irbHistory/submission-detail', component: SubmissionDetailsComponent},
                           { path: 'irbPermission', component: IrbPermissionComponent , resolve: { irb: DashboardResolverService }},
                           {path: 'irbActions', component: IrbActionsComponent, resolve: { irb: DashboardResolverService }},
                           { path: 'irbSummaryDetails', component: IrbSummaryDetailsComponent, resolve: { irb: DashboardResolverService } },
                           {path: 'irbSubmissionDetails', component: IrbSubmissionDetailComponent,
                           resolve: { irb: DashboardResolverService }},
-                          { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent },
+                          { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent,
+                    children: [{ path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }] },
                           { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }
                           ]}
                         ];

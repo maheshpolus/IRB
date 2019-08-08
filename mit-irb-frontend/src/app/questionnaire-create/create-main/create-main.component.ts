@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 // import _.forEach from 'lodash/forEach';
@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { CreateQuestionnaireService } from '../services/create.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISubscription } from 'rxjs/Subscription';
+import { BasicDetailsComponent } from './basic-details/basic-details.component';
 
 @Component({
   selector: 'app-create-main',
@@ -17,7 +18,9 @@ export class CreateMainComponent implements OnInit, OnDestroy {
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _createQuestionnaireService: CreateQuestionnaireService,
-              private _spinner: NgxSpinnerService) { }
+              private _spinner: NgxSpinnerService,
+              private _changeRef: ChangeDetectorRef) { }
+  @ViewChild(BasicDetailsComponent) basicDetailsComponent: BasicDetailsComponent;
   data: any = {};
   toast_message = 'Questionnaire Saved Sucessfully';
   QuestionnaireCommonValues: any = {
@@ -33,6 +36,7 @@ export class CreateMainComponent implements OnInit, OnDestroy {
   errorList = [];
   groupLabels = {};
   isSaving = false;
+  isViewmode = false;
   $goToQuestion: ISubscription;
   /**
    * takes the data from the resolver output,
@@ -40,7 +44,7 @@ export class CreateMainComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.data = this._activatedRoute.snapshot.data['Questionnaire'];
-    this.QuestionnaireCommonValues.lastGroupName = this.data.questionnaire.maxGroupNumber + 1 || 1
+    this.QuestionnaireCommonValues.lastGroupName = this.data.questionnaire.maxGroupNumber + 1 || 1;
     this._spinner.hide();
     this.goToQuestion();
   }
@@ -95,12 +99,16 @@ export class CreateMainComponent implements OnInit, OnDestroy {
    */
   saveQuestionniare() {
     if (!this.isSaving) {
+      if (this.basicDetailsComponent) {
+        this.basicDetailsComponent.addNewUsage();
+      }
       this.isSaving = true;
       document.getElementById('app-spinner').style.display = 'block';
       this.updateGroupLabel();
       this._createQuestionnaireService.saveQuestionnaireList(this.data).subscribe(
         data => {
           this.data = data;
+          this._changeRef.markForCheck();
           const toastId = document.getElementById('toast-success');
           this.showToast(toastId);
           const  el = document.getElementById('app-spinner');

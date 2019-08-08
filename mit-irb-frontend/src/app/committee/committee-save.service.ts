@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class CommitteeSaveService {
@@ -88,4 +88,31 @@ export class CommitteeSaveService {
         const params = new HttpParams().set('researchSearchString', researchSearchString);
         return this.http.post('/irb/loadResearchAreas', params);
       }
+      getCommitteeMembersById(params) {
+        return this.http.post('/irb/loadCommitteeMemberById', params);
+      }
+      getCommitteeMemberDetails(params) {
+        return this.http.post('/irb/loadCommitteeMemberDetails', params);
+      }
+      updateCommitteMembers(params) {
+        return this.http.post('/irb/updateCommitteeMemberDetails', params);
+      }
+      getMemberTermHistory(params) {
+        return this.http.post('/irb/loadTerHistory', params);
+      }
+      updateMemberRole(params) {
+        return this.http.post('/irb/updateMemberRole', params);
+      }
+      updateMemberExpertise(params) {
+        return this.http.post('/irb/updateMemberExpertise', params);
+      }
+      getIrbPersonDetailedList(params) {
+        return this.http.post('/irb/getMITKCPersonInfo', params);
+    }
+    downloadTrainingAttachment(fileId) {
+        return this.http.get('/irb/downloadFileData', {
+            headers: new HttpHeaders().set('fileDataId', fileId.toString()),
+            responseType: 'blob'
+        });
+    }
 }

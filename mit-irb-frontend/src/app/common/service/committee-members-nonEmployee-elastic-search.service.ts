@@ -115,6 +115,6 @@ export class CommitteeMemberNonEmployeeElasticService {
         } );
     }
     get_elastic_config() {
-        return this._http.get('resources/elastic_config_json');
+        return this._http.get('mit-irb/resources/elastic_config_json');
     }
 }

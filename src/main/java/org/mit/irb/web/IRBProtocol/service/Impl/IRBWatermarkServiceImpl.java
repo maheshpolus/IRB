@@ -37,14 +37,14 @@ public class IRBWatermarkServiceImpl implements IRBWatermarkService{
 	Logger logger = Logger.getLogger(IRBWatermarkServiceImpl.class.getName());
 
 	@Override
-	public byte[] generateTimestampAndUsernameForPdf(byte[] data, IRBWatermark watermarkDetails, IRBAttachmentProtocol protocolAttachment) {
+	public byte[] generateWaterMarkForPdf(byte[] data, IRBWatermark watermarkDetails, IRBAttachmentProtocol protocolAttachment) {
 		byte[] byteArray = null;
 		try {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 	
 			PdfReader reader = new PdfReader(data);
 			PdfStamper watermark = new PdfStamper(reader, outputStream);
 			Font FONT = null;
-			if(watermarkDetails.getFontColour() == "BLACK"){
+			if(watermarkDetails.getFontColour().equals("BLACK")){
 				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(179, 170, 170));		
 			}else{
 				 FONT = new Font(Font.FontFamily.TIMES_ROMAN, Float.parseFloat(watermarkDetails.getFontSize()), Font.BOLD, new BaseColor(251, 148, 142));		
@@ -69,7 +69,7 @@ public class IRBWatermarkServiceImpl implements IRBWatermarkService{
 			for (int i = 1; i <= totalpages; i++) {
 				pageSize = reader.getPageSizeWithRotation(i);
 				x = (pageSize.getLeft() + pageSize.getRight());				
-				over = watermark.getUnderContent(i); 
+				over = watermark.getOverContent(i);
 				over.saveState();
 				PdfGState state = new PdfGState();
 				state.setFillOpacity(10);

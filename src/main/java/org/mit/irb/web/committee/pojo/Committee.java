@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Basic;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,13 +34,34 @@ public class Committee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GenericGenerator(name = "seq_comm_id", strategy = "org.mit.irb.web.generator.CommitteeIdGenerator")
-	@GeneratedValue(generator = "seq_comm_id")  
+	/*@GenericGenerator(name = "seq_comm_id", strategy = "org.mit.irb.web.generator.CommitteeIdGenerator")
+	@GeneratedValue(generator = "seq_comm_id")  */
 	@Column(name = "COMMITTEE_ID")
 	private String committeeId;
 
 	@Column(name = "COMMITTEE_NAME")
 	private String committeeName;
+
+	public Committee(String committeeId, String committeeName, String homeUnitNumber, String description,
+			String scheduleDescription, Integer committeeTypeCode, CommitteeType committeeType,
+			Integer minimumMembersRequired, Integer maxProtocols, Integer advSubmissionDaysReq,
+			java.util.Date updateTimestamp, String updateUser,
+			String homeUnitName) {
+		super();
+		this.committeeId = committeeId;
+		this.committeeName = committeeName;
+		this.homeUnitNumber = homeUnitNumber;
+		this.description = description;
+		this.scheduleDescription = scheduleDescription;
+		this.committeeTypeCode = committeeTypeCode;
+		this.committeeType = committeeType;
+		this.minimumMembersRequired = minimumMembersRequired;
+		this.maxProtocols = maxProtocols;
+		this.advSubmissionDaysReq = advSubmissionDaysReq;
+		this.updateTimestamp = updateTimestamp;
+		this.updateUser = updateUser;
+		this.homeUnitName = homeUnitName;
+	}
 
 	@Column(name = "HOME_UNIT_NUMBER")
 	private String homeUnitNumber;
@@ -70,12 +88,6 @@ public class Committee implements Serializable {
 	@Column(name = "ADV_SUBMISSION_DAYS_REQ")
 	private Integer advSubmissionDaysReq;
 
-	@Column(name = "DEFAULT_REVIEW_TYPE_CODE")
-	private Integer defaultReviewTypecode;
-
-	@Column(name = "APPLICABLE_REVIEW_TYPE_CODE")
-	private Integer applicableReviewTypecode;
-
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
 
@@ -83,7 +95,7 @@ public class Committee implements Serializable {
 	private String createUser;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private Timestamp updateTimestamp;
+	private java.util.Date updateTimestamp;
 
 	@Transient
 	private String updatedDate;
@@ -95,7 +107,6 @@ public class Committee implements Serializable {
 	@OneToMany(mappedBy = "committee", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeResearchAreas> researchAreas;
 
-	@Transient
 	@JsonManagedReference
 	@OneToMany(mappedBy = "committee", orphanRemoval = true, cascade = { CascadeType.ALL })
 	private List<CommitteeSchedule> committeeSchedules;
@@ -106,15 +117,18 @@ public class Committee implements Serializable {
 	private List<CommitteeMemberships> committeeMemberships;
 
 	@Column(name = "HOME_UNIT_NAME")
-	private String homeUnitName;
+	private String homeUnitName;	
 
-	@Column(name = "REVIEW_TYPE")
-	private String reviewTypeDescription;
+	@Transient
+	private java.util.Date scheduleStartDate;
+	
+	@Transient
+	private java.util.Date scheduleEndDate;
 
 	public Committee() {
-		setResearchAreas(new ArrayList<CommitteeResearchAreas>());
+		/*setResearchAreas(new ArrayList<CommitteeResearchAreas>());
 		setCommitteeMemberships(new ArrayList<CommitteeMemberships>());
-        setCommitteeSchedules(new ArrayList<CommitteeSchedule>());
+        setCommitteeSchedules(new ArrayList<CommitteeSchedule>());*/
 		setCommitteeTypeCode(1);
 	}
 
@@ -190,22 +204,6 @@ public class Committee implements Serializable {
 		this.advSubmissionDaysReq = advSubmissionDaysReq;
 	}
 
-	public Integer getDefaultReviewTypecode() {
-		return defaultReviewTypecode;
-	}
-
-	public void setDefaultReviewTypecode(Integer defaultReviewTypecode) {
-		this.defaultReviewTypecode = defaultReviewTypecode;
-	}
-
-	public Integer getApplicableReviewTypecode() {
-		return applicableReviewTypecode;
-	}
-
-	public void setApplicableReviewTypecode(Integer applicableReviewTypecode) {
-		this.applicableReviewTypecode = applicableReviewTypecode;
-	}
-
 	public Timestamp getCreateTimestamp() {
 		return createTimestamp;
 	}
@@ -220,14 +218,6 @@ public class Committee implements Serializable {
 
 	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
 	}
 
 	public String getUpdateUser() {
@@ -246,18 +236,6 @@ public class Committee implements Serializable {
 		this.committeeTypeCode = committeeTypeCode;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	public List<CommitteeResearchAreas> getResearchAreas() {
-		return researchAreas;
-	}
-
-	public void setResearchAreas(List<CommitteeResearchAreas> researchAreas) {
-		this.researchAreas = researchAreas;
-	}
-
 	public List<CommitteeSchedule> getCommitteeSchedules() {
 		return committeeSchedules;
 	}
@@ -274,14 +252,6 @@ public class Committee implements Serializable {
 		this.homeUnitName = homeUnitName;
 	}
 
-	public String getReviewTypeDescription() {
-		return reviewTypeDescription;
-	}
-
-	public void setReviewTypeDescription(String reviewTypeDescription) {
-		this.reviewTypeDescription = reviewTypeDescription;
-	}
-
 	public List<CommitteeMemberships> getCommitteeMemberships() {
 		return committeeMemberships;
 	}
@@ -296,5 +266,37 @@ public class Committee implements Serializable {
 
 	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public java.util.Date getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(java.util.Date updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
+
+	public List<CommitteeResearchAreas> getResearchAreas() {
+		return researchAreas;
+	}
+
+	public void setResearchAreas(List<CommitteeResearchAreas> researchAreas) {
+		this.researchAreas = researchAreas;
+	}
+
+	public java.util.Date getScheduleStartDate() {
+		return scheduleStartDate;
+	}
+
+	public void setScheduleStartDate(java.util.Date scheduleStartDate) {
+		this.scheduleStartDate = scheduleStartDate;
+	}
+
+	public java.util.Date getScheduleEndDate() {
+		return scheduleEndDate;
+	}
+
+	public void setScheduleEndDate(java.util.Date scheduleEndDate) {
+		this.scheduleEndDate = scheduleEndDate;
 	}
 }

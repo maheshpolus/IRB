@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ExpandedViewService } from './expanded-view.service';
-import { SharedDataService } from '../common/service/shared-data.service';
-import { PermissionWarningModalComponent } from '../common/permission-warning-modal/permission-warning-modal.component';
-
 
 @Component( {
     selector: 'app-expanded-view',
@@ -23,7 +19,6 @@ export class ExpandedViewComponent implements OnInit {
     exemptCardDetails: any;
     result: any;
     lastClickedTab = '';
-    userDTO: any = {};
 
     requestObject = {
         personId: '',
@@ -41,11 +36,10 @@ export class ExpandedViewComponent implements OnInit {
     directionExempt: number;
 
     constructor( private _expandedViewService: ExpandedViewService, private _activatedRoute: ActivatedRoute,
-        private _spinner: NgxSpinnerService, private _router: Router, private modalService: NgbModal, private _sharedDataService: SharedDataService ) { }
+        private _spinner: NgxSpinnerService, private _router: Router ) { }
 
     /** sets page heading and calls function to load snapshot detailed data*/
     ngOnInit() {
-    	this.userDTO = this._activatedRoute.snapshot.data['irb'];
         this.requestObject.personId = this._activatedRoute.snapshot.queryParamMap.get( 'personId' );
         this.requestObject.personRoleType = this._activatedRoute.snapshot.queryParamMap.get( 'personRole' );
         this.requestObject.avSummaryType = this._activatedRoute.snapshot.queryParamMap.get( 'summaryType' );
@@ -123,28 +117,4 @@ export class ExpandedViewComponent implements OnInit {
         this.columnExempt = this.sortFieldExempt;
         this.directionExempt = parseInt(this.sortOrderExempt, 10);
     }
-      /**
-   * @param  {} protocolNumber
-   * @param  {} protocolId
-   * open the IRB protocol in edit mode
-   */
-  EditIrb (protocolNumber, protocolId) {
-    const requestObject = {
-      acType: 'E', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: protocolId
-  };
-  this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
-  const hasPermission = data.successCode;
-  if (hasPermission) {
-     this._router.navigate( ['/irb/irb-create'], {queryParams: {protocolNumber: protocolNumber, protocolId: protocolId}});
-} else {
-  const alertMessage = 'You do not have permission to edit this protocol';
-  this.openPermissionWarningModal(alertMessage);
-}
-});
-  }
-  
-   openPermissionWarningModal(alertMessage) {
-     const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
-     modalRef.componentInstance.alertMessage = alertMessage;
-   }
 }

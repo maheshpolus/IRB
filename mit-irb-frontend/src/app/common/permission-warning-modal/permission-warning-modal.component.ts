@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,9 +9,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class PermissionWarningModalComponent implements OnInit {
 @Input() alertMessage: string;
-  constructor(public activeModal: NgbActiveModal) { }
+@Input() openProtocol: any;
+@Input() protocolNumber: any;
+  constructor(public activeModal: NgbActiveModal, private _router: Router,) { }
 
   ngOnInit() {
   }
 
+  openProtocolViewMode() {
+    this.activeModal.dismiss('Cross click');
+    this._router.navigate( ['/irb/irb-view/irbOverview'], {queryParams: {protocolNumber: this.protocolNumber}});
+  }
 }

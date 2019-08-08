@@ -1,9 +1,11 @@
 package org.mit.irb.web.IRBProtocol.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.springframework.http.ResponseEntity;
@@ -37,4 +39,37 @@ public interface IRBUtilService {
 	 * @return True if user has permission else false
 	 */
 	IRBPermissionVO checkUserPermission(IRBPermissionVO vo);
+	
+
+	Date adjustTimezone(Date date);
+	
+	/**
+	 * @param vo
+	 * @return true if lock present else false
+	 */
+	IRBUtilVO checkLockPresent(IRBUtilVO vo);
+	
+	/**
+	 * @param irbProtocolVO
+	 * @return
+	 */
+	public IRBProtocolVO createLock(IRBProtocolVO irbProtocolVO);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	IRBUtilVO releaseProtocolLock(IRBUtilVO vo);
+
+	/**
+	 * @param vo
+	 * @return List 
+	 */
+	IRBUtilVO loadProtocolLock(IRBUtilVO vo);
+
+	/**
+	 * @param vo
+	 * @return
+	 */
+	IRBUtilVO checkSubmissionLock(IRBUtilVO vo); 
 }

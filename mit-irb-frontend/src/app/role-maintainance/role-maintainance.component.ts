@@ -10,6 +10,8 @@ import { PiElasticService } from '../common/service/pi-elastic.service';
   styleUrls: ['./role-maintainance.component.css']
 })
 export class RoleMaintainanceComponent implements OnInit {
+  
+  userDTO: any;
   unitId: any;
   personId: any;
   person: any = {};
@@ -67,6 +69,7 @@ export class RoleMaintainanceComponent implements OnInit {
     private _roleService: RoleMaintainanceService, ) { }
 
   ngOnInit() {
+    this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
     this._router.queryParams.subscribe(params => {
       this.unitId = this.roleDetails.unitNumber = this.assignedDetails.unitNumber = '000001';
       this.roleSearchObject.unitNumber = this.unitId;
@@ -93,7 +96,7 @@ export class RoleMaintainanceComponent implements OnInit {
         }
       });
     }
-    this.assignedDetails.updateUser = localStorage.getItem('currentUser');
+    this.assignedDetails.updateUser = this.userDTO.userName;
     this.elasticSearchOptions.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
     this.elasticSearchOptions.index = this._elasticsearchService.IRB_INDEX;
     this.elasticSearchOptions.type = 'person';

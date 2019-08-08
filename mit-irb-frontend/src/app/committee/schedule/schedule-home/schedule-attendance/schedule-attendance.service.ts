@@ -48,4 +48,13 @@ export class ScheduleAttendanceService {
                 return Observable.throw( error );
             } );
     }
+    getMeetingAttendenceList(params) {
+        return this.http.post( '/irb/loadMeetingAttendence', params );
+    }
+    updateMeetingAttendence(params) {
+        return this.http.post( '/irb/updateMeetingAttendence', params );
+    }
+    getAllActiveMembers(params) {
+        return this.http.post( '/irb/showAllMeetingAttendence', params );
+    }
 }

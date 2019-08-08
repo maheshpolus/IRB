@@ -142,7 +142,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
     if (mode !== 'DELETE') {
       this.protocolSubject.updateTimestamp = new Date();
       this.protocolSubject.updateUser = this.userDTO.userName;
-      this.protocolSubject.sequenceNumber = 1;
+      this.protocolSubject.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;;
       this.protocolSubject.protocolNumber = this.protocolNumber;
       this.protocolSubject.protocolId = this.protocolId;
       this.protocolSubject.acType = 'U';

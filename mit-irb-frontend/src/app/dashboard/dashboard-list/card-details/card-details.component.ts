@@ -32,15 +32,16 @@ export class CardDetailsComponent  {
    */
   EditIrb (protocolNumber, protocolId) {
     const requestObject = {
-      acType: 'E', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: protocolId
+      acType: 'E', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: protocolId,
+      protocolNumber: protocolNumber
   };
   this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
   const hasPermission = data.successCode;
   if (hasPermission) {
      this._router.navigate( ['/irb/irb-create'], {queryParams: {protocolNumber: protocolNumber, protocolId: protocolId}});
 } else {
-  const alertMessage = 'You do not have permission to edit this protocol';
-  this.openPermissionWarningModal(alertMessage);
+  const alertMessage = data.successMessage;
+  this.openPermissionWarningModal(alertMessage, protocolNumber);
 }
 });
   }
@@ -68,9 +69,11 @@ export class CardDetailsComponent  {
       });
   }
 
- openPermissionWarningModal(alertMessage) {
+ openPermissionWarningModal(alertMessage, protocolNumber) {
      const modalRef = this.modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
      modalRef.componentInstance.alertMessage = alertMessage;
+     modalRef.componentInstance.openProtocol = true;
+     modalRef.componentInstance.protocolNumber = protocolNumber;
    }
 }
 

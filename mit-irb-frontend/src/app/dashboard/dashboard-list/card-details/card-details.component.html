@@ -35,13 +35,13 @@
 				</span>
 				<a class="tooltip vertical-middle"  *ngIf="irb.IS_NEW_RULE=='N'"> <i class="fa fa-exclamation-circle text-secondary ml-5"
 						aria-hidden="true"></i>
-					<span class="tooltiptext-left">Follows Old Rules</span>
+					<span class="tooltiptext-left">Follows Old Rule</span>
 				</a>
 			</div>
 			<div class="col-md-8 col-sm-12 col-12 list-des">
 				<h6 class="txt-large">{{irb.PROTOCOL_NUMBER}} - {{irb.TITLE}}</h6>
 				<div>
-					<div class="row txt-dark txt-medium">
+					<div class="row text-secondary txt-medium">
 						<div class="col-md-4 ">
 							Type :
 							<span class="text-danger ">{{irb.PROTOCOL_TYPE}}</span>
@@ -56,7 +56,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row txt-dark txt-medium">
+				<div class="row text-secondary txt-medium">
 						<div class="col-md-4">
 								PI :
 								<span class="text-danger">{{irb.PI_NAME}}</span>
@@ -83,26 +83,26 @@
 			</div>
 			<div class="col-md-2 col-sm-12 col-12 list-des button-responsive">
 
-					<div class="txt-small txt-dark text-right mb-5">
+					<div class="txt-small text-secondary btn-align-r  mb-5">
 					Last Update:{{irb.updateUser}}
 					<span class="text-danger">{{(irb.UPDATE_TIMESTAMP === ' ' || irb.UPDATE_TIMESTAMP === null ) ? ' ':(irb.UPDATE_TIMESTAMP | date: 'MM/dd/yyyy')}}</span>
 				</div>
 
 				<div class="text-right ">
           <a href="#/irb/irb-view/irbOverview?protocolNumber={{irb.PROTOCOL_NUMBER}}"
-						class="btn btn-blue btn-sm text-right txt-medium" (click)="openIrb(irb.PROTOCOL_NUMBER)">
+						class="btn btn-blue btn-sm text-right txt-medium btn-style-sm" (click)="openIrb(irb.PROTOCOL_NUMBER)">
             <i class="fa fa-eye" aria-hidden="true"></i> View
           </a>
 
 					<a *ngIf="irb.PROTOCOL_STATUS_CODE == 100 || irb.PROTOCOL_STATUS_CODE == 104 || irb.PROTOCOL_STATUS_CODE == 105 || irb.PROTOCOL_STATUS_CODE == 106
 		          || irb.PROTOCOL_STATUS_CODE == 304 || irb.PROTOCOL_STATUS_CODE == 107 || irb.PROTOCOL_STATUS_CODE == 102 || irb.PROTOCOL_STATUS_CODE == 103"
-						class="btn btn-blue btn-sm text-right txt-medium"
+						class="btn btn-blue btn-sm text-right txt-medium btn-style-fund mob-mt-1"
 						(click)="EditIrb(irb.PROTOCOL_NUMBER,irb.PROTOCOL_ID)">
             <i class="fa fa-pencil"></i> Edit
           </a>
 
           <a *ngIf="(userDTO?.role=='ADMIN' || userDTO?.role=='CHAIR') && currentTab == 'NEW_SUBMISSION' && irb?.ASSIGNEE_PERSON_ID == null"
-            (click)="openAssignPopUp('I', irb, i )" class="btn btn-blue btn-sm text-right mt-1 txt-medium">
+            (click)="openAssignPopUp('I', irb, i )" class="btn btn-blue btn-sm text-right mt-1 txt-medium btn-style-admin mob-mt-1">
             <i class="fa fa-plus" aria-hidden="true"></i> Assign IRB Admin
           </a>
 

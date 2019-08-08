@@ -318,4 +318,12 @@ public interface IRBProtocolService {
 	 * @return
 	 */
 	IRBProtocolVO saveOrUpdateInternalProtocolAttachments(MultipartFile[] files, String formDataJson);
+	
+	
+	/**
+	 * getIRBprotocolScienificCData.
+	 * @param protocolNumber protocolNumber
+	 * @return IRBViewProfile
+	 */
+	IRBViewProfile getIRBprotocolScienificData(String protocolNumber);
 }

@@ -1,0 +1,20 @@
+--------------- I R B----------------------------------------------------------------------------------------
+1. Delete the old index(if already have with same name).
+
+	curl -XDELETE http://localhost:9200/irbprotocol/
+
+2. Create new irbprotocol index by executing below command.
+
+curl -XPUT 'http://localhost:9200/irbprotocol/' -d '{"settings": {"number_of_shards": 5,"analysis": {"filter": {"ngram_filter": {"type": "edgeNGram","min_gram": 2,"max_gram": 20}},"analyzer": {"ngram_analyzer": {"type": "custom","tokenizer": "whitespace","filter": ["lowercase", "ngram_filter"]}}}},"mappings": {"irbprotocol": {"_all": {"type": "text","analyzer": "ngram_analyzer","search_analyzer": "whitespace"},"properties": { "document_id": {"type": "text","include_in_all": false},"protocol_number": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "whitespace"},"pi_name": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "standard"},"lead_unit_number": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "standard"},"lead_unit_name": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "standard"},"title": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "standard"},"status_code": {"type": "integer","include_in_all": false,"index": "not_analyzed"},"status": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "standard"},"protocol_type": {"type": "text","include_in_all": true,"term_vector": "yes","analyzer": "ngram_analyzer","search_analyzer": "standard"},"submission_status": {"type": "text","include_in_all": false,"index": "not_analyzed"},"approval_date": {"type": "text","include_in_all": false,"index": "not_analyzed"},"expiration_date": {"type": "text","include_in_all": false,"index": "not_analyzed"},"@version": {"type": "integer","include_in_all": false},"@timestamp": {"type": "date","include_in_all": false}}}}}'
+
+submission_status, approval_date, expiration_date
+
+3. Please fill jdbc_user and jdbc_password  property in irbprotocol.conf
+
+
+4. Load data using logstash by executing the below command.
+
+	/opt/logstash/bin/logstash -f /etc/logstash/conf.d/irbprotocol.conf
+	
+	
+

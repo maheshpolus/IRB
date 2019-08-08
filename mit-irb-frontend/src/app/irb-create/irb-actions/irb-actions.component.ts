@@ -77,12 +77,13 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
   files: UploadFile[] = [];
   fil: FileList;
   attachmentList: any[] = [];
+  applicableQuestionnaire = [];
 
   private $subscription1: ISubscription;
   private $subscription2: ISubscription;
 
   invalidData = {
-    noPiExists: true, noLeadUnit: true, invalidReviewComments: false
+    noPiExists: true, noLeadUnit: true, invalidReviewComments: false, questionnaireIncomplete: false
   };
 
 
@@ -112,17 +113,17 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     { type: 'Expedited' },
     { type: 'Exempt' },
     { type: 'Committee' },
-    { type: 'IRB' },
+    { type: 'COUHES' },
     ];
-    this.scheduleDates = [{ type: '10-06-2018, [IRB - Room # 15-34], 12.00 PM' },
-    { type: '11-06-2018, [IRB - Room # 15-34], 12.00 PM' },
-    { type: '12-06-2018, [IRB - Room # 15-34], 12.00 PM' },
-    { type: '01-06-2019, [IRB - Room # 15-34], 12.00 PM' },
-    { type: '02-06-2019, [IRB - Room # 15-34], 12.00 PM' },
-    { type: '30-06-2019, [IRB - Room # 15-34], 12.00 PM' },
-    { type: '04-06-2019, [IRB - Room # 15-34], 12.00 PM' },
+    this.scheduleDates = [{ type: '10-06-2018, [COUHES - Room # 15-34], 12.00 PM' },
+    { type: '11-06-2018, [COUHES - Room # 15-34], 12.00 PM' },
+    { type: '12-06-2018, [COUHES - Room # 15-34], 12.00 PM' },
+    { type: '01-06-2019, [COUHES - Room # 15-34], 12.00 PM' },
+    { type: '02-06-2019, [COUHES - Room # 15-34], 12.00 PM' },
+    { type: '30-06-2019, [COUHES - Room # 15-34], 12.00 PM' },
+    { type: '04-06-2019, [COUHES - Room # 15-34], 12.00 PM' },
     ];
-    this.committees = [{ type: 'IRB' },
+    this.committees = [{ type: 'COUHES' },
     ];
     this.loadInitDetails();
 
@@ -235,13 +236,51 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
     });
 
   }
+
+  validateQuetionnaireList() {
+    let moduleSubItemCodeList: any = [];
+    if (this.protocolNumber.includes('A')) {
+      moduleSubItemCodeList = [0, 4];
+    } else if (this.protocolNumber.includes('R')) {
+      moduleSubItemCodeList = [0, 3];
+    } else {
+      moduleSubItemCodeList = [0];
+    }
+    const requestObject = { 'module_item_key': this.protocolNumber,
+                            'module_sub_item_key': this.IRBActionsVO.sequenceNumber,
+                            'moduleSubItemCodeList': moduleSubItemCodeList,
+                            'module_item_code': 7 };
+    this._irbCreateService.getApplicableQuestionnaire(requestObject).subscribe(
+      data => {
+        const result: any = data;
+        this.applicableQuestionnaire = result.applicableQuestionnaire != null ? result.applicableQuestionnaire : [];
+        this.invalidData.questionnaireIncomplete = false;
+        this.applicableQuestionnaire.forEach((questionnaire) => {
+          if (questionnaire.IS_MANDATORY === 'Y' && questionnaire.QUESTIONNAIRE_COMPLETED_FLAG !== 'Y') {
+            this.invalidData.questionnaireIncomplete = true;
+          }
+        });
+        if (this.invalidData.questionnaireIncomplete) {
+          document.getElementById('validationModalBtn').click();
+        } else {
+          document.getElementById('submitModalBtn').click();
+        }
+      });
+  }
+
+  openQuestionnaireInEditMode() {
+    this._router.navigate(['/irb/irb-create/irbQuestionnaireList'],
+            { queryParams: { protocolNumber: this.protocolNumber, protocolId: this.protocolId,
+              sequenceNumber: this.IRBActionsVO.sequenceNumber} });
+  }
+
   openActionDetails(action) {
     this.currentActionPerformed = action;
     this.uploadedFile = [];
     this.commentList = [];
     if (action.ACTION_CODE === '101') { // Submit
-      document.getElementById('submitModalBtn').click();
-    } else if (action.ACTION_CODE === '992' || action.ACTION_CODE === '303' ||
+      this.validateQuetionnaireList();
+    } else if (action.ACTION_CODE === '992' ||
       action.ACTION_CODE === '213' || action.ACTION_CODE === '300'
       || action.ACTION_CODE === '113' || action.ACTION_CODE === '119' ||
       action.ACTION_CODE === '211' || action.ACTION_CODE === '212' || action.ACTION_CODE === '910' || action.ACTION_CODE === '113') {
@@ -261,9 +300,13 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         action.ACTION_CODE === '910' || action.ACTION_CODE === '113' || action.ACTION_CODE === '119') {
         this.IRBActionsVO.actionDate = new Date();
       }
-      document.getElementById('commentModalBtn').click();
+      if (action.ACTION_CODE === '992') {
+        this.openDeleteWarning();
+      } else {
+        document.getElementById('commentModalBtn').click();
+      }
     } else if (action.ACTION_CODE === '114' || action.ACTION_CODE === '105' || action.ACTION_CODE === '116' ||
-      action.ACTION_CODE === '108' || action.ACTION_CODE === '115') {
+      action.ACTION_CODE === '108' || action.ACTION_CODE === '115' || action.ACTION_CODE === '303') {
       // Rqst Data Analysis, Rqst to close, notify irb, rqst close enrollment,rqst reopen enrollment, make admin corrections
       document.getElementById('commentAttachmentModalBtn').click();
     } else if (action.ACTION_CODE === '102' || action.ACTION_CODE === '103') {
@@ -350,7 +393,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this.currentActionPerformed.ACTION_CODE === '200' || this.currentActionPerformed.ACTION_CODE === '119' ||
           this.currentActionPerformed.ACTION_CODE === '304' || this.currentActionPerformed.ACTION_CODE === '910'
           || this.currentActionPerformed.ACTION_CODE === '209' || this.currentActionPerformed.ACTION_CODE === '210' ||
-          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ) {
+          this.currentActionPerformed.ACTION_CODE === '202' || this.currentActionPerformed.ACTION_CODE === '203' ||
+          this.currentActionPerformed.ACTION_CODE === '303' ) {
           // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-view/irbOverview'],
             { queryParams: { protocolNumber: this.protocolNumber } });
@@ -362,8 +406,8 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
         }
 
         // create amendment, create renewal, withdrawn, copy protocol
-        if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102' ||
-          this.currentActionPerformed.ACTION_CODE === '303' || this.currentActionPerformed.ACTION_CODE === '911') {
+        if (this.currentActionPerformed.ACTION_CODE === '103' || this.currentActionPerformed.ACTION_CODE === '102'
+        || this.currentActionPerformed.ACTION_CODE === '911') {
          // this._router.navigate(['/irb/dashboard']);
           this._router.navigate(['/irb/irb-create/irbHome'],
             { queryParams: { protocolNumber: this.IRBActionsResult.protocolNumber, protocolId: this.IRBActionsResult.protocolId } });
@@ -380,11 +424,12 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
           this._router.navigate(['/irb/dashboard']);
         }
       } else {
-        this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+        this.toastr.error(this.IRBActionsResult.successMessage, null, { toastLife: 5000 });
+        this.cancelActionPerform();
       }
     },
       error => {
-        this.toastr.error('Failed to perform Action', null, { toastLife: 2000 });
+        this.toastr.error(this.IRBActionsResult.successMessage, null, { toastLife: 2000 });
         console.log('Error in perform action ', error);
       }
     );
@@ -566,5 +611,16 @@ export class IrbActionsComponent implements OnInit, OnDestroy {
 }
   deleteReviewComments(index) {
     this.commentList.splice(index, 1);
+  }
+
+  setAcTypeForModule(index) {
+    if (this.moduleAvailableForAmendment[index].PROTO_AMEND_RENEWAL_ID != null) {
+      this.moduleAvailableForAmendment[index].AC_TYPE = 'U';
+
+    }
+    if (this.moduleAvailableForAmendment[index].PROTO_AMEND_RENEWAL_ID == null) {
+      this.moduleAvailableForAmendment[index].AC_TYPE = this.moduleAvailableForAmendment[index].STATUS_FLAG === true ? 'U' : null;
+
+    }
   }
 }

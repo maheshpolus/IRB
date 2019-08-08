@@ -275,14 +275,17 @@ export class IrbOverviewComponent implements OnInit, OnDestroy {
       });
   }
   downloadCollaboratorAttachment(attachment) {
-    this._irbViewService.downloadIrbAttachment(attachment.FILE_ID).subscribe( data => {
-        const a = document.createElement( 'a' );
-            const blob = new Blob( [data], { type: data.type } );
-            a.href = URL.createObjectURL( blob );
-            a.download = attachment.FILE_NAME;
-            document.body.appendChild(a);
-            a.click();
-    });
+    this._irbViewService.downloadIrbAttachment(attachment.FILE_ID).subscribe(data => {
+        const a = document.createElement('a');
+        const blob = new Blob([data], { type: data.type });
+        a.href = URL.createObjectURL(blob);
+        a.download = attachment.FILE_NAME;
+        document.body.appendChild(a);
+        a.click();
+
+    },
+        error => console.log('Error downloading the file.', error),
+        () => console.log('OK'));
   }
   showTrainingAttachments(index) {
     if (this.attachmentIconValue === index) {

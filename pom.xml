@@ -33,6 +33,7 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -116,7 +117,13 @@
     <artifactId>poi-ooxml</artifactId>
     <version>3.7</version>
 </dependency>
-
+<!-- For Generating Excel start-->
+	<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.7</version>
+		</dependency>
+<!-- For Generating Excel stop-->
 <!-- ********** added jars end -->
 		
 		

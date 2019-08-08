@@ -52,6 +52,9 @@ public class PersonDetailsView implements Serializable {
 	@Column(name = "ADDRESS_LINE_1")
 	private String addressLine1;
 
+	@Column(name = "DIRECTORY_TITLE")
+	private String directoryTitle;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -150,6 +153,14 @@ public class PersonDetailsView implements Serializable {
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+
+	public String getDirectoryTitle() {
+		return directoryTitle;
+	}
+
+	public void setDirectoryTitle(String directoryTitle) {
+		this.directoryTitle = directoryTitle;
 	}
 
 }

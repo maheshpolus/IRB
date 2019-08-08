@@ -68,6 +68,13 @@ public class ProtocolAdminContact {
 	@Transient
 	private String acType;
 	
+/*	@Column(name = "AFFILIATION_TYPE_CODE")
+	private Integer affiliationTypeCode;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "IRB_PROTO_ADMIN_CONTACTS_FK3"), name = "AFFILIATION_TYPE_CODE", referencedColumnName = "AFFILIATION_TYPE_CODE", insertable = false, updatable = false)
+	private ProtocolAffiliationTypes protocolAffiliationTypes;*/
+	
 	public Integer getAdminContactTypeCode() {
 		return adminContactTypeCode;
 	}

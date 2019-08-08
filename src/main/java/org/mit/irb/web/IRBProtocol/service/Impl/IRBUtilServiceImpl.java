@@ -1,29 +1,47 @@
 package org.mit.irb.web.IRBProtocol.service.Impl;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.mit.irb.web.IRBProtocol.VO.IRBPermissionVO;
+import org.mit.irb.web.IRBProtocol.VO.IRBProtocolVO;
 import org.mit.irb.web.IRBProtocol.VO.IRBUtilVO;
 import org.mit.irb.web.IRBProtocol.dao.IRBUtilDao;
+import org.mit.irb.web.IRBProtocol.pojo.Lock;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.PersonTrainingComments;
 import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
+import org.mit.irb.web.common.constants.KeyConstants;
+import org.mit.irb.web.roles.pojo.PersonRoles;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service(value = "irbUtilService")
+@Service(value = "irbUtilService") 
 public class IRBUtilServiceImpl implements IRBUtilService {
 	
 	@Autowired
 	IRBUtilDao irbUtilDao;
+	
+	@Autowired
+	HibernateTemplate hibernateTemplate;
+	
+	@Value("${system.timezone}")
+	private String timezone;
 	
 	protected static Logger logger = Logger.getLogger(IRBUtilServiceImpl.class.getName());
 
@@ -131,17 +149,156 @@ public class IRBUtilServiceImpl implements IRBUtilService {
 	@Override
 	public IRBPermissionVO checkUserPermission(IRBPermissionVO vo) {
 		try{
-			Boolean hasPermission = null;			
-			hasPermission = irbUtilDao.checkUserPermission(vo.getProtocolId() ,vo.getDepartment(),vo.getPersonId(),vo.getAcType());						
-			if(!hasPermission){
-				vo.setSuccessCode(hasPermission);
-				vo.setSuccessMessage("User do not have permission");
-			}else{
-				vo.setSuccessCode(true);
-				vo.setSuccessMessage("User has permission");
+			Boolean hasPermission = null;	
+			Boolean lockPresent = false;
+			if(vo.getAcType().equalsIgnoreCase("E")){
+				List<Lock> lockList = irbUtilDao.fetchProtocolLockData(vo.getProtocolNumber());
+				if(!lockList.isEmpty()){
+					lockPresent = true;
+				}
 			}
+			if(lockPresent){
+				vo.setSuccessCode(false);
+				vo.setSuccessMessage("Protocol is locked by other user, Do you want to open in View Mode?");
+			}else{
+				hasPermission = irbUtilDao.checkUserPermission(vo.getProtocolNumber() ,vo.getDepartment(),vo.getPersonId(),vo.getAcType());						
+				if(!hasPermission){
+					vo.setSuccessCode(hasPermission);
+					vo.setSuccessMessage("You do not have permission to edit this protocol");
+				}else{
+					vo.setSuccessCode(true);
+					vo.setSuccessMessage("User has permission");
+				}
+			}
+			
 		} catch (Exception e) {
 			logger.info("Exception in checkUserPermission:" + e);
+		}
+		return vo;
+	}
+
+	@Override
+	public Date adjustTimezone(Date date) {		
+		try {
+			 SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yy");
+			 DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:SS z");
+		     df.setTimeZone(TimeZone.getTimeZone(timezone));		       
+		     return newFormat.parse(df.format(date));		       
+		}catch(Exception e) {
+			logger.debug("Error in adusting adjustTimezone, input date is "+date+" . Error "+e.getMessage());
+		}       
+        return date;
+	}
+
+	@Override
+	public IRBUtilVO checkLockPresent(IRBUtilVO vo) {
+		Boolean lockPresent = false;
+		try{
+			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(vo.getProtocolNumber());
+			for(Lock lock :lockList){
+					if(lock.getPersonId().equalsIgnoreCase(vo.getPersonId())){
+						lockPresent = false;
+					}else{
+						lockPresent = true;
+					}	
+				}			
+			vo.setLockPresent(lockPresent);	
+		}catch(Exception e) {
+			logger.debug("Error in checkLockPresent"+e.getMessage());
+		}  
+		return vo;
+	}
+
+	private Integer generateLockId() {
+		Integer lockId = null;
+		Query queryGeneral = hibernateTemplate.getSessionFactory().getCurrentSession()
+				.createQuery("SELECT NVL(MAX(LOCK_ID),0)+1 FROM Lock");
+		if (!queryGeneral.list().isEmpty()) {
+			lockId = Integer.parseInt(queryGeneral.list().get(0).toString());
+		}
+		return lockId;
+	}
+	
+	@Override
+	public IRBProtocolVO createLock(IRBProtocolVO irbProtocolVO) {
+		try{
+			Lock lock = new Lock();
+			lock.setLockId(irbUtilDao.generateLockId());
+			lock.setModuleCode(KeyConstants.PROTOCOL_MODULE_CODE);
+			lock.setModuleItemKey(irbProtocolVO.getProtocolNumber());
+			lock.setPersonId(irbProtocolVO.getPersonId());
+			lock.setUpdateUser(irbProtocolVO.getUpdateUser());
+			lock.setUpdateTimestamp(new Date());
+			lock = irbUtilDao.createProtocolLock(lock);
+		}catch(Exception e) {
+			logger.debug("Error in createLock"+e.getMessage());
+		}
+		return irbProtocolVO;
+	}
+
+	@Override
+	public IRBUtilVO releaseProtocolLock(IRBUtilVO vo) {
+		try{
+			irbUtilDao.releaseProtocolLock(vo.getProtocolNumber());
+			vo = loadProtocolLock(vo);
+		}catch(Exception e) {
+			logger.debug("Error in releaseProtocolLock"+e.getMessage());
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBUtilVO loadProtocolLock(IRBUtilVO vo) {
+		try{
+			/*ArrayList<HashMap<String, Object>> userPermissionMap = irbUtilDao.fetchUserPermission(vo.getPersonId());
+			for(HashMap<String, Object> userPermission : userPermissionMap){
+				if(userPermission.get("PERM_NM").toString().equalsIgnoreCase("")){
+					
+				}
+			}*/
+			Boolean adminUser = false;
+			List<PersonRoles> personRolesList = irbUtilDao.fetchUserRoles(vo.getPersonId());
+			for(PersonRoles personRoles : personRolesList){
+				if(personRoles.getRoleId() == 5){
+					adminUser = true;
+					break;
+				}
+			}
+			List<Lock> lockList = null;
+			if(adminUser){
+				lockList = irbUtilDao.fetchAdminUserLockList(vo.getPersonId());
+			}else{
+				lockList = irbUtilDao.fetchPIUserLockList(vo.getPersonId());
+			}
+			vo.setLockList(lockList);
+		}catch(Exception e) {
+			logger.debug("Error in loadProtocolLock"+e.getMessage());
+		}
+		return vo;
+	}
+
+	@Override
+	public IRBUtilVO checkSubmissionLock(IRBUtilVO vo) {
+		try{
+			Boolean cancreateLock = null;
+			List<Lock> lockList = irbUtilDao.fetchProtocolLockData(vo.getProtocolNumber());
+			for(Lock lock :lockList){
+					if(lock.getPersonId().equalsIgnoreCase(vo.getPersonId())){
+						cancreateLock = false;
+					}else{
+						cancreateLock = true;
+					}	
+				}
+			vo.setLockPresent(cancreateLock);
+			if(lockList.isEmpty()){
+				vo.setLockPresent(false);
+				IRBProtocolVO irbProtocolVO = new IRBProtocolVO();
+				BeanUtils.copyProperties( vo ,irbProtocolVO );
+				createLock(irbProtocolVO);
+			}
+			
+		}catch(Exception e) {
+			logger.debug("Error in checkSubmissionLock"+e.getMessage());
 		}
 		return vo;
 	}	

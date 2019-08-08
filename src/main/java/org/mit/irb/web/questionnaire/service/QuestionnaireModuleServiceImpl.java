@@ -2,11 +2,9 @@ package org.mit.irb.web.questionnaire.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
@@ -717,6 +715,7 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 		header.put("IS_FINAL", null);
 		header.put("UPDATE_USER", null);
 		header.put("UPDATE_TIMESTAMP", null);
+		header.put("SORT_ORDER", questionnaireDAO.getNextSortOrder());
 		questionnaireDataBus.setHeader(header);
 
 		ArrayList<HashMap<String, Object>> usage = new ArrayList<>();
@@ -899,5 +898,17 @@ public class QuestionnaireModuleServiceImpl implements QuestionnaireModuleServic
 			logger.error("Exception in downloadAttachments " + e.getMessage());
 		}
 		return attachmentData;
+	}
+	
+	@Override
+	public QuestionnaireModuleDataBus updateHeaderInfo(QuestionnaireModuleDataBus questionnaireDataBus) {
+		ArrayList<HashMap<String, Object>> questionnaireList = questionnaireDataBus.getQuestionnaireList();
+		for(HashMap<String, Object> questionnaireObject : questionnaireList){
+			QuestionnaireModuleDataBus questionnaireDataBus1 = new QuestionnaireModuleDataBus();
+			questionnaireDataBus1.setHeader(questionnaireObject);
+			questionnaireDAO.updateHeaderForSortOrder(questionnaireDataBus1);
+		}
+		questionnaireDataBus.setQuestionnaireList(questionnaireList);
+		return questionnaireDataBus;
 	}
 }

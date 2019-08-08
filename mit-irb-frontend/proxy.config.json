@@ -1,383 +1,383 @@
 {
 	"/irb/loginCheck": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getDashboardSnapshot": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getDashboardProtocolList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getUserDetails": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBprotocolPersons": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBprotocolFundingSource": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBprotocolVulnerableSubject": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBprotocolLocation": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getDashboardProtocolStatus":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getDashboardProtocolSubmissionStatus": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBprotocolSpecialReview": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBprotocolDetails": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getMITKCPersonInfo": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/logout": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getAttachmentList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/downloadAttachment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getExpandedSnapShotView": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getDashboardProtocolType": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getProtocolHistotyGroupList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getProtocolHistotyGroupDetails": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/savePersonExemptForm": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/saveQuestionnaire": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getPersonExemptForm": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getPersonExemptFormList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getLeadunitAutoCompleteList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getEvaluateMessage": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/resources/string_config_json": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getExemptProtocolActivityLogs": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/approveOrDisapproveExemptProtocols": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addExemptProtocolAttachments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 					"secure" : false
 	},
 	"/irb/getExemptProtocolAttachmentList":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/downloadExemptProtocolAttachments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/createIRBProtocol":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateProtocolGeneralInfo":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateProtocolPersonInfo":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateFundingSource":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateSubject":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateCollaborator":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/addProtocolAttachments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadAttachmentType":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadIRBProtocolAttachments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/saveScienceOfProtocol":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/addCollaboratorAttachments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	}
 	,
 	"/irb/loadCollaboratorPersonsAndAttachments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/addCollaboratorPersons":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadSponsorTypes":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/createCommittee": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/saveCommittee": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadCommitteeById": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadScheduleDetailsById": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/saveAreaOfResearch": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteAreaOfResearch": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addSchedule": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteSchedule": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateSchedule": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/filterCommitteeScheduleDates": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/resetCommitteeScheduleDates": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateCommitteeSchedule": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addCommitteeMembership": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/saveCommitteeMembers": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteMemberRoles": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteMemberExpertise": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteCommitteeMembers": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/saveCommitteeMembersRole": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/saveCommitteeMembersExpertise": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateMemberRoles": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadScheduleById": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addOtherActions": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteOtherActions": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addScheduleAttachment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteScheduleAttachment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addCommitteeScheduleMinute": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateCommitteeScheduleMinute": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/addOthersPresent": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateScheduleAttendance": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/deleteScheduleAttendance": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/downloadScheduleAttachment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateScheduleAttachment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadCommitteeList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadCommitteeScheduleList": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadProtocolHistoryCorrespondanceLetter":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
-	},	
+	},
 	"/irb/loadProtocolHistoryActionComments":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/checkingPersonsRightToViewProtocol":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getApplicableQuestionnaire":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/editQuestionnaire": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/showAllQuestionnaire": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/configureQuestionnaire": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/createQuestionnaire": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/getQuestionnaire": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
-	  "irb/saveQuestionnaireModule": {
-		"target": "http://192.168.1.93:8082",
+	  "mit-irb/saveQuestionnaireModule": {
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/getCodeTableMetaData": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/getCodeTable": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/updateCodeTableRecord": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/deleteCodeTableRecord": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/irb/addCodeTableRecord": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	  },
 	  "/saveQuestionnaire": {
@@ -385,281 +385,408 @@
 		"secure": false
 	  },
 	  "/irb/generateCorrespondence":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadHomeUnits":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadResearchAreas":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getExemptProtocolFundingSource":{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateExemptFundingSource": {
-		"target" : "http://192.168.1.93:8082",
-		"secure" : false	
+		"target" : "http://192.168.1.137:8080",
+		"secure" : false
 	},
 	"/irb/loadHomeUnitsIRB": {
-		"target" : "http://192.168.1.93:8082",
-		"secure" : false	
+		"target" : "http://192.168.1.137:8080",
+		"secure" : false
 	},
 	"/irb/updateUnitDetails": {
-		"target" : "http://192.168.1.93:8082",
-		"secure" : false	
+		"target" : "http://192.168.1.137:8080",
+		"secure" : false
 	},
 	"/irb/loadPersonTrainingList": {
-		"target" : "http://192.168.1.93:8082",
-		"secure" : false	
+		"target" : "http://192.168.1.137:8080",
+		"secure" : false
 	},
 	"/irb/loadTrainingList": {
-		"target" : "http://192.168.1.93:8082",
-		"secure" : false	
+		"target" : "http://192.168.1.137:8080",
+		"secure" : false
 	},
 	"/irb/updatePersonTraining": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateAdminContact": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getPersonTrainingInfo": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/downloadFileData": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/addTrainingComments": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/addTrainingAttachments": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getIRBprotocolUnits": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getIRBprotocolAdminContact": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getIRBprotocolCollaboratorDetails": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/downloadCollaboratorFileData": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getUserTrainingRight": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getProtocolSubmissionDetails": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getActionList": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/performProtocolActions" :{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getAmendRenwalSummary" :{
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateAmendRenwalSummary": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadCollaborators": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/loadProtocolHistoryGroupComments": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/getIRBAdminList": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
 	"/irb/updateIRBAdmin": {
-		"target" : "http://192.168.1.93:8082",
+		"target" : "http://192.168.1.137:8080",
 		"secure" : false
 	},
-	
+
 	"/irb/getActionLookup": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getCommitteeScheduledDates": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getSubmissionLookups": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateIRBAdminReviewer": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBAdminReviewers": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getIRBAdminReviewDetails": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getSubmissionBasicDetails": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateIRBAdminComment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateIRBAdminAttachments": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/getSubmissionHistory": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/downloadAdminRevAttachment": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateBasicSubmissionDetail": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/loadCommitteeMembers": {
-		"target": "http://192.168.1.93:8082",
+		"target": "http://192.168.1.137:8080",
 		"secure": false
 	},
 	"/irb/updateCommitteeReviewers": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/updateCommitteeVotingDetail": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/updateCommitteeReviewerAttachments": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/loadCommitteeReviewerDetails": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/getPastSubmission": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/updateCommitteeReviewerComments": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/downloadCommitteeFileData": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/loadInternalProtocolAttachments": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/loadPreviousProtocolAttachments": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/downloadInternalProtocolAttachments": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 		"/irb/getProtocolPermissionDetails": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/updateProtocolPermission": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/unassignedRoleOfPerson": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/assignedRoleOfPerson": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/getUnitName": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/savePersonRoles": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/roleInformation": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/syncPersonRole": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/getPersonDetailById": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/findPersons": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/findDepartment": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/fetchAllRoles": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/getAssignedRole": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false		
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/loadCollaboratorAttachmentType": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/checkUserPermission": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/saveOrUpdateInternalProtocolAttachments": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	},
 	"/irb/downloadQuesAttachment": {
-		"target": "http://192.168.1.93:8082",
-		"secure": false	
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/getAdminDashBoardPermissions": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadCommitteeMemberById": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadCommitteeMemberDetails": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/updateCommitteeMemberDetails": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadTerHistory": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/updateMemberRole": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/updateMemberExpertise": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadScheduledProtocols": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadScheduleMeetingComments": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	}	,
+	"/irb/loadMeetingAttachmentById": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/saveOrUpdateMeetingAttachment": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/downloadMeetingAttachment": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadMeetingAttendence": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadMeetingOtherActions": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/updateMeetingOtherActions": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/createAgendaForSchedule": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/downloadScheduleAgenda": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadScheduleProtocolComments": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadAllScheduleAgenda": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/downloadScheduleAgendaById": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/createMinuteForSchedule": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/downloadScheduleMinute": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadAllScheduleMinutes": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/updateMeetingAttendence": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/downloadScheduleMinuteById": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/showAllMeetingAttendence": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/getIRBprotocolScienificData": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/releaseProtocolLock": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/loadProtocolLock": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/updateQuestionnarireSortOrder": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/checkSubmissionLock": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
+	},
+	"/irb/exportDashboardProtocolList": {
+		"target": "http://192.168.1.137:8080",
+		"secure": false
 	}
-	
 }

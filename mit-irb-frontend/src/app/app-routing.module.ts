@@ -11,8 +11,8 @@ import { LogoutComponent } from './login/logout.component';
 import { CommitteeScheduleListComponent } from './committee-schedule-list/committee-schedule-list.component';
 
 const appRoutes = [
-  // { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
-   { path: '', redirectTo: 'login', pathMatch: 'full' },
+   { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
+    // { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent },
     {
@@ -22,13 +22,15 @@ const appRoutes = [
                     resolve: { irb: DashboardResolverService }
             },
             { path: 'code-table', loadChildren: 'app/codetable/codetable.module#CodetableModule' },
+            { path: 'admin-dashbord', loadChildren: 'app/admin-dashboard/admin-dashboard.module#AdminDashboardModule',  
+            resolve: { irb: DashboardResolverService } },
             { path: 'training-maintenance', loadChildren: 'app/person-training/person-training.module#PersonTrainingModule' },
             { path: 'role-maintainance', loadChildren: 'app/role-maintainance/role-maintainance.module#RoleMaintainanceModule' },
             { path: 'irb-create', loadChildren: 'app/irb-create/irb-create.module#IrbCreateModule' },
             { path: 'configure-questionnaire', loadChildren: 'app/questionnaire-create/create.module#CreateModule' },
             { path: 'irb-view', loadChildren: 'app/irb-view/irb-view.module#IrbViewModule' },
             { path: 'committee', loadChildren: 'app/committee/committee.module#CommitteeModule' },
-            { path: 'expanded-view', component: ExpandedViewComponent,  resolve: { irb: DashboardResolverService } },
+            { path: 'expanded-view', component: ExpandedViewComponent },
             { path: 'exempt-questionaire', component: ExemptQuestionaireComponent,
                     resolve: { irb: DashboardResolverService }
             },

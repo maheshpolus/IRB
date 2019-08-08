@@ -164,4 +164,7 @@ getProtocolPermissionDetails(param) {
     this.formData.append('formDataJson', JSON.stringify(internalAttachments));
     return this._http.post('/irb/saveOrUpdateInternalProtocolAttachments', this.formData);
   }
+  getIrbPersonDetailedList(params) {
+    return this._http.post('/irb/getMITKCPersonInfo', params);
+}
 }

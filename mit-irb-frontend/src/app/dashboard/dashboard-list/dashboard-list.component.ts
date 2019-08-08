@@ -603,7 +603,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges 
      */
     openIrb(protocolNumber) {
         const requestObject = {
-            acType: 'V', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: this.protocolId
+            acType: 'V', department: this.userDTO.unitNumber, personId: this.userDTO.personID, protocolId: this.protocolId,
+            protocolNumber: protocolNumber
         };
         this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
         const hasPermission = data.successCode;
@@ -918,6 +919,50 @@ export class DashboardListComponent implements OnInit, AfterViewInit, OnChanges 
         this.isAdminSearch = false;
         this.adminSearchText = adminName;
         this.requestObject.adminPersonId = personId;
+    }
+    exportDashboardProtocolList() {
+        let fileName;
+        if (this.requestObject.dashboardType === 'ALL') {
+            fileName = 'All Protocols';
+        } else if ( this.requestObject.dashboardType === 'ACTIVE' ) {
+            fileName = 'Active Protocols';
+        } else if ( this.requestObject.dashboardType === 'NEW_SUBMISSION' ) {
+            fileName = 'New Submissions';
+        } else if ( this.requestObject.dashboardType === 'INPROGRESS' ) {
+            fileName = 'In Progress Protocols';
+        }
+        const protocolType = this.requestObject.protocolTypeCode !== '' ? this.protocolTypeList.filter(type =>
+            type.PROTOCOL_TYPE_CODE === this.requestObject.protocolTypeCode) : [];
+        const typeDescription = protocolType.length > 0 ? protocolType[0].PROTOCOL_TYPE : null;
+        const admin = this.requestObject.adminPersonId !== '' ? this.irbAdminsList.filter(person =>
+            person.PERSON_ID === this.requestObject.adminPersonId) : [];
+        const adminName = admin.length > 0 ? admin[0].FULL_NAME : null;
+        const searchCriteria = { protocolNumberNew: this.requestObject.protocolNumber,
+            title: this.requestObject.title,
+            protocolPersonName: this.requestObject.piName, protocolType: typeDescription,
+        protocolStatus: this.protocolStatus, submissionStatus: this.submissionStatus, irbAdmin: adminName,
+        approvalDateNew: this.requestObject.approvalDate, expirationDateNew: this.requestObject.expirationDate,
+        fundingSource: this.requestObject.fundingSource
+        };
+        const requestObject = {searchCriteria: searchCriteria, documentHeading: fileName, exportType: 'excel',
+        personRoleType: this.requestObject.personRoleType,  isAdvancedSearch: this.requestObject.isAdvancedSearch,
+        dashboardType: this.requestObject.dashboardType, personId: this.requestObject.personId};
+        this._spinner.show();
+        this._dashboardService.exportDashboardProtocolList(requestObject).subscribe( data => {
+            this._spinner.hide();
+            const tempData: any = data || {};
+            if (window.navigator.msSaveOrOpenBlob) { // for IE and Edge
+                window.navigator.msSaveBlob(new Blob([tempData.body], { type: 'xlsx' }),
+                    requestObject.documentHeading + '.' + 'xlsx');
+            } else {
+                const DOWNLOAD_BTN = document.createElement('a');
+                DOWNLOAD_BTN.href = URL.createObjectURL(tempData.body);
+                DOWNLOAD_BTN.download = requestObject.documentHeading + '.' + 'xlsx';
+                document.body.appendChild(DOWNLOAD_BTN);
+                DOWNLOAD_BTN.click();
+            }
+
+        });
     }
 }
 

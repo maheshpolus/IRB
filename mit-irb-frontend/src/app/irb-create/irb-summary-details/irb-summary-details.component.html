@@ -32,8 +32,8 @@
                           </div>
                           </div>
                           <div class="row"  *ngIf="isAmendment ">
-                              <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment">
-                                  <input type="checkbox" [disabled]="module.IS_EDITABLE == 'N' || protocolStatus != '105'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="module.AC_TYPE='U'"/>
+                              <div class="col-lg-4 status-links pdf" *ngFor="let module of moduleAvailableForAmendment; let i=index">
+                                  <input type="checkbox" [disabled]="module.IS_EDITABLE == 'N' || protocolStatus != '105'" [(ngModel)]="module.STATUS_FLAG" (ngModelChange)="setAcTypeForModule(i)"/>
                               
                                   <span class="txt-medium txt-dark" [ngStyle]="{'color': module.IS_EDITABLE == 'N' || protocolStatus != '105' ? 'grey' : ''}">{{module?.DESCRIPTION}}</span>
                             

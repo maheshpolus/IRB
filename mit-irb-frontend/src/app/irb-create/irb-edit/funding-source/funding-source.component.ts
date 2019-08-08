@@ -10,7 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { IrbCreateService } from '../../irb-create.service';
 import { ElasticService } from '../../../common/service/elastic.service';
 import { SharedDataService } from '../../../common/service/shared-data.service';
-import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component'
+import { KeyPressEvent } from '../../../common/directives/keyPressEvent.component';
 
 @Component({
   selector: 'app-funding-source',
@@ -445,7 +445,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   get_externalLinks_config() {
-    return this._http.get('irb/resources/elastic_config_json');
+    return this._http.get('mit-irb/resources/elastic_config_json');
   }
 
   deleteFundingDetails(index) {
@@ -458,7 +458,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
     if (mode !== 'DELETE') {
       this.fundingSource.updateTimestamp = new Date();
       this.fundingSource.updateUser = this.userDTO.userName;
-      this.fundingSource.sequenceNumber = 1;
+      this.fundingSource.sequenceNumber = this.commonVo.generalInfo.sequenceNumber;
       this.fundingSource.protocolNumber = this.protocolNumber;
       this.fundingSource.protocolId = this.protocolId;
       this.fundingSource.acType = 'U';

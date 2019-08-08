@@ -5,11 +5,13 @@ import java.util.List;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberExpertise;
 import org.mit.irb.web.committee.pojo.CommitteeMemberRoles;
+import org.mit.irb.web.committee.pojo.CommitteeMemberStatusChange;
 import org.mit.irb.web.committee.pojo.CommitteeMembershipType;
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
+import org.mit.irb.web.committee.pojo.CommitteeType;
 import org.mit.irb.web.committee.pojo.MembershipRole;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.schedule.ScheduleData;
@@ -23,7 +25,7 @@ public class CommitteeVo {
 
 	private Committee committee;
 
-	private List<ProtocolReviewType> reviewTypes;
+	//private List<ProtocolReviewType> reviewTypes;
 
 	private List<Unit> homeUnits;
 
@@ -37,9 +39,9 @@ public class CommitteeVo {
 	
 	private ScheduleData scheduleData;
 
-	private List<PersonDetailsView> employees;
+	private PersonDetailsView employee;
 
-	private List<Rolodex> nonEmployees;
+	private Rolodex nonEmployee;
 
 	private List<CommitteeMembershipType> committeeMembershipTypes;
 
@@ -76,14 +78,14 @@ public class CommitteeVo {
 	private List<ScheduleStatus> scheduleStatus;
 	
 	private Integer advSubmissionDaysReq;
+	
+	private String acType;
 
-	public List<ProtocolReviewType> getReviewTypes() {
-		return reviewTypes;
-	}
-
-	public void setReviewTypes(List<ProtocolReviewType> reviewTypes) {
-		this.reviewTypes = reviewTypes;
-	}
+	private List<CommitteeType> committeeTypeList;
+	
+	private CommitteeMemberships committeeMemberships;
+	
+	List<CommitteeMemberStatusChange> committeeMemberStatusChange; 
 
 	public List<Unit> getHomeUnits() {
 		return homeUnits;
@@ -147,22 +149,6 @@ public class CommitteeVo {
 
 	public void setScheduleData(ScheduleData scheduleData) {
 		this.scheduleData = scheduleData;
-	}
-
-	public List<PersonDetailsView> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(List<PersonDetailsView> employees) {
-		this.employees = employees;
-	}
-
-	public List<Rolodex> getNonEmployees() {
-		return nonEmployees;
-	}
-
-	public void setNonEmployees(List<Rolodex> nonEmployees) {
-		this.nonEmployees = nonEmployees;
 	}
 
 	public List<CommitteeMembershipType> getCommitteeMembershipTypes() {
@@ -307,6 +293,54 @@ public class CommitteeVo {
 
 	public void setAdvSubmissionDaysReq(Integer advSubmissionDaysReq) {
 		this.advSubmissionDaysReq = advSubmissionDaysReq;
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+
+	public List<CommitteeType> getCommitteeTypeList() {
+		return committeeTypeList;
+	}
+
+	public void setCommitteeTypeList(List<CommitteeType> committeeTypeList) {
+		this.committeeTypeList = committeeTypeList;
+	}
+
+	public CommitteeMemberships getCommitteeMemberships() {
+		return committeeMemberships;
+	}
+
+	public void setCommitteeMemberships(CommitteeMemberships committeeMemberships) {
+		this.committeeMemberships = committeeMemberships;
+	}
+
+	public List<CommitteeMemberStatusChange> getCommitteeMemberStatusChange() {
+		return committeeMemberStatusChange;
+	}
+
+	public void setCommitteeMemberStatusChange(List<CommitteeMemberStatusChange> committeeMemberStatusChange) {
+		this.committeeMemberStatusChange = committeeMemberStatusChange;
+	}
+
+	public PersonDetailsView getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(PersonDetailsView employee) {
+		this.employee = employee;
+	}
+
+	public Rolodex getNonEmployee() {
+		return nonEmployee;
+	}
+
+	public void setNonEmployee(Rolodex nonEmployee) {
+		this.nonEmployee = nonEmployee;
 	}
 
 }

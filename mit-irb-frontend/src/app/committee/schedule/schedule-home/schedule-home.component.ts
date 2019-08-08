@@ -39,6 +39,7 @@ export class ScheduleHomeComponent implements OnInit {
     scheduleEndTime: any;
     scheduleStatusSelected: string;
     scheduleStatus: any = [];
+    userDTO: any;
 
     constructor( public scheduleConfigurationService: ScheduleConfigurationService,
         private datePipe: DatePipe,
@@ -48,12 +49,18 @@ export class ScheduleHomeComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.userDTO = JSON.parse(localStorage.getItem('currentUser'));
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
             if ( this.result !== undefined && this.result.committeeSchedule !== undefined ) {
                 this.scheduleTime = new Date( this.result.committeeSchedule.time );
                 this.scheduleStartTime = new Date( this.result.committeeSchedule.startTime );
                 this.scheduleEndTime = new Date( this.result.committeeSchedule.endTime );
+                this.result.committeeSchedule.meetingDate =
+                    this.result.committeeSchedule.meetingDate != null ? new Date(this.result.committeeSchedule.meetingDate ) : null;
+                this.result.committeeSchedule.protocolSubDeadline =
+                    this.result.committeeSchedule.protocolSubDeadline != null ?
+                    new Date(this.result.committeeSchedule.protocolSubDeadline ) : null;
                 this.scheduleStatus = this.result.scheduleStatus;
                 this.scheduleStatusSelected = this.result.committeeSchedule.scheduleStatus.description;
             }
@@ -110,7 +117,7 @@ export class ScheduleHomeComponent implements OnInit {
         this.scheduleStatus.forEach(( value, index ) => {
             if ( value.description === this.scheduleStatusSelected ) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem( 'currentUser' );
+                value.updateUser = this.userDTO.userName;
                 this.result.committeeSchedule.scheduleStatus = value;
                 this.result.committeeSchedule.scheduleStatusCode = value.scheduleStatusCode;
                 this.scheduleStatusSelected = value.description;
@@ -118,6 +125,11 @@ export class ScheduleHomeComponent implements OnInit {
         } );
         this.scheduleHomeService.saveScheduleData( this.result ).subscribe( data => {
             this.result = data;
+            this.result.committeeSchedule.meetingDate =
+                    this.result.committeeSchedule.meetingDate != null ? new Date(this.result.committeeSchedule.meetingDate ) : null;
+                this.result.committeeSchedule.protocolSubDeadline =
+                    this.result.committeeSchedule.protocolSubDeadline != null ?
+                    new Date(this.result.committeeSchedule.protocolSubDeadline ) : null;
         } );
     }
 

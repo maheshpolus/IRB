@@ -11,7 +11,6 @@ import org.mit.irb.web.IRBProtocol.pojo.FDARiskLevel;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachementTypes;
 import org.mit.irb.web.IRBProtocol.pojo.IRBAttachmentProtocol;
 import org.mit.irb.web.IRBProtocol.pojo.IRBProtocolCorrespondence;
-import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswer;
 import org.mit.irb.web.IRBProtocol.pojo.IRBQuestionnaireAnswerAttachment;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContact;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolAdminContactType;
@@ -42,6 +41,7 @@ import org.mit.irb.web.committee.pojo.Unit;
 public class IRBProtocolVO {
 	private String protocolNumber;
 	private Integer protocolId;
+	private String personId;
 	private ProtocolGeneralInfo generalInfo;
 	private List<ProtocolType> protocolType;
 	private List<SponsorType> sponsorType;
@@ -90,6 +90,7 @@ public class IRBProtocolVO {
 	private List<IRBProtocolCorrespondence> internalProtocolAtachmentList;
 	private ArrayList<HashMap<String, Object>> moduleAvailableForAmendment;
 	private List<IRBAttachementTypes> irbInternalAttachementTypes;
+	private Boolean successCode;
 	
 	public List<FDARiskLevel> getFdaRiskLevelType() {
 		return fdaRiskLevelType;
@@ -481,5 +482,21 @@ public class IRBProtocolVO {
 
 	public void setQuestionnaireAttachmentList(List<IRBQuestionnaireAnswerAttachment> questionnaireAttachmentList) {
 		this.questionnaireAttachmentList = questionnaireAttachmentList;
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
+
+	public Boolean getSuccessCode() {
+		return successCode;
+	}
+
+	public void setSuccessCode(Boolean successCode) {
+		this.successCode = successCode;
 	}
 }

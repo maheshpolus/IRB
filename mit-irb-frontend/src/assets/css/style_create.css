@@ -856,7 +856,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     line-height: 30px;
     font-size: 1em;
     padding-left: 10px;
-    margin-left: -7px;
+    /* margin-left: -7px; */
 }
 .person-unit input {
     border-radius: .25rem !important;
@@ -1594,8 +1594,8 @@ color: #5e5e5e !important;
     /* color:white;
     background-color: #505050; */
     border: 1px solid #a92135;
-    background-color: #a92135;
-    color: #fff;
+    /* background-color: #a92135; */
+    color: #a92135;
 
 }
 .filechipCollaboratorAttachment span i {
@@ -2648,3 +2648,67 @@ input:disabled,textarea:disabled{
     float: left;
 
 }
+
+.return-link {
+    font-size: .9em;
+    float: right;
+    margin-right: 25px;
+}
+.color-grey {
+    color: gray;
+}
+.bg-none {
+    background: none !important;
+}
+.minutes-card {
+    margin: 0;
+    padding: 0 5px;
+    list-style: none;
+  }
+  .minutes-card li:hover {
+    background-color: #faebd7;
+  }
+  .selected-li {
+    background-color: #faebd7;
+  }
+  .card-fixed {
+      height: 275px;
+      overflow-y: auto;
+  }
+  .tabDisabled {
+    pointer-events:none; 
+    opacity:0.6;
+}
+.fontsize-20 {
+    font-size: 20px !important;
+}
+.present-color {
+    color: #0fbb37;
+}
+.btn-green {
+    /* background-color: rgba(88, 103, 221, 0.1) !important; */
+    background-color: #dbece0  !important;
+	color: #0fbb37 !important;
+}
+
+.btn-green:hover {
+	background-color: #0fbb37 !important;
+	color: #ffffff !important;
+	-webkit-box-shadow: 0 4px 7px 0 #dbece0 !important;
+	box-shadow: 0 8px 15px 0 #dbece0  !important;
+}
+  .color-white {
+      color: #fff !important;
+  }
+  .padding-15
+{
+	padding: 15px;
+	padding-bottom: 0;
+}
+
+.search-eidted-p
+{
+	background: #fff;
+}
+
+  

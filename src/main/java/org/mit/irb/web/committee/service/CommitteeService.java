@@ -3,7 +3,7 @@ package org.mit.irb.web.committee.service;
 import java.text.ParseException;
 
 import org.springframework.stereotype.Service;
-
+import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.vo.CommitteeVo;
 
 @Service("committeeService")
@@ -14,7 +14,7 @@ public interface CommitteeService {
 	 * @param committeeTypeCode - Type code of committee.
 	 * @return committee
 	 */
-	public CommitteeVo createCommittee(Integer committeeTypeCode);
+	public CommitteeVo createCommittee();
 
 	/**
 	 * This method is used to save committee.
@@ -101,10 +101,16 @@ public interface CommitteeService {
 	public CommitteeVo loadResearchAreas(String researchSearchString);
 
 	/**
-	 * This method is used to get scheduke details  for a particular committee id
+	 * This method is used to get schedule details  for a particular committee id
+	 * @param committeeId
+	 * @param acType 
+	 * @return
+	 */
+	public CommitteeVo loadScheduleDetailsById(String committeeId, String acType);
+
+	/**
 	 * @param committeeId
 	 * @return
 	 */
-	public CommitteeVo loadScheduleDetailsById(String committeeId);
-
+	public CommitteeVo loadCommitteeMembers(String committeeId);
 }

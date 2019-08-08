@@ -293,4 +293,24 @@ public class DashboardDaoImpl implements DashboardDao{
 		profile.setProtocolSubmissionStatusList(query.list());  
 		return profile;
 	}
+
+	@Override
+	public DashboardProfile getAdminDashBoardPermissions(String personId ,String leadUnitNumber) {
+		DashboardProfile profile = new DashboardProfile();
+		ArrayList<InParameter> inputParam = new ArrayList<>();
+		ArrayList<OutParameter> outputParam = new ArrayList<>();
+		inputParam.add(new InParameter("PERSON_ID", DBEngineConstants.TYPE_STRING, personId));		
+		inputParam.add(new InParameter("AV_UNIT_NUMBER", DBEngineConstants.TYPE_STRING,leadUnitNumber));
+		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
+		ArrayList<HashMap<String, Object>> result = null;
+		try {
+			result = dBEngine.executeProcedure(inputParam, "GET_IRB_ADMIN_RIGHTS", outputParam);
+			if (result != null && !result.isEmpty()) {
+				profile.setAdminDashBoardPermissions(result.get(0));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Exception in getAdminDashBoardPermissions"+ e);			}
+		return profile;	
+		}
 }

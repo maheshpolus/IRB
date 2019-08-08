@@ -21,9 +21,7 @@
                   </div>
                   <div class="card-body card-paddng">
                       <div class="col-12  search-eidted-p padding-15" *ngIf="mandatoryFieldMissing">
-                        <div class="alert alert-danger txt-medium">
-                            Please fill all mandatory fields marked
-                          <strong>*</strong>
+                        <div class="alert alert-danger txt-medium" [innerHTML]="warningMessage">
                         </div>
                       </div>
                       <div class="col-12  search-eidted-p" *ngIf="isAdminContactEditable">
@@ -47,7 +45,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                  <span class="txt-medium txt-dark">Type</span>
+                                  <span class="txt-medium txt-dark">Role</span>
                                     <span class="mandatory">*</span>
                                     <select [class.poping-border]="isAdminContactEdit" class="txt-small form-control" id="inlineFormCustomSelect" [(ngModel)]="protocolAdminContact.adminContactTypeCode"
                                     (ngModelChange)="setAdminContactType(protocolAdminContact.adminContactTypeCode)">
@@ -56,6 +54,17 @@
                                   </select>
                                   </div>
                                   </div>
+                                  <!-- <div class="col-md-3">
+                                      <div class="form-group">
+                                        <span class="txt-medium txt-dark">Affiliation</span>
+                                          <span class="mandatory">*</span>
+                                          <select [class.poping-border]="isAdminContactEdit" class="txt-small form-control" id="inlineFormCustomSelect" [(ngModel)]="protocolAdminContact.affiliationTypeCode"
+                                          (ngModelChange)="setPersonAffiliation(protocolAdminContact.affiliationTypeCode)">
+                                          <option selected value=null>Please Select</option>
+                                          <option *ngFor="let type of affiliationTypes" value="{{type.affiliationTypeCode}}">{{type.description}}</option>
+                                        </select>
+                                        </div>
+                                        </div> -->
 <!--                                  <div class="col-md-4">-->
 <!--                                      <div class="form-group">-->
 <!--                                          <span class="txt-medium txt-dark">Description</span>-->
@@ -83,14 +92,19 @@
                                         <span class="text-danger txt-medium">{{selectedPerson?.full_name}} (<span *ngIf="options.type == 'person'" class="text-danger txt-medium">{{selectedPerson?.person_id}}</span><span *ngIf="options.type != 'person'" class="text-danger txt-medium">{{selectedPerson?.rolodex_id}}</span>)</span>
                                       </div>
                                       <div class="col-12">
-                                        <span class="txt-medium text-secondary">Username:</span>
-                                        <span class="text-danger txt-medium">{{selectedPerson?.user_name}}</span>
                                         <span class="txt-medium text-secondary">Email:</span>
                                         <span class="text-danger txt-medium">{{selectedPerson?.email_address}}</span>
-                                        <span class="txt-medium text-secondary">Phone no:</span>
-                                        <span class="text-danger txt-medium">{{selectedPerson?.phone_number}}</span>
                                         <span class="txt-medium text-secondary">Title:</span>
-                                        <span class="text-danger txt-medium">{{selectedPerson?.title}}</span>
+                                        <span class="text-danger txt-medium" *ngIf="options.type == 'person'">{{selectedPerson?.job_title}}</span>
+                                        <span class="text-danger txt-medium" *ngIf="options.type != 'person'">{{selectedPerson?.title}}</span>
+                                        <span class="txt-medium text-secondary"> Unit:</span>
+                                        <span class="text-danger txt-medium" *ngIf="options.type == 'person'">{{selectedPerson?.home_unit_name}}</span>
+                                        <span class="text-danger txt-medium" *ngIf="options.type != 'person'">{{selectedPerson?.organization}}</span>
+                                        <span class="txt-medium text-secondary">Address:</span>
+                                        <span class="text-danger txt-medium">{{selectedPerson?.addr_line_1}}</span>
+                                        <span class="txt-medium text-secondary">Phone:</span>
+                                        <span class="text-danger txt-medium" *ngIf="options.type == 'person'">{{selectedPerson?.phone_nbr}}</span>
+                                        <span class="text-danger txt-medium" *ngIf="options.type != 'person'">{{selectedPerson?.phone_number}}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -168,23 +182,35 @@
                             <table class="table tbl-p-clr">
                               <thead class="tbl-head-clr thead-font-size">
                                 <tr class="solid-bottom">
-                                  <th scope="col">Person Name</th>
-                                  <th scope="col">Type</th>
-                                  <!-- <th scope="col">Description</th> -->
-                                  <th scope="col">Action</th>
+                                  <th class="align-middle" scope="col">Name</th>
+                                  <th class="align-middle" scope="col">Role</th>
+                                  <!-- <th class="align-middle" scope="col">Affiliation</th> -->
+                                  <!-- <th  class="align-middle text-center" scope="col">Training Completed</th> -->
+                                  <th class="align-middle" scope="col">Action</th>
                                 </tr>
                               </thead>
                               <tbody class="tbody-font-size">
                                 <tr *ngFor="let item of protocolAdminContactList let i =index" [class.poping-border]="i == adminContactSelectedRow"
                                   class="solid-bottom pull-up">
-                                  <td class="align-middle"><i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item?.personName}}</td>
-                                  <td class="align-middle">{{item?.adminContactType?.description}}</td>
-                                  <!-- <td class="align-middle">{{item?.description}}</td> -->
-                                  <td class="action-btn-list align-middle">
+                                  <td  scope="col" class="align-middle"><i class="fa" [ngClass]="item.nonEmployeeFlag == 'N' ? 'fa-user-circle':'fa-user-o'" aria-hidden="true"></i> {{item?.personName}}</td>
+                                  <td  scope="col" class="align-middle">{{item?.adminContactType?.description}}</td>
+                                  <!-- <td  scope="col" class="align-middle">{{item?.protocolAffiliationTypes?.description}}</td> -->
+                                  <!-- <td  scope="col" class="align-middle text-center">
+                                      <i *ngIf="item?.trainingInfo =='COMPLETED'" class="training-complete-color fa fa-check"
+                                      title="Complete" aria-hidden="true"></i>
+                                    <i *ngIf="item?.trainingInfo =='INCOMPLETED'" class="training-incomplete-color fa fa-times"
+                                      title="Not Complete" aria-hidden="true"></i>
+                                  </td> -->
+         
+                                  <td  scope="col" class="action-btn-list align-middle">
                                     <a *ngIf="isAdminContactEditable" title="Edit" (click)="editAdminContact(item,i)" class="btn mb-2">
                                       <i class="fa fa-pencil log-user-icon-lite" aria-hidden="true"></i>
                                     </a>
-                                    <a *ngIf="isAdminContactEditable" title="Delete" (click)="deleteProtocolUnit(i)" class="btn mb-2" data-toggle="modal"
+                                    <button title="View" type="button" class="btn mb-2" data-toggle="modal"
+                              data-target="#personModalAdmin" (click)="loadPersonDetailedList(item)">
+                              <i class="fa fa-eye log-user-icon-lite" aria-hidden="true"></i>
+                            </button>
+                                    <a *ngIf="isAdminContactEditable" title="Delete" (click)="deleteAdminContact(i)" class="btn mb-2" data-toggle="modal"
                                       data-target="#deleteAdminDetails">
                                       <i class="fa fa-trash log-user-icon-lite" aria-hidden="true"></i>
                                     </a>
@@ -254,3 +280,174 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade bd-example-modal-lg" id="personModalAdmin" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header popup-header dotted-bottom">
+          <h5 class="modal-title txt-large thick" id="exampleModalLongTitle">Person Details
+          </h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-popup ">
+          <div class="modal-header-label dotted-bottom">
+            <h4 class="popup-sub-head txt-medium">Basic</h4>
+          </div>
+          <!-- section1 -->
+          <div class="modal-padding">
+            <div class="row">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Name : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.FULL_NAME}}</span>
+  
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for="">Email : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.EMAIL_ADDRESS}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Primary Title : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.PRIMARY_TITLE}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Address : </label> <span
+                  class="txt-medium text-danger">{{irbPersonDetailedList?.ADDRESS_LINE_1}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> City : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.CITY}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Country : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.COUNTRY_CODE}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Office Location : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.OFFICE_LOCATION}}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Office Phone Number : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.OFFICE_PHONE }}</span>
+              </div>
+              <div class="col-md-4 col lg- 4 col-sm-4 col-6">
+                <label class="modal-label" for=""> Postal Code : </label>
+                <span class="txt-medium text-danger">{{irbPersonDetailedList?.POSTAL_CODE}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- section2 -->
+          <div class="row">
+            <div class="col-6">
+              <h4 class="popup-sub-head">Training -
+                <span *ngIf="trainingStatus=='COMPLETED'" class="text-danger"> Completed</span>
+                <span *ngIf="trainingStatus=='INCOMPLETE'" class="text-danger"> Not Completed</span>
+              </h4>
+            </div>
+            <div class="col-6">
+              <!-- <a class="pdf a-right attachment-btn-position" *ngIf="userHasRightToEditTraining == 1" data-dismiss="modal" (click)="openTrainingMaintainence(null,'ADD')">
+                <i class="fa fa-plus icon-padding"></i>Add Training
+              </a> -->
+            </div>
+          </div>
+          <div class="modal-padding" *ngIf="irbPersonDetailedTraining?.length > 0">
+            <div class="popup-div">
+              <table id="trainingTable" class="table">
+                <thead class="popup-header">
+                  <tr>
+                    <th class="table-align-head" scope="col">Description</th>
+                    <!-- <th scope="col">Score</th> -->
+                    <th scope="col">Expiration Date</th>
+                    <!-- <th scope="col" class="submitted-header">Submitted Date</th> -->
+                  </tr>
+                </thead>
+                <tbody *ngFor="let info of irbPersonDetailedTraining; let l=index" class="txt-medium">
+                  <tr class="solid-bottom">
+                    <td class="table-align" scope="row">{{info.TRAINING_DESCRIPTION}}
+                    </td>
+                    <!-- <td>{{info.SCORE}}</td> -->
+                    <td>
+                      {{(info.FOLLOWUP_DATE === ' ' || info.FOLLOWUP_DATE === null ) ? ' ':(info.FOLLOWUP_DATE | date: 'MM/dd/yyyy')}}
+                    </td>
+                    <!-- <td>{{(info.DATE_SUBMITTED === ' ' || info.DATE_SUBMITTED === null ) ? ' ':(info.DATE_SUBMITTED | date: 'MM/dd/yyyy')}}</td> -->
+                    <td class="action-btn-list">
+                      <!-- <button *ngIf="userHasRightToEditTraining == 1" (click)="openTrainingMaintainence(info,'EDIT')" data-dismiss="modal" title="Edit" type="button" class="btn btn-primary edit-btn-1" >
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                          </button> -->
+                      <button *ngIf="info?.attachment?.length > 0" title="Attachments"
+                        (click)="showTrainingAttachments(l)" type="button" class="btn">
+                        <i class="fa fa-paperclip log-user-icon-lite" aria-hidden="true"></i>
+                      </button>
+                      <button *ngIf="info?.comments?.length > 0" title="Comments" (click)="showTrainingComments(l)"
+                        type="button" class="btn">
+                        <i class="fa fa-comments log-user-icon-lite" aria-hidden="true"></i>
+                      </button>
+  
+                    </td>
+                  </tr>
+  
+  
+  
+                  <tr>
+                    <td colspan="12" class="hiddenRow padding0" *ngIf="attachmentIconValue==l">
+                      <div style="background-color: #f5f3f3!important" id=attachment+{{l}}>
+                        <table id="trainingTable" class="table table-striped">
+                          <tbody>
+                            <tr style="background-color: #f5f3f3!important">
+                              <td width="15%" class="label-font align-middle">Attachments</td>
+                              <td>
+                                <div class=" pdf" *ngIf="trainingAttachments?.length > 0">
+                                  <span title="download" *ngFor="let attachment of trainingAttachments"
+                                    (click)="downloadAttachment(attachment)">{{attachment?.FILE_NAME}}<i
+                                      class="fa fa-download log-user-icon-lite"></i></span>
+                                </div>
+                              </td>
+                            </tr>
+  
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="12" class="hiddenRow padding0" *ngIf="commentIconValue==l">
+                      <div style="background-color: #f5f3f3!important" id=comment+{{l}}>
+                        <table id="trainingTable" class="table table-striped">
+                          <tbody>
+                            <tr style="background-color: #f5f3f3!important">
+                              <td width="15%" class="label-font align-middle">Comments</td>
+                              <td>
+                                <!-- <div *ngFor="let comment of trainingComments">{{comment?.COMMENT_DESCRIPTION}}
+                                      </div> -->
+                                <ul *ngFor="let comment of trainingComments">
+                                  <li title="{{comment?.COMMENT_DESCRIPTION}}">
+                                    {{comment?.COMMENT_DESCRIPTION| slice:0:50}} <span
+                                      *ngIf="comment?.COMMENT_DESCRIPTION != null && comment?.COMMENT_DESCRIPTION.length > 50">
+                                      ...</span></li>
+                                </ul>
+                              </td>
+                            </tr>
+  
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+  
+  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <!-- modal-end -->

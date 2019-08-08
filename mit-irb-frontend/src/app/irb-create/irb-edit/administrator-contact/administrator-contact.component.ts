@@ -19,10 +19,16 @@ export class AdministratorContactComponent implements OnInit {
   options: any = {};
   protocolAdminContactType: any = [];
   protocolAdminContact: any = {};
+  irbPersonDetailedList: any = {};
   protocolAdminContactList = [];
+  irbPersonDetailedTraining: any = [];
+  trainingComments = [];
+  trainingAttachments = [];
   selectedPerson = {};
   personType = 'employee';
   elasticPlaceHolder: string;
+  trainingStatus: string;
+  warningMessage: string;
   clearField: any = 'true';
   protocolId = null;
   protocolNumber = null;
@@ -33,6 +39,8 @@ export class AdministratorContactComponent implements OnInit {
   mandatoryFieldMissing = false;
   isAdminContactEditable = true;
   adminContactSelectedRow = null;
+  attachmentIconValue = -1;
+  commentIconValue = -1;
   private subscription1: ISubscription;
 
   constructor(private _elasticsearchService: PiElasticService,
@@ -52,13 +60,13 @@ export class AdministratorContactComponent implements OnInit {
     this.options.width = '100%';
     this.options.fontSize = '16px';
     this.options.defaultValue = '';
-    this.options.formatString = 'full_name | email_address | home_unit | person_id';
+    this.options.formatString = 'full_name | email_address | home_unit_name';
     this.options.fields = {
       full_name: {},
       first_name: {},
       user_name: {},
       email_address: {},
-      home_unit: {},
+      home_unit_name: {},
       person_id: {}
     };
     this.elasticPlaceHolder = 'Search for an Employee Name';
@@ -89,6 +97,7 @@ export class AdministratorContactComponent implements OnInit {
   loadEditDetails() {
     this.isAdminContactEditable = this.commonVo.protocolRenewalDetails != null ? this.commonVo.protocolRenewalDetails.pointOFContact : true;
     this.protocolAdminContactType = this.commonVo.protocolAdminContactType;
+    // this.affiliationTypes = this.commonVo.affiliationTypes;
     this.protocolAdminContactList = this.commonVo.protocolAdminContactList != null ? this.commonVo.protocolAdminContactList : [];
     this.protocolAdminContact = this.commonVo.protocolAdminContact;
     this.protocolAdminContact.adminContactType = {};
@@ -109,13 +118,13 @@ export class AdministratorContactComponent implements OnInit {
       this.options.url = this._elasticsearchService.URL_FOR_ELASTIC + '/';
       this.options.index = this._elasticsearchService.IRB_INDEX;
       this.options.type = 'person';
-      this.options.formatString = 'full_name | email_address | home_unit | person_id';
+      this.options.formatString = 'full_name | email_address | home_unit_name';
       this.options.fields = {
         full_name: {},
         first_name: {},
         user_name: {},
         email_address: {},
-        home_unit: {},
+        home_unit_name: {},
         person_id: {}
       };
       this.elasticPlaceHolder = 'Search for an Employee Name';
@@ -124,14 +133,15 @@ export class AdministratorContactComponent implements OnInit {
       this.options.index = this._elasticsearchService.NON_EMPLOYEE_INDEX;
       this.options.type = 'rolodex';
       this.elasticPlaceHolder = 'Search for an Non-Employee Name';
-      this.options.formatString = 'full_name | email_address | home_unit | rolodex_id';
+      this.options.formatString = 'full_name | email_address | title ';
       this.options.fields = {
         full_name: {},
         first_name: {},
         user_name: {},
         email_address: {},
         home_unit: {},
-        rolodex_id: {}
+        rolodex_id: {},
+        title: {}
       };
     }
   }
@@ -170,11 +180,22 @@ export class AdministratorContactComponent implements OnInit {
    */
   addAdminContact(mode) {
     if (this.protocolAdminContact.personId != null && this.protocolAdminContact.adminContactTypeCode != null &&
-      this.protocolAdminContact.adminContactTypeCode !== 'null') {
-      this.saveAdminContact(mode);
+      this.protocolAdminContact.adminContactTypeCode !== 'null' && this.protocolAdminContact !== null) {
       this.mandatoryFieldMissing = false;
+      this.protocolAdminContactList.forEach(personData => {
+        if (personData.personId === this.protocolAdminContact.personId &&
+          personData.adminContactId !== this.protocolAdminContact.adminContactId ) {
+          this.mandatoryFieldMissing = true;
+          this.warningMessage = 'Person already added please choose a different person';
+        }
+
+      });
+      if (this.mandatoryFieldMissing === false) {
+        this.saveAdminContact(mode);
+      }
     } else {
       this.mandatoryFieldMissing = true;
+      this.warningMessage = 'Please fill all mandatory fields marked <strong>*</strong>';
     }
   }
 
@@ -197,7 +218,7 @@ export class AdministratorContactComponent implements OnInit {
   /**
    * @param  {} index - index of the unit object deleted
    */
-  deleteProtocolUnit(index) {
+  deleteAdminContact(index) {
     this.commonVo.protocolAdminContact = this.protocolAdminContactList[index];
     this.commonVo.protocolAdminContact.acType = 'D';
     this.showDeletePopup = true;
@@ -221,6 +242,7 @@ export class AdministratorContactComponent implements OnInit {
       this._spinner.hide();
       this.protocolAdminContact = {};
       this.protocolAdminContact.adminContactTypeCode = null;
+      this.protocolAdminContact.affiliationTypeCode = null;
       this.protocolAdminContact.adminContactType = {};
       this.commonVo.protocolAdminContact = this.protocolAdminContact;
       this.showPersonElasticBand = false;
@@ -233,4 +255,41 @@ export class AdministratorContactComponent implements OnInit {
       this.adminContactSelectedRow = null;
     });
   }
+
+  loadPersonDetailedList(item) {
+    this.attachmentIconValue = -1;
+    this.trainingAttachments = [];
+    this.commentIconValue = -1;
+    this.trainingComments = [];
+    this._spinner.show();
+    const params = { protocolNumber: this.protocolNumber, avPersonId: item.personId };
+    this._irbCreateService.getIrbPersonDetailedList(params).subscribe((data: any) => {
+      this._spinner.hide();
+        this.irbPersonDetailedList = data.irbViewProtocolMITKCPersonInfo;
+        this.irbPersonDetailedTraining = data.irbViewProtocolMITKCPersonTrainingInfo;
+        this.trainingStatus = data.trainingStatus;
+    },
+      error => {
+        console.log('Error in method loadPersonDetailedList()', error);
+      },
+    );
+  }
+
+  showTrainingAttachments(index) {
+    if (this.attachmentIconValue === index) {
+      this.attachmentIconValue = -1;
+    } else {
+      this.attachmentIconValue = index;
+      this.trainingAttachments = this.irbPersonDetailedTraining[index].attachment;
+  }
+}
+
+showTrainingComments(index) {
+  if (this.commentIconValue === index) {
+    this.commentIconValue = -1;
+  } else {
+    this.commentIconValue = index;
+    this.trainingComments = this.irbPersonDetailedTraining[index].comments;
+}
+}
 }

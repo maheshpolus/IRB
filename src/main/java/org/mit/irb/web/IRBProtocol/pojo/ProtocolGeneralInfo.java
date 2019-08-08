@@ -170,6 +170,15 @@ public class ProtocolGeneralInfo {
 	@Transient
 	private String createUserName;
 	
+	@Transient
+	private String strApprovalDate;
+	
+	@Transient
+	private String strExpirationDate;
+	
+	@Transient
+	private String strLastApprovalDate;
+	
 	public String getAniticipatedStartDate() {
 		return aniticipatedStartDate;
 	}
@@ -512,5 +521,43 @@ public class ProtocolGeneralInfo {
 
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName;
+	}
+
+	public ProtocolGeneralInfo(Integer protocolId, String protocolStatusCode, String protocolNumber,
+			Integer sequenceNumber, String updateUser) {
+		super();
+		this.protocolId = protocolId;
+		this.protocolStatusCode = protocolStatusCode;
+		this.protocolNumber = protocolNumber;
+		this.sequenceNumber = sequenceNumber;
+		this.updateUser = updateUser;
+	}
+
+	public ProtocolGeneralInfo() {
+		super();
+	}
+
+	public String getStrApprovalDate() {
+		return strApprovalDate;
+	}
+
+	public void setStrApprovalDate(String strApprovalDate) {
+		this.strApprovalDate = strApprovalDate;
+	}
+
+	public String getStrExpirationDate() {
+		return strExpirationDate;
+	}
+
+	public void setStrExpirationDate(String strExpirationDate) {
+		this.strExpirationDate = strExpirationDate;
+	}
+
+	public String getStrLastApprovalDate() {
+		return strLastApprovalDate;
+	}
+
+	public void setStrLastApprovalDate(String strLastApprovalDate) {
+		this.strLastApprovalDate = strLastApprovalDate;
 	}
 }

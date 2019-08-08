@@ -12,10 +12,20 @@ import { SharedDataService } from '../../common/service/shared-data.service';
 @Component({
   selector: 'app-irb-submission-detail',
   templateUrl: './irb-submission-detail.component.html',
-  styleUrls: ['./irb-submission-detail.component.css']
+  styleUrls: ['./irb-submission-detail.component.css'],
 })
 export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
+  adminSearchPersonId = null;
+  protocolSearchPersonId = null;
+  rowSelectedAdmin: number;
+  rowSelectedProtocol: number;
+  filterPublic = false;
+  filterMinutes = false;
+  filterLetter = false;
+  showEdit = true;
+  editDetails = false;
+  reviewTabSelected = 'ADMIN';
   isExpanded = false;
   lookUpData: any;
   headerDetails: any;
@@ -97,12 +107,15 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   reviewedBy = null;
   showProtocolReviewsOf = 'All Protocol Reviewers';
   attachmentDescription = '';
-  tabSelectedCommittee: string;
+  tabSelectedCommittee = 'PROTOCOL_COMMENTS';
   warningMessage: string;
   adminListDataSource: CompleterData;
   committeeReviewerSource: CompleterData;
+  lockPresent = false;
+  isReviewerAttachment = false;
 
   private $subscription: ISubscription;
+  private $subscription1: ISubscription;
   constructor(private _activatedRoute: ActivatedRoute,
     private _irbViewService: IrbViewService, private _completerService: CompleterService,
     private _sharedDataService: SharedDataService, private _spinner: NgxSpinnerService, public toastr: ToastsManager) {
@@ -111,25 +124,39 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getLookUpData();
-    this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
-      if (data !== undefined && data != null) {
-        this.headerDetails = Object.assign({}, data);
-        this.getIRBAdminReviewers();
-        this.getIRBAdminReviewDetails();
-        this.getSubmissionBasicDetails();
-        this.getSubmissionHistory();
-        this.loadCommitteeReviewerDetails();
-      }
-    });
+      this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
+        if (data !== undefined && data != null) {
+          if (+data.PROTOCOL_STATUS_CODE >= 200) { // check if edit is allowed
+            this.showEdit = false;
+          }
+          this.headerDetails = Object.assign({}, data);
+          this.getIRBAdminReviewers();
+          this.getIRBAdminReviewDetails();
+          this.getSubmissionBasicDetails();
+          this.getSubmissionHistory();
+          this.loadCommitteeReviewerDetails();
+        }
+      });
   }
   ngOnDestroy() {
     if (this.$subscription) {
       this.$subscription.unsubscribe();
     }
+    if (this.$subscription1) {
+      this.$subscription1.unsubscribe();
+    }
+    if (this.headerDetails.PROTOCOL_NUMBER && this.editDetails) {
+      const reqstObj = { protocolNumber: this.headerDetails.PROTOCOL_NUMBER };
+      this._sharedDataService.releaseProtocolLock(reqstObj).subscribe(
+        data => {
+          console.log('Lock Released Successfully');
+        });
+    }
   }
 
   getLookUpData() {
     this.userDTO = this._activatedRoute.snapshot.data['irb'];
+    this.reviewedBy = this.userDTO.userName;
     this._irbViewService.getSubmissionLookups(null).subscribe(data => {
       this.lookUpData = data || [];
       this.irbAdminsReviewerType = this.lookUpData.irbAdminsReviewerType != null ? this.lookUpData.irbAdminsReviewerType : [];
@@ -167,6 +194,22 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  editSubmissionDetailsClick() {
+    const reqstObj = {
+      protocolNumber: this.headerDetails.PROTOCOL_NUMBER,
+      personId: this.userDTO.personID,
+      updateUser: this.userDTO.userName
+    };
+    this._irbViewService.checkSubmissionLock(reqstObj).subscribe(data => {
+      const result: any = data || [];
+      this.lockPresent = result.lockPresent;
+      this.editDetails = this.lockPresent === true ? false : true;
+      if (this.lockPresent) {
+        this.toastr.error('You cannot Edit Submission Details. Protocol is locked by another user', null, { toastLife: 5000 });
+      }
+    });
+  }
+
   loadPastSubmissionById(submission) {
     document.getElementById('pastSubCloseButton').click();
     this.selectedPastSubmission = submission;
@@ -182,17 +225,20 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   showCurrentSubmission() {
-    this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
-      if (data !== undefined && data != null) {
-        this.headerDetails = Object.assign({}, data);
-        this.getIRBAdminReviewers();
-        this.getIRBAdminReviewDetails();
-        this.getSubmissionBasicDetails();
-        this.getSubmissionHistory();
-        this.loadCommitteeReviewerDetails();
-        this.viewMode = false;
-      }
-    });
+      this.$subscription = this._sharedDataService.viewProtocolDetailsVariable.subscribe(data => {
+        if (data !== undefined && data != null) {
+          if (+data.PROTOCOL_STATUS_CODE >= 200) { // check if edit is allowed
+            this.showEdit = false;
+          }
+          this.headerDetails = Object.assign({}, data);
+          this.getIRBAdminReviewers();
+          this.getIRBAdminReviewDetails();
+          this.getSubmissionBasicDetails();
+          this.getSubmissionHistory();
+          this.loadCommitteeReviewerDetails();
+          this.viewMode = false;
+        }
+      });
   }
 
   getIRBAdminReviewers() {
@@ -204,8 +250,11 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   getIRBAdminReviewDetails() {
+    this.filterPublic = false;
+    this.adminSearchPersonId = null;
+    this.rowSelectedAdmin = null;
     this.showReviewsOf = 'All Administrative Reviewers';
-    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID };
+    const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
     this._spinner.show();
     this._irbViewService.getIRBAdminReviewDetails(reqstObj).subscribe(data => {
       this._spinner.hide();
@@ -243,7 +292,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
 
       this.scheduleList = result.scheduleDates != null ? result.scheduleDates : [];
       this.committeeList = result.committeeList != null ? result.committeeList : [];
-      this.committeeID = this.submissionVo.committeeId != null ? this.submissionVo.committeeId :
+      this.committeeID = result.committeeId != null ? result.committeeId :
         (this.committeeList.length > 0 ? this.committeeList[0].COMMITTEE_ID : null);
       this.scheduleID = this.submissionVo.sceduleId != null ?
         this.submissionVo.sceduleId : (this.scheduleList.length > 0 ? this.scheduleList[0].SCHEDULE_ID : null);
@@ -518,10 +567,93 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     this.isIRBReviewAttachmentEdited = false;
   }
 
-  showReviewById(irbAdminsReviewer) {
+  filterPublicReviews() {
+    this.filterPublic = !this.filterPublic;
+    if (this.filterPublic) {
+      if (+this.adminSearchPersonId > 0 && this.adminSearchPersonId != null) {
+         this.submissionVo.irbAdminCommentAttachment =
+         this.submissionVo.irbAdminCommentAttachment.filter(x => x.publicFlag === 'Y');
+      } else {
+        this.submissionVo.irbAdminCommentAttachment =
+         this.irbAdminCommentAttachmentBackUp.filter(x => x.publicFlag === 'Y');
+      }
+    } else {
+
+      if (+this.adminSearchPersonId > 0 && this.adminSearchPersonId != null) {
+        this.submissionVo.irbAdminCommentAttachment =
+        this.irbAdminCommentAttachmentBackUp.filter(x => x.personId === this.adminSearchPersonId);
+      } else {
+        this.submissionVo.irbAdminCommentAttachment =
+        this.irbAdminCommentAttachmentBackUp;
+      }
+    }
+  }
+
+  filterMinutesReviews() {
+    this.filterMinutes = !this.filterMinutes;
+    if (this.filterMinutes) {
+      if (+this.protocolSearchPersonId > 0 && this.protocolSearchPersonId != null) {
+        this.filterIfMinutes();
+      } else {
+        this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_MINUTES === 'Y');
+      }
+    } else {
+      this.filterIfPerson();
+    }
+    this.filterIfLetters();
+  }
+
+  filterLetterReviews() {
+    this.filterLetter = !this.filterLetter;
+    if (this.filterLetter) {
+      if (+this.protocolSearchPersonId > 0 && this.protocolSearchPersonId != null) {
+        this.filterIfLetters();
+      } else {
+        this.submissionVo.committeeReviewerCommentsandAttachment =
+          this.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_LETTER === 'Y');
+      }
+    } else {
+      this.filterIfPerson();
+    }
+    this.filterIfMinutes();
+  }
+
+  filterIfLetters() { // filter letters from already filtered list
+    if (this.filterLetter) {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.submissionVo.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_LETTER === 'Y');
+    }
+  }
+
+  filterIfMinutes() { // filter minutes from already filtered list
+    if (this.filterMinutes) {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.submissionVo.committeeReviewerCommentsandAttachment.filter(x => x.INCLUDE_IN_MINUTES === 'Y');
+    }
+  }
+
+  filterIfPerson() { // filter person else return full list
+    if (+this.protocolSearchPersonId > 0 && this.protocolSearchPersonId != null) {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.committeeReviewerCommentsandAttachment.filter(x => x.PERSON_ID === this.protocolSearchPersonId);
+    } else {
+      this.submissionVo.committeeReviewerCommentsandAttachment =
+        this.committeeReviewerCommentsandAttachment;
+    }
+  }
+
+
+  showReviewById(irbAdminsReviewer, index) {
+    this.rowSelectedAdmin = index;
     this.showReviewsOf = irbAdminsReviewer.FULL_NAME;
     this.submissionVo.irbAdminCommentAttachment =
       this.irbAdminCommentAttachmentBackUp.filter(x => x.personId === irbAdminsReviewer.PERSON_ID);
+
+    this.adminSearchPersonId = irbAdminsReviewer.PERSON_ID;
+    if (this.filterPublic) {
+      this.filterPublic = false;
+    }
     // const id = document.getElementById('commentdiv');
     // if (id) {
     //   id.scrollIntoView({ behavior: 'smooth' });
@@ -595,6 +727,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   saveSubmissionBasicDetails() {
+    this.editDetails = !this.editDetails;
     if (this.submissionVo.submissionTypeCode == null) {
       this.invalidData.invalidBasicDetails = true;
     } else {
@@ -602,6 +735,7 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
       this.submissionVo.submissionId = this.headerDetails.SUBMISSION_ID;
       this.submissionVo.committeeId = this.committeeID;
       this.submissionVo.sceduleId = this.scheduleID;
+      this.submissionVo.protocolNumber = this.headerDetails.PROTOCOL_NUMBER;
       this._spinner.show();
       this._irbViewService.updateBasicSubmissionDetail(this.submissionVo).subscribe((data: any) => {
         // this.submissionVo = data;
@@ -825,9 +959,15 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
   }
 
   loadCommitteeReviewerDetails() {
+    this.rowSelectedProtocol = null;
+    this.protocolSearchPersonId = null;
+    this.filterLetter = false;
+    this.filterMinutes = false;
     this.showProtocolReviewsOf = 'All Protocol Reviewers';
     const reqstObj = { submissionId: this.headerDetails.SUBMISSION_ID, personID: this.userDTO.personID };
+    this._spinner.show();
     this._irbViewService.loadCommitteeReviewerDetails(reqstObj).subscribe(data => {
+      this._spinner.hide();
       const result: any = data || [];
       // this.submissionVo.irbAdminsReviewers = result.irbAdminsReviewers;
       this.submissionVo.comment = result.comment;
@@ -926,10 +1066,14 @@ export class IrbSubmissionDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  showProtocolReviewerCommentsById(protocolReviewer) {
+  showProtocolReviewerCommentsById(protocolReviewer, index) {
+    this.filterMinutes = false;
+    this.filterLetter = false;
+    this.rowSelectedProtocol = index;
     this.showProtocolReviewsOf = protocolReviewer.FULL_NAME;
     this.submissionVo.committeeReviewerCommentsandAttachment =
       this.committeeReviewerCommentsandAttachment.filter(x => x.PERSON_ID === protocolReviewer.PERSON_ID);
+    this.protocolSearchPersonId = protocolReviewer.PERSON_ID;
   }
 
   expandProtocolReviwers() {

@@ -18,10 +18,13 @@ public final class KeyConstants {
 	public static final String PROPOSAL_FUNDING_SPONSOR_TYPE_CODE = "5";
 	public static final String AWARD_FUNDING_SPONSOR_TYPE_CODE = "6";
 	
-	
+	public static final Integer PROTOCOL_MINUTE_ENTRY_TYPE = 3;
 	/*Action Code*/
 	public static final String CREATE_AMENDMENT_ACTION_CODE = "103";
 	public static final String NOTIFY_COHEUS_ACTION_CODE = "116";
+	
+	/*Module Code*/
+	public static final Integer PROTOCOL_MODULE_CODE = 7;
 	
 	public static final String ROLE_WITH_UNIT = "SELECT DISTINCT T1.PERSON_ID,T2.FULL_NAME,T2.EMAIL_ADDRESS,T2.USER_NAME,T3.UNIT_NAME,T1.UNIT_NUMBER\r\n" + 
 			"FROM IRB_PERSON_ROLES_ASSIGN T1 \r\n" + 
@@ -48,4 +51,5 @@ public final class KeyConstants {
 			"			INNER JOIN WHOSP_PERSON_HISTORY T2 ON T1.PERSON_ID = T2.PERSON_ID \r\n" + 
 			"			INNER JOIN UNIT T3 ON T1.UNIT_NUMBER = T3.UNIT_NUMBER WHERE T1.PERSON_ID = :person_id\r\n" ; 
 			//"			GROUP BY T1.UNIT_NUMBER ";
+	public static final String LOCK_MESSAGE_ACTION = "Protocol was updated by another user. Please reload the Protocol";
 }

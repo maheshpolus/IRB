@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginService } from '../../login/login.service';
 import { SharedDataService } from '../service/shared-data.service';
-import { PermissionWarningModalComponent} from '../../common/permission-warning-modal/permission-warning-modal.component';
 
 @Component({
     selector: 'app-header',
@@ -24,9 +22,10 @@ export class HeaderComponent implements OnInit {
     alertMessage: string;
     FAQ_URL: string;
     GUIDELINES_URL: string;
+    lockList = [];
 
     constructor(private _loginService: LoginService, private _router: Router,
-        private _sharedDataService: SharedDataService, private _http: HttpClient,  private _modalService: NgbModal) { }
+        private _sharedDataService: SharedDataService, private _http: HttpClient) { }
 
     ngOnInit() {
         this._http.get('/irb/resources/string_config_json').subscribe(
@@ -52,19 +51,8 @@ export class HeaderComponent implements OnInit {
         this._sharedDataService.changeCurrentTab(null);
         this._sharedDataService.searchData = null;
         this._sharedDataService.isAdvancesearch = false;
-        this._router.navigate(['/login']);
+        this._router.navigate(['/logout']);
 
-        // this._loginService.logout().subscribe(data => {
-        //     this._sharedDataService.changeCurrentTab(null);
-        //     this._sharedDataService.searchData = null;
-        //     this._sharedDataService.isAdvancesearch = false;
-        //     if (data === true) {
-        //         sessionStorage.removeItem('ActivatedUser');
-        //         this._router.navigate(['/login']);
-        //     } else {
-        //         this._router.navigate(['/logout']);
-        //     }
-        // });
     }
     expandMenu(e: any) {
         e.preventDefault();
@@ -80,96 +68,23 @@ export class HeaderComponent implements OnInit {
         element.classList.add('slideMenu');
         this.showMenu = true;
     }
-    // goToQuestionnaire() {
-    //     const hasPermission = this.checkUserPermission('Q');
-    //     if (hasPermission !== undefined) {
-    //     if (hasPermission) {
-    //     this._router.navigate(['/irb/configure-questionnaire']);
-    //     } else {
-    //         this.alertMessage = 'You donot have Permission to Maintain Questionnaire';
-    //         // document.getElementById('noPermissionModalBtn').click();
-    //         this.openPermissionWarningModal(this.alertMessage);
-    //     }
-    // }
-    // }
-    // goToCodeTable() {
-    //    // const hasPermission = this.checkUserPermission('CT');
-    //     if (this.checkUserPermission('CT')) {
-    //     this._router.navigate(['/irb/code-table']);
-    //     } else {
-    //         this.alertMessage = 'You donot have Permission to Maintain Code Tables';
-    //        // document.getElementById('noPermissionModalBtn').click();
-    //        this.openPermissionWarningModal(this.alertMessage);
-    //     }
-    // }
-    // goToTrainingMaintainence() {
-    //    // const hasPermission = this.checkUserPermission('T');
-    //     if (this.checkUserPermission('T')) {
-    //     this._router.navigate(['/irb/training-maintenance']);
-    //     } else {
-    //         this.alertMessage = 'You donot have Permission to Maintain Person training';
-    //         // document.getElementById('noPermissionModalBtn').click();
-    //         this.openPermissionWarningModal(this.alertMessage);
-    //     }
-    // }
-    // checkUserPermission(Type) {debugger;
-    //    let hasPermission;
-    //     const requestObject = {
-    //         acType: Type, department: this.result.unitNumber, personId: this.result.personID
-    //     };
-    //     this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
-    //     hasPermission = data.successCode;
-    //     return hasPermission;
-    //     });
-    // }
 
-    checkPermissionToGotoLink(acType) {
-        const requestObject = {
-                    acType: acType, department: this.result.unitNumber, personId: this.result.personID, protocolId: null
-                };
-                this._sharedDataService.checkUserPermission(requestObject).subscribe((data: any) => {
-                const  hasPermission = data.successCode;
-                if (hasPermission === true) {
-                    if (acType === 'Q') {
-                        this._router.navigate(['/irb/configure-questionnaire']);
-                    } else if (acType === 'CT') {
-                        this._router.navigate(['/irb/code-table']);
-                    } else if ( acType === 'T') {
-                        this._router.navigate(['/irb/training-maintenance']);
 
-                    } else if ( acType === 'R') {
-                        this._router.navigate(['/irb/role-maintainance']);
-
-                    } else if ( acType === 'C') {
-
-                        if (this.isScheduleClicked) {
-                            this._router.navigate(['/irb/committee-schedule-list'],
-                            {queryParams: { isCommitteeList: false}});
-                        } else {
-                        this._router.navigate(['/irb/committee-schedule-list'],
-                        {queryParams: { isCommitteeList: true}});
-                        }
-
-                    }
-                } else {
-                    if (acType === 'Q') {
-                        this.alertMessage = 'You do not have Permission to Maintain Questionnaire';
-                    } else if (acType === 'CT') {
-                        this.alertMessage = 'You do not have Permission to Maintain Code Tables';
-                    } else if ( acType === 'T') {
-                        this.alertMessage = 'You do not have Permission to Maintain Person training';
-                    }  else if ( acType === 'R') {
-                        this.alertMessage = 'You do not have Permission to Maintain Roles';
-                    }  else if ( acType === 'C') {
-                        this.alertMessage = 'You do not have Permission to Maintain Committee';
-                    }
-                    this.openPermissionWarningModal(this.alertMessage);
-                }
-                });
+    loadProtocolLock() {
+        const reqstObj = {personId: this.result.personID};
+        this._sharedDataService.loadProtocolLock(reqstObj).subscribe(data => {
+            const result: any = data;
+            this.lockList = result.lockList != null ? result.lockList : [];
+        });
     }
 
-    openPermissionWarningModal(alertMessage) {
-        const modalRef = this._modalService.open(PermissionWarningModalComponent, { backdrop : 'static'});
-        modalRef.componentInstance.alertMessage = alertMessage;
-      }
+    RemoveLock(protocolNumber) {
+        const reqstObj = { protocolNumber: protocolNumber, personId: this.result.personID };
+        this._sharedDataService.releaseProtocolLock(reqstObj).subscribe(
+            data => {
+                const result: any = data;
+                this.lockList = result.lockList != null ? result.lockList : [];
+                console.log('Lock Released Successfully');
+            });
+    }
 }

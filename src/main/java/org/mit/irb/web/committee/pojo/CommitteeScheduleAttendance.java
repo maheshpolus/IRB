@@ -74,14 +74,17 @@ public class CommitteeScheduleAttendance implements Serializable {
 	private String updateUser;
 
 	@Column(name = "MEMBER_PRESENT")
-	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean memberPresent;
+	//@Convert(converter = JpaCharBooleanConversion.class)
+	private String memberPresent;
 
 	@Transient
 	private String roleName;
 
 	@Transient
 	private boolean guestMemberActive;
+	
+	@Transient
+	private String acType;
 
 	public Integer getCommitteeScheduleAttendanceId() {
 		return committeeScheduleAttendanceId;
@@ -191,12 +194,35 @@ public class CommitteeScheduleAttendance implements Serializable {
 		this.guestMemberActive = guestMemberActive;
 	}
 
-	public Boolean getMemberPresent() {
+	public CommitteeScheduleAttendance(String personName, String personId, String memberPresent,Boolean guestFlag,
+			Integer committeeScheduleAttendanceId,String comments,String alternateFor) {
+		super();
+		this.personName = personName;
+		this.personId = personId;
+		this.memberPresent = memberPresent;
+		this.guestFlag = guestFlag;
+		this.committeeScheduleAttendanceId = committeeScheduleAttendanceId;
+		this.comments = comments;
+		this.alternateFor = alternateFor;
+	}
+	
+	public CommitteeScheduleAttendance() {
+		super();
+	}
+
+	public String getAcType() {
+		return acType;
+	}
+
+	public void setAcType(String acType) {
+		this.acType = acType;
+	}
+
+	public String getMemberPresent() {
 		return memberPresent;
 	}
 
-	public void setMemberPresent(Boolean memberPresent) {
+	public void setMemberPresent(String memberPresent) {
 		this.memberPresent = memberPresent;
 	}
-
 }

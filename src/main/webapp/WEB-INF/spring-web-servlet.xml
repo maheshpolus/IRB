@@ -85,12 +85,14 @@
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolCollaboratorAttachments</value>	
 				<value>org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses</value>
 				<value>org.mit.irb.web.IRBProtocol.pojo.IRBProtocolPersonRoles</value>
+			    <value>org.mit.irb.web.IRBProtocol.pojo.IRBAdminReviewerComment</value>			
 				
 				<value>org.mit.irb.web.roles.pojo.PersonRoles</value>
 				<value>org.mit.irb.web.roles.pojo.Rights</value>
 				<value>org.mit.irb.web.roles.pojo.RoleRights</value>
 				<value>org.mit.irb.web.roles.pojo.RoleType</value>
 				<value>org.mit.irb.web.roles.pojo.Role</value>
+				<value>org.mit.irb.web.IRBProtocol.pojo.Lock</value>
 				
 					<value>org.mit.irb.web.committee.pojo.BatchCorrespondence</value> 
 					<value>org.mit.irb.web.committee.pojo.Committee</value>

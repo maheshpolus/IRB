@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr';
 import { IrbCreateService } from '../irb-create.service';
 import { SharedDataService } from '../../common/service/shared-data.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var $: any;
 
@@ -16,6 +17,7 @@ declare var $: any;
 export class IrbProtocolComponent implements OnInit, OnDestroy {
 
   isProtocolScienceEmpty = false;
+  isProtocolScienceEditable = true;
   userDTO: any = {};
   requestObject: any = {};
   commonVo: any = {};
@@ -24,12 +26,12 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
   ckEditorConfig: {} = {
     height: '300px',
     toolbarCanCollapse: 1,
-    removePlugins: 'sourcearea',
+    removePlugins: 'sourcearea'
   };
   private $subscription1: ISubscription;
 
   constructor(private _irbCreateService: IrbCreateService, private _sharedDataService: SharedDataService,
-    private _activatedRoute: ActivatedRoute, public toastr: ToastsManager, vcr: ViewContainerRef) {
+    private _activatedRoute: ActivatedRoute, public toastr: ToastsManager, private _spinner: NgxSpinnerService, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
   }
 
@@ -42,6 +44,8 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
     this.$subscription1 = this._sharedDataService.commonVo.subscribe(commonVo => {
       if (commonVo !== undefined) {
         this.commonVo = commonVo;
+        this.isProtocolScienceEditable = this.commonVo.protocolRenewalDetails != null ?
+          this.commonVo.protocolRenewalDetails.generalInfo : true;
         if (this.commonVo.scienceOfProtocol != null) {
           this.protocolScience = this.commonVo.scienceOfProtocol.description;
           this.scientificId = this.commonVo.scienceOfProtocol.scientificId;
@@ -71,7 +75,9 @@ export class IrbProtocolComponent implements OnInit, OnDestroy {
         sequenceNumber: 1
 
       };
+      this._spinner.show();
       this._irbCreateService.saveScienceOfProtocol(this.commonVo).subscribe(data => {
+        this._spinner.hide();
         this.commonVo = data;
         this.toastr.success('Protocol saved successfully', null, { toastLife: 2000 });
         if (this.commonVo.scienceOfProtocol != null) {

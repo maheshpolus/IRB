@@ -276,7 +276,7 @@
 														Description :
 													</h5>
 													<h5>
-														<span class="text-danger txt-medium">{{irbHeaderDetails.description}}</span>
+														<span class="text-danger txt-medium">{{irbHeaderDetails.DESCRIPTION}}</span>
 													</h5>
 												</div>
 											</div>
@@ -309,9 +309,14 @@
 				<i class="fa fa-home" aria-hidden="true"></i>General
 			</button>
 			<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbQuestionnaireList']"
-				[queryParams]="{protocolNumber :requestObject.protocolNumber}" (click)="show_current_tab('irbQuestionnaireList')"
+				[queryParams]="{protocolNumber :requestObject.protocolNumber, sequenceNumber:irbHeaderDetails?.SEQUENCE_NUMBER}" (click)="show_current_tab('irbQuestionnaireList')"
 				routerLinkActive="nav-active">
 				<i class="fa fa-question-circle-o" aria-hidden="true"></i>Additional Forms
+			</button>
+			<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbProtocol']"
+				[queryParams]="{protocolNumber :requestObject.protocolNumber}" routerLinkActive="nav-active"
+				(click)="show_current_tab('irbProtocol')">
+				<i class="fa fa-sticky-note-o" aria-hidden="true"></i>Protocol
 			</button>
 			<!--<button class="btn btn-primary tab_btn" type="submit"  [routerLink]="['irbQuestionaire']" [queryParams]= "{protocolNumber :requestObject.protocolNumber}" routerLinkActive="btnactive" (click)="show_current_tab('irb_questionaire')"><i class="fa fa-question-circle-o" aria-hidden="true"></i>Questionnaire</button> -->
 			<button class="btn btn-primary tab_btn" type="submit" [routerLink]="['irbAttatchments']"
@@ -329,7 +334,7 @@
 				(click)="show_current_tab('irb_history')">
 				<i class="fa fa-history" aria-hidden="true"></i>History
 			</button>
-			<button *ngIf="irbHeaderDetails?.PROTOCOL_STATUS_CODE != 100" class="btn btn-primary tab_btn" type="submit"
+			<button *ngIf="irbHeaderDetails?.SUBMISSION_STATUS_CODE != null" class="btn btn-primary tab_btn" type="submit"
 				[routerLink]="['irbSubmissionDetails']" [queryParams]="{protocolNumber :requestObject.protocolNumber}"
 				routerLinkActive="nav-active" (click)="show_current_tab('irbSubmissionDetails')">
 				<i class="fa fa-file-text-o" aria-hidden="true"></i>Submission Details

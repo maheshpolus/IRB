@@ -1,7 +1,7 @@
 <!--asign admin Modal-->
 <!-- <ngx-spinner bdOpacity=0.5 bdColor="#333" color="#fff" type="ball-spin-clockwise-fade" loadingText="Loading..."></ngx-spinner> -->
 <div class="modal-header popup-header dotted-bottom" data-backdrop="static">
-    <h5 class="modal-title txt-large thick">Assign IRB Admin</h5>
+    <h5 class="modal-title txt-large thick">Assign COUHES Admin</h5>
     <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -41,7 +41,7 @@
                </ul>
              </div> -->
             <ng2-completer class="txt-small" [datasource]="adminListDataSource" [minSearchLength]="0" [placeholder]="'Search IRB Admin'" [openOnFocus]="true"
-              [inputClass]="'ng-pristine ng-valid ng-touched'" [(ngModel)]="SearchTableName" (selected)="setAdmin($event)">
+              [inputClass]="'ng-pristine ng-valid ng-touched'" (selected)="setAdmin($event)">
             </ng2-completer>
           </div>
   

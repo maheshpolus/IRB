@@ -1,89 +1,123 @@
 <!-- start here -->
 
 <div class="container-fluid">
-    <div class="row">
-      <!--collapse-->
-  
-  
-      <div class="col-12">
-        <div class="row cards-in">
-          <div class="col-12 mb-10">
-            <div class="card mt-5">
-  
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                  <h4 class="card-hedding dotted-bottom">Questionnaires
-                    <span style="float: right;">
-                      <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    </span>
-                  </h4>
-                </div>
+  <div class="row">
+    <!--collapse-->
+
+
+    <div class="col-12">
+      <div class="row cards-in">
+        <div class="col-12 mb-10">
+          <div class="card mt-5">
+
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <h4 class="card-hedding dotted-bottom">Questionnaires <span class="sub-label"> (Please fill Questionnaires marked * before submission)</span>
+                  <span style="float: right;">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                  </span>
+                </h4>
               </div>
+            </div>
 
-              <div class="card-body card-paddng">
+            <div class="card-body card-paddng">
+              <div class="col-12  search-eidted-p padding-15">
+            
+                <div class="row">
+                  <div class="col-md-12 col-12 lg-12 col-sm-12 col-12">
+                    <div class="row">
+                      <div class="col-md-12">
+            
+                        <ul class="nav nav-pills">
+                          <li class="nav-item border-left1" *ngFor = "let questionnaire of applicableQuestionnaire">
+                            <a (click)="openEachQuestionaire(questionnaire)" class="nav-link txt-medium button-red-tab pointer font-bold"
+                              [ngClass]="{'active':selectedQuestionnaire?.QUESTIONNAIRE_ID == questionnaire.QUESTIONNAIRE_ID}">
+                              <i class="fa fa-check pr-5" [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y','txt-orange':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG != 'Y'}"
+                              aria-hidden="true" title="{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' ? 'Completed' : 'Not Completed'}}"></i>{{questionnaire?.QUESTIONNAIRE}}
+                              <span class="mandatory" *ngIf="questionnaire.IS_MANDATORY == 'Y'" title="Mandatory">*</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+            
+                    </div>
+            
+                    <!-- <div class="col-12 mt-10">
+                      <p class="noAttachments txt-small">
+                         Questionaire associated with this protocol will be released soon. 
+                        </p>
+                    </div> -->
+            
+            
+                  </div>
+                </div>
+            
+              </div>
+            </div>
+            <router-outlet></router-outlet>
+            <!-- <div class="card-body card-paddng">
 
 
-                  <div class="col-md-12 users-list-tbl">
-                      <div class="row">
-                        <div class="w-100">
-                          <table class="table  tbl-p-clr">
-                              <thead class="tbl-head-clr thead-font-size">
-                                  <tr>
-                                      <th scope="col">Name</th>
-                                      <th scope="col">Completed</th>
-                                      <th scope="col">Last Updated</th>
-                                      <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="tbody-font-size">
-                                    <tr *ngFor = "let questionnaire of applicableQuestionnaire" class="pull-up solid-bottom">
-                                        <td scope="row">{{questionnaire.QUESTIONNAIRE}}</td>
-                                        <td>
-                                          <span >{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y' ? 'Yes' : 'No'}}</span>
-                                        </td>
-                                        <td>{{questionnaire.UPDATE_USER}} On {{questionnaire?.UPDATE_TIMESTAMP| date: 'MM/dd/yyyy'}}</td>
-                                        <td>
+                <div class="col-md-12 users-list-tbl">
+                    <div class="row">
+                      <div class="w-100">
+                        <table class="table  tbl-p-clr">
+                            <thead class="tbl-head-clr thead-font-size">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Completed</th>
+                                    <th scope="col">Last Updated By</th>
+                                    <th scope="col">Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody class="tbody-font-size">
+                                  <tr *ngFor = "let questionnaire of applicableQuestionnaire" class="pull-up solid-bottom">
+                                      <td scope="row">{{questionnaire.QUESTIONNAIRE}}</td>
+                                      <td>
+                                        <span >{{questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y' ? 'Yes' : 'No'}}</span>
+                                      </td>
+                                      <td><span *ngIf="questionnaire.UPDATE_USER != null">{{questionnaire.UPDATE_USER}} On {{questionnaire?.UPDATE_TIMESTAMP| date: 'MM/dd/yyyy'}}</span></td>
+                                      <td>
 
-                                            <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
-                                                                                          protocolId: protocolId,
-                                                                                          ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
-                                                                                         qnrId: questionnaire.QUESTIONNAIRE_ID,mode: 'view'}">
-                                              <button type="button" class="btn">
-                                                <i class="fa fa-eye log-user-icon-lite"></i>
+                                          <a class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
+                                                                                        protocolId: protocolId,
+                                                                                        sequenceNumber: sequenceNumber,
+                                                                                        ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
+                                                                                        subItemCode:questionnaire.MODULE_SUB_ITEM_CODE,
+                                                                                        qnrId: questionnaire.QUESTIONNAIRE_ID,mode: 'view'}">
+                                            <button type="button" class="btn">
+                                              <i class="fa fa-eye log-user-icon-lite"></i>
+                                            </button>
+                                          </a>
+    
+                                          <a *ngIf="isEditMode && ((isQstnrEditable && questionnaire.MODULE_SUB_ITEM_CODE == 0) || 
+                                                                   (questionnaire.MODULE_SUB_ITEM_CODE == 4 && protocolNumber.includes('A')) || 
+                                                                   (questionnaire.MODULE_SUB_ITEM_CODE == 3 && protocolNumber.includes('R')))" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
+                                                                                                                         protocolId: protocolId,
+                                                                                                                         sequenceNumber: sequenceNumber,
+                                                                                                                         ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
+                                                                                                                         qnrId: questionnaire.QUESTIONNAIRE_ID,
+                                                                                                                         subItemCode:questionnaire.MODULE_SUB_ITEM_CODE}">
+                                              <button type="button" class="btn" >
+                                                <i class="fa fa-pencil log-user-icon-lite"></i>
                                               </button>
                                             </a>
-      
-                                            <a *ngIf="isQstnrEditable" class="pointer" [routerLink]="['../irbQuestionnaireView']" [queryParams]="{ protocolNumber: protocolNumber,
-                                                                                                                           protocolId: protocolId,
-                                                                                                                           ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
-                                                                                                                          qnrId: questionnaire.QUESTIONNAIRE_ID}">
-                                                <button type="button" class="btn" >
-                                                  <i class="fa fa-pencil log-user-icon-lite"></i>
-                                                </button>
-                                              </a>
-      
-                                          <!-- <a [routerLink]="['../irbQuestionnaireView']" 
-                                            [queryParams]="{ protocolNumber: protocolNumber,
-                                                             protocolId: protocolId,
-                                                             ansHdrId: questionnaire.QUESTIONNAIRE_ANS_HEADER_ID,
-                                                             qnrId: questionnaire.QUESTIONNAIRE_ID}"> dfsdfsd
-                                          </a> -->
-                                        </td>
-                                      </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                            </div>
-                            </div>
-              </div>
+                                      </td>
+                                    </tr>
+                              </tbody>
+                          </table>
+                          </div>
+                          </div>
+                          </div>
+            </div> -->
 
 
-            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 <!-- End at here -->
 

@@ -79,14 +79,6 @@
                           <i class="fa fa-eye"></i> View
                         </button>
                       </a>
-                           <a  *ngIf="result.PROTOCOL_STATUS_CODE == 100 || result.PROTOCOL_STATUS_CODE == 104 || result.PROTOCOL_STATUS_CODE == 105 || result.PROTOCOL_STATUS_CODE == 106
-		          || result.PROTOCOL_STATUS_CODE == 304 || result.PROTOCOL_STATUS_CODE == 107 || result.PROTOCOL_STATUS_CODE == 102 || result.PROTOCOL_STATUS_CODE == 103" class="pointer" title="Open {{result.PROTOCOL_NUMBER}}"
-                        (click)="EditIrb(result.PROTOCOL_NUMBER,result.PROTOCOL_ID)">
-                        <button type="button" class="btn btn-blue btn-sm text-right txt-medium mt-10"
-                          (click)="EditIrb(result.PROTOCOL_NUMBER,result.PROTOCOL_ID)">
-                          <i class="fa fa-pencil"></i> Edit
-                        </button>
-                      </a>
                       <!-- <ul class="actionButtonGroup">
                               <li><a href="#/irb/irb-view/irbOverview?protocolNumber={{result.PROTOCOL_NUMBER}}" title="Open {{result.PROTOCOL_NUMBER}}"
                                 (click)="openIrbView(result.PROTOCOL_NUMBER)"><i

@@ -8,10 +8,8 @@ export class CommitteCreateEditService {
 
     }
 
-    getCommitteeData( committeeTypeCode: string ): Observable<JSON> {
-        const params = {
-            committeeTypeCode: committeeTypeCode,
-        };
+    getCommitteeData(): Observable<JSON> {
+        const params = null;
         return this.http.post( '/irb/createCommittee', params )
             .catch( error => {
                 console.error( error.message || error );
@@ -30,10 +28,7 @@ export class CommitteCreateEditService {
             } );
     }
 
-    loadScheduleDetailsById( committeeId: string ): Observable<JSON> {
-        const params = {
-            committeeId: committeeId,
-        };
+    loadScheduleDetailsById( params ): Observable<JSON> {
         return this.http.post( '/irb/loadScheduleDetailsById', params )
             .catch( error => {
                 console.error( error.message || error );

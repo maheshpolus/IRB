@@ -98,18 +98,12 @@
 	color:#ff3d3d;
 }
 
-.padding-15-30{
-	padding: 15px 30px !important;
+.ct-padding-modal{
+	padding: 9px 18px !important;
 }
 
-.divpad{
+.ct-divpad{
 	padding: 0px !important;
-}
-.sublist{
-	display:inline-block;
-	float: left;
-	padding-left:
-	5px;padding-right: 5px;
 }
 
 /* toast */
@@ -207,26 +201,21 @@
 }
 
 .tablealign>tbody>tr>td{
-	vertical-align: initial !important;
-}
-
-.atag
-{
-	color: #757575;
-	/* text-decoration: none !important; */
+	/* vertical-align: initial !important; */
+	vertical-align: top !important;
 }
 .list-header
 {
 	width: 100%;
-    border-bottom: solid 1px #dadad6;
+    /* border-bottom: solid 1px #dadad6; */
     padding-bottom: 5px;
     /* color: #a92034; */
-    /* font-size: 16px; */
+    font-size: 16px;
 	/* font-weight: 400px; */
-	font-weight: bold;
+	/* font-weight: bold;
 	color: #505050;
     padding-top: 10px;
-    font-size: 14px;
+    font-size: 14px; */
 }
 .result-outer .col-lg-3
 {
@@ -242,13 +231,13 @@
 {
 	text-decoration: underline;
 }
-.viewmorea {
+.ct-viewmorea {
 	font-size: 15px !important;
 	padding-left: 20px !important;
 	text-decoration: underline !important;
 	color: #a92034 !important;
 }
-.pointer {
+.ct-pointer {
 	cursor: pointer !important;
 }
 .action-icon i:nth-child(2) {
@@ -260,6 +249,8 @@
 }
 .advance{
 	padding-left: 0px !important;
+	padding-top: 10px;		
+    padding-bottom: 10px;
 }
 .body{
 	font-size: .95em;
@@ -328,3 +319,231 @@ margin-top: 15px;
 .irb-tbody-font-size{
 	font-size: 16px !important;
 }
+/* file styles */
+.ct-drop-zone{
+	margin: auto;
+	height: 67px;
+	border: 2px dotted #a92034;
+	border-radius: 30px;
+	padding: 0 8px;
+}
+.ct-file{
+	color: #a92034;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  .ct-filebtn{
+    background-color: #a92034 !important;
+	border-color: #a92034 !important;
+	font-size: 11px;
+    padding: 3px 5px;
+    border-radius: 10px;
+    margin-right: 10px;
+  }
+  .ct-filename-align{
+      text-align: center;
+      color: #495057;
+      padding-left: 20px;
+  }
+  .searchButton:hover{
+	color:#a92034 !important;
+}
+/* may cause some issues when integrating in other projects. 
+The give styles added to avoid problems when datepicker used inside modals */
+/* .cdk-overlay-container {
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 9999999 !important;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 9999999 !important;
+} */
+/* End */
+.ct-date-dv{
+	position: relative;
+   display: inline-block;
+}
+.ct-date-i{
+	position: absolute;
+	right: -8px;
+	top: 6px;
+	font-size: 18px;
+}
+.ct-border-none{
+	border: none !important;
+}
+.ct-createnw{
+	border: 1px solid #a92034;;
+    padding: 5px 8px;
+    border-radius: 8PX;
+    color: #000;
+	font-size: 14px;
+	cursor: pointer;
+}
+.ct-val-msg{
+	color: #ff9308;
+    font-size: .8rem;
+}
+.ct-not-available{
+	font-size: .9rem;
+	text-align: center;
+  	font-weight: bold;
+ 	padding-top: 7px;
+}
+.ct-border-bg-clr{
+	background-color: #f3f2f2 !important;
+}
+.ct-download-icn{
+	color: #1cc523 !important;
+	font-size: 18px;
+	cursor: pointer;
+}
+.ct-download-icn:hover {
+    color: #9e9e9e !important;
+}
+.ct-input-bodr{
+	border-radius: 20px !important;
+	background-color: white !important;
+}
+.searchButton{
+	color:#9e9e9e !important;
+}
+.ct-searchheader{
+	color: #a92034;
+	font-size: .85rem;
+	padding-left: 115px;
+	padding-top: 5px;
+	font-weight: bold;
+}
+.ct-adv-searchheader{
+	color: #a92034;
+	font-size: .85rem;
+	font-weight: bold;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+.ct-p-15{
+	padding-left: 15px;
+	margin-bottom: 10px;
+}
+.mgl-15{
+	padding-left: -15px !important;
+}
+.ct-icon-right{
+	font-size: 1.25rem!important;
+    margin-top: 0px;
+	float: right;
+	color: #4c4b4b;
+}
+.ct-helpMsg {
+    padding: 7px 10px;
+    border-radius: 0;
+    font-size: .85rem;
+    /* font-weight: bold; */
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.ct-helpCard:hover .ct-closeResultCard {
+    display: block !important;
+    transition: display .25s !important;
+}
+.ct-close-help {
+	right: 10px!important;
+	bottom: 36px;
+}
+.ct-closeResultCard {
+   	position: absolute;
+    padding: 0;
+    border: 0;
+    width: 20px;
+    border-radius: 50%;
+    height: 20px;
+    color: #fff;
+    font-size: .8em;
+    line-height: 20px;
+    right: 5px;
+    cursor: pointer;
+    display: none !important; 
+}
+.ct-checkbox-ml{
+	margin-left: -17px !important;
+}
+.ct-pl0{
+	padding-left: 0;
+}
+.ct-validation-msg span{
+	display: block;
+}
+.ct-modulelist{
+	display: inline-block;
+	margin: 5px 16px;
+ }
+ .ct-outerpadding{
+	 padding-top: 0 !important;
+ }
+ .ct-warning-validation{
+    color: red;
+  }
+  .ct-spanwidth{
+  word-break: break-all;
+  }
+  .ct-widthmodal{
+	max-width: 1252px;
+  }
+  .ct-widthnew{
+	width: 30% !important;
+  }
+  .ct-hrmargin{
+	margin-top: 0px !important;
+  }
+  .ct-header-color{
+	color: #616161 !important;
+	font-weight: 500 !important;
+  }
+  .ct-modal-padding{
+	padding-bottom: 0 !important;
+	padding-top: 5px !important;
+  }
+  .ct-footer-padding{
+	padding-bottom: 8px !important;
+	padding-top: 8px !important;
+  }
+  .ct-mb10 {
+	margin-bottom: 15px !important;
+  }
+  .ct-acrdn-i {
+	float: right;
+	margin-top: 2px;
+	margin-right: 1px;
+	/* color: #4c4b4b; */
+	/* font-weight: bold; */
+	font-size: 1.25rem!important;
+  }
+  .ct-mgtp {
+	  margin-top: 20px;
+  }
+  hr.ct-hrmargin{
+	  border: .5px solid #a92034;
+  }
+  .ct-m0{
+	  margin:0px;
+  }
+  .ct-ml5 {
+	margin-top: 5px;
+  }

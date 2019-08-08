@@ -53,4 +53,12 @@ checkUserPermission(params) {
   return this._http.post('/irb/checkUserPermission', params);
 }
 
+releaseProtocolLock(params) {
+  return this._http.post('/irb/releaseProtocolLock', params);
+}
+
+loadProtocolLock(params) {
+  return this._http.post('/irb/loadProtocolLock', params);
+}
+
 }

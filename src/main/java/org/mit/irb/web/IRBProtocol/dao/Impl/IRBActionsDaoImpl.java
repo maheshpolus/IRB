@@ -7,10 +7,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,7 +21,9 @@ import org.mit.irb.web.IRBProtocol.dao.IRBActionsDao;
 import org.mit.irb.web.IRBProtocol.dao.IRBProtocolDao;
 import org.mit.irb.web.IRBProtocol.pojo.AdminCheckListDetail;
 import org.mit.irb.web.IRBProtocol.pojo.IRBCommitteeReviewerComments;
+import org.mit.irb.web.IRBProtocol.pojo.ProtocolGeneralInfo;
 import org.mit.irb.web.IRBProtocol.pojo.ProtocolSubmissionStatuses;
+import org.mit.irb.web.common.constants.KeyConstants;
 import org.mit.irb.web.common.utils.DBEngine;
 import org.mit.irb.web.common.utils.DBEngineConstants;
 import org.mit.irb.web.common.utils.InParameter;
@@ -67,26 +66,16 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO getActionList(IRBActionsVO vo) {		
 		ArrayList<InParameter> inputParam  = new ArrayList<InParameter>();
 		ArrayList<OutParameter> outputParam = new ArrayList<>();
-		ArrayList<HashMap<String, Object>> permissionList = null;
 		ArrayList<HashMap<String, Object>> result = null;	
-		ArrayList<HashMap<String, Object>> intialResult =  new ArrayList<HashMap<String, Object>>();
-		inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,String.valueOf(vo.getPersonID())));				
 		outputParam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));		
 		try {
-			permissionList = dbEngine.executeProcedure(inputParam,"GET_IRB_PERSON_PERMISSION", outputParam);
-			if(permissionList !=null && !permissionList.isEmpty()){			
-				for(HashMap<String,Object> permName : permissionList){		
-					inputParam=new ArrayList<InParameter>();			
-					inputParam.add(new InParameter("AV_PERMISSION_NAME", DBEngineConstants.TYPE_STRING,permName.get("PERM_NM").toString()));				
-					inputParam.add(new InParameter("AV_PROTOCOL_STATUS", DBEngineConstants.TYPE_STRING,vo.getProtocolStatus()));				
-					inputParam.add(new InParameter("AV_PROTOCOL_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING,vo.getSubmissionStatus()));				
-					result = dbEngine.executeProcedure(inputParam,"GET_IRB_AVAILABLE_ACTION", outputParam);
-					if(result != null && !result.isEmpty())
-						intialResult.addAll(result);								
-				}						
-			}
+			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,String.valueOf(vo.getPersonID())));				
+			inputParam.add(new InParameter("AV_PROTOCOL_SUBMISSION_STATUS", DBEngineConstants.TYPE_STRING,vo.getSubmissionStatus()));
+			inputParam.add(new InParameter("AV_PROTOCOL_NUMBER", DBEngineConstants.TYPE_STRING,vo.getProtocolNumber()));				
+			inputParam.add(new InParameter("AV_SEQUENCE_NUMBER", DBEngineConstants.TYPE_INTEGER,vo.getSequenceNumber()));				
+			result = dbEngine.executeProcedure(inputParam,"GET_IRB_AVAILABLE_ACTION", outputParam);													
 			vo = getProtocolActionDetails(vo);	
-			ArrayList<HashMap<String, Object>> finalResult = actionsAvaliableForUser(vo,intialResult);			
+			ArrayList<HashMap<String, Object>> finalResult = actionsAvaliableForUser(vo,result);			
 			vo.setPersonActionsList(finalResult);	
 		} catch (Exception e) {
 			logger.info("Exception in getPersonRight:" + e);
@@ -96,56 +85,53 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	private ArrayList<HashMap<String, Object>> actionsAvaliableForUser(IRBActionsVO vo,ArrayList<HashMap<String, Object>> intialResult) {
 		String reviewTypeCode =vo.getProtocolSubmissionStatuses().getProtocolReviewTypeCode();
-		if(intialResult !=null && !intialResult.isEmpty()){	
-		for(int i = 0;i < intialResult.size();i++)
-        {
-            Object temp = intialResult.get(i).get("ACTION_NAME");
-            for(int k = i+1;k < intialResult.size();k++)
-            {
-                if(temp.equals(intialResult.get(k).get("ACTION_NAME")))
-                {
-                	intialResult.remove(k); 
-                }                 
+		ArrayList<HashMap<String, Object>> finalResult = new ArrayList<>();
+		if(intialResult !=null && !intialResult.isEmpty()){		
+			for(int i = 0; i< intialResult.size(); i++)
+             {	 
+				finalResult.add(intialResult.get(i));
+            	Object temp = intialResult.get(i).get("ACTION_CODE"); 
+            	switch (temp.toString()) {
+            		case "205":
+            			if(reviewTypeCode == null){
+            				finalResult.remove(finalResult.size()-1);
+            			}					 
+            			else if(!reviewTypeCode.equals("2")){
+            				finalResult.remove(finalResult.size()-1); 
+            			}
+            			break;
+            		case "208":
+            			if(reviewTypeCode == null){
+            				finalResult.remove(finalResult.size()-1);
+            			}					 
+            			else if(!reviewTypeCode.equals("6")){
+            				finalResult.remove(finalResult.size()-1);
+            			}
+            			break;
+            		case "210":
+            			if(reviewTypeCode == null){
+            				finalResult.remove(finalResult.size()-1); 
+            			}					 
+            			else if(!reviewTypeCode.equals("5")){
+            				finalResult.remove(finalResult.size()-1);
+            			}
+            			break;
+            		case "204":
+            		case "304":
+            		case "203":	
+            		case "202":	
+            			if(reviewTypeCode == null){
+            				finalResult.remove(finalResult.size()-1); 
+            			}
+            			else if(!reviewTypeCode.equals("1")){
+            				finalResult.remove(finalResult.size()-1); 
+            			}
+            			break;
+            	}     
             }
-            temp = intialResult.get(i).get("ACTION_CODE"); 
-            switch (temp.toString()) {
-			case "205":
-				 if(reviewTypeCode == null){
-					 intialResult.remove(i);
-				 }					 
-				 else if(!reviewTypeCode.equals("2")){
-					 intialResult.remove(i);
-				 }
-				break;
-			case "208":
-				 if(reviewTypeCode == null){
-					 intialResult.remove(i);
-				 }					 
-				 else if(!reviewTypeCode.equals("6")){
-					 intialResult.remove(i);
-				 }
-				break;
-			case "210":
-				 if(reviewTypeCode == null){
-					 intialResult.remove(i);
-				 }					 
-				 else if(!reviewTypeCode.equals("5")){
-					 intialResult.remove(i);
-				 }
-				break;
-			case "204":
-			case "304":
-			case "203":	
-			case "202":	
-				if(reviewTypeCode == null){
-					intialResult.remove(i);
-				  }
-				break;			
-			 }	          
-           }
-	     }
-		return intialResult;
-	}         
+		}		
+		return finalResult;
+	}       
 
 	public IRBActionsVO getProtocolActionDetails(IRBActionsVO vo){
 		try{
@@ -252,9 +238,10 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	}
 	
 	@Override
-	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo) {			
+	public IRBActionsVO withdrawProtocolActions(IRBActionsVO vo, MultipartFile[] files) {			
 		try {			
 			protocolActionSP(vo,null);
+			protocolActionAttachments(files,vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Withdrawn successfully");	
 		} catch (Exception e) {
@@ -545,8 +532,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 						vo.setSuccessMessage("Amendment creation Failed");
 						logger.info("Exception in updateAmendRenewModule:" + e);	
 						}	
-					}			
-			});
+					}	
+				});
 			updateSummarryData(vo);
 			} catch (Exception e) {
 				vo.setSuccessCode(false);
@@ -613,7 +600,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    }else{
 				    vo.setTemplateTypeCode("23");
 			    }
-			}	
+			}
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Closed successfully");	
@@ -627,7 +615,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO disapproveAdminActions(IRBActionsVO vo) {
-		try {	
+		try {
+			if(vo.getProtocolNumber().length() > 10){
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}				
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
@@ -638,7 +631,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    vo.setTemplateTypeCode("16");
 			}
 			updateRiskLevelDetails(vo);
-			updateReviewComments(vo);							
+			updateReviewComments(vo);	
+			if(vo.getProtocolNumber().length() <= 10)
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Dissapproved successfully");	
@@ -678,6 +673,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    vo.setTemplateTypeCode("18");
 			}
 			protocolActionAttachments(files, vo);
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Re-Open enrollment successful");	
@@ -700,6 +696,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
 			    vo.setTemplateTypeCode("14");
 			}
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Data analysis only successful");	
@@ -722,7 +719,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
 			    vo.setTemplateTypeCode("13");
 			}
-			updateReviewComments(vo);
+			updateReviewComments(vo);			
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Closed for enrollment successful");	
@@ -747,7 +745,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    vo.setTemplateTypeCode("21");
 			}
 			updateReviewComments(vo);
-			protocolActionReviewerAttachments(files, vo);
+			protocolActionReviewerAttachments(files, vo);			
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Terminated successfully");	
@@ -773,6 +772,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Suspended successfully");	
@@ -813,6 +813,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Defered successfully");	
@@ -872,6 +873,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			}
 			updateReviewComments(vo);
 			protocolActionReviewerAttachments(files, vo);
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Review not required successful");	
@@ -886,7 +888,12 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO approvedAdminActions(IRBActionsVO vo) {
-		try {	
+		try {
+			if(vo.getProtocolNumber().length() >10){
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}				
 			updateSubmissionDetail(vo);
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);
@@ -903,7 +910,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 					vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
 				    vo.setCorrespTemplateTypeCode(result.get(0).get("CORESSPOND_TYPE_CODE")  == null ? null : result.get(0).get("CORESSPOND_TYPE_CODE").toString());
 				    vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
-			}					
+			}
+			if(vo.getProtocolNumber().length() <= 10)
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);	
 			if(vo.getProtocolNumber().length() > 10){				
 				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
@@ -933,7 +942,14 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				   vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
 				   vo.setTemplateTypeCode("11");				   
 			}
-			generateProtocolCorrespondence(vo);			
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+			generateProtocolCorrespondence(vo);	
+			if(!result.isEmpty()){
+			    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			    vo.setSubmissionId(result.get(0).get("SUBMISSION_ID").toString());
+			    vo.setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
+			    vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Specific Minor Revisions Required successful");	
 		} catch (Exception e) {
@@ -959,7 +975,14 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			}			
 			updateRiskLevelDetails(vo);
 			updateReviewComments(vo);
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
+			if(!result.isEmpty()){
+			    vo.setProtocolId(Integer.parseInt(result.get(0).get("PROTOCOL_ID").toString()));
+			    vo.setSubmissionId(result.get(0).get("SUBMISSION_ID").toString());
+			    vo.setSubmissionNumber(Integer.parseInt(result.get(0).get("SUBMISSION_NUMBER").toString()));
+			    vo.setSequenceNumber(Integer.parseInt(result.get(0).get("SEQUENCE_NUMBER").toString()));
+			}
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Substantive Revisions Required successful");	
 		} catch (Exception e) {
@@ -974,6 +997,11 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	@Override
 	public IRBActionsVO expeditedApprovalAdminActions(IRBActionsVO vo) {
 		try {
+			if(vo.getProtocolNumber().length() > 10){
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}
 			updateSubmissionDetail(vo);										
 			ArrayList<HashMap<String, Object>> result = null;			
 			result = protocolActionSP(vo,null);	
@@ -995,6 +1023,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			}else{
 				vo.setTemplateTypeCode("7");
 			}
+			if(vo.getProtocolNumber().length() <= 10)
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			if(vo.getProtocolNumber().length() > 10){				
 				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
@@ -1012,8 +1042,14 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 
 	@Override
 	public IRBActionsVO responseApprovalAdminActions(IRBActionsVO vo) {
-		try {												
-			ArrayList<HashMap<String, Object>> result = null;			
+		try {
+			if(vo.getProtocolNumber().length() > 10){
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
+				vo.getProtocolHeaderDetails().remove("PROTOCOL_STATUS");
+				vo.getProtocolHeaderDetails().put("PROTOCOL_STATUS","Active - Open to Enrollment");
+			}
+			ArrayList<HashMap<String, Object>> result = null;
+			updateSubmissionDetail(vo);
 			result = protocolActionSP(vo,null);	
 			if(result != null && !result.isEmpty()){
 				   vo.setActionId(result.get(0).get("ACTION_LOG_ID") == null ? null : Integer.parseInt(result.get(0).get("ACTION_LOG_ID").toString()));
@@ -1021,6 +1057,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				   vo.setCorrespTypeDescription(result.get(0).get("CORESSP_TYPE") == null ? null : result.get(0).get("CORESSP_TYPE").toString());
 				   vo.setTemplateTypeCode("10");				   
 			}
+			if(vo.getProtocolNumber().length() <= 10)
+				vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			if(vo.getProtocolNumber().length() > 10){				
 				vo.setProtocolNumber(vo.getProtocolNumber().substring(0, 10));
@@ -1063,6 +1101,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			    vo.setTemplateTypeCode("24");
 			}		
 			protocolActionAttachments(files, vo);
+			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
 			generateProtocolCorrespondence(vo);
 			vo.setSuccessCode(true);
 		    vo.setSuccessMessage("Adandon successful");	
@@ -1108,8 +1147,8 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 	public IRBActionsVO generateProtocolCorrespondence(IRBActionsVO vo){
 		ResponseEntity<byte[]> attachmentData = null;
 		try{
-			vo.setProtocolHeaderDetails(irbProtocolDao.getIRBProtocolDetail(vo.getProtocolNumber()));
-			byte[] data = getTemplateData(vo);
+			
+			byte[] data = getTemplateData(vo);			
 			byte[] mergedOutput = mergePlaceHolders(data,vo);
 			String generatedFileName = vo.getCorrespTypeDescription()+".pdf";
 			HttpHeaders headers = new HttpHeaders();
@@ -1398,6 +1437,7 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getUpdateUser()));
 			inputParam.add(new InParameter("AV_PUBLIC_FLAG", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPublicFLag()));
 			inputParam.add(new InParameter("AV_PERSON_ID", DBEngineConstants.TYPE_STRING,submissionDetailvo.getPersonID().toString()));
+			inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,submissionDetailvo.getIncludeInLetter()));
 			outputparam.add(new OutParameter("resultset", DBEngineConstants.TYPE_RESULTSET));
 			ArrayList<HashMap<String, Object>> result = dbEngine.executeProcedure(inputParam,"UPD_IRB_PROTO_ADMIN_REVW_CMMNT",outputparam);
 			if(result != null && !result.isEmpty()){
@@ -1516,7 +1556,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getContingencyCode()));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,vo.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,"I"));	
-				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));			
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,irbActionsReviewerCommentList.getLetterFlag()));
+				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,vo.getProtocolSubmissionStatuses().getScheduleId()));
+				inputParam.add(new InParameter("AV_MINUTE_ENTRY_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,KeyConstants.PROTOCOL_MINUTE_ENTRY_TYPE));
 			    dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1579,7 +1621,9 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 				inputParam.add(new InParameter("AV_PROTOCOL_CONTINGENCY_CODE", DBEngineConstants.TYPE_STRING,null));
 				inputParam.add(new InParameter("AV_UPDATE_USER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getUpdateUser()));
 				inputParam.add(new InParameter("AV_TYPE", DBEngineConstants.TYPE_STRING,submissionDetailVO.getAcType()));			
-				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getIrbCommitteeReviewerComments().getLetterFlag()));			
+				inputParam.add(new InParameter("AV_INCLUDE_IN_LETTER", DBEngineConstants.TYPE_STRING,submissionDetailVO.getIrbCommitteeReviewerComments().getLetterFlag()));
+				inputParam.add(new InParameter("AV_SCHEDULE_ID", DBEngineConstants.TYPE_INTEGER,submissionDetailVO.getSceduleId()));
+				inputParam.add(new InParameter("AV_MINUTE_ENTRY_TYPE_CODE", DBEngineConstants.TYPE_INTEGER,KeyConstants.PROTOCOL_MINUTE_ENTRY_TYPE));
 				dbEngine.executeProcedure(inputParam,"UPD_IRB_REVIEW_COMMENTS");
 			} catch (Exception e) {
 				logger.info("Exception in updateIRBAdminReviewers:" + e);	
@@ -1881,5 +1925,67 @@ public class IRBActionsDaoImpl implements IRBActionsDao {
 			logger.info("Exception in getPastSubmission method:" + e);
 		}
 		return  Integer.parseInt(isRequested.get(0).get("resultset").toString());	
+	}
+
+	@Override
+	public IRBActionsVO getProtocolCurrentStatus(IRBActionsVO vo) {		
+		ProtocolSubmissionStatuses protocolSubmission = new ProtocolSubmissionStatuses();
+		ProtocolGeneralInfo protocolInfo = new ProtocolGeneralInfo();
+		if(vo.getSubmissionId() != null){
+			protocolSubmission  = fetchSubmissionDetailsForLock(vo,protocolSubmission);
+		}
+		protocolInfo = fetchProtocolStatusForLock(vo,protocolInfo);
+		vo.setProtocolInfo(protocolInfo);		
+		if(vo.getProtocolSubmissionStatuses().getSubmissionStatusCode() != null && protocolSubmission != null ){
+			if(vo.getProtocolSubmissionStatuses().getSubmissionStatusCode().equals(protocolSubmission.getSubmissionStatusCode())){
+				vo.setSuccessCode(true);
+			}else{
+				vo.setSuccessCode(false);
+			    vo.setSuccessMessage(KeyConstants.LOCK_MESSAGE_ACTION);	
+				return(vo);
+			}
+		}
+		if(protocolInfo.getProtocolStatusCode().equals(vo.getProtocolStatus())){
+			vo.setSuccessCode(true);
+		}else{
+			vo.setSuccessCode(false);
+		    vo.setSuccessMessage(KeyConstants.LOCK_MESSAGE_ACTION);	
+		}		
+	    return vo;
+	}
+
+	private ProtocolGeneralInfo fetchProtocolStatusForLock(IRBActionsVO vo, ProtocolGeneralInfo protocolInfo) {
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProtocolGeneralInfo> criteria = builder.createQuery(ProtocolGeneralInfo.class);
+			Root<ProtocolGeneralInfo> protocolRoot=criteria.from(ProtocolGeneralInfo.class);	
+			criteria.multiselect(protocolRoot.get("protocolId"),protocolRoot.get("protocolStatusCode")
+					,protocolRoot.get("protocolNumber"),protocolRoot.get("sequenceNumber")
+					,protocolRoot.get("updateUser"));
+			criteria.where(builder.equal(protocolRoot.get("protocolNumber"),vo.getProtocolNumber()));
+			criteria.orderBy(builder.desc(protocolRoot.get("protocolId")));
+			if(session.createQuery(criteria).getResultList() != null)
+				protocolInfo = session.createQuery(criteria).getResultList().get(0);					
+		}catch (Exception e) {
+			logger.info("Exception in fetchProtocolStatus:" + e);		
+		}
+		return protocolInfo;
+	}
+	
+	private ProtocolSubmissionStatuses fetchSubmissionDetailsForLock(IRBActionsVO vo,ProtocolSubmissionStatuses protocolSubmissionStatuses) {
+		try{
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();		
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProtocolSubmissionStatuses> criteria = builder.createQuery(ProtocolSubmissionStatuses.class);
+			Root<ProtocolSubmissionStatuses> submissionRoot=criteria.from(ProtocolSubmissionStatuses.class);			
+			criteria.where(builder.equal(submissionRoot.get("protocolNumber"),vo.getProtocolNumber()));
+			criteria.orderBy(builder.desc(submissionRoot.get("submission_Id")));
+			if(session.createQuery(criteria).getResultList() != null)
+			protocolSubmissionStatuses = session.createQuery(criteria).getResultList().get(0);					
+		}catch (Exception e) {
+			logger.info("Exception in getProtocolSubmissionDetails:" + e);		
+		}
+		return protocolSubmissionStatuses;
 	}
 }

@@ -2,6 +2,7 @@ package org.mit.irb.web.committee.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
@@ -29,7 +30,7 @@ import org.mit.irb.web.committee.util.JpaCharBooleanConversion;
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CommitteeScheduleMinutes implements Serializable {
-
+		
 	private static final long serialVersionUID = 1L;
 
 
@@ -39,6 +40,27 @@ public class CommitteeScheduleMinutes implements Serializable {
 	@GeneratedValue(generator = "muinutesIdGererator")
 	@Column(name = "COMM_SCHEDULE_MINUTES_ID", updatable = false, nullable = false)
 	private Integer commScheduleMinutesId;
+
+	public CommitteeScheduleMinutes(Integer commScheduleMinutesId, Integer entryNumber, Integer minuteEntryTypeCode,
+			MinuteEntryType minuteEntrytype, String protocolContingencyCode, ProtocolContingency protocolContingency,
+			String protocolNumber, Integer protocolId, Integer submissionId, Boolean privateCommentFlag,
+			String minuteEntry, Boolean finalFlag, Date updateTimestamp) {
+		super();
+		this.commScheduleMinutesId = commScheduleMinutesId;
+		this.entryNumber = entryNumber;
+		this.minuteEntryTypeCode = minuteEntryTypeCode;
+		this.minuteEntrytype = minuteEntrytype;
+		this.protocolContingencyCode = protocolContingencyCode;
+		this.protocolContingency = protocolContingency;
+		this.protocolNumber = protocolNumber;
+		this.protocolId = protocolId;
+		this.submissionId = submissionId;
+		this.privateCommentFlag = privateCommentFlag;
+		this.minuteEntry = minuteEntry;
+		this.finalFlag = finalFlag;
+		this.updateTimestamp = updateTimestamp;
+	}
+
 
 	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.REFRESH })
@@ -104,7 +126,7 @@ public class CommitteeScheduleMinutes implements Serializable {
 	private Timestamp createTimestamp;
 
 	@Column(name = "UPDATE_TIMESTAMP")
-	private Timestamp updateTimestamp;
+	private java.util.Date updateTimestamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
@@ -279,14 +301,6 @@ public class CommitteeScheduleMinutes implements Serializable {
 		this.createTimestamp = createTimestamp;
 	}
 
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
 	public String getUpdateUser() {
 		return updateUser;
 	}
@@ -321,6 +335,22 @@ public class CommitteeScheduleMinutes implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public java.util.Date getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(java.util.Date updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
+	
+	public CommitteeScheduleMinutes(String minuteEntry) {
+		super();
+		this.minuteEntry = minuteEntry;
+	}
+
+	public CommitteeScheduleMinutes() {		
 	}
 
 }

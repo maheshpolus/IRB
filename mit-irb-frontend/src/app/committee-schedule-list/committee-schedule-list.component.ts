@@ -49,9 +49,20 @@ getScheduleList() {
   this._spinner.show();
   this._dashboardService.loadCommitteeScheduleList().subscribe((data: any) => {
     this._spinner.hide();
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     this.irbListData = data.committeSchedulList != null ? data.committeSchedulList : [];
     this.paginatedIrbListData = this.irbListData.slice(0, this.paginationData.limit);
     this.count = this.irbListData.length;
+    this.irbListData.forEach(element => {
+      element.SCHEDULED_DATE = new Date(element.SCHEDULED_DATE);
+      element.SCHEDULED_DATE.setHours(0, 0, 0, 0);
+      if (currentDate <= element.SCHEDULED_DATE) {
+          element.isActive = true;
+      } else {
+          element.isActive = false;
+      }
+  });
   });
 }
 

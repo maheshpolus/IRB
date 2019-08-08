@@ -8,8 +8,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.Future;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
@@ -17,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.mit.irb.web.IRBProtocol.service.IRBUtilService;
 import org.mit.irb.web.committee.dao.CommitteeDao;
 import org.mit.irb.web.committee.pojo.Committee;
 import org.mit.irb.web.committee.pojo.CommitteeMemberships;
 import org.mit.irb.web.committee.pojo.CommitteeResearchAreas;
 import org.mit.irb.web.committee.pojo.CommitteeSchedule;
 import org.mit.irb.web.committee.pojo.CommitteeType;
-import org.mit.irb.web.committee.pojo.ProtocolReviewType;
 import org.mit.irb.web.committee.pojo.ResearchArea;
 import org.mit.irb.web.committee.pojo.ScheduleStatus;
 import org.mit.irb.web.committee.schedule.CronSpecialChars;
@@ -56,6 +54,9 @@ public class CommitteeServiceImpl implements CommitteeService {
 
 	@Autowired
 	private CommitteeScheduleService committeeScheduleService;
+	
+	@Autowired
+	IRBUtilService irbUtilService;
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
@@ -63,8 +64,8 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo fetchInitialDatas() {
 		CommitteeVo committeeVo = new CommitteeVo();
-		List<ProtocolReviewType> reviewTypes = committeeDao.fetchAllReviewType();
-		committeeVo.setReviewTypes(reviewTypes);
+		/*List<ProtocolReviewType> reviewTypes = committeeDao.fetchAllReviewType();
+		committeeVo.setReviewTypes(reviewTypes);*/
 		List<Unit> units = committeeDao.fetchAllHomeUnits();
 		committeeVo.setHomeUnits(units);
 		List<ResearchArea> researchAreas = committeeDao.fetchAllResearchAreas();
@@ -75,22 +76,13 @@ public class CommitteeServiceImpl implements CommitteeService {
 	}
 
 	@Override
-	public CommitteeVo createCommittee(Integer committeeTypeCode) {
+	public CommitteeVo createCommittee(){
 		CommitteeVo committeeVo = new CommitteeVo();
 		Committee committee = new Committee();
-		committeeVo.setCommitteeTypeCode(committeeTypeCode);
-		CommitteeType committeeType = committeeDao.fetchCommitteeType(committeeTypeCode);
-		committee.setCommitteeType(committeeType);
-		committeeVo.setCommittee(committee);
-		try {
-			Future<CommitteeVo> loadMembershipTypes=committeeDao.loadMembershipTypes(committeeVo);
-		    Future<CommitteeVo> loadMembershipRoles=committeeDao.loadMembershipRoles(committeeVo);
-		    Future<CommitteeVo> loadAllReviewType=committeeDao.loadAllReviewType(committeeVo);
-		    Future<CommitteeVo> loadScheduleStatus=committeeDao.loadScheduleStatus(committeeVo);
-		    committeeVo=loadMembershipTypes.get();
-		    committeeVo=loadMembershipRoles.get();
-		    committeeVo=loadAllReviewType.get();
-		    committeeVo=loadScheduleStatus.get();
+		try{
+			List<CommitteeType> committeeTypeList = committeeDao.fetchCommitteeType();
+			committeeVo.setCommitteeTypeList(committeeTypeList);
+			committeeVo.setCommittee(committee);			
 		}catch (Exception e) {
 			logger.error("Error in createCommittee method : "+e.getMessage());	
 		}
@@ -99,14 +91,21 @@ public class CommitteeServiceImpl implements CommitteeService {
 
 	@Override
 	public CommitteeVo saveCommittee(CommitteeVo vo) {
-		Committee committee = vo.getCommittee();
-		committee = committeeDao.saveCommittee(committee);
-		vo.setStatus(true);
-		String updateType = vo.getUpdateType();
-		if (updateType != null && updateType.equals("SAVE")) {
-			vo.setMessage("Committee created successfully");
-		} else {
-			vo.setMessage("Committee updated successfully");
+		Committee committee = new Committee();
+		committee = vo.getCommittee();
+		String updateType = vo.getUpdateType();		
+		if ( updateType != null &&  updateType.equals("UPDATE")) {
+			committee = committeeDao.saveCommittee(committee);
+			vo.setStatus(true);
+		}else{ 
+			Boolean isIDUnique = committeeDao.checkUniqueCommitteeId(committee);
+			if(isIDUnique){
+				committee = committeeDao.saveCommittee(committee);
+				vo.setStatus(true);			
+			}else{	
+				vo.setStatus(false);			
+				vo.setMessage("Committee ID already exist");				
+			}
 		}
 		vo.setCommittee(committee);
 		return vo;
@@ -116,28 +115,10 @@ public class CommitteeServiceImpl implements CommitteeService {
 	public CommitteeVo loadCommitteeById(String committeeId) {
 		CommitteeVo committeeVo = new CommitteeVo();
 		try {
-		    Committee committee = committeeDao.fetchCommitteeById(committeeId);
-		    List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
-			if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
-				for (CommitteeMemberships membership : committeeMemberships) {
-					if (membership.getNonEmployeeFlag()) {
-						Rolodex rolodex = committeeDao.getRolodexById(membership.getRolodexId());
-						membership.setRolodex(rolodex);
-					} else {
-						PersonDetailsView personDetails = committeeDao.getPersonDetailsById(membership.getPersonId());
-						membership.setPersonDetails(personDetails);
-					}
-				}
-			}	
+		    Committee committee = committeeDao.fetchCommitteeById(committeeId);		 
 		    committeeVo.setCommittee(committee);
-	        Future<CommitteeVo> loadMembershipTypes=committeeDao.loadMembershipTypes(committeeVo);
-		    Future<CommitteeVo> loadMembershipRoles=committeeDao.loadMembershipRoles(committeeVo);
-		    Future<CommitteeVo> loadAllReviewType=committeeDao.loadAllReviewType(committeeVo);
-		    Future<CommitteeVo> loadScheduleStatus=committeeDao.loadScheduleStatus(committeeVo);
-		    committeeVo=loadMembershipTypes.get();
-		    committeeVo=loadMembershipRoles.get();
-		    committeeVo=loadAllReviewType.get();
-		    committeeVo=loadScheduleStatus.get();
+		    List<CommitteeType> committeeTypeList = committeeDao.fetchCommitteeType();
+			committeeVo.setCommitteeTypeList(committeeTypeList);
 		}catch (Exception e) {
 		logger.error("Error in loadCommitteeById method : "+e.getMessage());		
 		}
@@ -148,7 +129,9 @@ public class CommitteeServiceImpl implements CommitteeService {
 	public CommitteeVo addSchedule(CommitteeVo committeeVo) throws ParseException {
 
 		ScheduleData scheduleData = committeeVo.getScheduleData();
-		Committee committee = committeeVo.getCommittee();
+		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommittee().getCommitteeId());
+		Committee com = committeeDao.loadScheduleDetailsById(committeeVo.getCommittee().getCommitteeId(),null);
+		committee.setCommitteeSchedules(com.getCommitteeSchedules());
 		List<Date> dates = null;
 		Date dtEnd = null;
 		int frequency = 0;
@@ -157,7 +140,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 		CronSpecialChars weekOfMonth = null;
 		CronSpecialChars dayOfWeek = null;
 		CronSpecialChars month = null;
-
+		scheduleData.setScheduleStartDate(irbUtilService.adjustTimezone(scheduleData.getScheduleStartDate()));
 		Time24HrFmt time = getTime24hFmt(scheduleData.getScheduleStartDate(), scheduleData.getTime().findMinutes());
 		Date dt = scheduleData.getScheduleStartDate();
 
@@ -244,8 +227,8 @@ public class CommitteeServiceImpl implements CommitteeService {
 		addScheduleDatesToCommittee(dates, committee, scheduleData.getPlace(), skippedDates, committeeVo);
 		scheduleData.setDatesInConflict(skippedDates);
 		logger.info("skippedDates : " + skippedDates);
-		committee = committeeDao.saveCommittee(committee);
-		committeeVo.setCommittee(committee);
+		Committee comSche=committeeDao.loadScheduleDetailsById(committeeVo.getCommittee().getCommitteeId(),"F");
+		committeeVo.getCommittee().setCommitteeSchedules(comSche.getCommitteeSchedules());
 		return committeeVo;
 	}
 
@@ -272,6 +255,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			CommitteeSchedule committeeSchedule = new CommitteeSchedule();
 			committeeSchedule.setCommittee(committee);
 			committeeSchedule.setScheduledDate(sqldate);
+			committeeSchedule.setMeetingDate(sqldate);
 			committeeSchedule.setPlace(location);
 			committeeSchedule.setTime(new Timestamp(date.getTime()));
 
@@ -286,8 +270,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 			committeeSchedule.setScheduleStatus(defaultStatus);
 			committeeSchedule.setUpdateTimestamp(committeeDao.getCurrentTimestamp());
 			committeeSchedule.setUpdateUser(committeeVo.getCurrentUser());
-			hibernateTemplate.saveOrUpdate(committeeSchedule); //code is changes since schedule is not saved properly
-			committee.getCommitteeSchedules().add(committeeSchedule);
+			hibernateTemplate.saveOrUpdate(committeeSchedule); //code is changes since schedule is not saved properly		
 		}
 	}
 
@@ -329,18 +312,14 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo saveAreaOfResearch(CommitteeVo committeeVo) {
 		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
-		CommitteeResearchAreas committeeResearchAreas = committeeVo.getCommitteeResearchArea();
-		/*committeeResearchAreas.setCommittee(committee);
-		committee.getResearchAreas().add(committeeResearchAreas);*/
 		CommitteeResearchAreas researchAreas = new CommitteeResearchAreas();
 		researchAreas.setCommittee(committee);
-		researchAreas.setResearchAreaCode(committeeResearchAreas.getResearchAreaCode());
-		researchAreas.setResearchAreaDescription(committeeResearchAreas.getResearchAreaDescription());
-		researchAreas.setUpdateTimestamp(committeeResearchAreas.getUpdateTimestamp());
-		researchAreas.setUpdateUser(committeeResearchAreas.getUpdateUser());
+		researchAreas.setResearchAreaCode(committeeVo.getCommitteeResearchArea().getResearchAreaCode());
+		researchAreas.setResearchAreaDescription(committeeVo.getCommitteeResearchArea().getResearchAreaDescription());
+		researchAreas.setUpdateTimestamp(committeeVo.getCommitteeResearchArea().getUpdateTimestamp());
+		researchAreas.setUpdateUser(committeeVo.getCommitteeResearchArea().getUpdateUser());
 		researchAreas = committeeDao.saveCommitteeResearchAreas(researchAreas);
-		committee.getResearchAreas().add(researchAreas);
-		committee = committeeDao.saveCommittee(committee);
+		committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
 		committeeVo.setCommittee(committee);
 		return committeeVo;
 	}
@@ -348,18 +327,8 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo deleteAreaOfResearch(CommitteeVo committeeVo) {
 		try {
+			committeeDao.deleteCommitteeResearchArea(committeeVo.getCommResearchAreasId());
 			Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
-			List<CommitteeResearchAreas> list = committee.getResearchAreas();
-			List<CommitteeResearchAreas> updatedlist = new ArrayList<CommitteeResearchAreas>(list);
-			Collections.copy(updatedlist, list);
-			for (CommitteeResearchAreas researchArea : list) {
-				if (researchArea.getCommResearchAreasId().equals(committeeVo.getCommResearchAreasId())) {
-					updatedlist.remove(researchArea);
-				}
-			}
-			committee.getResearchAreas().clear();
-			committee.getResearchAreas().addAll(updatedlist);
-			committeeDao.saveCommittee(committee);
 			committeeVo.setCommittee(committee);
 			committeeVo.setStatus(true);
 			committeeVo.setMessage("Committee research area deleted successfully");
@@ -374,17 +343,11 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo deleteSchedule(CommitteeVo committeeVo) {
 		try {
-			Committee committee = committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
-			List<CommitteeSchedule> list = committee.getCommitteeSchedules();
-			List<CommitteeSchedule> updatedlist = new ArrayList<CommitteeSchedule>(list);
-			Collections.copy(updatedlist, list);
-			for (CommitteeSchedule schedule : list) {
-				if (schedule.getScheduleId().equals(committeeVo.getScheduleId())) {
-					committeeDao.deleteCommitteeSchedule(schedule);
-				}
-			}
-			committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
+			committeeDao.deleteCommitteeSchedule(committeeVo.getCommitteeSchedule());			
+			Committee committee = new Committee();
+			committee = committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),"F");
 			committeeVo.setCommittee(committee);
+			committeeVo.setCommitteeSchedule(null);
 			committeeVo.setStatus(true);
 			committeeVo.setMessage("Committee schedule deleted successfully");
 		} catch (Exception e) {
@@ -438,9 +401,10 @@ public class CommitteeServiceImpl implements CommitteeService {
 	@Override
 	public CommitteeVo updateCommitteeSchedule(CommitteeVo committeeVo) {
 		Committee committee = committeeDao.fetchCommitteeById(committeeVo.getCommitteeId());
-		Committee com=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
+		Committee com=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId(),null);
 		List<CommitteeSchedule> committeeSchedule = com.getCommitteeSchedules();		
-		CommitteeSchedule schedule = committeeVo.getCommitteeSchedule();
+		CommitteeSchedule schedule = new CommitteeSchedule();
+		schedule = committeeVo.getCommitteeSchedule();
 		boolean isDateExist = isDateAvailableForUpdate(committeeSchedule, schedule);
 		String response = "";
 		if (!isDateExist) {
@@ -455,22 +419,20 @@ public class CommitteeServiceImpl implements CommitteeService {
 					committeeSchedules.setTime(schedule.getTime());
 					committeeSchedules.setScheduleStatus(schedule.getScheduleStatus());
 					committeeSchedules.setScheduleStatusCode(schedule.getScheduleStatusCode());
-					int daysToAdd =  committeeVo.getAdvSubmissionDaysReq();
+					int daysToAdd = committee.getAdvSubmissionDaysReq();
 					java.sql.Date sqlDate = calculateAdvancedSubmissionDays(schedule.getScheduledDate(), daysToAdd);
 					committeeSchedules.setProtocolSubDeadline(sqlDate);
 					committeeSchedules.setCommittee(committee);
 					schedule = committeeDao.updateCommitteeSchedule(committeeSchedules);
-					committeeVo.setCommitteeSchedule(committeeSchedules);
-					committee.getCommitteeSchedules().add(committeeSchedules);
-					committee = committeeDao.saveCommittee(committee);
-					committeeVo.setCommittee(committee);
+					committeeVo.setCommitteeSchedule(schedule);
+					committeeVo.setStatus(true);
+					break;
 				}
 			}			
-		committee=committeeDao.loadScheduleDetailsById(committeeVo.getCommitteeId());
-		committeeVo.setCommittee(committee);	
 	  }
 		return committeeVo;
 	}
+	
 	@Override
 	public CommitteeVo loadHomeUnits(String homeUnitSearchString) {	
 		CommitteeVo vo=new CommitteeVo();
@@ -486,11 +448,32 @@ public class CommitteeServiceImpl implements CommitteeService {
 	}
 
 	@Override
-	public CommitteeVo loadScheduleDetailsById(String committeeId) {
-		Committee committee=committeeDao.loadScheduleDetailsById(committeeId);
+	public CommitteeVo loadScheduleDetailsById(String committeeId, String acType) {
+		Committee committee=committeeDao.loadScheduleDetailsById(committeeId,acType);	   
+		List<ScheduleStatus> scheduleStatus = committeeDao.fetchAllScheduleStatus();
+		CommitteeVo vo=new CommitteeVo();
+		vo.setCommittee(committee);
+		vo.setScheduleStatus(scheduleStatus);
+		return vo;
+	}
+
+	@Override
+	public CommitteeVo loadCommitteeMembers(String committeeId) {
+		Committee committee=committeeDao.loadCommitteeMembers(committeeId);
+		List<CommitteeMemberships> committeeMemberships = committee.getCommitteeMemberships();
+		if (committeeMemberships != null && !committeeMemberships.isEmpty()) {
+			for (CommitteeMemberships membership : committeeMemberships) {
+				if (membership.getNonEmployeeFlag()) {
+					Rolodex rolodex = committeeDao.getRolodexById(membership.getRolodexId());
+					membership.setRolodex(rolodex);
+				} else {
+					PersonDetailsView personDetails = committeeDao.getPersonDetailsById(membership.getPersonId());
+					membership.setPersonDetails(personDetails);
+				}
+			}
+		}
 		CommitteeVo vo=new CommitteeVo();
 		vo.setCommittee(committee);
 		return vo;
 	}
-
 }

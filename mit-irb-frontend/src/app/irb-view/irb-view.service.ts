@@ -186,5 +186,11 @@ loadInternalProtocolAttachments(params) {
         responseType: 'blob'
     });
 }
+getIRBprotocolScienificData(params) {
+    return this._http.post('/irb/getIRBprotocolScienificData', params);
+  }
 
+checkSubmissionLock(params) {
+    return this._http.post('/irb/checkSubmissionLock', params);
+  }
 }

@@ -445,7 +445,7 @@ export class FundingSourceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   get_externalLinks_config() {
-    return this._http.get('mit-irb/resources/elastic_config_json');
+    return this._http.get('irb/resources/elastic_config_json');
   }
 
   deleteFundingDetails(index) {

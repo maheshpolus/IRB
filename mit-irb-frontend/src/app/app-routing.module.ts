@@ -11,8 +11,8 @@ import { LogoutComponent } from './login/logout.component';
 import { CommitteeScheduleListComponent } from './committee-schedule-list/committee-schedule-list.component';
 
 const appRoutes = [
-   { path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
-    // { path: '', redirectTo: 'login', pathMatch: 'full' },
+   //{ path: '', redirectTo: 'irb/dashboard', pathMatch: 'full'},
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent },
     {

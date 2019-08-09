@@ -143,6 +143,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
   loadPersonalDetails() {
     this._irbViewService.getIrbPersonalDetails(this.requestObject).subscribe((data: any) => {
       this._spinner.hide();
+      this.result = data || [];
       if (data.irbViewProtocolPersons == null) {
         this.noIrbPersons = true;
       } else {

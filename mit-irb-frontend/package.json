@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng server --proxy-config proxy.config.json",
-    "build": "ng build  --deploy-url /irb/resources/dist/",
+    "build": "ng build  --prod --deploy-url /irb/resources/dist/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -32,6 +32,7 @@ const routes: Routes = [
                           { path: 'irbSummaryDetails', component: IrbSummaryDetailsComponent, resolve: { irb: DashboardResolverService } },
                           {path: 'irbSubmissionDetails', component: IrbSubmissionDetailComponent,
                           resolve: { irb: DashboardResolverService }},
+                          { path: 'review', loadChildren: '../../app/review/review.module#ReviewModule' },
                           { path: 'irbQuestionnaireList', component: IrbQuestionnaireListComponent,
                     children: [{ path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }] },
                           { path: 'irbQuestionnaireView', loadChildren: '../../app/questionnaire-view/view.module#ViewModule' }

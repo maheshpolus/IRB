@@ -120,6 +120,10 @@ export class PersonnelInfoComponent implements OnInit, AfterViewInit, OnDestroy 
       .subscribe(this._results);
   }
 
+  showComments() {
+    this._irbCreateService.showSectionComment.next('Protocol Personnel Comments');
+  }
+
   checkPiExists() {
     this.invalidData.noPiExists = true;
     if (this.personalDataList.length > 0) {

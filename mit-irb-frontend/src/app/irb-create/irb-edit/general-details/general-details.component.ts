@@ -83,6 +83,9 @@ export class GeneralDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       this.$subscription1.unsubscribe();
     }
   }
+  showComments() {
+    this._irbCreateService.showSectionComment.next('General Details Comments');
+  }
 
   ngAfterViewInit() {
     this.personSearchText

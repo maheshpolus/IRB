@@ -1,0 +1,34 @@
+.review-container{
+    transition: all .6s ease-in-out;
+}
+.comment-button{
+    color: #5867dd;
+}
+.delete-background{
+    background: #ffb6b6;
+}
+.add-background{
+    background: #c7ffce;
+}
+.change-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #d2e4d4;
+    text-align: center;
+    line-height: 37px;
+    color: #fff;
+    font-size: 1.2rem;
+}
+.item-align-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#changed-data ins {
+    background: #c6fdc6;
+}
+.changed-data ins {
+    background: green;
+    display: inline-block;
+}

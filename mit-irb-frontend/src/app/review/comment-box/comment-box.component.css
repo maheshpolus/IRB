@@ -1,0 +1,14 @@
+.comment-section {
+  background: #e8e8e8;
+  padding: .5rem;
+}
+
+a:not([href]) {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.d-flex{
+  display: flex;
+}

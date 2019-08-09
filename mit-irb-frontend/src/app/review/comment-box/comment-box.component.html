@@ -1,0 +1,64 @@
+<div class="row comment-section">
+  <div class="col-sm-12 col-md-6 col-lg-6 d-flex pr-0">
+    <textarea appAutoGrow rows="1" class="txt-small form-control" placeholder="Write a comment.."
+      [(ngModel)]="commentObject.comment"></textarea>
+    <span class="p-1 ml-10">by</span>
+  </div>
+  <div class="col-sm-12 col-md-3 col-lg-2">
+    <select class="form-control txt-small" id="exampleFormControlSelect1" [(ngModel)]="commentObject.selectedPerson">
+      <option>Michale Dongurre</option>
+      <option> Steve Shaun</option>
+      <option>Carol Wood</option>
+    </select>
+  </div>
+  <div class="col-sm-12 col-md-3 col-lg-1">
+    <span class="form-check pl-0">
+      <input type="checkbox" class="form-check-input" [(ngModel)]="commentObject.isPublic" id="exampleCheck1">
+      <label class="form-check-label pl-3 txt-medium mt-1" for="exampleCheck1">Public</label>
+    </span>
+  </div>
+  <div class="col-sm-12 col-md-3 col-lg-3">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="clearCommentObject()">Clear</button>
+    <button type="button" class="btn btn-outline-success btn-sm" (click)="addComment()">Comment</button>
+  </div>
+</div>
+<div class="card-body p-2 border-bottom mt-3" *ngFor="let comment of commentsList; let index= index">
+  <div class="row">
+    <div class="col-sm-6 col-md-12 col-lg-12">
+      <h6 class="text-secondary font-weight-bold"><i class="fa fa-user-circle txt-big mr-5" aria-hidden="true"></i>
+        {{comment.selectedPerson}} &nbsp;&nbsp; <span *ngIf="!comment.isPublic" class="badge badge-primary">
+          Private</span>
+        <p class="d-inline ml-10 txt-small  font-weight-normal">{{comment.commentedTime}}</p>
+        <p class="txt-medium mt-1 m-0 font-weight-normal ml-4">{{comment.comment}}</p>
+      </h6>
+      <div class="ml-4">
+        <a class=" mr-5" *ngIf="!comment.resolve" (click)="comment.resolve = true">Resolve</a>
+        <span class=" mr-5 badge badge-success" *ngIf="comment.resolve">Resolved</span>
+        <a class="ml-5" *ngIf="comment.reply != '' "
+          (click)="comment.reply.isShowReply = !comment.reply.isShowReply">Reply</a>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-11 ml-2 mt-2" *ngIf="comment.reply.isShowReply">
+      <div class="row">
+        <div class="col-10">
+          <textarea appAutoGrow rows="1" class="txt-small form-control" placeholder="Write a reply.."
+            [(ngModel)]="comment.reply.reply"></textarea>
+        </div>
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+            (click)="comment.reply.reply = '' ">Clear</button>
+          <button type="button" class="btn btn-outline-success btn-sm" (click)="addReply(index)">Reply</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-11 ml-4 mt-2" *ngIf="comment.reply.isReplied && !comment.reply.isShowReply">
+      <h6 class="text-secondary font-weight-bold"><i class="fa fa-user-circle txt-big mr-5" aria-hidden="true"></i>
+        Carol Wood
+        <p class="ml-10 txt-small d-inline font-weight-normal">{{comment.reply.repliedTime}}</p>
+      </h6>
+      <p class="txt-medium m-0 mt-1 font-weight-normal ml-4"> {{comment.reply.reply}}</p>
+    </div>
+  </div>
+</div>
+<div class="col-12"><a class="txt-small">Show all Comments</a></div>

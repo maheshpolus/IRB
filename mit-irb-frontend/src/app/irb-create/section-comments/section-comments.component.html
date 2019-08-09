@@ -1,0 +1,43 @@
+<div  class="stick-note" *ngIf = "showCommentBox" appClickNdrag>
+    <div class="sticky-header" >
+      {{CommentSection}} <i class="fa fa-times float-right mt-1" aria-hidden="true" (click) ="showCommentBox = false;"></i>
+    </div>
+    <div class="sticky-body">
+        <div class="card-body p-2">
+            <div class="row">
+              <div class="col-sm-6 col-md-12 col-lg-12">
+                <h6 class="text-secondary font-weight-bold"><i class="fa fa-user-circle txt-big mr-5" aria-hidden="true"></i>
+                  Carol Wood
+                   <p class="d-inline ml-10 txt-small  font-weight-normal">Thu Jul 18 2019 19:05:25</p>
+                   <p class="txt-medium mt-1 m-0 font-weight-normal ml-4">Please make sure Protocol Type is same per the Guidelines released by
+                      MOH-DHSR-006-2019. The training attained by key persons should be based on the guideline</p>
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-2">
+              <div class="row">
+                <div class="col-sm-6 col-md-12 col-lg-12">
+                  <h6 class="text-secondary font-weight-bold"><i class="fa fa-user-circle txt-big mr-5" aria-hidden="true"></i>
+                    Jeff Smith
+                     <p class="d-inline ml-10 txt-small  font-weight-normal">Wed Jun 18 2019 07:05:25</p>
+                     <p class="txt-medium mt-1 m-0 font-weight-normal ml-4">
+                        Purpose of study can be more ellaborative. Please include the clinical trial methodolgy chosen
+                        for study on subjectsMake sure PI has obtained Pharma Drug Expert certificate before applying the drug</p>
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-2">
+                <div class="row">
+                  <div class="col-sm-6 col-md-12 col-lg-12">
+                    <h6 class="text-secondary font-weight-bold"><i class="fa fa-user-circle txt-big mr-5" aria-hidden="true"></i>
+                      Eagle Trend
+                       <p class="d-inline ml-10 txt-small  font-weight-normal">Fri Mar 10 2019 13:07:25</p>
+                       <p class="txt-medium mt-1 m-0 font-weight-normal ml-4">Research start date need to postpone to middle of December considering the delay in approval</p>
+                    </h6>
+                  </div>
+                </div>
+              </div>
+    </div>
+</div>

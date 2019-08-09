@@ -352,6 +352,12 @@
 				routerLinkActive="nav-active" (click)="show_current_tab('irbActions')">
 				<i class="fa fa-cog" aria-hidden="true"></i>Actions
 			</button>
+			<button class="btn btn-primary tab_btn" [routerLink]="['review']"
+				[queryParams]="{protocolNumber :requestObject.protocolNumber}" (click)="show_current_tab('irb_overView')"
+				routerLinkActive="nav-active">
+				<i class="fa fa-exchange" aria-hidden="true"></i>Review
+			</button>
+	
 	
 		</section>
 	</div>

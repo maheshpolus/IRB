@@ -20,6 +20,7 @@ import { FileDropComponent } from './file-drop/file-drop.component';
     OwlNativeDateTimeModule,
   ],
   providers: [ViewQuestionnaireService],
-  declarations: [ViewQuestionnaireComponent, DragNdropDirective, FileDropComponent]
+  declarations: [ViewQuestionnaireComponent, DragNdropDirective, FileDropComponent],
+  exports: [ViewQuestionnaireComponent]
 })
 export class ViewModule { }

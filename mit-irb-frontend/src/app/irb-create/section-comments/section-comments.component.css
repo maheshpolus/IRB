@@ -1,0 +1,17 @@
+.stick-note {
+  width: 500px;
+  height: auto;
+  position: fixed;
+  right: 27px;
+  z-index: 99999;
+  background: #FFFF88;
+  top: 26px;
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+  border-radius: 3px;
+}
+.sticky-header
+{
+  padding: 8px 15px;
+  border-bottom: solid 1px #d0c80f;
+  cursor: move;
+}

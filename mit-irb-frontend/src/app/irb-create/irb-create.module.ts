@@ -29,6 +29,8 @@ import { IrbSummaryDetailsComponent } from './irb-summary-details/irb-summary-de
 import { RiskLevelsComponent } from './irb-edit/risk-levels/risk-levels.component';
 import { IrbPermissionComponent } from './irb-permission/irb-permission.component';
 import { IrbSubmissionDetailsComponent } from './irb-submission-details/irb-submission-details.component';
+import { SectionCommentsComponent } from './section-comments/section-comments.component';
+import { ClickNdragDirective } from './section-comments/clickNdrag.directive';
 
 @NgModule({
   imports: [
@@ -48,7 +50,7 @@ import { IrbSubmissionDetailsComponent } from './irb-submission-details/irb-subm
   declarations: [IrbCreateHeaderComponent, IrbEditComponent, IrbCreateAttachmentComponent,
     IrbCreateHistroyComponent, IrbActionsComponent, CollaboratorsComponent, SubjectsComponent,
     FundingSourceComponent, PersonnelInfoComponent, GeneralDetailsComponent, IrbProtocolComponent,
-    IrbQuestionnaireListComponent,
+    IrbQuestionnaireListComponent, SectionCommentsComponent, ClickNdragDirective,
     ProtocolUnitsComponent, AdministratorContactComponent, SubmissionDetailsComponent,
      IrbSummaryDetailsComponent, RiskLevelsComponent, IrbPermissionComponent, IrbSubmissionDetailsComponent],
     exports: [IrbActionsComponent, IrbSummaryDetailsComponent, IrbPermissionComponent, IrbCreateAttachmentComponent]
